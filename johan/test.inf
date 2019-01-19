@@ -1,27 +1,29 @@
 Global running;
 
 Verb 'quit'
-  * -> Quit;
+	* -> Quit;
 [QuitSub;
-    running = 0;
+	running = 0;
 ];
 
 Array text->43;
 Array parse->26;
 
 [main;
-    running = 1;
+	running = 1;
 	text->0 = 40;
 	parse->0 = 6;
 	print"Test^";
 	for(: running == 1:) {
-        print ">";
-        read text parse;
-        if(parse->1 == 1 && parse-->1 == 'quit') {
-            running = 0;
-        }
-        if(running) print "eh?^";
-    }
-    print "thanks for playing^";
+		print ">";
+		read text parse;
+		if(parse->1 == 1 && parse-->1 == 'quit') {
+			running = 0;
+		}
+		if(running) {
+			print "Sorry, I didn't understand that.^";
+		}
+	}
+	print "thanks for playing^";
 ];
 
