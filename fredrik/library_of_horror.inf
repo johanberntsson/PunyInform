@@ -1,0 +1,9 @@
+include "puny.h";
+
+Object Library "Library"
+	has light;
+
+[game_start;
+	location = Library;
+	print_ret "And so the story begins...";
+];

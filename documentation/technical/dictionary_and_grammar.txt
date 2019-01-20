@@ -1,0 +1,38 @@
+Grammar table is always located at the start of static memory (address pointed to by word at $0e in header). Word (Verb number) points to the start address for the grammar for a verb.
+
+Grammar for a verb:
+Byte 0: Number of grammar lines for this verb + 1
+Byte 1 ... Syntax line 0, 1, ...
+
+
+Grammar line
+
+0: Highbyte of action_value
+1: Lowbyte of action_value
+
+(action_value & $0400) = 1 means the action is reversed
+
+action = action_value & $03ff
+
+3 bytes per token:
+    byte 0 & $0f : token_type
+    byte 1 + 2 : Token data
+If token_type = 15 (ENDIT_TOKEN), this is the end of line, and byte 1 and 2 are not supplied.
+
+
+ILLEGAL_TT         = 0;    ! Types of grammar token: illegal
+ELEMENTARY_TT      = 1;    !     (one of those below)
+PREPOSITION_TT     = 2;    !     e.g. 'into'
+ROUTINE_FILTER_TT  = 3;    !     e.g. noun=CagedCreature
+ATTR_FILTER_TT     = 4;    !     e.g. edible
+SCOPE_TT           = 5;    !     e.g. scope=Spells
+GPR_TT             = 6;    !     a general parsing routine
+ENDIT_TOKEN        = 15
+
+Extra data in dictionary:
+
+byte 0 & $1 : Verb flag
+byte 0 & $2 : Meta flag
+255 - (byte 1) : Verb number (255 - value is for "traditional Infocom reasons")
+
+

@@ -3,7 +3,7 @@ Global running;
 Verb 'quit'
 	* -> Quit;
 [QuitSub;
-		running = 0;
+	running = 0;
 ];
 
 Array text->43;
