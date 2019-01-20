@@ -1,3 +1,10 @@
+Extra data in dictionary:
+
+byte 0 & $1 : Verb flag
+byte 0 & $2 : Meta flag
+255 - (byte 1) : Verb number (255 - value is for "traditional Infocom reasons")
+
+
 Grammar table is always located at the start of static memory (address pointed to by word at $0e in header). Word (Verb number) points to the start address for the grammar for a verb.
 
 Grammar for a verb:
@@ -29,10 +36,34 @@ SCOPE_TT           = 5;    !     e.g. scope=Spells
 GPR_TT             = 6;    !     a general parsing routine
 ENDIT_TOKEN        = 15
 
-Extra data in dictionary:
 
-byte 0 & $1 : Verb flag
-byte 0 & $2 : Meta flag
-255 - (byte 1) : Verb number (255 - value is for "traditional Infocom reasons")
+Grammar for Quit, v3:
+01 Number of grammar lines
 
+00 params wanted
+ff token 1
+00 token 2
+00 token 3
+00 token 4
+00 token 5
+00 token 6
+00 action number
+
+
+02 Grammar line 1, highbyte of action routine
+bd Grammar line 1, lowbyte of action routine
+
+
+Tokens available in z3:
+NOUN_TOKEN         = 0;    ! The elementary grammar tokens, and
+HELD_TOKEN         = 1;    ! the numbers compiled by Inform to
+MULTI_TOKEN        = 2;    ! encode them
+MULTIHELD_TOKEN    = 3;
+MULTIEXCEPT_TOKEN  = 4;
+MULTIINSIDE_TOKEN  = 5;
+CREATURE_TOKEN     = 6;
+SPECIAL_TOKEN      = 7;
+NUMBER_TOKEN       = 8;
+
+ENDIT_TOKEN = 15 ! Legal, but doesn't seem to be used
 

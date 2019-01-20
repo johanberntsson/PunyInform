@@ -1,6 +1,8 @@
-include "puny.h";
+!% -~S
 
-Object Library "Library"
+Include "puny.h";
+
+Object Library "The Library"
 	has light;
 
 [game_start;
