@@ -1,3 +1,5 @@
+Constant Grammar__Version = 2;
+
 Attribute light;
 
 Constant TT_PREPOSITION      = 2;    ! e.g. 'into'
@@ -55,21 +57,21 @@ Verb 'quit'
 ];
 
 
-#IfTrue Grammar__Version == 1;
-[check_pattern pattern   i c;
-	print "Params wanted: ", pattern->0,". ";
-	for(i = 1: i < 7: i++) {
-		if(pattern->i ~= 0) {
-			print pattern->i,", ";
-			c++;
-		} else {
-			break;
-		}
-	}
-	print ": ", c, " tokens. Action#: ", pattern->7, "^";
-	return pattern + 8;
-];
-#IfNot;
+! #IfTrue Grammar__Version == 1;
+! [check_pattern pattern   i c;
+! 	print "Params wanted: ", pattern->0,". ";
+! 	for(i = 1: i < 7: i++) {
+! 		if(pattern->i ~= 0) {
+! 			print pattern->i,", ";
+! 			c++;
+! 		} else {
+! 			break;
+! 		}
+! 	}
+! 	print ": ", c, " tokens. Action#: ", pattern->7, "^";
+! 	return pattern + 8;
+! ];
+! #IfNot;
 ! Grammar version 2
 [check_pattern pattern   i;
 	print "Action: ", pattern-->0,". ";
@@ -82,10 +84,11 @@ Verb 'quit'
 	print ": ", i, " tokens^";
 	return pattern + 1;
 ];
-#EndIf;
+! #EndIf;
 
 [parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern;
 	print "Adj: ", #adjectives_table;
+	print "Action: ", #actions_table;
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
