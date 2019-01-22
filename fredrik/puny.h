@@ -54,7 +54,18 @@ Verb 'quit'
 #EndIf;
 ];
 
-[parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i;
+[check_pattern pattern   i;
+	pattern--;
+	for(i = 0: : i++) {
+		pattern = pattern + 3;
+		if(pattern->0 == TT_END) break;
+		print pattern-->i,",";
+	}
+	print ": ", i, " tokens^";
+	return pattern + 1;
+];
+
+[parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern;
 	print "Adj: ", #adjectives_table;
 	if(parse_array->1 < 1) {
 		"Come again?";
@@ -78,9 +89,11 @@ Verb 'quit'
 	num_patterns = verb_grammar->0;
 	print "Patterns: ",num_patterns,"^";
 
+	pattern = verb_grammar + 1;
+	!pattern = verb_grammar;
 	for(i = 0 : i < num_patterns : i++) {
-		print "Checking pattern ",i,"^";
-		! something similar to UnpackGrammarLine (parserm.h)
+		print "Checking pattern ",i,":";
+		pattern = check_pattern(pattern);
 	}
 
 
