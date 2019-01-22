@@ -65,8 +65,20 @@ CREATURE_TOKEN     = 6;
 SPECIAL_TOKEN      = 7;
 NUMBER_TOKEN       = 8;
 
-ENDIT_TOKEN = 15 ! Legal, but doesn't seem to be used
+ENDIT_TOKEN = $0f ! Legal, but doesn't seem to be used
 
+Token $10-$2f are routine filters (ROUTINE_FILTER_TT).  e.g. noun=CagedCreature
+
+Token $30-$4f are general parsing routines (GPR_TT).
+Routine address is in #preactions_table-->(token-48)
+
+Token $50-$7f are scope tokens (SCOPE_TT). e.g. scope=Spells
+Routine address is in #preactions_table-->(token-80)
+
+
+Token $80-$b3 are attribute filters (ATTR_FILTER_TT). e.g. edible
+
+Token $b4-$ff are prepositions (PREPOSITION_TT). e.g. 'into'
 Prepositions are located in the "adjectives table". The start address is in the constant #adjectives_table .
 Each entry consists of two words. If the second word is the preposition-number (like $ff), the first
 word is the address of the dictionary word. There is no length number or end marker. You should just expect
