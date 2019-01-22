@@ -20,6 +20,8 @@ Constant DICT_BYTES_FOR_WORD = 6;
 #EndIf;
 
 Global location = 0; ! Must be first global
+Global action;
+Global reverse;
 Global game_state;
 
 Constant MAX_INPUT_CHARS     = 78;
@@ -39,7 +41,7 @@ Array parse_array->(2 + 4 * MAX_INPUT_WORDS);
 
 Verb 'quit'
 	* 'into' noun -> Quit
-	* 'out' 'of' -> Take;
+	* 'out' 'of' -> Take reverse;
 
 ! ######################### Parser
 
@@ -73,22 +75,28 @@ Verb 'quit'
 ! ];
 ! #IfNot;
 ! Grammar version 2
-[check_pattern pattern   i;
-	print "Action: ", pattern-->0,". ";
+[check_pattern pattern   i action_number;
+	action_number = pattern-->0;
+	action = action_number & $3ff;
+	reverse = (action_number & $400 ~= 0);
+	print "Action#: ", action, " Reverse: ", reverse, "^";
 	pattern = pattern + 2;
 	for(i = 0: : i++) {
 		if(pattern->0 == TT_END) break;
-		print pattern->0,"(",(pattern->1)-->0,"), ";
+		print "Token#: ", i, " Type: ", pattern->0, " Data: ",(pattern + 1)-->0,"^";
 		pattern = pattern + 3;
 	}
-	print ": ", i, " tokens^";
+!	print ": ", i, " tokens^";
 	return pattern + 1;
 ];
 ! #EndIf;
 
 [parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern;
 	print "Adj: ", #adjectives_table;
+	@new_line;
 	print "Action: ", #actions_table;
+	@new_line;
+	@new_line;
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
@@ -105,11 +113,11 @@ Verb 'quit'
 	! Now we know that the first word is a verb
 
 	verb_num = 255 - (word_data->1);
-	print "Verb#: ",verb_num,".";
+	print "Verb#: ",verb_num,".^";
 	verb_grammar = (0-->7)-->verb_num;
-	print "Grammar: ",verb_grammar," (address)";
+	print "Grammar address for this verb: ",verb_grammar,"^";
 	num_patterns = verb_grammar->0;
-	print "Patterns: ",num_patterns,"^";
+	print "Number of patterns: ",num_patterns,"^";
 
 	pattern = verb_grammar + 1;
 	!pattern = verb_grammar;
