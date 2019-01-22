@@ -37,7 +37,7 @@ GPR_TT             = 6;    !     a general parsing routine
 ENDIT_TOKEN        = 15
 
 
-Grammar for Quit, v3:
+Grammar for Quit, grammar version 1:
 01 Number of grammar lines
 
 00 params wanted
@@ -54,7 +54,7 @@ ff token 1
 bd Grammar line 1, lowbyte of action routine
 
 
-Tokens available in z3:
+Tokens available in grammar version 1:
 NOUN_TOKEN         = 0;    ! The elementary grammar tokens, and
 HELD_TOKEN         = 1;    ! the numbers compiled by Inform to
 MULTI_TOKEN        = 2;    ! encode them
@@ -66,4 +66,9 @@ SPECIAL_TOKEN      = 7;
 NUMBER_TOKEN       = 8;
 
 ENDIT_TOKEN = 15 ! Legal, but doesn't seem to be used
+
+Prepositions are located in the "adjectives table". The start address is in the constant #adjectives_table .
+Each entry consists of two words. If the second word is the preposition-number (like $ff), the first
+word is the address of the dictionary word. There is no length number or end marker. You should just expect
+to find the entry somewhere in there.
 
