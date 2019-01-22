@@ -54,16 +54,35 @@ Verb 'quit'
 #EndIf;
 ];
 
+
+#IfTrue Grammar__Version == 1;
+[check_pattern pattern   i c;
+	print "Params wanted: ", pattern->0,". ";
+	for(i = 1: i < 7: i++) {
+		if(pattern->i ~= 0) {
+			print pattern->i,", ";
+			c++;
+		} else {
+			break;
+		}
+	}
+	print ": ", c, " tokens. Action#: ", pattern->7, "^";
+	return pattern + 8;
+];
+#IfNot;
+! Grammar version 2
 [check_pattern pattern   i;
-	pattern--;
+	print "Action: ", pattern-->0,". ";
+	pattern = pattern + 2;
 	for(i = 0: : i++) {
-		pattern = pattern + 3;
 		if(pattern->0 == TT_END) break;
-		print pattern-->i,",";
+		print pattern->0,"(",(pattern->1)-->0,"), ";
+		pattern = pattern + 3;
 	}
 	print ": ", i, " tokens^";
 	return pattern + 1;
 ];
+#EndIf;
 
 [parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern;
 	print "Adj: ", #adjectives_table;
