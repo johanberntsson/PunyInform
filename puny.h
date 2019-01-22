@@ -92,11 +92,6 @@ Verb 'quit'
 ! #EndIf;
 
 [parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern;
-	print "Adj: ", #adjectives_table;
-	@new_line;
-	print "Action: ", #actions_table;
-	@new_line;
-	@new_line;
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
@@ -122,7 +117,7 @@ Verb 'quit'
 	pattern = verb_grammar + 1;
 	!pattern = verb_grammar;
 	for(i = 0 : i < num_patterns : i++) {
-		print "Checking pattern ",i,":";
+		print "############ Pattern ",i,"^";
 		pattern = check_pattern(pattern);
 	}
 
@@ -139,6 +134,11 @@ Verb 'quit'
 
 [main;
 	print "PunyInform 0.0^^";
+	print "Adj: ", #adjectives_table;
+	@new_line;
+	print "Action: ", #actions_table;
+	@new_line;
+
 	game_start();
 	game_state = GS_PLAYING;
 	while(game_state == GS_PLAYING) {

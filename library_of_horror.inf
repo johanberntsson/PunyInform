@@ -1,5 +1,7 @@
 !% -~S
 
+! Library of Horror - a sample game which uses PunyInform
+
 Include "puny.h";
 
 Object Library "The Library"
@@ -7,5 +9,5 @@ Object Library "The Library"
 
 [game_start;
 	location = Library;
-	print_ret "And so the story begins...";
+	print_ret "^^And so the story begins...^^";
 ];
