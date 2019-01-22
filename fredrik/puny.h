@@ -54,7 +54,7 @@ Verb 'quit'
 #EndIf;
 ];
 
-[parse_and_perform_action   verb word_data verb_num verb_grammar;
+[parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i;
 	print "Adj: ", #adjectives_table;
 	if(parse_array->1 < 1) {
 		"Come again?";
@@ -72,13 +72,21 @@ Verb 'quit'
 	! Now we know that the first word is a verb
 
 	verb_num = 255 - (word_data->1);
-!	print "Verb#: ",verb_num,".";
+	print "Verb#: ",verb_num,".";
 	verb_grammar = (0-->7)-->verb_num;
-!	print "Grammar: ",verb_grammar," (address)";
+	print "Grammar: ",verb_grammar," (address)";
+	num_patterns = verb_grammar->0;
+	print "Patterns: ",num_patterns,"^";
+
+	for(i = 0 : i < num_patterns : i++) {
+		print "Checking pattern ",i,"^";
+		! something similar to UnpackGrammarLine (parserm.h)
+	}
 
 
 	if(parse_array->1 == 1 && parse_array-->1 == 'quit') {
-		game_state = GS_QUIT;
+		! game_state = GS_QUIT;
+		print "parse properly, no cheating allowed.^";
 	} else {
 		print "Sorry, I didn't understand that.^";
 	}

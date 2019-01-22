@@ -6,18 +6,19 @@ Verb 'quit'
 	running = 0;
 ];
 
-Array text->43;
-Array parse->26;
+Array raw_input -> 43;
+Array parse_array -> 26;
 
-[main;
+[main i;
+	i = 1;
 	running = 1;
-	text->0 = 40;
-	parse->0 = 6;
+	raw_input->0 = 40;
+	parse_array->0 = 6;
 	print"Test^";
-	for(: running == 1:) {
+	for(: running == 1 :) {
 		print ">";
-		read text parse;
-		if(parse->1 == 1 && parse-->1 == 'quit') {
+		read raw_input parse_array;
+		if(parse_array->1 == 1 && parse_array-->1 == 'quit') {
 			running = 0;
 		}
 		if(running) {
