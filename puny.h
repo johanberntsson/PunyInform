@@ -1,3 +1,5 @@
+! Always use grammar version 2 which is easier to parse and more economical
+! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
 
 Attribute light;
