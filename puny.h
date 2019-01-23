@@ -42,7 +42,7 @@ Array parse_array->(2 + 4 * MAX_INPUT_WORDS);
 ];
 
 Verb 'quit'
-	* 'into' noun -> Quit
+	* 'into'/'out'/'of'/'hello'/'bob' noun -> Quit
 	* 'out' 'of' -> Take reverse;
 
 ! ######################### Parser
