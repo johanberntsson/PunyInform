@@ -21,7 +21,9 @@ Constant DICT_BYTES_FOR_WORD = 4;
 Constant DICT_BYTES_FOR_WORD = 6;
 #EndIf;
 
-Global location = 0; ! Must be first global
+Global location = 1; ! Must be first global
+Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
+Global status_field_2 = 0; ! Must be third global. Is used to show turns or minutes
 Global action;
 Global reverse;
 Global game_state;
