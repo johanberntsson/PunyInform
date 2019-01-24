@@ -77,19 +77,24 @@ Verb 'quit'
 ! ];
 ! #IfNot;
 ! Grammar version 2
-[check_pattern pattern   i action_number;
+[check_pattern pattern   i action_number token_top token_next token_bottom;
+    ! action number is the first two bytes
 	action_number = pattern-->0;
+	pattern = pattern + 2;
 	action = action_number & $3ff;
 	reverse = (action_number & $400 ~= 0);
 	print "Action#: ", action, " Reverse: ", reverse, "^";
-	pattern = pattern + 2;
+
 	for(i = 0: : i++) {
 		if(pattern->0 == TT_END) break;
-		print "Token#: ", i, " Type: ", pattern->0, " Data: ",(pattern + 1)-->0,"^";
+		token_top = (pattern->0 & $c0)/64; ! top (2 bits)
+		token_next = (pattern->0 & $30)/16;  ! next (2 bits)
+		token_bottom = pattern->0 & $0f; ! bottom (4 bits)
+		print "Token#: ", i, " Type: ", pattern->0, " (top ", token_top, ", next ",token_next, ", bottom ",token_bottom, ") Next byte: ",(pattern + 1)-->0,"^";
 		pattern = pattern + 3;
 	}
 !	print ": ", i, " tokens^";
-	return pattern + 1;
+	return pattern + 1; ! skip TT_END
 ];
 ! #EndIf;
 
@@ -117,7 +122,6 @@ Verb 'quit'
 	print "Number of patterns: ",num_patterns,"^";
 
 	pattern = verb_grammar + 1;
-	!pattern = verb_grammar;
 	for(i = 0 : i < num_patterns : i++) {
 		print "############ Pattern ",i,"^";
 		pattern = check_pattern(pattern);
