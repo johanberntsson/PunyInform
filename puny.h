@@ -27,6 +27,7 @@ Global status_field_2 = 0; ! Must be third global. Is used to show turns or minu
 Global action;
 Global reverse;
 Global game_state;
+Global wn;
 
 Constant MAX_INPUT_CHARS     = 78;
 Constant MAX_INPUT_WORDS     = 20;
@@ -37,13 +38,15 @@ Array parse_array->(2 + 4 * MAX_INPUT_WORDS);
 ! ######################### Grammar + Actions
 [QuitSub;
 	game_state = GS_QUIT;
+	"Quitting...";
 ];
 
-[TakeSub a b c;
-	game_state = GS_QUIT;
+[TakeSub;
+	"Taking...";
 ];
 
 Verb 'quit'
+	* -> Quit
 	* 'into'/'out'/'of'/'hello'/'bob' noun -> Quit
 	* 'out' 'of' -> Take reverse;
 
@@ -100,7 +103,7 @@ Verb 'quit'
 ];
 ! #EndIf;
 
-[parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern;
+[parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern pattern_index token data parse_pointer;
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
@@ -116,6 +119,11 @@ Verb 'quit'
 
 	! Now we know that the first word is a verb
 
+! 	print "Parse array: ", parse_array, "^";
+! 	print "Word count: ", parse_array->0, "^";
+! 	print "Word 1: ", (parse_array + 2)-->0, "^";
+! 	print "Word 2: ", (parse_array + 6)-->0, "^";
+! 	print "Word 3: ", (parse_array + 10)-->0, "^";
 	verb_num = 255 - (word_data->1);
 	print "Verb#: ",verb_num,".^";
 	verb_grammar = (0-->7)-->verb_num;
@@ -123,19 +131,70 @@ Verb 'quit'
 	num_patterns = verb_grammar->0;
 	print "Number of patterns: ",num_patterns,"^";
 
+! First print all patterns, for debug purposes
 	pattern = verb_grammar + 1;
 	for(i = 0 : i < num_patterns : i++) {
 		print "############ Pattern ",i,"^";
 		pattern = check_pattern(pattern);
 	}
 
-
-	if(parse_array->1 == 1 && parse_array-->1 == 'quit') {
-		! game_state = GS_QUIT;
-		print "parse properly, no cheating allowed.^";
-	} else {
-		print "Sorry, I didn't understand that.^";
+	@new_line;
+	pattern = verb_grammar + 1;
+	for(i = 0 : i < num_patterns : i++) {
+		print "############ Pattern ",i," address ", pattern, "^";
+		wn = 1;
+		parse_pointer = parse_array + 6;
+		pattern_index = pattern - 1;
+		while(true) {
+			pattern_index = pattern_index + 3;
+			token = pattern_index -> 0;
+			print "TOKEN: ", token, "^";
+			data = (pattern_index + 1) --> 0;
+			if(token == TT_END) {
+				if(wn == parse_array -> 1) {
+					jump parse_success;
+				}
+				break; ! Fail because the grammar line ends here but not the input
+			}
+			if(wn >= parse_array -> 1) { !Fail because input ends here but not the grammar line
+				print "Fail, since grammar line has not ended but player input has.^";
+				break;
+			}
+			if(token == $42 or $52 or $62 or $72) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
+				print "Preposition: ", data, "^";
+				if(parse_pointer --> 0 == data) {
+					print "Match!^";
+					wn++;
+					parse_pointer = parse_pointer + 4;
+					while(token == $62 or $72) { ! Alternative prepositions which are not at the end of the list
+						print "Skipping one alternative...^";
+						pattern_index = pattern_index + 3;
+						token = pattern_index -> 0;
+					}
+					continue;
+				}
+				print "Failed prep: ", parse_pointer, ":", parse_pointer --> 0, " should have been ", data, "^";
+				if(token == $62 or $72) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
+				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
+			}
+			! This is a token we don't recognize, which means we fail at matching against this line
+			print "Unknown token: ", token, "^";
+			break;
+		}
+		! This pattern has failed.
+		print "Pattern didn't match.^";
+		! Scan to the end of this pattern
+		while(pattern_index -> 0 ~= TT_END) pattern_index = pattern_index + 3;
+		pattern = pattern_index + 1;
 	}
+
+	"Sorry, I didn't understand that.^";
+
+.parse_success;
+	print "Complete pattern match!^";
+	action = (pattern --> 0) & $03ff;
+	print "Performing action ", action, "^";
+	indirect(#actions_table --> action);
 ];
 
 
