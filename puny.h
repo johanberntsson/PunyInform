@@ -135,7 +135,7 @@ Verb 'quit'
 			@scan_table current_word name_array name_array_len -> result ?success;
 #IfNot;
 			for(j = 0: j < name_array_len: j++) {
-				if(obj.&name-->j == current_word) jump success;
+				if(name_array-->j == current_word) jump success;
 			}
 #EndIf;
 			continue;
