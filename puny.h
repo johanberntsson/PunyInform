@@ -117,7 +117,7 @@ Verb 'quit'
 ];
 ! #EndIf;
 
-[check_noun parse_pointer   i n p obj result matches last_match current_word name_array name_array_len;
+[check_noun parse_pointer   i j n p obj result matches last_match current_word name_array name_array_len;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
@@ -128,21 +128,23 @@ Verb 'quit'
 		obj = scope-->i;
 		if(obj == nothing) continue;
 		! the matching of name with parse_array doesn't work yet
-#IfV5;
 		if(obj.#name > 1) {
 			name_array = obj.&name;
 			name_array_len = obj.#name / 2;
+#IfV5;
 			@scan_table current_word name_array name_array_len -> result ?success;
-			continue;
-.success;
-			n++;
-			p = p + 4;
-			matches++;
-			last_match = obj;
-		}
 #IfNot;
-	! Todo: A solution for v3/v4
+			for(j = 0: j < name_array_len: j++) {
+				if(obj.&name-->j == current_word) jump success;
+			}
 #EndIf;
+			continue;
+		}
+.success;
+		n++;
+		p = p + 4;
+		matches++;
+		last_match = obj;
 
 !		print "checking ", obj.&name-->0, " ", current_word, "^";
 	}
