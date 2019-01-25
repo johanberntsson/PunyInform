@@ -9,15 +9,15 @@ Object Library "The Library"
 		description "You are in an old and deserted library.",
 	has light;
 
-Nearby Book "book"
+Object -> Book "book"
 	with
 		name 'book',
 		initial "Odd, there is only a single book left on the library shelves",
 		description "The book is old and worn";
 
-[ look_around i; 
+[ look_around i;
 	! cheating for now
-	print location->description;
+	print (string) location.description;
 	for(i = 0: i < MAX_SCOPE: i++) {
 		if(scope-->i ~= nothing) {
 			print " There is a ",(name) scope-->i, " here.^";

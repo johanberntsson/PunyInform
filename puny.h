@@ -6,12 +6,24 @@ Constant Grammar__Version = 2;
 
 Attribute light;
 
+! Property name; ! This seems to be hardcoded in the Inform compiler
+Property initial;
+Property description;
+
+
+Constant TT_NOUN             = 1;    ! one or more words referring to an object
 Constant TT_PREPOSITION      = 2;    ! e.g. 'into'
 Constant TT_ROUTINE_FILTER   = 3;    ! e.g. noun=CagedCreature
 Constant TT_ATTR_FILTER      = 4;    ! e.g. edible
 Constant TT_SCOPE            = 5;    ! e.g. scope=Spells
 Constant TT_PARSE_ROUTIME    = 6;    ! a parse routine
 Constant TT_END              = 15;   ! End of grammar line
+
+! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
+Constant TOKEN_SINGLE_PREP   = $42;
+Constant TOKEN_FIRST_PREP    = $62;
+Constant TOKEN_MIDDLE_PREP   = $72;
+Constant TOKEN_LAST_PREP     = $52;
 
 Constant GS_PLAYING          = 1;
 Constant GS_QUIT             = 2;
@@ -105,22 +117,45 @@ Verb 'quit'
 ];
 ! #EndIf;
 
-[check_noun parse_pointer   i n p obj;
+[check_noun parse_pointer   i n p obj result matches last_match current_word name_array name_array_len;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
 	n = wn;
 	p = parse_pointer;
-	for(i = 0: i < MAX_SCOPE; i++) {
+	current_word = parse_pointer-->0;
+	for(i = 0: i < MAX_SCOPE: i++) {
 		obj = scope-->i;
 		if(obj == nothing) continue;
 		! the matching of name with parse_array doesn't work yet
-		print "checking ", obj->name, " ", parse_pointer->3, "^";
+#IfV5;
+		if(obj.#name > 1) {
+			name_array = obj.&name;
+			name_array_len = obj.#name / 2;
+			@scan_table current_word name_array name_array_len -> result ?success;
+			continue;
+.success;
+			n++;
+			p = p + 4;
+			matches++;
+			last_match = obj;
+		}
+#IfNot;
+	! Todo: A solution for v3/v4
+#EndIf;
+
+!		print "checking ", obj.&name-->0, " ", current_word, "^";
 	}
+	if(matches == 1) {
+		wn = n;
+		parse_pointer = p;
+		return last_match;
+	}
+	if(matches > 1) return -2;
 	return -1;
 ];
 
-[parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern pattern_index token data parse_pointer;
+[parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern pattern_index token token_type data parse_pointer;
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
@@ -177,13 +212,14 @@ Verb 'quit'
 				print "Fail, since grammar line has not ended but player input has.^";
 				break;
 			}
-			if(token == $42 or $52 or $62 or $72) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
+			token_type = token & $0f;
+			if(token_type == TT_PREPOSITION) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
 				print "Preposition: ", data, "^";
 				if(parse_pointer --> 0 == data) {
 					print "Match!^";
 					wn++;
 					parse_pointer = parse_pointer + 4;
-					while(token == $62 or $72) { ! Alternative prepositions which are not at the end of the list
+					while(token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) { ! Alternative prepositions which are not at the end of the list
 						print "Skipping one alternative...^";
 						pattern_index = pattern_index + 3;
 						token = pattern_index -> 0;
@@ -191,9 +227,9 @@ Verb 'quit'
 					continue;
 				}
 				print "Failed prep: ", parse_pointer, ":", parse_pointer --> 0, " should have been ", data, "^";
-				if(token == $62 or $72) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
+				if(token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
-			} else if(token == $01) {
+			} else if(token_type == TT_NOUN) {
 				! we expect a noun here
 				! check all objects in 'scope', and see if any match.
 				! If so, update wn and parse_pointer, and return success
