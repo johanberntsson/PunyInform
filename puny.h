@@ -1,3 +1,5 @@
+Include "scope.h";
+
 ! Always use grammar version 2 which is easier to parse and more economical
 ! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
@@ -103,6 +105,21 @@ Verb 'quit'
 ];
 ! #EndIf;
 
+[check_noun parse_pointer   i n p obj;
+	! return -1 if no noun matches
+	! return -2 if more than one match found
+	! else return object number
+	n = wn;
+	p = parse_pointer;
+	for(i = 0: i < MAX_SCOPE; i++) {
+		obj = scope-->i;
+		if(obj == nothing) continue;
+		! the matching of name with parse_array doesn't work yet
+		print "checking ", obj->name, " ", parse_pointer->3, "^";
+	}
+	return -1;
+];
+
 [parse_and_perform_action   verb word_data verb_num verb_grammar num_patterns i pattern pattern_index token data parse_pointer;
 	if(parse_array->1 < 1) {
 		"Come again?";
@@ -176,6 +193,16 @@ Verb 'quit'
 				print "Failed prep: ", parse_pointer, ":", parse_pointer --> 0, " should have been ", data, "^";
 				if(token == $62 or $72) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
+			} else if(token == $01) {
+				! we expect a noun here
+				! check all objects in 'scope', and see if any match.
+				! If so, update wn and parse_pointer, and return success
+				if(check_noun(parse_pointer) >= 0) {
+					print "Noun match!^";
+					continue;
+				}
+				print "Not a matching noun: ", parse_pointer, ":", parse_pointer --> 0, "^";
+				break;
 			}
 			! This is a token we don't recognize, which means we fail at matching against this line
 			print "Unknown token: ", token, "^";
