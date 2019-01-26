@@ -9,18 +9,32 @@ Object Library "The Library"
 		description "You are in an old and deserted library.",
 	has light;
 
-Object -> Book "book"
+Object -> RedBook "red book"
 	with
-		name 'book',
-		initial "Odd, there is only a single book left on the library shelves",
-		description "The book is old and worn";
+		name 'red' 'book',
+		initial "There is a red book lying on the floor here.",
+		description "The book is old and worn.";
 
-[ look_around i;
+Object -> BlueBook "blue book"
+	with
+		name 'book' 'blue',
+		initial "A blue book is standing on a shelf.",
+		description "The book looks new and shiny.";
+
+[ look_around i obj;
 	! cheating for now
 	print (string) location.description;
-	for(i = 0: i < MAX_SCOPE: i++) {
-		if(scope-->i ~= nothing) {
-			print " There is a ",(name) scope-->i, " here.^";
+	new_line;
+	for(i = 0: i < scope_objects: i++) {
+		obj = scope-->i;
+		if(obj ~= nothing) {
+			new_line;
+			if(obj.initial) {
+				print (string) obj.initial;
+			} else {
+				print "There is a ",(name) scope-->i, " here. ";
+			}
+			new_line;
 		}
 	}
 ];

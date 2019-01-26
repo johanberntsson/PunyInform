@@ -1,5 +1,3 @@
-Include "scope.h";
-
 ! Always use grammar version 2 which is easier to parse and more economical
 ! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
@@ -42,12 +40,18 @@ Global action;
 Global reverse;
 Global game_state;
 Global wn;
+Global input_words;
+Global scope_objects;
 
 Constant MAX_INPUT_CHARS     = 78;
 Constant MAX_INPUT_WORDS     = 20;
 
 Array player_input_array->(MAX_INPUT_CHARS + 3);
 Array parse_array->(2 + 4 * MAX_INPUT_WORDS);
+
+! ######################### Include utility files
+
+Include "scope.h";
 
 ! ######################### Grammar + Actions
 [QuitSub;
@@ -59,10 +63,20 @@ Array parse_array->(2 + 4 * MAX_INPUT_WORDS);
 	"Taking...";
 ];
 
+[DropSub;
+	"Taking...";
+];
+
 Verb 'quit'
 	* -> Quit
 	* 'into'/'out'/'of'/'hello'/'bob' noun -> Quit
 	* 'out' 'of' -> Take reverse;
+
+Verb 'take' 'get'
+	* noun -> Take;
+
+Verb 'drop'
+	* noun -> Drop;
 
 ! ######################### Parser
 
@@ -77,6 +91,7 @@ Verb 'quit'
 	player_input_array->0 = MAX_INPUT_CHARS - 1;
 	@sread player_input_array parse_array;
 #EndIf;
+	input_words = parse_array -> 1;
 ];
 
 
@@ -117,40 +132,46 @@ Verb 'quit'
 ];
 ! #EndIf;
 
-[check_noun parse_pointer   i j n p obj result matches last_match current_word name_array name_array_len;
+[check_noun parse_pointer   i j n p obj result matches last_match current_word name_array name_array_len best_score best_obj;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
-	n = wn;
-	p = parse_pointer;
-	current_word = parse_pointer-->0;
-	for(i = 0: i < MAX_SCOPE: i++) {
+	for(i = 0: i < scope_objects: i++) {
+		n = wn;
+		p = parse_pointer;
+		current_word = parse_pointer-->0;
 		obj = scope-->i;
-		if(obj == nothing) continue;
-		! the matching of name with parse_array doesn't work yet
+!		if(obj == nothing) continue;
 		if(obj.#name > 1) {
 			name_array = obj.&name;
 			name_array_len = obj.#name / 2;
+			while(n < input_words) {
 #IfV5;
-			@scan_table current_word name_array name_array_len -> result ?success;
+				@scan_table current_word name_array name_array_len -> result ?success;
 #IfNot;
-			for(j = 0: j < name_array_len: j++) {
-				if(name_array-->j == current_word) jump success;
-			}
+				for(j = 0: j < name_array_len: j++) {
+					if(name_array-->j == current_word) jump success;
+				}
 #EndIf;
-			continue;
-		}
+				jump not_matched;
 .success;
-		n++;
-		p = p + 4;
-		matches++;
-		last_match = obj;
+				n++;
+				p = p + 4;
+				if(n == best_score) matches++;
+				if(n > best_score) {
+					last_match = obj;
+					best_score = n;
+					matches = 1;
+				}
+			}
+		}
+.not_matched;
 
 !		print "checking ", obj.&name-->0, " ", current_word, "^";
 	}
 	if(matches == 1) {
-		wn = n;
-		parse_pointer = p;
+		wn = best_score;
+!		parse_pointer = p;
 		return last_match;
 	}
 	if(matches > 1) return -2;
