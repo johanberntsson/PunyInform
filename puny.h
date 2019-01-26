@@ -37,6 +37,10 @@ Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
 Global status_field_2 = 0; ! Must be third global. Is used to show turns or minutes
 Global action;
+Global noun;
+Global second;
+Global inp1;
+Global inp2;
 Global reverse;
 Global game_state;
 Global wn;
@@ -54,6 +58,26 @@ Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an ex
 Include "scope.h";
 
 ! ######################### Grammar + Actions
+[ LookSub _i _obj;
+	! cheating for now
+	print (string) location.description;
+	new_line;
+	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
+		if(_obj ~= nothing) {
+			new_line;
+			if(_obj.initial) {
+				print (string) _obj.initial;
+			} else {
+				print "There is a ",(name) scope-->_i, " here. ";
+			}
+			new_line;
+		}
+	}
+];
+
+
+
 [QuitSub;
 	game_state = GS_QUIT;
 	"Quitting...";
@@ -66,6 +90,9 @@ Include "scope.h";
 [DropSub;
 	"Taking...";
 ];
+
+Verb 'look'
+	* -> Look;
 
 Verb 'quit'
 	* -> Quit
@@ -165,7 +192,7 @@ Verb 'drop'
 	return -1;
 ];
 
-[parse_and_perform_action _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer;
+[parse_and_perform_action _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer _noun_tokens _noun;
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
@@ -207,6 +234,9 @@ Verb 'drop'
 		wn = 1;
 		_parse_pointer = parse_array + 6;
 		_pattern_index = _pattern - 1;
+		_noun_tokens = 0;
+		noun = 0;
+		second = 0;
 		while(true) {
 			_pattern_index = _pattern_index + 3;
 			_token = _pattern_index -> 0;
@@ -243,8 +273,15 @@ Verb 'drop'
 				! we expect a noun here
 				! check all objects in 'scope', and see if any match.
 				! If so, update wn and parse_pointer, and return success
-				if(check_noun(_parse_pointer) >= 0) {
+				_noun = check_noun(_parse_pointer);
+				if(_noun > 0) {
 					print "Noun match!^";
+					if(_noun_tokens == 0) {
+						noun = _noun;
+					} else if(_noun_tokens == 1){
+						second = _noun;
+					}
+					_noun_tokens++;
 					continue;
 				}
 				print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
@@ -264,23 +301,41 @@ Verb 'drop'
 	"Sorry, I didn't understand that.^";
 
 .parse_success;
-	print "Complete pattern match!^";
 	action = (_pattern --> 0) & $03ff;
-	print "Performing action ", action, "^";
-	indirect(#actions_table --> action);
+	perform_action();
 ];
 
+[action_primitive; indirect(#actions_table-->action); ];
+
+[perform_action;
+	print "Performing action ", action, "^";
+! Add check for before routines and fake actions later
+!    if ((BeforeRoutines() == false) && action < 4096)
+        action_primitive();
+];
+
+[perform_action_safe p_action p_noun p_second _sa _sn _ss;
+    _sa = action; _sn = noun; _ss = second;
+    action = p_action; noun = p_noun; second = p_second;
+	perform_action();
+    action = _sa; noun = _sn; second = _ss;
+];
+
+[R_Process p_action p_noun p_second _s1 _s2;
+    _s1 = inp1; _s2 = inp2;
+    inp1 = p_noun; inp2 = p_second;
+    perform_action_safe(p_action, p_noun, p_second);
+    inp1 = _s1; inp2 = _s2;
+];
 
 
 [main;
 	print "PunyInform 0.0^^";
-	print "Adj: ", #adjectives_table;
-	@new_line;
-	print "Action: ", #actions_table;
-	@new_line;
 
-	game_start();
 	game_state = GS_PLAYING;
+	game_start();
+	<Look>; ! Equivalent to perform_action(##Look);
+
 	while(game_state == GS_PLAYING) {
 		read_player_input();
 		parse_and_perform_action();

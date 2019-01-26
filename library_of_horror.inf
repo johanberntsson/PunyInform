@@ -21,27 +21,9 @@ Object -> BlueBook "blue book"
 		initial "A blue book is standing on a shelf.",
 		description "The book looks new and shiny.";
 
-[ look_around _i _obj;
-	! cheating for now
-	print (string) location.description;
-	new_line;
-	for(_i = 0: _i < scope_objects: _i++) {
-		_obj = scope-->_i;
-		if(_obj ~= nothing) {
-			new_line;
-			if(_obj.initial) {
-				print (string) _obj.initial;
-			} else {
-				print "There is a ",(name) scope-->_i, " here. ";
-			}
-			new_line;
-		}
-	}
-];
-
 [game_start;
 	location = Library;
 	print "^^And so the story begins...^^";
 	update_scope(location);
-	look_around();
+!	look_around();
 ];
