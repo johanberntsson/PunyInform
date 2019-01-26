@@ -88,7 +88,7 @@ Include "scope.h";
 ];
 
 [DropSub;
-	"Taking...";
+	"Dropping...";
 ];
 
 Verb 'look'
@@ -302,29 +302,29 @@ Verb 'drop'
 
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
-	perform_action();
+	perform_prepared_action();
 ];
 
 [action_primitive; indirect(#actions_table-->action); ];
 
-[perform_action;
+[perform_prepared_action;
 	print "Performing action ", action, "^";
 ! Add check for before routines and fake actions later
 !    if ((BeforeRoutines() == false) && action < 4096)
         action_primitive();
 ];
 
-[perform_action_safe p_action p_noun p_second _sa _sn _ss;
+[perform_action p_action p_noun p_second _sa _sn _ss;
     _sa = action; _sn = noun; _ss = second;
     action = p_action; noun = p_noun; second = p_second;
-	perform_action();
+	perform_prepared_action();
     action = _sa; noun = _sn; second = _ss;
 ];
 
 [R_Process p_action p_noun p_second _s1 _s2;
     _s1 = inp1; _s2 = inp2;
     inp1 = p_noun; inp2 = p_second;
-    perform_action_safe(p_action, p_noun, p_second);
+    perform_action(p_action, p_noun, p_second);
     inp1 = _s1; inp2 = _s2;
 ];
 
@@ -334,7 +334,7 @@ Verb 'drop'
 
 	game_state = GS_PLAYING;
 	game_start();
-	<Look>; ! Equivalent to perform_action_safe(##Look);
+	<Look>; ! Equivalent to perform_action(##Look);
 
 	while(game_state == GS_PLAYING) {
 		read_player_input();
