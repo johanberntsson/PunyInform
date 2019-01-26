@@ -21,18 +21,18 @@ Object -> BlueBook "blue book"
 		initial "A blue book is standing on a shelf.",
 		description "The book looks new and shiny.";
 
-[ look_around v_i v_obj;
+[ look_around _i _obj;
 	! cheating for now
 	print (string) location.description;
 	new_line;
-	for(v_i = 0: v_i < scope_objects: v_i++) {
-		v_obj = scope-->v_i;
-		if(v_obj ~= nothing) {
+	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
+		if(_obj ~= nothing) {
 			new_line;
-			if(v_obj.initial) {
-				print (string) v_obj.initial;
+			if(_obj.initial) {
+				print (string) _obj.initial;
 			} else {
-				print "There is a ",(name) scope-->v_i, " here. ";
+				print "There is a ",(name) scope-->_i, " here. ";
 			}
 			new_line;
 		}

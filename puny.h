@@ -47,7 +47,7 @@ Constant MAX_INPUT_CHARS     = 78;
 Constant MAX_INPUT_WORDS     = 20;
 
 Array player_input_array->(MAX_INPUT_CHARS + 3);
-Array parse_array->(2 + 4 * MAX_INPUT_WORDS);
+Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
 
 ! ######################### Include utility files
 
@@ -80,98 +80,102 @@ Verb 'drop'
 
 ! ######################### Parser
 
-[read_player_input v_result;
+[read_player_input _result;
 	print ">";
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
 	player_input_array->0 = MAX_INPUT_CHARS;
 	player_input_array->1 = 0;
-	@aread player_input_array parse_array -> v_result;
+	@aread player_input_array parse_array -> _result;
 #IfNot;
 	player_input_array->0 = MAX_INPUT_CHARS - 1;
 	@sread player_input_array parse_array;
 #EndIf;
 	input_words = parse_array -> 1;
+	! Set word after last word in parse array to all zeroes, so it won't match any words.
+	_result = 2 * input_words + 1;
+	parse_array-->_result = 0;
+	parse_array-->(_result + 1) = 0;
 ];
 
 
-[check_pattern p_pattern v_i v_action_number v_token_top v_token_next v_token_bottom;
+[check_pattern p_pattern _i _action_number _token_top _token_next _token_bottom;
     ! action number is the first two bytes
-	v_action_number = p_pattern-->0;
+	_action_number = p_pattern-->0;
 	p_pattern = p_pattern + 2;
-	action = v_action_number & $3ff;
-	reverse = (v_action_number & $400 ~= 0);
+	action = _action_number & $3ff;
+	reverse = (_action_number & $400 ~= 0);
 	print "Action#: ", action, " Reverse: ", reverse, "^";
 
-	for(v_i = 0: : v_i++) {
+	for(_i = 0: : _i++) {
 		if(p_pattern->0 == TT_END) break;
-		v_token_top = (p_pattern->0 & $c0)/64; ! top (2 bits)
-		v_token_next = (p_pattern->0 & $30)/16;  ! next (2 bits)
-		v_token_bottom = p_pattern->0 & $0f; ! bottom (4 bits)
-		print "Token#: ", v_i, " Type: ", p_pattern->0, " (top ", v_token_top, ", next ",v_token_next, ", bottom ",v_token_bottom, ") Next byte: ",(p_pattern + 1)-->0,"^";
+		_token_top = (p_pattern->0 & $c0)/64; ! top (2 bits)
+		_token_next = (p_pattern->0 & $30)/16;  ! next (2 bits)
+		_token_bottom = p_pattern->0 & $0f; ! bottom (4 bits)
+		print "Token#: ", _i, " Type: ", p_pattern->0, " (top ", _token_top, ", next ",_token_next, ", bottom ",_token_bottom, ") Next byte: ",(p_pattern + 1)-->0,"^";
 		p_pattern = p_pattern + 3;
 	}
 !	print ": ", i, " tokens^";
 	return p_pattern + 1; ! skip TT_END
 ];
 
-[check_noun p_parse_pointer v_i v_j v_n v_p v_obj v_result v_matches v_last_match v_current_word v_name_array v_name_array_len v_best_score;
+[check_noun p_parse_pointer _i _j _n _p _obj _result _matches _last_match _current_word _name_array _name_array_len _best_score;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
-	for(v_i = 0: v_i < scope_objects: v_i++) {
-		v_n = wn;
-		v_p = p_parse_pointer;
-		v_current_word = p_parse_pointer-->0;
-		v_obj = scope-->v_i;
-!		if(v_obj == nothing) continue;
-		if(v_obj.#name > 1) {
-			v_name_array = v_obj.&name;
-			v_name_array_len = v_obj.#name / 2;
-			while(v_n < input_words) {
+	for(_i = 0: _i < scope_objects: _i++) {
+		_n = wn;
+		_p = p_parse_pointer;
+		_current_word = p_parse_pointer-->0;
+		_obj = scope-->_i;
+!		if(_obj == nothing) continue;
+		if(_obj.#name > 1) {
+			_name_array = _obj.&name;
+			_name_array_len = _obj.#name / 2;
+			while(_n < input_words) {
 #IfV5;
-				@scan_table v_current_word v_name_array v_name_array_len -> v_result ?success;
+				@scan_table _current_word _name_array _name_array_len -> _result ?success;
 #IfNot;
-				for(v_j = 0: v_j < v_name_array_len: v_j++) {
-					if(v_name_array-->v_j == v_current_word) jump success;
+				for(_j = 0: _j < _name_array_len: _j++) {
+					if(_name_array-->_j == _current_word) jump success;
 				}
 #EndIf;
 				jump not_matched;
 .success;
-				v_n++;
-				v_p = v_p + 4;
-				if(v_n == v_best_score) v_matches++;
-				if(v_n > v_best_score) {
-					v_last_match = v_obj;
-					v_best_score = v_n;
-					v_matches = 1;
+				_n++;
+				_p = _p + 4;
+				if(_n == _best_score) _matches++;
+				if(_n > _best_score) {
+					_last_match = _obj;
+					_best_score = _n;
+					_matches = 1;
 				}
 			}
 		}
 .not_matched;
 
-!		print "checking ", v_obj.&name-->0, " ", v_current_word, "^";
+!		print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
-	if(v_matches == 1) {
-		wn = v_best_score;
+	if(_matches == 1) {
+		wn = _best_score;
 !		parse_pointer = p;
-		return v_last_match;
+		return _last_match;
 	}
-	if(v_matches > 1) return -2;
+	if(_matches > 1) return -2;
 	return -1;
 ];
 
-[parse_and_perform_action v_verb v_word_data v_verb_num v_verb_grammar v_num_patterns v_i v_pattern v_pattern_index v_token v_token_type v_data v_parse_pointer;
+[parse_and_perform_action _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer;
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
-	v_verb = parse_array-->1;
-	if(v_verb < (0-->4)) {
+	_verb = parse_array-->1;
+	if(_verb < (0-->4)) {
 		"That is not a verb I recognize.";
 	}
 
-	v_word_data = v_verb + DICT_BYTES_FOR_WORD;
-	if((v_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
+	_word_data = _verb + DICT_BYTES_FOR_WORD;
+	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
 		"That is not a verb I recognize.";
 	}
 
@@ -182,33 +186,33 @@ Verb 'drop'
 ! 	print "Word 1: ", (parse_array + 2)-->0, "^";
 ! 	print "Word 2: ", (parse_array + 6)-->0, "^";
 ! 	print "Word 3: ", (parse_array + 10)-->0, "^";
-	v_verb_num = 255 - (v_word_data->1);
-	print "Verb#: ",v_verb_num,".^";
-	v_verb_grammar = (0-->7)-->v_verb_num;
-	print "Grammar address for this verb: ",v_verb_grammar,"^";
-	v_num_patterns = v_verb_grammar->0;
-	print "Number of patterns: ",v_num_patterns,"^";
+	_verb_num = 255 - (_word_data->1);
+	print "Verb#: ",_verb_num,".^";
+	_verb_grammar = (0-->7)-->_verb_num;
+	print "Grammar address for this verb: ",_verb_grammar,"^";
+	_num_patterns = _verb_grammar->0;
+	print "Number of patterns: ",_num_patterns,"^";
 
 	! First print all patterns, for debug purposes
-	v_pattern = v_verb_grammar + 1;
-	for(v_i = 0 : v_i < v_num_patterns : v_i++) {
-		print "############ Pattern ",v_i,"^";
-		v_pattern = check_pattern(v_pattern);
+	_pattern = _verb_grammar + 1;
+	for(_i = 0 : _i < _num_patterns : _i++) {
+		print "############ Pattern ",_i,"^";
+		_pattern = check_pattern(_pattern);
 	}
 
 	@new_line;
-	v_pattern = v_verb_grammar + 1;
-	for(v_i = 0 : v_i < v_num_patterns : v_i++) {
-		print "############ Pattern ",v_i," address ", v_pattern, "^";
+	_pattern = _verb_grammar + 1;
+	for(_i = 0 : _i < _num_patterns : _i++) {
+		print "############ Pattern ",_i," address ", _pattern, "^";
 		wn = 1;
-		v_parse_pointer = parse_array + 6;
-		v_pattern_index = v_pattern - 1;
+		_parse_pointer = parse_array + 6;
+		_pattern_index = _pattern - 1;
 		while(true) {
-			v_pattern_index = v_pattern_index + 3;
-			v_token = v_pattern_index -> 0;
-			print "TOKEN: ", v_token, "^";
-			v_data = (v_pattern_index + 1) --> 0;
-			if(v_token == TT_END) {
+			_pattern_index = _pattern_index + 3;
+			_token = _pattern_index -> 0;
+			print "TOKEN: ", _token, "^";
+			_data = (_pattern_index + 1) --> 0;
+			if(_token == TT_END) {
 				if(wn == parse_array -> 1) {
 					jump parse_success;
 				}
@@ -218,50 +222,50 @@ Verb 'drop'
 				print "Fail, since grammar line has not ended but player input has.^";
 				break;
 			}
-			v_token_type = v_token & $0f;
-			if(v_token_type == TT_PREPOSITION) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
-				print "Preposition: ", v_data, "^";
-				if(v_parse_pointer --> 0 == v_data) {
+			_token_type = _token & $0f;
+			if(_token_type == TT_PREPOSITION) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
+				print "Preposition: ", _data, "^";
+				if(_parse_pointer --> 0 == _data) {
 					print "Match!^";
 					wn++;
-					v_parse_pointer = v_parse_pointer + 4;
-					while(v_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) { ! Alternative prepositions which are not at the end of the list
+					_parse_pointer = _parse_pointer + 4;
+					while(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) { ! Alternative prepositions which are not at the end of the list
 						print "Skipping one alternative...^";
-						v_pattern_index = v_pattern_index + 3;
-						v_token = v_pattern_index -> 0;
+						_pattern_index = _pattern_index + 3;
+						_token = _pattern_index -> 0;
 					}
 					continue;
 				}
-				print "Failed prep: ", v_parse_pointer, ":", v_parse_pointer --> 0, " should have been ", v_data, "^";
-				if(v_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
+				print "Failed prep: ", _parse_pointer, ":", _parse_pointer --> 0, " should have been ", _data, "^";
+				if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
-			} else if(v_token_type == TT_NOUN) {
+			} else if(_token_type == TT_NOUN) {
 				! we expect a noun here
 				! check all objects in 'scope', and see if any match.
 				! If so, update wn and parse_pointer, and return success
-				if(check_noun(v_parse_pointer) >= 0) {
+				if(check_noun(_parse_pointer) >= 0) {
 					print "Noun match!^";
 					continue;
 				}
-				print "Not a matching noun: ", v_parse_pointer, ":", v_parse_pointer --> 0, "^";
+				print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
 				break;
 			}
 			! This is a token we don't recognize, which means we fail at matching against this line
-			print "Unknown token: ", v_token, "^";
+			print "Unknown token: ", _token, "^";
 			break;
 		}
 		! This pattern has failed.
 		print "Pattern didn't match.^";
 		! Scan to the end of this pattern
-		while(v_pattern_index -> 0 ~= TT_END) v_pattern_index = v_pattern_index + 3;
-		v_pattern = v_pattern_index + 1;
+		while(_pattern_index -> 0 ~= TT_END) _pattern_index = _pattern_index + 3;
+		_pattern = _pattern_index + 1;
 	}
 
 	"Sorry, I didn't understand that.^";
 
 .parse_success;
 	print "Complete pattern match!^";
-	action = (v_pattern --> 0) & $03ff;
+	action = (_pattern --> 0) & $03ff;
 	print "Performing action ", action, "^";
 	indirect(#actions_table --> action);
 ];
