@@ -334,7 +334,7 @@ Verb 'drop'
 
 	game_state = GS_PLAYING;
 	game_start();
-	<Look>; ! Equivalent to perform_action(##Look);
+	<Look>; ! Equivalent to perform_action_safe(##Look);
 
 	while(game_state == GS_PLAYING) {
 		read_player_input();
