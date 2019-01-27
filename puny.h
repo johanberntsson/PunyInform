@@ -47,6 +47,7 @@ Constant DICT_BYTES_FOR_WORD = 6;
 Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
 Global status_field_2 = 0; ! Must be third global. Is used to show turns or minutes
+Global player;
 Global action;
 Global noun;
 Global second;
@@ -114,6 +115,15 @@ Include "scope.h";
 	move noun to location;
 	"Dropped.";
 ];
+
+[InventorySub;
+	if(child(player) == 0)
+		"You are empty handed.";
+	print_contents("You are holding ", ".^", player);
+];
+
+Verb 'i' 'inventory'
+	* -> Inventory;
 
 Verb 'look' 'l'
 	* -> Look;
@@ -243,7 +253,7 @@ Verb 'drop'
 	return p_pattern + 1; ! skip TT_END
 ];
 
-[check_noun p_parse_pointer _i _j _n _p _obj _result _matches _last_match _current_word _name_array _name_array_len _best_score;
+[check_noun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
@@ -429,13 +439,14 @@ Verb 'drop'
 ];
 
 
-Object Player "you"
+Object DefaultPlayer "you"
 	has concealed;
 
 
 [main;
 	print "PunyInform 0.0^^";
 
+	player = DefaultPlayer;
 	game_state = GS_PLAYING;
 	game_start();
 	player_to(location);
