@@ -3,10 +3,18 @@
 Constant Grammar__Version = 2;
 
 Attribute light;
+Attribute supporter;
+Attribute container;
+Attribute transparent;
+Attribute open;
+Attribute concealed;
+Attribute moved;
+Attribute visited alias moved;
 
 ! Property name; ! This seems to be hardcoded in the Inform compiler
 Property initial;
 Property description;
+Property short_name;
 
 
 Constant TT_NOUN             = 1;    ! one or more words referring to an object
@@ -26,6 +34,9 @@ Constant TOKEN_LAST_PREP     = $52;
 Constant GS_PLAYING          = 1;
 Constant GS_QUIT             = 2;
 Constant GS_DEAD             = 3;
+
+Constant FORM_DEF            = 1;
+Constant FORM_INDEF          = 2;
 
 #IfV3;
 Constant DICT_BYTES_FOR_WORD = 4;
@@ -58,25 +69,31 @@ Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an ex
 Include "scope.h";
 
 ! ######################### Grammar + Actions
-[ LookSub _i _obj;
-	! cheating for now
-	print (string) location.description;
-	new_line;
-	for(_i = 0: _i < scope_objects: _i++) {
-		_obj = scope-->_i;
-		if(_obj ~= nothing) {
-			new_line;
-			if(_obj.initial) {
-				print (string) _obj.initial;
-			} else {
-				print "There is a ",(name) scope-->_i, " here. ";
-			}
-			new_line;
+[ LookSub _obj _text;
+
+	! ### Print room name
+	print_obj_name(location);
+	@new_line;
+
+	! ### Print room description
+	_text = location.description;
+	if(_text) {
+		print_or_run(_text);
+	}
+
+	print_contents(" You can also see ", " here.", location);
+	@new_line;
+
+	objectloop(_obj in location) {
+		_text = _obj.initial;
+		if(_obj hasnt moved && _text ~= 0) {
+			@new_line;
+			print_or_run(_text);
+			@new_line;
 		}
 	}
+
 ];
-
-
 
 [QuitSub;
 	game_state = GS_QUIT;
@@ -84,14 +101,21 @@ Include "scope.h";
 ];
 
 [TakeSub;
-	"Taking...";
+	if(noun in player)
+		"You already have that.";
+	move noun to player;
+	give noun moved;
+	"Taken.";
 ];
 
 [DropSub;
-	"Dropping...";
+	if(noun notin player)
+		"You are not holding that.";
+	move noun to location;
+	"Dropped.";
 ];
 
-Verb 'look'
+Verb 'look' 'l'
 	* -> Look;
 
 Verb 'quit'
@@ -104,6 +128,79 @@ Verb 'take' 'get'
 
 Verb 'drop'
 	* noun -> Drop;
+
+! ######################### Helper routines
+
+[print_obj_name p_obj p_form _text _done;
+	if(p_form == FORM_DEF) {
+		print "the ";
+	} else if(p_form == FORM_INDEF) {
+		print "a ";
+	}
+	_text = p_obj.short_name;
+	if(_text) {
+		_done = print_or_run(_text);
+	}
+	if(_done == 0) {
+		print (object) p_obj;
+	}
+];
+
+[print_contents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
+! 	print "Objectlooping...^";
+	objectloop(_obj in p_obj) {
+!		print "Considering ", (object) _obj, "...^";
+!		if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
+		if(_obj hasnt concealed && (_obj has moved || _obj.initial == 0)) {
+			if(_printed_first_text == 0) {
+				print (string) p_first_text;
+				_printed_first_text = 1;
+			}
+			! Push obj onto queue, printing the object that is shifted out, if any
+			if(_last_obj) {
+				if(_printed_any_objects) print ", ";
+				print_obj_name(_last_obj, FORM_INDEF);
+				_printed_any_objects = 1;
+			}
+			_last_obj = _obj;
+		}
+	}
+	if(_last_obj) {
+		if(_printed_any_objects) print " and ";
+		print_obj_name(_last_obj, FORM_INDEF);
+		print (string) p_last_text;
+	}
+
+!
+! 	for(_i = 0: _i < scope_objects: _i++) {
+! 		_obj = scope-->_i;
+! 		if(_obj ~= nothing) {
+! 			@new_line;
+! 			_text = _obj.initial;
+! 			if(_text) {
+! 				print_or_run(_text);
+! 			} else {
+! 				print "There is a ",(name) scope-->_i, " here. ";
+! 			}
+! 			@new_line;
+! 		}
+! 	}
+];
+
+[print_or_run p_value;
+	if(p_value ofclass String) {
+		print (string) p_value;
+		rtrue;
+	}
+	else if(p_value ofclass Routine) {
+		return indirect(p_value);
+	}
+];
+
+[player_to p_loc;
+	move Player to p_loc;
+	location = p_loc;
+];
 
 ! ######################### Parser
 
@@ -193,6 +290,9 @@ Verb 'drop'
 ];
 
 [parse_and_perform_action _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer _noun_tokens _noun;
+
+	update_scope(location);
+
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
@@ -308,7 +408,7 @@ Verb 'drop'
 [action_primitive; indirect(#actions_table-->action); ];
 
 [perform_prepared_action;
-	print "Performing action ", action, "^";
+!	print "Performing action ", action, "^";
 ! Add check for before routines and fake actions later
 !    if ((BeforeRoutines() == false) && action < 4096)
         action_primitive();
@@ -329,11 +429,16 @@ Verb 'drop'
 ];
 
 
+Object Player "you"
+	has concealed;
+
+
 [main;
 	print "PunyInform 0.0^^";
 
 	game_state = GS_PLAYING;
 	game_start();
+	player_to(location);
 	<Look>; ! Equivalent to perform_action(##Look);
 
 	while(game_state == GS_PLAYING) {

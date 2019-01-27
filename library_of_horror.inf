@@ -6,10 +6,16 @@ Include "puny.h";
 
 Object Library "The Library"
 	with
+		short_name [; print "A huge library!"; rtrue; ],
 		description "You are in an old and deserted library.",
 	has light;
 
-Object -> RedBook "red book"
+Object -> Box "box"
+	with
+		name 'box',
+	has container open;
+
+Object -> -> RedBook "red book"
 	with
 		name 'red' 'book',
 		initial "There is a red book lying on the floor here.",
@@ -21,9 +27,12 @@ Object -> BlueBook "blue book"
 		initial "A blue book is standing on a shelf.",
 		description "The book looks new and shiny.";
 
+Object -> GreenBook "green book"
+	with
+		name 'book' 'green',
+		description "The book is nice and tidy.";
+
 [game_start;
 	location = Library;
 	print "^^And so the story begins...^^";
-	update_scope(location);
-!	look_around();
 ];
