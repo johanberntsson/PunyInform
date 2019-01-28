@@ -4,10 +4,19 @@
 
 Include "puny.h";
 
+Object CarPark "Car Park"
+	with
+		short_name [; print "In front of the library!"; rtrue; ],
+		description "You are in a cark park in front of the library. You can enter to the north.",
+		n_to Library,
+		cant_go "Without a car the only viable exit is to the north.",
+	has light;
+
 Object Library "The Library"
 	with
 		short_name [; print "A huge library!"; rtrue; ],
-		description "You are in an old and deserted library.",
+		description "You are in an old and deserted library. There is an exit leading south.",
+		s_to CarPark,
 	has light;
 
 Object -> Box "box"
