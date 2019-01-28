@@ -253,7 +253,7 @@ Verb 'drop'
 	return p_pattern + 1; ! skip TT_END
 ];
 
-[check_noun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score;
+[check_noun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
