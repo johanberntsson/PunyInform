@@ -17,15 +17,10 @@ Property description;
 Property short_name;
 
 ! directions
-! I need to define the Compass object to make sure that all direction
-! properties have been declared, otherwise the missing properties will
-! cause a compile error in the direction_properties_array declaration below.
-Object Compass
-	with
-		n_to 0,
-		s_to 0,
-		e_to 0,
-		w_to 0;
+Property n_to;
+Property s_to;
+Property e_to;
+Property w_to;
 Array directions_array table 'n//' 's//' 'e//' 'w//';
 Array direction_properties_array table n_to s_to e_to w_to;
 
