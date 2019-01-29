@@ -17,7 +17,7 @@ Property description;
 Property short_name;
 
 ! directions
-Array directions_array table 'n//' 's//' 'e//' 'w//';
+!Array directions_array table 'n//' 's//' 'e//' 'w//';
 
 ! Header constants
 Constant HEADER_DICTIONARY   = 4;    ! 2*4 = $8
@@ -128,21 +128,33 @@ Include "scope.h";
 	print_contents("You are holding ", ".^", player);
 ];
 
-[GoSub _dir;
+[GoDirSub _dir _new_location;
 	_dir = parse_array --> wn;
-	print "Trying to go direction ", (address) _dir, "^";
-	if(_dir == 'n') {
-		! TODO check location.n_do and move if okay
-		"north!";
+	!print "Trying to go direction ", (address) _dir, "^";
+	switch(_dir) {
+		'n//':
+			if(location provides n_to) {
+				_new_location = location.n_to;
+			}
+		's//':
+			if(location provides s_to) {
+				_new_location = location.s_to;
+			}
+		default:
 	}
-	"you can't go that direction";
+	if(_new_location == 0) {
+		"You can't go that way.";
+	}
+	location = _new_location;
+	player_to(location);
+	<Look>; ! Equivalent to perform_action(##Look);
 ];
 
 Verb 'i' 'inventory'
 	* -> Inventory;
 
 Verb 'n' 's' 'e' 'w'
-	* -> Go;
+	* -> GoDir;
 
 Verb 'look' 'l'
 	* -> Look;
@@ -326,16 +338,16 @@ Verb 'drop'
 		"Come again?";
 	}
 
-!	check if it is a direction
-	for(_i = 1 : _i <= directions_array-->0 : _i++) {
-		_verb = parse_array-->1;
-		!_word_data = directions_array --> _i + 0-->HEADER_DICTIONARY;
-		_word_data = directions_array --> _i;
-		print (address) _verb, "==", (address) _word_data, "^";
-		if(_verb == _word_data) {
-			print "Found direction^";
-		}
-	}
+	! check if it is a direction
+	!for(_i = 1 : _i <= directions_array-->0 : _i++) {
+	!	_verb = parse_array-->1;
+	!	!_word_data = directions_array --> _i + 0-->HEADER_DICTIONARY;
+	!	_word_data = directions_array --> _i;
+	!	print (address) _verb, "==", (address) _word_data, "^";
+	!	if(_verb == _word_data) {
+	!		print "Found direction^";
+	!	}
+	!}
 
 
 	! not a direction, try a verb command
