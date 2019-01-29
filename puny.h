@@ -21,6 +21,7 @@ Property n_to;
 Property s_to;
 Property e_to;
 Property w_to;
+Property cant_go;
 Array directions_array table 'n//' 's//' 'e//' 'w//';
 Array direction_properties_array table n_to s_to e_to w_to;
 
@@ -137,7 +138,11 @@ Include "scope.h";
 	!print "Trying to go direction ", (address) direction, "^";
 	!print "property ", property, "^";
 	if(location provides property) {
+#IfV5;
 		_new_location = location.property;
+#IfNot;
+		_new_location = location.property; ! TODO: doesn't work in z3
+#EndIf;
 	}
 	if(_new_location == 0) {
 		if(location provides cant_go) {
