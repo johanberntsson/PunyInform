@@ -16,6 +16,12 @@ Property initial;
 Property description;
 Property short_name;
 
+! directions
+!Array directions_array table 'n' 's' 'e' 'w';
+
+! Header constants
+Constant HEADER_DICTIONARY   = 4;    ! 2*4 = $8
+Constant HEADER_STATIC_MEM   = 7;    ! 2*7 = $c
 
 Constant TT_NOUN             = 1;    ! one or more words referring to an object
 Constant TT_PREPOSITION      = 2;    ! e.g. 'into'
@@ -122,8 +128,21 @@ Include "scope.h";
 	print_contents("You are holding ", ".^", player);
 ];
 
+[GoSub _dir;
+	_dir = parse_array --> wn;
+	print "Trying to go direction ", (address) _dir, "^";
+	if(_dir == 'n') {
+		! TODO check location.n_do and move if okay
+		"north!";
+	}
+	"you can't go that direction";
+];
+
 Verb 'i' 'inventory'
 	* -> Inventory;
+
+Verb 'n' 's' 'e' 'w'
+	* -> Go;
 
 Verb 'look' 'l'
 	* -> Look;
@@ -306,8 +325,23 @@ Verb 'drop'
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
+
+	! check if it is a direction
+	!for(_i = 1 : _i <= directions_array-->0 : _i++) {
+	!	_verb = parse_array-->1;
+	!	!_word_data = directions_array --> _i + 0-->HEADER_DICTIONARY;
+	!	_word_data = directions_array --> _i;
+	!	print (address) _verb, "==", (address) _word_data, "^";
+	!	if(_verb == _word_data) {
+	!		print "Found direction^";
+	!	}
+	!}
+
+
+
+	! not a direction, try a verb command
 	_verb = parse_array-->1;
-	if(_verb < (0-->4)) {
+	if(_verb < (0-->HEADER_DICTIONARY)) {
 		"That is not a verb I recognize.";
 	}
 
@@ -325,7 +359,7 @@ Verb 'drop'
 ! 	print "Word 3: ", (parse_array + 10)-->0, "^";
 	_verb_num = 255 - (_word_data->1);
 	print "Verb#: ",_verb_num,".^";
-	_verb_grammar = (0-->7)-->_verb_num;
+	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_verb_num;
 	print "Grammar address for this verb: ",_verb_grammar,"^";
 	_num_patterns = _verb_grammar->0;
 	print "Number of patterns: ",_num_patterns,"^";
