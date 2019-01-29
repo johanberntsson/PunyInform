@@ -138,11 +138,8 @@ Include "scope.h";
 	!print "Trying to go direction ", (address) direction, "^";
 	!print "property ", property, "^";
 	if(location provides property) {
-#IfV5;
-		_new_location = location.property;
-#IfNot;
-		_new_location = location.property; ! TODO: doesn't work in z3
-#EndIf;
+		!_new_location = location.property; ! doesn't work in z3
+		@get_prop location property -> _new_location; ! works in z3 and z5
 	}
 	if(_new_location == 0) {
 		if(location provides cant_go) {
