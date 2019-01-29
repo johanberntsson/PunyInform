@@ -17,7 +17,7 @@ Property description;
 Property short_name;
 
 ! directions
-!Array directions_array table 'n' 's' 'e' 'w';
+Array directions_array table 'n//' 's//' 'e//' 'w//';
 
 ! Header constants
 Constant HEADER_DICTIONARY   = 4;    ! 2*4 = $8
@@ -326,17 +326,16 @@ Verb 'drop'
 		"Come again?";
 	}
 
-	! check if it is a direction
-	!for(_i = 1 : _i <= directions_array-->0 : _i++) {
-	!	_verb = parse_array-->1;
-	!	!_word_data = directions_array --> _i + 0-->HEADER_DICTIONARY;
-	!	_word_data = directions_array --> _i;
-	!	print (address) _verb, "==", (address) _word_data, "^";
-	!	if(_verb == _word_data) {
-	!		print "Found direction^";
-	!	}
-	!}
-
+!	check if it is a direction
+	for(_i = 1 : _i <= directions_array-->0 : _i++) {
+		_verb = parse_array-->1;
+		!_word_data = directions_array --> _i + 0-->HEADER_DICTIONARY;
+		_word_data = directions_array --> _i;
+		print (address) _verb, "==", (address) _word_data, "^";
+		if(_verb == _word_data) {
+			print "Found direction^";
+		}
+	}
 
 
 	! not a direction, try a verb command
