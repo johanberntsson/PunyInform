@@ -17,7 +17,17 @@ Property description;
 Property short_name;
 
 ! directions
-!Array directions_array table 'n//' 's//' 'e//' 'w//';
+! I need to define the Compass object to make sure that all direction
+! properties have been declared, otherwise the missing properties will
+! cause a compile error in the direction_properties_array declaration below.
+Object Compass
+	with
+		n_to 0,
+		s_to 0,
+		e_to 0,
+		w_to 0;
+Array directions_array table 'n//' 's//' 'e//' 'w//';
+Array direction_properties_array table n_to s_to e_to w_to;
 
 ! Header constants
 Constant HEADER_DICTIONARY   = 4;    ! 2*4 = $8
@@ -128,21 +138,16 @@ Include "scope.h";
 	print_contents("You are holding ", ".^", player);
 ];
 
-[GoDirSub _dir _new_location;
-	_dir = parse_array --> wn;
-	!print "Trying to go direction ", (address) _dir, "^";
-	switch(_dir) {
-		'n//':
-			if(location provides n_to) {
-				_new_location = location.n_to;
-			}
-		's//':
-			if(location provides s_to) {
-				_new_location = location.s_to;
-			}
-		default:
+[GoDir direction property _new_location;
+	!print "Trying to go direction ", (address) direction, "^";
+	!print "property ", property, "^";
+	if(location provides property) {
+		_new_location = location.property;
 	}
 	if(_new_location == 0) {
+		if(location provides cant_go) {
+			print_ret (string) location.cant_go;
+		}
 		"You can't go that way.";
 	}
 	location = _new_location;
@@ -152,9 +157,6 @@ Include "scope.h";
 
 Verb 'i' 'inventory'
 	* -> Inventory;
-
-Verb 'n' 's' 'e' 'w'
-	* -> GoDir;
 
 Verb 'look' 'l'
 	* -> Look;
@@ -339,15 +341,16 @@ Verb 'drop'
 	}
 
 	! check if it is a direction
-	!for(_i = 1 : _i <= directions_array-->0 : _i++) {
-	!	_verb = parse_array-->1;
-	!	!_word_data = directions_array --> _i + 0-->HEADER_DICTIONARY;
-	!	_word_data = directions_array --> _i;
-	!	print (address) _verb, "==", (address) _word_data, "^";
-	!	if(_verb == _word_data) {
-	!		print "Found direction^";
-	!	}
-	!}
+	for(_i = 1 : _i <= directions_array-->0 : _i++) {
+		_verb = parse_array-->1;
+		_word_data = directions_array --> _i;
+		!if(_verb ~= 0) print (address) _verb, "==", (address) _word_data, "^";
+		if(_verb == _word_data) {
+			!print "Found direction ",(address) directions_array --> _i, "^";
+			GoDir(directions_array --> _i, direction_properties_array --> _i);
+			rtrue;
+		}
+	}
 
 
 	! not a direction, try a verb command
