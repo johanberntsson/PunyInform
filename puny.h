@@ -134,12 +134,12 @@ Include "scope.h";
 	print_contents("You are holding ", ".^", player);
 ];
 
-[GoDir direction property _new_location;
+[GoDir p_direction p_property _new_location;
 	!print "Trying to go direction ", (address) direction, "^";
 	!print "property ", property, "^";
-	if(location provides property) {
-		!_new_location = location.property; ! doesn't work in z3
-		@get_prop location property -> _new_location; ! works in z3 and z5
+	if(location provides p_property) {
+!		_new_location = location.p_property; ! doesn't work in z3
+		@get_prop location p_property -> _new_location; ! works in z3 and z5
 	}
 	if(_new_location == 0) {
 		if(location provides cant_go) {
