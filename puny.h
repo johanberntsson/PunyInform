@@ -108,6 +108,15 @@ Include "scope.h";
 
 ];
 
+[ExamineSub;
+	if(noun provides description) {
+		print "Has desc...";
+		print_or_run(noun.description);
+	} else {
+		"There is nothing special about ", (the) noun, ".";
+	}
+];
+
 [QuitSub;
 	game_state = GS_QUIT;
 	"Quitting...";
@@ -138,8 +147,8 @@ Include "scope.h";
 	!print "Trying to go direction ", (address) direction, "^";
 	!print "property ", property, "^";
 	if(location provides p_property) {
-!		_new_location = location.p_property; ! doesn't work in z3
-		@get_prop location p_property -> _new_location; ! works in z3 and z5
+		_new_location = location.p_property; ! doesn't work in z3
+!		@get_prop location p_property -> _new_location; ! works in z3 and z5
 	}
 	if(_new_location == 0) {
 		if(location provides cant_go) {
@@ -156,7 +165,8 @@ Verb 'i' 'inventory'
 	* -> Inventory;
 
 Verb 'look' 'l'
-	* -> Look;
+	* -> Look
+	* 'at' noun -> Examine;
 
 Verb 'quit'
 	* -> Quit
@@ -168,6 +178,9 @@ Verb 'take' 'get'
 
 Verb 'drop'
 	* noun -> Drop;
+
+Verb 'examine' 'x//'
+	* noun -> Examine;
 
 ! ######################### Helper routines
 
@@ -483,6 +496,48 @@ Verb 'drop'
     inp1 = _s1; inp2 = _s2;
 ];
 
+#IfV3;
+! These routines are implemented by Veneer, but the default implementations give compile errors for z3
+
+[ FindIndivPropValue p_obj p_property _x _prop_id;
+  _x = p_obj.3;
+	if (_x == 0) rfalse;
+!  print "Table for ", (object) obj, " is at ", (hex) x, "^";
+	while (true) {
+		_prop_id = _x-->0;
+		if(_prop_id == 0) break;
+		if(_prop_id & 32767 == p_property) break;
+!	print (hex) x-->0, " (", (property) x-->0, ")  length ", x->2, ": ";
+!       for (n = 0: n< (x->2)/2: n++)
+!           print (hex) (x+3)-->n, " ";
+!       new_line;
+      _x = _x + _x->2 + 3;
+  }
+  return _x;
+];
+
+[RV__Pr p_object p_property _value _address;
+	if(p_object == 0) {
+		print "*Error: Tried to read property ";
+		Print__PName(p_property);
+		" of nothing.*";
+	}
+	if(p_object provides p_property) {
+		if(p_property > 63) {
+			_address = FindIndivPropValue(p_object, p_property);
+			return (_address + 3)-->0;
+		}
+		@get_prop p_object p_property -> _value;
+		return _value;
+	}
+	print "[Error: Tried to read undefined property ";
+	Print__PName(p_property);
+	print " of ";
+	PrintShortName(p_object);
+	print "]";
+	rfalse;
+];
+#EndIf;
 
 Object DefaultPlayer "you"
 	has concealed;

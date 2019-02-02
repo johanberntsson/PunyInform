@@ -4,6 +4,17 @@
 
 Include "puny.h";
 
+Class Book
+	with
+		description [;
+			print "Self is ", self;
+			if(self provides hello) {
+				print (The) self, " has a Hello value of ", self.hello, ". ";
+			}
+			rfalse;
+		];
+
+
 Object CarPark "Car Park"
 	with
 		short_name [; print "In front of the library!"; rtrue; ],
@@ -24,19 +35,27 @@ Object -> Box "box"
 		name 'box',
 	has container open;
 
-Object -> -> RedBook "red book"
+Book -> -> RedBook "red book"
 	with
 		name 'red' 'book',
 		initial "There is a red book lying on the floor here.",
 		description "The book is old and worn.";
 
-Object -> BlueBook "blue book"
+Book -> BlueBook "blue book"
 	with
 		name 'book' 'blue',
-		initial "A blue book is standing on a shelf.",
-		description "The book looks new and shiny.";
+		initial [;
+			if(BlueBook provides hello && BlueBook.hello > 10) {
+				print "BlueBook.Hello is ", BlueBook.hello, ". ";
+			}
+			"A blue book is standing on a shelf.";
+		],
+!		description "The book looks new and shiny.",
+		bobby 7,
+		hello 13,
+		pants 21;
 
-Object -> GreenBook "green book"
+Book -> GreenBook "green book"
 	with
 		name 'book' 'green',
 		description "The book is nice and tidy.";
