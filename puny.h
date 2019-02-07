@@ -22,7 +22,8 @@ Property s_to;
 Property e_to;
 Property w_to;
 Property cant_go;
-Array directions_array table 'n//' 's//' 'e//' 'w//';
+Array abbr_directions_array table 'n//' 's//' 'e//' 'w//';
+Array full_directions_array table 'north' 'south' 'east' 'west';
 Array direction_properties_array table n_to s_to e_to w_to;
 
 ! Header constants
@@ -143,9 +144,20 @@ Include "scope.h";
 	print_contents("You are holding ", ".^", player);
 ];
 
-[GoDir p_direction p_property _new_location;
-	!print "Trying to go direction ", (address) direction, "^";
-	!print "property ", property, "^";
+[GoSub _dir _i;
+    ! called "go <dir>", so direction is the second word
+    _dir = parse_array-->3;
+	for(_i = 1 : _i <= abbr_directions_array-->0 : _i++) {
+		if(_dir == abbr_directions_array --> _i or full_directions_array --> _i) {
+			GoDir(direction_properties_array --> _i);
+			rtrue;
+		}
+	}
+    ! this should never happen, but just in case
+    "You can't go that way!";
+];
+
+[GoDir p_property _new_location;
 	if(location provides p_property) {
 		_new_location = location.p_property; ! doesn't work in z3
 !		@get_prop location p_property -> _new_location; ! works in z3 and z5
@@ -159,6 +171,10 @@ Include "scope.h";
 	location = _new_location;
 	player_to(location);
 	<Look>; ! Equivalent to perform_action(##Look);
+];
+
+[EnterSub p_direction;
+	"can't enter yet";
 ];
 
 Verb 'i' 'inventory'
@@ -178,6 +194,11 @@ Verb 'take' 'get'
 
 Verb 'drop'
 	* noun -> Drop;
+
+Verb 'go'
+	* 'north'/'south' -> Go
+	* 'n//'/'s//' -> Go
+	* noun -> Enter;
 
 Verb 'examine' 'x//'
 	* noun -> Examine;
@@ -351,13 +372,11 @@ Verb 'examine' 'x//'
 	}
 
 	! check if it is a direction
-	for(_i = 1 : _i <= directions_array-->0 : _i++) {
+	for(_i = 1 : _i <= abbr_directions_array-->0 : _i++) {
 		_verb = parse_array-->1;
-		_word_data = directions_array --> _i;
-		!if(_verb ~= 0) print (address) _verb, "==", (address) _word_data, "^";
-		if(_verb == _word_data) {
-			!print "Found direction ",(address) directions_array --> _i, "^";
-			GoDir(directions_array --> _i, direction_properties_array --> _i);
+		if(_verb == abbr_directions_array --> _i or full_directions_array --> _i) {
+			!print "Found direction ",(address) abbr_directions_array --> _i, "^";
+			GoDir(direction_properties_array --> _i);
 			rtrue;
 		}
 	}
