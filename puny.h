@@ -1,6 +1,7 @@
 ! Always use grammar version 2 which is easier to parse and more economical
 ! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
+Constant INDIV_PROP_START 64;
 
 Attribute light;
 Attribute supporter;
@@ -82,26 +83,24 @@ Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an ex
 Include "scope.h";
 
 ! ######################### Grammar + Actions
-[ LookSub _obj _text;
+[ LookSub _obj;
 
 	! ### Print room name
 	print_obj_name(location);
 	@new_line;
 
 	! ### Print room description
-	_text = location.description;
-	if(_text) {
-		print_or_run(_text);
+	if(location.description) {
+		PrintOrRun(location, description);
 	}
 
 	print_contents(" You can also see ", " here.", location);
 	@new_line;
 
 	objectloop(_obj in location) {
-		_text = _obj.initial;
-		if(_obj hasnt moved && _text ~= 0) {
+		if(_obj hasnt moved && _obj.initial ~= 0) {
 			@new_line;
-			print_or_run(_text);
+			PrintOrRun(_obj, initial);
 			@new_line;
 		}
 	}
@@ -111,7 +110,7 @@ Include "scope.h";
 [ExamineSub;
 	if(noun provides description) {
 		print "Has desc...";
-		print_or_run(noun.description);
+		PrintOrRun(noun, description);
 	} else {
 		"There is nothing special about ", (the) noun, ".";
 	}
@@ -157,8 +156,8 @@ Include "scope.h";
 		"You can't go that way.";
 	}
 	location = _new_location;
-	player_to(location);
-	<Look>; ! Equivalent to perform_action(##Look);
+	PlayerTo(location);
+	<Look>; ! Equivalent to PerformAction(##Look);
 ];
 
 Verb 'i' 'inventory'
@@ -184,15 +183,14 @@ Verb 'examine' 'x//'
 
 ! ######################### Helper routines
 
-[print_obj_name p_obj p_form _text _done;
+[print_obj_name p_obj p_form _done;
 	if(p_form == FORM_DEF) {
 		print "the ";
 	} else if(p_form == FORM_INDEF) {
 		print "a ";
 	}
-	_text = p_obj.short_name;
-	if(_text) {
-		_done = print_or_run(_text);
+	if(p_obj.short_name) {
+		_done = PrintOrRun(p_obj, short_name);
 	}
 	if(_done == 0) {
 		print (object) p_obj;
@@ -231,7 +229,7 @@ Verb 'examine' 'x//'
 ! 			@new_line;
 ! 			_text = _obj.initial;
 ! 			if(_text) {
-! 				print_or_run(_text);
+! 				PrintOrRun(_text);
 ! 			} else {
 ! 				print "There is a ",(name) scope-->_i, " here. ";
 ! 			}
@@ -240,24 +238,30 @@ Verb 'examine' 'x//'
 ! 	}
 ];
 
-[print_or_run p_value;
-	if(p_value ofclass String) {
-		print (string) p_value;
+[RunRoutines p_obj p_prop;
+    if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
+    return p_obj.p_prop();
+];
+
+
+[PrintOrRun p_obj p_prop;
+	if(p_obj.p_prop ofclass String) {
+		print (string) p_obj.p_prop;
 		rtrue;
 	}
-	else if(p_value ofclass Routine) {
-		return indirect(p_value);
+	else if(p_obj.p_prop ofclass Routine) {
+		return RunRoutines(p_obj, p_prop);
 	}
 ];
 
-[player_to p_loc;
+[PlayerTo p_loc;
 	move Player to p_loc;
 	location = p_loc;
 ];
 
 ! ######################### Parser
 
-[read_player_input _result;
+[ReadPlayerInput _result;
 	print ">";
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
@@ -276,7 +280,7 @@ Verb 'examine' 'x//'
 ];
 
 
-[check_pattern p_pattern _i _action_number _token_top _token_next _token_bottom;
+[CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
     ! action number is the first two bytes
 	_action_number = p_pattern-->0;
 	p_pattern = p_pattern + 2;
@@ -296,7 +300,7 @@ Verb 'examine' 'x//'
 	return p_pattern + 1; ! skip TT_END
 ];
 
-[check_noun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+[CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
@@ -342,7 +346,7 @@ Verb 'examine' 'x//'
 	return -1;
 ];
 
-[parse_and_perform_action _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer _noun_tokens _noun;
+[ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer _noun_tokens _noun;
 
 	update_scope(location);
 
@@ -392,7 +396,7 @@ Verb 'examine' 'x//'
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _num_patterns : _i++) {
 		print "############ Pattern ",_i,"^";
-		_pattern = check_pattern(_pattern);
+		_pattern = CheckPattern(_pattern);
 	}
 
 	@new_line;
@@ -441,7 +445,7 @@ Verb 'examine' 'x//'
 				! we expect a noun here
 				! check all objects in 'scope', and see if any match.
 				! If so, update wn and parse_pointer, and return success
-				_noun = check_noun(_parse_pointer);
+				_noun = CheckNoun(_parse_pointer);
 				if(_noun > 0) {
 					print "Noun match!^";
 					if(_noun_tokens == 0) {
@@ -482,7 +486,7 @@ Verb 'examine' 'x//'
         action_primitive();
 ];
 
-[perform_action p_action p_noun p_second _sa _sn _ss;
+[PerformAction p_action p_noun p_second _sa _sn _ss;
     _sa = action; _sn = noun; _ss = second;
     action = p_action; noun = p_noun; second = p_second;
 	perform_prepared_action();
@@ -492,14 +496,14 @@ Verb 'examine' 'x//'
 [R_Process p_action p_noun p_second _s1 _s2;
     _s1 = inp1; _s2 = inp2;
     inp1 = p_noun; inp2 = p_second;
-    perform_action(p_action, p_noun, p_second);
+    PerformAction(p_action, p_noun, p_second);
     inp1 = _s1; inp2 = _s2;
 ];
 
 #IfV3;
 ! These routines are implemented by Veneer, but the default implementations give compile errors for z3
 
-[ FindIndivPropValue p_obj p_property _x _prop_id;
+[FindIndivPropValue p_obj p_property _x _prop_id;
   _x = p_obj.3;
 	if (_x == 0) rfalse;
 !  print "Table for ", (object) obj, " is at ", (hex) x, "^";
@@ -523,7 +527,7 @@ Verb 'examine' 'x//'
 		" of nothing.*";
 	}
 	if(p_object provides p_property) {
-		if(p_property > 63) {
+		if(p_property >= INDIV_PROP_START) {
 			_address = FindIndivPropValue(p_object, p_property);
 			return (_address + 3)-->0;
 		}
@@ -549,12 +553,12 @@ Object DefaultPlayer "you"
 	player = DefaultPlayer;
 	game_state = GS_PLAYING;
 	game_start();
-	player_to(location);
-	<Look>; ! Equivalent to perform_action(##Look);
+	PlayerTo(location);
+	<Look>; ! Equivalent to PerformAction(##Look);
 
 	while(game_state == GS_PLAYING) {
-		read_player_input();
-		parse_and_perform_action();
+		ReadPlayerInput();
+		ParseAndPerformAction();
 	}
 ];
 
