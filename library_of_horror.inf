@@ -62,7 +62,7 @@ Book -> GreenBook "green book"
 		name 'book' 'green',
 		description "The book is nice and tidy.";
 
-[game_start;
+[GameStart;
 	location = Library;
 	BlueBook.description();
 	print "^^And so the story begins...^^";
