@@ -8,7 +8,7 @@ We aim to make it possible to compile a game to z3, z5 and z8. Compared to the I
 
 ## Motivation
 
-The main goal of PunyInform is to allow for games to be small, fast and have a small memory footprint. This should make the games run well on older architectures, such as the 8 bit computers of the 1980s. Our main target is to make it suitable for games on the Commodore 64 using [Ozmoo](https://github.com/johanberntsson/ozmoo/).
+The main goal of PunyInform is to allow for games which are fast and have a small memory footprint. This should make the games run well on older architectures, such as the 8 bit computers of the 1980s. Our main target is to make it suitable for games on the Commodore 64 using [Ozmoo](https://github.com/johanberntsson/ozmoo/).
 
 
 ## Status
