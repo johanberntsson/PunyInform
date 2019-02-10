@@ -6,7 +6,7 @@
 ! eight bits to a variable that will never be anything other than 0 or 1.
 
 ! Here's how to use it in your programs. First of all, set the constant
-! FLAGCOUNT to the number of flags you need *before* including flags.h!
+! FLAG_COUNT to the number of flags you need before including puny.h!
 ! When you start using a new flag, create a constant with a descriptive name.
 ! You may also want to add a comment, or keep a list on the side regarding
 ! the meaning of each flag.
