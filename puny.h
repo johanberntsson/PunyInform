@@ -11,6 +11,7 @@ Attribute open;
 Attribute concealed;
 Attribute moved;
 Attribute visited alias moved;
+Attribute proper;
 
 ! Property name; ! This seems to be hardcoded in the Inform compiler
 Property initial;
@@ -208,12 +209,14 @@ Verb 'examine' 'x//'
 ! ######################### Helper routines
 
 [PrintObjName p_obj p_form _done;
-	if(p_form == FORM_CDEF) {
-		print "The ";
-	} else if(p_form == FORM_DEF) {
-		print "the ";
-	} else if(p_form == FORM_INDEF) {
-		print "a ";
+	if(p_obj hasnt proper) {
+		if(p_form == FORM_CDEF) {
+			print "The ";
+		} else if(p_form == FORM_DEF) {
+			print "the ";
+		} else if(p_form == FORM_INDEF) {
+			print "a ";
+		}
 	}
 	if(p_obj.short_name) {
 		_done = PrintOrRun(p_obj, short_name);

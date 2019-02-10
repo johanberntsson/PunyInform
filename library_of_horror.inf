@@ -27,6 +27,9 @@ Object CarPark "Car Park"
 		short_name [; print "In front of the library!"; rtrue; ],
 		description "You are in a cark park in front of the library. You can enter to the north.",
 		n_to Library,
+! 		exits [;
+! 			N_TO: return Library;
+! 		],
 		cant_go "Without a car the only viable exit is to the north.",
 	has light;
 
@@ -64,6 +67,10 @@ Object -> BlueBook "blue book" class Book
 		bobby 7,
 		hello 13,
 		pants 21;
+
+Object -> John "John"
+	has proper;
+
 
 Book -> GreenBook "green book"
 	with
