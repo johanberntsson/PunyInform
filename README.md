@@ -1,13 +1,19 @@
 # PunyInform
 
-PunyInform is a collection of libraries written in Inform that allow people to create Interactive Fiction (IF games, aka adventure games). It provides a parser and stdlib for the z-machine, designed to perform well on old 8-bit computers. 
+PunyInform is a library written in Inform which allows people to create text adventures / interactive fiction using the Z-machine virtual machine. It provides a parser, implementations of common verbs, as well as a framework for writing text adventures.
+
+We are trying to make it easy for authors used to writing in Inform 6 to start using PunyInform. There will be a manual describing the differences. 
+
+We aim to make it possible to compile a game to z3, z5 and z8. Compared to the Inform 6 library, this means we lack support for Glulx, but we have support for z3 (which the Inform 6 library lacks).
 
 ## Motivation
 
-The main goal of PunyInform is to be small and efficient, which will allow it to work efficently on older architectures, such as the 8 bit computers of the 1980s. Our main target is to make games that run well on the Commodore 64 with [Ozmoo](https://github.com/johanberntsson/ozmoo/).
+The main goal of PunyInform is to allow for games to be small, fast and have a small memory footprint. This should make the games run well on older architectures, such as the 8 bit computers of the 1980s. Our main target is to make it suitable for games on the Commodore 64 using [Ozmoo](https://github.com/johanberntsson/ozmoo/).
 
 
 ## Status
 
-The project has just been started and there is nothing ready to test yet.
+There is a rudimentary parser in place. The verbs GO, LOOK, EXAMINE, INVENTORY, TAKE, DROP and QUIT work. 
+
+PunyInform is far from ready to be used for writing an actual game yet. If you are interested in our progress, please star or follow the project here on Github.
 

@@ -706,7 +706,7 @@ Object DefaultPlayer "you"
 
 	player = DefaultPlayer;
 	game_state = GS_PLAYING;
-	GameStart();
+	Initialise();
 	PlayerTo(location);
 	<Look>; ! Equivalent to PerformAction(##Look);
 

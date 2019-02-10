@@ -77,7 +77,7 @@ Book -> GreenBook "green book"
 		name 'book' 'green',
 		description "The book is nice and tidy.";
 
-[GameStart;
+[Initialise;
 	location = Library;
 	BlueBook.description();
 !	print "BlueBook.party is ", BlueBook.party, "^";
