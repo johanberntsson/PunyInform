@@ -85,7 +85,15 @@ Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an ex
 
 ! ######################### Include utility files
 
+#IfDef FLAG_COUNT;
+Include "flags.h";
+#EndIf;
+
+
+
 Include "scope.h";
+
+
 
 ! ######################### Grammar + Actions
 [ LookSub _obj;

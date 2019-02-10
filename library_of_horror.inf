@@ -2,6 +2,11 @@
 
 ! Library of Horror - a sample game which uses PunyInform
 
+Constant FLAG_COUNT 8;
+Constant F_SQUIRREL_ESCAPED 0;
+Constant F_PARROT_FED 1;
+Constant F_BOUGHT_TICKETS 2;
+
 Include "puny.h";
 
 Class Book
@@ -79,6 +84,13 @@ Book -> GreenBook "green book"
 
 [Initialise;
 	location = Library;
+	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
+	SetFlag(F_PARROT_FED);
+	print "Have set. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
+	ClearFlag(F_PARROT_FED);
+	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
+	print "Parrot fed != ", FlagIsClear(F_PARROT_FED),"^";
+
 	BlueBook.description();
 !	print "BlueBook.party is ", BlueBook.party, "^";
 	BlueBook.party(5);

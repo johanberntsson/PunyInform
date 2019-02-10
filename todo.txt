@@ -1,0 +1,45 @@
+Ideas of things to do next
+---
+Pronouns (OPEN IT)
+
+Ordering someone to do something
+
+ASK/TELL
+
+SAY
+
+Handling ALL and ALL RED BALLS
+
+parse_name
+
+each_turn
+
+Timers
+
+Daemons
+
+add_to_scope
+
+Handling doors (is there a smarter/easier way than the Inform 6 way?)
+
+Capacity of player
+
+Scoring
+
+Winning
+
+Dying/Losing
+
+Restart
+
+Save / Restore
+
+Amusing
+
+
+Done
+---
+Flags
+
+
+
