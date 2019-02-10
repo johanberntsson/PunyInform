@@ -49,8 +49,9 @@ Constant GS_PLAYING          = 1;
 Constant GS_QUIT             = 2;
 Constant GS_DEAD             = 3;
 
-Constant FORM_DEF            = 1;
-Constant FORM_INDEF          = 2;
+Constant FORM_CDEF           = 1;
+Constant FORM_DEF            = 2;
+Constant FORM_INDEF          = 3;
 
 #IfV3;
 Constant DICT_BYTES_FOR_WORD = 4;
@@ -207,7 +208,9 @@ Verb 'examine' 'x//'
 ! ######################### Helper routines
 
 [PrintObjName p_obj p_form _done;
-	if(p_form == FORM_DEF) {
+	if(p_form == FORM_CDEF) {
+		print "The ";
+	} else if(p_form == FORM_DEF) {
 		print "the ";
 	} else if(p_form == FORM_INDEF) {
 		print "a ";
@@ -520,6 +523,19 @@ Verb 'examine' 'x//'
     PerformAction(p_action, p_noun, p_second);
     inp1 = _s1; inp2 = _s2;
 ];
+
+[CDefArt p_obj _result;
+	PrintObjName(p_obj, FORM_CDEF);
+];
+
+[DefArt p_obj _result;
+	PrintObjName(p_obj, FORM_DEF);
+];
+
+[IndefArt p_obj _result;
+	PrintObjName(p_obj, FORM_INDEF);
+];
+
 
 #IfV3;
 ! These routines are implemented by Veneer, but the default implementations give compile errors for z3

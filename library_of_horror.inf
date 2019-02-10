@@ -56,7 +56,9 @@ Object -> BlueBook "blue book" class Book
 			if(BlueBook provides hello && BlueBook.hello > 10) {
 				print "BlueBook.Hello is ", BlueBook.hello, ". ";
 			}
-			"A blue book is standing on a shelf.";
+			print "A ";
+			PrintShortName(self);
+			" is standing on a shelf. Looking at ", (the) self, " makes you dizzy.";
 		],
 !		description "The book looks new and shiny.",
 		bobby 7,
