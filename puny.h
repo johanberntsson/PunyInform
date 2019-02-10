@@ -73,6 +73,8 @@ Global wn;
 Global input_words;
 Global scope_objects;
 
+Global debug_flag = 0;
+
 Constant MAX_INPUT_CHARS     = 78;
 Constant MAX_INPUT_WORDS     = 20;
 
@@ -87,7 +89,7 @@ Include "scope.h";
 [ LookSub _obj;
 
 	! ### Print room name
-	print_obj_name(location);
+	PrintObjName(location);
 	@new_line;
 
 	! ### Print room description
@@ -95,7 +97,7 @@ Include "scope.h";
 		PrintOrRun(location, description);
 	}
 
-	print_contents(" You can also see ", " here.", location);
+	PrintContents(" You can also see ", " here.", location);
 	@new_line;
 
 	objectloop(_obj in location) {
@@ -140,7 +142,7 @@ Include "scope.h";
 [InventorySub;
 	if(child(player) == 0)
 		"You are empty handed.";
-	print_contents("You are holding ", ".^", player);
+	PrintContents("You are holding ", ".^", player);
 ];
 
 [GoSub _dir _i;
@@ -204,7 +206,7 @@ Verb 'examine' 'x//'
 
 ! ######################### Helper routines
 
-[print_obj_name p_obj p_form _done;
+[PrintObjName p_obj p_form _done;
 	if(p_form == FORM_DEF) {
 		print "the ";
 	} else if(p_form == FORM_INDEF) {
@@ -218,7 +220,7 @@ Verb 'examine' 'x//'
 	}
 ];
 
-[print_contents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
+[PrintContents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
 ! 	print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
 !		print "Considering ", (object) _obj, "...^";
@@ -231,7 +233,7 @@ Verb 'examine' 'x//'
 			! Push obj onto queue, printing the object that is shifted out, if any
 			if(_last_obj) {
 				if(_printed_any_objects) print ", ";
-				print_obj_name(_last_obj, FORM_INDEF);
+				PrintObjName(_last_obj, FORM_INDEF);
 				_printed_any_objects = 1;
 			}
 			_last_obj = _obj;
@@ -239,7 +241,7 @@ Verb 'examine' 'x//'
 	}
 	if(_last_obj) {
 		if(_printed_any_objects) print " and ";
-		print_obj_name(_last_obj, FORM_INDEF);
+		PrintObjName(_last_obj, FORM_INDEF);
 		print (string) p_last_text;
 	}
 
@@ -493,22 +495,22 @@ Verb 'examine' 'x//'
 
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
-	perform_prepared_action();
+	PerformPreparedAction();
 ];
 
-[action_primitive; indirect(#actions_table-->action); ];
+[ActionPrimitive; indirect(#actions_table-->action); ];
 
-[perform_prepared_action;
+[PerformPreparedAction;
 !	print "Performing action ", action, "^";
 ! Add check for before routines and fake actions later
 !    if ((BeforeRoutines() == false) && action < 4096)
-        action_primitive();
+        ActionPrimitive();
 ];
 
 [PerformAction p_action p_noun p_second _sa _sn _ss;
     _sa = action; _sn = noun; _ss = second;
     action = p_action; noun = p_noun; second = p_second;
-	perform_prepared_action();
+	PerformPreparedAction();
     action = _sa; noun = _sn; second = _ss;
 ];
 
@@ -560,6 +562,120 @@ Verb 'examine' 'x//'
 	print "]";
 	rfalse;
 ];
+
+!      CA__Pr:  call, that is, print-or-run-or-read, a property:
+!                      this exactly implements obj..prop(...).  Note that
+!                      classes (members of Class) have 5 built-in properties
+!                      inherited from Class: create, recreate, destroy,
+!                      remaining and copy.  Implementing these here prevents
+!                      the need for a full metaclass inheritance scheme.      */
+
+[CA__Pr obj id a b c    x y z s s2 n m;
+!	print "CA_Pr obj = ", obj,", id = ", id,", a = ", a, "^";
+	if (obj < 1 || obj > #largest_object-255) {
+		switch(Z__Region(obj)) {
+		2:
+			if (id == call) {
+				s = sender; sender = self; self = obj;
+				#ifdef action;sw__var=action;#endif;
+				x = indirect(obj, a, b, c);
+				self = sender; sender = s; return x;
+			}
+			jump Call__Error;
+		3:
+			if (id == print) { @print_paddr obj; rtrue; }
+			if (id == print_to_array) {
+				@output_stream 3 a; @print_paddr obj; @output_stream -3;
+				return a-->0;
+			}
+			jump Call__Error;
+		}
+		jump Call__Error;
+	}
+!	print "CA_Pr(2) obj = ", obj,", id = ", id,", a = ", a, "^";
+! 	@check_arg_count 3 ?~A__x;y++;@check_arg_count 4 ?~A__x;y++;
+! 	@check_arg_count 5 ?~A__x;y++;@check_arg_count 6 ?~A__x;y++;
+! 	@check_arg_count 7 ?~A__x;y++;@check_arg_count 8 ?~A__x;y++;.A__x;
+! 	#ifdef INFIX;if (obj has infix__watching) n=1;#endif;
+	#ifdef DEBUG;if (debug_flag & 1 ~= 0) n=1;#endif;
+! 	if (n==1) {
+! 		n=debug_flag & 1; debug_flag=debug_flag-n;
+! 		print "[ ~", (name) obj, "~.", (property) id, "(";
+! 		switch(y) {
+! 		1:
+! 			print a; 2: print a,",",b; 3: print a,",",b,",",c;
+! 		4:
+! 			print a,",",b,",",c,",",d;
+! 		5:
+! 			print a,",",b,",",c,",",d,",",e;
+! 		6:
+! 			print a,",",b,",",c,",",d,",",e,",",f;
+! 		}
+! 		print ") ]^"; debug_flag = debug_flag + n;
+! 	}
+	if (id > 0 && id < INDIV_PROP_START) {
+!		print "CA_Pr OK obj = ", obj,", id = ", id,", a = ", a, "^";
+		x = obj.&id;
+		if (x==0) {
+			x=$000a-->0 + 2*(id-1); n=2;
+		} else n = obj.#id;
+	} else {
+		if (id>=64 && id<69 && obj in Class) {
+!			print "CA_Pr ERROR0 obj = ", obj,", id = ", id,", a = ", a, "^";
+			RT__Err("Class create etc", obj, id); return;
+			!			return Cl__Ms(obj,id,y,a,b,c);
+		}
+!		print "CA_Pr(2.1) obj = ", obj,", id = ", id,", n = ", n, "^";
+		x = obj..&id;
+!		print "CA_Pr(2.2) obj = ", obj,", id = ", id,", x = ", x, "^";
+		if (x == 0) {
+!			print "CA_Pr ERROR1 obj = ", obj,", id = ", id,", a = ", a, "^";
+			.Call__Error;
+			RT__Err("send message", obj, id); return;
+		}
+!		print "Reading n at ", x-1,": ", 0->(x-1), "^";
+		n = 0->(x-1);
+		if (id&$C000==$4000)
+			switch (n&$C0) { 0: n=1; $40: n=2; $80: n=n&$3F; }
+	}
+!	print "CA_Pr(3) obj = ", obj,", id = ", id,", a = ", a, "^";
+	for (:2*m<n:m++) {
+!		print "Considering routine at ", x+2*m,": ", x-->m, "^";
+		if (x-->m==$ffff) rfalse;
+		switch(Z__Region(x-->m)) {
+		2:
+			s = sender; sender = self; self = obj; s2 = sw__var;
+! 			switch(y) {
+! 			0:
+! 				z = indirect(x-->m);
+! 			1:
+ 				z = indirect(x-->m, a);
+! 			2:
+! 				z = indirect(x-->m, a, b);
+! 			3:
+!				z = indirect(x-->m, a, b, c);
+! 			4:
+! 				z = indirect(x-->m, a, b, c, d);
+! 			5:
+! 				z = indirect(x-->m, a, b, c, d, e);
+! 			6:
+! 				z = indirect(x-->m, a, b, c, d, e, f);
+! 			}
+			self = sender; sender = s; sw__var = s2;
+			if (z ~= 0) return z;
+		3:
+			print_ret (string) x-->m;
+		default:
+		return x-->m;
+		}
+	}
+	rfalse;
+];
+
+[Cl__Ms;
+	rfalse;
+];
+
 #EndIf;
 
 Object DefaultPlayer "you"

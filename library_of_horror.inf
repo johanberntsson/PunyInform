@@ -7,13 +7,19 @@ Include "puny.h";
 Class Book
 	with
 		description [;
-			print "Self is ", self;
+			print "Self is ", self, "^";
 			if(self provides hello) {
 				print (The) self, " has a Hello value of ", self.hello, ". ";
 			}
 			rfalse;
 		],
-		hello 0;
+		hello 0,
+		party [a b c;
+			print "Self is ", self, "^";
+			print "a is ", a, "^";
+			print "b is ", b, "^";
+			print "c is ", c, "^";
+		];
 
 
 Object CarPark "Car Park"
@@ -46,7 +52,7 @@ Object -> BlueBook "blue book" class Book
 	with
 		name 'book' 'blue',
 		initial [;
-			print "Self is ", self;
+			print "Self is ", self, ". ";
 			if(BlueBook provides hello && BlueBook.hello > 10) {
 				print "BlueBook.Hello is ", BlueBook.hello, ". ";
 			}
@@ -65,5 +71,7 @@ Book -> GreenBook "green book"
 [GameStart;
 	location = Library;
 	BlueBook.description();
+!	print "BlueBook.party is ", BlueBook.party, "^";
+	BlueBook.party(5);
 	print "^^And so the story begins...^^";
 ];
