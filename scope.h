@@ -1,4 +1,4 @@
-! routines to update scope rules
+! Routines to update what is in scope
 
 Constant MAX_SCOPE = 32;
 

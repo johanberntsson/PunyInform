@@ -1,0 +1,21 @@
+!% -~S
+
+! Library of Horror - a sample game which uses PunyInform
+
+Include "puny.h";
+
+Object Library "The Library"
+	with
+		description "You are in a library.",
+	has light;
+
+Object -> Box "box"
+	with
+		name 'box',
+	has container open;
+
+
+[Initialise;
+	location = Library;
+	print "^^And so the story begins...^^";
+];

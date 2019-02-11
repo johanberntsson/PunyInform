@@ -318,6 +318,7 @@ Verb 'examine' 'x//'
 ];
 
 
+#IfDef DEBUG;
 [ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
     ! action number is the first two bytes
 	_action_number = p_pattern-->0;
@@ -337,6 +338,7 @@ Verb 'examine' 'x//'
 !	print ": ", i, " tokens^";
 	return p_pattern + 1; ! skip TT_END
 ];
+#EndIf;
 
 [ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return -1 if no noun matches
@@ -422,10 +424,12 @@ Verb 'examine' 'x//'
 ! 	print "Word 2: ", (parse_array + 6)-->0, "^";
 ! 	print "Word 3: ", (parse_array + 10)-->0, "^";
 	_verb_num = 255 - (_word_data->1);
-	print "Verb#: ",_verb_num,".^";
 	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_verb_num;
-	print "Grammar address for this verb: ",_verb_grammar,"^";
 	_num_patterns = _verb_grammar->0;
+
+#IfDef DEBUG;
+	print "Verb#: ",_verb_num,".^";
+	print "Grammar address for this verb: ",_verb_grammar,"^";
 	print "Number of patterns: ",_num_patterns,"^";
 
 	! First print all patterns, for debug purposes
@@ -434,11 +438,14 @@ Verb 'examine' 'x//'
 		print "############ Pattern ",_i,"^";
 		_pattern = CheckPattern(_pattern);
 	}
+#EndIf;
 
 	@new_line;
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _num_patterns : _i++) {
+#IfDef DEBUG;
 		print "############ Pattern ",_i," address ", _pattern, "^";
+#EndIf;
 		wn = 1;
 		_parse_pointer = parse_array + 6;
 		_pattern_index = _pattern - 1;
@@ -448,7 +455,9 @@ Verb 'examine' 'x//'
 		while(true) {
 			_pattern_index = _pattern_index + 3;
 			_token = _pattern_index -> 0;
+#IfDef DEBUG;
 			print "TOKEN: ", _token, "^";
+#EndIf;
 			_data = (_pattern_index + 1) --> 0;
 			if(_token == TT_END) {
 				if(wn == parse_array -> 1) {
@@ -457,12 +466,16 @@ Verb 'examine' 'x//'
 				break; ! Fail because the grammar line ends here but not the input
 			}
 			if(wn >= parse_array -> 1) { !Fail because input ends here but not the grammar line
+#IfDef DEBUG;
 				print "Fail, since grammar line has not ended but player input has.^";
+#EndIf;
 				break;
 			}
 			_token_type = _token & $0f;
 			if(_token_type == TT_PREPOSITION) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
+#IfDef DEBUG;
 				print "Preposition: ", _data, "^";
+#EndIf;
 				if(_parse_pointer --> 0 == _data) {
 					print "Match!^";
 					wn++;
@@ -474,7 +487,9 @@ Verb 'examine' 'x//'
 					}
 					continue;
 				}
+#IfDef DEBUG;
 				print "Failed prep: ", _parse_pointer, ":", _parse_pointer --> 0, " should have been ", _data, "^";
+#EndIf;
 				if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
 			} else if(_token_type == TT_NOUN) {
@@ -483,7 +498,9 @@ Verb 'examine' 'x//'
 				! If so, update wn and parse_pointer, and return success
 				_noun = CheckNoun(_parse_pointer);
 				if(_noun > 0) {
+#IfDef DEBUG;
 					print "Noun match!^";
+#EndIf;
 					if(_noun_tokens == 0) {
 						noun = _noun;
 					} else if(_noun_tokens == 1){
@@ -492,15 +509,21 @@ Verb 'examine' 'x//'
 					_noun_tokens++;
 					continue;
 				}
+#IfDef DEBUG;
 				print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
+#EndIf;
 				break;
 			}
 			! This is a token we don't recognize, which means we fail at matching against this line
+#IfDef DEBUG;
 			print "Unknown token: ", _token, "^";
+#EndIf;
 			break;
 		}
 		! This pattern has failed.
+#IfDef DEBUG;
 		print "Pattern didn't match.^";
+#EndIf;
 		! Scan to the end of this pattern
 		while(_pattern_index -> 0 ~= TT_END) _pattern_index = _pattern_index + 3;
 		_pattern = _pattern_index + 1;
