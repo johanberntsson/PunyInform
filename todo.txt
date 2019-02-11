@@ -1,5 +1,5 @@
 Ideas of things to do next
----
+--------------------------
 Pronouns (OPEN IT)
 
 Ordering someone to do something
@@ -18,7 +18,7 @@ Timers
 
 Daemons
 
-add_to_scope
+Scope - general scope, scope tokens, add_to_scope etc.
 
 Handling doors (is there a smarter/easier way than the Inform 6 way?)
 
@@ -36,9 +36,12 @@ Save / Restore
 
 Amusing
 
+Statusline for z5 games
+
+
 
 Done
----
+----
 Flags
 
 

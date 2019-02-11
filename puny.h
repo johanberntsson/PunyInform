@@ -17,6 +17,7 @@ Attribute proper;
 Property initial;
 Property description;
 Property short_name;
+Property add_to_scope;
 
 ! directions
 Property n_to;
@@ -120,7 +121,7 @@ Include "scope.h";
 
 ];
 
-[ExamineSub;
+[ ExamineSub;
 	if(noun provides description) {
 		print "Has desc...";
 		PrintOrRun(noun, description);
@@ -129,12 +130,12 @@ Include "scope.h";
 	}
 ];
 
-[QuitSub;
+[ QuitSub;
 	game_state = GS_QUIT;
 	"Quitting...";
 ];
 
-[TakeSub;
+[ TakeSub;
 	if(noun in player)
 		"You already have that.";
 	move noun to player;
@@ -142,20 +143,20 @@ Include "scope.h";
 	"Taken.";
 ];
 
-[DropSub;
+[ DropSub;
 	if(noun notin player)
 		"You are not holding that.";
 	move noun to location;
 	"Dropped.";
 ];
 
-[InventorySub;
+[ InventorySub;
 	if(child(player) == 0)
 		"You are empty handed.";
 	PrintContents("You are holding ", ".^", player);
 ];
 
-[GoSub _dir _i;
+[ GoSub _dir _i;
     ! called "go <dir>", so direction is the second word
     _dir = parse_array-->3;
 	for(_i = 1 : _i <= abbr_directions_array-->0 : _i++) {
@@ -168,7 +169,7 @@ Include "scope.h";
     "You can't go that way!";
 ];
 
-[GoDir p_property _new_location;
+[ GoDir p_property _new_location;
 	if(location provides p_property) {
 		_new_location = location.p_property; ! doesn't work in z3
 !		@get_prop location p_property -> _new_location; ! works in z3 and z5
@@ -184,7 +185,7 @@ Include "scope.h";
 	<Look>; ! Equivalent to PerformAction(##Look);
 ];
 
-[EnterSub p_direction;
+[ EnterSub p_direction;
 	"can't enter yet";
 ];
 
@@ -216,7 +217,7 @@ Verb 'examine' 'x//'
 
 ! ######################### Helper routines
 
-[PrintObjName p_obj p_form _done;
+[ PrintObjName p_obj p_form _done;
 	if(p_obj hasnt proper) {
 		if(p_form == FORM_CDEF) {
 			print "The ";
@@ -234,7 +235,7 @@ Verb 'examine' 'x//'
 	}
 ];
 
-[PrintContents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
+[ PrintContents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
 ! 	print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
 !		print "Considering ", (object) _obj, "...^";
@@ -275,13 +276,13 @@ Verb 'examine' 'x//'
 ! 	}
 ];
 
-[RunRoutines p_obj p_prop;
+[ RunRoutines p_obj p_prop;
     if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
     return p_obj.p_prop();
 ];
 
 
-[PrintOrRun p_obj p_prop;
+[ PrintOrRun p_obj p_prop;
 	if(p_obj.p_prop ofclass String) {
 		print (string) p_obj.p_prop;
 		rtrue;
@@ -291,14 +292,14 @@ Verb 'examine' 'x//'
 	}
 ];
 
-[PlayerTo p_loc;
+[ PlayerTo p_loc;
 	move Player to p_loc;
 	location = p_loc;
 ];
 
 ! ######################### Parser
 
-[ReadPlayerInput _result;
+[ ReadPlayerInput _result;
 	print ">";
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
@@ -317,7 +318,7 @@ Verb 'examine' 'x//'
 ];
 
 
-[CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
+[ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
     ! action number is the first two bytes
 	_action_number = p_pattern-->0;
 	p_pattern = p_pattern + 2;
@@ -337,7 +338,7 @@ Verb 'examine' 'x//'
 	return p_pattern + 1; ! skip TT_END
 ];
 
-[CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+[ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
@@ -383,9 +384,9 @@ Verb 'examine' 'x//'
 	return -1;
 ];
 
-[ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer _noun_tokens _noun;
+[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer _noun_tokens _noun;
 
-	update_scope(location);
+	UpdateScope(location);
 
 	if(parse_array->1 < 1) {
 		"Come again?";
@@ -512,38 +513,38 @@ Verb 'examine' 'x//'
 	PerformPreparedAction();
 ];
 
-[ActionPrimitive; indirect(#actions_table-->action); ];
+[ ActionPrimitive; indirect(#actions_table-->action); ];
 
-[PerformPreparedAction;
+[ PerformPreparedAction;
 !	print "Performing action ", action, "^";
 ! Add check for before routines and fake actions later
 !    if ((BeforeRoutines() == false) && action < 4096)
         ActionPrimitive();
 ];
 
-[PerformAction p_action p_noun p_second _sa _sn _ss;
+[ PerformAction p_action p_noun p_second _sa _sn _ss;
     _sa = action; _sn = noun; _ss = second;
     action = p_action; noun = p_noun; second = p_second;
 	PerformPreparedAction();
     action = _sa; noun = _sn; second = _ss;
 ];
 
-[R_Process p_action p_noun p_second _s1 _s2;
+[ R_Process p_action p_noun p_second _s1 _s2;
     _s1 = inp1; _s2 = inp2;
     inp1 = p_noun; inp2 = p_second;
     PerformAction(p_action, p_noun, p_second);
     inp1 = _s1; inp2 = _s2;
 ];
 
-[CDefArt p_obj _result;
+[ CDefArt p_obj _result;
 	PrintObjName(p_obj, FORM_CDEF);
 ];
 
-[DefArt p_obj _result;
+[ DefArt p_obj _result;
 	PrintObjName(p_obj, FORM_DEF);
 ];
 
-[IndefArt p_obj _result;
+[ IndefArt p_obj _result;
 	PrintObjName(p_obj, FORM_INDEF);
 ];
 
@@ -551,7 +552,7 @@ Verb 'examine' 'x//'
 #IfV3;
 ! These routines are implemented by Veneer, but the default implementations give compile errors for z3
 
-[FindIndivPropValue p_obj p_property _x _prop_id;
+[ FindIndivPropValue p_obj p_property _x _prop_id;
   _x = p_obj.3;
 	if (_x == 0) rfalse;
 !  print "Table for ", (object) obj, " is at ", (hex) x, "^";
@@ -568,7 +569,7 @@ Verb 'examine' 'x//'
   return _x;
 ];
 
-[RV__Pr p_object p_property _value _address;
+[ RV__Pr p_object p_property _value _address;
 	if(p_object == 0) {
 		print "*Error: Tried to read property ";
 		Print__PName(p_property);
@@ -597,7 +598,7 @@ Verb 'examine' 'x//'
 !                      remaining and copy.  Implementing these here prevents
 !                      the need for a full metaclass inheritance scheme.      */
 
-[CA__Pr obj id a b c    x y z s s2 n m;
+[ CA__Pr obj id a b c    x y z s s2 n m;
 !	print "CA_Pr obj = ", obj,", id = ", id,", a = ", a, "^";
 	if (obj < 1 || obj > #largest_object-255) {
 		switch(Z__Region(obj)) {
@@ -699,7 +700,7 @@ Verb 'examine' 'x//'
 	rfalse;
 ];
 
-[Cl__Ms;
+[ Cl__Ms;
 	rfalse;
 ];
 
@@ -709,7 +710,7 @@ Object DefaultPlayer "you"
 	has concealed;
 
 
-[main;
+[ main;
 	print "PunyInform 0.0^^";
 
 	player = DefaultPlayer;
