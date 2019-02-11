@@ -36,12 +36,12 @@ Save / Restore
 
 Amusing
 
-Statusline for z5 games
-
 
 
 Done
 ----
+Statusline for z5 games
+
 Flags
 
 

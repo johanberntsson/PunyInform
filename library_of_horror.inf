@@ -14,7 +14,7 @@ Class Book
 		description [;
 			print "Self is ", self, "^";
 			if(self provides hello) {
-				print (The) self, " has a Hello value of ", self.hello, ". ";
+				print (The) self, " has a Hello value of ", self.hello, ". ^";
 			}
 			rfalse;
 		],
@@ -74,6 +74,8 @@ Object -> BlueBook "blue book" class Book
 		pants 21;
 
 Object -> John "John"
+	with
+		name 'john',
 	has proper;
 
 

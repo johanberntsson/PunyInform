@@ -59,7 +59,10 @@ Constant FORM_INDEF          = 3;
 Constant DICT_BYTES_FOR_WORD = 4;
 #IfNot;
 Constant DICT_BYTES_FOR_WORD = 6;
+Constant HDR_SCREENHCHARS    = $20;
+Constant HDR_SCREENWCHARS    = $21;
 #EndIf;
+
 
 Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
@@ -75,8 +78,15 @@ Global game_state;
 Global wn;
 Global input_words;
 Global scope_objects;
-
-Global debug_flag = 0;
+Global statusline_current_height = 0;
+Global statusline_height     = 1;
+Global statuswin_current     = false;
+Global debug_flag            = 0;
+Global clr_on                = false;
+Global clr_bg                = 2;
+Global clr_fg                = 8;
+Global clr_bgstatus          = 2;
+Global clr_fgstatus          = 8;
 
 Constant MAX_INPUT_CHARS     = 78;
 Constant MAX_INPUT_WORDS     = 20;
@@ -217,6 +227,132 @@ Verb 'examine' 'x//'
 
 ! ######################### Helper routines
 
+[ StatusLineHeight p_height;
+	if (statusline_current_height ~= p_height) {
+		@split_window p_height;
+		statusline_current_height = p_height;
+	}
+];
+
+#IfV5;
+[ MoveCursor line column;  ! 1-based postion on text grid
+	if (~~statuswin_current) {
+		@set_window 1;
+		if (clr_on && clr_bgstatus > 1) {
+			@set_colour clr_fgstatus clr_bgstatus;
+		} else {
+			style reverse;
+		}
+	}
+	if (line == 0) {
+		line = 1;
+		column = 1;
+	}
+	@set_cursor line column;
+	statuswin_current = true;
+];
+
+[ MainWindow;
+	if (statuswin_current) {
+		if (clr_on && clr_bgstatus > 1) {
+			@set_colour clr_fg clr_bg;
+		} else {
+			style roman;
+		}
+		@set_window 0;
+	}
+	statuswin_current = false;
+];
+
+#IfNot; !IfV5
+
+! [ MoveCursor line column;  ! 1-based postion on text grid
+! 	if (~~statuswin_current) {
+! 		@set_window 1;
+! 		style reverse;
+! 	}
+! 	if (line == 0) {
+! 		line = 1;
+! 		column = 1;
+! 	}
+! 	@set_cursor line column;
+! 	statuswin_current = true;
+! ];
+
+! [ MainWindow;
+! 	if (statuswin_current) {
+! 		style roman;
+! 		@set_window 0;
+! 	}
+! 	statuswin_current = false;
+! ];
+#EndIf;
+
+
+#IfV3;
+[ DrawStatusLine;
+	@show_status;
+];
+#IfNot;
+[ DrawStatusLine width posa posb _i;
+
+    ! If there is no player location, we shouldn't try to draw status window
+    if (location == nothing || parent(player) == nothing)
+        return;
+
+    StatusLineHeight(statusline_height);
+    MoveCursor(1, 1);
+
+    width = HDR_SCREENWCHARS->0;
+    posa = width-26; posb = width-13;
+
+    _i = width;
+    while(_i>=10) {
+	    print "          ";
+	    _i = _i - 10;
+    }
+    spaces _i;
+
+    MoveCursor(1, 2);
+!     if (location == thedark) {
+!         print (name) location;
+!     }
+!     else {
+!         FindVisibilityLevels();
+!         if (visibility_ceiling == location)
+            print (name) location;
+!         else
+!             print (The) visibility_ceiling;
+!     }
+
+!     if (sys_statusline_flag && width > 53) {
+!         MoveCursor(1, posa);
+!         print (string) TIME__TX;
+!         LanguageTimeOfDay(sline1, sline2);
+!     }
+!     else {
+!         if (width > 66) {
+!             #Ifndef NO_SCORE;
+!             MoveCursor(1, posa);
+!             print (string) SCORE__TX, sline1;
+!             #Endif;
+!             MoveCursor(1, posb);
+!             print (string) MOVES__TX, sline2;
+!         }
+!         #Ifndef NO_SCORE;
+        if (width > 39) {
+            MoveCursor(1, posb);
+            print status_field_1, "/", status_field_2;
+        }
+!         #Endif;
+!     }
+
+    MainWindow(); ! set_window
+];
+#Endif;
+
+
+
 [ PrintObjName p_obj p_form _done;
 	if(p_obj hasnt proper) {
 		if(p_form == FORM_CDEF) {
@@ -303,6 +439,7 @@ Verb 'examine' 'x//'
 	print ">";
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
+	DrawStatusLine();
 	player_input_array->0 = MAX_INPUT_CHARS;
 	player_input_array->1 = 0;
 	@aread player_input_array parse_array -> _result;
@@ -477,11 +614,15 @@ Verb 'examine' 'x//'
 				print "Preposition: ", _data, "^";
 #EndIf;
 				if(_parse_pointer --> 0 == _data) {
+#IfDef DEBUG;
 					print "Match!^";
+#EndIf;
 					wn++;
 					_parse_pointer = _parse_pointer + 4;
 					while(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) { ! Alternative prepositions which are not at the end of the list
+#IfDef DEBUG;
 						print "Skipping one alternative...^";
+#EndIf;
 						_pattern_index = _pattern_index + 3;
 						_token = _pattern_index -> 0;
 					}
