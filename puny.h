@@ -61,12 +61,16 @@ Constant DICT_BYTES_FOR_WORD = 4;
 Constant DICT_BYTES_FOR_WORD = 6;
 Constant HDR_SCREENHCHARS    = $20;
 Constant HDR_SCREENWCHARS    = $21;
+Constant MOVES__TX = "Moves: ";
+Constant SCORE__TX = "Score: ";
 #EndIf;
 
 
 Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
 Global status_field_2 = 0; ! Must be third global. Is used to show turns or minutes
+Global score;
+Global turns;
 Global player;
 Global action;
 Global noun;
@@ -150,6 +154,7 @@ Include "scope.h";
 		"You already have that.";
 	move noun to player;
 	give noun moved;
+	score = score + 10;
 	"Taken.";
 ];
 
@@ -235,6 +240,15 @@ Verb 'examine' 'x//'
 ];
 
 #IfV5;
+
+Array cursor_pos --> 2;
+
+! [ GetCursor;  ! 1-based postion on text grid
+! 	@get_cursor cursor_pos;
+! ];
+
+
+
 [ MoveCursor line column;  ! 1-based postion on text grid
 	if (~~statuswin_current) {
 		@set_window 1;
@@ -294,7 +308,26 @@ Verb 'examine' 'x//'
 	@show_status;
 ];
 #IfNot;
-[ DrawStatusLine width posa posb _i;
+
+[ PrintSpaces p_n;
+    while(p_n >= 5) {
+	    print "     ";
+	    p_n = p_n - 5;
+    }
+    spaces p_n;
+];
+
+[ PrintSpacesOrMoveBack p_col;
+	@get_cursor cursor_pos;
+	if(cursor_pos --> 1 > p_col || cursor_pos --> 0 > 1) {
+		MoveCursor(1, p_col - 1);
+		print " ";
+	} else {
+		PrintSpaces(p_col - (cursor_pos --> 1));
+	}
+];
+
+[ DrawStatusLine _width _pos;
 
     ! If there is no player location, we shouldn't try to draw status window
     if (location == nothing || parent(player) == nothing)
@@ -302,25 +335,25 @@ Verb 'examine' 'x//'
 
     StatusLineHeight(statusline_height);
     MoveCursor(1, 1);
+    print " ";
 
-    width = HDR_SCREENWCHARS->0;
-    posa = width-26; posb = width-13;
+    _width = HDR_SCREENWCHARS->0;
 
-    _i = width;
-    while(_i>=10) {
-	    print "          ";
-	    _i = _i - 10;
-    }
-    spaces _i;
+!     _i = width;
+!     while(_i>=10) {
+! 	    print "          ";
+! 	    _i = _i - 10;
+!     }
+!     spaces _i;
 
-    MoveCursor(1, 2);
+!     MoveCursor(1, 2);
 !     if (location == thedark) {
 !         print (name) location;
 !     }
 !     else {
 !         FindVisibilityLevels();
 !         if (visibility_ceiling == location)
-            print (name) location;
+    print (name) location;
 !         else
 !             print (The) visibility_ceiling;
 !     }
@@ -331,21 +364,17 @@ Verb 'examine' 'x//'
 !         LanguageTimeOfDay(sline1, sline2);
 !     }
 !     else {
-!         if (width > 66) {
-!             #Ifndef NO_SCORE;
-!             MoveCursor(1, posa);
-!             print (string) SCORE__TX, sline1;
-!             #Endif;
-!             MoveCursor(1, posb);
-!             print (string) MOVES__TX, sline2;
-!         }
-!         #Ifndef NO_SCORE;
-        if (width > 39) {
-            MoveCursor(1, posb);
-            print status_field_1, "/", status_field_2;
-        }
-!         #Endif;
-!     }
+	if (_width > 66) {
+		PrintSpacesOrMoveBack(_width - 26);
+		print (string) SCORE__TX, status_field_1;
+		PrintSpacesOrMoveBack(_width - 13);
+		print (string) MOVES__TX, status_field_2;
+		PrintSpacesOrMoveBack(_width + 1);
+	} else if (_width > 39) {
+		PrintSpacesOrMoveBack(_width - 10);
+		print status_field_1, "/", status_field_2;
+		PrintSpacesOrMoveBack(_width + 1);
+	}
 
     MainWindow(); ! set_window
 ];
@@ -525,6 +554,8 @@ Verb 'examine' 'x//'
 
 [ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer _noun_tokens _noun;
 
+	action = -1;
+
 	UpdateScope(location);
 
 	if(parse_array->1 < 1) {
@@ -536,6 +567,7 @@ Verb 'examine' 'x//'
 		_verb = parse_array-->1;
 		if(_verb == abbr_directions_array --> _i or full_directions_array --> _i) {
 			!print "Found direction ",(address) abbr_directions_array --> _i, "^";
+			action = ##Go;
 			GoDir(direction_properties_array --> _i);
 			rtrue;
 		}
@@ -884,8 +916,11 @@ Object DefaultPlayer "you"
 	<Look>; ! Equivalent to PerformAction(##Look);
 
 	while(game_state == GS_PLAYING) {
+		status_field_1 = score;
+		status_field_2 = turns;
 		ReadPlayerInput();
 		ParseAndPerformAction();
+		if(action >= 0) turns++;
 	}
 ];
 
