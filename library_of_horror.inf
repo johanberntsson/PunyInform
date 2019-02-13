@@ -45,10 +45,10 @@ Object Library "The Library"
 		s_to CarPark,
 	has light;
 
-Object -> Box "box"
+Object -> SmallBox "box"
 	with
 		name 'box',
-	has container open;
+	has container;
 
 Book -> -> RedBook "red book"
 	with
@@ -85,7 +85,8 @@ Book -> GreenBook "green book"
 		description "The book is nice and tidy.";
 
 [Initialise;
-	location = Library;
+!	location = Library;
+	PlayerTo(SmallBox);
 	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
 	SetFlag(F_PARROT_FED);
 	print "Have set. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";

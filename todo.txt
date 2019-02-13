@@ -1,5 +1,7 @@
 Ideas of things to do next
 --------------------------
+Look / Go / Take etc must handle situation when player is in a closed or non-transparent container. Also check light. And Go should alert if player is on supporter or in (even open or transparent) container.
+
 Pronouns (OPEN IT)
 
 Ordering someone to do something

@@ -232,21 +232,26 @@ Verb 'examine' 'x//'
 
 ! ######################### Helper routines
 
+[ GetVisibilityCeiling p_actor _parent;
+	for(:: p_actor = _parent) {
+		_parent = parent(p_actor);
+		if(_parent == 0 || (p_actor has container && p_actor hasnt transparent or open)) {
+			return p_actor;
+		}
+	}
+];
+
+
+#IfV5;
+
+Array cursor_pos --> 2;
+
 [ StatusLineHeight p_height;
 	if (statusline_current_height ~= p_height) {
 		@split_window p_height;
 		statusline_current_height = p_height;
 	}
 ];
-
-#IfV5;
-
-Array cursor_pos --> 2;
-
-! [ GetCursor;  ! 1-based postion on text grid
-! 	@get_cursor cursor_pos;
-! ];
-
 
 
 [ MoveCursor line column;  ! 1-based postion on text grid
@@ -324,7 +329,7 @@ Array cursor_pos --> 2;
     spaces p_col;
 ];
 
-[ DrawStatusLine _width _pos;
+[ DrawStatusLine _width _visibility_ceiling;
 
     ! If there is no player location, we shouldn't try to draw status window
     if (location == nothing || parent(player) == nothing)
@@ -350,10 +355,13 @@ Array cursor_pos --> 2;
 !     else {
 !         FindVisibilityLevels();
 !         if (visibility_ceiling == location)
-    print (name) location;
-!         else
-!             print (The) visibility_ceiling;
-!     }
+	_visibility_ceiling = GetVisibilityCeiling(player);
+!	print (object) _visibility_ceiling;
+	if (_visibility_ceiling == location) {
+		print (name) _visibility_ceiling;
+	} else {
+		print (The) _visibility_ceiling;
+	}
 
 !     if (sys_statusline_flag && width > 53) {
 !         MoveCursor(1, posa);
@@ -470,9 +478,10 @@ Array cursor_pos --> 2;
 	}
 ];
 
-[ PlayerTo p_loc;
+[ PlayerTo p_loc _p;
 	move Player to p_loc;
-	location = p_loc;
+	for(location = p_loc: (_p = parent(location)): location = _p);
+	print (object) location;
 ];
 
 ! ######################### Parser
@@ -929,7 +938,7 @@ Object DefaultPlayer "you"
 	player = DefaultPlayer;
 	game_state = GS_PLAYING;
 	Initialise();
-	PlayerTo(location);
+!	PlayerTo(location);
 	<Look>; ! Equivalent to PerformAction(##Look);
 
 	while(game_state == GS_PLAYING) {
