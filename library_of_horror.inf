@@ -22,8 +22,8 @@ Class Book
 		party [a b c;
 			print "Self is ", self, "^";
 			print "a is ", a, "^";
-			print "b is ", b, "^";
-			print "c is ", c, "^";
+!			print "b is ", b, "^";
+!			print "c is ", c, "^";
 		];
 
 
@@ -90,7 +90,7 @@ Book -> GreenBook "green book"
 	SetFlag(F_PARROT_FED);
 	print "Have set. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
 	ClearFlag(F_PARROT_FED);
-	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
+	print "Have cleared. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
 	print "Parrot fed != ", FlagIsClear(F_PARROT_FED),"^";
 
 	BlueBook.description();

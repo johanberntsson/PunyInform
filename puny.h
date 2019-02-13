@@ -309,22 +309,19 @@ Array cursor_pos --> 2;
 ];
 #IfNot;
 
-[ PrintSpaces p_n;
-    while(p_n >= 5) {
-	    print "     ";
-	    p_n = p_n - 5;
-    }
-    spaces p_n;
-];
-
 [ PrintSpacesOrMoveBack p_col;
 	@get_cursor cursor_pos;
 	if(cursor_pos --> 1 > p_col || cursor_pos --> 0 > 1) {
 		MoveCursor(1, p_col - 1);
 		print " ";
-	} else {
-		PrintSpaces(p_col - (cursor_pos --> 1));
+		rtrue;
 	}
+	p_col = p_col - (cursor_pos --> 1);
+    while(p_col >= 5) {
+	    print "     ";
+	    p_col = p_col - 5;
+    }
+    spaces p_col;
 ];
 
 [ DrawStatusLine _width _pos;
@@ -364,18 +361,34 @@ Array cursor_pos --> 2;
 !         LanguageTimeOfDay(sline1, sline2);
 !     }
 !     else {
-	if (_width > 66) {
-		PrintSpacesOrMoveBack(_width - 26);
-		print (string) SCORE__TX, status_field_1;
-		PrintSpacesOrMoveBack(_width - 13);
-		print (string) MOVES__TX, status_field_2;
-		PrintSpacesOrMoveBack(_width + 1);
-	} else if (_width > 39) {
-		PrintSpacesOrMoveBack(_width - 10);
-		print status_field_1, "/", status_field_2;
-		PrintSpacesOrMoveBack(_width + 1);
+	if (_width > 24) {
+		if (_width < 29) {
+			! Width is 25-28, only print score as "0", no moves
+			PrintSpacesOrMoveBack(_width - 2);
+			print status_field_1;
+		} else {
+			if (_width > 66) {
+				! Width is 67-, print "Score: 0 Moves: 0"
+				PrintSpacesOrMoveBack(_width - 26);
+				print (string) SCORE__TX, status_field_1;
+				PrintSpacesOrMoveBack(_width - 13);
+				print (string) MOVES__TX;
+			} else {
+				if (_width > 35) {
+					! Width is 36-66, print "Score: 0/0"
+					PrintSpacesOrMoveBack(_width - 13);
+					print (string) SCORE__TX;
+				} else {
+					! Width is 29-35, print "0/0"
+					PrintSpacesOrMoveBack(_width - 6);
+				}
+				print status_field_1, "/";
+			}
+			print status_field_2;
+		}
 	}
-
+	! Regardless of what kind of status line we have printed, print spaces to the end.
+	PrintSpacesOrMoveBack(_width + 1);
     MainWindow(); ! set_window
 ];
 #Endif;
@@ -465,6 +478,10 @@ Array cursor_pos --> 2;
 ! ######################### Parser
 
 [ ReadPlayerInput _result;
+! #IfV5;
+! 	print "Width: ", HDR_SCREENWCHARS->0,"^";
+! #EndIf;
+
 	print ">";
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
@@ -794,7 +811,7 @@ Array cursor_pos --> 2;
 !                      remaining and copy.  Implementing these here prevents
 !                      the need for a full metaclass inheritance scheme.      */
 
-[ CA__Pr obj id a b c    x y z s s2 n m;
+[ CA__Pr obj id a    x y z s s2 n m;
 !	print "CA_Pr obj = ", obj,", id = ", id,", a = ", a, "^";
 	if (obj < 1 || obj > #largest_object-255) {
 		switch(Z__Region(obj)) {
@@ -802,7 +819,7 @@ Array cursor_pos --> 2;
 			if (id == call) {
 				s = sender; sender = self; self = obj;
 				#ifdef action;sw__var=action;#endif;
-				x = indirect(obj, a, b, c);
+				x = indirect(obj, a);
 				self = sender; sender = s; return x;
 			}
 			jump Call__Error;
