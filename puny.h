@@ -2,6 +2,7 @@
 ! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
+Constant WORDSIZE 2;
 
 Attribute light;
 Attribute supporter;
@@ -152,6 +153,8 @@ Include "scope.h";
 [ TakeSub;
 	if(noun in player)
 		"You already have that.";
+	if(IndirectlyContains(noun, player))
+		"First, you'd have to leave ", (the) noun, ".";
 	move noun to player;
 	give noun moved;
 	score = score + 10;
@@ -241,6 +244,16 @@ Verb 'examine' 'x//'
 	}
 ];
 
+[ IndirectlyContains p_o1 p_o2;
+    ! Does o1 indirectly contain o2?  (Same as testing if o1 is one of the ancestors of o2.)
+    while (p_o2 ~= 0) {
+        if (p_o1 == p_o2) rtrue;
+!        if (p_o2 ofclass Class) rfalse;
+        p_o2 = parent(p_o2);
+    }
+    rfalse;
+];
+
 
 #IfV5;
 
@@ -314,19 +327,24 @@ Array cursor_pos --> 2;
 ];
 #IfNot;
 
-[ PrintSpacesOrMoveBack p_col;
+[ PrintSpacesOrMoveBack p_col p_space_before _col;
 	@get_cursor cursor_pos;
-	if(cursor_pos --> 1 > p_col || cursor_pos --> 0 > 1) {
+	_col = cursor_pos --> 1;
+	if(_col > p_col || (_col == p_col && p_space_before ~= 0) || cursor_pos --> 0 > 1) {
 		MoveCursor(1, p_col - 1);
-		print " ";
+		print (char) ' ';
 		rtrue;
 	}
-	p_col = p_col - (cursor_pos --> 1);
+	p_col = p_col - _col;
     while(p_col >= 5) {
 	    print "     ";
 	    p_col = p_col - 5;
     }
-    spaces p_col;
+
+	@jl p_col 1 ?rtrue;
+.one_more;
+	@print_char ' ';
+	@dec_chk (p_col) 1 ?~one_more;
 ];
 
 [ DrawStatusLine _width _visibility_ceiling;
@@ -372,23 +390,23 @@ Array cursor_pos --> 2;
 	if (_width > 24) {
 		if (_width < 29) {
 			! Width is 25-28, only print score as "0", no moves
-			PrintSpacesOrMoveBack(_width - 2);
+			PrintSpacesOrMoveBack(_width - 2, 1);
 			print status_field_1;
 		} else {
 			if (_width > 66) {
 				! Width is 67-, print "Score: 0 Moves: 0"
-				PrintSpacesOrMoveBack(_width - 26);
+				PrintSpacesOrMoveBack(_width - 26, 1);
 				print (string) SCORE__TX, status_field_1;
 				PrintSpacesOrMoveBack(_width - 13);
 				print (string) MOVES__TX;
 			} else {
 				if (_width > 35) {
 					! Width is 36-66, print "Score: 0/0"
-					PrintSpacesOrMoveBack(_width - 13);
+					PrintSpacesOrMoveBack(_width - 13, 1);
 					print (string) SCORE__TX;
 				} else {
 					! Width is 29-35, print "0/0"
-					PrintSpacesOrMoveBack(_width - 6);
+					PrintSpacesOrMoveBack(_width - 6, 1);
 				}
 				print status_field_1, "/";
 			}
@@ -469,6 +487,7 @@ Array cursor_pos --> 2;
 
 
 [ PrintOrRun p_obj p_prop;
+    if (obj.#prop > WORDSIZE) return RunRoutines(obj,prop);
 	if(p_obj.p_prop ofclass String) {
 		print (string) p_obj.p_prop;
 		rtrue;
@@ -481,7 +500,7 @@ Array cursor_pos --> 2;
 [ PlayerTo p_loc _p;
 	move Player to p_loc;
 	for(location = p_loc: (_p = parent(location)): location = _p);
-	print (object) location;
+!	print (object) location;
 ];
 
 ! ######################### Parser
@@ -582,7 +601,7 @@ Array cursor_pos --> 2;
 
 	action = -1;
 
-	UpdateScope(location);
+	UpdateScope(GetVisibilityCeiling(player));
 
 	if(parse_array->1 < 1) {
 		"Come again?";
@@ -633,9 +652,9 @@ Array cursor_pos --> 2;
 		print "############ Pattern ",_i,"^";
 		_pattern = CheckPattern(_pattern);
 	}
+	@new_line;
 #EndIf;
 
-	@new_line;
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _num_patterns : _i++) {
 #IfDef DEBUG;
@@ -938,7 +957,7 @@ Object DefaultPlayer "you"
 	player = DefaultPlayer;
 	game_state = GS_PLAYING;
 	Initialise();
-!	PlayerTo(location);
+	if(parent(player) == 0) PlayerTo(location);
 	<Look>; ! Equivalent to PerformAction(##Look);
 
 	while(game_state == GS_PLAYING) {

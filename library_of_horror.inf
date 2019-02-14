@@ -48,7 +48,7 @@ Object Library "The Library"
 Object -> SmallBox "box"
 	with
 		name 'box',
-	has container;
+	has container open;
 
 Book -> -> RedBook "red book"
 	with
