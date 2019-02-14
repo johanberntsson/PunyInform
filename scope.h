@@ -19,7 +19,9 @@ Array scope-->MAX_SCOPE;
 
 [ UpdateScope p_start_pos;
 	scope_objects = 0;
-    ! start recursion
+    ! Add all in player locatio (which may be inside an object)
     SearchScope(child(p_start_pos));
+    if(p_start_pos ~= location) scope-->(scope_objects++) = p_start_pos;
+
 ];
 

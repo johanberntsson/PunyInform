@@ -2,13 +2,15 @@
 ! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
-Constant WORDSIZE 2;
+!Constant WORDSIZE 2;
 
 Attribute light;
 Attribute supporter;
 Attribute container;
+Attribute enterable;
 Attribute transparent;
 Attribute open;
+Attribute openable;
 Attribute concealed;
 Attribute moved;
 Attribute visited alias moved;
@@ -112,25 +114,30 @@ Include "scope.h";
 
 
 ! ######################### Grammar + Actions
-[ LookSub _obj;
+[ LookSub _obj _ceil;
 
+	_ceil = GetVisibilityCeiling(player);
+
+!	print "Ceiling is object ", _ceil, ": ", (object) _ceil, ".^";
 	! ### Print room name
-	PrintObjName(location);
+	if(_ceil ~= location) {
+		print (The) _ceil;
+	} else {
+		PrintObjName(_ceil);
+	}
 	@new_line;
 
 	! ### Print room description
-	if(location.description) {
-		PrintOrRun(location, description);
+	if(_ceil.description) {
+		PrintOrRun(_ceil, description);
 	}
 
-	PrintContents(" You can also see ", " here.", location);
-	@new_line;
+	PrintContents(" You can also see ", " here.^", _ceil);
 
-	objectloop(_obj in location) {
+	objectloop(_obj in _ceil) {
 		if(_obj hasnt moved && _obj.initial ~= 0) {
 			@new_line;
 			PrintOrRun(_obj, initial);
-			@new_line;
 		}
 	}
 
@@ -138,7 +145,7 @@ Include "scope.h";
 
 [ ExamineSub;
 	if(noun provides description) {
-		print "Has desc...";
+!		print "Has desc...";
 		PrintOrRun(noun, description);
 	} else {
 		"There is nothing special about ", (the) noun, ".";
@@ -151,10 +158,8 @@ Include "scope.h";
 ];
 
 [ TakeSub;
-	if(noun in player)
-		"You already have that.";
-	if(IndirectlyContains(noun, player))
-		"First, you'd have to leave ", (the) noun, ".";
+	if(noun in player) "You already have that.";
+	if(IndirectlyContains(noun, player)) "First, you'd have to leave ", (the) noun, ".";
 	move noun to player;
 	give noun moved;
 	score = score + 10;
@@ -162,10 +167,43 @@ Include "scope.h";
 ];
 
 [ DropSub;
-	if(noun notin player)
-		"You are not holding that.";
+	if(noun notin player) "You aren't holding that.";
 	move noun to location;
 	"Dropped.";
+];
+
+[ OpenSub;
+	if(noun hasnt openable) "You can't open that.";
+	if(noun has open) "It is already open.";
+	give noun open;
+	"You open ", (the) noun, ".";
+];
+
+[ CloseSub;
+	if(noun hasnt openable) "You can't close that.";
+	if(noun hasnt open) "It isn't open.";
+	give noun ~open;
+	"You close ", (the) noun, ".";
+];
+
+[ EnterSub;
+	if(noun hasnt enterable) "You can't enter that.";
+	if(player in noun) "But you are already there!";
+	if(noun has container && noun hasnt open) "You can't, since it's closed.";
+	PlayerTo(noun);
+	"You enter ", (the) noun, ".";
+];
+
+[ ExitSub;
+	if(player in location) "But you aren't in anything at the moment!";
+	if(player notin noun) {
+		if(IndirectlyContains(noun, player)) "First you have to leave ", (the) parent(player),".";
+		if(noun has supporter) "You aren't on that.";
+		"You aren't in that.";
+	}
+	if(noun has container && noun hasnt open) "You can't, since it's closed.";
+	PlayerTo(parent(noun));
+	"You leave ", (the) noun, ".";
 ];
 
 [ InventorySub;
@@ -203,9 +241,9 @@ Include "scope.h";
 	<Look>; ! Equivalent to PerformAction(##Look);
 ];
 
-[ EnterSub p_direction;
-	"can't enter yet";
-];
+! [ EnterSub p_direction;
+! 	"can't enter yet";
+! ];
 
 Verb 'i' 'inventory'
 	* -> Inventory;
@@ -219,11 +257,32 @@ Verb 'quit'
 	* 'into'/'out'/'of'/'hello'/'bob' noun -> Quit
 	* 'out' 'of' -> Take reverse;
 
+Verb 'open'
+	* noun -> Open;
+
+Verb 'close'
+	* noun -> Close;
+
 Verb 'take' 'get'
 	* noun -> Take;
 
 Verb 'drop'
 	* noun -> Drop;
+
+Verb 'enter'
+	* noun -> Enter;
+
+Verb 'climb'
+	* 'into'/'onto' noun 		-> Enter
+	* 'out' 'of'/'from' noun 	-> Exit;
+
+Verb 'jump'
+	* 'into'/'onto' noun 		-> Enter
+	* 'out' 'of'/'from' noun 	-> Exit
+	* 'off' noun 				-> Exit;
+
+Verb 'exit' 'leave'
+	* noun -> Exit;
 
 Verb 'go'
 	* 'north'/'south' -> Go
@@ -238,6 +297,7 @@ Verb 'examine' 'x//'
 [ GetVisibilityCeiling p_actor _parent;
 	for(:: p_actor = _parent) {
 		_parent = parent(p_actor);
+!		print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
 		if(_parent == 0 || (p_actor has container && p_actor hasnt transparent or open)) {
 			return p_actor;
 		}
@@ -486,10 +546,11 @@ Array cursor_pos --> 2;
 ];
 
 
-[ PrintOrRun p_obj p_prop;
-    if (obj.#prop > WORDSIZE) return RunRoutines(obj,prop);
+[ PrintOrRun p_obj p_prop p_no_string_newline;
+    if (p_obj.#p_prop > WORDSIZE) return RunRoutines(p_obj,p_prop);
 	if(p_obj.p_prop ofclass String) {
 		print (string) p_obj.p_prop;
+		if(p_no_string_newline == 0) @new_line;
 		rtrue;
 	}
 	else if(p_obj.p_prop ofclass Routine) {
@@ -510,7 +571,7 @@ Array cursor_pos --> 2;
 ! 	print "Width: ", HDR_SCREENWCHARS->0,"^";
 ! #EndIf;
 
-	print ">";
+	print "^>";
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
 	DrawStatusLine();
@@ -519,7 +580,13 @@ Array cursor_pos --> 2;
 	@aread player_input_array parse_array -> _result;
 #IfNot;
 	player_input_array->0 = MAX_INPUT_CHARS - 1;
-	@sread player_input_array parse_array;
+	if(player in location) {
+		@sread player_input_array parse_array;
+	} else {
+		_result = location; location = GetVisibilityCeiling(player);
+		@sread player_input_array parse_array;
+		location = _result;
+	}
 #EndIf;
 	input_words = parse_array -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.

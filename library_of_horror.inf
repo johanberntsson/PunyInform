@@ -48,7 +48,13 @@ Object Library "The Library"
 Object -> SmallBox "box"
 	with
 		name 'box',
-	has container open;
+		description [;
+			if(GetVisibilityCeiling(player) == self)
+				"The box looked pretty big from the outside, but you feel really confined in here.";
+			else
+				"It's a large box. You could probably fit several people in there.";
+		],
+	has container openable enterable;
 
 Book -> -> RedBook "red book"
 	with
