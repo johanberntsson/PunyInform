@@ -129,7 +129,7 @@ Include "scope.h";
 
 	! ### Print room description
 	if(_ceil.description) {
-		PrintOrRun(_ceil, description);
+		PrintOrRun(_ceil, description, 1);
 	}
 
 	PrintContents(" You can also see ", " here.^", _ceil);
@@ -814,7 +814,7 @@ Array cursor_pos --> 2;
 		_pattern = _pattern_index + 1;
 	}
 
-	"Sorry, I didn't understand that.^";
+	"Sorry, I didn't understand that.";
 
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
