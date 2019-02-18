@@ -247,25 +247,43 @@ Include "scope.h";
 	<Look>; ! Equivalent to PerformAction(##Look);
 ];
 
-[ SaveSub;
-	save save_success;
+[ SaveSub _result;
+#IFV3; 
+	save save_success; ! can't use @save because of compiler test
     "Save failed.";
     .save_success;
     "Ok.";
+#IFNOT;
+	@save -> _result;
+	switch(_result) {
+		0: "Save failed.";
+		1: "Ok."; ! if save worked
+		2: "Ok."; ! after successful restore
+	}
+#ENDIF;
 ];
 
-[ RestoreSub;
-    restore restore_success;
+[ RestoreSub _flag;
+#IFV3; 
+    restore restore_success; ! can't use @restore because of compiler test
     "Restore failed.";
     .restore_success;
     "Ok.";
+#IFNOT;
+	@restore -> _flag;
+	! must have failed here so no need to check the flag
+	"Restore failed";
+#ENDIF;
 ];
 
 [ YesOrNo i;
   for (::)
   {
-   #IFV3; read player_input_array parse_array; #ENDIF;
-   #IFV5; read player_input_array parse_array DrawStatusLine; #ENDIF;
+#IFV3; 
+	  read player_input_array parse_array; 
+#IFNOT;
+      read player_input_array parse_array DrawStatusLine;
+#ENDIF;
       i=parse_array-->1;
       if (i=='yes' or #n$y) rtrue;
       if (i=='no' or #n$n) rfalse;
