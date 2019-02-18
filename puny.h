@@ -152,9 +152,15 @@ Include "scope.h";
 	}
 ];
 
+! could handle locatisation with constants, but need (string)
+! Constant MSG_AREYOUSUREQUIT = "Are you sure you want to quit? ";
+
 [ QuitSub;
-	game_state = GS_QUIT;
-	"Quitting...";
+    ! print (string) MSG_AREYOUSUREQUIT;
+    print "Are you sure you want to quit? ";
+    if(YesOrNo()) {
+		game_state = GS_QUIT;
+	}
 ];
 
 [ TakeSub;
@@ -241,9 +247,39 @@ Include "scope.h";
 	<Look>; ! Equivalent to PerformAction(##Look);
 ];
 
-! [ EnterSub p_direction;
-! 	"can't enter yet";
-! ];
+[ SaveSub;
+	save save_success;
+    "Save failed.";
+    .save_success;
+    "Ok.";
+];
+
+[ RestoreSub;
+    restore restore_success;
+    "Restore failed.";
+    .restore_success;
+    "Ok.";
+];
+
+[ YesOrNo i;
+  for (::)
+  {
+   #IFV3; read player_input_array parse_array; #ENDIF;
+   #IFV5; read player_input_array parse_array DrawStatusLine; #ENDIF;
+      i=parse_array-->1;
+      if (i=='yes' or #n$y) rtrue;
+      if (i=='no' or #n$n) rfalse;
+      print "Please answer yes or no.^> ";
+  }
+];
+
+[ RestartSub;
+    print "Are you sure you want to restart? ";
+    if(YesOrNo()) {
+		@restart;
+		"Failed.";
+	}
+];
 
 Verb 'i' 'inventory'
 	* -> Inventory;
@@ -251,11 +287,6 @@ Verb 'i' 'inventory'
 Verb 'look' 'l'
 	* -> Look
 	* 'at' noun -> Examine;
-
-Verb 'quit'
-	* -> Quit
-	* 'into'/'out'/'of'/'hello'/'bob' noun -> Quit
-	* 'out' 'of' -> Take reverse;
 
 Verb 'open'
 	* noun -> Open;
@@ -291,6 +322,18 @@ Verb 'go'
 
 Verb 'examine' 'x//'
 	* noun -> Examine;
+
+Verb meta 'quit'
+	* -> Quit;
+
+Verb meta 'save'
+	*      -> Save;
+
+Verb meta 'restore'
+	*      -> Restore;
+
+Verb meta 'restart'
+	*      -> Restart;
 
 ! ######################### Helper routines
 
@@ -802,6 +845,9 @@ Array cursor_pos --> 2;
 #IfDef DEBUG;
 				print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
 #EndIf;
+				break;
+			} else if(_token_type == TT_ROUTINE_FILTER ) {
+				print "TODO: fix routine filter";
 				break;
 			}
 			! This is a token we don't recognize, which means we fail at matching against this line
