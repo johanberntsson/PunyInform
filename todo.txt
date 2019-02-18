@@ -42,6 +42,8 @@ Amusing
 
 Done
 ----
+Complain if more than one noun matches the input
+
 Statusline for z5 games
 
 Flags

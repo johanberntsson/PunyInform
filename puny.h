@@ -782,6 +782,11 @@ Array cursor_pos --> 2;
 				! check all objects in 'scope', and see if any match.
 				! If so, update wn and parse_pointer, and return success
 				_noun = CheckNoun(_parse_pointer);
+				if(_noun == -2) {
+					print "Which ", (address) _parse_pointer --> 0, "? ";
+					"You have to be more specific.";
+					break;
+				}
 				if(_noun > 0) {
 #IfDef DEBUG;
 					print "Noun match!^";
