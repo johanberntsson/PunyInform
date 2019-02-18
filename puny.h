@@ -248,52 +248,49 @@ Include "scope.h";
 ];
 
 [ SaveSub _result;
-#IFV3; 
-	save save_success; ! can't use @save because of compiler test
-    "Save failed.";
-    .save_success;
-    "Ok.";
-#IFNOT;
+#IfV3;
+	@save ?save_success;
+	"Save failed.";
+.save_success;
+	"Ok.";
+#IfNot;
 	@save -> _result;
-	switch(_result) {
-		0: "Save failed.";
-		1: "Ok."; ! if save worked
-		2: "Ok."; ! after successful restore
-	}
-#ENDIF;
+	if(_result == 0) "Save failed.";
+	"Ok."; ! _result = 1: save ok, 2: Restore ok
+#EndIf;
 ];
 
 [ RestoreSub _flag;
-#IFV3; 
-    restore restore_success; ! can't use @restore because of compiler test
-    "Restore failed.";
-    .restore_success;
-    "Ok.";
-#IFNOT;
+#IfV3;
+	@restore ?restore_success; ! can't use @restore because of compiler test
+	"Restore failed.";
+.restore_success; ! This is never reached, since a successful restore continues after save opcode.
+#IfNot;
 	@restore -> _flag;
 	! must have failed here so no need to check the flag
 	"Restore failed";
-#ENDIF;
+#EndIf;
 ];
 
-[ YesOrNo i;
-  for (::)
-  {
-#IFV3; 
-	  read player_input_array parse_array; 
-#IFNOT;
-      read player_input_array parse_array DrawStatusLine;
-#ENDIF;
-      i=parse_array-->1;
-      if (i=='yes' or #n$y) rtrue;
-      if (i=='no' or #n$n) rfalse;
-      print "Please answer yes or no.^> ";
-  }
+[ YesOrNo _i;
+	for (::)
+	{
+#IfV3;
+		@sread player_input_array parse_array;
+#IfNot;
+		DrawStatusLine();
+		@aread player_input_array parse_array -> _i;
+#EndIf;
+		_i = parse_array --> 1;
+		if (_i == 'yes' or #n$y) rtrue;
+		if (_i == 'no' or #n$n) rfalse;
+		print "Please answer yes or no.^> ";
+	}
 ];
 
 [ RestartSub;
-    print "Are you sure you want to restart? ";
-    if(YesOrNo()) {
+	print "Are you sure you want to restart? ";
+	if(YesOrNo()) {
 		@restart;
 		"Failed.";
 	}
