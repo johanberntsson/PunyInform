@@ -1,3 +1,5 @@
+#include "english.h";
+
 ! Always use grammar version 2 which is easier to parse and more economical
 ! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
@@ -1085,6 +1087,9 @@ Array cursor_pos --> 2;
 Object DefaultPlayer "you"
 	has concealed;
 
+[ PrintMsg msg;
+	print (string) msg;
+];
 
 [ main i;
 	print "PunyInform 0.0^^";
@@ -1103,13 +1108,13 @@ Object DefaultPlayer "you"
 		if(action >= 0) turns++;
 	}
 	if(game_state == GS_QUIT) @quit;
-	if(game_state == GS_WIN) print "You have won";
-	else if(game_state == GS_DEAD) print "You have died";
+	if(game_state == GS_WIN) PrintMsg(MSG_YOUHAVEWON);
+	else if(game_state == GS_DEAD) PrintMsg(MSG_YOUHAVEDIED);
 	else DeathMessage();
 	print ".^";
 	for (::)
 	{
-		print "^Would you like to RESTART, RESTORE or QUIT? ";
+		PrintMsg(MSG_RESTARTRESTOREORQUIT);
 #IFV3; 
 		read player_input_array parse_array; 
 #IFNOT;
