@@ -54,6 +54,7 @@ Constant GS_PLAYING          = 1;
 Constant GS_QUIT             = 2;
 Constant GS_DEAD             = 3;
 Constant GS_WIN              = 4;
+Constant GS_DEATHMESSAGE     = 5;
 
 Constant FORM_CDEF           = 1;
 Constant FORM_DEF            = 2;
@@ -1118,6 +1119,6 @@ Object DefaultPlayer "you"
 		if (i=='restart') @restart;
 		if (i=='restore') RestoreSub();
 		if (i=='quit') @quit;
-  }
+	}
 ];
 

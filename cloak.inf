@@ -106,7 +106,7 @@ Object  message "scrawled message" bar
                 }
             else {
 !                deadflag = 3;
-                game_state = GS_DEAD;
+                game_state = GS_DEATHMESSAGE;
                 print "The message has been carelessly trampled, making it
                   difficult to read. You can just distinguish the words...";
                 }
