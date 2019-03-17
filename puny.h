@@ -53,6 +53,7 @@ Constant TOKEN_LAST_PREP     = $52;
 Constant GS_PLAYING          = 1;
 Constant GS_QUIT             = 2;
 Constant GS_DEAD             = 3;
+Constant GS_WIN              = 4;
 
 Constant FORM_CDEF           = 1;
 Constant FORM_DEF            = 2;
@@ -1084,7 +1085,7 @@ Object DefaultPlayer "you"
 	has concealed;
 
 
-[ main;
+[ main i;
 	print "PunyInform 0.0^^";
 
 	player = DefaultPlayer;
@@ -1100,5 +1101,23 @@ Object DefaultPlayer "you"
 		ParseAndPerformAction();
 		if(action >= 0) turns++;
 	}
+	if(game_state == GS_QUIT) @quit;
+	if(game_state == GS_WIN) print "You have won";
+	else if(game_state == GS_DEAD) print "You have died";
+	else DeathMessage();
+	print ".^";
+	for (::)
+	{
+		print "^Would you like to RESTART, RESTORE or QUIT? ";
+#IFV3; 
+		read player_input_array parse_array; 
+#IFNOT;
+		read player_input_array parse_array DrawStatusLine;
+#ENDIF;
+		i=parse_array-->1;
+		if (i=='restart') @restart;
+		if (i=='restore') RestoreSub();
+		if (i=='quit') @quit;
+  }
 ];
 

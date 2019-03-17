@@ -1,0 +1,136 @@
+!% -~S
+
+! ============================================================================ !
+!   Cloak of Darkness - a simple demonstration of Interactive Fiction
+!       This version for Inform written by Roger Firth on 17Sep99
+! ============================================================================ !
+
+Constant Story      "Cloak of Darkness";
+Constant Headline   "^A basic IF demonstration.^";
+Constant MANUAL_PRONOUNS;
+Constant MAX_SCORE  2;
+
+! PunyInform version used instead of Inform stdlib
+Attribute worn;
+Attribute scenery;
+Attribute clothing;
+Attribute general;
+[ PutOnSub; ];
+Include "puny.h";
+!Include "Parser";
+!Include "VerbLib";
+
+! ============================================================================ !
+
+Object  foyer "Foyer of the Opera House"
+  with  description
+           "You are standing in a spacious hall, splendidly decorated in red
+            and gold, with glittering chandeliers overhead. The entrance from
+            the street is to the north, and there are doorways south and west.",
+        s_to  bar,
+        w_to  cloakroom,
+        n_to
+           "You've only just arrived, and besides, the weather outside
+            seems to be getting worse.",
+  has   light;
+
+Object  cloakroom "Cloakroom"
+  with  description
+           "The walls of this small room were clearly once lined with hooks,
+            though now only one remains. The exit is a door to the east.",
+        e_to  foyer,
+  has   light;
+
+Object  hook "small brass hook" cloakroom
+  with  name 'small' 'brass' 'hook' 'peg',
+        description [;
+            print "It's just a small brass hook, ";
+            if (self == parent(cloak)) "with a cloak hanging on it.";
+            "screwed to the wall.";
+            ],
+  has   scenery supporter;
+
+Object  bar "Foyer bar"
+  with  description
+           "The bar, much rougher than you'd have guessed after the opulence
+            of the foyer to the north, is completely empty. There seems to
+            be some sort of message scrawled in the sawdust on the floor.",
+        n_to  foyer,
+        before [;
+            Go:
+!                if (self hasnt light && noun ~= n_obj) {
+                if (self hasnt light) { ! TODO
+                    message.number = message.number + 2;
+                    "Blundering around in the dark isn't a good idea!";
+                    }
+            default:
+                if (self hasnt light) {
+                    message.number = message.number + 1;
+                    "In the dark? You could easily disturb something!";
+                    }
+            ],
+  has   ~light;
+
+Object  cloak "velvet cloak"
+  with  name 'handsome' 'dark' 'black' 'velvet' 'satin' 'cloak',
+        description
+           "A handsome cloak, of velvet trimmed with satin, and slightly
+            spattered with raindrops. Its blackness is so deep that it
+            almost seems to suck light from the room.",
+        before [;
+            Drop, PutOn:
+                if (location == cloakroom) {
+                    give bar light;
+                    if (action == ##PutOn && self has general) {
+                        give self ~general;
+                        score++;
+                        }
+                    }
+                else
+                   "This isn't the best place to leave a smart cloak
+                    lying around.";
+            ],
+        after [;
+            Take: give bar ~light;
+            ],
+  has   clothing general;
+
+Object  message "scrawled message" bar
+  with  name 'message' 'sawdust' 'floor',
+        description [;
+            if (self.number < 2) {
+                score++;
+!                deadflag = 2;
+                game_state = GS_WIN;
+                print "The message, neatly marked in the sawdust, reads...";
+                }
+            else {
+!                deadflag = 3;
+                game_state = GS_DEAD;
+                print "The message has been carelessly trampled, making it
+                  difficult to read. You can just distinguish the words...";
+                }
+            ],
+        number  0,
+  has   scenery;
+
+[ Initialise;
+    location = foyer;
+    move cloak to player;
+    give cloak worn;
+   "^^Hurrying through the rainswept November night, you're glad to see the
+    bright lights of the Opera House. It's surprising that there aren't more
+    people about but, hey, what do you expect in a cheap demo game...?^^";
+    ];
+
+[ DeathMessage; print "You have lost"; ];
+
+! ============================================================================ !
+
+!Include "Grammar";
+
+Verb 'hang'     * held 'on' noun    -> PutOn;
+
+
+! ============================================================================ !
+
