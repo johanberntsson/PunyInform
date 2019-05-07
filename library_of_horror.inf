@@ -106,6 +106,3 @@ Book -> GreenBook "green book"
 	print "^^And so the story begins...^^";
 ];
 
-! todo: this has to be at the end of the file in case no DeathMessage was
-! defined. Do we need to specify to includes (puny_begin.h and puny_end.h)?
-#Stub DeathMessage      0;

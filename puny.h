@@ -1127,3 +1127,6 @@ Object DefaultPlayer "you"
 	}
 ];
 
+! todo: This has to be at the end of the file in case no DeathMessage was
+! defined. Do we need to specify two includes (puny_begin.h and puny_end.h)?
+#Stub DeathMessage      0;
