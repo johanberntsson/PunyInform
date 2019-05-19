@@ -23,6 +23,7 @@ Property initial;
 Property description;
 Property short_name;
 Property add_to_scope;
+Property react_before;
 
 ! directions
 Property n_to;
@@ -894,19 +895,23 @@ Array cursor_pos --> 2;
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
 [ PerformPreparedAction;
-	print "Performing action ", action, "^";
+	!print "Performing action ", action, "^";
+	sw__var = action;
     if ((BeforeRoutines() == false) && action < 4096) {
 	    ActionPrimitive();
 	}
 ];
 
-[ BeforeRoutines _i _obj;
-	! react_before - Loops over the scope and find possible react_before 
-	! routines to run in each object, if's found stop the action by
+[ BeforeRoutines _i _obj _result;
+	! react_before - Loops over the scope including scope ceiling to find 
+	! possible react_before routines to run in each object, if it's found 
+	! stop the action by returning true
  	for(_i = 0: _i < scope_objects: _i++) {
  		_obj = scope-->_i;
- 		if (_obj.&react_before ~= 0 or $ffff) { 
- 			return RunRoutines(_obj, react_before);
+ 		if (_obj provides react_before) {
+ 			if(PrintOrRun(_obj, react_before)) {
+ 				rtrue;
+ 			}
  		}
  	}
  	rfalse;
