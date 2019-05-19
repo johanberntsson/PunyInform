@@ -903,9 +903,8 @@ Array cursor_pos --> 2;
 ];
 
 [ BeforeRoutines _i _obj _result;
-	! react_before - Loops over the scope including scope ceiling to find 
-	! possible react_before routines to run in each object, if it's found 
-	! stop the action by returning true
+	! react_before - Loops over the scope to find possible react_before routines
+	! to run in each object, if it's found stop the action by returning true
  	for(_i = 0: _i < scope_objects: _i++) {
  		_obj = scope-->_i;
  		if (_obj provides react_before) {
