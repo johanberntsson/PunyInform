@@ -894,10 +894,22 @@ Array cursor_pos --> 2;
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
 [ PerformPreparedAction;
-!	print "Performing action ", action, "^";
-! Add check for before routines and fake actions later
-!    if ((BeforeRoutines() == false) && action < 4096)
-        ActionPrimitive();
+	print "Performing action ", action, "^";
+    if ((BeforeRoutines() == false) && action < 4096) {
+	    ActionPrimitive();
+	}
+];
+
+[ BeforeRoutines _i _obj;
+	! react_before - Loops over the scope and find possible react_before 
+	! routines to run in each object, if's found stop the action by
+ 	for(_i = 0: _i < scope_objects: _i++) {
+ 		_obj = scope-->_i;
+ 		if (_obj.&react_before ~= 0 or $ffff) { 
+ 			return RunRoutines(_obj, react_before);
+ 		}
+ 	}
+ 	rfalse;
 ];
 
 [ PerformAction p_action p_noun p_second _sa _sn _ss;
