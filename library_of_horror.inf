@@ -60,7 +60,19 @@ Book -> -> RedBook "red book"
 	with
 		name 'red' 'book',
 		initial "There is a red book lying on the floor here.",
-		description "The book is old and worn.";
+		description "The book is old and worn.",
+		react_before [;
+ 			Take:
+ 				if(player in SmallBox) {
+ 					"It's too hard to pick it up while inside the box.";	
+ 				}
+				if(BlueBook in player) {
+					print "The blue book does not want to be near the red book and jumps out of your grasp and lands on the floor.^^";
+					move BlueBook to location;
+				}
+
+
+		];
 
 Object -> BlueBook "blue book" class Book
 	with
@@ -73,6 +85,13 @@ Object -> BlueBook "blue book" class Book
 			print "A ";
 			PrintShortName(self);
 			" is standing on a shelf. Looking at ", (the) self, " makes you dizzy.";
+		],
+		react_before[;
+			Take: 
+				if(RedBook in player) {
+					print "The red book does not want to be near the blue book and jumps out of your grasp and lands on the floor.^^";
+					move RedBook to location;
+				}
 		],
 !		description "The book looks new and shiny.",
 		bobby 7,
