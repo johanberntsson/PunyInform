@@ -24,6 +24,7 @@ Property description;
 Property short_name;
 Property add_to_scope;
 Property react_before;
+Property before;
 
 ! directions
 Property n_to;
@@ -913,6 +914,11 @@ Array cursor_pos --> 2;
  			}
  		}
  	}
+
+ 	if(noun provides before && RunRoutines(noun, before)) {
+ 		rtrue;
+ 	}
+
  	rfalse;
 ];
 
