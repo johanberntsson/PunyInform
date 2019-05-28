@@ -888,6 +888,8 @@ Array cursor_pos --> 2;
 
 	"Sorry, I didn't understand that.";
 
+
+
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
 	PerformPreparedAction();
@@ -914,11 +916,12 @@ Array cursor_pos --> 2;
  			}
  		}
  	}
-
- 	if(noun provides before && RunRoutines(noun, before)) {
+    if(location provides before && RunRoutines(location, before)) {
  		rtrue;
  	}
-
+    if(noun provides before && RunRoutines(noun, before)) {
+ 		rtrue;
+ 	}
  	rfalse;
 ];
 
@@ -1126,6 +1129,8 @@ Object DefaultPlayer "you"
 		status_field_1 = score;
 		status_field_2 = turns;
 		ReadPlayerInput();
+
+
 		ParseAndPerformAction();
 		if(action >= 0) turns++;
 	}
