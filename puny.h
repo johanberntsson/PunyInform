@@ -916,13 +916,13 @@ Array cursor_pos --> 2;
  			}
  		}
  	}
-    if(location provides before && RunRoutines(location, before)) {
- 		rtrue;
+	if(location provides before && RunRoutines(location, before)) {
+		rtrue;
  	}
-    if(noun provides before && RunRoutines(noun, before)) {
- 		rtrue;
+	if(noun provides before && RunRoutines(noun, before)) {
+		rtrue;
  	}
- 	rfalse;
+	rfalse;
 ];
 
 [ PerformAction p_action p_noun p_second _sa _sn _ss;
