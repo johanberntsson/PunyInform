@@ -797,6 +797,9 @@ Array cursor_pos --> 2;
 		_noun_tokens = 0;
 		noun = 0;
 		second = 0;
+		inp1 = 0;
+		inp2 = 0;
+
 		while(true) {
 			_pattern_index = _pattern_index + 3;
 			_token = _pattern_index -> 0;
@@ -857,8 +860,10 @@ Array cursor_pos --> 2;
 #EndIf;
 					if(_noun_tokens == 0) {
 						noun = _noun;
+						inp1 = _noun;
 					} else if(_noun_tokens == 1){
 						second = _noun;
+						inp2 = _noun;
 					}
 					_noun_tokens++;
 					continue;
@@ -919,7 +924,7 @@ Array cursor_pos --> 2;
 	if(location provides before && RunRoutines(location, before)) {
 		rtrue;
  	}
-	if(noun provides before && RunRoutines(noun, before)) {
+	if(inp1 provides before && RunRoutines(inp1, before)) {
 		rtrue;
  	}
 	rfalse;
@@ -1129,8 +1134,6 @@ Object DefaultPlayer "you"
 		status_field_1 = score;
 		status_field_2 = turns;
 		ReadPlayerInput();
-
-
 		ParseAndPerformAction();
 		if(action >= 0) turns++;
 	}
