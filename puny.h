@@ -24,6 +24,7 @@ Property description;
 Property short_name;
 Property add_to_scope;
 Property react_before;
+Property before;
 
 ! directions
 Property n_to;
@@ -796,6 +797,9 @@ Array cursor_pos --> 2;
 		_noun_tokens = 0;
 		noun = 0;
 		second = 0;
+		inp1 = 0;
+		inp2 = 0;
+
 		while(true) {
 			_pattern_index = _pattern_index + 3;
 			_token = _pattern_index -> 0;
@@ -856,8 +860,10 @@ Array cursor_pos --> 2;
 #EndIf;
 					if(_noun_tokens == 0) {
 						noun = _noun;
+						inp1 = _noun;
 					} else if(_noun_tokens == 1){
 						second = _noun;
+						inp2 = _noun;
 					}
 					_noun_tokens++;
 					continue;
@@ -887,6 +893,8 @@ Array cursor_pos --> 2;
 
 	"Sorry, I didn't understand that.";
 
+
+
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
 	PerformPreparedAction();
@@ -913,7 +921,13 @@ Array cursor_pos --> 2;
  			}
  		}
  	}
- 	rfalse;
+	if(location provides before && RunRoutines(location, before)) {
+		rtrue;
+ 	}
+	if(inp1 provides before && RunRoutines(inp1, before)) {
+		rtrue;
+ 	}
+	rfalse;
 ];
 
 [ PerformAction p_action p_noun p_second _sa _sn _ss;
