@@ -25,6 +25,7 @@ Property short_name;
 Property add_to_scope;
 Property react_before;
 Property before;
+Property parse_name;
 
 ! directions
 Property n_to;
@@ -682,7 +683,7 @@ Array cursor_pos --> 2;
 ];
 #EndIf;
 
-[ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+[ CheckNoun p_parse_pointer _i _j _n _m _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
@@ -692,7 +693,17 @@ Array cursor_pos --> 2;
 		_current_word = p_parse_pointer-->0;
 		_obj = scope-->_i;
 !		if(_obj == nothing) continue;
-		if(_obj.#name > 1) {
+		if(_obj provides parse_name) {
+ 			_j = wn;
+ 			_n = wn + PrintOrRun(_obj, parse_name); ! number of words consumed
+ 			wn = _j;
+			if(_n == _best_score) _matches++;
+			if(_n > _best_score) {
+				_last_match = _obj;
+				_best_score = _n;
+				_matches = 1;
+			}
+		} else if(_obj.#name > 1) {
 			_name_array = _obj.&name;
 			_name_array_len = _obj.#name / 2;
 			while(_n < input_words) {
@@ -707,6 +718,7 @@ Array cursor_pos --> 2;
 .success;
 				_n++;
 				_p = _p + 4;
+		        _current_word = _p-->0;
 				if(_n == _best_score) _matches++;
 				if(_n > _best_score) {
 					_last_match = _obj;
@@ -903,7 +915,7 @@ Array cursor_pos --> 2;
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
 [ PerformPreparedAction;
-	!print "Performing action ", action, "^";
+	print "Performing action ", action, "^";
 	sw__var = action;
     if ((BeforeRoutines() == false) && action < 4096) {
 	    ActionPrimitive();

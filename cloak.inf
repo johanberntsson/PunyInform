@@ -15,7 +15,10 @@ Attribute worn;
 Attribute scenery;
 Attribute clothing;
 Attribute general;
+
 [ PutOnSub; ];
+[ DeathMessage; print "You have lost"; ];
+
 Include "puny.h";
 !Include "Parser";
 !Include "VerbLib";
@@ -123,7 +126,6 @@ Object  message "scrawled message" bar
     people about but, hey, what do you expect in a cheap demo game...?^^";
     ];
 
-[ DeathMessage; print "You have lost"; ];
 
 ! ============================================================================ !
 
