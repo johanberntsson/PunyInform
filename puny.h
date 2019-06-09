@@ -271,7 +271,6 @@ Include "scope.h";
 
 [ GoSub _dir _i _prop;
     ! when called Directions have been set properly
-print "GoSub: ^";
     _prop = Directions.selected_dir_prop;
     if(_prop == 0) return Error("Invalid direction prop in GoSub");
     GoDir(_prop);
@@ -279,11 +278,8 @@ print "GoSub: ^";
 ];
 
 [ GoDir p_property _new_location;
-print "GoDir: p_property ", p_property, "^";
 	if(location provides p_property) {
-!		_new_location = location.p_property; ! doesn't work in z3
 		@get_prop location p_property -> _new_location; ! works in z3 and z5
-print "GoDir: new_location ", _new_location, "^";
 	}
 	if(_new_location == 0) {
 		if(location provides cant_go) {
@@ -793,30 +789,26 @@ Array cursor_pos --> 2;
 		"Come again?";
 	}
 
-	! check if it is a direction
-	for(_i = 1 : _i <= abbr_directions_array-->0 : _i++) {
-		_verb = parse_array-->1;
-		if(_verb == abbr_directions_array --> _i or full_directions_array --> _i) {
-			!print "Found direction ",(address) abbr_directions_array --> _i, "^";
-			action = ##Go;
-			GoDir(direction_properties_array --> _i);
-			rtrue;
-		}
-	}
 
-
-	! not a direction, try a verb command
 	_verb = parse_array-->1;
 	if(_verb < (0-->HEADER_DICTIONARY)) {
+	    ! unknown word
 		"That is not a verb I recognize.";
 	}
 
 	_word_data = _verb + DICT_BYTES_FOR_WORD;
+	! check if it is a direction
 	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
+	    ! try a direction instead
+	    wn = 0;
+	    if(Directions.parse_name()) {
+	        <<Go Directions>>;
+        }
+        ! not a direction, fail
 		"That is not a verb I recognize.";
 	}
 
-	! Now we know that the first word is a verb
+	! Now it is known word, and it is not a direction, in the first position
 
 ! 	print "Parse array: ", parse_array, "^";
 ! 	print "Word count: ", parse_array->0, "^";
@@ -960,7 +952,7 @@ Array cursor_pos --> 2;
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
 [ PerformPreparedAction;
-	print "Performing action ", action, "^";
+	!print "Performing action ", action, "^";
 	sw__var = action;
     if ((BeforeRoutines() == false) && action < 4096) {
 	    ActionPrimitive();
