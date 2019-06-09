@@ -108,6 +108,31 @@ Constant MAX_INPUT_WORDS     = 20;
 Array player_input_array->(MAX_INPUT_CHARS + 3);
 Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
 
+Object SelectedDirection
+    with
+        dir 0,
+        parse_name [;
+            self.dir = 0;
+            if((parse_array+2+4*wn)-->0 == 'n' || 'north') {
+                self.dir = n_to;
+                return 1;
+            }
+            if((parse_array+2+4*wn)-->0 == 's' || 'south') {
+                self.dir = s_to;
+                return 1;
+            }
+            if((parse_array+2+4*wn)-->0 == 'e' || 'east') {
+                self.dir = e_to;
+                return 1;
+            }
+            if((parse_array+2+4*wn)-->0 == 'w' || 'west') {
+                self.dir = w_to;
+                return 1;
+            }
+            return 0;
+        ];
+
+
 ! ######################### Include utility files
 
 #IfDef FLAG_COUNT;
@@ -338,6 +363,7 @@ Verb 'exit' 'leave'
 	* noun -> Exit;
 
 Verb 'go'
+	* 'north'/'south' -> Go
 	* 'north'/'south' -> Go
 	* 'n//'/'s//' -> Go
 	* noun -> Enter;
@@ -856,7 +882,7 @@ Array cursor_pos --> 2;
 #EndIf;
 				if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
-			} else if(_token_type == TT_NOUN) {
+			} else if(_token_type == TT_NOUN || TT_ROUTINE_FILTER ) {
 				! we expect a noun here
 				! check all objects in 'scope', and see if any match.
 				! If so, update wn and parse_pointer, and return success
@@ -878,14 +904,16 @@ Array cursor_pos --> 2;
 						inp2 = _noun;
 					}
 					_noun_tokens++;
+
+			        if(_token_type == TT_ROUTINE_FILTER) {
+				        !print "calling filter: ", _data, "^";
+				        if(_data() == false) break;
+                    }
 					continue;
 				}
 #IfDef DEBUG;
 				print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
 #EndIf;
-				break;
-			} else if(_token_type == TT_ROUTINE_FILTER ) {
-				print "TODO: fix routine filter";
 				break;
 			}
 			! This is a token we don't recognize, which means we fail at matching against this line
