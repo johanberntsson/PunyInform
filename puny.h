@@ -518,18 +518,11 @@ Array cursor_pos --> 2;
     if (location == nothing || parent(player) == nothing)
         return;
 
-    StatusLineHeight(statusline_height);
-    MoveCursor(1, 1);
-    print " ";
-
     _width = HDR_SCREENWCHARS->0;
 
-!     _i = width;
-!     while(_i>=10) {
-! 	    print "          ";
-! 	    _i = _i - 10;
-!     }
-!     spaces _i;
+    StatusLineHeight(statusline_height);
+    MoveCursor(1, 1);
+	if(_width >= 60) print " ";
 
 !     MoveCursor(1, 2);
 !     if (location == thedark) {
