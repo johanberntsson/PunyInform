@@ -746,6 +746,7 @@ Array cursor_pos --> 2;
 			_name_array = _obj.&name;
 			_name_array_len = _obj.#name / 2;
 			while(_n < input_words) {
+		        if(_current_word == nothing) return -1; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
 #IfNot;
@@ -788,7 +789,6 @@ Array cursor_pos --> 2;
 	if(parse_array->1 < 1) {
 		"Come again?";
 	}
-
 
 	_verb = parse_array-->1;
 	if(_verb < (0-->HEADER_DICTIONARY)) {
