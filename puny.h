@@ -1166,10 +1166,6 @@ Array cursor_pos --> 2;
 Object DefaultPlayer "you"
 	has concealed;
 
-[ PrintMsg msg;
-	print (string) msg;
-];
-
 [ main i;
 	print "PunyInform 0.0^^";
 
