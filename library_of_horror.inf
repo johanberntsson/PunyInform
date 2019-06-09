@@ -30,7 +30,7 @@ Class Book
 Object CarPark "Car Park"
 	with
 		short_name [; print "In front of the library!"; rtrue; ],
-		description "You are in a cark park in front of the library. You can enter to the north.",
+		description "You are in a car park in front of the library. You can enter to the north.",
 		n_to Library,
 ! 		exits [;
 ! 			N_TO: return Library;

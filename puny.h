@@ -108,28 +108,40 @@ Constant MAX_INPUT_WORDS     = 20;
 Array player_input_array->(MAX_INPUT_CHARS + 3);
 Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
 
-Object SelectedDirection
+Object Directions
     with
-        dir 0,
-        parse_name [;
-            self.dir = 0;
-            if((parse_array+2+4*wn)-->0 == 'n' || 'north') {
-                self.dir = n_to;
-                return 1;
-            }
-            if((parse_array+2+4*wn)-->0 == 's' || 'south') {
-                self.dir = s_to;
-                return 1;
-            }
-            if((parse_array+2+4*wn)-->0 == 'e' || 'east') {
-                self.dir = e_to;
-                return 1;
-            }
-            if((parse_array+2+4*wn)-->0 == 'w' || 'west') {
-                self.dir = w_to;
-                return 1;
-            }
+        selected_dir 0,
+        selected_dir_prop 0,
+        parse_name [_len _i _w _arr;
+            _w = (parse_array+2+4*wn)-->0;
+        	_len = abbr_directions_array-->0;
+#IfV5;
+            _arr = abbr_directions_array + 2;
+            @scan_table _w _arr _len -> _i ?success;
+            ! not found in abbr, try full
+            _arr = full_directions_array + 2;
+            @scan_table _w _arr _len -> _i ?success;
+            ! no match
+            self.selected_dir = 0;
+            self.selected_dir_prop = 0;
             return 0;
+.success;
+            self.selected_dir = (_i - _arr)/2;
+            self.selected_dir_prop = direction_properties_array --> (self.selected_dir + 1);
+            return 1;
+#IfNot;
+        	for(_i = 1 : _i <= _len : _i++) {
+	        	if(_w == abbr_directions_array --> _i or full_directions_array --> _i) {
+			        self.selected_dir = _i;
+			        self.selected_dir_prop = direction_properties_array --> _i;
+			        return 1;
+                }
+            }
+            ! failure
+            self.selected_dir = 0;
+            self.selected_dir_prop = 0;
+            return 0;
+#EndIf;
         ];
 
 
@@ -143,6 +155,13 @@ Include "flags.h";
 
 Include "scope.h";
 
+[ Error msg;
+#IfDef DEBUG;
+    "ERROR: ", (string) msg, "^";
+#IfNot;
+    "Something went wrong.";
+#EndIf;
+];
 
 
 ! ######################### Grammar + Actions
@@ -250,23 +269,21 @@ Include "scope.h";
 	PrintContents("You are holding ", ".^", player);
 ];
 
-[ GoSub _dir _i;
-    ! called "go <dir>", so direction is the second word
-    _dir = parse_array-->3;
-	for(_i = 1 : _i <= abbr_directions_array-->0 : _i++) {
-		if(_dir == abbr_directions_array --> _i or full_directions_array --> _i) {
-			GoDir(direction_properties_array --> _i);
-			rtrue;
-		}
-	}
-    ! this should never happen, but just in case
-    "You can't go that way!";
+[ GoSub _dir _i _prop;
+    ! when called Directions have been set properly
+print "GoSub: ^";
+    _prop = Directions.selected_dir_prop;
+    if(_prop == 0) return Error("Invalid direction prop in GoSub");
+    GoDir(_prop);
+    rtrue;
 ];
 
 [ GoDir p_property _new_location;
+print "GoDir: p_property ", p_property, "^";
 	if(location provides p_property) {
-		_new_location = location.p_property; ! doesn't work in z3
-!		@get_prop location p_property -> _new_location; ! works in z3 and z5
+!		_new_location = location.p_property; ! doesn't work in z3
+		@get_prop location p_property -> _new_location; ! works in z3 and z5
+print "GoDir: new_location ", _new_location, "^";
 	}
 	if(_new_location == 0) {
 		if(location provides cant_go) {
@@ -362,10 +379,10 @@ Verb 'jump'
 Verb 'exit' 'leave'
 	* noun -> Exit;
 
+[ ADirection; return (noun == Directions); ];
+
 Verb 'go'
-	* 'north'/'south' -> Go
-	* 'north'/'south' -> Go
-	* 'n//'/'s//' -> Go
+	* noun=ADirection -> Go
 	* noun -> Enter;
 
 Verb 'examine' 'x//'
