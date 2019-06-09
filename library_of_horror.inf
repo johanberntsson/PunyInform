@@ -49,10 +49,13 @@ Object -> SmallBox "box"
 	with
 		name 'box',
 		description [;
-			if(GetVisibilityCeiling(player) == self)
-				"The box looked pretty big from the outside, but you feel really confined in here.";
-			else
-				"It's a large box. You could probably fit several people in there.";
+			if(GetVisibilityCeiling(player) == self) {
+				print "The box looked pretty big from the outside, but you feel really confined in here.";
+				rtrue;
+			} else {
+				print "It's a large box. You could probably fit several people in there.";
+				rtrue;
+			}
 		],
 	has container openable enterable;
 
@@ -78,10 +81,10 @@ Object -> BlueBook "blue book" class Book
 	with
 		name 'book' 'blue',
 		initial [;
-			print "Self is ", self, ". ";
-			if(BlueBook provides hello && BlueBook.hello > 10) {
-				print "BlueBook.Hello is ", BlueBook.hello, ". ";
-			}
+			!print "Self is ", self, ". ";
+			!if(BlueBook provides hello && BlueBook.hello > 10) {
+			!	print "BlueBook.Hello is ", BlueBook.hello, ". ";
+			!}
 			print "A ";
 			PrintShortName(self);
 			" is standing on a shelf. Looking at ", (the) self, " makes you dizzy.";

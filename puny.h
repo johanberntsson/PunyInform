@@ -183,11 +183,12 @@ Include "scope.h";
 		PrintOrRun(_ceil, description, 1);
 	}
 
-	PrintContents(" You can also see ", " here.^", _ceil);
+	PrintContents(" You can also see ", " here.", _ceil);
+	@new_line;
 
 	objectloop(_obj in _ceil) {
 		if(_obj hasnt moved && _obj.initial ~= 0) {
-			@new_line;
+	        @new_line;
 			PrintOrRun(_obj, initial);
 		}
 	}
@@ -642,6 +643,8 @@ Array cursor_pos --> 2;
 ! 			@new_line;
 ! 		}
 ! 	}
+    !print "(",_printed_first_text, ")";
+	return _printed_first_text;
 ];
 
 [ RunRoutines p_obj p_prop;
