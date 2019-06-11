@@ -165,17 +165,25 @@ Include "scope.h";
 
 
 ! ######################### Grammar + Actions
-[ LookSub _obj _ceil;
+[ LookSub _obj _ceil _player_parent;
 
 	_ceil = GetVisibilityCeiling(player);
 
 !	print "Ceiling is object ", _ceil, ": ", (object) _ceil, ".^";
 	! ### Print room name
-	if(_ceil ~= location) {
-		print (The) _ceil;
+	if(_ceil == location) {
+		PrintObjName(location);
 	} else {
-		PrintObjName(_ceil);
+		print (The) _ceil;
 	}
+	
+	_player_parent = parent(player);
+	if(_player_parent ~= _ceil) {
+		if(_player_parent has supporter) print ", on ";
+		else print ", in ";
+		PrintObjName(_player_parent);
+	}
+	
 	@new_line;
 
 	! ### Print room description
@@ -279,6 +287,7 @@ Include "scope.h";
 ];
 
 [ GoDir p_property _new_location;
+	if(player notin location) "You need to leave ", (the) parent(player), " first.";
 	if(location provides p_property) {
 		@get_prop location p_property -> _new_location; ! works in z3 and z5
 	}
@@ -543,7 +552,8 @@ Array cursor_pos --> 2;
 	_visibility_ceiling = GetVisibilityCeiling(player);
 !	print (object) _visibility_ceiling;
 	if (_visibility_ceiling == location) {
-		print (name) _visibility_ceiling;
+		PrintObjName(location);
+!		print (name) _visibility_ceiling;
 	} else {
 		print (The) _visibility_ceiling;
 	}

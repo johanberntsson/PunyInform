@@ -40,7 +40,7 @@ Object CarPark "Car Park"
 
 Object Library "The Library"
 	with
-		short_name [; print "A huge library!"; rtrue; ],
+		short_name [; print "Huge library"; rtrue; ],
 		description "You are in an old and deserted library. There is an exit leading south.",
 		s_to CarPark,
 	has light;
