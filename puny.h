@@ -492,15 +492,17 @@ Array cursor_pos --> 2;
 ];
 #IfNot;
 
-[ PrintSpacesOrMoveBack p_col p_space_before _col;
+[ PrintSpacesOrMoveBack p_col p_space_before _current_col _go_to_col;
 	@get_cursor cursor_pos;
-	_col = cursor_pos --> 1;
-	if(_col > p_col || (_col == p_col && p_space_before ~= 0) || cursor_pos --> 0 > 1) {
-		MoveCursor(1, p_col - 1);
-		print (char) ' ';
-		rtrue;
+	_current_col = cursor_pos --> 1;
+	_go_to_col = p_col - p_space_before;
+	
+	if(_current_col > _go_to_col || cursor_pos --> 0 > 1) {
+		MoveCursor(1, _go_to_col);
+		_current_col = _go_to_col;
 	}
-	p_col = p_col - _col;
+
+	p_col = p_col - _current_col;
     while(p_col >= 5) {
 	    print "     ";
 	    p_col = p_col - 5;
@@ -513,6 +515,13 @@ Array cursor_pos --> 2;
 ];
 
 [ DrawStatusLine _width _visibility_ceiling;
+	! For wide screens (67+ columns):
+	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right. 
+	! * Room names up to 39 characters are never truncated.
+	! For narrow screens:
+	! * No space before room name
+	! * Print "Score: xxx/yyyy", "xxx/yyyy", "xxx" or nothing, depending on screen width
+	! * Room names up to 21 characters are never truncated. On a 40 column screen, room names up to 24 characters are never truncated.
 
     ! If there is no player location, we shouldn't try to draw status window
     if (location == nothing || parent(player) == nothing)
@@ -522,7 +531,7 @@ Array cursor_pos --> 2;
 
     StatusLineHeight(statusline_height);
     MoveCursor(1, 1);
-	if(_width >= 60) print " ";
+	if(_width > 66) print " ";
 
 !     MoveCursor(1, 2);
 !     if (location == thedark) {
@@ -546,8 +555,8 @@ Array cursor_pos --> 2;
 !     }
 !     else {
 	if (_width > 24) {
-		if (_width < 29) {
-			! Width is 25-28, only print score as "0", no moves
+		if (_width < 30) {
+			! Width is 25-29, only print score as "0", no moves
 			PrintSpacesOrMoveBack(_width - 2, 1);
 			print status_field_1;
 		} else {
@@ -558,13 +567,13 @@ Array cursor_pos --> 2;
 				PrintSpacesOrMoveBack(_width - 13);
 				print (string) MOVES__TX;
 			} else {
-				if (_width > 35) {
-					! Width is 36-66, print "Score: 0/0"
-					PrintSpacesOrMoveBack(_width - 13, 1);
+				if (_width > 36) {
+					! Width is 37-66, print "Score: 0/0"
+					PrintSpacesOrMoveBack(_width - 14, 1);
 					print (string) SCORE__TX;
 				} else {
 					! Width is 29-35, print "0/0"
-					PrintSpacesOrMoveBack(_width - 6, 1);
+					PrintSpacesOrMoveBack(_width - 7, 1);
 				}
 				print status_field_1, "/";
 			}
