@@ -155,11 +155,11 @@ Include "flags.h";
 
 Include "scope.h";
 
-[ Error msg;
+[ Error _msg;
 #IfDef DEBUG;
-    "ERROR: ", (string) msg, "^";
+    "ERROR: ", (string) _msg, "^";
 #IfNot;
-    "Something went wrong.";
+    "Something went wrong. Error #", _msg, ".";
 #EndIf;
 ];
 
@@ -278,7 +278,7 @@ Include "scope.h";
 	PrintContents("You are holding ", ".^", player);
 ];
 
-[ GoSub _dir _i _prop;
+[ GoSub _prop;
     ! when called Directions have been set properly
     _prop = Directions.selected_dir_prop;
     if(_prop == 0) return Error("Invalid direction prop in GoSub");
@@ -539,8 +539,8 @@ Array cursor_pos --> 2;
     _width = HDR_SCREENWCHARS->0;
 
     StatusLineHeight(statusline_height);
-    MoveCursor(1, 1);
-	if(_width > 66) print " ";
+    MoveCursor(1, 1); ! This also sets the upper window as active.
+	if(_width > 66) @print_char ' ';
 
 !     MoveCursor(1, 2);
 !     if (location == thedark) {
@@ -585,7 +585,8 @@ Array cursor_pos --> 2;
 					! Width is 29-35, print "0/0"
 					PrintSpacesOrMoveBack(_width - 7, 1);
 				}
-				print status_field_1, "/";
+				print status_field_1;
+				@print_char '/';
 			}
 			print status_field_2;
 		}
@@ -679,8 +680,12 @@ Array cursor_pos --> 2;
 
 [ PlayerTo p_loc _p;
 	move Player to p_loc;
-	for(location = p_loc: (_p = parent(location)): location = _p);
-!	print (object) location;
+	location = p_loc;
+	while(true) {
+		_p = parent(location);
+		if(_p == 0) rtrue;
+		location = _p;
+	}
 ];
 
 ! ######################### Parser
@@ -737,7 +742,7 @@ Array cursor_pos --> 2;
 ];
 #EndIf;
 
-[ CheckNoun p_parse_pointer _i _j _n _m _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+[ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
@@ -914,7 +919,6 @@ Array cursor_pos --> 2;
 				if(_noun == -2) {
 					print "Which ", (address) _parse_pointer --> 0, "? ";
 					"You have to be more specific.";
-					break;
 				}
 				if(_noun > 0) {
 #IfDef DEBUG;

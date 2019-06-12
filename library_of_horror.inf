@@ -19,7 +19,7 @@ Class Book
 			rfalse;
 		],
 		hello 0,
-		party [a b c;
+		party [a;
 			print "Self is ", self, "^";
 			print "a is ", a, "^";
 !			print "b is ", b, "^";
