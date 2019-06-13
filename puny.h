@@ -179,9 +179,9 @@ Include "scope.h";
 	
 	_player_parent = parent(player);
 	if(_player_parent ~= _ceil) {
-		if(_player_parent has supporter) print ", on ";
-		else print ", in ";
-		PrintObjName(_player_parent);
+		if(_player_parent has supporter) print " (on ";
+		else print " (in ";
+		print (the) _player_parent, ")";
 	}
 	
 	@new_line;
