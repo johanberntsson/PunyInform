@@ -501,6 +501,8 @@ Array cursor_pos --> 2;
 ];
 #IfNot;
 
+Array TenSpaces -> "          ";
+
 [ PrintSpacesOrMoveBack p_col p_space_before _current_col _go_to_col;
 	@get_cursor cursor_pos;
 	_current_col = cursor_pos --> 1;
@@ -512,15 +514,11 @@ Array cursor_pos --> 2;
 	}
 
 	p_col = p_col - _current_col;
-    while(p_col >= 5) {
-	    print "     ";
-	    p_col = p_col - 5;
+    while(p_col >= 10) {
+	    @print_table TenSpaces 10;
+	    p_col = p_col - 10;
     }
-
-	@jl p_col 1 ?rtrue;
-.one_more;
-	@print_char ' ';
-	@dec_chk (p_col) 1 ?~one_more;
+    @print_table TenSpaces p_col;
 ];
 
 [ DrawStatusLine _width _visibility_ceiling;
@@ -694,7 +692,8 @@ Array cursor_pos --> 2;
 ! #IfV5;
 ! 	print "Width: ", HDR_SCREENWCHARS->0,"^";
 ! #EndIf;
-
+	style roman;
+	@buffer_mode 0;
 	print "^>";
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
@@ -712,6 +711,7 @@ Array cursor_pos --> 2;
 		location = _result;
 	}
 #EndIf;
+	@buffer_mode 1;
 	input_words = parse_array -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
 	_result = 2 * input_words + 1;
