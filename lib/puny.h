@@ -111,38 +111,38 @@ Array player_input_array->(MAX_INPUT_CHARS + 3);
 Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
 
 Object Directions
-    with
-        selected_dir 0,
-        selected_dir_prop 0,
-        parse_name [_len _i _w _arr;
-            _w = (parse_array+2+4*wn)-->0;
-        	_len = abbr_directions_array-->0;
+	with
+		selected_dir 0,
+		selected_dir_prop 0,
+		parse_name [_len _i _w _arr;
+			_w = (parse_array+2+4*wn)-->0;
+			_len = abbr_directions_array-->0;
 #IfV5;
-            _arr = abbr_directions_array + 2;
-            @scan_table _w _arr _len -> _i ?success;
-            ! not found in abbr, try full
-            _arr = full_directions_array + 2;
-            @scan_table _w _arr _len -> _i ?success;
-            ! no match
-            self.selected_dir = 0;
-            self.selected_dir_prop = 0;
-            return 0;
+			_arr = abbr_directions_array + 2;
+			@scan_table _w _arr _len -> _i ?success;
+			! not found in abbr, try full
+			_arr = full_directions_array + 2;
+			@scan_table _w _arr _len -> _i ?success;
+			! no match
+			self.selected_dir = 0;
+			self.selected_dir_prop = 0;
+			return 0;
 .success;
-            self.selected_dir = (_i - _arr)/2;
-            self.selected_dir_prop = direction_properties_array --> (self.selected_dir + 1);
-            return 1;
+			self.selected_dir = (_i - _arr)/2;
+			self.selected_dir_prop = direction_properties_array --> (self.selected_dir + 1);
+			return 1;
 #IfNot;
-        	for(_i = 1 : _i <= _len : _i++) {
-	        	if(_w == abbr_directions_array --> _i or full_directions_array --> _i) {
-			        self.selected_dir = _i;
-			        self.selected_dir_prop = direction_properties_array --> _i;
-			        return 1;
-                }
-            }
-            ! failure
-            self.selected_dir = 0;
-            self.selected_dir_prop = 0;
-            return 0;
+			for(_i = 1 : _i <= _len : _i++) {
+				if(_w == abbr_directions_array --> _i or full_directions_array --> _i) {
+					self.selected_dir = _i;
+					self.selected_dir_prop = direction_properties_array --> _i;
+					return 1;
+				}
+			}
+			! failure
+			self.selected_dir = 0;
+			self.selected_dir_prop = 0;
+			return 0;
 #EndIf;
         ];
 
@@ -157,9 +157,9 @@ Include "scope.h";
 
 [ Error p_msg;
 #IfDef DEBUG;
-    "ERROR: ", (string) p_msg, "^";
+	"ERROR: ", (string) p_msg, "^";
 #IfNot;
-    "Something went wrong. Error #", p_msg, ".";
+	"Something went wrong. Error #", p_msg, ".";
 #EndIf;
 ];
 
@@ -169,21 +169,21 @@ Include "scope.h";
 
 	_ceil = GetVisibilityCeiling(player);
 
-!	print "Ceiling is object ", _ceil, ": ", (object) _ceil, ".^";
+! print "Ceiling is object ", _ceil, ": ", (object) _ceil, ".^";
 	! ### Print room name
 	if(_ceil == location) {
 		PrintObjName(location);
 	} else {
 		print (The) _ceil;
 	}
-	
+
 	_player_parent = parent(player);
 	if(_player_parent ~= _ceil) {
 		if(_player_parent has supporter) print " (on ";
 		else print " (in ";
 		print (the) _player_parent, ")";
 	}
-	
+
 	@new_line;
 
 	! ### Print room description
@@ -196,7 +196,7 @@ Include "scope.h";
 
 	objectloop(_obj in _ceil) {
 		if(_obj hasnt moved && _obj.initial ~= 0) {
-	        @new_line;
+			@new_line;
 			PrintOrRun(_obj, initial);
 		}
 	}
@@ -205,8 +205,8 @@ Include "scope.h";
 
 [ ExamineSub;
 	if(noun provides description) {
-!		print "Has desc...";
-		PrintOrRun(noun, description);
+		!   print "Has desc...";
+	PrintOrRun(noun, description);
 	} else {
 		"There is nothing special about ", (the) noun, ".";
 	}
@@ -216,9 +216,9 @@ Include "scope.h";
 ! Constant MSG_AREYOUSUREQUIT = "Are you sure you want to quit? ";
 
 [ QuitSub;
-    ! print (string) MSG_AREYOUSUREQUIT;
-    print "Are you sure you want to quit? ";
-    if(YesOrNo()) {
+	! print (string) MSG_AREYOUSUREQUIT;
+	print "Are you sure you want to quit? ";
+	if(YesOrNo()) {
 		game_state = GS_QUIT;
 	}
 ];
@@ -240,7 +240,7 @@ Include "scope.h";
 
 [ OpenSub;
 	if(noun hasnt openable) {
-		PrintMsg(MSG_YOU_CANT_VERB_THAT); 
+		PrintMsg(MSG_YOU_CANT_VERB_THAT);
 		rtrue;
 	}
 	if(noun has open) "It's already open.";
@@ -250,7 +250,7 @@ Include "scope.h";
 
 [ CloseSub;
 	if(noun hasnt openable) {
-		PrintMsg(MSG_YOU_CANT_VERB_THAT); 
+		PrintMsg(MSG_YOU_CANT_VERB_THAT);
 		rtrue;
 	}
 	if(noun hasnt open) "It isn't open.";
@@ -260,7 +260,7 @@ Include "scope.h";
 
 [ EnterSub;
 	if(noun hasnt enterable) {
-		PrintMsg(MSG_YOU_CANT_VERB_THAT); 
+		PrintMsg(MSG_YOU_CANT_VERB_THAT);
 		rtrue;
 	}
 	if(player in noun) "But you are already there!";
@@ -272,8 +272,8 @@ Include "scope.h";
 [ ExitSub;
 	if(player in location) "But you aren't in anything at the moment!";
 	if(player notin noun) {
-		if(IndirectlyContains(noun, player)) "First you have to leave ", (the) parent(player),".";
-		if(noun has supporter) "You aren't on that.";
+	if(IndirectlyContains(noun, player)) "First you have to leave ", (the) parent(player),".";
+	if(noun has supporter) "You aren't on that.";
 		"You aren't in that.";
 	}
 	if(noun has container && noun hasnt open) "You can't, since it's closed.";
@@ -283,16 +283,16 @@ Include "scope.h";
 
 [ InventorySub;
 	if(child(player) == 0)
-		"You are empty handed.";
+	"You are empty handed.";
 	PrintContents("You are holding ", ".^", player);
 ];
 
 [ GoSub _prop;
-    ! when called Directions have been set properly
-    _prop = Directions.selected_dir_prop;
-    if(_prop == 0) return Error("Invalid direction prop in GoSub");
-    GoDir(_prop);
-    rtrue;
+	! when called Directions have been set properly
+	_prop = Directions.selected_dir_prop;
+	if(_prop == 0) return Error("Invalid direction prop in GoSub");
+	GoDir(_prop);
+	rtrue;
 ];
 
 [ GoDir p_property _new_location;
@@ -383,13 +383,13 @@ Verb 'enter'
 	* noun -> Enter;
 
 Verb 'climb'
-	* 'into'/'onto' noun 		-> Enter
-	* 'out' 'of'/'from' noun 	-> Exit;
+	* 'into'/'onto' noun    -> Enter
+	* 'out' 'of'/'from' noun  -> Exit;
 
 Verb 'jump'
-	* 'into'/'onto' noun 		-> Enter
-	* 'out' 'of'/'from' noun 	-> Exit
-	* 'off' noun 				-> Exit;
+	* 'into'/'onto' noun    -> Enter
+	* 'out' 'of'/'from' noun  -> Exit
+	* 'off' noun        -> Exit;
 
 Verb 'exit' 'leave'
 	* noun -> Exit;
@@ -407,20 +407,20 @@ Verb meta 'quit'
 	* -> Quit;
 
 Verb meta 'save'
-	*      -> Save;
+	* -> Save;
 
 Verb meta 'restore'
-	*      -> Restore;
+	* -> Restore;
 
 Verb meta 'restart'
-	*      -> Restart;
+	* -> Restart;
 
 ! ######################### Helper routines
 
 [PrintVerb p_v;
 #IfV3;
 	switch(p_v) {
-	'examine': p_v = "examine";
+		'examine': p_v = "examine";
 	}
 #EndIf;
 	switch(p_v) {
@@ -435,7 +435,7 @@ Verb meta 'restart'
 [ GetVisibilityCeiling p_actor _parent;
 	for(:: p_actor = _parent) {
 		_parent = parent(p_actor);
-!		print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
+		!   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
 		if(_parent == 0 || (p_actor has container && p_actor hasnt transparent or open)) {
 			return p_actor;
 		}
@@ -443,13 +443,13 @@ Verb meta 'restart'
 ];
 
 [ IndirectlyContains p_o1 p_o2;
-    ! Does o1 indirectly contain o2?  (Same as testing if o1 is one of the ancestors of o2.)
-    while (p_o2 ~= 0) {
-        if (p_o1 == p_o2) rtrue;
-!        if (p_o2 ofclass Class) rfalse;
-        p_o2 = parent(p_o2);
-    }
-    rfalse;
+	! Does o1 indirectly contain o2?  (Same as testing if o1 is one of the ancestors of o2.)
+	while (p_o2 ~= 0) {
+		if (p_o1 == p_o2) rtrue;
+		!        if (p_o2 ofclass Class) rfalse;
+		p_o2 = parent(p_o2);
+	}
+	rfalse;
 ];
 
 
@@ -497,24 +497,24 @@ Array cursor_pos --> 2;
 #IfNot; !IfV5
 
 ! [ MoveCursor line column;  ! 1-based postion on text grid
-! 	if (~~statuswin_current) {
-! 		@set_window 1;
-! 		style reverse;
-! 	}
-! 	if (line == 0) {
-! 		line = 1;
-! 		column = 1;
-! 	}
-! 	@set_cursor line column;
-! 	statuswin_current = true;
+!   if (~~statuswin_current) {
+!     @set_window 1;
+!     style reverse;
+!   }
+!   if (line == 0) {
+!     line = 1;
+!     column = 1;
+!   }
+!   @set_cursor line column;
+!   statuswin_current = true;
 ! ];
 
 ! [ MainWindow;
-! 	if (statuswin_current) {
-! 		style roman;
-! 		@set_window 0;
-! 	}
-! 	statuswin_current = false;
+!   if (statuswin_current) {
+!     style roman;
+!     @set_window 0;
+!   }
+!   statuswin_current = false;
 ! ];
 #EndIf;
 
@@ -531,37 +531,37 @@ Array TenSpaces -> "          ";
 	@get_cursor cursor_pos;
 	_current_col = cursor_pos --> 1;
 	_go_to_col = p_col - p_space_before;
-	
+
 	if(_current_col > _go_to_col || cursor_pos --> 0 > 1) {
 		MoveCursor(1, _go_to_col);
 		_current_col = _go_to_col;
 	}
 
 	p_col = p_col - _current_col;
-    while(p_col >= 10) {
-	    @print_table TenSpaces 10;
-	    p_col = p_col - 10;
-    }
-    @print_table TenSpaces p_col;
+	while(p_col >= 10) {
+		@print_table TenSpaces 10;
+		p_col = p_col - 10;
+	}
+	@print_table TenSpaces p_col;
 ];
 
 [ DrawStatusLine _width _visibility_ceiling;
 	! For wide screens (67+ columns):
-	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right. 
+	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right.
 	! * Room names up to 39 characters are never truncated.
 	! For narrow screens:
 	! * No space before room name
 	! * Print "Score: xxx/yyyy", "xxx/yyyy", "xxx" or nothing, depending on screen width
 	! * Room names up to 21 characters are never truncated. On a 40 column screen, room names up to 24 characters are never truncated.
 
-    ! If there is no player location, we shouldn't try to draw status window
-    if (location == nothing || parent(player) == nothing)
-        return;
+	! If there is no player location, we shouldn't try to draw status window
+	if (location == nothing || parent(player) == nothing)
+		return;
 
-    _width = HDR_SCREENWCHARS->0;
+	_width = HDR_SCREENWCHARS->0;
 
-    StatusLineHeight(statusline_height);
-    MoveCursor(1, 1); ! This also sets the upper window as active.
+	StatusLineHeight(statusline_height);
+	MoveCursor(1, 1); ! This also sets the upper window as active.
 	if(_width > 66) @print_char ' ';
 
 !     MoveCursor(1, 2);
@@ -572,10 +572,10 @@ Array TenSpaces -> "          ";
 !         FindVisibilityLevels();
 !         if (visibility_ceiling == location)
 	_visibility_ceiling = GetVisibilityCeiling(player);
-!	print (object) _visibility_ceiling;
+! print (object) _visibility_ceiling;
 	if (_visibility_ceiling == location) {
 		PrintObjName(location);
-!		print (name) _visibility_ceiling;
+!   print (name) _visibility_ceiling;
 	} else {
 		print (The) _visibility_ceiling;
 	}
@@ -615,7 +615,7 @@ Array TenSpaces -> "          ";
 	}
 	! Regardless of what kind of status line we have printed, print spaces to the end.
 	PrintSpacesOrMoveBack(_width + 1);
-    MainWindow(); ! set_window
+	MainWindow(); ! set_window
 ];
 #Endif;
 
@@ -640,10 +640,10 @@ Array TenSpaces -> "          ";
 ];
 
 [ PrintContents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
-! 	print "Objectlooping...^";
+!   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
-!		print "Considering ", (object) _obj, "...^";
-!		if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
+!   print "Considering ", (object) _obj, "...^";
+!   if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
 		if(_obj hasnt concealed && (_obj has moved || _obj.initial == 0)) {
 			if(_printed_first_text == 0) {
 				print (string) p_first_text;
@@ -665,34 +665,34 @@ Array TenSpaces -> "          ";
 	}
 
 !
-! 	for(_i = 0: _i < scope_objects: _i++) {
-! 		_obj = scope-->_i;
-! 		if(_obj ~= nothing) {
-! 			@new_line;
-! 			_text = _obj.initial;
-! 			if(_text) {
-! 				PrintOrRun(_text);
-! 			} else {
-! 				print "There is a ",(name) scope-->_i, " here. ";
-! 			}
-! 			@new_line;
-! 		}
-! 	}
-    !print "(",_printed_first_text, ")";
+!   for(_i = 0: _i < scope_objects: _i++) {
+!     _obj = scope-->_i;
+!     if(_obj ~= nothing) {
+!       @new_line;
+!       _text = _obj.initial;
+!       if(_text) {
+!         PrintOrRun(_text);
+!       } else {
+!         print "There is a ",(name) scope-->_i, " here. ";
+!       }
+!       @new_line;
+!     }
+!   }
+	!print "(",_printed_first_text, ")";
 	return _printed_first_text;
 ];
 
 [ RunRoutines p_obj p_prop;
-    if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
-    return p_obj.p_prop();
+	if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
+	return p_obj.p_prop();
 ];
 
 
 [ PrintOrRun p_obj p_prop p_no_string_newline;
-    if (p_obj.#p_prop > WORDSIZE) return RunRoutines(p_obj,p_prop);
+	if (p_obj.#p_prop > WORDSIZE) return RunRoutines(p_obj,p_prop);
 	if(p_obj.p_prop ofclass String) {
 		print (string) p_obj.p_prop;
-		if(p_no_string_newline == 0) @new_line;
+	if(p_no_string_newline == 0) @new_line;
 		rtrue;
 	}
 	else if(p_obj.p_prop ofclass Routine) {
@@ -714,13 +714,13 @@ Array TenSpaces -> "          ";
 
 [ ReadPlayerInput _result;
 ! #IfV5;
-! 	print "Width: ", HDR_SCREENWCHARS->0,"^";
+!   print "Width: ", HDR_SCREENWCHARS->0,"^";
 ! #EndIf;
 #IfV5;
 	style roman;
 	@buffer_mode 0;
 #EndIf;
-	print "^>";
+	print "^> ";
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
 	DrawStatusLine();
@@ -748,7 +748,7 @@ Array TenSpaces -> "          ";
 
 #IfDef DEBUG;
 [ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
-    ! action number is the first two bytes
+	! action number is the first two bytes
 	_action_number = p_pattern-->0;
 	p_pattern = p_pattern + 2;
 	action = _action_number & $3ff;
@@ -763,7 +763,7 @@ Array TenSpaces -> "          ";
 		print "Token#: ", _i, " Type: ", p_pattern->0, " (top ", _token_top, ", next ",_token_next, ", bottom ",_token_bottom, ") Next byte: ",(p_pattern + 1)-->0,"^";
 		p_pattern = p_pattern + 3;
 	}
-!	print ": ", i, " tokens^";
+	! print ": ", i, " tokens^";
 	return p_pattern + 1; ! skip TT_END
 ];
 #EndIf;
@@ -777,11 +777,11 @@ Array TenSpaces -> "          ";
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
 		_obj = scope-->_i;
-!		if(_obj == nothing) continue;
+		!   if(_obj == nothing) continue;
 		if(_obj provides parse_name) {
- 			_j = wn;
- 			_n = wn + PrintOrRun(_obj, parse_name); ! number of words consumed
- 			wn = _j;
+			_j = wn;
+			_n = wn + PrintOrRun(_obj, parse_name); ! number of words consumed
+			wn = _j;
 			if(_n == _best_score) _matches++;
 			if(_n > _best_score) {
 				_last_match = _obj;
@@ -792,7 +792,7 @@ Array TenSpaces -> "          ";
 			_name_array = _obj.&name;
 			_name_array_len = _obj.#name / 2;
 			while(_n < input_words) {
-		        if(_current_word == nothing) return -1; ! not in dictionary
+				if(_current_word == nothing) return -1; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
 #IfNot;
@@ -804,7 +804,7 @@ Array TenSpaces -> "          ";
 .success;
 				_n++;
 				_p = _p + 4;
-		        _current_word = _p-->0;
+				_current_word = _p-->0;
 				if(_n == _best_score) _matches++;
 				if(_n > _best_score) {
 					_last_match = _obj;
@@ -815,11 +815,11 @@ Array TenSpaces -> "          ";
 		}
 .not_matched;
 
-!		print "checking ", _obj.&name-->0, " ", _current_word, "^";
+!   print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
 	if(_matches == 1) {
 		wn = _best_score;
-!		parse_pointer = p;
+!   parse_pointer = p;
 		return _last_match;
 	}
 	if(_matches > 1) return -2;
@@ -838,30 +838,30 @@ Array TenSpaces -> "          ";
 
 	_verb = parse_array-->1;
 	if(_verb < (0-->HEADER_DICTIONARY)) {
-	    ! unknown word
+		! unknown word
 		"That is not a verb I recognize.";
 	}
 
 	_word_data = _verb + DICT_BYTES_FOR_WORD;
 	! check if it is a direction
 	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
-	    ! try a direction instead
-	    wn = 0;
-	    if(Directions.parse_name()) {
-	        <<Go Directions>>;
-        }
-        ! not a direction, fail
+		! try a direction instead
+		wn = 0;
+		if(Directions.parse_name()) {
+			<<Go Directions>>;
+		}
+		! not a direction, fail
 		"That is not a verb I recognize.";
 	}
 
 	! Now it is known word, and it is not a direction, in the first position
 	verb_word = _verb;
-	
-! 	print "Parse array: ", parse_array, "^";
-! 	print "Word count: ", parse_array->0, "^";
-! 	print "Word 1: ", (parse_array + 2)-->0, "^";
-! 	print "Word 2: ", (parse_array + 6)-->0, "^";
-! 	print "Word 3: ", (parse_array + 10)-->0, "^";
+
+!   print "Parse array: ", parse_array, "^";
+!   print "Word count: ", parse_array->0, "^";
+!   print "Word 1: ", (parse_array + 2)-->0, "^";
+!   print "Word 2: ", (parse_array + 6)-->0, "^";
+!   print "Word 3: ", (parse_array + 10)-->0, "^";
 	_verb_num = 255 - (_word_data->1);
 	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_verb_num;
 	_num_patterns = _verb_grammar->0;
@@ -960,9 +960,9 @@ Array TenSpaces -> "          ";
 					}
 					_noun_tokens++;
 
-			        if(_token_type == TT_ROUTINE_FILTER) {
-				        !print "calling filter: ", _data, "^";
-				        if(_data() == false) break;
+					if(_token_type == TT_ROUTINE_FILTER) {
+						!print "calling filter: ", _data, "^";
+						if(_data() == false) break;
                     }
 					continue;
 				}
@@ -988,8 +988,6 @@ Array TenSpaces -> "          ";
 
 	"Sorry, I didn't understand that.";
 
-
-
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
 	PerformPreparedAction();
@@ -1000,43 +998,43 @@ Array TenSpaces -> "          ";
 [ PerformPreparedAction;
 	!print "Performing action ", action, "^";
 	sw__var = action;
-    if ((BeforeRoutines() == false) && action < 4096) {
-	    ActionPrimitive();
+	if ((BeforeRoutines() == false) && action < 4096) {
+		ActionPrimitive();
 	}
 ];
 
 [ BeforeRoutines _i _obj;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
- 	for(_i = 0: _i < scope_objects: _i++) {
- 		_obj = scope-->_i;
- 		if (_obj provides react_before) {
- 			if(PrintOrRun(_obj, react_before)) {
- 				rtrue;
- 			}
- 		}
- 	}
+	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
+		if (_obj provides react_before) {
+			if(PrintOrRun(_obj, react_before)) {
+				rtrue;
+			}
+		}
+	}
 	if(location provides before && RunRoutines(location, before)) {
 		rtrue;
- 	}
+	}
 	if(inp1 provides before && RunRoutines(inp1, before)) {
 		rtrue;
- 	}
+	}
 	rfalse;
 ];
 
 [ PerformAction p_action p_noun p_second _sa _sn _ss;
-    _sa = action; _sn = noun; _ss = second;
-    action = p_action; noun = p_noun; second = p_second;
+	_sa = action; _sn = noun; _ss = second;
+	action = p_action; noun = p_noun; second = p_second;
 	PerformPreparedAction();
-    action = _sa; noun = _sn; second = _ss;
+	action = _sa; noun = _sn; second = _ss;
 ];
 
 [ R_Process p_action p_noun p_second _s1 _s2;
-    _s1 = inp1; _s2 = inp2;
-    inp1 = p_noun; inp2 = p_second;
-    PerformAction(p_action, p_noun, p_second);
-    inp1 = _s1; inp2 = _s2;
+	_s1 = inp1; _s2 = inp2;
+	inp1 = p_noun; inp2 = p_second;
+	PerformAction(p_action, p_noun, p_second);
+	inp1 = _s1; inp2 = _s2;
 ];
 
 [ CDefArt p_obj _result;
@@ -1056,20 +1054,20 @@ Array TenSpaces -> "          ";
 ! These routines are implemented by Veneer, but the default implementations give compile errors for z3
 
 [ FindIndivPropValue p_obj p_property _x _prop_id;
-  _x = p_obj.3;
+	_x = p_obj.3;
 	if (_x == 0) rfalse;
-!  print "Table for ", (object) obj, " is at ", (hex) x, "^";
+	!  print "Table for ", (object) obj, " is at ", (hex) x, "^";
 	while (true) {
 		_prop_id = _x-->0;
 		if(_prop_id == 0) break;
 		if(_prop_id & 32767 == p_property) break;
-!	print (hex) x-->0, " (", (property) x-->0, ")  length ", x->2, ": ";
-!       for (n = 0: n< (x->2)/2: n++)
-!           print (hex) (x+3)-->n, " ";
-!       new_line;
-      _x = _x + _x->2 + 3;
-  }
-  return _x;
+		! print (hex) x-->0, " (", (property) x-->0, ")  length ", x->2, ": ";
+		!       for (n = 0: n< (x->2)/2: n++)
+		!           print (hex) (x+3)-->n, " ";
+		!       new_line;
+		_x = _x + _x->2 + 3;
+	}
+	return _x;
 ];
 
 [ RV__Pr p_object p_property _value _address;
@@ -1102,10 +1100,10 @@ Array TenSpaces -> "          ";
 !                      the need for a full metaclass inheritance scheme.      */
 
 [ CA__Pr obj id a    x y z s s2 n m;
-!	print "CA_Pr obj = ", obj,", id = ", id,", a = ", a, "^";
+! print "CA_Pr obj = ", obj,", id = ", id,", a = ", a, "^";
 	if (obj < 1 || obj > #largest_object-255) {
 		switch(Z__Region(obj)) {
-		2:
+			2:
 			if (id == call) {
 				s = sender; sender = self; self = obj;
 				#ifdef action;sw__var=action;#endif;
@@ -1113,7 +1111,7 @@ Array TenSpaces -> "          ";
 				self = sender; sender = s; return x;
 			}
 			jump Call__Error;
-		3:
+			3:
 			if (id == print) { @print_paddr obj; rtrue; }
 			if (id == print_to_array) {
 				@output_stream 3 a; @print_paddr obj; @output_stream -3;
@@ -1123,81 +1121,81 @@ Array TenSpaces -> "          ";
 		}
 		jump Call__Error;
 	}
-!	print "CA_Pr(2) obj = ", obj,", id = ", id,", a = ", a, "^";
-! 	@check_arg_count 3 ?~A__x;y++;@check_arg_count 4 ?~A__x;y++;
-! 	@check_arg_count 5 ?~A__x;y++;@check_arg_count 6 ?~A__x;y++;
-! 	@check_arg_count 7 ?~A__x;y++;@check_arg_count 8 ?~A__x;y++;.A__x;
-! 	#ifdef INFIX;if (obj has infix__watching) n=1;#endif;
+! print "CA_Pr(2) obj = ", obj,", id = ", id,", a = ", a, "^";
+!   @check_arg_count 3 ?~A__x;y++;@check_arg_count 4 ?~A__x;y++;
+!   @check_arg_count 5 ?~A__x;y++;@check_arg_count 6 ?~A__x;y++;
+!   @check_arg_count 7 ?~A__x;y++;@check_arg_count 8 ?~A__x;y++;.A__x;
+!   #ifdef INFIX;if (obj has infix__watching) n=1;#endif;
 	#ifdef DEBUG;if (debug_flag & 1 ~= 0) n=1;#endif;
-! 	if (n==1) {
-! 		n=debug_flag & 1; debug_flag=debug_flag-n;
-! 		print "[ ~", (name) obj, "~.", (property) id, "(";
-! 		switch(y) {
-! 		1:
-! 			print a; 2: print a,",",b; 3: print a,",",b,",",c;
-! 		4:
-! 			print a,",",b,",",c,",",d;
-! 		5:
-! 			print a,",",b,",",c,",",d,",",e;
-! 		6:
-! 			print a,",",b,",",c,",",d,",",e,",",f;
-! 		}
-! 		print ") ]^"; debug_flag = debug_flag + n;
-! 	}
+!   if (n==1) {
+!     n=debug_flag & 1; debug_flag=debug_flag-n;
+!     print "[ ~", (name) obj, "~.", (property) id, "(";
+!     switch(y) {
+!     1:
+!       print a; 2: print a,",",b; 3: print a,",",b,",",c;
+!     4:
+!       print a,",",b,",",c,",",d;
+!     5:
+!       print a,",",b,",",c,",",d,",",e;
+!     6:
+!       print a,",",b,",",c,",",d,",",e,",",f;
+!     }
+!     print ") ]^"; debug_flag = debug_flag + n;
+!   }
 	if (id > 0 && id < INDIV_PROP_START) {
-!		print "CA_Pr OK obj = ", obj,", id = ", id,", a = ", a, "^";
+!   print "CA_Pr OK obj = ", obj,", id = ", id,", a = ", a, "^";
 		x = obj.&id;
 		if (x==0) {
 			x=$000a-->0 + 2*(id-1); n=2;
 		} else n = obj.#id;
 	} else {
 		if (id>=64 && id<69 && obj in Class) {
-!			print "CA_Pr ERROR0 obj = ", obj,", id = ", id,", a = ", a, "^";
+!     print "CA_Pr ERROR0 obj = ", obj,", id = ", id,", a = ", a, "^";
 			RT__Err("Class create etc", obj, id); return;
-			!			return Cl__Ms(obj,id,y,a,b,c);
+!     return Cl__Ms(obj,id,y,a,b,c);
 		}
-!		print "CA_Pr(2.1) obj = ", obj,", id = ", id,", n = ", n, "^";
+!   print "CA_Pr(2.1) obj = ", obj,", id = ", id,", n = ", n, "^";
 		x = obj..&id;
-!		print "CA_Pr(2.2) obj = ", obj,", id = ", id,", x = ", x, "^";
+!   print "CA_Pr(2.2) obj = ", obj,", id = ", id,", x = ", x, "^";
 		if (x == 0) {
-!			print "CA_Pr ERROR1 obj = ", obj,", id = ", id,", a = ", a, "^";
+!     print "CA_Pr ERROR1 obj = ", obj,", id = ", id,", a = ", a, "^";
 			.Call__Error;
 			RT__Err("send message", obj, id); return;
 		}
-!		print "Reading n at ", x-1,": ", 0->(x-1), "^";
+!   print "Reading n at ", x-1,": ", 0->(x-1), "^";
 		n = 0->(x-1);
 		if (id&$C000==$4000)
-			switch (n&$C0) { 0: n=1; $40: n=2; $80: n=n&$3F; }
+		switch (n&$C0) { 0: n=1; $40: n=2; $80: n=n&$3F; }
 	}
-!	print "CA_Pr(3) obj = ", obj,", id = ", id,", a = ", a, "^";
+! print "CA_Pr(3) obj = ", obj,", id = ", id,", a = ", a, "^";
 	for (:2*m<n:m++) {
-!		print "Considering routine at ", x+2*m,": ", x-->m, "^";
+!   print "Considering routine at ", x+2*m,": ", x-->m, "^";
 		if (x-->m==$ffff) rfalse;
 		switch(Z__Region(x-->m)) {
 		2:
 			s = sender; sender = self; self = obj; s2 = sw__var;
-! 			switch(y) {
-! 			0:
-! 				z = indirect(x-->m);
-! 			1:
- 				z = indirect(x-->m, a);
-! 			2:
-! 				z = indirect(x-->m, a, b);
-! 			3:
-!				z = indirect(x-->m, a, b, c);
-! 			4:
-! 				z = indirect(x-->m, a, b, c, d);
-! 			5:
-! 				z = indirect(x-->m, a, b, c, d, e);
-! 			6:
-! 				z = indirect(x-->m, a, b, c, d, e, f);
-! 			}
+!       switch(y) {
+!       0:
+!         z = indirect(x-->m);
+!       1:
+			z = indirect(x-->m, a);
+!       2:
+!         z = indirect(x-->m, a, b);
+!       3:
+!       z = indirect(x-->m, a, b, c);
+!       4:
+!         z = indirect(x-->m, a, b, c, d);
+!       5:
+!         z = indirect(x-->m, a, b, c, d, e);
+!       6:
+!         z = indirect(x-->m, a, b, c, d, e, f);
+!       }
 			self = sender; sender = s; sw__var = s2;
 			if (z ~= 0) return z;
 		3:
 			print_ret (string) x-->m;
 		default:
-		return x-->m;
+			return x-->m;
 		}
 	}
 	rfalse;
@@ -1236,8 +1234,8 @@ Object DefaultPlayer "you"
 	for (::)
 	{
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
-#IFV3; 
-		read player_input_array parse_array; 
+#IFV3;
+		read player_input_array parse_array;
 #IFNOT;
 		read player_input_array parse_array DrawStatusLine;
 #ENDIF;
