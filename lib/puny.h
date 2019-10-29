@@ -423,6 +423,11 @@ Verb meta 'restart'
 	'examine': p_v = "examine";
 	}
 #EndIf;
+	switch(p_v) {
+		'i', 'inventory': p_v = "inventory";
+		'l': p_v = "look";
+		'z': p_v = "wait";
+	}
 
 	print (address) p_v;
 ];

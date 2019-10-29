@@ -20,9 +20,11 @@ Array scope-->MAX_SCOPE;
 [ UpdateScope p_start_pos;
 	scope-->0 = Directions;
 	scope_objects = 1;
+    if(p_start_pos ~= location) {
+		scope-->(scope_objects++) = p_start_pos;
+	}
+	if(p_start_pos.add_to_scope) p_start_pos.add_to_scope();
     ! Add all in player locatio (which may be inside an object)
     SearchScope(child(p_start_pos));
-    if(p_start_pos ~= location) scope-->(scope_objects++) = p_start_pos;
-
 ];
 

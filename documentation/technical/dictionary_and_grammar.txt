@@ -5,6 +5,7 @@ byte 0 & $2 : Meta flag
 255 - (byte 1) : Verb number (255 - value is for "traditional Infocom reasons")
 
 
+
 Grammar table is always located at the start of static memory (address pointed to by word at $0e in header). Word (Verb number) points to the start address for the grammar for a verb.
 
 Grammar for a verb:
