@@ -336,18 +336,21 @@ Include "scope.h";
 #EndIf;
 ];
 
-[ YesOrNo _i;
+[ YesOrNo _words _reply;
 	for (::)
 	{
 #IfV3;
 		@sread player_input_array parse_array;
 #IfNot;
 		DrawStatusLine();
-		@aread player_input_array parse_array -> _i;
+		@aread player_input_array parse_array -> _reply;
 #EndIf;
-		_i = parse_array --> 1;
-		if (_i == 'yes' or #n$y) rtrue;
-		if (_i == 'no' or #n$n) rfalse;
+		_words = parse_array -> 1;
+		_reply = parse_array --> 1;
+		if(_words == 1) {
+			if (_reply == 'yes' or 'y//') rtrue;
+			if (_reply == 'no' or 'n//') rfalse;
+		}
 		print "Please answer yes or no.^> ";
 	}
 ];
