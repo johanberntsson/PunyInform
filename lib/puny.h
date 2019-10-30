@@ -343,6 +343,7 @@ Include "scope.h";
 		@sread player_input_array parse_array;
 #IfNot;
 		DrawStatusLine();
+		player_input_array -> 1 = 0;
 		@aread player_input_array parse_array -> _reply;
 #EndIf;
 		_words = parse_array -> 1;
