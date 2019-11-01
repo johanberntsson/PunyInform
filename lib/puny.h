@@ -81,6 +81,7 @@ Global score;
 Global turns;
 Global player;
 Global action;
+Global is_meta;      ! if the verb has the meta attribute or not
 Global verb_word;
 Global noun;
 Global second;
@@ -90,8 +91,8 @@ Global game_state;
 Global wn;
 Global input_words;
 Global scope_objects;
-#IfV5;
 Global reverse;
+#IfV5;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
 Global statuswin_current     = false;
@@ -872,6 +873,7 @@ Array TenSpaces -> "          ";
 
 	! Now it is known word, and it is not a direction, in the first position
 	verb_word = _verb;
+	is_meta = (_word_data->0) & 2;
 
 !   print "Parse array: ", parse_array, "^";
 !   print "Word count: ", parse_array->0, "^";
@@ -883,7 +885,7 @@ Array TenSpaces -> "          ";
 	_num_patterns = _verb_grammar->0;
 
 #IfDef DEBUG;
-	print "Verb#: ",_verb_num,".^";
+	print "Verb#: ",_verb_num,", is_meta ",is_meta,".^";
 	print "Grammar address for this verb: ",_verb_grammar,"^";
 	print "Number of patterns: ",_num_patterns,"^";
 
@@ -1240,7 +1242,7 @@ Object DefaultPlayer "you"
 		status_field_2 = turns;
 		ReadPlayerInput();
 		ParseAndPerformAction();
-		if(action >= 0) turns++;
+		if(action >= 0 && is_meta == false) turns++;
 	}
 	if(game_state == GS_QUIT) @quit;
 	if(game_state == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
