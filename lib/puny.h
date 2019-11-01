@@ -112,6 +112,7 @@ Constant MAX_INPUT_WORDS     = 20;
 
 #include "messages.h";
 
+Array multiple_objects-->64; ! holds nouns when multi* grammar used
 
 Array player_input_array->(MAX_INPUT_CHARS + 3);
 Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
@@ -234,6 +235,13 @@ Include "scope.h";
 ];
 
 [ TakeSub;
+
+#ifdef DEBUG;
+    print "Number of nouns ", multiple_objects --> 0, "^";
+#endif;
+    if(multiple_objects --> 0 > 1) {
+		"Get all or multiple objects is not yet supported.";
+	}
 	if(noun in player) "You already have that.";
 	if(IndirectlyContains(noun, player)) "First, you'd have to leave ", (the) noun, ".";
 	move noun to player;
@@ -243,6 +251,12 @@ Include "scope.h";
 ];
 
 [ DropSub;
+#ifdef DEBUG;
+    print "Number of nouns ", multiple_objects --> 0, "^";
+#endif;
+    if(multiple_objects --> 0 > 1) {
+		"Drop all or multiple objects is not yet supported.";
+	}
 	if(noun notin player) "You aren't holding that.";
 	move noun to location;
 	"Dropped.";
@@ -390,10 +404,10 @@ Verb 'close'
 	* noun -> Close;
 
 Verb 'take' 'get'
-	* noun -> Take;
+	* multi -> Take;
 
 Verb 'drop'
-	* noun -> Drop;
+	* multiheld -> Drop;
 
 Verb 'enter'
 	* noun -> Enter;
@@ -433,7 +447,7 @@ Verb meta 'restart'
 
 ! ######################### Helper routines
 
-[PrintVerb p_v;
+[ PrintVerb p_v;
 #IfV3;
 	switch(p_v) {
 		'examine': p_v = "examine";
@@ -843,9 +857,10 @@ Array TenSpaces -> "          ";
 	return -1;
 ];
 
-[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _data _parse_pointer _noun_tokens _noun;
+[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
 
 	action = -1;
+	multiple_objects --> 0 = 0;
 
 	UpdateScope(GetVisibilityCeiling(player));
 
@@ -918,7 +933,7 @@ Array TenSpaces -> "          ";
 #IfDef DEBUG;
 			print "TOKEN: ", _token, "^";
 #EndIf;
-			_data = (_pattern_index + 1) --> 0;
+			_token_data = (_pattern_index + 1) --> 0;
 			if(_token == TT_END) {
 				if(wn == parse_array -> 1) {
 					jump parse_success;
@@ -932,11 +947,14 @@ Array TenSpaces -> "          ";
 				break;
 			}
 			_token_type = _token & $0f;
+#IfDef DEBUG;
+			print "token type ", _token_type, ", data ",_token_data,"^";
+#EndIf;
 			if(_token_type == TT_PREPOSITION) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
 #IfDef DEBUG;
-				print "Preposition: ", _data, "^";
+				print "Preposition: ", _token_data, "^";
 #EndIf;
-				if(_parse_pointer --> 0 == _data) {
+				if(_parse_pointer --> 0 == _token_data) {
 #IfDef DEBUG;
 					print "Match!^";
 #EndIf;
@@ -952,14 +970,21 @@ Array TenSpaces -> "          ";
 					continue;
 				}
 #IfDef DEBUG;
-				print "Failed prep: ", _parse_pointer, ":", _parse_pointer --> 0, " should have been ", _data, "^";
+				print "Failed prep: ", _parse_pointer, ":", _parse_pointer --> 0, " should have been ", _token_data, "^";
 #EndIf;
 				if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
-			} else if(_token_type == TT_NOUN || TT_ROUTINE_FILTER ) {
-				! we expect a noun here
+			} else if(_token_type == TT_NOUN || _token_type == TT_ROUTINE_FILTER ) {
+				! normally we expect a noun here, but multiple nouns
+				! are possible if _token_data is multi or similar
+				!
 				! check all objects in 'scope', and see if any match.
-				! If so, update wn and parse_pointer, and return success
+				! If so, update wn and parse_pointer, update noun
+				! and second, and return success.
+				! 
+				! In case of multiple matches the multiple_objects array
+				! contains all matched nouns.
+				!
 				_noun = CheckNoun(_parse_pointer);
 				if(_noun == -2) {
 					print "Which ", (address) _parse_pointer --> 0, "? ";
@@ -969,6 +994,7 @@ Array TenSpaces -> "          ";
 #IfDef DEBUG;
 					print "Noun match!^";
 #EndIf;
+					multiple_objects --> 0 = 1; ! TODO only if first position
 					if(_noun_tokens == 0) {
 						noun = _noun;
 						inp1 = _noun;
@@ -979,8 +1005,11 @@ Array TenSpaces -> "          ";
 					_noun_tokens++;
 
 					if(_token_type == TT_ROUTINE_FILTER) {
-						!print "calling filter: ", _data, "^";
-						if(_data() == false) break;
+						!print "calling filter: ", _token_data, "^";
+						if(_token_data() == false) break;
+					}
+					if(_token_data ~= 0) {
+						!multiple_objects --> 0 = 2; ! testing only
 					}
 					continue;
 				}

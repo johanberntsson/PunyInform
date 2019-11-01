@@ -104,7 +104,7 @@ Object -> BlueBook "blue book" class Book
 Object -> John "John"
 	with
 		name 'john',
-		description "The book is old and worn.",
+		description "John is the meanest gangster around. Don't mess with him.",
 		react_before [;
 			Take:
 				if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
