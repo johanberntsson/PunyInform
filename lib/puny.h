@@ -144,7 +144,7 @@ Object Directions
 			self.selected_dir_prop = 0;
 			return 0;
 #EndIf;
-        ];
+		];
 
 
 ! ######################### Include utility files
@@ -967,7 +967,7 @@ Array TenSpaces -> "          ";
 					if(_token_type == TT_ROUTINE_FILTER) {
 						!print "calling filter: ", _data, "^";
 						if(_data() == false) break;
-                    }
+					}
 					continue;
 				}
 #IfDef DEBUG;
