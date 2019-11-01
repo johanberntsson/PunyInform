@@ -45,8 +45,9 @@ Object Library "The Library"
 		s_to CarPark,
 	has light;
 
-Object -> SmallBox "box"
+Object -> SmallBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
 	with
+		short_name "box",
 		name 'box',
 		description [;
 			if(GetVisibilityCeiling(player) == self) {
@@ -62,7 +63,7 @@ Object -> SmallBox "box"
 Book -> -> RedBook "red book"
 	with
 		name 'red' 'book',
-		initial "In the bottom of the box, there is a red book.",
+		initial "On the bottom of the box, there is a red book.",
 		description "The book is old and worn.",
 		before [;
  			Take:

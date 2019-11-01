@@ -81,7 +81,7 @@ Global score;
 Global turns;
 Global player;
 Global action;
-Global is_meta;      ! if the verb has the meta attribute or not
+Global meta;      ! if the verb has the meta attribute or not
 Global verb_word;
 Global noun;
 Global second;
@@ -659,7 +659,7 @@ Array TenSpaces -> "          ";
 		}
 	}
 	if(p_obj.short_name) {
-		_done = PrintOrRun(p_obj, short_name);
+		_done = PrintOrRun(p_obj, short_name, true);
 	}
 	if(_done == 0) {
 		print (object) p_obj;
@@ -719,10 +719,9 @@ Array TenSpaces -> "          ";
 	if (p_obj.#p_prop > WORDSIZE) return RunRoutines(p_obj,p_prop);
 	if(p_obj.p_prop ofclass String) {
 		print (string) p_obj.p_prop;
-	if(p_no_string_newline == 0) @new_line;
+		if(p_no_string_newline == 0) @new_line;
 		rtrue;
-	}
-	else if(p_obj.p_prop ofclass Routine) {
+	} else if(p_obj.p_prop ofclass Routine) {
 		return RunRoutines(p_obj, p_prop);
 	}
 ];
@@ -888,7 +887,7 @@ Array TenSpaces -> "          ";
 
 	! Now it is known word, and it is not a direction, in the first position
 	verb_word = _verb;
-	is_meta = (_word_data->0) & 2;
+	meta = (_word_data->0) & 2;
 
 !   print "Parse array: ", parse_array, "^";
 !   print "Word count: ", parse_array->0, "^";
@@ -900,7 +899,7 @@ Array TenSpaces -> "          ";
 	_num_patterns = _verb_grammar->0;
 
 #IfDef DEBUG;
-	print "Verb#: ",_verb_num,", is_meta ",is_meta,".^";
+	print "Verb#: ",_verb_num,", meta ",meta,".^";
 	print "Grammar address for this verb: ",_verb_grammar,"^";
 	print "Number of patterns: ",_num_patterns,"^";
 
@@ -1271,7 +1270,7 @@ Object DefaultPlayer "you"
 		status_field_2 = turns;
 		ReadPlayerInput();
 		ParseAndPerformAction();
-		if(action >= 0 && is_meta == false) turns++;
+		if(action >= 0 && meta == false) turns++;
 	}
 	if(game_state == GS_QUIT) @quit;
 	if(game_state == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
