@@ -86,20 +86,25 @@ Global noun;
 Global second;
 Global inp1;
 Global inp2;
-Global reverse;
 Global game_state;
 Global wn;
 Global input_words;
 Global scope_objects;
+#IfV5;
+Global reverse;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
 Global statuswin_current     = false;
-Global debug_flag            = 0;
 Global clr_on                = false;
 Global clr_bg                = 2;
 Global clr_fg                = 8;
 Global clr_bgstatus          = 2;
 Global clr_fgstatus          = 8;
+#endif;
+
+#ifdef DEBUG;
+Global debug_flag            = 0;
+#endif;
 
 Constant MAX_INPUT_CHARS     = 78;
 Constant MAX_INPUT_WORDS     = 20;
@@ -114,7 +119,11 @@ Object Directions
 	with
 		selected_dir 0,
 		selected_dir_prop 0,
+#IfV5;
 		parse_name [_len _i _w _arr;
+#IfNot;
+		parse_name [_len _i _w;
+#EndIf;
 			_w = (parse_array+2+4*wn)-->0;
 			_len = abbr_directions_array-->0;
 #IfV5;
@@ -311,25 +320,27 @@ Include "scope.h";
 	<Look>; ! Equivalent to PerformAction(##Look);
 ];
 
-[ SaveSub _result;
 #IfV3;
+[ SaveSub;
 	@save ?save_success;
 	"Save failed.";
 .save_success;
 	"Ok.";
 #IfNot;
+[ SaveSub _result;
 	@save -> _result;
 	if(_result == 0) "Save failed.";
 	"Ok."; ! _result = 1: save ok, 2: Restore ok
 #EndIf;
 ];
 
-[ RestoreSub _flag;
 #IfV3;
+[ RestoreSub;
 	@restore ?restore_success; ! can't use @restore because of compiler test
 	"Restore failed.";
 .restore_success; ! This is never reached, since a successful restore continues after save opcode.
 #IfNot;
+[ RestoreSub _flag;
 	@restore -> _flag;
 	! must have failed here so no need to check the flag
 	"Restore failed";
@@ -524,9 +535,6 @@ Array cursor_pos --> 2;
 
 
 #IfV3;
-[ DrawStatusLine;
-	@show_status;
-];
 #IfNot;
 
 Array TenSpaces -> "          ";
@@ -772,7 +780,11 @@ Array TenSpaces -> "          ";
 ];
 #EndIf;
 
+#IfV5;
 [ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+#IfNot;
+[ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score;
+#EndIf;
 	! return -1 if no noun matches
 	! return -2 if more than one match found
 	! else return object number
@@ -1042,15 +1054,15 @@ Array TenSpaces -> "          ";
 ];
 
 [ CDefArt p_obj _result;
-	PrintObjName(p_obj, FORM_CDEF);
+	_result = PrintObjName(p_obj, FORM_CDEF);
 ];
 
 [ DefArt p_obj _result;
-	PrintObjName(p_obj, FORM_DEF);
+	_result = PrintObjName(p_obj, FORM_DEF);
 ];
 
 [ IndefArt p_obj _result;
-	PrintObjName(p_obj, FORM_INDEF);
+	_result = PrintObjName(p_obj, FORM_INDEF);
 ];
 
 
@@ -1103,7 +1115,7 @@ Array TenSpaces -> "          ";
 !                      remaining and copy.  Implementing these here prevents
 !                      the need for a full metaclass inheritance scheme.      */
 
-[ CA__Pr obj id a    x y z s s2 n m;
+[ CA__Pr obj id a    x z s s2 n m;
 ! print "CA_Pr obj = ", obj,", id = ", id,", a = ", a, "^";
 	if (obj < 1 || obj > #largest_object-255) {
 		switch(Z__Region(obj)) {
@@ -1233,7 +1245,7 @@ Object DefaultPlayer "you"
 	if(game_state == GS_QUIT) @quit;
 	if(game_state == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
 	else if(game_state == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
-	else DeathMessage();
+	else if(game_state == GS_DEATHMESSAGE) DeathMessage();
 	print ".^";
 	for (::)
 	{
