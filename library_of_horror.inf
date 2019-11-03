@@ -58,6 +58,9 @@ Object -> SmallBox "The box" ! Set the object name to the name we want on the z3
 				rtrue;
 			}
 		],
+        daemon [;
+            print "^This is the annoying box daemon.^";
+        ],
 	has container openable enterable;
 
 Book -> -> RedBook "red book"
@@ -95,7 +98,12 @@ Object -> BlueBook "blue book" class Book
 				if(RedBook in player) {
 					print "The red book does not want to be near the blue book and jumps out of your grasp and lands on the floor.^^";
 					move RedBook to location;
-				}
+                }
+                StartDaemon(SmallBox);
+            Drop:
+                if (self in player) {
+                    StopDaemon(SmallBox);
+                }
 		],
 !		description "The book looks new and shiny.",
 		bobby 7,

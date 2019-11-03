@@ -25,6 +25,11 @@ Property react_before;
 Property before;
 Property parse_name;
 
+! Daemons and timers
+Property daemon;
+Property time_left;
+Property time_out;
+
 ! directions
 Property n_to;
 Property s_to;
@@ -109,6 +114,13 @@ Global debug_flag            = 0;
 
 Constant MAX_INPUT_CHARS     = 78;
 Constant MAX_INPUT_WORDS     = 20;
+
+Constant WORD_HIGHBIT = $8000;
+#Ifndef MAX_TIMERS;
+Constant MAX_TIMERS  32;            ! Max number timers/daemons active at once
+#Endif; ! MAX_TIMERS
+Array  the_timers  --> MAX_TIMERS;
+Global active_timers;               ! Number of timers/daemons actives
 
 #include "messages.h";
 
@@ -1037,6 +1049,7 @@ Array TenSpaces -> "          ";
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
 	PerformPreparedAction();
+    RunTimersAndDaemons();
 ];
 
 [ ActionPrimitive; indirect(#actions_table-->action); ];
@@ -1095,6 +1108,82 @@ Array TenSpaces -> "          ";
 	_result = PrintObjName(p_obj, FORM_INDEF);
 ];
 
+[ RunTimersAndDaemons i j;
+    #Ifdef DEBUG;
+    if (debug_flag & DEBUG_TIMERS) {
+        for (i=0 : i<active_timers : i++) {
+            j = the_timers-->i;
+            if (j ~= 0) {
+                print (name) (j&~WORD_HIGHBIT), ": ";
+                if (j & WORD_HIGHBIT) print "daemon";
+                else
+                    print "timer with ", j.time_left, " turns to go";
+                new_line;
+            }
+        }
+    }
+    #Endif; ! DEBUG
+
+    for (i=0 : i<active_timers : i++) {
+        ! if (deadflag) return;
+        j = the_timers-->i;
+        if (j ~= 0) {
+            if (j & WORD_HIGHBIT) RunRoutines(j&~WORD_HIGHBIT, daemon);
+            else {
+                if (j.time_left == 0) {
+                    StopTimer(j);
+                    RunRoutines(j, time_out);
+                }
+                else
+                    j.time_left = j.time_left-1;
+            }
+        }
+    }
+];
+
+[ StartTimer obj timer i;
+    for (i=0 : i<active_timers : i++)
+        if (the_timers-->i == obj) rfalse;
+    for (i=0 : i<active_timers : i++)
+        if (the_timers-->i == 0) jump FoundTSlot;
+    i = active_timers++;
+    if (i >= MAX_TIMERS) { print "Too many timers/daemons are active simultaneously.
+		The limit is the library constant MAX_TIMERS
+		(currently ", MAX_TIMERS, ") and should be increased"; return; }
+  .FoundTSlot;
+    if (obj.&time_left == 0) { print "The object has not that property"; return; }
+    the_timers-->i = obj; obj.time_left = timer;
+];
+
+[ StopTimer obj i;
+    for (i=0 : i<active_timers : i++)
+        if (the_timers-->i == obj) jump FoundTSlot2;
+    rfalse;
+  .FoundTSlot2;
+    if (obj.&time_left == 0) { print "The object has not that property"; return; }
+    the_timers-->i = 0; obj.time_left = 0;
+];
+
+[ StartDaemon obj i;
+    for (i=0 : i<active_timers : i++)
+        if (the_timers-->i == WORD_HIGHBIT + obj) rfalse;
+    for (i=0 : i<active_timers : i++)
+        if (the_timers-->i == 0) jump FoundTSlot3;
+    i = active_timers++;
+    if (i >= MAX_TIMERS) print "Too many timers/daemons are active simultaneously.
+		The limit is the library constant MAX_TIMERS
+		(currently ", MAX_TIMERS, ") and should be increased";
+  .FoundTSlot3;
+    the_timers-->i = WORD_HIGHBIT + obj;
+];
+
+[ StopDaemon obj i;
+    for (i=0 : i<active_timers : i++)
+        if (the_timers-->i == WORD_HIGHBIT + obj) jump FoundTSlot4;
+    rfalse;
+  .FoundTSlot4;
+    the_timers-->i = 0;
+];
 
 #IfV3;
 ! These routines are implemented by Veneer, but the default implementations give compile errors for z3
