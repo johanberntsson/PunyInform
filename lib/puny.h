@@ -120,7 +120,8 @@ Constant WORD_HIGHBIT = $8000;
 Constant MAX_TIMERS  32;            ! Max number timers/daemons active at once
 #Endif; ! MAX_TIMERS
 Array  the_timers  --> MAX_TIMERS;
-Global active_timers;               ! Number of timers/daemons actives
+Global active_timers;               ! Number of timers/daemons active
+Global current_timer;               ! Index of the timer which is currently being executed
 
 #include "messages.h";
 
@@ -1107,21 +1108,19 @@ Array TenSpaces -> "          ";
 	_result = PrintObjName(p_obj, FORM_INDEF);
 ];
 
-[ RunTimersAndDaemons _i _j _t;
-	for (_i=0 : _i<active_timers : _i++) {
+[ RunTimersAndDaemons _j _t;
+	for (current_timer=0 : current_timer<active_timers : current_timer++) {
 		if (game_state == GS_DEAD) return;
-		_j = the_timers-->_i;
-		if (_j ~= 0) {
-			if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
-			else {
-				_t = _j.time_left;
-				if (_t == 0) {
-					StopTimer(_j);
-					RunRoutines(_j, time_out);
-				} else {
-					_t--;
-					_j.time_left = _t;
-				}
+		_j = the_timers-->current_timer;
+		if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
+		else {
+			_t = _j.time_left;
+			if (_t == 0) {
+				StopTimer(_j);
+				RunRoutines(_j, time_out);
+			} else {
+				_t--;
+				_j.time_left = _t;
 			}
 		}
 	}
@@ -1130,11 +1129,8 @@ Array TenSpaces -> "          ";
 [ StartTimer p_obj p_timer _i;
 	for (_i=0 : _i<active_timers : _i++)
 		if (the_timers-->_i == p_obj) rfalse;
-	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == 0) jump FoundTSlot;
 	_i = active_timers++;
 	if (_i >= MAX_TIMERS) { RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS); return; }
-.FoundTSlot;
 	if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
 	the_timers-->_i = p_obj; p_obj.time_left = p_timer;
 ];
@@ -1145,26 +1141,35 @@ Array TenSpaces -> "          ";
 	rfalse;
 .FoundTSlot2;
 	if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
-	the_timers-->_i = 0; p_obj.time_left = 0;
+	for (_i=_i + 1: _i < active_timers : _i++)
+		the_timers-->(_i - 1) = the_timers-->_i;
+	if(_i <= current_timer)
+		current_timer--;
+	p_obj.time_left = 0;
+	active_timers--;
 ];
 
-[ StartDaemon p_obj _i;
+[ StartDaemon p_obj _i _obj;
+	_obj = WORD_HIGHBIT + p_obj;
 	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == WORD_HIGHBIT + p_obj) rfalse;
-	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == 0) jump FoundTSlot3;
+		if (the_timers-->_i == _obj) rfalse;
 	_i = active_timers++;
 	if (_i >= MAX_TIMERS) RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
-.FoundTSlot3;
-	the_timers-->_i = WORD_HIGHBIT + p_obj;
+	the_timers-->_i = _obj;
 ];
 
-[ StopDaemon p_obj _i;
+[ StopDaemon p_obj _i _obj;
+	_obj = WORD_HIGHBIT + p_obj;
 	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == WORD_HIGHBIT + p_obj) jump FoundTSlot4;
+		if (the_timers-->_i == _obj) jump FoundTSlot4;
 	rfalse;
 .FoundTSlot4;
+	for (_i=_i + 1: _i < active_timers : _i++)
+		the_timers-->(_i - 1) = the_timers-->_i;
+	if(_i <= current_timer)
+		current_timer--;
     the_timers-->_i = 0;
+	active_timers--;
 ];
 
 #IfV3;
