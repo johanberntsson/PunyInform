@@ -1126,49 +1126,43 @@ Array TenSpaces -> "          ";
 	}
 ];
 
-[ StartTimer p_obj p_timer _i;
+[ StartTimer p_obj p_timer;
+	StartDaemon(p_obj, p_obj, p_timer);
+];
+
+[ StartDaemon p_obj p_array_val p_timer _i;
+	if(p_array_val == 0)
+		p_array_val = WORD_HIGHBIT + p_obj;
 	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == p_obj) rfalse;
+		if (the_timers-->_i == p_array_val) rfalse;
 	_i = active_timers++;
-	if (_i >= MAX_TIMERS) { RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS); return; }
-	if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
-	the_timers-->_i = p_obj; p_obj.time_left = p_timer;
+	if (_i >= MAX_TIMERS) RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
+	if (p_timer > 0) {
+		if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
+		else p_obj.time_left = p_timer;
+	}
+	the_timers-->_i = p_array_val;
 ];
 
 [ StopTimer p_obj _i;
-	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == p_obj) jump FoundTSlot2;
-	rfalse;
-.FoundTSlot2;
-	if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
-	for (_i=_i + 1: _i < active_timers : _i++)
-		the_timers-->(_i - 1) = the_timers-->_i;
-	if(_i <= current_timer)
-		current_timer--;
-	p_obj.time_left = 0;
-	active_timers--;
+	StopDaemon(p_obj, p_obj);
 ];
 
-[ StartDaemon p_obj _i _obj;
-	_obj = WORD_HIGHBIT + p_obj;
+[ StopDaemon p_obj p_array_val _i;
+	if(p_array_val == 0)
+		p_array_val = WORD_HIGHBIT + p_obj;
 	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == _obj) rfalse;
-	_i = active_timers++;
-	if (_i >= MAX_TIMERS) RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
-	the_timers-->_i = _obj;
-];
-
-[ StopDaemon p_obj _i _obj;
-	_obj = WORD_HIGHBIT + p_obj;
-	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == _obj) jump FoundTSlot4;
+		if (the_timers-->_i == p_array_val) jump FoundTSlot4;
 	rfalse;
 .FoundTSlot4;
+	if (p_obj == p_array_val) { ! This is a timer, not a daemon
+		if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
+		else p_obj.time_left = 0;
+	}
 	for (_i=_i + 1: _i < active_timers : _i++)
 		the_timers-->(_i - 1) = the_timers-->_i;
 	if(_i <= current_timer)
 		current_timer--;
-    the_timers-->_i = 0;
 	active_timers--;
 ];
 
