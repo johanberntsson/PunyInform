@@ -1107,62 +1107,64 @@ Array TenSpaces -> "          ";
 	_result = PrintObjName(p_obj, FORM_INDEF);
 ];
 
-[ RunTimersAndDaemons i j;
-    for (i=0 : i<active_timers : i++) {
-        if (game_state == GS_DEAD) return;
-        j = the_timers-->i;
-        if (j ~= 0) {
-            if (j < 0) RunRoutines(j&~WORD_HIGHBIT, daemon);
-            else {
-                if (j.time_left == 0) {
-                    StopTimer(j);
-                    RunRoutines(j, time_out);
-                }
-                else
-                    j.time_left--;
-            }
-        }
-    }
+[ RunTimersAndDaemons _i _j _t;
+	for (_i=0 : _i<active_timers : _i++) {
+		if (game_state == GS_DEAD) return;
+		_j = the_timers-->_i;
+		if (_j ~= 0) {
+			if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
+			else {
+				_t = _j.time_left;
+				if (_t == 0) {
+					StopTimer(_j);
+					RunRoutines(_j, time_out);
+				} else {
+					_t--;
+					_j.time_left = _t;
+				}
+			}
+		}
+	}
 ];
 
-[ StartTimer obj timer i;
-    for (i=0 : i<active_timers : i++)
-        if (the_timers-->i == obj) rfalse;
-    for (i=0 : i<active_timers : i++)
-        if (the_timers-->i == 0) jump FoundTSlot;
-    i = active_timers++;
-    if (i >= MAX_TIMERS) { RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS); return; }
-  .FoundTSlot;
-    if (obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
-    the_timers-->i = obj; obj.time_left = timer;
+[ StartTimer p_obj p_timer _i;
+	for (_i=0 : _i<active_timers : _i++)
+		if (the_timers-->_i == p_obj) rfalse;
+	for (_i=0 : _i<active_timers : _i++)
+		if (the_timers-->_i == 0) jump FoundTSlot;
+	_i = active_timers++;
+	if (_i >= MAX_TIMERS) { RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS); return; }
+.FoundTSlot;
+	if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
+	the_timers-->_i = p_obj; p_obj.time_left = p_timer;
 ];
 
-[ StopTimer obj i;
-    for (i=0 : i<active_timers : i++)
-        if (the_timers-->i == obj) jump FoundTSlot2;
-    rfalse;
-  .FoundTSlot2;
-    if (obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
-    the_timers-->i = 0; obj.time_left = 0;
+[ StopTimer p_obj _i;
+	for (_i=0 : _i<active_timers : _i++)
+		if (the_timers-->_i == p_obj) jump FoundTSlot2;
+	rfalse;
+.FoundTSlot2;
+	if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
+	the_timers-->_i = 0; p_obj.time_left = 0;
 ];
 
-[ StartDaemon obj i;
-    for (i=0 : i<active_timers : i++)
-        if (the_timers-->i == WORD_HIGHBIT + obj) rfalse;
-    for (i=0 : i<active_timers : i++)
-        if (the_timers-->i == 0) jump FoundTSlot3;
-    i = active_timers++;
-    if (i >= MAX_TIMERS) RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
-  .FoundTSlot3;
-    the_timers-->i = WORD_HIGHBIT + obj;
+[ StartDaemon p_obj _i;
+	for (_i=0 : _i<active_timers : _i++)
+		if (the_timers-->_i == WORD_HIGHBIT + p_obj) rfalse;
+	for (_i=0 : _i<active_timers : _i++)
+		if (the_timers-->_i == 0) jump FoundTSlot3;
+	_i = active_timers++;
+	if (_i >= MAX_TIMERS) RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
+.FoundTSlot3;
+	the_timers-->_i = WORD_HIGHBIT + p_obj;
 ];
 
-[ StopDaemon obj i;
-    for (i=0 : i<active_timers : i++)
-        if (the_timers-->i == WORD_HIGHBIT + obj) jump FoundTSlot4;
-    rfalse;
-  .FoundTSlot4;
-    the_timers-->i = 0;
+[ StopDaemon p_obj _i;
+	for (_i=0 : _i<active_timers : _i++)
+		if (the_timers-->_i == WORD_HIGHBIT + p_obj) jump FoundTSlot4;
+	rfalse;
+.FoundTSlot4;
+    the_timers-->_i = 0;
 ];
 
 #IfV3;
