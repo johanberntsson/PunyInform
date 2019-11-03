@@ -17,3 +17,14 @@ Constant MSG_YOU_CANT_VERB_THAT = 1;
 	Error("Unknown message#");
 ];
 
+Constant ERR_TOO_MANY_TIMERS_DAEMONS "Too many timers/daemons";
+Constant ERR_OBJECT_HASNT_PROPERTY "The object has not that property";
+
+[RunTimeError p_err;
+    print "[Run-time error: ";
+    if(p_err ofclass String) print (string) p_err;
+    switch(p_err) {
+        ! For future use
+    }
+    "]";
+];

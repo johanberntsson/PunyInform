@@ -1049,7 +1049,6 @@ Array TenSpaces -> "          ";
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
 	PerformPreparedAction();
-    RunTimersAndDaemons();
 ];
 
 [ ActionPrimitive; indirect(#actions_table-->action); ];
@@ -1109,33 +1108,18 @@ Array TenSpaces -> "          ";
 ];
 
 [ RunTimersAndDaemons i j;
-    #Ifdef DEBUG;
-    if (debug_flag & DEBUG_TIMERS) {
-        for (i=0 : i<active_timers : i++) {
-            j = the_timers-->i;
-            if (j ~= 0) {
-                print (name) (j&~WORD_HIGHBIT), ": ";
-                if (j & WORD_HIGHBIT) print "daemon";
-                else
-                    print "timer with ", j.time_left, " turns to go";
-                new_line;
-            }
-        }
-    }
-    #Endif; ! DEBUG
-
     for (i=0 : i<active_timers : i++) {
-        ! if (deadflag) return;
+        if (game_state == GS_DEAD) return;
         j = the_timers-->i;
         if (j ~= 0) {
-            if (j & WORD_HIGHBIT) RunRoutines(j&~WORD_HIGHBIT, daemon);
+            if (j < 0) RunRoutines(j&~WORD_HIGHBIT, daemon);
             else {
                 if (j.time_left == 0) {
                     StopTimer(j);
                     RunRoutines(j, time_out);
                 }
                 else
-                    j.time_left = j.time_left-1;
+                    j.time_left--;
             }
         }
     }
@@ -1147,11 +1131,9 @@ Array TenSpaces -> "          ";
     for (i=0 : i<active_timers : i++)
         if (the_timers-->i == 0) jump FoundTSlot;
     i = active_timers++;
-    if (i >= MAX_TIMERS) { print "Too many timers/daemons are active simultaneously.
-		The limit is the library constant MAX_TIMERS
-		(currently ", MAX_TIMERS, ") and should be increased"; return; }
+    if (i >= MAX_TIMERS) { RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS); return; }
   .FoundTSlot;
-    if (obj.&time_left == 0) { print "The object has not that property"; return; }
+    if (obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
     the_timers-->i = obj; obj.time_left = timer;
 ];
 
@@ -1160,7 +1142,7 @@ Array TenSpaces -> "          ";
         if (the_timers-->i == obj) jump FoundTSlot2;
     rfalse;
   .FoundTSlot2;
-    if (obj.&time_left == 0) { print "The object has not that property"; return; }
+    if (obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
     the_timers-->i = 0; obj.time_left = 0;
 ];
 
@@ -1170,9 +1152,7 @@ Array TenSpaces -> "          ";
     for (i=0 : i<active_timers : i++)
         if (the_timers-->i == 0) jump FoundTSlot3;
     i = active_timers++;
-    if (i >= MAX_TIMERS) print "Too many timers/daemons are active simultaneously.
-		The limit is the library constant MAX_TIMERS
-		(currently ", MAX_TIMERS, ") and should be increased";
+    if (i >= MAX_TIMERS) RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
   .FoundTSlot3;
     the_timers-->i = WORD_HIGHBIT + obj;
 ];
@@ -1359,7 +1339,10 @@ Object DefaultPlayer "you"
 		status_field_2 = turns;
 		ReadPlayerInput();
 		ParseAndPerformAction();
-		if(action >= 0 && meta == false) turns++;
+		if(action >= 0 && meta == false) {
+            RunTimersAndDaemons();
+            turns++;
+        }
 	}
 	if(game_state == GS_QUIT) @quit;
 	if(game_state == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
