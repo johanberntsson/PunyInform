@@ -58,9 +58,10 @@ Object -> SmallBox "The box" ! Set the object name to the name we want on the z3
 				rtrue;
 			}
 		],
-        daemon [;
-            print "^This is the annoying box daemon.^";
+        time_out [;
+            print "^The box goes BOOM.^";
         ],
+		time_left 0,
 	has container openable enterable;
 
 Book -> -> RedBook "red book"
@@ -99,13 +100,19 @@ Object -> BlueBook "blue book" class Book
 					print "The red book does not want to be near the blue book and jumps out of your grasp and lands on the floor.^^";
 					move RedBook to location;
                 }
-                StartDaemon(SmallBox);
+!                StartDaemon(SmallBox);
+                StartDaemon(self);
+                StartTimer(SmallBox, 3);
+				print "The box starts ticking...^";
             Drop:
                 if (self in player) {
-                    StopDaemon(SmallBox);
+                   StopDaemon(Self);
                 }
 		],
 !		description "The book looks new and shiny.",
+        daemon [;
+            print "^The blue book glows annoyingly.^";
+        ],
 		bobby 7,
 		hello 13,
 		pants 21;

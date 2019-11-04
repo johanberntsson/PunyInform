@@ -2,6 +2,7 @@
 ! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
+Constant NULL         = $ffff;
 !Constant WORDSIZE 2;
 
 Attribute light;
@@ -26,9 +27,10 @@ Property before;
 Property parse_name;
 
 ! Daemons and timers
-Property daemon;
+
+Property additive time_out NULL;
+Property daemon alias time_out;
 Property time_left;
-Property time_out;
 
 ! directions
 Property n_to;
@@ -1108,24 +1110,6 @@ Array TenSpaces -> "          ";
 	_result = PrintObjName(p_obj, FORM_INDEF);
 ];
 
-[ RunTimersAndDaemons _j _t;
-	for (current_timer=0 : current_timer<active_timers : current_timer++) {
-		if (game_state == GS_DEAD) return;
-		_j = the_timers-->current_timer;
-		if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
-		else {
-			_t = _j.time_left;
-			if (_t == 0) {
-				StopTimer(_j);
-				RunRoutines(_j, time_out);
-			} else {
-				_t--;
-				_j.time_left = _t;
-			}
-		}
-	}
-];
-
 [ StartTimer p_obj p_timer;
 	StartDaemon(p_obj, p_obj, p_timer);
 ];
@@ -1144,7 +1128,7 @@ Array TenSpaces -> "          ";
 	the_timers-->_i = p_array_val;
 ];
 
-[ StopTimer p_obj _i;
+[ StopTimer p_obj;
 	StopDaemon(p_obj, p_obj);
 ];
 
@@ -1164,6 +1148,24 @@ Array TenSpaces -> "          ";
 	if(_i <= current_timer)
 		current_timer--;
 	active_timers--;
+];
+
+[ RunTimersAndDaemons _j _t;
+	for (current_timer=0 : current_timer<active_timers : current_timer++) {
+		if (game_state == GS_DEAD) return;
+		_j = the_timers-->current_timer;
+		if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
+		else {
+			_t = _j.time_left;
+			if (_t == 0) {
+				StopTimer(_j);
+				RunRoutines(_j, time_out);
+			} else {
+				_t--;
+				_j.time_left = _t;
+			}
+		}
+	}
 ];
 
 #IfV3;
