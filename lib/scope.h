@@ -7,6 +7,10 @@ Array scope-->MAX_SCOPE;
 [ SearchScope p_obj _child;
 	while(p_obj) {
 !		print "Adding ",(object) p_obj," to scope.^";
+		if(scope_objects >= MAX_SCOPE) {
+			RunTimeError(ERR_SCOPE_FULL);
+			return;
+		}			
 		scope-->(scope_objects++) = p_obj;
 		if(p_obj.add_to_scope) p_obj.add_to_scope();
 		_child = child(p_obj);
@@ -24,7 +28,7 @@ Array scope-->MAX_SCOPE;
 		scope-->(scope_objects++) = p_start_pos;
 	}
 	if(p_start_pos.add_to_scope) p_start_pos.add_to_scope();
-	! Add all in player locatio (which may be inside an object)
+	! Add all in player location (which may be inside an object)
 	SearchScope(child(p_start_pos));
 ];
 
