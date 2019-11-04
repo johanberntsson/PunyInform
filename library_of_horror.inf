@@ -115,7 +115,7 @@ Object -> BlueBook "blue book" class Book
         ],
 		bobby 7,
 		hello 13,
-		pants 21;
+		pants (-1000) (-1001) (-1002) (-1003) (-1004) (-1005) (-1006) (-1007) (-1008) (-1009) (-1010) (-1011) (-1012) (-1013) (-1014) (-1015) (-1016) (-1017) (-1018) (-1019) (-1020) (-1021) (-1022) (-1023) (-1024) (-1025) (-1026) (-1027) (-1028) (-1029) (-1030) (-1031);
 
 Object -> John "John"
 	with
@@ -147,7 +147,7 @@ Book -> PinkBook "pink book"
 		description "The book is nice and tidy.",
 		;
 
-[Initialise;
+[Initialise b i;
 !	location = Library;
 	PlayerTo(SmallBox);
 	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
@@ -157,6 +157,9 @@ Book -> PinkBook "pink book"
 	print "Have cleared. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
 	print "Parrot fed != ", FlagIsClear(F_PARROT_FED),"^";
 
+!	b = BlueBook.&pants;
+!	for(i=0 : i<BlueBook.#pants / 2 : i++)
+!		print "BlueBook pants(",i,") is ", b-->i, "^";
 	BlueBook.description();
 !	print "BlueBook.party is ", BlueBook.party, "^";
 	BlueBook.party(5);
