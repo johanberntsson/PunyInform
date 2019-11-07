@@ -814,8 +814,8 @@ Array TenSpaces -> "          ";
 #IfNot;
 [ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score;
 #EndIf;
-	! return -1 if no noun matches
-	! return -2 if more than one match found
+	! return 0 if no noun matches
+	! return -n if more n matches found (n > 1)
 	! else return object number
 	for(_i = 0: _i < scope_objects: _i++) {
 		_n = wn;
@@ -827,7 +827,10 @@ Array TenSpaces -> "          ";
 			_j = wn;
 			_n = wn + PrintOrRun(_obj, parse_name); ! number of words consumed
 			wn = _j;
-			if(_n == _best_score) _matches++;
+			if(_n == _best_score) {
+				multiple_objects->_matches = _obj;
+				_matches++;
+			}
 			if(_n > _best_score) {
 				_last_match = _obj;
 				_best_score = _n;
@@ -850,7 +853,10 @@ Array TenSpaces -> "          ";
 				_n++;
 				_p = _p + 4;
 				_current_word = _p-->0;
-				if(_n == _best_score) _matches++;
+				if(_n == _best_score) {
+					multiple_objects->_matches = _obj;
+					_matches++;
+				}
 				if(_n > _best_score) {
 					_last_match = _obj;
 					_best_score = _n;
@@ -867,8 +873,25 @@ Array TenSpaces -> "          ";
 !   parse_pointer = p;
 		return _last_match;
 	}
-	if(_matches > 1) return -2;
-	return -1;
+	if(_matches > 1) return -_matches;
+	return 0;
+];
+
+[ AskWhichNoun p_noun_name p_num_matching_nouns _i;
+	print "Which ", (address) p_noun_name, " do you mean? ";
+	for(_i = 1 : _i < p_num_matching_nouns : _i++) {
+		if(_i == 1) {
+			print (The) multiple_objects->_i;
+		} else {
+			if (_i == p_num_matching_nouns - 1) {
+				print " or ";
+			} else {
+				print ", ";
+			}
+			print (the) multiple_objects->_i;
+		}
+	}
+	"?";
 ];
 
 [ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
@@ -1000,9 +1023,9 @@ Array TenSpaces -> "          ";
 				! contains all matched nouns.
 				!
 				_noun = CheckNoun(_parse_pointer);
-				if(_noun == -2) {
-					print "Which ", (address) _parse_pointer --> 0, "? ";
-					"You have to be more specific.";
+				if(_noun < 0) {
+					AskWhichNoun(_parse_pointer --> 0, -_noun);
+					rtrue;
 				}
 				if(_noun > 0) {
 #IfDef DEBUG;
