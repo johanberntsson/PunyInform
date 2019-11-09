@@ -25,6 +25,7 @@ Property add_to_scope;
 Property react_before;
 Property before;
 Property parse_name;
+Property capacity;
 
 ! Daemons and timers
 
@@ -80,6 +81,8 @@ Constant MOVES__TX = "Moves: ";
 Constant SCORE__TX = "Score: ";
 #EndIf;
 
+Default MAX_CARRIED         100;
+! Default SACK_OBJECT         0;
 
 Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
@@ -259,6 +262,7 @@ Include "scope.h";
 	}
 	if(noun in player) "You already have that.";
 	if(IndirectlyContains(noun, player)) "First, you'd have to leave ", (the) noun, ".";
+    if (AtFullCapacity(player)) "You are carrying too many things already.";
 	move noun to player;
 	give noun moved;
 	score = score + 10;
@@ -661,7 +665,34 @@ Array TenSpaces -> "          ";
 ];
 #Endif;
 
+[ AtFullCapacity p_s
+    obj k;
+    if (p_s == player) {
+        objectloop (obj in p_s)
+            ! if (obj hasnt worn) k++;
+            k++;
+    } else
+        k = children(p_s);
+    ! if (k < RunRoutines(p_s, capacity) || (p_s == player && RoomInSack())) rfalse;
+    if (k < RunRoutines(p_s, capacity)) rfalse;
+];
 
+! [ RoomInSack
+!     obj ks;
+!     if (SACK_OBJECT && SACK_OBJECT in player) {
+!         ks = keep_silent; keep_silent = 2;
+!         for (obj=youngest(player) : obj : obj=elder(obj))
+!             if (obj ~= SACK_OBJECT && obj hasnt worn or light) {
+!                 <Insert obj SACK_OBJECT>;
+!                 if (obj in SACK_OBJECT) {
+!                     keep_silent = ks;
+!                     return "(putting ", (the) obj, " into ", (the) SACK_OBJECT, " to make room)";
+!                 }
+!             }
+!         keep_silent = ks;
+!     }
+!     rfalse;
+! ];
 
 [ PrintObjName p_obj p_form _done;
 	if(p_obj hasnt proper) {
@@ -1349,6 +1380,7 @@ Array TenSpaces -> "          ";
 #EndIf;
 
 Object DefaultPlayer "you"
+   with capacity MAX_CARRIED
 	has concealed;
 
 [ main i;

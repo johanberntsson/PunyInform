@@ -6,6 +6,7 @@ Constant FLAG_COUNT 8;
 Constant F_SQUIRREL_ESCAPED 0;
 Constant F_PARROT_FED 1;
 Constant F_BOUGHT_TICKETS 2;
+Constant MAX_CARRIED 3;
 
 Include "puny.h";
 
