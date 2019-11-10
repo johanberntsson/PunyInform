@@ -38,10 +38,28 @@ Property n_to;
 Property s_to;
 Property e_to;
 Property w_to;
+#IfDef FULL_DIRECTIONS;
+Property ne_to;
+Property nw_to;
+Property se_to;
+Property sw_to;
+#EndIf;
+Property u_to;
+Property d_to;
+Property in_to;
+Property out_to;
+
 Property cant_go;
-Array abbr_directions_array table 'n//' 's//' 'e//' 'w//';
-Array full_directions_array table 'north' 'south' 'east' 'west';
-Array direction_properties_array table n_to s_to e_to w_to;
+
+#IfDef FULL_DIRECTIONS;
+Array abbr_directions_array table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' ',,' ',,';
+Array full_directions_array table 'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
+Array direction_properties_array table n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
+#IfNot;
+Array abbr_directions_array table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' ',,' ',,';
+Array full_directions_array table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
+Array direction_properties_array table n_to s_to e_to w_to u_to d_to in_to out_to;
+#EndIf;
 
 ! Header constants
 Constant HEADER_DICTIONARY   = 4;    ! 2*4 = $8
