@@ -7,6 +7,7 @@ Constant F_SQUIRREL_ESCAPED 0;
 Constant F_PARROT_FED 1;
 Constant F_BOUGHT_TICKETS 2;
 Constant MAX_CARRIED 3;
+Constant SACK_OBJECT infiniteBag;
 
 Include "puny.h";
 
@@ -130,6 +131,11 @@ Object -> John "John"
 		],
 	has proper;
 
+Object -> infiniteBag "infinite bag"
+	with
+		name 'infinite' 'bag',
+		description "An infinitely deep bag.",
+	has container open;
 
 Book -> GreenBook "green book"
 	with

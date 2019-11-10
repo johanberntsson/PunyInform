@@ -16,6 +16,7 @@ Attribute concealed;
 Attribute moved;
 Attribute visited alias moved;
 Attribute proper;
+Attribute worn;
 
 ! Property name; ! This seems to be hardcoded in the Inform compiler
 Property initial;
@@ -82,7 +83,7 @@ Constant SCORE__TX = "Score: ";
 #EndIf;
 
 Default MAX_CARRIED         100;
-! Default SACK_OBJECT         0;
+Default SACK_OBJECT         0;
 
 Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
@@ -409,6 +410,22 @@ Include "scope.h";
 	}
 ];
 
+[ InsertSub _ancestor;
+    if (parent(noun) == second) "Already there.";
+    _ancestor = CommonAncestor(noun, second);
+    if (_ancestor == noun) "Cannot put something inside itself.";
+    if (second ~= _ancestor) {
+        if (second has container && second hasnt open) "Closed.";
+    }
+    if (second hasnt container) "That can't contain things.";
+
+    if (AtFullCapacity(noun, second)) "There is no more room.";
+
+    move noun to second;
+
+    "You put ", (the) noun, " into ", (the) second, ".";
+];
+
 Verb 'i' 'inventory'
 	* -> Inventory;
 
@@ -426,7 +443,8 @@ Verb 'take' 'get'
 	* multi -> Take;
 
 Verb 'drop'
-	* multiheld -> Drop;
+	* multiheld -> Drop
+    * multiexcept 'in'/'into'/'down' noun       -> Insert;
 
 Verb 'enter'
 	* noun -> Enter;
@@ -442,6 +460,12 @@ Verb 'jump'
 
 Verb 'exit' 'leave'
 	* noun -> Exit;
+
+Verb 'put'
+    * multiexcept 'in'/'inside'/'into' noun     -> Insert;
+
+Verb 'insert'
+    * multiexcept 'in'/'into' noun              -> Insert;
 
 [ ADirection; return (noun == Directions); ];
 
@@ -501,6 +525,20 @@ Verb meta 'restart'
 	rfalse;
 ];
 
+[ CommonAncestor p_o1 p_o2 _i _j;
+    ! Find the nearest object indirectly containing o1 and o2,
+    ! or return 0 if there is no common ancestor.
+    _i = p_o1;
+    while (_i) {
+        _j = p_o2;
+        while (_j) {
+            if (_j == _i) return _i;
+            _j = parent(_j);
+        }
+        _i = parent(_i);
+    }
+    return 0;
+];
 
 #IfV5;
 
@@ -665,34 +703,29 @@ Array TenSpaces -> "          ";
 ];
 #Endif;
 
-[ AtFullCapacity p_s
-    obj k;
+[ AtFullCapacity p_s _obj _k;
+    if (p_s.&capacity == 0) rfalse; ! We will consider that no capacity specified implies infinite capacity.
     if (p_s == player) {
-        objectloop (obj in p_s)
-            ! if (obj hasnt worn) k++;
-            k++;
+        objectloop (_obj in p_s)
+            if (_obj hasnt worn) _k++;
     } else
-        k = children(p_s);
-    ! if (k < RunRoutines(p_s, capacity) || (p_s == player && RoomInSack())) rfalse;
-    if (k < RunRoutines(p_s, capacity)) rfalse;
+        _k = children(p_s);
+    if (_k < RunRoutines(p_s, capacity) || (p_s == player && RoomInSack())) rfalse;
 ];
 
-! [ RoomInSack
-!     obj ks;
-!     if (SACK_OBJECT && SACK_OBJECT in player) {
-!         ks = keep_silent; keep_silent = 2;
-!         for (obj=youngest(player) : obj : obj=elder(obj))
-!             if (obj ~= SACK_OBJECT && obj hasnt worn or light) {
-!                 <Insert obj SACK_OBJECT>;
-!                 if (obj in SACK_OBJECT) {
-!                     keep_silent = ks;
-!                     return "(putting ", (the) obj, " into ", (the) SACK_OBJECT, " to make room)";
-!                 }
-!             }
-!         keep_silent = ks;
-!     }
-!     rfalse;
-! ];
+[ RoomInSack _obj;
+    if (SACK_OBJECT && SACK_OBJECT in player) {
+        for (_obj=youngest(player) : _obj : _obj=elder(_obj))
+            if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
+                PerformAction(##Insert, _obj, SACK_OBJECT);
+                if (_obj in SACK_OBJECT) {
+                    print "(putting ", (the) _obj, " into ", (the) SACK_OBJECT, " to make room) ";
+                    rtrue;
+                }
+            }
+    }
+    rfalse;
+];
 
 [ PrintObjName p_obj p_form _done;
 	if(p_obj hasnt proper) {
