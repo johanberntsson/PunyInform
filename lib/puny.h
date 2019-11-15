@@ -118,7 +118,6 @@ Global inp1;
 Global inp2;
 Global game_state;
 Global wn;
-Global input_words;
 Global scope_objects;
 Global reverse;
 #IfV5;
@@ -848,13 +847,21 @@ Array TenSpaces -> "          ";
 		location = _result;
 	}
 #EndIf;
-	input_words = parse_array -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
-	_result = 2 * input_words + 1;
+	_result = 2 * (parse_array -> 1) + 1;
 	parse_array-->_result = 0;
 	parse_array-->(_result + 1) = 0;
 ];
 
+[ PrintParseArray _i;
+	print "PARSE_ARRAY: ", parse_array->1, " entries^";
+	for(_i = 0; _i < parse_array -> 1; _i++) {
+		print _i,
+		" dict ",(parse_array + 2 + _i * 4) --> 0,
+		" len ",(parse_array + 2 + _i * 4) -> 2,
+		" index ",(parse_array + 2 + _i * 4) -> 3, "^";
+	}
+];
 
 #IfDef DEBUG;
 [ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
@@ -878,6 +885,12 @@ Array TenSpaces -> "          ";
 ];
 #EndIf;
 
+[ IsSentenceDivider p_parse_pointer;
+	! check if current parse_array block, indicated by p_parse_pointer,
+	! is a period or other sentence divider
+	return player_input_array -> (p_parse_pointer -> 3) == '.' && p_parse_pointer -> 2 == 1;
+];
+
 #IfV5;
 [ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 #IfNot;
@@ -886,6 +899,9 @@ Array TenSpaces -> "          ";
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
+	! side effect: multiple_objects
+	!              - stores all matching nouns if more than one
+	!              - stores number of words consumed if single match 
 	for(_i = 0: _i < scope_objects: _i++) {
 		_n = wn;
 		_p = p_parse_pointer;
@@ -908,7 +924,8 @@ Array TenSpaces -> "          ";
 		} else if(_obj.#name > 1) {
 			_name_array = _obj.&name;
 			_name_array_len = _obj.#name / 2;
-			while(_n < input_words) {
+
+			while(_n < parse_array -> 1 && IsSentenceDivider(_p) == false) {
 				if(_current_word == nothing) return 0; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
@@ -938,7 +955,7 @@ Array TenSpaces -> "          ";
 !   print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
 	if(_matches == 1) {
-		wn = _best_score;
+		multiple_objects->0 = _best_score - 1;
 !   parse_pointer = p;
 		return _last_match;
 	}
@@ -964,6 +981,12 @@ Array TenSpaces -> "          ";
 ];
 
 [ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
+	! returns how many words were used to find a match
+	! taking periods and other sentence breaks into account.
+	! For example, if the input is "l.l" then the parser
+	! will stop after the first "l" has been mached, and
+	! 1 is returned. If the input is "open box" then
+	! the whole input is matched and 2 returned.
 
 	action = -1;
 	multiple_objects --> 0 = 0;
@@ -972,12 +995,14 @@ Array TenSpaces -> "          ";
 
 	if(parse_array->1 < 1) {
 		"Come again?";
+		return 0;
 	}
 
 	_verb = parse_array-->1;
 	if(_verb < (0-->HEADER_DICTIONARY)) {
 		! unknown word
 		"That is not a verb I recognize.";
+		return 0;
 	}
 
 	_word_data = _verb + DICT_BYTES_FOR_WORD;
@@ -990,6 +1015,7 @@ Array TenSpaces -> "          ";
 		}
 		! not a direction, fail
 		"That is not a verb I recognize.";
+		return 0;
 	}
 
 	! Now it is known word, and it is not a direction, in the first position
@@ -1037,10 +1063,11 @@ Array TenSpaces -> "          ";
 			_pattern_index = _pattern_index + 3;
 			_token = _pattern_index -> 0;
 #IfDef DEBUG;
-			print "TOKEN: ", _token, "^";
+			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 			_token_data = (_pattern_index + 1) --> 0;
 			if(_token == TT_END) {
+				if(IsSentenceDivider(_parse_pointer)) jump parse_success;
 				if(wn == parse_array -> 1) {
 					jump parse_success;
 				}
@@ -1098,8 +1125,11 @@ Array TenSpaces -> "          ";
 				}
 				if(_noun > 0) {
 #IfDef DEBUG;
-					print "Noun match!^";
+					print "Noun match! ", _noun, " ", multiple_objects -> 0, "^";
 #EndIf;
+					wn = wn + multiple_objects->0;
+					_parse_pointer = _parse_pointer + 4 * multiple_objects->0;
+
 					multiple_objects --> 0 = 1; ! TODO only if first position
 					if(_noun_tokens == 0) {
 						noun = _noun;
@@ -1140,10 +1170,12 @@ Array TenSpaces -> "          ";
 	}
 
 	"Sorry, I didn't understand that.";
+	return 0;
 
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
 	PerformPreparedAction();
+	return wn;
 ];
 
 [ ActionPrimitive; indirect(#actions_table-->action); ];
@@ -1421,7 +1453,7 @@ Object DefaultPlayer "you"
    with capacity MAX_CARRIED
 	has concealed;
 
-[ main i;
+[ main _i _j  _sentencelength;
 	print "PunyInform 0.0^^";
 
 	player = DefaultPlayer;
@@ -1433,12 +1465,40 @@ Object DefaultPlayer "you"
 	while(game_state == GS_PLAYING) {
 		status_field_1 = score;
 		status_field_2 = turns;
-		ReadPlayerInput();
-		ParseAndPerformAction();
+		if(parse_array->1 == 0) {
+			ReadPlayerInput();
+		}
+		_sentencelength = ParseAndPerformAction();
+#IfDef DEBUG;
+		print "ParseAndPerformAction returned ", _sentencelength, "^";
+#Endif;
 		if(action >= 0 && meta == false) {
             RunTimersAndDaemons();
             turns++;
         }
+
+		if(parse_array->1 >  _sentencelength + 1) {
+			! the first sentence in the input  has been parsed
+			! and executed. Now remove it from parse_array so that
+			! the next sentence can be parsed
+#IfDef DEBUG;
+			PrintParseArray();
+#Endif;
+			for(_i = 0: _i < _sentencelength: _i++) {
+				for(_j = 0: _j < 4: _j++) {
+					parse_array->(2 + _j + _i * 4) =
+						parse_array->(2 + _j + (_i + _sentencelength + 1) * 4);
+				}
+			}
+			parse_array->1 = parse_array->1 - _sentencelength - 1;
+#IfDef DEBUG;
+			PrintParseArray();
+#Endif;
+			print "^";
+		} else {
+			! the input was just once sentence
+			parse_array->1 = 0;
+		}
 	}
 	if(game_state == GS_QUIT) @quit;
 	if(game_state == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
@@ -1453,10 +1513,10 @@ Object DefaultPlayer "you"
 #IFNOT;
 		read player_input_array parse_array DrawStatusLine;
 #ENDIF;
-		i=parse_array-->1;
-		if (i=='restart') @restart;
-		if (i=='restore') RestoreSub();
-		if (i=='quit') @quit;
+		_i=parse_array-->1;
+		if (_i=='restart') @restart;
+		if (_i=='restore') RestoreSub();
+		if (_i=='quit') @quit;
 	}
 ];
 
