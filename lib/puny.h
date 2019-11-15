@@ -922,7 +922,7 @@ Array TenSpaces -> "          ";
 			_name_array = _obj.&name;
 			_name_array_len = _obj.#name / 2;
 			while(_n < input_words) {
-				if(_current_word == nothing) return -1; ! not in dictionary
+				if(_current_word == nothing) return 0; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
 #IfNot;
