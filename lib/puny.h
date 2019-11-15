@@ -853,6 +853,9 @@ Array TenSpaces -> "          ";
 	parse_array-->(_result + 1) = 0;
 ];
 
+
+#IfDef DEBUG;
+
 [ PrintParseArray _i;
 	print "PARSE_ARRAY: ", parse_array->1, " entries^";
 	for(_i = 0; _i < parse_array -> 1; _i++) {
@@ -863,7 +866,6 @@ Array TenSpaces -> "          ";
 	}
 ];
 
-#IfDef DEBUG;
 [ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
 	! action number is the first two bytes
 	_action_number = p_pattern-->0;
