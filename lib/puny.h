@@ -203,15 +203,6 @@ Include "flags.h";
 
 Include "scope.h";
 
-[ Error p_msg;
-#IfDef DEBUG;
-	"ERROR: ", (string) p_msg, "^";
-#IfNot;
-	"Something went wrong. Error #", p_msg, ".";
-#EndIf;
-];
-
-
 ! ######################### Grammar + Actions
 [ LookSub _obj _ceil _player_parent;
 
@@ -260,12 +251,8 @@ Include "scope.h";
 	}
 ];
 
-! could handle locatisation with constants, but need (string)
-! Constant MSG_AREYOUSUREQUIT = "Are you sure you want to quit? ";
-
 [ QuitSub;
-	! print (string) MSG_AREYOUSUREQUIT;
-	print "Are you sure you want to quit? ";
+	PrintMsg(MSG_AREYOUSUREQUIT);
 	if(YesOrNo()) {
 		game_state = GS_QUIT;
 	}
@@ -352,7 +339,7 @@ Include "scope.h";
 [ GoSub _prop;
 	! when called Directions have been set properly
 	_prop = Directions.selected_dir_prop;
-	if(_prop == 0) return Error("Invalid direction prop in GoSub");
+	if(_prop == 0) return RuntimeError("Invalid direction prop in GoSub");
 	GoDir(_prop);
 	rtrue;
 ];
