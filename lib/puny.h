@@ -870,9 +870,9 @@ Array TenSpaces -> "          ";
 [ PrintParseArray _i;
 	print "PARSE_ARRAY: ", parse_array->1, " entries^";
 	for(_i = 0; _i < parse_array -> 1; _i++) {
-		print _i,
-		" dict ",(parse_array + 2 + _i * 4) --> 0,
-		" len ",(parse_array + 2 + _i * 4) -> 2,
+		print "Word " ,_i,
+		" dict ",((parse_array + 2 + _i * 4) --> 0),
+ 		" len ",(parse_array + 2 + _i * 4) -> 2,
 		" index ",(parse_array + 2 + _i * 4) -> 3, "^";
 	}
 ];
@@ -1481,7 +1481,7 @@ Object DefaultPlayer "you"
 		if(parse_array->1 == 0) {
 			ReadPlayerInput();
 		}
-		_sentencelength = ParseAndPerformAction();
+		_sentencelength = ParseAndPerformAction() + 1;  ! It's more handy to have a value which is one higher, to include the (possible) sentence separator.
 #IfDef DEBUG;
 		print "ParseAndPerformAction returned ", _sentencelength, "^";
 #Endif;
@@ -1490,24 +1490,18 @@ Object DefaultPlayer "you"
             turns++;
         }
 
-		if(parse_array->1 >  _sentencelength + 1) {
+		if(parse_array->1 > _sentencelength) {
 			! the first sentence in the input  has been parsed
 			! and executed. Now remove it from parse_array so that
 			! the next sentence can be parsed
 #IfDef DEBUG;
 			PrintParseArray();
 #Endif;
-			_copylength = _sentencelength * 2 + 1;
-			for(_i = 1, _j = 1 + 2 * (_sentencelength + 1): _i < _copylength: _i++, _j++)
+			_copylength = 2 * parse_array->1 + 1;
+			for(_i = 1, _j = 2 * _sentencelength + 1: _j < _copylength: _i++, _j++)
 				parse_array-->_i = parse_array-->_j;
 
-!			for(_i = 0: _i < _sentencelength: _i++) {
-!				for(_j = 2: _j < 6: _j++) {
-!					parse_array->(_i * 4 + _j) =
-!						parse_array->((_i + _sentencelength + 1) * 4 + _j);
-!				}
-!			}
-			parse_array->1 = parse_array->1 - _sentencelength - 1;
+			parse_array->1 = parse_array->1 - _sentencelength;
 #IfDef DEBUG;
 			PrintParseArray();
 #Endif;
