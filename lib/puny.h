@@ -120,6 +120,7 @@ Global game_state;
 Global wn;
 Global scope_objects;
 Global reverse;
+Global keep_silent;
 #IfV5;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
@@ -271,6 +272,7 @@ Include "scope.h";
 	move noun to player;
 	give noun moved;
 	score = score + 10;
+    if (keep_silent) return;
 	"Taken.";
 ];
 
@@ -283,6 +285,7 @@ Include "scope.h";
 	}
 	if(noun notin player) "You aren't holding that.";
 	move noun to location;
+    if (keep_silent) return;
 	"Dropped.";
 ];
 
@@ -293,6 +296,7 @@ Include "scope.h";
 	}
 	if(noun has open) "It's already open.";
 	give noun open;
+    if (keep_silent) return;
 	"You open ", (the) noun, ".";
 ];
 
@@ -303,6 +307,7 @@ Include "scope.h";
 	}
 	if(noun hasnt open) "It isn't open.";
 	give noun ~open;
+    if (keep_silent) return;
 	"You close ", (the) noun, ".";
 ];
 
@@ -314,6 +319,7 @@ Include "scope.h";
 	if(player in noun) "But you are already there!";
 	if(noun has container && noun hasnt open) "You can't, since it's closed.";
 	PlayerTo(noun);
+    if (keep_silent) return;
 	"You enter ", (the) noun, ".";
 ];
 
@@ -326,6 +332,7 @@ Include "scope.h";
 	}
 	if(noun has container && noun hasnt open) "You can't, since it's closed.";
 	PlayerTo(parent(noun));
+    if (keep_silent) return;
 	"You leave ", (the) noun, ".";
 ];
 
@@ -426,7 +433,7 @@ Include "scope.h";
     if (AtFullCapacity(noun, second)) "There is no more room.";
 
     move noun to second;
-
+    if (keep_silent) return;
     "You put ", (the) noun, " into ", (the) second, ".";
 ];
 
@@ -717,11 +724,15 @@ Array TenSpaces -> "          ";
     if (_k < RunRoutines(p_s, capacity) || (p_s == player && RoomInSack())) rfalse;
 ];
 
-[ RoomInSack _obj;
+[ RoomInSack _obj _ks;
     if (SACK_OBJECT && SACK_OBJECT in player) {
         for (_obj=youngest(player) : _obj : _obj=elder(_obj))
             if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
+                _ks = keep_silent;
+                Keep_silent = 1;
                 PerformAction(##Insert, _obj, SACK_OBJECT);
+                keep_silent = _ks;
+                if (keep_silent) return;
                 if (_obj in SACK_OBJECT) {
                     print "(putting ", (the) _obj, " into ", (the) SACK_OBJECT, " to make room) ";
                     rtrue;
