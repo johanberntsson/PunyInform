@@ -1455,7 +1455,7 @@ Object DefaultPlayer "you"
    with capacity MAX_CARRIED
 	has concealed;
 
-[ main _i _j  _sentencelength;
+[ main _i _j _copylength _sentencelength;
 	print "PunyInform 0.0^^";
 
 	player = DefaultPlayer;
@@ -1486,19 +1486,23 @@ Object DefaultPlayer "you"
 #IfDef DEBUG;
 			PrintParseArray();
 #Endif;
-			for(_i = 0: _i < _sentencelength: _i++) {
-				for(_j = 0: _j < 4: _j++) {
-					parse_array->(2 + _j + _i * 4) =
-						parse_array->(2 + _j + (_i + _sentencelength + 1) * 4);
-				}
-			}
+			_copylength = _sentencelength * 2 + 1;
+			for(_i = 1, _j = 1 + 2 * (_sentencelength + 1): _i < _copylength: _i++, _j++)
+				parse_array-->_i = parse_array-->_j;
+
+!			for(_i = 0: _i < _sentencelength: _i++) {
+!				for(_j = 2: _j < 6: _j++) {
+!					parse_array->(_i * 4 + _j) =
+!						parse_array->((_i + _sentencelength + 1) * 4 + _j);
+!				}
+!			}
 			parse_array->1 = parse_array->1 - _sentencelength - 1;
 #IfDef DEBUG;
 			PrintParseArray();
 #Endif;
 			print "^";
 		} else {
-			! the input was just once sentence
+			! the input was just one sentence
 			parse_array->1 = 0;
 		}
 	}
