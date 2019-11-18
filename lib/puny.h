@@ -1080,7 +1080,10 @@ Array TenSpaces -> "          ";
 #EndIf;
 			_token_data = (_pattern_index + 1) --> 0;
 			if(_token == TT_END) {
-				if(IsSentenceDivider(_parse_pointer)) jump parse_success;
+				if(IsSentenceDivider(_parse_pointer)) {
+					wn++;
+					jump parse_success;
+				}
 				if(wn == parse_array -> 1) {
 					jump parse_success;
 				}
@@ -1466,7 +1469,7 @@ Object DefaultPlayer "you"
    with capacity MAX_CARRIED
 	has concealed;
 
-[ main _i _j _copylength _sentencelength;
+[ main _i _j _copylength _sentencelength _parsearraylength;
 	print "PunyInform 0.0^^";
 
 	player = DefaultPlayer;
@@ -1481,7 +1484,7 @@ Object DefaultPlayer "you"
 		if(parse_array->1 == 0) {
 			ReadPlayerInput();
 		}
-		_sentencelength = ParseAndPerformAction() + 1;  ! It's more handy to have a value which is one higher, to include the (possible) sentence separator.
+		_sentencelength = ParseAndPerformAction();
 #IfDef DEBUG;
 		print "ParseAndPerformAction returned ", _sentencelength, "^";
 #Endif;
@@ -1490,18 +1493,19 @@ Object DefaultPlayer "you"
             turns++;
         }
 
-		if(parse_array->1 > _sentencelength) {
+		_parsearraylength = parse_array->1;
+		if(_parsearraylength > _sentencelength) {
 			! the first sentence in the input  has been parsed
 			! and executed. Now remove it from parse_array so that
 			! the next sentence can be parsed
 #IfDef DEBUG;
 			PrintParseArray();
 #Endif;
-			_copylength = 2 * parse_array->1 + 1;
+			_copylength = 2 * _parsearraylength + 1;
 			for(_i = 1, _j = 2 * _sentencelength + 1: _j < _copylength: _i++, _j++)
 				parse_array-->_i = parse_array-->_j;
 
-			parse_array->1 = parse_array->1 - _sentencelength;
+			parse_array->1 = _parsearraylength - _sentencelength;
 #IfDef DEBUG;
 			PrintParseArray();
 #Endif;
