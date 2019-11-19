@@ -15,7 +15,8 @@ The main goal of PunyInform is to allow for games which are fast and have a smal
 
 ## Status
 
-There is a rudimentary parser in place. The verbs GO, LOOK, EXAMINE, INVENTORY, TAKE, DROP, SAVE, RESTORE, RESTART and QUIT work. 
+There is a rudimentary parser in place. The verbs GO, LOOK, OPEN, CLOSE, ENTER, EXIT, EXAMINE, INVENTORY, TAKE, DROP, SAVE, RESTORE, RESTART and QUIT work. 
 
-PunyInform is far from ready to be used for writing an actual game yet. If you are interested in our progress, please star or follow the project here on Github.
+PunyInform is not ready to be used for writing an actual game yet. If you are interested in our progress, please star or follow the project here on Github.
 
+You can see what tasks we're currently working on, tasks we've done and tasks coming up on our Trello board: https://trello.com/b/mfGVsB4H/punyinform
