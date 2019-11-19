@@ -941,9 +941,7 @@ Array TenSpaces -> "          ";
 	return player_input_array -> (p_parse_pointer -> 3) == '.' && p_parse_pointer -> 2 == 1;
 ];
 
-#IfV5;
 [ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
-#EndIf;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
