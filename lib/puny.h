@@ -551,6 +551,43 @@ Verb meta 'restart'
     return 0;
 ];
 
+[ NextWord _i _j;
+!	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
+!	_i = wn*2-1; wn++;
+	if (wn < 0 || wn >= parse_array->1) { wn++; rfalse; }
+	_i = wn*2+1; wn++;
+	_j = parse_array-->_i;
+!    if (j == ',//') j = comma_word;
+!    if (j == './/') j = THEN1__WD;
+	return _j;
+];
+
+[ NextWordStopped;
+!	if (wn > parse_array->1) { wn++; return -1; }
+	if (wn >= parse_array->1) { wn++; return -1; }
+	return NextWord();
+];
+
+![ WordAddress p_wordnum p_p p_b;  ! Absolute addr of 'wordnum' string in buffer
+!	if (p_p==0) p_p=parse_array;
+!	if (p_b==0) p_b=player_input_array;
+!	return p_b + p_p->(p_wordnum*4+1);
+!];
+[ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
+!	return player_input_array + parse_array->(p_wordnum*4+1);
+	return player_input_array + parse_array->(p_wordnum*4+5);
+];
+
+![ WordLength p_wordnum p_p;     ! Length of 'wordnum' string in buffer
+!	if (p_p==0) p_p=parse_array;
+!	return p_p->(p_wordnum*4);	
+!];
+[ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
+!	return parse_array->(p_wordnum*4);	
+	return parse_array->(p_wordnum*4+4);	
+];
+
+
 #IfV5;
 
 Array cursor_pos --> 2;
@@ -906,8 +943,6 @@ Array TenSpaces -> "          ";
 
 #IfV5;
 [ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
-#IfNot;
-[ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score;
 #EndIf;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
@@ -920,19 +955,31 @@ Array TenSpaces -> "          ";
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
 		_obj = scope-->_i;
+#IfDef DEBUG;
+		print "Testing ", (the) _obj, " _n is ", _n, "...^";
+#EndIf;
 		!   if(_obj == nothing) continue;
 		if(_obj provides parse_name) {
 			_j = wn;
-			_n = wn + PrintOrRun(_obj, parse_name); ! number of words consumed
+			_result = PrintOrRun(_obj, parse_name);
+			_n = _n + _result; ! number of words consumed
 			wn = _j;
-			if(_n == _best_score) {
-				multiple_objects->_matches = _obj;
-				_matches++;
-			}
-			if(_n > _best_score) {
-				_last_match = _obj;
-				_best_score = _n;
-				_matches = 1;
+			if(_n > wn) {
+				if(_n == _best_score) {
+					multiple_objects->_matches = _obj;
+					_matches++;
+#IfDef DEBUG;
+				print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+#EndIf;
+				}
+				if(_n > _best_score) {
+#IfDef DEBUG;
+					print "New best score - matched with parse_name ", _n,"^";
+#EndIf;
+					_last_match = _obj;
+					_best_score = _n;
+					_matches = 1;
+				}
 			}
 		} else if(_obj.#name > 1) {
 			_name_array = _obj.&name;
@@ -949,14 +996,23 @@ Array TenSpaces -> "          ";
 #EndIf;
 				jump not_matched;
 .success;
+#IfDef DEBUG;
+				print " - matched ", (address) _current_word,"^";
+#EndIf;
 				_n++;
 				_p = _p + 4;
 				_current_word = _p-->0;
 				if(_n == _best_score) {
 					multiple_objects->_matches = _obj;
 					_matches++;
+#IfDef DEBUG;
+				print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+#EndIf;
 				}
 				if(_n > _best_score) {
+#IfDef DEBUG;
+				print "New best score ", _n, ". Old score was ", _best_score,". Matches is now 1.^";
+#EndIf;
 					_last_match = _obj;
 					_best_score = _n;
 					_matches = 1;
@@ -968,10 +1024,16 @@ Array TenSpaces -> "          ";
 !   print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
 	if(_matches == 1) {
+#IfDef DEBUG;
+				print "Matched a single object: ", (the) _last_match,"^";
+#EndIf;
 		multiple_objects->0 = _best_score - 1;
 !   parse_pointer = p;
 		return _last_match;
 	}
+#IfDef DEBUG;
+				print "Matches: ", _matches,"^";
+#EndIf;
 	if(_matches > 1) return -_matches;
 	return 0;
 ];
@@ -1007,15 +1069,18 @@ Array TenSpaces -> "          ";
 	UpdateScope(GetVisibilityCeiling(player));
 
 	if(parse_array->1 < 1) {
-		"Come again?";
-		return 0;
+		print "Come again?^";
+		return parse_array->1;
 	}
 
 	_verb = parse_array-->1;
 	if(_verb < (0-->HEADER_DICTIONARY)) {
 		! unknown word
-		"That is not a verb I recognize.";
-		return 0;
+#IfDef DEBUG;
+		print "Case 1, Word ", _verb, "^";
+#EndIf;
+		print "That is not a verb I recognize.^";
+		return parse_array->1;
 	}
 
 	_word_data = _verb + DICT_BYTES_FOR_WORD;
@@ -1027,8 +1092,12 @@ Array TenSpaces -> "          ";
 			<<Go Directions>>;
 		}
 		! not a direction, fail
-		"That is not a verb I recognize.";
-		return 0;
+
+#IfDef DEBUG;
+		print "Case 2, Word ", _verb, " is : ", (address) _verb, "^";
+#EndIf;
+		print "That is not a verb I recognize.^";
+		return parse_array->1;
 	}
 
 	! Now it is known word, and it is not a direction, in the first position
@@ -1137,7 +1206,7 @@ Array TenSpaces -> "          ";
 				_noun = CheckNoun(_parse_pointer);
 				if(_noun < 0) {
 					AskWhichNoun(_parse_pointer --> 0, -_noun);
-					rtrue;
+					return parse_array->1;
 				}
 				if(_noun > 0) {
 #IfDef DEBUG;
@@ -1185,8 +1254,8 @@ Array TenSpaces -> "          ";
 		_pattern = _pattern_index + 1;
 	}
 
-	"Sorry, I didn't understand that.";
-	return 0;
+	print "Sorry, I didn't understand that.^";
+	return parse_array->1;
 
 .parse_success;
 	action = (_pattern --> 0) & $03ff;

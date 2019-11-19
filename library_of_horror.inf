@@ -146,10 +146,17 @@ Book -> GreenBook "green book"
 Book -> PinkBook "pink book"
 	with
 	    parse_name [;
-			if((parse_array+2+4*wn)-->0 == 'pink' &&
-			   (parse_array+2+4*(wn+1))-->0 == 'book') return 2;
-			if((parse_array+2+4*wn)-->0 == 'pink') return 1;
+!			print "Pink word 1: ", (address) NextWord(), "^";
+!			print "Pink word 2: ", (address) NextWord(), "^";
+			if( NextWord() == 'pink') {
+				if( NextWord() == 'book') return 2;
+				return 1;
+			}
 			return 0;
+!			if((parse_array+2+4*wn)-->0 == 'pink' &&
+!			   (parse_array+2+4*(wn+1))-->0 == 'book') return 2;
+!			if((parse_array+2+4*wn)-->0 == 'pink') return 1;
+!			return 0;
 	    ],
 		description "The book is nice and tidy.",
 		;
