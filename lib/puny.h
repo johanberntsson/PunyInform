@@ -1025,7 +1025,7 @@ Array TenSpaces -> "          ";
 #IfDef DEBUG;
 				print "Matched a single object: ", (the) _last_match,"^";
 #EndIf;
-		multiple_objects->0 = _best_score - 2;
+		multiple_objects->0 = _best_score - wn;
 !   parse_pointer = p;
 		return _last_match;
 	}
