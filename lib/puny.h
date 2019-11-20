@@ -163,7 +163,7 @@ Object Directions
 #IfNot;
 		parse_name [_len _i _w;
 #EndIf;
-			_w = (parse_array+2+4*wn)-->0;
+			_w = (parse_array+4*wn-2)-->0;
 			_len = abbr_directions_array-->0;
 #IfV5;
 			_arr = abbr_directions_array + 2;
@@ -552,10 +552,10 @@ Verb meta 'restart'
 ];
 
 [ NextWord _i _j;
-!	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
-!	_i = wn*2-1; wn++;
-	if (wn < 0 || wn >= parse_array->1) { wn++; rfalse; }
-	_i = wn*2+1; wn++;
+	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
+	_i = wn*2-1; wn++;
+!	if (wn < 0 || wn >= parse_array->1) { wn++; rfalse; }
+!	_i = wn*2+1; wn++;
 	_j = parse_array-->_i;
 !    if (j == ',//') j = comma_word;
 !    if (j == './/') j = THEN1__WD;
@@ -563,8 +563,8 @@ Verb meta 'restart'
 ];
 
 [ NextWordStopped;
-!	if (wn > parse_array->1) { wn++; return -1; }
-	if (wn >= parse_array->1) { wn++; return -1; }
+	if (wn > parse_array->1) { wn++; return -1; }
+!	if (wn >= parse_array->1) { wn++; return -1; }
 	return NextWord();
 ];
 
@@ -574,8 +574,8 @@ Verb meta 'restart'
 !	return p_b + p_p->(p_wordnum*4+1);
 !];
 [ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
-!	return player_input_array + parse_array->(p_wordnum*4+1);
-	return player_input_array + parse_array->(p_wordnum*4+5);
+	return player_input_array + parse_array->(p_wordnum*4+1);
+!	return player_input_array + parse_array->(p_wordnum*4+5);
 ];
 
 ![ WordLength p_wordnum p_p;     ! Length of 'wordnum' string in buffer
@@ -583,8 +583,8 @@ Verb meta 'restart'
 !	return p_p->(p_wordnum*4);	
 !];
 [ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
-!	return parse_array->(p_wordnum*4);	
-	return parse_array->(p_wordnum*4+4);	
+	return parse_array->(p_wordnum*4);	
+!	return parse_array->(p_wordnum*4+4);	
 ];
 
 
@@ -967,7 +967,7 @@ Array TenSpaces -> "          ";
 					multiple_objects->_matches = _obj;
 					_matches++;
 #IfDef DEBUG;
-				print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
 				}
 				if(_n > _best_score) {
@@ -983,7 +983,7 @@ Array TenSpaces -> "          ";
 			_name_array = _obj.&name;
 			_name_array_len = _obj.#name / 2;
 
-			while(_n < parse_array -> 1 && IsSentenceDivider(_p) == false) {
+			while(_n <= parse_array->1 && IsSentenceDivider(_p) == false) {
 				if(_current_word == nothing) return 0; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
@@ -1004,12 +1004,12 @@ Array TenSpaces -> "          ";
 					multiple_objects->_matches = _obj;
 					_matches++;
 #IfDef DEBUG;
-				print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
 				}
 				if(_n > _best_score) {
 #IfDef DEBUG;
-				print "New best score ", _n, ". Old score was ", _best_score,". Matches is now 1.^";
+					print "New best score ", _n, ". Old score was ", _best_score,". Matches is now 1.^";
 #EndIf;
 					_last_match = _obj;
 					_best_score = _n;
@@ -1025,7 +1025,7 @@ Array TenSpaces -> "          ";
 #IfDef DEBUG;
 				print "Matched a single object: ", (the) _last_match,"^";
 #EndIf;
-		multiple_objects->0 = _best_score - 1;
+		multiple_objects->0 = _best_score - 2;
 !   parse_pointer = p;
 		return _last_match;
 	}
@@ -1085,7 +1085,7 @@ Array TenSpaces -> "          ";
 	! check if it is a direction
 	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
 		! try a direction instead
-		wn = 0;
+		wn = 1;
 		if(Directions.parse_name()) {
 			<<Go Directions>>;
 		}
@@ -1130,7 +1130,7 @@ Array TenSpaces -> "          ";
 #IfDef DEBUG;
 		print "############ Pattern ",_i," address ", _pattern, "^";
 #EndIf;
-		wn = 1;
+		wn = 2;
 		_parse_pointer = parse_array + 6;
 		_pattern_index = _pattern - 1;
 		_noun_tokens = 0;
@@ -1151,12 +1151,12 @@ Array TenSpaces -> "          ";
 					wn++;
 					jump parse_success;
 				}
-				if(wn == parse_array -> 1) {
+				if(wn == 1 + parse_array->1) {
 					jump parse_success;
 				}
 				break; ! Fail because the grammar line ends here but not the input
 			}
-			if(wn >= parse_array -> 1) { !Fail because input ends here but not the grammar line
+			if(wn >= 1 + parse_array->1) { !Fail because input ends here but not the grammar line
 #IfDef DEBUG;
 				print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
@@ -1258,7 +1258,7 @@ Array TenSpaces -> "          ";
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
 	PerformPreparedAction();
-	return wn;
+	return wn - 1;
 ];
 
 [ ActionPrimitive; indirect(#actions_table-->action); ];
