@@ -551,42 +551,6 @@ Verb meta 'restart'
     return 0;
 ];
 
-[ NextWord _i _j;
-	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
-	_i = wn*2-1; wn++;
-!	if (wn < 0 || wn >= parse_array->1) { wn++; rfalse; }
-!	_i = wn*2+1; wn++;
-	_j = parse_array-->_i;
-!    if (j == ',//') j = comma_word;
-!    if (j == './/') j = THEN1__WD;
-	return _j;
-];
-
-[ NextWordStopped;
-	if (wn > parse_array->1) { wn++; return -1; }
-!	if (wn >= parse_array->1) { wn++; return -1; }
-	return NextWord();
-];
-
-![ WordAddress p_wordnum p_p p_b;  ! Absolute addr of 'wordnum' string in buffer
-!	if (p_p==0) p_p=parse_array;
-!	if (p_b==0) p_b=player_input_array;
-!	return p_b + p_p->(p_wordnum*4+1);
-!];
-[ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
-	return player_input_array + parse_array->(p_wordnum*4+1);
-!	return player_input_array + parse_array->(p_wordnum*4+5);
-];
-
-![ WordLength p_wordnum p_p;     ! Length of 'wordnum' string in buffer
-!	if (p_p==0) p_p=parse_array;
-!	return p_p->(p_wordnum*4);	
-!];
-[ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
-	return parse_array->(p_wordnum*4);	
-!	return parse_array->(p_wordnum*4+4);	
-];
-
 
 #IfV5;
 
@@ -939,6 +903,40 @@ Array TenSpaces -> "          ";
 	! check if current parse_array block, indicated by p_parse_pointer,
 	! is a period or other sentence divider
 	return player_input_array -> (p_parse_pointer -> 3) == '.' && p_parse_pointer -> 2 == 1;
+];
+
+! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to CheckNoun, 
+! since they will typically be called from parse_name routines, which are called from CheckNoun
+
+![ WordAddress p_wordnum p_p p_b;  ! Absolute addr of 'wordnum' string in buffer
+!	if (p_p==0) p_p=parse_array;
+!	if (p_b==0) p_b=player_input_array;
+!	return p_b + p_p->(p_wordnum*4+1);
+!];
+[ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
+	return player_input_array + parse_array->(p_wordnum*4+1);
+];
+
+![ WordLength p_wordnum p_p;     ! Length of 'wordnum' string in buffer
+!	if (p_p==0) p_p=parse_array;
+!	return p_p->(p_wordnum*4);	
+!];
+[ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
+	return parse_array->(p_wordnum*4);	
+];
+
+[ NextWord _i _j;
+	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
+	_i = wn*2-1; wn++;
+	_j = parse_array-->_i;
+!    if (j == ',//') j = comma_word;
+!    if (j == './/') j = THEN1__WD;
+	return _j;
+];
+
+[ NextWordStopped;
+	if (wn > parse_array->1) { wn++; return -1; }
+	return NextWord();
 ];
 
 [ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
