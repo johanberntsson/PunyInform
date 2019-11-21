@@ -899,11 +899,6 @@ Array TenSpaces -> "          ";
 ];
 #EndIf;
 
-[ IsSentenceDivider p_parse_pointer;
-	! check if current parse_array block, indicated by p_parse_pointer,
-	! is a period or other sentence divider
-	return player_input_array -> (p_parse_pointer -> 3) == '.' && p_parse_pointer -> 2 == 1;
-];
 
 ! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to CheckNoun, 
 ! since they will typically be called from parse_name routines, which are called from CheckNoun
@@ -1051,6 +1046,12 @@ Array TenSpaces -> "          ";
 	"?";
 ];
 
+[ IsSentenceDivider p_parse_pointer;
+	! check if current parse_array block, indicated by p_parse_pointer,
+	! is a period or other sentence divider
+	return p_parse_pointer --> 0 == './/';
+];
+
 [ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
 	! returns how many words were used to find a match
 	! taking periods and other sentence breaks into account.
@@ -1061,6 +1062,8 @@ Array TenSpaces -> "          ";
 
 	action = -1;
 	multiple_objects --> 0 = 0;
+	if(IsSentenceDivider(parse_array + 2))
+		return 1;
 
 	UpdateScope(GetVisibilityCeiling(player));
 
@@ -1085,7 +1088,11 @@ Array TenSpaces -> "          ";
 		! try a direction instead
 		wn = 1;
 		if(Directions.parse_name()) {
-			<<Go Directions>>;
+			action = ##Go;
+			noun = Directions;
+			inp1 = Directions;
+			PerformPreparedAction();
+			return 1;
 		}
 		! not a direction, fail
 
@@ -1573,8 +1580,8 @@ Object DefaultPlayer "you"
 			parse_array->1 = _parsearraylength - _sentencelength;
 #IfDef DEBUG;
 			PrintParseArray();
-#Endif;
 			print "^";
+#Endif;
 		} else {
 			! the input was just one sentence
 			parse_array->1 = 0;
