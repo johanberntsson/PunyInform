@@ -1355,10 +1355,10 @@ Array TenSpaces -> "          ";
 		if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
 		else p_obj.time_left = 0;
 	}
-	for (_i=_i + 1: _i < active_timers : _i++)
-		the_timers-->(_i - 1) = the_timers-->_i;
 	if(_i <= current_timer)
 		current_timer--;
+	for (_i=_i + 1: _i < active_timers : _i++)
+		the_timers-->(_i - 1) = the_timers-->_i;
 	active_timers--;
 ];
 
