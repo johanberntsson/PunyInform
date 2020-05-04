@@ -23,6 +23,9 @@ Attribute concealed;
 Attribute moved;
 Attribute visited alias moved;
 Attribute proper;
+Attribute scenery;
+Attribute static;
+Attribute animate;
 Attribute worn;
 
 ! Property name; ! This seems to be hardcoded in the Inform compiler
@@ -30,7 +33,9 @@ Property initial;
 Property description;
 Property short_name;
 Property add_to_scope;
+Property react_after;
 Property react_before;
+Property after;
 Property before;
 Property parse_name;
 Property capacity;
@@ -213,7 +218,7 @@ Object Directions
 			return 0;
 #EndIf;
 		]
-has concealed;
+has scenery;
 
 ! ######################### Include utility files
 
@@ -278,14 +283,27 @@ Include "scope.h";
 	}
 ];
 
-[ TakeSub;
+[ TryToTakeObject item;
+    ! Try to transfer the given item to the player: return false
+    ! if successful, true if unsuccessful, printing a suitable message
+    ! in the latter case.
+    ! People cannot ordinarily be taken.
+    if(item == player) "You are always self-possessed.";
+    if(item has animate) "I don't suppose ", (the) item, " would care for that.";
+	if(item has scenery) "That's hardly portable.";
+	if(item has static) "That's fixed in place.";
 	if(noun in player) "You already have that.";
 	if(IndirectlyContains(noun, player)) "First, you'd have to leave ", (the) noun, ".";
     if(AtFullCapacity(player)) "You are carrying too many things already.";
-    if(noun == Directions) "You can't take that.";
+
 	move noun to player;
 	give noun moved;
-	score = score + 10;
+	rfalse;
+];
+
+[ TakeSub;
+	if(TryToTakeObject(noun) == 1) rtrue;
+	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	"Taken.";
 ];
@@ -293,6 +311,7 @@ Include "scope.h";
 [ DropSub;
 	if(noun notin player) "You aren't holding that.";
 	move noun to location;
+	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	"Dropped.";
 ];
@@ -304,6 +323,7 @@ Include "scope.h";
 	}
 	if(noun has open) "It's already open.";
 	give noun open;
+	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	"You open ", (the) noun, ".";
 ];
@@ -315,6 +335,7 @@ Include "scope.h";
 	}
 	if(noun hasnt open) "It isn't open.";
 	give noun ~open;
+	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	"You close ", (the) noun, ".";
 ];
@@ -327,6 +348,7 @@ Include "scope.h";
 	if(player in noun) "But you are already there!";
 	if(noun has container && noun hasnt open) "You can't, since it's closed.";
 	PlayerTo(noun);
+	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	"You enter ", (the) noun, ".";
 ];
@@ -341,6 +363,7 @@ Include "scope.h";
 	}
 	if(noun has container && noun hasnt open) "You can't, since ",(the) noun, " is closed.";
 	PlayerTo(parent(noun));
+	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	"You leave ", (the) noun, ".";
 ];
@@ -1310,7 +1333,7 @@ Array TenSpaces -> "          ";
 		_addobj = false;
 		switch(multiple_objects_type) {
 		MULTI_TOKEN:
-			_addobj = _obj hasnt concealed;
+			_addobj = _obj hasnt scenery or concealed;
 		MULTIHELD_TOKEN:
 			_addobj = _obj in player;
 		}
@@ -1347,6 +1370,26 @@ Array TenSpaces -> "          ";
 		rtrue;
 	}
 	if(inp1 provides before && RunRoutines(inp1, before)) {
+		rtrue;
+	}
+	rfalse;
+];
+
+[ AfterRoutines _i _obj;
+	! react_after - Loops over the scope to find possible react_before routines
+	! to run in each object, if it's found stop the action by returning true
+	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
+		if (_obj provides react_after) {
+			if(PrintOrRun(_obj, react_after)) {
+				rtrue;
+			}
+		}
+	}
+	if(location provides after && RunRoutines(location, after)) {
+		rtrue;
+	}
+	if(inp1 provides after && RunRoutines(inp1, after)) {
 		rtrue;
 	}
 	rfalse;
@@ -1594,7 +1637,9 @@ Array TenSpaces -> "          ";
 #EndIf;
 
 Object DefaultPlayer "you"
-   with capacity MAX_CARRIED
+	with 
+		name 'me',
+		capacity MAX_CARRIED
 	has concealed;
 
 [ main _i _j _copylength _sentencelength _parsearraylength;

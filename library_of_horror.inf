@@ -47,7 +47,7 @@ Object Library "The Library"
 		s_to CarPark,
 	has light;
 
-Object -> SmallBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
+Object -> LargeBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
 	with
 		short_name "box",
 		name 'box',
@@ -64,7 +64,7 @@ Object -> SmallBox "The box" ! Set the object name to the name we want on the z3
             print "^The box goes BOOM.^";
         ],
 		time_left 0,
-	has container openable enterable;
+	has container openable enterable static;
 
 Book -> -> RedBook "red book"
 	with
@@ -73,7 +73,7 @@ Book -> -> RedBook "red book"
 		description "The book is old and worn.",
 		before [;
  			Take:
- 				if(player in SmallBox) {
+ 				if(player in LargeBox) {
  					"It's too hard to pick it up while inside the box.";	
  				}
 				if(BlueBook in player) {
@@ -97,19 +97,22 @@ Object -> BlueBook "blue book" class Book
 			" is standing on a shelf. Looking at ", (the) self, " makes you dizzy.";
 		],
 		before [;
+            Drop:
+                if (self in player) {
+                   StopDaemon(Self);
+                }
+		],
+		after [;
 			Take: 
 				if(RedBook in player) {
 					print "The red book does not want to be near the blue book and jumps out of your grasp and lands on the floor.^^";
 					move RedBook to location;
                 }
-!                StartDaemon(SmallBox);
+!                StartDaemon(LargeBox);
                 StartDaemon(self);
-                StartTimer(SmallBox, 3);
-				print "The box starts ticking...^";
-            Drop:
-                if (self in player) {
-                   StopDaemon(Self);
-                }
+                StartTimer(LargeBox, 3);
+				print "The blue box starts ticking...^";
+				rtrue; ! stop normal printouts
 		],
 !		description "The book looks new and shiny.",
         daemon [;
@@ -124,12 +127,12 @@ Object -> John "John"
 		name 'john',
 		description "John is the meanest gangster around. Don't mess with him.",
 		react_before [;
-			Take:
-				if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
-					"", (The) John, " says, ~Oh no! That's mine!~^";
-				}
+		Take:
+			if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
+				"", (The) John, " says, ~Oh no! That's mine!~";
+			}
 		],
-	has proper;
+	has proper animate;
 
 Object -> infiniteBag "infinite bag"
 	with
@@ -163,7 +166,7 @@ Book -> PinkBook "pink book"
 
 [Initialise b i;
 !	location = Library;
-	PlayerTo(SmallBox);
+	PlayerTo(LargeBox);
 	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
 	SetFlag(F_PARROT_FED);
 	print "Have set. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
