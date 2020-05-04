@@ -11,6 +11,7 @@ Constant NULL         = $ffff;
 !Constant WORDSIZE 2; ! set by the compiler from Inform 6.30
 
 Constant ALL_WORD     = 'all';
+Constant AND_WORD     = 'and';
 
 Attribute light;
 Attribute supporter;
@@ -133,6 +134,7 @@ Global status_field_2 = 0; ! Must be third global. Is used to show turns or minu
 Global score;
 Global turns;
 Global player;
+Global actor;
 Global action;
 Global meta;      ! if the verb has the meta attribute or not
 Global verb_word;
@@ -178,6 +180,10 @@ Array multiple_objects-->32;  ! holds nouns when multi* grammar used
 
 Array player_input_array->(MAX_INPUT_CHARS + 3);
 Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
+
+! extra arrays to be able to ask for additional info (do you mean X or Y?)
+Array temp_player_input_array->(MAX_INPUT_CHARS + 3);
+Array temp_parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); 
 
 Object Directions
 	with
@@ -866,7 +872,7 @@ Array TenSpaces -> "          ";
 
 ! ######################### Parser
 
-[ ReadPlayerInput _result;
+[ ReadPlayerInput p_player_input_array p_parse_array _result;
 ! #IfV5;
 !   print "Width: ", HDR_SCREENWCHARS->0,"^";
 ! #EndIf;
@@ -875,39 +881,38 @@ Array TenSpaces -> "          ";
 	@buffer_mode 0;
 #EndIf;
 	print "^> ";
-	parse_array->0 = MAX_INPUT_WORDS;
+	p_parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
 	DrawStatusLine();
-	player_input_array->0 = MAX_INPUT_CHARS;
-	player_input_array->1 = 0;
-	@aread player_input_array parse_array -> _result;
+	p_player_input_array->0 = MAX_INPUT_CHARS;
+	p_player_input_array->1 = 0;
+	@aread p_player_input_array p_parse_array -> _result;
 	@buffer_mode 1;
 #IfNot;
-	player_input_array->0 = MAX_INPUT_CHARS - 1;
+	p_player_input_array->0 = MAX_INPUT_CHARS - 1;
 	if(player in location) {
-		@sread player_input_array parse_array;
+		@sread p_player_input_array p_parse_array;
 	} else {
 		_result = location; location = GetVisibilityCeiling(player);
-		@sread player_input_array parse_array;
+		@sread p_player_input_array p_parse_array;
 		location = _result;
 	}
 #EndIf;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
-	_result = 2 * (parse_array -> 1) + 1;
-	parse_array-->_result = 0;
-	parse_array-->(_result + 1) = 0;
+	_result = 2 * (p_parse_array -> 1) + 1;
+	p_parse_array-->_result = 0;
+	p_parse_array-->(_result + 1) = 0;
 ];
-
 
 #IfDef DEBUG;
 
-[ PrintParseArray _i;
-	print "PARSE_ARRAY: ", parse_array->1, " entries^";
-	for(_i = 0; _i < parse_array -> 1; _i++) {
+[ PrintParseArray p_parse_array _i;
+	print "PARSE_ARRAY: ", p_parse_array->1, " entries^";
+	for(_i = 0; _i < p_parse_array -> 1; _i++) {
 		print "Word " ,_i,
-		" dict ",((parse_array + 2 + _i * 4) --> 0),
- 		" len ",(parse_array + 2 + _i * 4) -> 2,
-		" index ",(parse_array + 2 + _i * 4) -> 3, "^";
+		" dict ",((p_parse_array + 2 + _i * 4) --> 0),
+ 		" len ",(p_parse_array + 2 + _i * 4) -> 2,
+		" index ",(p_parse_array + 2 + _i * 4) -> 3, "^";
 	}
 ];
 
@@ -936,19 +941,10 @@ Array TenSpaces -> "          ";
 ! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to CheckNoun, 
 ! since they will typically be called from parse_name routines, which are called from CheckNoun
 
-![ WordAddress p_wordnum p_p p_b;  ! Absolute addr of 'wordnum' string in buffer
-!	if (p_p==0) p_p=parse_array;
-!	if (p_b==0) p_b=player_input_array;
-!	return p_b + p_p->(p_wordnum*4+1);
-!];
 [ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
 	return player_input_array + parse_array->(p_wordnum*4+1);
 ];
 
-![ WordLength p_wordnum p_p;     ! Length of 'wordnum' string in buffer
-!	if (p_p==0) p_p=parse_array;
-!	return p_p->(p_wordnum*4);	
-!];
 [ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
 	return parse_array->(p_wordnum*4);	
 ];
@@ -957,8 +953,6 @@ Array TenSpaces -> "          ";
 	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
 	_i = wn*2-1; wn++;
 	_j = parse_array-->_i;
-!    if (j == ',//') j = comma_word;
-!    if (j == './/') j = THEN1__WD;
 	return _j;
 ];
 
@@ -1098,6 +1092,7 @@ Array TenSpaces -> "          ";
 	if(IsSentenceDivider(parse_array + 2))
 		return 1;
 
+	actor = player;
 	UpdateScope(GetVisibilityCeiling(player));
 
 	if(parse_array->1 < 1) {
@@ -1127,12 +1122,18 @@ Array TenSpaces -> "          ";
 			PerformPreparedAction();
 			return 1;
 		}
-		! not a direction, fail
-
+		! not a direction, check if beginning of a command
+		_noun = CheckNoun(_parse_pointer);
+		if(_noun <= 0) {
+			print "That is not a verb I recognize.^";
+			return parse_array->1; ! skip the rest of the input
+		}
+		print "Trying to talk to to ", (the) _noun, "^";
+		! set actor
+		actor = _noun;
 #IfDef DEBUG;
 		print "Case 2, Word ", _verb, " is : ", (address) _verb, "^";
 #EndIf;
-		print "That is not a verb I recognize.^";
 		return parse_array->1;
 	}
 
@@ -1243,7 +1244,19 @@ Array TenSpaces -> "          ";
 				_noun = CheckNoun(_parse_pointer);
 				if(_noun < 0) {
 					AskWhichNoun(_parse_pointer --> 0, -_noun);
-					return parse_array->1;
+					! read a new line of input
+					ReadPlayerInput(temp_player_input_array, temp_parse_array);
+					! only one noun in the new input?
+					!PrintParseArray(temp_parse_array);
+
+					! completely new input. Copy into normal arrays and reparse
+					_num_patterns = MAX_INPUT_CHARS + 3;
+					for(_i = 0: _i < _num_patterns: _i++)
+						player_input_array->_i = temp_player_input_array->_i;
+					_num_patterns = 2 + 4 * (MAX_INPUT_WORDS + 1); 
+					for(_i = 0: _i < _num_patterns: _i++)
+						parse_array->_i = temp_parse_array->_i;
+					return 0; ! start from the beginning
 				} else if(_noun > 0) {
 #IfDef DEBUG;
 					print "Noun match! ", _noun, " ", which_object -> 0, "^";
@@ -1655,7 +1668,7 @@ Object DefaultPlayer "you"
 		status_field_1 = score;
 		status_field_2 = turns;
 		if(parse_array->1 == 0) {
-			ReadPlayerInput();
+			ReadPlayerInput(player_input_array, parse_array);
 		}
 		_sentencelength = ParseAndPerformAction();
 #IfDef DEBUG;
@@ -1672,7 +1685,7 @@ Object DefaultPlayer "you"
 			! and executed. Now remove it from parse_array so that
 			! the next sentence can be parsed
 #IfDef DEBUG;
-			PrintParseArray();
+			PrintParseArray(parse_array);
 #Endif;
 			_copylength = 2 * _parsearraylength + 1;
 			for(_i = 1, _j = 2 * _sentencelength + 1: _j < _copylength: _i++, _j++)
@@ -1680,7 +1693,7 @@ Object DefaultPlayer "you"
 
 			parse_array->1 = _parsearraylength - _sentencelength;
 #IfDef DEBUG;
-			PrintParseArray();
+			PrintParseArray(parse_array);
 			print "^";
 #Endif;
 		} else {
