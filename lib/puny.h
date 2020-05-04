@@ -1,9 +1,16 @@
+! Puny: implemented a small stdlib and parser for interactive fiction
+! suitable for old-school computers such as the Commodore 64.
+! Designed to be similar, but not identical, to Inform 6.
+
 ! Always use grammar version 2 which is easier to parse and more economical
 ! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
 Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
 Constant NULL         = $ffff;
-!Constant WORDSIZE 2;
+
+!Constant WORDSIZE 2; ! set by the compiler from Inform 6.30
+
+Constant ALL_WORD     = 'all';
 
 Attribute light;
 Attribute supporter;
@@ -66,13 +73,25 @@ Array direction_properties_array table n_to s_to e_to w_to u_to d_to in_to out_t
 Constant HEADER_DICTIONARY   = 4;    ! 2*4 = $8
 Constant HEADER_STATIC_MEM   = 7;    ! 2*7 = $c
 
-Constant TT_NOUN             = 1;    ! one or more words referring to an object
+Constant TT_OBJECT           = 1;    ! one or more words referring to an object
+                                     ! it is one of NOUN_TOKEN etc. below
 Constant TT_PREPOSITION      = 2;    ! e.g. 'into'
 Constant TT_ROUTINE_FILTER   = 3;    ! e.g. noun=CagedCreature
 Constant TT_ATTR_FILTER      = 4;    ! e.g. edible
 Constant TT_SCOPE            = 5;    ! e.g. scope=Spells
 Constant TT_PARSE_ROUTIME    = 6;    ! a parse routine
 Constant TT_END              = 15;   ! End of grammar line
+
+Constant NOUN_TOKEN         = 0;    ! The elementary grammar tokens, and
+Constant HELD_TOKEN         = 1;    ! the numbers compiled by Inform to
+Constant MULTI_TOKEN        = 2;    ! encode them
+Constant MULTIHELD_TOKEN    = 3;
+Constant MULTIEXCEPT_TOKEN  = 4;
+Constant MULTIINSIDE_TOKEN  = 5;
+Constant CREATURE_TOKEN     = 6;
+Constant SPECIAL_TOKEN      = 7;
+Constant NUMBER_TOKEN       = 8;
+Constant TOPIC_TOKEN        = 9;
 
 ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
 Constant TOKEN_SINGLE_PREP   = $42;
@@ -149,7 +168,8 @@ Global current_timer;               ! Index of the timer which is currently bein
 
 #include "messages.h";
 
-Array multiple_objects-->64; ! holds nouns when multi* grammar used
+Array which_object-->10;      ! options for "which do you mean?"
+Array multiple_objects-->32;  ! holds nouns when multi* grammar used
 
 Array player_input_array->(MAX_INPUT_CHARS + 3);
 Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
@@ -192,8 +212,8 @@ Object Directions
 			self.selected_dir_prop = 0;
 			return 0;
 #EndIf;
-		];
-
+		]
+has concealed;
 
 ! ######################### Include utility files
 
@@ -259,16 +279,10 @@ Include "scope.h";
 ];
 
 [ TakeSub;
-
-#ifdef DEBUG;
-    print "Number of nouns ", multiple_objects --> 0, "^";
-#endif;
-    if(multiple_objects --> 0 > 1) {
-		"Get all or multiple objects is not yet supported.";
-	}
 	if(noun in player) "You already have that.";
 	if(IndirectlyContains(noun, player)) "First, you'd have to leave ", (the) noun, ".";
-    if (AtFullCapacity(player)) "You are carrying too many things already.";
+    if(AtFullCapacity(player)) "You are carrying too many things already.";
+    if(noun == Directions) "You can't take that.";
 	move noun to player;
 	give noun moved;
 	score = score + 10;
@@ -277,12 +291,6 @@ Include "scope.h";
 ];
 
 [ DropSub;
-#ifdef DEBUG;
-    print "Number of nouns ", multiple_objects --> 0, "^";
-#endif;
-    if(multiple_objects --> 0 > 1) {
-		"Drop all or multiple objects is not yet supported.";
-	}
 	if(noun notin player) "You aren't holding that.";
 	move noun to location;
     if (keep_silent) return;
@@ -324,13 +332,14 @@ Include "scope.h";
 ];
 
 [ ExitSub;
+	if(noun == 0) noun = parent(player);
 	if(player in location) "But you aren't in anything at the moment!";
 	if(player notin noun) {
-	if(IndirectlyContains(noun, player)) "First you have to leave ", (the) parent(player),".";
-	if(noun has supporter) "You aren't on that.";
-		"You aren't in that.";
+		if(IndirectlyContains(noun, player)) "First you have to leave ", (the) parent(player),".";
+		if(noun has supporter) "You aren't on that.";
+			"You aren't in that.";
 	}
-	if(noun has container && noun hasnt open) "You can't, since it's closed.";
+	if(noun has container && noun hasnt open) "You can't, since ",(the) noun, " is closed.";
 	PlayerTo(parent(noun));
     if (keep_silent) return;
 	"You leave ", (the) noun, ".";
@@ -451,6 +460,7 @@ Verb 'close'
 	* noun -> Close;
 
 Verb 'take' 'get'
+	* 'up' -> Exit
 	* multi -> Take;
 
 Verb 'drop'
@@ -938,7 +948,7 @@ Array TenSpaces -> "          ";
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
-	! side effect: multiple_objects
+	! side effect: which_object
 	!              - stores all matching nouns if more than one
 	!              - stores number of words consumed if single match 
 	for(_i = 0: _i < scope_objects: _i++) {
@@ -957,7 +967,7 @@ Array TenSpaces -> "          ";
 			wn = _j;
 			if(_n > wn) {
 				if(_n == _best_score) {
-					multiple_objects->_matches = _obj;
+					which_object->_matches = _obj;
 					_matches++;
 #IfDef DEBUG;
 					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
@@ -994,7 +1004,7 @@ Array TenSpaces -> "          ";
 				_p = _p + 4;
 				_current_word = _p-->0;
 				if(_n == _best_score) {
-					multiple_objects->_matches = _obj;
+					which_object->_matches = _obj;
 					_matches++;
 #IfDef DEBUG;
 					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
@@ -1018,7 +1028,7 @@ Array TenSpaces -> "          ";
 #IfDef DEBUG;
 				print "Matched a single object: ", (the) _last_match,"^";
 #EndIf;
-		multiple_objects->0 = _best_score - wn;
+		which_object->0 = _best_score - wn;
 !   parse_pointer = p;
 		return _last_match;
 	}
@@ -1033,14 +1043,14 @@ Array TenSpaces -> "          ";
 	print "Which ", (address) p_noun_name, " do you mean? ";
 	for(_i = 1 : _i < p_num_matching_nouns : _i++) {
 		if(_i == 1) {
-			print (The) multiple_objects->_i;
+			print (The) which_object->_i;
 		} else {
 			if (_i == p_num_matching_nouns - 1) {
 				print " or ";
 			} else {
 				print ", ";
 			}
-			print (the) multiple_objects->_i;
+			print (the) which_object->_i;
 		}
 	}
 	"?";
@@ -1061,7 +1071,7 @@ Array TenSpaces -> "          ";
 	! the whole input is matched and 2 returned.
 
 	action = -1;
-	multiple_objects --> 0 = 0;
+	which_object --> 0 = 0;
 	if(IsSentenceDivider(parse_array + 2))
 		return 1;
 
@@ -1143,14 +1153,16 @@ Array TenSpaces -> "          ";
 		second = 0;
 		inp1 = 0;
 		inp2 = 0;
+		multiple_objects --> 0 = 0;
 
 		while(true) {
 			_pattern_index = _pattern_index + 3;
-			_token = _pattern_index -> 0;
+			_token = (_pattern_index -> 0) & $$1111;
 #IfDef DEBUG;
 			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 			_token_data = (_pattern_index + 1) --> 0;
+
 			if(_token == TT_END) {
 				if(IsSentenceDivider(_parse_pointer)) {
 					wn++;
@@ -1195,30 +1207,28 @@ Array TenSpaces -> "          ";
 #EndIf;
 				if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
-			} else if(_token_type == TT_NOUN || _token_type == TT_ROUTINE_FILTER ) {
-				! normally we expect a noun here, but multiple nouns
+			} else if(_token_type == TT_OBJECT || _token_type == TT_ROUTINE_FILTER ) {
+				! normally we expect a noun here, but several 
 				! are possible if _token_data is multi or similar
 				!
 				! check all objects in 'scope', and see if any match.
 				! If so, update wn and parse_pointer, update noun
 				! and second, and return success.
 				! 
-				! In case of multiple matches the multiple_objects array
+				! In case of more than one match the which_object array
 				! contains all matched nouns.
-				!
 				_noun = CheckNoun(_parse_pointer);
 				if(_noun < 0) {
 					AskWhichNoun(_parse_pointer --> 0, -_noun);
 					return parse_array->1;
-				}
-				if(_noun > 0) {
+				} else if(_noun > 0) {
 #IfDef DEBUG;
-					print "Noun match! ", _noun, " ", multiple_objects -> 0, "^";
+					print "Noun match! ", _noun, " ", which_object -> 0, "^";
 #EndIf;
-					wn = wn + multiple_objects->0;
-					_parse_pointer = _parse_pointer + 4 * multiple_objects->0;
+					wn = wn + which_object->0;
+					_parse_pointer = _parse_pointer + 4 * which_object->0;
 
-					multiple_objects --> 0 = 1; ! TODO only if first position
+					which_object --> 0 = 1; ! TODO only if first position
 					if(_noun_tokens == 0) {
 						noun = _noun;
 						inp1 = _noun;
@@ -1232,10 +1242,20 @@ Array TenSpaces -> "          ";
 						!print "calling filter: ", _token_data, "^";
 						if(_token_data() == false) break;
 					}
-					if(_token_data ~= 0) {
-						!multiple_objects --> 0 = 2; ! testing only
+					continue;
+				} else if(_parse_pointer-->0 == ALL_WORD) {
+					! take all etc. Add all reasonable objects
+					! in scope to the multiple_objects array
+					wn = wn + 1; ! absorb "all"
+					AddMultipleNouns(_token_data);
+					if(multiple_objects --> 0 == 0) {
+						print "Nothing to do!^";
+						return wn;
 					}
 					continue;
+				} else {
+					! this is not a recognized word at all
+					break;
 				}
 #IfDef DEBUG;
 				print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
@@ -1262,8 +1282,44 @@ Array TenSpaces -> "          ";
 
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
-	PerformPreparedAction();
+
+	if(multiple_objects --> 0 == 0) {
+		! single action
+		PerformPreparedAction();
+	} else {
+		! multiple action
+		! (a) check the multiple list isn't empty;
+		! (b) warn the player if it has been cut short because too long;
+		! (c) generate a sequence of actions from the list
+		!     (stopping in the event of death or movement away).
+		for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
+			inp1 = multiple_objects --> _noun;
+			noun = inp1;
+			print (name) noun, ": ";
+			PerformPreparedAction();
+		}
+	}
+.parse_end;
 	return wn - 1;
+];
+
+[ AddMultipleNouns multiple_objects_type   _i _addobj _obj;
+	multiple_objects --> 0 = 0;
+	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
+		_addobj = false;
+		switch(multiple_objects_type) {
+		MULTI_TOKEN:
+			_addobj = _obj hasnt concealed;
+		MULTIHELD_TOKEN:
+			_addobj = _obj in player;
+		}
+		if(_addobj) {
+			multiple_objects --> 0 = 1 + (multiple_objects --> 0);
+			multiple_objects --> (multiple_objects --> 0) = _obj;
+			!print "Adding ", (name) _obj, "^";
+		}
+	}
 ];
 
 [ ActionPrimitive; indirect(#actions_table-->action); ];
@@ -1610,3 +1666,4 @@ Object DefaultPlayer "you"
 ! todo: This has to be at the end of the file in case no DeathMessage was
 ! defined. Do we need to specify two includes (puny_begin.h and puny_end.h)?
 #Stub DeathMessage      0;
+
