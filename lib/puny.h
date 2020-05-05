@@ -12,6 +12,8 @@ Constant NULL         = $ffff;
 
 Constant ALL_WORD     = 'all';
 Constant AND_WORD     = 'and';
+Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
+                                   ! for commas in parse buffers
 
 Attribute light;
 Attribute supporter;
@@ -28,6 +30,11 @@ Attribute scenery;
 Attribute static;
 Attribute animate;
 Attribute worn;
+
+! when you order a NPC, but the command isn't understood
+! See: http://www.inform-fiction.org/manual/html/s18.html
+Fake_Action Order; 
+Fake_Action NotUnderstood; 
 
 ! Property name; ! This seems to be hardcoded in the Inform compiler
 Property initial;
@@ -138,6 +145,7 @@ Global actor;
 Global action;
 Global meta;      ! if the verb has the meta attribute or not
 Global verb_word;
+Global verb_wordnum;
 Global noun;
 Global second;
 Global inp1;
@@ -147,6 +155,9 @@ Global wn;
 Global scope_objects;
 Global reverse;
 Global keep_silent;
+Global reason_code;                 ! Reason for calling a "life" rule
+Global consult_from;                ! Word that a "consult" topic starts on
+Global consult_words;               ! ...and number of words in topic
 #IfV5;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
@@ -275,8 +286,7 @@ Include "scope.h";
 
 [ ExamineSub;
 	if(noun provides description) {
-		!   print "Has desc...";
-	PrintOrRun(noun, description);
+		PrintOrRun(noun, description);
 	} else {
 		"There is nothing special about ", (the) noun, ".";
 	}
@@ -346,6 +356,40 @@ Include "scope.h";
 	"You close ", (the) noun, ".";
 ];
 
+[ ShowSub;
+    if (parent(noun) ~= player) "You aren't holding ", (the) noun, ".";
+    if (second == player) <<Examine noun>>;
+    if (RunLife(second, ##Show) ~= 0) rfalse;
+    print_ret (The) second, " is unimpressed.";
+];
+
+[ GiveSub;
+    if (parent(noun) ~= player) "You aren't holding ", (the) noun, ".";
+    if (second == player)  return "You already have it.";
+    if (RunLife(second, ##Give) ~= 0) rfalse;
+    print_ret (The) second, " doesn't seem interested.";
+];
+
+[ AskSub;
+    if (RunLife(noun,##Ask) ~= 0) rfalse;
+    "There is no reply.";
+];
+
+[ AskForSub;
+    if (noun == player) <<Inventory>>;
+    print_ret (The) noun, " has better things to do.";
+];
+
+[ AskToSub;
+    print_ret (The) noun, " has better things to do.";
+];
+
+[ TellSub;
+    if (noun == player) "You talk to yourself a while.";
+    if (RunLife(noun, ##Tell) ~= 0) rfalse;
+    "This provokes no reaction.";
+];
+
 [ EnterSub;
 	if(noun hasnt enterable) {
 		PrintMsg(MSG_YOU_CANT_VERB_THAT);
@@ -372,6 +416,11 @@ Include "scope.h";
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	"You leave ", (the) noun, ".";
+];
+
+[ AnswerSub;
+    if (second ~= 0 && RunLife(second,##Answer) ~= 0) rfalse;
+    "There is no reply";
 ];
 
 [ InventorySub;
@@ -478,6 +527,9 @@ Include "scope.h";
 Verb 'i' 'inventory'
 	* -> Inventory;
 
+Verb 'answer' 'say' 'shout' 'speak'
+    * topic 'to' creature -> Answer;
+
 Verb 'look' 'l'
 	* -> Look
 	* 'at' noun -> Examine;
@@ -485,11 +537,33 @@ Verb 'look' 'l'
 Verb 'open'
 	* noun -> Open;
 
+Verb 'show' 'display' 'present'
+	* creature held                             -> Show reverse
+	* held 'to' creature                        -> Show;
+
+Verb 'give' 'feed' 'offer' 'pay'
+	* held 'to' creature                        -> Give
+	* creature held                             -> Give reverse
+	* 'over' held 'to' creature                 -> Give;
+
+Verb 'ask'
+	* creature 'about' topic                    -> Ask
+	* creature 'for' noun                       -> AskFor
+	* creature 'to' topic                       -> AskTo
+	* 'that' creature topic                     -> AskTo;
+
+Verb 'tell'
+	* creature 'about' topic                    -> Tell
+	* creature 'to' topic                       -> AskTo;
+
 Verb 'close'
 	* noun -> Close;
 
-Verb 'take' 'get'
+Verb 'get'
 	* 'up' -> Exit
+	* 'out' -> Exit
+	* multi -> Take;
+Verb 'take'
 	* multi -> Take;
 
 Verb 'drop'
@@ -953,6 +1027,8 @@ Array TenSpaces -> "          ";
 	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
 	_i = wn*2-1; wn++;
 	_j = parse_array-->_i;
+	if (_j == ',//') _j = comma_word;
+!	if (_j == './/') _j = THEN1__WD;
 	return _j;
 ];
 
@@ -965,9 +1041,10 @@ Array TenSpaces -> "          ";
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
-	! side effect: which_object
-	!              - stores all matching nouns if more than one
-	!              - stores number of words consumed if single match 
+	! side effects: 
+	!   which_object
+	!     - stores all matching nouns if more than one
+	!     - stores number of words consumed if single match 
 	for(_i = 0: _i < scope_objects: _i++) {
 		_n = wn;
 		_p = p_parse_pointer;
@@ -1042,11 +1119,11 @@ Array TenSpaces -> "          ";
 !   print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
 	if(_matches == 1) {
-#IfDef DEBUG;
-				print "Matched a single object: ", (the) _last_match,"^";
-#EndIf;
 		which_object->0 = _best_score - wn;
-!   parse_pointer = p;
+#IfDef DEBUG;
+		print "Matched a single object: ", (the) _last_match,
+			", len ", which_object->0, "^";
+#EndIf;
 		return _last_match;
 	}
 #IfDef DEBUG;
@@ -1080,7 +1157,10 @@ Array TenSpaces -> "          ";
 ];
 
 [ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
-	! returns how many words were used to find a match
+	! returns
+	! -n: if <n> words were used to find a match,
+	! true (1): if error was found (so can't abort with "error...")
+	!
 	! taking periods and other sentence breaks into account.
 	! For example, if the input is "l.l" then the parser
 	! will stop after the first "l" has been mached, and
@@ -1090,51 +1170,61 @@ Array TenSpaces -> "          ";
 	action = -1;
 	which_object --> 0 = 0;
 	if(IsSentenceDivider(parse_array + 2))
-		return 1;
+		return -1;
 
 	actor = player;
 	UpdateScope(GetVisibilityCeiling(player));
 
 	if(parse_array->1 < 1) {
-		print "Come again?^";
-		return parse_array->1;
+		"Come again?^";
 	}
 
-	_verb = parse_array-->1;
+	verb_wordnum = 1;
+
+.reparse;
+	_verb = (parse_array + 2 + 4 * (verb_wordnum - 1)) --> 0;
 	if(_verb < (0-->HEADER_DICTIONARY)) {
 		! unknown word
 #IfDef DEBUG;
 		print "Case 1, Word ", _verb, "^";
 #EndIf;
-		print "That is not a verb I recognize.^";
-		return parse_array->1;
+		print "I don't understand that word.^";
 	}
 
 	_word_data = _verb + DICT_BYTES_FOR_WORD;
 	! check if it is a direction
 	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
 		! try a direction instead
-		wn = 1;
+		wn = verb_wordnum;
 		if(Directions.parse_name()) {
 			action = ##Go;
 			noun = Directions;
 			inp1 = Directions;
 			PerformPreparedAction();
-			return 1;
+			return -1;
 		}
 		! not a direction, check if beginning of a command
-		_noun = CheckNoun(_parse_pointer);
-		if(_noun <= 0) {
-			print "That is not a verb I recognize.^";
-			return parse_array->1; ! skip the rest of the input
+		_noun = CheckNoun(parse_array+2);
+		if(_noun > 0) {
+			! The sentence starts with a noun, now 
+			! check if comma afterwards
+			wn = wn + which_object->0;
+			_pattern = NextWord();
+			if(_pattern == comma_word) {
+				jump conversation;
+			}
 		}
-		print "Trying to talk to to ", (the) _noun, "^";
+		"That is not a verb I recognize.";
+.conversation;
+		if(_noun hasnt animate) {
+			"You can't talk to ", (the) _noun, ".";
+		}
+		! See http://www.inform-fiction.org/manual/html/s18.html
 		! set actor
 		actor = _noun;
-#IfDef DEBUG;
-		print "Case 2, Word ", _verb, " is : ", (address) _verb, "^";
-#EndIf;
-		return parse_array->1;
+		!print "Trying to talk to to ", (the) _noun, ".^";
+		verb_wordnum = wn;
+		jump reparse;
 	}
 
 	! Now it is known word, and it is not a direction, in the first position
@@ -1169,8 +1259,8 @@ Array TenSpaces -> "          ";
 #IfDef DEBUG;
 		print "############ Pattern ",_i," address ", _pattern, "^";
 #EndIf;
-		wn = 2;
-		_parse_pointer = parse_array + 6;
+		wn = verb_wordnum + 1;
+		_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
 		_pattern_index = _pattern - 1;
 		_noun_tokens = 0;
 		noun = 0;
@@ -1286,7 +1376,7 @@ Array TenSpaces -> "          ";
 					AddMultipleNouns(_token_data);
 					if(multiple_objects --> 0 == 0) {
 						print "Nothing to do!^";
-						return wn;
+						return -wn;
 					}
 					continue;
 				} else {
@@ -1313,11 +1403,35 @@ Array TenSpaces -> "          ";
 		_pattern = _pattern_index + 1;
 	}
 
-	print "Sorry, I didn't understand that.^";
-	return parse_array->1;
+	"Sorry, I didn't understand that.^";
 
 .parse_success;
 	action = (_pattern --> 0) & $03ff;
+
+	if(actor ~= player) {
+		! The player's "orders" property can refuse to allow conversation
+		! here, by returning true.  If not, the order is sent to the
+		! other person's "orders" property.  If that also returns false,
+		! then: if it was a misunderstood command anyway, it is converted
+		! to an Answer action (thus "floyd, grrr" ends up as
+		! "say grrr to floyd").  If it was a good command, it is finally
+		! offered to the Order: part of the other person's "life"
+		! property, the old-fashioned way of dealing with conversation.
+		_i = RunRoutines(player, orders);
+		if (_i == 0) {
+			_i = RunRoutines(actor, orders);
+			if (_i == 0) {
+				if(action == ##NotUnderstood) {
+					_pattern-->3 = actor; actor = player; action = ##Answer;
+					jump parse_success;
+				}
+				if(RunLife(actor, ##Order) == 0) {
+					print_ret (The) actor, " has better things to do.";
+				}
+			}
+		}
+		rfalse;
+	}
 
 	if(multiple_objects --> 0 == 0) {
 		! single action
@@ -1335,8 +1449,7 @@ Array TenSpaces -> "          ";
 			PerformPreparedAction();
 		}
 	}
-.parse_end;
-	return wn - 1;
+	return -(wn - 1);
 ];
 
 [ AddMultipleNouns multiple_objects_type   _i _addobj _obj;
@@ -1406,6 +1519,12 @@ Array TenSpaces -> "          ";
 		rtrue;
 	}
 	rfalse;
+];
+
+[ RunLife p_actor p_reason;
+print "actor ", (the) p_actor, "^";
+	reason_code = p_reason; ! TODO: remove reason_code?
+    return RunRoutines(p_actor,life);
 ];
 
 [ PerformAction p_action p_noun p_second _sa _sn _ss;
@@ -1650,10 +1769,23 @@ Array TenSpaces -> "          ";
 #EndIf;
 
 Object DefaultPlayer "you"
-	with 
+	with
 		name 'me',
-		capacity MAX_CARRIED
-	has concealed;
+		short_name  "yourself",
+		description "As good-looking as ever.",
+		before NULL,
+		after NULL,
+		life NULL,
+		each_turn NULL,
+		time_out NULL,
+		describe NULL,
+		add_to_scope 0,
+		capacity MAX_CARRIED,
+		!parse_name 0, ! TODO: uncommenting causes error (open box)
+		orders 0,
+		number 0,
+		before_implicit NULL,
+	has concealed animate proper transparent;
 
 [ main _i _j _copylength _sentencelength _parsearraylength;
 	print "PunyInform 0.0^^";
@@ -1671,6 +1803,8 @@ Object DefaultPlayer "you"
 			ReadPlayerInput(player_input_array, parse_array);
 		}
 		_sentencelength = ParseAndPerformAction();
+		if(_sentencelength < 0) _sentencelength = -_sentencelength;
+		else _sentencelength = parse_array->1;
 #IfDef DEBUG;
 		print "ParseAndPerformAction returned ", _sentencelength, "^";
 #Endif;

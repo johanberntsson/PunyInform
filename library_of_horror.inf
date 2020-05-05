@@ -127,10 +127,36 @@ Object -> John "John"
 		name 'john',
 		description "John is the meanest gangster around. Don't mess with him.",
 		react_before [;
-		Take:
-			if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
-				"", (The) John, " says, ~Oh no! That's mine!~";
-			}
+			Take:
+				if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
+					print_ret (The) John, " says, ~Oh no! That's mine!~";
+				}
+		],
+		orders [;
+			Go: "~I must not leave this room.~";
+			NotUnderstood: "~You speak in riddles.~";
+			default: "~I don't take orders from you.~";
+		],
+		xxxlife [c w1 w2;
+		! Attack Kiss WakeOther ThrowAt Give Show Ask Tell Answer Order
+		Order:
+			print "hello^";
+			if(action==##Take) "~I don't need more possessions.~";
+			"John ignores your comment.";
+		Show, Give:
+			consult_words=0;
+			if(noun==LargeBox) <<Ask self LargeBox>>;
+			"John doesn't appear to be interested.";
+		Ask, Tell, Answer:
+			w1=0;
+			w2=0;
+			wn=consult_from; c=consult_words; if(c>0) w1=NextWord();
+			if(w1=='the') { c=c-1; if(c>0) w1=NextWord(); }
+			if(c>1) w2=NextWord();
+			if(c>2) "What you cannot say in few words, probably isn't worth saying.";
+
+			if(w1=='help') "'I will help you, if you tell me how.'";
+			"John ignores your question.";
 		],
 	has proper animate;
 
@@ -165,8 +191,8 @@ Book -> PinkBook "pink book"
 		;
 
 [Initialise b i;
-!	location = Library;
-	PlayerTo(LargeBox);
+	location = Library;
+!	PlayerTo(LargeBox);
 	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
 	SetFlag(F_PARROT_FED);
 	print "Have set. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
