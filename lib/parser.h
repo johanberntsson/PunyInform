@@ -1,0 +1,526 @@
+! ######################### Parser
+
+[ ReadPlayerInput p_player_input_array p_parse_array _result;
+! #IfV5;
+!   print "Width: ", HDR_SCREENWCHARS->0,"^";
+! #EndIf;
+#IfV5;
+	style roman;
+	@buffer_mode 0;
+#EndIf;
+	print "^> ";
+	p_parse_array->0 = MAX_INPUT_WORDS;
+#IfV5;
+	DrawStatusLine();
+	p_player_input_array->0 = MAX_INPUT_CHARS;
+	p_player_input_array->1 = 0;
+	@aread p_player_input_array p_parse_array -> _result;
+	@buffer_mode 1;
+#IfNot;
+	p_player_input_array->0 = MAX_INPUT_CHARS - 1;
+	if(player in location) {
+		@sread p_player_input_array p_parse_array;
+	} else {
+		_result = location; location = GetVisibilityCeiling(player);
+		@sread p_player_input_array p_parse_array;
+		location = _result;
+	}
+#EndIf;
+	! Set word after last word in parse array to all zeroes, so it won't match any words.
+	_result = 2 * (p_parse_array -> 1) + 1;
+	p_parse_array-->_result = 0;
+	p_parse_array-->(_result + 1) = 0;
+];
+
+#IfDef DEBUG;
+
+[ PrintParseArray p_parse_array _i;
+	print "PARSE_ARRAY: ", p_parse_array->1, " entries^";
+	for(_i = 0; _i < p_parse_array -> 1; _i++) {
+		print "Word " ,_i,
+		" dict ",((p_parse_array + 2 + _i * 4) --> 0),
+ 		" len ",(p_parse_array + 2 + _i * 4) -> 2,
+		" index ",(p_parse_array + 2 + _i * 4) -> 3, "^";
+	}
+];
+
+[ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
+	! action number is the first two bytes
+	_action_number = p_pattern-->0;
+	p_pattern = p_pattern + 2;
+	action = _action_number & $3ff;
+	reverse = (_action_number & $400 ~= 0);
+	print "Action#: ", action, " Reverse: ", reverse, "^";
+
+	for(_i = 0: : _i++) {
+		if(p_pattern->0 == TT_END) break;
+		_token_top = (p_pattern->0 & $c0)/64; ! top (2 bits)
+		_token_next = (p_pattern->0 & $30)/16;  ! next (2 bits)
+		_token_bottom = p_pattern->0 & $0f; ! bottom (4 bits)
+		print "Token#: ", _i, " Type: ", p_pattern->0, " (top ", _token_top, ", next ",_token_next, ", bottom ",_token_bottom, ") Next byte: ",(p_pattern + 1)-->0,"^";
+		p_pattern = p_pattern + 3;
+	}
+	! print ": ", i, " tokens^";
+	return p_pattern + 1; ! skip TT_END
+];
+#EndIf;
+
+
+! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to CheckNoun, 
+! since they will typically be called from parse_name routines, which are called from CheckNoun
+
+[ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
+	return player_input_array + parse_array->(p_wordnum*4+1);
+];
+
+[ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
+	return parse_array->(p_wordnum*4);	
+];
+
+[ NextWord _i _j;
+	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
+	_i = wn*2-1; wn++;
+	_j = parse_array-->_i;
+	if (_j == ',//') _j = comma_word;
+!	if (_j == './/') _j = THEN1__WD;
+	return _j;
+];
+
+[ NextWordStopped;
+	if (wn > parse_array->1) { wn++; return -1; }
+	return NextWord();
+];
+
+[ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+	! return 0 if no noun matches
+	! return -n if more n matches found (n > 1)
+	! else return object number
+	! side effects: 
+	!   which_object
+	!     - stores all matching nouns if more than one
+	!     - stores number of words consumed if single match 
+	for(_i = 0: _i < scope_objects: _i++) {
+		_n = wn;
+		_p = p_parse_pointer;
+		_current_word = p_parse_pointer-->0;
+		_obj = scope-->_i;
+#IfDef DEBUG;
+		print "Testing ", (the) _obj, " _n is ", _n, "...^";
+#EndIf;
+		!   if(_obj == nothing) continue;
+		if(_obj provides parse_name) {
+			_j = wn;
+			_result = PrintOrRun(_obj, parse_name);
+			_n = _n + _result; ! number of words consumed
+			wn = _j;
+			if(_n > wn) {
+				if(_n == _best_score) {
+					which_object->_matches = _obj;
+					_matches++;
+#IfDef DEBUG;
+					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+#EndIf;
+				}
+				if(_n > _best_score) {
+#IfDef DEBUG;
+					print "New best score - matched with parse_name ", _n,"^";
+#EndIf;
+					_last_match = _obj;
+					_best_score = _n;
+					_matches = 1;
+				}
+			}
+		} else if(_obj.#name > 1) {
+			_name_array = _obj.&name;
+			_name_array_len = _obj.#name / 2;
+
+			while(_n <= parse_array->1 && IsSentenceDivider(_p) == false) {
+				if(_current_word == nothing) return 0; ! not in dictionary
+#IfV5;
+				@scan_table _current_word _name_array _name_array_len -> _result ?success;
+#IfNot;
+				for(_j = 0: _j < _name_array_len: _j++) {
+					if(_name_array-->_j == _current_word) jump success;
+				}
+#EndIf;
+				jump not_matched;
+.success;
+#IfDef DEBUG;
+				print " - matched ", (address) _current_word,"^";
+#EndIf;
+				_n++;
+				_p = _p + 4;
+				_current_word = _p-->0;
+				if(_n == _best_score) {
+					which_object->_matches = _obj;
+					_matches++;
+#IfDef DEBUG;
+					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+#EndIf;
+				}
+				if(_n > _best_score) {
+#IfDef DEBUG;
+					print "New best score ", _n, ". Old score was ", _best_score,". Matches is now 1.^";
+#EndIf;
+					_last_match = _obj;
+					_best_score = _n;
+					_matches = 1;
+				}
+			}
+		}
+.not_matched;
+
+!   print "checking ", _obj.&name-->0, " ", _current_word, "^";
+	}
+	if(_matches == 1) {
+		which_object->0 = _best_score - wn;
+#IfDef DEBUG;
+		print "Matched a single object: ", (the) _last_match,
+			", len ", which_object->0, "^";
+#EndIf;
+		return _last_match;
+	}
+#IfDef DEBUG;
+				print "Matches: ", _matches,"^";
+#EndIf;
+	if(_matches > 1) return -_matches;
+	return 0;
+];
+
+[ AskWhichNoun p_noun_name p_num_matching_nouns _i;
+	print "Which ", (address) p_noun_name, " do you mean? ";
+	for(_i = 1 : _i < p_num_matching_nouns : _i++) {
+		if(_i == 1) {
+			print (The) which_object->_i;
+		} else {
+			if (_i == p_num_matching_nouns - 1) {
+				print " or ";
+			} else {
+				print ", ";
+			}
+			print (the) which_object->_i;
+		}
+	}
+	"?";
+];
+
+[ IsSentenceDivider p_parse_pointer;
+	! check if current parse_array block, indicated by p_parse_pointer,
+	! is a period or other sentence divider
+	return p_parse_pointer --> 0 == './/';
+];
+
+[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
+	! returns
+	! -n: if <n> words were used to find a match,
+	! true (1): if error was found (so can't abort with "error...")
+	!
+	! taking periods and other sentence breaks into account.
+	! For example, if the input is "l.l" then the parser
+	! will stop after the first "l" has been mached, and
+	! 1 is returned. If the input is "open box" then
+	! the whole input is matched and 2 returned.
+
+	action = -1;
+	which_object --> 0 = 0;
+	if(IsSentenceDivider(parse_array + 2))
+		return -1;
+
+	actor = player;
+	UpdateScope(GetVisibilityCeiling(player));
+
+	if(parse_array->1 < 1) {
+		"Come again?^";
+	}
+
+	verb_wordnum = 1;
+
+.reparse;
+	_verb = (parse_array + 2 + 4 * (verb_wordnum - 1)) --> 0;
+	if(_verb < (0-->HEADER_DICTIONARY)) {
+		! unknown word
+#IfDef DEBUG;
+		print "Case 1, Word ", _verb, "^";
+#EndIf;
+		print "I don't understand that word.^";
+	}
+
+	_word_data = _verb + DICT_BYTES_FOR_WORD;
+	! check if it is a direction
+	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
+		! try a direction instead
+		wn = verb_wordnum;
+		if(Directions.parse_name()) {
+			action = ##Go;
+			noun = Directions;
+			inp1 = Directions;
+			PerformPreparedAction();
+			return -1;
+		}
+		! not a direction, check if beginning of a command
+		_noun = CheckNoun(parse_array+2);
+		if(_noun > 0) {
+			! The sentence starts with a noun, now 
+			! check if comma afterwards
+			wn = wn + which_object->0;
+			_pattern = NextWord();
+			if(_pattern == comma_word) {
+				jump conversation;
+			}
+		}
+		"That is not a verb I recognize.";
+.conversation;
+		if(_noun hasnt animate) {
+			"You can't talk to ", (the) _noun, ".";
+		}
+		! See http://www.inform-fiction.org/manual/html/s18.html
+		! set actor
+		actor = _noun;
+		!print "Trying to talk to to ", (the) _noun, ".^";
+		verb_wordnum = wn;
+		jump reparse;
+	}
+
+	! Now it is known word, and it is not a direction, in the first position
+	verb_word = _verb;
+	meta = (_word_data->0) & 2;
+
+!   print "Parse array: ", parse_array, "^";
+!   print "Word count: ", parse_array->0, "^";
+!   print "Word 1: ", (parse_array + 2)-->0, "^";
+!   print "Word 2: ", (parse_array + 6)-->0, "^";
+!   print "Word 3: ", (parse_array + 10)-->0, "^";
+	_verb_num = 255 - (_word_data->1);
+	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_verb_num;
+	_num_patterns = _verb_grammar->0;
+
+#IfDef DEBUG;
+	print "Verb#: ",_verb_num,", meta ",meta,".^";
+	print "Grammar address for this verb: ",_verb_grammar,"^";
+	print "Number of patterns: ",_num_patterns,"^";
+
+	! First print all patterns, for debug purposes
+	_pattern = _verb_grammar + 1;
+	for(_i = 0 : _i < _num_patterns : _i++) {
+		print "############ Pattern ",_i,"^";
+		_pattern = CheckPattern(_pattern);
+	}
+	@new_line;
+#EndIf;
+
+	_pattern = _verb_grammar + 1;
+	for(_i = 0 : _i < _num_patterns : _i++) {
+#IfDef DEBUG;
+		print "############ Pattern ",_i," address ", _pattern, "^";
+#EndIf;
+		wn = verb_wordnum + 1;
+		_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
+		_pattern_index = _pattern - 1;
+		_noun_tokens = 0;
+		noun = 0;
+		second = 0;
+		inp1 = 0;
+		inp2 = 0;
+		multiple_objects --> 0 = 0;
+
+		while(true) {
+			_pattern_index = _pattern_index + 3;
+			_token = (_pattern_index -> 0) & $$1111;
+#IfDef DEBUG;
+			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+#EndIf;
+			_token_data = (_pattern_index + 1) --> 0;
+
+			if(_token == TT_END) {
+				if(IsSentenceDivider(_parse_pointer)) {
+					wn++;
+					jump parse_success;
+				}
+				if(wn == 1 + parse_array->1) {
+					jump parse_success;
+				}
+				break; ! Fail because the grammar line ends here but not the input
+			}
+			if(wn >= 1 + parse_array->1) { !Fail because input ends here but not the grammar line
+#IfDef DEBUG;
+				print "Fail, since grammar line has not ended but player input has.^";
+#EndIf;
+				break;
+			}
+			_token_type = _token & $0f;
+#IfDef DEBUG;
+			print "token type ", _token_type, ", data ",_token_data,"^";
+#EndIf;
+			if(_token_type == TT_PREPOSITION) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
+#IfDef DEBUG;
+				print "Preposition: ", _token_data, "^";
+#EndIf;
+				if(_parse_pointer --> 0 == _token_data) {
+#IfDef DEBUG;
+					print "Match!^";
+#EndIf;
+					wn++;
+					_parse_pointer = _parse_pointer + 4;
+					while(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) { ! Alternative prepositions which are not at the end of the list
+#IfDef DEBUG;
+						print "Skipping one alternative...^";
+#EndIf;
+						_pattern_index = _pattern_index + 3;
+						_token = _pattern_index -> 0;
+					}
+					continue;
+				}
+#IfDef DEBUG;
+				print "Failed prep: ", _parse_pointer, ":", _parse_pointer --> 0, " should have been ", _token_data, "^";
+#EndIf;
+				if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
+				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
+			} else if(_token_type == TT_OBJECT || _token_type == TT_ROUTINE_FILTER ) {
+				! normally we expect a noun here, but several 
+				! are possible if _token_data is multi or similar
+				!
+				! check all objects in 'scope', and see if any match.
+				! If so, update wn and parse_pointer, update noun
+				! and second, and return success.
+				! 
+				! In case of more than one match the which_object array
+				! contains all matched nouns.
+				_noun = CheckNoun(_parse_pointer);
+				if(_noun < 0) {
+					AskWhichNoun(_parse_pointer --> 0, -_noun);
+					! read a new line of input
+					ReadPlayerInput(temp_player_input_array, temp_parse_array);
+					! only one noun in the new input?
+					!PrintParseArray(temp_parse_array);
+
+					! completely new input. Copy into normal arrays and reparse
+					_num_patterns = MAX_INPUT_CHARS + 3;
+					for(_i = 0: _i < _num_patterns: _i++)
+						player_input_array->_i = temp_player_input_array->_i;
+					_num_patterns = 2 + 4 * (MAX_INPUT_WORDS + 1); 
+					for(_i = 0: _i < _num_patterns: _i++)
+						parse_array->_i = temp_parse_array->_i;
+					return 0; ! start from the beginning
+				} else if(_noun > 0) {
+#IfDef DEBUG;
+					print "Noun match! ", _noun, " ", which_object -> 0, "^";
+#EndIf;
+					wn = wn + which_object->0;
+					_parse_pointer = _parse_pointer + 4 * which_object->0;
+
+					which_object --> 0 = 1; ! TODO only if first position
+					if(_noun_tokens == 0) {
+						noun = _noun;
+						inp1 = _noun;
+					} else if(_noun_tokens == 1){
+						second = _noun;
+						inp2 = _noun;
+					}
+					_noun_tokens++;
+
+					if(_token_type == TT_ROUTINE_FILTER) {
+						!print "calling filter: ", _token_data, "^";
+						if(_token_data() == false) break;
+					}
+					continue;
+				} else if(_parse_pointer-->0 == ALL_WORD) {
+					! take all etc. Add all reasonable objects
+					! in scope to the multiple_objects array
+					wn = wn + 1; ! absorb "all"
+					AddMultipleNouns(_token_data);
+					if(multiple_objects --> 0 == 0) {
+						print "Nothing to do!^";
+						return -wn;
+					}
+					continue;
+				} else {
+					! this is not a recognized word at all
+					break;
+				}
+#IfDef DEBUG;
+				print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
+#EndIf;
+				break;
+			}
+			! This is a token we don't recognize, which means we fail at matching against this line
+#IfDef DEBUG;
+			print "Unknown token: ", _token, "^";
+#EndIf;
+			break;
+		}
+		! This pattern has failed.
+#IfDef DEBUG;
+		print "Pattern didn't match.^";
+#EndIf;
+		! Scan to the end of this pattern
+		while(_pattern_index -> 0 ~= TT_END) _pattern_index = _pattern_index + 3;
+		_pattern = _pattern_index + 1;
+	}
+
+	"Sorry, I didn't understand that.^";
+
+.parse_success;
+	action = (_pattern --> 0) & $03ff;
+
+	if(actor ~= player) {
+		! The player's "orders" property can refuse to allow conversation
+		! here, by returning true.  If not, the order is sent to the
+		! other person's "orders" property.  If that also returns false,
+		! then: if it was a misunderstood command anyway, it is converted
+		! to an Answer action (thus "floyd, grrr" ends up as
+		! "say grrr to floyd").  If it was a good command, it is finally
+		! offered to the Order: part of the other person's "life"
+		! property, the old-fashioned way of dealing with conversation.
+		_i = RunRoutines(player, orders);
+		if (_i == 0) {
+			_i = RunRoutines(actor, orders);
+			if (_i == 0) {
+				if(action == ##NotUnderstood) {
+					_pattern-->3 = actor; actor = player; action = ##Answer;
+					jump parse_success;
+				}
+				if(RunLife(actor, ##Order) == 0) {
+					print_ret (The) actor, " has better things to do.";
+				}
+			}
+		}
+		rfalse;
+	}
+
+	if(multiple_objects --> 0 == 0) {
+		! single action
+		PerformPreparedAction();
+	} else {
+		! multiple action
+		! (a) check the multiple list isn't empty;
+		! (b) warn the player if it has been cut short because too long;
+		! (c) generate a sequence of actions from the list
+		!     (stopping in the event of death or movement away).
+		for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
+			inp1 = multiple_objects --> _noun;
+			noun = inp1;
+			print (name) noun, ": ";
+			PerformPreparedAction();
+		}
+	}
+	return -(wn - 1);
+];
+
+[ AddMultipleNouns multiple_objects_type   _i _addobj _obj;
+	multiple_objects --> 0 = 0;
+	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
+		_addobj = false;
+		switch(multiple_objects_type) {
+		MULTI_TOKEN:
+			_addobj = _obj hasnt scenery or concealed;
+		MULTIHELD_TOKEN:
+			_addobj = _obj in player;
+		}
+		if(_addobj) {
+			multiple_objects --> 0 = 1 + (multiple_objects --> 0);
+			multiple_objects --> (multiple_objects --> 0) = _obj;
+			!print "Adding ", (name) _obj, "^";
+		}
+	}
+];
