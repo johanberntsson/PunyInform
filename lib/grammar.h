@@ -79,6 +79,16 @@
 	"Taken.";
 ];
 
+[ EatSub;
+    if(noun has animate) "I don't suppose ", (the) noun, " would like that.";
+    "That's plainly inedible.";
+];
+
+[ DrinkSub;
+    if (parent(noun) ~= player) "You aren't holding ", (the) noun, ".";
+    "There's nothing suitable to drink there.";
+];
+
 [ DropSub;
 	if(noun notin player) "You aren't holding that.";
 	move noun to location;
@@ -132,6 +142,10 @@
     if (second == player) <<Examine noun>>;
     if (RunLife(second, ##Show) ~= 0) rfalse;
     print_ret (The) second, " is unimpressed.";
+];
+
+[ SmellSub;
+    "You smell nothing unexpected.";
 ];
 
 [ GiveSub;
@@ -330,6 +344,10 @@ Verb 'show' 'display' 'present'
 	* creature held                             -> Show reverse
 	* held 'to' creature                        -> Show;
 
+Verb 'smell'
+    *                                           -> Smell
+    * noun                                      -> Smell;
+
 Verb 'give' 'feed' 'offer' 'pay'
 	* held 'to' creature                        -> Give
 	* creature held                             -> Give reverse
@@ -358,6 +376,12 @@ Verb 'take'
 
 Verb 'throw'
 	* held 'at'/'against'/'on'/'onto' noun      -> ThrowAt;
+
+Verb 'eat'
+    * held                                      -> Eat;
+
+Verb 'drink'
+    * noun                                      -> Drink;
 
 Verb 'drop'
 	* multiheld -> Drop
