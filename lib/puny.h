@@ -34,6 +34,7 @@ Attribute worn;
 ! when you order a NPC, but the command isn't understood
 ! See: http://www.inform-fiction.org/manual/html/s18.html
 Fake_Action Order; 
+Fake_Action ThrownAt;
 Fake_Action NotUnderstood; 
 
 ! Property name; ! This seems to be hardcoded in the Inform compiler

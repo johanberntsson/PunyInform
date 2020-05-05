@@ -83,8 +83,24 @@
 	if(noun notin player) "You aren't holding that.";
 	move noun to location;
 	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
+    if(keep_silent) return;
 	"Dropped.";
+];
+
+[ ThrowAtSub;
+	if(ObjectIsUntouchable(noun)) return;
+	if(second > 1) {
+		action = ##ThrownAt;
+		if (RunRoutines(second, before) ~= 0) { action = ##ThrowAt; rtrue; }
+		action = ##ThrowAt;
+	}
+	if(noun has worn) {
+		print "(first taking ", (the) noun, " off)^";
+		if (noun has worn && noun in player) rtrue;
+	}
+	if(second hasnt animate) return "Futile.";
+	if(RunLife(second,##ThrowAt) ~= 0) rfalse;
+	"You lack the nerve when it comes to the crucial moment.";
 ];
 
 [ OpenSub;
@@ -279,6 +295,24 @@
     "You put ", (the) noun, " into ", (the) second, ".";
 ];
 
+[ WakeSub;
+	"The dreadful truth is, this is not a dream.";
+];
+
+[ WakeOtherSub;
+    !if (ObjectIsUntouchable(noun)) return; ! TODO
+    if (RunLife(noun, ##WakeOther) ~= 0) rfalse;
+    "That seems unnecessary.";
+];
+
+[ KissSub;
+    !if (ObjectIsUntouchable(noun)) return; ! TODO
+    if (RunLife(noun, ##Kiss) ~= 0) rfalse;
+    if (noun == player) "If you think that'll help.";
+    "Keep your mind on the game.";
+];
+
+
 Verb 'i' 'inventory'
 	* -> Inventory;
 
@@ -318,12 +352,16 @@ Verb 'get'
 	* 'up' -> Exit
 	* 'out' -> Exit
 	* multi -> Take;
+
 Verb 'take'
 	* multi -> Take;
 
+Verb 'throw'
+	* held 'at'/'against'/'on'/'onto' noun      -> ThrowAt;
+
 Verb 'drop'
 	* multiheld -> Drop
-    * multiexcept 'in'/'into'/'down' noun       -> Insert;
+	* multiexcept 'in'/'into'/'down' noun       -> Insert;
 
 Verb 'enter'
 	* noun -> Enter;
@@ -366,4 +404,14 @@ Verb meta 'restore'
 
 Verb meta 'restart'
 	* -> Restart;
+
+Verb 'wake' 'awake' 'awaken'
+    *                                           -> Wake
+    * 'up'                                      -> Wake
+    * creature                                  -> WakeOther
+    * creature 'up'                             -> WakeOther
+    * 'up' creature                             -> WakeOther;
+
+Verb 'kiss' 'embrace' 'hug'
+    * creature                                  -> Kiss;
 

@@ -32,3 +32,15 @@ Array scope-->MAX_SCOPE;
 	SearchScope(child(p_start_pos));
 ];
 
+[ ObjectIsUntouchable item flag1 flag2 ancestor i;
+    ! Determine if there's any barrier preventing the player from moving
+    ! things to "item".  Return false if no barrier; otherwise print a
+    ! suitable message and return true.
+    ! If flag1 is set, do not print any message.
+    ! If flag2 is set, also apply Take/Remove restrictions.
+
+    ! If the item has been added to scope by something, it's first necessary
+    ! for that something to be touchable.
+    "TODO: ObjectIsUntouchable";
+];
+
