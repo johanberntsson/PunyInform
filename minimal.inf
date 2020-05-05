@@ -2,7 +2,9 @@
 
 ! Library of Horror - a sample game which uses PunyInform
 
-Constant FULL_DIRECTIONS 1;
+!Constant FULL_DIRECTIONS 1;
+
+Include "globals.h";
 
 Include "puny.h";
 

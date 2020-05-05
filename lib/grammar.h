@@ -43,7 +43,7 @@
 	if(noun provides description) {
 		PrintOrRun(noun, description);
 	} else {
-		"There is nothing special about ", (the) noun, ".";
+		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
 	}
 ];
 
@@ -54,18 +54,18 @@
 	}
 ];
 
-[ TryToTakeObject item;
+[ TryToTakeNoun;
     ! Try to transfer the given item to the player: return false
     ! if successful, true if unsuccessful, printing a suitable message
     ! in the latter case.
     ! People cannot ordinarily be taken.
-    if(item == player) "You are always self-possessed.";
-    if(item has animate) "I don't suppose ", (the) item, " would care for that.";
-	if(item has scenery) "That's hardly portable.";
-	if(item has static) "That's fixed in place.";
-	if(noun in player) "You already have that.";
-	if(IndirectlyContains(noun, player)) "First, you'd have to leave ", (the) noun, ".";
-    if(AtFullCapacity(player)) "You are carrying too many things already.";
+    if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
+    if(noun has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
+    if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
+    if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
+	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
+	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT); rtrue; }
+    if(AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
 	move noun to player;
 	give noun moved;
@@ -73,28 +73,27 @@
 ];
 
 [ TakeSub;
-	if(TryToTakeObject(noun) == 1) rtrue;
+	if(TryToTakeNoun() == 1) rtrue;
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
-	"Taken.";
+	PrintMsg(MSG_TAKE_SUCCESS);
 ];
 
 [ EatSub;
-    if(noun has animate) "I don't suppose ", (the) noun, " would like that.";
-    "That's plainly inedible.";
+    if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
+    PrintMsg(MSG_EAT_INEDIBLE);
 ];
 
 [ DrinkSub;
-    if (parent(noun) ~= player) "You aren't holding ", (the) noun, ".";
-    "There's nothing suitable to drink there.";
+	PrintMsg(MSG_DRINK_NOTHING_SUITABLE);
 ];
 
 [ DropSub;
-	if(noun notin player) "You aren't holding that.";
+	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
 	move noun to location;
 	if(AfterRoutines() == 1) rtrue;
     if(keep_silent) return;
-	"Dropped.";
+	PrintMsg(MSG_DROP_DROPPED);
 ];
 
 [ ThrowAtSub;
@@ -170,7 +169,7 @@
 ];
 
 [ TellSub;
-    if (noun == player) "You talk to yourself a while.";
+    if (noun == player) "You talk to yourself for a while.";
     if (RunLife(noun, ##Tell) ~= 0) rfalse;
     "This provokes no reaction.";
 ];

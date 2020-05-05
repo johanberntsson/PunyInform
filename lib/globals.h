@@ -26,6 +26,9 @@ Attribute scenery;
 Attribute static;
 Attribute animate;
 Attribute worn;
+Attribute pluralname;
+Attribute female;
+Attribute neuter;
 
 ! when you order a NPC, but the command isn't understood
 ! See: http://www.inform-fiction.org/manual/html/s18.html
