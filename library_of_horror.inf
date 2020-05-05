@@ -137,14 +137,12 @@ Object -> John "John"
 			NotUnderstood: "~You speak in riddles.~";
 			default: "~I don't take orders from you.~";
 		],
-		xxxlife [c w1 w2;
+		life [c w1 w2;
 		! Attack Kiss WakeOther ThrowAt Give Show Ask Tell Answer Order
 		Order:
-			print "hello^";
 			if(action==##Take) "~I don't need more possessions.~";
 			"John ignores your comment.";
 		Show, Give:
-			consult_words=0;
 			if(noun==LargeBox) <<Ask self LargeBox>>;
 			"John doesn't appear to be interested.";
 		Ask, Tell, Answer:

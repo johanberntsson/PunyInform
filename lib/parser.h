@@ -457,7 +457,7 @@
 		_pattern = _pattern_index + 1;
 	}
 
-	"Sorry, I didn't understand that.^";
+	"Sorry, I didn't understand that.";
 
 .parse_success;
 	action = (_pattern --> 0) & $03ff;

@@ -155,9 +155,8 @@ Global wn;
 Global scope_objects;
 Global reverse;
 Global keep_silent;
-Global reason_code;                 ! Reason for calling a "life" rule
-Global consult_from;                ! Word that a "consult" topic starts on
-Global consult_words;               ! ...and number of words in topic
+Global consult_from;  !TODO remove? ! Word that a "consult" topic starts on
+Global consult_words; !TODO remove? ! ...and number of words in topic
 #IfV5;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
@@ -631,8 +630,7 @@ Include "parser.h";
 ];
 
 [ RunLife p_actor p_reason;
-print "actor ", (the) p_actor, "^";
-	reason_code = p_reason; ! TODO: remove reason_code?
+	sw__var = p_reason;
     return RunRoutines(p_actor,life);
 ];
 
