@@ -151,6 +151,7 @@ Object -> John "John"
 		life [c w1 w2;
 		! Attack Kiss WakeOther ThrowAt Give Show Ask Tell Answer Order
 		Order:
+			if(action==##Take && noun==LargeBox) "~That box is too big.~";
 			if(action==##Take) "~I don't need more possessions.~";
 			"John ignores your comment.";
 		Show, Give:

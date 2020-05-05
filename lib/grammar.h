@@ -48,7 +48,7 @@
 ];
 
 [ QuitSub;
-	PrintMsg(MSG_AREYOUSUREQUIT);
+	PrintMsg(MSG_AREYOUSUREQUIT, true);
 	if(YesOrNo()) {
 		game_state = GS_QUIT;
 	}

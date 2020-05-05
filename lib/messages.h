@@ -32,8 +32,14 @@ Constant LibraryMessages 0;
 #Endif;
 
 
-[ PrintMsg p_msg;
-	if(p_msg ofclass String) print_ret (string) p_msg;
+[ PrintMsg p_msg p_dontprintnewline;
+	if(p_msg ofclass String) {
+		if(p_dontprintnewline == 0) {
+			print_ret (string) p_msg;
+		}
+		print (string) p_msg;
+		rtrue;
+	}
 
 	if(LibraryMessages(p_msg))
 		rtrue;
