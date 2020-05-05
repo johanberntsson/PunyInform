@@ -1,23 +1,46 @@
 !
 ! Simple string messages
 !
+#Ifndef MSG_YOU_HAVE_WON;
 Constant MSG_YOU_HAVE_WON "You have won";
+#EndIf;
+#Ifndef MSG_YOU_HAVE_DIED;
 Constant MSG_YOU_HAVE_DIED "You have died";
+#EndIf;
+#Ifndef MSG_RESTART_RESTORE_OR_QUIT;
 Constant MSG_RESTART_RESTORE_OR_QUIT "^Would you like to RESTART, RESTORE or QUIT? ";
+#EndIf;
+#Ifndef MSG_AREYOUSUREQUIT;
 Constant MSG_AREYOUSUREQUIT "Are you sure you want to quit? ";
-
+#EndIf;
 !
 ! complex messages (enumerated)
 !
-Constant MSG_YOU_CANT_VERB_THAT = 1;
+
+#Ifndef MSG_OPEN_YOU_CANT;
+Constant MSG_OPEN_YOU_CANT = 1;
+#Endif;
+#Ifndef MSG_CLOSE_YOU_CANT;
+Constant MSG_CLOSE_YOU_CANT = 2;
+#Endif;
+#Ifndef MSG_ENTER_YOU_CANT;
+Constant MSG_ENTER_YOU_CANT = 3;
+#Endif;
+
+#Ifndef LibraryMessages;
+Constant LibraryMessages 0;
+#Endif;
 
 
 [ PrintMsg p_msg;
 	if(p_msg ofclass String) print_ret (string) p_msg;
 
+	if(LibraryMessages(p_msg))
+		rtrue;
+		
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
-	MSG_YOU_CANT_VERB_THAT:
+	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT:
 		"You can't ", (PrintVerb) verb_word, " that!";
 	}
 

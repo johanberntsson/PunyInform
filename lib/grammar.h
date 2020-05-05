@@ -105,7 +105,7 @@
 
 [ OpenSub;
 	if(noun hasnt openable) {
-		PrintMsg(MSG_YOU_CANT_VERB_THAT);
+		PrintMsg(MSG_OPEN_YOU_CANT);
 		rtrue;
 	}
 	if(noun has open) "It's already open.";
@@ -117,7 +117,7 @@
 
 [ CloseSub;
 	if(noun hasnt openable) {
-		PrintMsg(MSG_YOU_CANT_VERB_THAT);
+		PrintMsg(MSG_CLOSE_YOU_CANT);
 		rtrue;
 	}
 	if(noun hasnt open) "It isn't open.";
@@ -163,7 +163,7 @@
 
 [ EnterSub;
 	if(noun hasnt enterable) {
-		PrintMsg(MSG_YOU_CANT_VERB_THAT);
+		PrintMsg(MSG_ENTER_YOU_CANT);
 		rtrue;
 	}
 	if(player in noun) "But you are already there!";

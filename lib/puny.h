@@ -184,7 +184,7 @@ Array  the_timers  --> MAX_TIMERS;
 Global active_timers;               ! Number of timers/daemons active
 Global current_timer;               ! Index of the timer which is currently being executed
 
-#include "messages.h";
+Include "messages.h";
 
 Array which_object-->10;      ! options for "which do you mean?"
 Array multiple_objects-->32;  ! holds nouns when multi* grammar used
