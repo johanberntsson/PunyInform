@@ -10,12 +10,13 @@ Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
 Constant MSG_AREYOUSUREQUIT "You ain't no quitter eh? ";
-!Constant MSG_OPEN_YOU_CANT 1000;
+Constant MSG_OPEN_YOU_CANT 1000;
 
-![LibraryMessages p_msg;
-!	if(p_msg == MSG_OPEN_YOU_CANT)
-!		"How would you go about opening ", (a) noun, "?^";
-!];
+[LibraryMessages p_msg;
+	if(p_msg == MSG_OPEN_YOU_CANT)
+		"How would you go about opening that?"; !, (a) noun, "?";
+	rfalse;
+];
 
 Include "puny.h";
 
