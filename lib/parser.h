@@ -424,9 +424,13 @@
 					}
 					continue;
 				} else if(_parse_pointer-->0 == ALL_WORD) {
-					! take all etc. Add all reasonable objects
-					! in scope to the multiple_objects array
-					wn = wn + 1; ! absorb "all"
+					! take all etc.
+					!
+					! absort the "all" keyword
+					wn = wn + 1;
+					_parse_pointer = _parse_pointer + 4;
+					! Add all reasonable objects in scope
+					! to the multiple_objects array
 					AddMultipleNouns(_token_data);
 					if(multiple_objects --> 0 == 0) {
 						print "Nothing to do!^";
