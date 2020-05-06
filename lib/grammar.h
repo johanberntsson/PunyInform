@@ -208,9 +208,8 @@
 ];
 
 [ InventorySub;
-	if(child(player) == 0)
-	"You are empty handed.";
-	PrintContents("You are holding ", ".^", player);
+	if(child(player) == 0) { PrintMsg(MSG_INVENTORY_EMPTY); rtrue; }
+    PrintMsg(MSG_INVENTORY_SUCCESS);
 ];
 
 [ GoSub _prop;
@@ -222,7 +221,7 @@
 ];
 
 [ GoDir p_property _new_location;
-	if(player notin location) "You need to leave ", (the) parent(player), " first.";
+	if(player notin location) { PrintMsg(MSG_GO_LEAVE_FIRST); rtrue; }
 	if(location provides p_property) {
 		@get_prop location p_property -> _new_location; ! works in z3 and z5
 	}
@@ -230,7 +229,7 @@
 		if(location provides cant_go) {
 			print_ret (string) location.cant_go;
 		}
-		"You can't go that way.";
+        PrintMsg(MSG_GO_CANT_GO); rtrue;
 	}
 	location = _new_location;
 	PlayerTo(location);
@@ -240,27 +239,27 @@
 #IfV3;
 [ SaveSub;
 	@save ?save_success;
-	"Save failed.";
+	PrintMsg(MSG_SAVE_FAILED); rtrue;
 .save_success;
-	"Ok.";
+    PrintMsg(MSG_SAVE_SUCCESS);
 #IfNot;
 [ SaveSub _result;
 	@save -> _result;
-	if(_result == 0) "Save failed.";
-	"Ok."; ! _result = 1: save ok, 2: Restore ok
+	if(_result == 0) { PrintMsg(MSG_SAVE_FAILED); rtrue; }
+	PrintMsg(MSG_SAVE_SUCCESS); ! _result = 1: save ok, 2: Restore ok
 #EndIf;
 ];
 
 #IfV3;
 [ RestoreSub;
 	@restore ?restore_success; ! can't use @restore because of compiler test
-	"Restore failed.";
+	PrintMsg(MSG_RESTORE_FAILED);
 .restore_success; ! This is never reached, since a successful restore continues after save opcode.
 #IfNot;
 [ RestoreSub _flag;
 	@restore -> _flag;
 	! must have failed here so no need to check the flag
-	"Restore failed";
+	PrintMsg(MSG_RESTORE_FAILED);
 #EndIf;
 ];
 
@@ -280,49 +279,49 @@
 			if (_reply == 'yes' or 'y//') rtrue;
 			if (_reply == 'no' or 'n//') rfalse;
 		}
-		print "Please answer yes or no.^> ";
+        PrintMsg(MSG_YES_OR_NO);
 	}
 ];
 
 [ RestartSub;
-	print "Are you sure you want to restart? ";
+    PrintMsg(MSG_RESTART_CONFIRM);
 	if(YesOrNo()) {
 		@restart;
-		"Failed.";
+        PrintMsg(MSG_RESTART_FAILED);
 	}
 ];
 
 [ InsertSub _ancestor;
-    if (parent(noun) == second) "Already there.";
+    if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
     _ancestor = CommonAncestor(noun, second);
-    if (_ancestor == noun) "Cannot put something inside itself.";
+    if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
     if (second ~= _ancestor) {
-        if (second has container && second hasnt open) "Closed.";
+        if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN); rtrue; }
     }
-    if (second hasnt container) "That can't contain things.";
+    if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
 
-    if (AtFullCapacity(noun, second)) "There is no more room.";
+    if (AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
     move noun to second;
     if (keep_silent) return;
-    "You put ", (the) noun, " into ", (the) second, ".";
+    PrintMsg(MSG_INSERT_SUCCESS);
 ];
 
 [ WakeSub;
-	"The dreadful truth is, this is not a dream.";
+    PrintMsg(MSG_WAKE_SUCCESS);
 ];
 
 [ WakeOtherSub;
     !if (ObjectIsUntouchable(noun)) return; ! TODO
     if (RunLife(noun, ##WakeOther) ~= 0) rfalse;
-    "That seems unnecessary.";
+    PrintMsg(MSG_WAKEOTHER_SUCCESS);
 ];
 
 [ KissSub;
     !if (ObjectIsUntouchable(noun)) return; ! TODO
     if (RunLife(noun, ##Kiss) ~= 0) rfalse;
-    if (noun == player) "If you think that'll help.";
-    "Keep your mind on the game.";
+    if (noun == player) { PrintMsg(MSG_KISS_PLAYER); rtrue; }
+    PrintMsg(MSG_KISS_SUCCESS);
 ];
 
 

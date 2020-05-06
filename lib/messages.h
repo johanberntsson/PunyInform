@@ -55,9 +55,6 @@ Constant MSG_CLOSE_NOT_OPEN "It isn't open.";
 #Ifndef MSG_SMELL_SUCCESS;
 Constant MSG_SMELL_SUCCESS "You smell nothing unexpected.";
 #Endif;
-#Ifndef MSG_GIVE_PLAYER;
-Constant MSG_GIVE_PLAYER "You already have it.";
-#Endif;
 #Ifndef MSG_ASK_SUCCESS;
 Constant MSG_ASK_SUCCESS "There is no reply.";
 #Endif;
@@ -81,6 +78,48 @@ Constant MSG_EXIT_NOT_IN "You aren't in that.";
 #Endif;
 #Ifndef MSG_ANSWER_SUCCESS;
 Constant MSG_ANSWER_SUCCESS "There is no reply";
+#Endif;
+#Ifndef MSG_INVENTORY_EMPTY;
+Constant MSG_INVENTORY_EMPTY "You are empty handed.";
+#Endif;
+#Ifndef MSG_GO_CANT_GO;
+Constant MSG_GO_CANT_GO "You can't go that way.";
+#Endif;
+#Ifndef MSG_SAVE_SUCCESS;
+Constant MSG_SAVE_SUCCESS "Ok.";
+#Endif;
+#Ifndef MSG_YES_OR_NO;
+Constant MSG_YES_OR_NO "Please answer yes or no.^> ";
+#Endif;
+#Ifndef MSG_RESTART_CONFIRM;
+Constant MSG_RESTART_CONFIRM "Are you sure you want to restart? ";
+#Endif;
+#Ifndef MSG_INSERT_ALREADY;
+Constant MSG_INSERT_ALREADY "Already there.";
+#Endif;
+#Ifndef MSG_INSERT_ITSELF;
+Constant MSG_INSERT_ITSELF "Cannot put something inside itself.";
+#Endif;
+#Ifndef MSG_INSERT_NOT_OPEN;
+Constant MSG_INSERT_NOT_OPEN "Closed.";
+#Endif;
+#Ifndef MSG_INSERT_NOT_CONTAINER;
+Constant MSG_INSERT_NOT_CONTAINER "That can't contain things.";
+#Endif;
+#Ifndef MSG_INSERT_NO_ROOM;
+Constant MSG_INSERT_NO_ROOM "There is no more room.";
+#Endif;
+#Ifndef MSG_WAKE_SUCCESS;
+Constant MSG_WAKE_SUCCESS "The dreadful truth is, this is not a dream.";
+#Endif;
+#Ifndef MSG_WAKEOTHER_SUCCESS;
+Constant MSG_WAKEOTHER_SUCCESS "That seems unnecessary.";
+#Endif;
+#Ifndef MSG_KISS_PLAYER;
+Constant MSG_KISS_PLAYER "If you think that'll help.";
+#Endif;
+#Ifndef MSG_KISS_SUCCESS;
+Constant MSG_KISS_SUCCESS "Keep your mind on the game.";
 #Endif;
 
 !
@@ -153,6 +192,27 @@ Constant MSG_EXIT_NOT_OPEN = 21;
 #Ifndef MSG_EXIT_SUCCESS;
 Constant MSG_EXIT_SUCCESS = 22;
 #Endif;
+#Ifndef MSG_INVENTORY_SUCCESS;
+Constant MSG_INVENTORY_SUCCESS = 23;
+#Endif;
+#Ifndef MSG_GO_LEAVE_FIRST;
+Constant MSG_GO_LEAVE_FIRST = 24;
+#Endif;
+#Ifndef MSG_GIVE_PLAYER;
+Constant MSG_GIVE_PLAYER 25;
+#Endif;
+#Ifndef MSG_SAVE_FAILED;
+Constant MSG_SAVE_FAILED 26;
+#Endif;
+#Ifndef MSG_RESTORE_FAILED;
+Constant MSG_RESTORE_FAILED 27;
+#Endif;
+#Ifndef MSG_RESTART_FAILED;
+Constant MSG_RESTART_FAILED 28;
+#Endif;
+#Ifndef MSG_INSERT_SUCCESS;
+Constant MSG_INSERT_SUCCESS 29;
+#Endif;
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
 #Endif;
@@ -197,6 +257,16 @@ Constant LibraryMessages 0;
         "You can't, since ",(the) noun, " is closed.";
     MSG_EXIT_SUCCESS:
 	    "You leave ", (the) noun, ".";
+    MSG_INVENTORY_SUCCESS:
+	    PrintContents("You are holding ", ".^", player);
+    MSG_GO_LEAVE_FIRST:
+        "You need to leave ", (the) parent(player), " first.";
+    MSG_GIVE_PLAYER:
+        "You already have ", (ItOrThem) noun, ".";
+    MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
+        "Failed ", (PrintVerb) verb_word, ".";
+    MSG_INSERT_SUCCESS:
+        "You put ", (the) noun, " into ", (the) second, ".";
 
 	default:
 		! No code found. Print an error message.
