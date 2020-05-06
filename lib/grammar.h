@@ -104,12 +104,12 @@
 		action = ##ThrowAt;
 	}
 	if(noun has worn) {
-		print "(first taking ", (the) noun, " off)^";
+        PrintMsg(MSG_THROW_FIRST_TAKING);
 		if (noun has worn && noun in player) rtrue;
 	}
-	if(second hasnt animate) return "Futile.";
+	if(second hasnt animate) { PrintMsg(MSG_THROW_ANIMATE); rtrue; }
 	if(RunLife(second,##ThrowAt) ~= 0) rfalse;
-	"You lack the nerve when it comes to the crucial moment.";
+	PrintMsg(MSG_THROW_SUCCESS);
 ];
 
 [ OpenSub;
@@ -117,11 +117,11 @@
 		PrintMsg(MSG_OPEN_YOU_CANT);
 		rtrue;
 	}
-	if(noun has open) "It's already open.";
+	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
 	give noun open;
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
-	"You open ", (the) noun, ".";
+	PrintMsg(MSG_OPEN_SUCCESS);
 ];
 
 [ CloseSub;
@@ -129,27 +129,27 @@
 		PrintMsg(MSG_CLOSE_YOU_CANT);
 		rtrue;
 	}
-	if(noun hasnt open) "It isn't open.";
+	if(noun hasnt open) PrintMsg(MSG_CLOSE_NOT_OPEN);
 	give noun ~open;
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
-	"You close ", (the) noun, ".";
+	PrintMsg(MSG_CLOSE_SUCCESS);
 ];
 
 [ ShowSub;
-    if (parent(noun) ~= player) "You aren't holding ", (the) noun, ".";
+    if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
     if (second == player) <<Examine noun>>;
     if (RunLife(second, ##Show) ~= 0) rfalse;
-    print_ret (The) second, " is unimpressed.";
+    PrintMsg(MSG_SHOW_SUCCESS);
 ];
 
 [ SmellSub;
-    "You smell nothing unexpected.";
+    PrintMsg(MSG_SMELL_SUCCESS);
 ];
 
 [ GiveSub;
-    if (parent(noun) ~= player) "You aren't holding ", (the) noun, ".";
-    if (second == player)  return "You already have it.";
+    if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
+    if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
     if (RunLife(second, ##Give) ~= 0) rfalse;
     print_ret (The) second, " doesn't seem interested.";
 ];

@@ -40,9 +40,24 @@ Constant MSG_DRINK_NOTHING_SUITABLE "There's nothing suitable to drink here.";
 #Ifndef MSG_DROP_DROPPED;
 Constant MSG_DROP_DROPPED "Dropped.";
 #EndIf;
-
-
-
+#Ifndef MSG_OPEN_ALREADY;
+Constant MSG_OPEN_ALREADY "It's already open.";
+#Endif;
+#Ifndef MSG_THROW_ANIMATE;
+Constant MSG_THROW_ANIMATE "Futile.";
+#Endif;
+#Ifndef MSG_THROW_SUCCESS;
+Constant MSG_THROW_SUCCESS "You lack the nerve when it comes to the crucial moment.";
+#Endif;
+#Ifndef MSG_CLOSE_NOT_OPEN;
+Constant MSG_CLOSE_NOT_OPEN "It isn't open.";
+#Endif;
+#Ifndef MSG_SMELL_SUCCESS;
+Constant MSG_SMELL_SUCCESS "You smell nothing unexpected.";
+#Endif;
+#Ifndef MSG_GIVE_PLAYER;
+Constant MSG_GIVE_PLAYER "You already have it.";
+#Endif;
 
 !
 ! complex messages (enumerated)
@@ -72,7 +87,24 @@ Constant MSG_EAT_ANIMATE = 7;
 #Ifndef MSG_DROP_NOT_HOLDING;
 Constant MSG_DROP_NOT_HOLDING = 8;
 #Endif;
-
+#Ifndef MSG_OPEN_SUCCESS;
+Constant MSG_OPEN_SUCCESS = 9;
+#Endif;
+#Ifndef MSG_CLOSE_SUCCESS;
+Constant MSG_CLOSE_SUCCESS = 10;
+#Endif;
+#Ifndef MSG_THROW_FIRST_TAKING;
+Constant MSG_THROW_FIRST_TAKING = 11;
+#Endif;
+#Ifndef MSG_SHOW_NOT_HOLDING;
+Constant MSG_SHOW_NOT_HOLDING = 12;
+#Endif;
+#Ifndef MSG_SHOW_SUCCESS;
+Constant MSG_SHOW_SUCCESS = 13;
+#Endif;
+#Ifndef MSG_GIVE_NOT_HOLDING;
+Constant MSG_GIVE_NOT_HOLDING = 14;
+#Endif;
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
 #Endif;
@@ -99,8 +131,15 @@ Constant LibraryMessages 0;
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT:
 		"First, you'd have to leave ", (the) noun, ".";
-	MSG_DROP_NOT_HOLDING:
-		"You aren't holding ", (ItOrThem) noun, ".";	
+	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING:
+		"You aren't holding ", (ItOrThem) noun, ".";
+    MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS:
+	    "You ", (PrintVerb) verb_word, " ", (the) noun, ".";
+    MSG_THROW_FIRST_TAKING:
+		"(first taking ", (the) noun, " off)";
+    MSG_SHOW_SUCCESS:
+        print_ret (The) second, " is unimpressed.";
+
 	default:
 		! No code found. Print an error message.
 		RuntimeError("Unknown message#");
