@@ -248,7 +248,7 @@
 	UpdateScope(GetVisibilityCeiling(player));
 
 	if(parse_array->1 < 1) {
-		"Come again?^";
+		"Come again?";
 	}
 
 	verb_wordnum = 1;
@@ -260,7 +260,7 @@
 #IfDef DEBUG;
 		print "Case 1, Word ", _verb, "^";
 #EndIf;
-		print "I don't understand that word.^";
+		"I don't understand that word.";
 	}
 
 	_word_data = _verb + DICT_BYTES_FOR_WORD;
