@@ -33,7 +33,6 @@
 	p_parse_array-->(_result + 1) = 0;
 ];
 
-#IfDef DEBUG;
 
 [ PrintParseArray p_parse_array _i;
 	print "PARSE_ARRAY: ", p_parse_array->1, " entries^";
@@ -44,6 +43,8 @@
 		" index ",(p_parse_array + 2 + _i * 4) -> 3, "^";
 	}
 ];
+
+#IfDef DEBUG;
 
 [ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
 	! action number is the first two bytes
@@ -92,7 +93,7 @@
 	return NextWord();
 ];
 
-[ CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+[ CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
@@ -136,7 +137,8 @@
 			_name_array = _obj.&name;
 			_name_array_len = _obj.#name / 2;
 
-			while(_n <= parse_array->1 && IsSentenceDivider(_p) == false) {
+			while(_n <= p_parse_length && IsSentenceDivider(_p) == false) {
+			!while(_n <= parse_array->1 && IsSentenceDivider(_p) == false) {
 				if(_current_word == nothing) return 0; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
@@ -213,10 +215,11 @@
 	return p_parse_pointer --> 0 == './/';
 ];
 
-[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
+[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _j _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
 	! returns
+	! 0: to reparse
+	! 1/true: if error was found (so you can abort with "error...")
 	! -n: if <n> words were used to find a match,
-	! true (1): if error was found (so can't abort with "error...")
 	!
 	! taking periods and other sentence breaks into account.
 	! For example, if the input is "l.l" then the parser
@@ -261,7 +264,7 @@
 			return -1;
 		}
 		! not a direction, check if beginning of a command
-		_noun = CheckNoun(parse_array+2);
+		_noun = CheckNoun(parse_array+2, parse_array->1);
 		if(_noun > 0) {
 			! The sentence starts with a noun, now 
 			! check if comma afterwards
@@ -388,14 +391,35 @@
 				! 
 				! In case of more than one match the which_object array
 				! contains all matched nouns.
-				_noun = CheckNoun(_parse_pointer);
+				_noun = CheckNoun(_parse_pointer, parse_array->1);
+.recheck_noun;
 				if(_noun < 0) {
 					AskWhichNoun(_parse_pointer --> 0, -_noun);
 					! read a new line of input
 					ReadPlayerInput(temp_player_input_array, temp_parse_array);
-					! only one noun in the new input?
-					!PrintParseArray(temp_parse_array);
-
+					! is this a reply to the question?
+					if((temp_parse_array->1 == 1) &&  
+						(((temp_parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
+						! only one word, and it is not a verb. Assume
+						! a valid reply and add the other 
+						! entry into parse_array, then retry
+						_i = wn; ! wn is used in CheckNoun, so save it
+						wn = 1;
+						_noun = CheckNoun(temp_parse_array+2, 1);
+						wn = _i; ! and restore it after the call
+						if(_noun > 0) {
+							! TODO: here I assume that only one word was
+							! give in the original input
+							! > take book
+							! which book, the blue or the green
+							! > green
+							! and then I skip book when accepting the
+							! new reply. Will fail if more then
+							! one noun word before disambiguation
+							which_object->0 = 1;
+							jump recheck_noun;
+						}
+					}
 					! completely new input. Copy into normal arrays and reparse
 					_num_patterns = MAX_INPUT_CHARS + 3;
 					for(_i = 0: _i < _num_patterns: _i++)
@@ -411,7 +435,6 @@
 					wn = wn + which_object->0;
 					_parse_pointer = _parse_pointer + 4 * which_object->0;
 
-					which_object --> 0 = 1; ! TODO only if first position
 					if(_noun_tokens == 0) {
 						noun = _noun;
 						inp1 = _noun;

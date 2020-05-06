@@ -722,7 +722,7 @@ Object DefaultPlayer "you"
 			ReadPlayerInput(player_input_array, parse_array);
 		}
 		_sentencelength = ParseAndPerformAction();
-		if(_sentencelength < 0) _sentencelength = -_sentencelength;
+		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
 #IfDef DEBUG;
 		print "ParseAndPerformAction returned ", _sentencelength, "^";
