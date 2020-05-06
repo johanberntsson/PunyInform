@@ -1,4 +1,5 @@
 ! ######################### Parser
+! https://www.inform-fiction.org/source/tm/TechMan.txt
 
 [ ReadPlayerInput p_player_input_array p_parse_array _result;
 ! #IfV5;
@@ -325,13 +326,14 @@
 
 		while(true) {
 			_pattern_index = _pattern_index + 3;
-			_token = (_pattern_index -> 0) & $$1111;
+			_token = (_pattern_index -> 0);
+			_token_type = _token & $0f;
+			_token_data = (_pattern_index + 1) --> 0;
 #IfDef DEBUG;
 			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
-			_token_data = (_pattern_index + 1) --> 0;
 
-			if(_token == TT_END) {
+			if(_token_type == TT_END) {
 				if(IsSentenceDivider(_parse_pointer)) {
 					wn++;
 					jump parse_success;
@@ -347,11 +349,10 @@
 #EndIf;
 				break;
 			}
-			_token_type = _token & $0f;
 #IfDef DEBUG;
 			print "token type ", _token_type, ", data ",_token_data,"^";
 #EndIf;
-			if(_token_type == TT_PREPOSITION) { ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
+			if(_token_type == TT_PREPOSITION) { 
 #IfDef DEBUG;
 				print "Preposition: ", _token_data, "^";
 #EndIf;
@@ -448,7 +449,7 @@
 			}
 			! This is a token we don't recognize, which means we fail at matching against this line
 #IfDef DEBUG;
-			print "Unknown token: ", _token, "^";
+			print "Unknown token: ", _token_type, "^";
 #EndIf;
 			break;
 		}
