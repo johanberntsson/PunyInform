@@ -33,6 +33,19 @@
 	p_parse_array-->(_result + 1) = 0;
 ];
 
+[ CopyInputArray p_src_input_array p_dst_input_array _n _i;
+	_n = MAX_INPUT_CHARS + 3;
+	for(_i = 0: _i < _n: _i++)
+		p_dst_input_array->_i = p_src_input_array->_i;
+];
+
+[ CopyParserArray p_src_parse_array p_dst_parse_array _n _i;
+	_n = 2 + 4 * (MAX_INPUT_WORDS + 1); 
+	for(_i = 0: _i < _n: _i++)
+		p_dst_parse_array->_i = p_src_parse_array->_i;
+];
+
+#IfDef DEBUG;
 
 [ PrintParseArray p_parse_array _i;
 	print "PARSE_ARRAY: ", p_parse_array->1, " entries^";
@@ -44,7 +57,6 @@
 	}
 ];
 
-#IfDef DEBUG;
 
 [ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
 	! action number is the first two bytes
@@ -396,16 +408,23 @@
 				if(_noun < 0) {
 					AskWhichNoun(_parse_pointer --> 0, -_noun);
 					! read a new line of input
-					ReadPlayerInput(temp_player_input_array, temp_parse_array);
+					! I need to use parse_array since NextWord
+					! for parse_name and others hardcode this
+					! usage, so I first store the old input into
+					! temp arrays that I will restore if I can
+					! disambiguate successfully.
+					CopyInputArray(player_input_array, temp_player_input_array);
+					CopyParserArray(parse_array, temp_parse_array);
+					ReadPlayerInput(player_input_array, parse_array);
 					! is this a reply to the question?
-					if((temp_parse_array->1 == 1) &&  
-						(((temp_parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
+					if((parse_array->1 == 1) &&  
+						(((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
 						! only one word, and it is not a verb. Assume
 						! a valid reply and add the other 
 						! entry into parse_array, then retry
 						_i = wn; ! wn is used in CheckNoun, so save it
 						wn = 1;
-						_noun = CheckNoun(temp_parse_array+2, 1);
+						_noun = CheckNoun(parse_array+2, 1);
 						wn = _i; ! and restore it after the call
 						if(_noun > 0) {
 							! TODO: here I assume that only one word was
@@ -417,16 +436,13 @@
 							! new reply. Will fail if more then
 							! one noun word before disambiguation
 							which_object->0 = 1;
+							! don't forget to restore the old arrays
+							CopyInputArray(temp_player_input_array, player_input_array);
+							CopyParserArray(temp_parse_array, parse_array);
 							jump recheck_noun;
 						}
 					}
-					! completely new input. Copy into normal arrays and reparse
-					_num_patterns = MAX_INPUT_CHARS + 3;
-					for(_i = 0: _i < _num_patterns: _i++)
-						player_input_array->_i = temp_player_input_array->_i;
-					_num_patterns = 2 + 4 * (MAX_INPUT_WORDS + 1); 
-					for(_i = 0: _i < _num_patterns: _i++)
-						parse_array->_i = temp_parse_array->_i;
+					! completely new input.
 					return 0; ! start from the beginning
 				} else if(_noun > 0) {
 #IfDef DEBUG;
