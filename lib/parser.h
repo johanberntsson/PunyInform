@@ -129,6 +129,7 @@
 					_last_match = _obj;
 					_best_score = _n;
 					_matches = 1;
+					which_object->0 = _obj;
 				}
 			}
 		} else if(_obj.#name > 1) {
@@ -160,12 +161,13 @@
 #EndIf;
 				}
 				if(_n > _best_score) {
+					_matches = 1;
 #IfDef DEBUG;
-					print "New best score ", _n, ". Old score was ", _best_score,". Matches is now 1.^";
+					print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
 #EndIf;
 					_last_match = _obj;
 					_best_score = _n;
-					_matches = 1;
+					which_object->0 = _obj;
 				}
 			}
 		}
@@ -190,8 +192,8 @@
 
 [ AskWhichNoun p_noun_name p_num_matching_nouns _i;
 	print "Which ", (address) p_noun_name, " do you mean? ";
-	for(_i = 1 : _i < p_num_matching_nouns : _i++) {
-		if(_i == 1) {
+	for(_i = 0 : _i < p_num_matching_nouns : _i++) {
+		if(_i == 0) {
 			print (The) which_object->_i;
 		} else {
 			if (_i == p_num_matching_nouns - 1) {
