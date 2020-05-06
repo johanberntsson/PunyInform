@@ -58,6 +58,30 @@ Constant MSG_SMELL_SUCCESS "You smell nothing unexpected.";
 #Ifndef MSG_GIVE_PLAYER;
 Constant MSG_GIVE_PLAYER "You already have it.";
 #Endif;
+#Ifndef MSG_ASK_SUCCESS;
+Constant MSG_ASK_SUCCESS "There is no reply.";
+#Endif;
+#Ifndef MSG_TELL_PLAYER;
+Constant MSG_TELL_PLAYER "You talk to yourself for a while.";
+#Endif;
+#Ifndef MSG_TELL_SUCCESS;
+Constant MSG_TELL_SUCCESS "This provokes no reaction.";
+#Endif;
+#Ifndef MSG_ENTER_ALREADY;
+Constant MSG_ENTER_ALREADY "But you are already there!";
+#Endif;
+#Ifndef MSG_EXIT_ALREADY;
+Constant MSG_EXIT_ALREADY "But you aren't in anything at the moment!";
+#Endif;
+#Ifndef MSG_EXIT_NOT_ON;
+Constant MSG_EXIT_NOT_ON "You aren't on that.";
+#Endif;
+#Ifndef MSG_EXIT_NOT_IN;
+Constant MSG_EXIT_NOT_IN "You aren't in that.";
+#Endif;
+#Ifndef MSG_ANSWER_SUCCESS;
+Constant MSG_ANSWER_SUCCESS "There is no reply";
+#Endif;
 
 !
 ! complex messages (enumerated)
@@ -105,6 +129,30 @@ Constant MSG_SHOW_SUCCESS = 13;
 #Ifndef MSG_GIVE_NOT_HOLDING;
 Constant MSG_GIVE_NOT_HOLDING = 14;
 #Endif;
+#Ifndef MSG_GIVE_SUCCESS;
+Constant MSG_GIVE_SUCCESS = 15;
+#Endif;
+#Ifndef MSG_ASKFOR_SUCCESS;
+Constant MSG_ASKFOR_SUCCESS = 16;
+#Endif;
+#Ifndef MSG_ASKTO_SUCCESS;
+Constant MSG_ASKTO_SUCCESS = 17;
+#Endif;
+#Ifndef MSG_ENTER_SUCCESS;
+Constant MSG_ENTER_SUCCESS = 18;
+#Endif;
+#Ifndef MSG_EXIT_FIRST_LEAVE;
+Constant MSG_EXIT_FIRST_LEAVE = 19;
+#Endif;
+#Ifndef MSG_ENTER_NOT_OPEN;
+Constant MSG_ENTER_NOT_OPEN = 20;
+#Endif;
+#Ifndef MSG_EXIT_NOT_OPEN;
+Constant MSG_EXIT_NOT_OPEN = 21;
+#Endif;
+#Ifndef MSG_EXIT_SUCCESS;
+Constant MSG_EXIT_SUCCESS = 22;
+#Endif;
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
 #Endif;
@@ -133,12 +181,22 @@ Constant LibraryMessages 0;
 		"First, you'd have to leave ", (the) noun, ".";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING:
 		"You aren't holding ", (ItOrThem) noun, ".";
-    MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS:
+    MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS:
 	    "You ", (PrintVerb) verb_word, " ", (the) noun, ".";
     MSG_THROW_FIRST_TAKING:
 		"(first taking ", (the) noun, " off)";
     MSG_SHOW_SUCCESS:
         print_ret (The) second, " is unimpressed.";
+    MSG_GIVE_SUCCESS:
+        print_ret (The) second, " doesn't seem interested.";
+    MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
+        print_ret (The) noun, " has better things to do.";
+    MSG_EXIT_FIRST_LEAVE:
+        "First you have to leave ", (the) parent(player),".";
+    MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN:
+        "You can't, since ",(the) noun, " is closed.";
+    MSG_EXIT_SUCCESS:
+	    "You leave ", (the) noun, ".";
 
 	default:
 		! No code found. Print an error message.

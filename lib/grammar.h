@@ -151,27 +151,27 @@
     if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
     if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
     if (RunLife(second, ##Give) ~= 0) rfalse;
-    print_ret (The) second, " doesn't seem interested.";
+    PrintMsg(MSG_GIVE_SUCCESS);
 ];
 
 [ AskSub;
     if (RunLife(noun,##Ask) ~= 0) rfalse;
-    "There is no reply.";
+    PrintMsg(MSG_ASK_SUCCESS);
 ];
 
 [ AskForSub;
     if (noun == player) <<Inventory>>;
-    print_ret (The) noun, " has better things to do.";
+    PrintMsg(MSG_ASKFOR_SUCCESS);
 ];
 
 [ AskToSub;
-    print_ret (The) noun, " has better things to do.";
+    PrintMsg(MSG_ASKTO_SUCCESS);
 ];
 
 [ TellSub;
-    if (noun == player) "You talk to yourself for a while.";
+    if (noun == player) PrintMsg(MSG_TELL_PLAYER);
     if (RunLife(noun, ##Tell) ~= 0) rfalse;
-    "This provokes no reaction.";
+    PrintMsg(MSG_TELL_SUCCESS);
 ];
 
 [ EnterSub;
@@ -179,32 +179,32 @@
 		PrintMsg(MSG_ENTER_YOU_CANT);
 		rtrue;
 	}
-	if(player in noun) "But you are already there!";
-	if(noun has container && noun hasnt open) "You can't, since it's closed.";
+	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
+	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN); rtrue; }
 	PlayerTo(noun);
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
-	"You enter ", (the) noun, ".";
+    PrintMsg(MSG_ENTER_SUCCESS);
 ];
 
 [ ExitSub;
 	if(noun == 0) noun = parent(player);
-	if(player in location) "But you aren't in anything at the moment!";
+	if(player in location) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
 	if(player notin noun) {
-		if(IndirectlyContains(noun, player)) "First you have to leave ", (the) parent(player),".";
-		if(noun has supporter) "You aren't on that.";
-			"You aren't in that.";
+		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE); rtrue; }
+		if(noun has supporter) { PrintMsg(MSG_EXIT_NOT_ON); rtrue; }
+			PrintMsg(MSG_EXIT_NOT_IN); rtrue;
 	}
-	if(noun has container && noun hasnt open) "You can't, since ",(the) noun, " is closed.";
+	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN); rtrue; }
 	PlayerTo(parent(noun));
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
-	"You leave ", (the) noun, ".";
+    PrintMsg(MSG_EXIT_SUCCESS);
 ];
 
 [ AnswerSub;
     if (second ~= 0 && RunLife(second,##Answer) ~= 0) rfalse;
-    "There is no reply";
+    PrintMsg(MSG_ANSWER_SUCCESS);
 ];
 
 [ InventorySub;
