@@ -1,7 +1,7 @@
 ! ######################### Parser
 ! https://www.inform-fiction.org/source/tm/TechMan.txt
 
-[ ReadPlayerInput p_player_input_array p_parse_array _result;
+[ ReadPlayerInput p_no_prompt _result;
 ! #IfV5;
 !   print "Width: ", HDR_SCREENWCHARS->0,"^";
 ! #EndIf;
@@ -9,28 +9,41 @@
 	style roman;
 	@buffer_mode 0;
 #EndIf;
-	print "^> ";
-	p_parse_array->0 = MAX_INPUT_WORDS;
+	if(p_no_prompt == false) print "> ";
+	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
 	DrawStatusLine();
-	p_player_input_array->0 = MAX_INPUT_CHARS;
-	p_player_input_array->1 = 0;
-	@aread p_player_input_array p_parse_array -> _result;
+	player_input_array->0 = MAX_INPUT_CHARS;
+	player_input_array->1 = 0;
+	@aread player_input_array parse_array -> _result;
 	@buffer_mode 1;
 #IfNot;
-	p_player_input_array->0 = MAX_INPUT_CHARS - 1;
+	player_input_array->0 = MAX_INPUT_CHARS - 1;
 	if(player in location) {
-		@sread p_player_input_array p_parse_array;
+		@sread player_input_array parse_array;
 	} else {
 		_result = location; location = GetVisibilityCeiling(player);
-		@sread p_player_input_array p_parse_array;
+		@sread player_input_array parse_array;
 		location = _result;
 	}
 #EndIf;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
-	_result = 2 * (p_parse_array -> 1) + 1;
-	p_parse_array-->_result = 0;
-	p_parse_array-->(_result + 1) = 0;
+	_result = 2 * (parse_array -> 1) + 1;
+	parse_array-->_result = 0;
+	parse_array-->(_result + 1) = 0;
+];
+
+[ YesOrNo _words _reply;
+    for (::) {
+        ReadPlayerInput(true);
+        _words = parse_array -> 1;
+        _reply = parse_array --> 1;
+        if(_words == 1) {
+            if (_reply == 'yes' or 'y//') rtrue;
+            if (_reply == 'no' or 'n//') rfalse;
+        }
+        PrintMsg(MSG_YES_OR_NO);
+    }
 ];
 
 [ CopyInputArray p_src_input_array p_dst_input_array _n _i;
@@ -415,7 +428,7 @@
 					! disambiguate successfully.
 					CopyInputArray(player_input_array, temp_player_input_array);
 					CopyParserArray(parse_array, temp_parse_array);
-					ReadPlayerInput(player_input_array, parse_array);
+					ReadPlayerInput();
 					! is this a reply to the question?
 					if((parse_array->1 == 1) &&  
 						(((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
@@ -530,7 +543,7 @@
 				}
 			}
 		}
-		rfalse;
+		return -(wn - 1);
 	}
 
 	if(multiple_objects --> 0 == 0) {

@@ -719,9 +719,10 @@ Object DefaultPlayer "you"
 		status_field_1 = score;
 		status_field_2 = turns;
 		if(parse_array->1 == 0) {
-			ReadPlayerInput(player_input_array, parse_array);
+			ReadPlayerInput();
 		}
 		_sentencelength = ParseAndPerformAction();
+		print "^";
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
 #IfDef DEBUG;
@@ -755,13 +756,13 @@ Object DefaultPlayer "you"
 		}
 	}
 	if(game_state == GS_QUIT) @quit;
-	if(game_state == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
-	else if(game_state == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
+	if(game_state == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON, true);
+	else if(game_state == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED, true);
 	else if(game_state == GS_DEATHMESSAGE) DeathMessage();
 	print ".^";
 	for (::)
 	{
-		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
+		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT, true);
 #IFV3;
 		read player_input_array parse_array;
 #IFNOT;

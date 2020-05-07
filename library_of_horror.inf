@@ -146,12 +146,11 @@ Object -> John "John"
 		orders [;
 			Go: "~I must not leave this room.~";
 			NotUnderstood: "~You speak in riddles.~";
-			default: "~I don't take orders from you.~";
 		],
 		life [c w1 w2;
 		! Attack Kiss WakeOther ThrowAt Give Show Ask Tell Answer Order
 		Order:
-			if(action==##Take && noun==LargeBox) "~That box is too big.~";
+			if(action==##Take && noun==LargeBox) "~", (The) noun, " is too big.~";
 			if(action==##Take) "~I don't need more possessions.~";
 			"John ignores your comment.";
 		Show, Give:

@@ -263,28 +263,8 @@
 #EndIf;
 ];
 
-[ YesOrNo _words _reply;
-	for (::)
-	{
-#IfV3;
-		@sread player_input_array parse_array;
-#IfNot;
-		DrawStatusLine();
-		player_input_array -> 1 = 0;
-		@aread player_input_array parse_array -> _reply;
-#EndIf;
-		_words = parse_array -> 1;
-		_reply = parse_array --> 1;
-		if(_words == 1) {
-			if (_reply == 'yes' or 'y//') rtrue;
-			if (_reply == 'no' or 'n//') rfalse;
-		}
-        PrintMsg(MSG_YES_OR_NO);
-	}
-];
-
 [ RestartSub;
-    PrintMsg(MSG_RESTART_CONFIRM);
+    PrintMsg(MSG_RESTART_CONFIRM, true);
 	if(YesOrNo()) {
 		@restart;
         PrintMsg(MSG_RESTART_FAILED);
