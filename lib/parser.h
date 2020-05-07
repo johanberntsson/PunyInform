@@ -300,9 +300,6 @@
 		return _noun;
 	} else {
 		! this is not a recognized word at all
-#IfDef DEBUG;
-	print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
-#EndIf;
 		return 0;
 	}
 ];
@@ -313,7 +310,7 @@
 	return p_parse_pointer --> 0 == './/';
 ];
 
-[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _num_patterns _i _j _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun;
+[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun _check_held _check_creature;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -396,16 +393,15 @@
 !   print "Word 3: ", (parse_array + 10)-->0, "^";
 	_verb_num = 255 - (_word_data->1);
 	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_verb_num;
-	_num_patterns = _verb_grammar->0;
 
 #IfDef DEBUG;
 	print "Verb#: ",_verb_num,", meta ",meta,".^";
 	print "Grammar address for this verb: ",_verb_grammar,"^";
-	print "Number of patterns: ",_num_patterns,"^";
+	print "Number of patterns: ", _verb_grammar->0 ,"^";
 
 	! First print all patterns, for debug purposes
 	_pattern = _verb_grammar + 1;
-	for(_i = 0 : _i < _num_patterns : _i++) {
+	for(_i = 0 : _i < _verb_grammar->0: _i++) {
 		print "############ Pattern ",_i,"^";
 		_pattern = CheckPattern(_pattern);
 	}
@@ -413,7 +409,7 @@
 #EndIf;
 
 	_pattern = _verb_grammar + 1;
-	for(_i = 0 : _i < _num_patterns : _i++) {
+	for(_i = 0 : _i < _verb_grammar->0 : _i++) {
 #IfDef DEBUG;
 		print "############ Pattern ",_i," address ", _pattern, "^";
 #EndIf;
@@ -426,6 +422,8 @@
 		inp1 = 0;
 		inp2 = 0;
 		multiple_objects --> 0 = 0;
+		_check_held = 0;
+		_check_creature = 0;
 
 		while(true) {
 			_pattern_index = _pattern_index + 3;
@@ -486,9 +484,9 @@
 				! SPECIAL_TOKEN, NUMBER_TOKEN or TOPIC_TOKEN
 				!
 				! first take care of take all/drop all
-				if(_parse_pointer-->0 == ALL_WORD) {
+				if(_parse_pointer-->0 == ALL_WORD &&
+					_token_data == MULTI_TOKEN or MULTIHELD_TOKEN) {
 					! take all etc.
-					!
 					! absort the "all" keyword
 					wn = wn + 1;
 					_parse_pointer = _parse_pointer + 4;
@@ -506,6 +504,11 @@
 					if(_noun == 0) break;
 					if(_noun == -1) rfalse;
 					_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+					if(_token_data == CREATURE_TOKEN && _noun hasnt animate)
+						_check_creature = _noun;
+					if(_token_data == HELD_TOKEN && _noun notin player) {
+						_check_held = _noun;
+					}
 					if(_noun_tokens == 0) {
 						noun = _noun;
 						inp1 = _noun;
@@ -529,7 +532,7 @@
 						multiple_objects --> (multiple_objects --> 0) = _noun;
 					}
 					if(multiple_objects --> 0 == 0) {
-						! no nouns found
+						! no nouns found, so this pattern didn't match
 						break;
 					}
 				} else {
@@ -583,6 +586,15 @@
 		}
 		return -(wn - 1);
 	}
+	if(_check_held > 0) {
+		print "(first taking ", (the) _check_held, ")^^";
+		keep_silent = true;
+		<take _check_held>;
+		keep_silent = false;
+		if(_check_held notin player) rtrue;
+	}
+	if(_check_creature > 0 && _check_creature hasnt animate)
+		"You can only do that to something animate.";
 
 	if(multiple_objects --> 0 == 0) {
 		! single action
