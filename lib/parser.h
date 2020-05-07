@@ -103,12 +103,20 @@
 	return parse_array->(p_wordnum*4);	
 ];
 
+[ PeekAtNextWord _i _j _wn;
+	_i = wn*2-1;
+	_j = parse_array-->_i;
+	if (_j == ',//') _j = comma_word;
+	if (_j == './/') _j = THEN_WORD;
+	return _j;
+];
+
 [ NextWord _i _j;
 	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
 	_i = wn*2-1; wn++;
 	_j = parse_array-->_i;
 	if (_j == ',//') _j = comma_word;
-!	if (_j == './/') _j = THEN1__WD;
+	if (_j == './/') _j = THEN_WORD;
 	return _j;
 ];
 
@@ -216,7 +224,7 @@
 	return 0;
 ];
 
-[ AskWhichNoun p_noun_name p_num_matching_nouns _i;
+[ AskWhichNoun p_noun_name p_num_matching_nouns _i; 
 	print "Which ", (address) p_noun_name, " do you mean? ";
 	for(_i = 0 : _i < p_num_matching_nouns : _i++) {
 		if(_i == 0) {
@@ -231,6 +239,72 @@
 		}
 	}
 	"?";
+];
+
+[ GetNextNoun p_parse_pointer _noun _oldwn;
+	! try getting a noun from the <p_parse_pointer> entry in parse_array
+	! return <noun number> if found, 0 if no noun found, or -1
+	! if we should give up parsing completely (because the
+	! player has entered a new command line).
+	! 
+	! Side effects:
+	! - if found, then wn will be updated
+	! NOTE: you need to update parse_pointer after calling GetNextNoun since
+	! wn can change
+	_noun = CheckNoun(p_parse_pointer, parse_array->1);
+.recheck_noun;
+	if(_noun < 0) {
+		AskWhichNoun(p_parse_pointer --> 0, -_noun);
+		! read a new line of input
+		! I need to use parse_array since NextWord
+		! for parse_name and others hardcode this
+		! usage, so I first store the old input into
+		! temp arrays that I will restore if I can
+		! disambiguate successfully.
+		CopyInputArray(player_input_array, temp_player_input_array);
+		CopyParserArray(parse_array, temp_parse_array);
+		ReadPlayerInput();
+		! is this a reply to the question?
+		if((parse_array->1 == 1) &&  
+			(((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
+			! only one word, and it is not a verb. Assume
+			! a valid reply and add the other 
+			! entry into parse_array, then retry
+			_oldwn = wn; ! wn is used in CheckNoun, so save it
+			wn = 1;
+			_noun = CheckNoun(parse_array+2, 1);
+			wn = _oldwn; ! and restore it after the call
+			if(_noun > 0) {
+				! TODO: here I assume that only one word was
+				! give in the original input
+				! > take book
+				! which book, the blue or the green
+				! > green
+				! and then I skip book when accepting the
+				! new reply. Will fail if more then
+				! one noun word before disambiguation
+				which_object->0 = 1;
+				! don't forget to restore the old arrays
+				CopyInputArray(temp_player_input_array, player_input_array);
+				CopyParserArray(temp_parse_array, parse_array);
+				jump recheck_noun;
+			}
+		}
+		! completely new input.
+		return -1; ! start from the beginning
+	} else if(_noun > 0) {
+#IfDef DEBUG;
+		print "Noun match! ", _noun, " ", which_object -> 0, "^";
+#EndIf;
+		wn = wn + which_object->0;
+		return _noun;
+	} else {
+		! this is not a recognized word at all
+#IfDef DEBUG;
+	print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
+#EndIf;
+		return 0;
+	}
 ];
 
 [ IsSentenceDivider p_parse_pointer;
@@ -420,90 +494,42 @@
 					_parse_pointer = _parse_pointer + 4;
 					! Add all reasonable objects in scope
 					! to the multiple_objects array
-					AddMultipleNouns(MULTI_TOKEN);
+					AddMultipleNouns(_token_data);
 					if(multiple_objects --> 0 == 0) {
 						print "Nothing to do!^";
 						return -wn;
 					}
 					continue;
 				}
-				if(_token_data == NOUN_TOKEN or HELD_TOKEN or MULTI_TOKEN) {
-					! normally we expect a single noun here, but several 
-					! are possible if _token_data is MULTI* or similar
-					!
-					! check all objects in 'scope', and see if any match.
-					! If so, update wn and parse_pointer, update noun
-					! and second, and return success.
-					! 
-					! In case of more than one match the which_object array
-					! contains all matched nouns.
-					_noun = CheckNoun(_parse_pointer, parse_array->1);
-	.recheck_noun;
-					if(_noun < 0) {
-						AskWhichNoun(_parse_pointer --> 0, -_noun);
-						! read a new line of input
-						! I need to use parse_array since NextWord
-						! for parse_name and others hardcode this
-						! usage, so I first store the old input into
-						! temp arrays that I will restore if I can
-						! disambiguate successfully.
-						CopyInputArray(player_input_array, temp_player_input_array);
-						CopyParserArray(parse_array, temp_parse_array);
-						ReadPlayerInput();
-						! is this a reply to the question?
-						if((parse_array->1 == 1) &&  
-							(((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
-							! only one word, and it is not a verb. Assume
-							! a valid reply and add the other 
-							! entry into parse_array, then retry
-							_i = wn; ! wn is used in CheckNoun, so save it
-							wn = 1;
-							_noun = CheckNoun(parse_array+2, 1);
-							wn = _i; ! and restore it after the call
-							if(_noun > 0) {
-								! TODO: here I assume that only one word was
-								! give in the original input
-								! > take book
-								! which book, the blue or the green
-								! > green
-								! and then I skip book when accepting the
-								! new reply. Will fail if more then
-								! one noun word before disambiguation
-								which_object->0 = 1;
-								! don't forget to restore the old arrays
-								CopyInputArray(temp_player_input_array, player_input_array);
-								CopyParserArray(temp_parse_array, parse_array);
-								jump recheck_noun;
-							}
+				if(_token_data == NOUN_TOKEN or HELD_TOKEN or CREATURE_TOKEN) {
+					_noun = GetNextNoun(_parse_pointer);
+					if(_noun == 0) break;
+					if(_noun == -1) rfalse;
+					_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+					if(_noun_tokens == 0) {
+						noun = _noun;
+						inp1 = _noun;
+					} else if(_noun_tokens == 1){
+						second = _noun;
+						inp2 = _noun;
+					}
+					_noun_tokens++;
+				} else if(_token_data == MULTI_TOKEN or MULTIHELD_TOKEN) {
+					for(::) {
+						if(PeekAtNextWord() == comma_word or AND_WORD) {
+							wn = wn + 1;
+							_parse_pointer = _parse_pointer + 4;
+							continue;
 						}
-						! completely new input.
-						return 0; ! start from the beginning
-					} else if(_noun > 0) {
-#IfDef DEBUG;
-						print "Noun match! ", _noun, " ", which_object -> 0, "^";
-#EndIf;
-						wn = wn + which_object->0;
-						_parse_pointer = _parse_pointer + 4 * which_object->0;
-
-						if(_noun_tokens == 0) {
-							noun = _noun;
-							inp1 = _noun;
-						} else if(_noun_tokens == 1){
-							second = _noun;
-							inp2 = _noun;
-						}
-						_noun_tokens++;
-
-						if(_token_type == TT_ROUTINE_FILTER) {
-							!print "calling filter: ", _token_data, "^";
-							if(_token_data() == false) break;
-						}
-						continue;
-					} else {
-						! this is not a recognized word at all
-#IfDef DEBUG;
-					print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
-#EndIf;
+						_noun = GetNextNoun(_parse_pointer);
+						if(_noun == 0) break;
+						if(_noun == -1) rfalse;
+						_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+						multiple_objects --> 0 = 1 + (multiple_objects --> 0);
+						multiple_objects --> (multiple_objects --> 0) = _noun;
+					}
+					if(multiple_objects --> 0 == 0) {
+						! no nouns found
 						break;
 					}
 				} else {
