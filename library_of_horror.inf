@@ -168,7 +168,8 @@ Object -> John "John"
 			if(action==##Take) "~I don't need more possessions.~";
 			"John ignores your comment.";
 		Show, Give:
-			if(noun==PinkBook) <<Ask self PinkBook>>;
+			! TODO <<>> doesn't work if(noun==PinkBook) <<Ask self PinkBook>>;
+			if(noun==PinkBook) { <<Ask self PinkBook>>; rtrue; }
 			"John doesn't appear to be interested.";
 		Ask, Tell, Answer:
 			w1=0;
@@ -179,6 +180,7 @@ Object -> John "John"
 			if(c>2) "What you cannot say in few words, probably isn't worth saying.";
 
 			if(w1=='help') "'I will help you, if you tell me how.'";
+			if(second == PinkBook) "~That is a nice pink book.~";
 			"John ignores your question.";
 		],
 	has proper animate;

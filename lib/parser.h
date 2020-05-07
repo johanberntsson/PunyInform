@@ -343,6 +343,7 @@
 #IfDef DEBUG;
 		print "Case 1, Word ", _verb, "^";
 #EndIf;
+		if(actor ~= player) jump treat_bad_line_as_conversation;
 		"I don't understand that word.";
 	}
 
@@ -369,7 +370,9 @@
 				jump conversation;
 			}
 		}
+		if(actor ~= player) jump treat_bad_line_as_conversation;
 		"That is not a verb I recognize.";
+
 .conversation;
 		if(_noun hasnt animate) {
 			"You can't talk to ", (the) _noun, ".";
@@ -425,6 +428,7 @@
 		_check_held = 0;
 		_check_creature = 0;
 		_unknown_noun_found = 0;
+		action = (_pattern --> 0) & $03ff;
 
 		while(true) {
 			_pattern_index = _pattern_index + 3;
@@ -522,6 +526,8 @@
 					}
 					_noun_tokens++;
 				} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT) {
+					! TODO: perhaps merge NOUN_OBJECT and MULTI_OBJECT
+					! and friends? Lots of code in common
 					for(::) {
 						_noun = GetNextNoun(_parse_pointer);
 						if(_noun == 0) {
@@ -543,12 +549,26 @@
 						! no nouns found, so this pattern didn't match
 						break;
 					}
+					_noun_tokens++;
 				} else if(_token_data == TOPIC_OBJECT) {
-					! TODO: for now, only absorb one topic word
 					consult_from = wn;
-					consult_words = 1;
-					wn = wn + 1;
-					_parse_pointer = _parse_pointer + 4;
+					consult_words = 0;
+					! topic continues until end of line or
+					! until the word matches the preposition
+					! defined in the next pattern
+					!print (_pattern_index + 3) -> 0, "^"; ! token
+					!print (_pattern_index + 4) --> 0, "^"; ! token_data 
+					_i = (_pattern_index + 4) --> 0; ! word to stop at
+					for(::) {
+						wn = wn + 1;
+						consult_words = consult_words + 1;
+						_parse_pointer = _parse_pointer + 4;
+						if(wn > parse_array->1 || _parse_pointer --> 0 == _i) {
+							! found the stop token, or end of line
+							break;
+						}
+					}
+					_noun_tokens++;
 				!TODO } else if(_token_data == MULTIEXCEPT_OBJECT) {
 				!TODO } else if(_token_data == MULTIINSIDE_OBJECT) {
 				!TODO } else if(_token_data == SPECIAL_OBJECT) {
@@ -577,9 +597,14 @@
 	if(_unknown_noun_found) "You can't see any such thing.";
 	"Sorry, I didn't understand that.";
 
-.parse_success;
-	action = (_pattern --> 0) & $03ff;
+.treat_bad_line_as_conversation;
+	! this is used when not understood and the actor is an NPC
+	action = ##NotUnderstood;
+	consult_from = wn;
+	consult_words = parse_array->1 - wn + 1;
+	! fall through to jump parse_success;
 
+.parse_success;
 	if(actor ~= player) {
 		! The player's "orders" property can refuse to allow conversation
 		! here, by returning true.  If not, the order is sent to the
@@ -589,19 +614,15 @@
 		! "say grrr to floyd").  If it was a good command, it is finally
 		! offered to the Order: part of the other person's "life"
 		! property, the old-fashioned way of dealing with conversation.
-		_i = RunRoutines(player, orders);
-		if (_i == 0) {
-			_i = RunRoutines(actor, orders);
-			if (_i == 0) {
-				if(action == ##NotUnderstood) {
-					_pattern-->3 = actor; actor = player; action = ##Answer;
-					jump parse_success;
-				}
-				if(RunLife(actor, ##Order) == 0) {
-					print_ret (The) actor, " has better things to do.";
-				}
-			}
+		sw__var = action;
+		if(RunRoutines(player, orders)) rtrue;
+		if(RunRoutines(actor, orders)) rtrue;
+		if(action == ##NotUnderstood) {
+			actor = player; action = ##Answer;
+			jump parse_success;
 		}
+		if(RunLife(actor, ##Order)) rtrue;
+		print (The) actor, " has better things to do.";
 		return -(wn - 1);
 	}
 	if(_check_held > 0) {
