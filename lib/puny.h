@@ -718,11 +718,11 @@ Object DefaultPlayer "you"
 	while(game_state == GS_PLAYING) {
 		status_field_1 = score;
 		status_field_2 = turns;
+		print "^";
 		if(parse_array->1 == 0) {
 			ReadPlayerInput();
 		}
 		_sentencelength = ParseAndPerformAction();
-		print "^";
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
 #IfDef DEBUG;

@@ -359,7 +359,7 @@
 			_token_type = _token & $0f;
 			_token_data = (_pattern_index + 1) --> 0;
 #IfDef DEBUG;
-			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, " _token_data ", _token_data, "^";
 #EndIf;
 
 			if(_token_type == TT_END) {
@@ -405,79 +405,14 @@
 #EndIf;
 				if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
-			} else if(_token_type == TT_OBJECT || _token_type == TT_ROUTINE_FILTER ) {
-				! normally we expect a noun here, but several 
-				! are possible if _token_data is multi or similar
+			} else if(_token_type == TT_OBJECT) {
+				! here _token_data will be one of 
+				! NOUN_TOKEN, HELD_TOKEN, MULTI_TOKEN, MULTIHELD_TOKEN,
+				! MULTIEXCEPT_TOKEN, MULTIINSIDE_TOKEN, CREATURE_TOKEN,
+				! SPECIAL_TOKEN, NUMBER_TOKEN or TOPIC_TOKEN
 				!
-				! check all objects in 'scope', and see if any match.
-				! If so, update wn and parse_pointer, update noun
-				! and second, and return success.
-				! 
-				! In case of more than one match the which_object array
-				! contains all matched nouns.
-				_noun = CheckNoun(_parse_pointer, parse_array->1);
-.recheck_noun;
-				if(_noun < 0) {
-					AskWhichNoun(_parse_pointer --> 0, -_noun);
-					! read a new line of input
-					! I need to use parse_array since NextWord
-					! for parse_name and others hardcode this
-					! usage, so I first store the old input into
-					! temp arrays that I will restore if I can
-					! disambiguate successfully.
-					CopyInputArray(player_input_array, temp_player_input_array);
-					CopyParserArray(parse_array, temp_parse_array);
-					ReadPlayerInput();
-					! is this a reply to the question?
-					if((parse_array->1 == 1) &&  
-						(((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
-						! only one word, and it is not a verb. Assume
-						! a valid reply and add the other 
-						! entry into parse_array, then retry
-						_i = wn; ! wn is used in CheckNoun, so save it
-						wn = 1;
-						_noun = CheckNoun(parse_array+2, 1);
-						wn = _i; ! and restore it after the call
-						if(_noun > 0) {
-							! TODO: here I assume that only one word was
-							! give in the original input
-							! > take book
-							! which book, the blue or the green
-							! > green
-							! and then I skip book when accepting the
-							! new reply. Will fail if more then
-							! one noun word before disambiguation
-							which_object->0 = 1;
-							! don't forget to restore the old arrays
-							CopyInputArray(temp_player_input_array, player_input_array);
-							CopyParserArray(temp_parse_array, parse_array);
-							jump recheck_noun;
-						}
-					}
-					! completely new input.
-					return 0; ! start from the beginning
-				} else if(_noun > 0) {
-#IfDef DEBUG;
-					print "Noun match! ", _noun, " ", which_object -> 0, "^";
-#EndIf;
-					wn = wn + which_object->0;
-					_parse_pointer = _parse_pointer + 4 * which_object->0;
-
-					if(_noun_tokens == 0) {
-						noun = _noun;
-						inp1 = _noun;
-					} else if(_noun_tokens == 1){
-						second = _noun;
-						inp2 = _noun;
-					}
-					_noun_tokens++;
-
-					if(_token_type == TT_ROUTINE_FILTER) {
-						!print "calling filter: ", _token_data, "^";
-						if(_token_data() == false) break;
-					}
-					continue;
-				} else if(_parse_pointer-->0 == ALL_WORD) {
+				! first take care of take all/drop all
+				if(_parse_pointer-->0 == ALL_WORD) {
 					! take all etc.
 					!
 					! absort the "all" keyword
@@ -485,26 +420,104 @@
 					_parse_pointer = _parse_pointer + 4;
 					! Add all reasonable objects in scope
 					! to the multiple_objects array
-					AddMultipleNouns(_token_data);
+					AddMultipleNouns(MULTI_TOKEN);
 					if(multiple_objects --> 0 == 0) {
 						print "Nothing to do!^";
 						return -wn;
 					}
 					continue;
+				}
+				if(_token_data == NOUN_TOKEN or HELD_TOKEN or MULTI_TOKEN) {
+					! normally we expect a single noun here, but several 
+					! are possible if _token_data is MULTI* or similar
+					!
+					! check all objects in 'scope', and see if any match.
+					! If so, update wn and parse_pointer, update noun
+					! and second, and return success.
+					! 
+					! In case of more than one match the which_object array
+					! contains all matched nouns.
+					_noun = CheckNoun(_parse_pointer, parse_array->1);
+	.recheck_noun;
+					if(_noun < 0) {
+						AskWhichNoun(_parse_pointer --> 0, -_noun);
+						! read a new line of input
+						! I need to use parse_array since NextWord
+						! for parse_name and others hardcode this
+						! usage, so I first store the old input into
+						! temp arrays that I will restore if I can
+						! disambiguate successfully.
+						CopyInputArray(player_input_array, temp_player_input_array);
+						CopyParserArray(parse_array, temp_parse_array);
+						ReadPlayerInput();
+						! is this a reply to the question?
+						if((parse_array->1 == 1) &&  
+							(((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
+							! only one word, and it is not a verb. Assume
+							! a valid reply and add the other 
+							! entry into parse_array, then retry
+							_i = wn; ! wn is used in CheckNoun, so save it
+							wn = 1;
+							_noun = CheckNoun(parse_array+2, 1);
+							wn = _i; ! and restore it after the call
+							if(_noun > 0) {
+								! TODO: here I assume that only one word was
+								! give in the original input
+								! > take book
+								! which book, the blue or the green
+								! > green
+								! and then I skip book when accepting the
+								! new reply. Will fail if more then
+								! one noun word before disambiguation
+								which_object->0 = 1;
+								! don't forget to restore the old arrays
+								CopyInputArray(temp_player_input_array, player_input_array);
+								CopyParserArray(temp_parse_array, parse_array);
+								jump recheck_noun;
+							}
+						}
+						! completely new input.
+						return 0; ! start from the beginning
+					} else if(_noun > 0) {
+#IfDef DEBUG;
+						print "Noun match! ", _noun, " ", which_object -> 0, "^";
+#EndIf;
+						wn = wn + which_object->0;
+						_parse_pointer = _parse_pointer + 4 * which_object->0;
+
+						if(_noun_tokens == 0) {
+							noun = _noun;
+							inp1 = _noun;
+						} else if(_noun_tokens == 1){
+							second = _noun;
+							inp2 = _noun;
+						}
+						_noun_tokens++;
+
+						if(_token_type == TT_ROUTINE_FILTER) {
+							!print "calling filter: ", _token_data, "^";
+							if(_token_data() == false) break;
+						}
+						continue;
+					} else {
+						! this is not a recognized word at all
+#IfDef DEBUG;
+					print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
+#EndIf;
+						break;
+					}
 				} else {
-					! this is not a recognized word at all
+					RunTimeError("unexpected _token_data");
 					break;
 				}
-#IfDef DEBUG;
-				print "Not a matching noun: ", _parse_pointer, ":", _parse_pointer --> 0, "^";
-#EndIf;
-				break;
+			!TODO } else if(_token_type == TT_ROUTINE_FILTER ) {
+			!TODO } else if(_token_type == TT_ATTR_FILTER ) {
+			!TODO } else if(_token_type == TT_SCOPE
+			!TODO } else if(_token_type == TT_PARSE_ROUTINE ) {
+			} else {
+					RunTimeError("unexpected _token_type");
+					break;
 			}
-			! This is a token we don't recognize, which means we fail at matching against this line
-#IfDef DEBUG;
-			print "Unknown token: ", _token_type, "^";
-#EndIf;
-			break;
 		}
 		! This pattern has failed.
 #IfDef DEBUG;

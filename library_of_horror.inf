@@ -154,7 +154,7 @@ Object -> John "John"
 			if(action==##Take) "~I don't need more possessions.~";
 			"John ignores your comment.";
 		Show, Give:
-			if(noun==LargeBox) <<Ask self LargeBox>>;
+			if(noun==PinkBook) <<Ask self PinkBook>>;
 			"John doesn't appear to be interested.";
 		Ask, Tell, Answer:
 			w1=0;

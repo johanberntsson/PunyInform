@@ -92,7 +92,7 @@ Constant TT_PREPOSITION      = 2;    ! e.g. 'into'
 Constant TT_ROUTINE_FILTER   = 3;    ! e.g. noun=CagedCreature
 Constant TT_ATTR_FILTER      = 4;    ! e.g. edible
 Constant TT_SCOPE            = 5;    ! e.g. scope=Spells
-Constant TT_PARSE_ROUTIME    = 6;    ! a parse routine
+Constant TT_PARSE_ROUTINE    = 6;    ! a parse routine
 Constant TT_END              = 15;   ! End of grammar line
 
 Constant NOUN_TOKEN         = 0;    ! The elementary grammar tokens, and
