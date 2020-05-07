@@ -2,13 +2,25 @@
 
 ! Library of Horror - a sample game which uses PunyInform
 
+! compile as z8 to use Inform stdlib instead of puny (for debugging)
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
 Constant FLAG_COUNT 8;
 Constant F_SQUIRREL_ESCAPED 0;
 Constant F_PARROT_FED 1;
 Constant F_BOUGHT_TICKETS 2;
+
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+Include "./lib/flags.h";
+#Endif;
+#Ifndef USEINFORM;
 Include "globals.h";
 
 Constant MSG_AREYOUSUREQUIT "You ain't no quitter eh? ";
@@ -19,8 +31,8 @@ Constant MSG_OPEN_YOU_CANT 1000;
 		"How would you go about opening ", (a) noun, "?";
 	rfalse;
 ];
-
 Include "puny.h";
+#Endif;
 
 Class Book
 	with
@@ -63,6 +75,7 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 		short_name "box",
 		name 'box',
 		description [;
+#Ifndef USEINFORM;
 			if(GetVisibilityCeiling(player) == self) {
 				print "The box looked pretty big from the outside, but you feel really confined in here.";
 				rtrue;
@@ -70,6 +83,7 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 				print "It's a large box. You could probably fit several people in there.";
 				rtrue;
 			}
+#Endif;
 		],
         time_out [;
             print "^The box goes BOOM.^";
@@ -220,4 +234,7 @@ Book -> PinkBook "pink book"
 	BlueBook.party(5);
 	print "^^And so the story begins...^^";
 ];
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
 
