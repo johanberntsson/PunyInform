@@ -307,10 +307,10 @@
 [ IsSentenceDivider p_parse_pointer;
 	! check if current parse_array block, indicated by p_parse_pointer,
 	! is a period or other sentence divider
-	return p_parse_pointer --> 0 == './/';
+	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseAndPerformAction _verb _word_data _verb_num _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun _check_held _check_creature;
+[ ParseAndPerformAction _verb _word_data _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun _check_held _check_creature _unknown_noun_found;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -391,11 +391,11 @@
 !   print "Word 1: ", (parse_array + 2)-->0, "^";
 !   print "Word 2: ", (parse_array + 6)-->0, "^";
 !   print "Word 3: ", (parse_array + 10)-->0, "^";
-	_verb_num = 255 - (_word_data->1);
-	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_verb_num;
+	_i = 255 - (_word_data->1); ! was _verb_num
+	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_i;
 
 #IfDef DEBUG;
-	print "Verb#: ",_verb_num,", meta ",meta,".^";
+	print "Verb#: ",_i,", meta ",meta,".^";
 	print "Grammar address for this verb: ",_verb_grammar,"^";
 	print "Number of patterns: ", _verb_grammar->0 ,"^";
 
@@ -424,6 +424,7 @@
 		multiple_objects --> 0 = 0;
 		_check_held = 0;
 		_check_creature = 0;
+		_unknown_noun_found = 0;
 
 		while(true) {
 			_pattern_index = _pattern_index + 3;
@@ -501,7 +502,10 @@
 				}
 				if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 					_noun = GetNextNoun(_parse_pointer);
-					if(_noun == 0) break;
+					if(_noun == 0) {
+						_unknown_noun_found = true;
+						break;
+					}
 					if(_noun == -1) rfalse;
 					_parse_pointer = parse_array + 2 + 4 * (wn - 1);
 					if(_token_data == CREATURE_OBJECT && _noun hasnt animate)
@@ -519,17 +523,21 @@
 					_noun_tokens++;
 				} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT) {
 					for(::) {
-						if(PeekAtNextWord() == comma_word or AND_WORD) {
-							wn = wn + 1;
-							_parse_pointer = _parse_pointer + 4;
-							continue;
-						}
 						_noun = GetNextNoun(_parse_pointer);
-						if(_noun == 0) break;
+						if(_noun == 0) {
+							_unknown_noun_found = true;
+							break;
+						}
 						if(_noun == -1) rfalse;
 						_parse_pointer = parse_array + 2 + 4 * (wn - 1);
 						multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 						multiple_objects --> (multiple_objects --> 0) = _noun;
+						! check if we should continue: and or comma
+						if(PeekAtNextWord() == comma_word or AND_WORD) {
+							wn = wn + 1;
+							_parse_pointer = _parse_pointer + 4;
+							continue;
+						} else break;
 					}
 					if(multiple_objects --> 0 == 0) {
 						! no nouns found, so this pattern didn't match
@@ -566,7 +574,7 @@
 		while(_pattern_index -> 0 ~= TT_END) _pattern_index = _pattern_index + 3;
 		_pattern = _pattern_index + 1;
 	}
-
+	if(_unknown_noun_found) "You can't see any such thing.";
 	"Sorry, I didn't understand that.";
 
 .parse_success;
