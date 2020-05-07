@@ -479,13 +479,13 @@
 				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
 			} else if(_token_type == TT_OBJECT) {
 				! here _token_data will be one of 
-				! NOUN_TOKEN, HELD_TOKEN, MULTI_TOKEN, MULTIHELD_TOKEN,
-				! MULTIEXCEPT_TOKEN, MULTIINSIDE_TOKEN, CREATURE_TOKEN,
-				! SPECIAL_TOKEN, NUMBER_TOKEN or TOPIC_TOKEN
+				! NOUN_OBJECT, HELD_OBJECT, MULTI_OBJECT, MULTIHELD_OBJECT,
+				! MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT, CREATURE_OBJECT,
+				! SPECIAL_OBJECT, NUMBER_OBJECT or TOPIC_OBJECT
 				!
 				! first take care of take all/drop all
 				if(_parse_pointer-->0 == ALL_WORD &&
-					_token_data == MULTI_TOKEN or MULTIHELD_TOKEN) {
+					_token_data == MULTI_OBJECT or MULTIHELD_OBJECT) {
 					! take all etc.
 					! absort the "all" keyword
 					wn = wn + 1;
@@ -499,14 +499,14 @@
 					}
 					continue;
 				}
-				if(_token_data == NOUN_TOKEN or HELD_TOKEN or CREATURE_TOKEN) {
+				if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 					_noun = GetNextNoun(_parse_pointer);
 					if(_noun == 0) break;
 					if(_noun == -1) rfalse;
 					_parse_pointer = parse_array + 2 + 4 * (wn - 1);
-					if(_token_data == CREATURE_TOKEN && _noun hasnt animate)
+					if(_token_data == CREATURE_OBJECT && _noun hasnt animate)
 						_check_creature = _noun;
-					if(_token_data == HELD_TOKEN && _noun notin player) {
+					if(_token_data == HELD_OBJECT && _noun notin player) {
 						_check_held = _noun;
 					}
 					if(_noun_tokens == 0) {
@@ -517,7 +517,7 @@
 						inp2 = _noun;
 					}
 					_noun_tokens++;
-				} else if(_token_data == MULTI_TOKEN or MULTIHELD_TOKEN) {
+				} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT) {
 					for(::) {
 						if(PeekAtNextWord() == comma_word or AND_WORD) {
 							wn = wn + 1;
@@ -535,14 +535,24 @@
 						! no nouns found, so this pattern didn't match
 						break;
 					}
+				} else if(_token_data == TOPIC_OBJECT) {
+					! TODO: for now, only absorb one topic word
+					consult_from = wn;
+					consult_words = 1;
+					wn = wn + 1;
+					_parse_pointer = _parse_pointer + 4;
+				!TODO } else if(_token_data == MULTIEXCEPT_OBJECT) {
+				!TODO } else if(_token_data == MULTIINSIDE_OBJECT) {
+				!TODO } else if(_token_data == SPECIAL_OBJECT) {
+				!TODO } else if(_token_data == NUMBER_OBJECT) {
 				} else {
 					RunTimeError("unexpected _token_data");
 					break;
 				}
-			!TODO } else if(_token_type == TT_ROUTINE_FILTER ) {
-			!TODO } else if(_token_type == TT_ATTR_FILTER ) {
-			!TODO } else if(_token_type == TT_SCOPE
-			!TODO } else if(_token_type == TT_PARSE_ROUTINE ) {
+			!TODO } else if(_token_type == TT_ROUTINE_FILTER) {
+			!TODO } else if(_token_type == TT_ATTR_FILTER) {
+			!TODO } else if(_token_type == TT_SCOPE) {
+			!TODO } else if(_token_type == TT_PARSE_ROUTINE) {
 			} else {
 					RunTimeError("unexpected _token_type");
 					break;
@@ -621,9 +631,9 @@
 		_obj = scope-->_i;
 		_addobj = false;
 		switch(multiple_objects_type) {
-		MULTI_TOKEN:
+		MULTI_OBJECT:
 			_addobj = _obj hasnt scenery or concealed;
-		MULTIHELD_TOKEN:
+		MULTIHELD_OBJECT:
 			_addobj = _obj in player;
 		}
 		if(_addobj) {

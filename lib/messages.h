@@ -77,7 +77,7 @@ Constant MSG_EXIT_NOT_ON "You aren't on that.";
 Constant MSG_EXIT_NOT_IN "You aren't in that.";
 #Endif;
 #Ifndef MSG_ANSWER_SUCCESS;
-Constant MSG_ANSWER_SUCCESS "There is no reply";
+Constant MSG_ANSWER_SUCCESS "There is no reply.";
 #Endif;
 #Ifndef MSG_INVENTORY_EMPTY;
 Constant MSG_INVENTORY_EMPTY "You are empty handed.";

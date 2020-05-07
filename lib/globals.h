@@ -96,16 +96,16 @@ Constant TT_SCOPE            = 5;    ! e.g. scope=Spells
 Constant TT_PARSE_ROUTINE    = 6;    ! a parse routine
 Constant TT_END              = 15;   ! End of grammar line
 
-Constant NOUN_TOKEN         = 0;    ! The elementary grammar tokens, and
-Constant HELD_TOKEN         = 1;    ! the numbers compiled by Inform to
-Constant MULTI_TOKEN        = 2;    ! encode them
-Constant MULTIHELD_TOKEN    = 3;
-Constant MULTIEXCEPT_TOKEN  = 4;
-Constant MULTIINSIDE_TOKEN  = 5;
-Constant CREATURE_TOKEN     = 6;
-Constant SPECIAL_TOKEN      = 7;
-Constant NUMBER_TOKEN       = 8;
-Constant TOPIC_TOKEN        = 9;
+Constant NOUN_OBJECT         = 0;    ! The elementary grammar tokens, and
+Constant HELD_OBJECT         = 1;    ! the numbers compiled by Inform to
+Constant MULTI_OBJECT        = 2;    ! encode them
+Constant MULTIHELD_OBJECT    = 3;
+Constant MULTIEXCEPT_OBJECT  = 4;
+Constant MULTIINSIDE_OBJECT  = 5;
+Constant CREATURE_OBJECT     = 6;
+Constant SPECIAL_OBJECT      = 7;
+Constant NUMBER_OBJECT       = 8;
+Constant TOPIC_OBJECT        = 9;
 
 ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
 Constant TOKEN_SINGLE_PREP   = $42;
