@@ -89,7 +89,7 @@ Constant MSG_GO_CANT_GO "You can't go that way.";
 Constant MSG_SAVE_SUCCESS "Ok.";
 #Endif;
 #Ifndef MSG_YES_OR_NO;
-Constant MSG_YES_OR_NO "Please answer yes or no.^> ";
+Constant MSG_YES_OR_NO "Please answer yes or no: ";
 #Endif;
 #Ifndef MSG_RESTART_CONFIRM;
 Constant MSG_RESTART_CONFIRM "Are you sure you want to restart? ";

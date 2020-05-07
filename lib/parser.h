@@ -33,16 +33,15 @@
 	parse_array-->(_result + 1) = 0;
 ];
 
-[ YesOrNo _words _reply;
+[ YesOrNo;
     for (::) {
         ReadPlayerInput(true);
-        _words = parse_array -> 1;
-        _reply = parse_array --> 1;
-        if(_words == 1) {
-            if (_reply == 'yes' or 'y//') rtrue;
-            if (_reply == 'no' or 'n//') rfalse;
+        if(parse_array -> 1 == 1) {
+        	! one word reply
+            if(parse_array --> 1 == 'yes' or 'y//') rtrue;
+            if(parse_array --> 1 == 'no' or 'n//') rfalse;
         }
-        PrintMsg(MSG_YES_OR_NO);
+        PrintMsg(MSG_YES_OR_NO, true);
     }
 ];
 
