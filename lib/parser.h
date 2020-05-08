@@ -472,6 +472,9 @@
 		second = 0;
 		inp1 = 0;
 		inp2 = 0;
+		special_number = 0;
+		special_word = 0;
+		parsed_number = 0;
 		multiple_objects --> 0 = 0;
 		_check_held = 0;
 		_check_creature = 0;
@@ -622,7 +625,7 @@
 					_i = TryNumber(wn);
 					special_word = NextWord();
 					if (_i == -1000) _i = special_word;
-					parsed_number = _i;
+					special_number = _i;
 				} else if(_token_data == NUMBER_OBJECT) {
 					_i=TryNumber(wn++);
             		if (_i == -1000) break;

@@ -266,13 +266,10 @@
 	! sets the random seed, thus making randomness predictable
 	! also a test of special and number, thus the fancy grammar
 	if(special_word ~=0) "You can't send randomness to an object!";
-	_i = parsed_number;
-	if(_i == 0) {
-		print "Using a default seed of 100. ";
-		_i = 100;
-	}
+	_i = parsed_number + special_number; ! allow both special and number
+	if(_i == 0) _i = 100; ! default
 	random(-_i);
-	"The randomness will now be less random.";
+	"The random seed is set to ", _i, ".";
 ];
 
 [ InsertSub _ancestor;
