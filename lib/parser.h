@@ -396,6 +396,15 @@
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
+[ ParseNextObject;
+	! this works like a general parse routines and returns
+	! GPR_FAIL: is no object found
+	! GPR_MULTIPLE: if multiple objects found (stored in multiple_objects)
+	! GPR_NUMBER: if a number, returned in parsed_number
+	! GPR_PREPOSITION: if a preposition was found
+	! GPR_REPARSE: if the input is changed and we need to reparse
+];
+
 [ ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun _check_held _check_creature _unknown_noun_found _multiple_object_modifier;
 	! returns
 	! 0: to reparse
@@ -569,6 +578,7 @@
 			} else if(_token_type == TT_PARSE_ROUTINE) {
 				RunTimeError("general parse routines are not implemented");
 				break;
+				ParseNextObject();
 				switch(indirect(_token_data)) {
 				GPR_FAIL:
 				GPR_MULTIPLE:
