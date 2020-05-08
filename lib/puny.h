@@ -396,7 +396,6 @@ Include "parser.h";
 [ PerformPreparedAction;
 	!print "Performing action ", action, "^";
 	sw__var = action;
-
 	if ((BeforeRoutines() == false) && action < 4096) {
 		ActionPrimitive();
 	}

@@ -143,21 +143,22 @@ Global score;
 Global turns;
 Global player;
 Global actor;
-Global action;
-Global meta;      ! if the verb has the meta attribute or not
-Global verb_word;
-Global verb_wordnum;
+Global wn;               ! word number within parse
+Global action;           ! the current action
+Global action_reverse;   ! if parameters are in reversed order
+Global meta;             ! if the verb has the meta attribute or not
+Global verb_word;        ! verb word, eg 'take' in "take all"
+Global verb_wordnum;     ! the position of the verb in the current sentence
+Global consult_from;     ! Word that a "consult" topic starts on
+Global consult_words;    ! ...and number of words in topic
+Global num_words_parsed; ! Number of words successfully parsed
 Global noun;
 Global second;
-Global inp1;
-Global inp2;
+Global inp1;             ! the same as noun, except when noun is a number
+Global inp2;             ! the same as second, except when second is a number
 Global game_state;
-Global wn;
 Global scope_objects;
-Global reverse;
 Global keep_silent;
-Global consult_from;  !TODO remove? ! Word that a "consult" topic starts on
-Global consult_words; !TODO remove? ! ...and number of words in topic
 #IfV5;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;

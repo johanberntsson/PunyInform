@@ -75,7 +75,7 @@
 	_action_number = p_pattern-->0;
 	p_pattern = p_pattern + 2;
 	action = _action_number & $3ff;
-	reverse = (_action_number & $400 ~= 0);
+	action_reverse = (_action_number & $400 ~= 0);
 	print "Action#: ", action, " Reverse: ", reverse, "^";
 
 	for(_i = 0: : _i++) {
@@ -103,9 +103,10 @@
 	return parse_array->(p_wordnum*4);	
 ];
 
-[ PeekAtNextWord;
-	--wn;
-	return NextWord();
+[ PeekAtNextWord _i;
+	_i = NextWord();
+	--wn; ! wn was modified by NextWord, restore it
+	return _i;
 ];
 
 [ NextWord _i _j;
@@ -307,7 +308,7 @@
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseAndPerformAction _verb _word_data _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun _check_held _check_creature _unknown_noun_found;
+[ ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun _check_held _check_creature _unknown_noun_found _multiple_object_modifier;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -334,17 +335,17 @@
 	verb_wordnum = 1;
 
 .reparse;
-	_verb = (parse_array + 2 + 4 * (verb_wordnum - 1)) --> 0;
-	if(_verb < (0-->HEADER_DICTIONARY)) {
+	verb_word = (parse_array + 2 + 4 * (verb_wordnum - 1)) --> 0;
+	if(verb_word < (0-->HEADER_DICTIONARY)) {
 		! unknown word
 #IfDef DEBUG;
-		print "Case 1, Word ", _verb, "^";
+		print "Case 1, Word ", verb_word, "^";
 #EndIf;
 		if(actor ~= player) jump treat_bad_line_as_conversation;
 		"I don't understand that word.";
 	}
 
-	_word_data = _verb + DICT_BYTES_FOR_WORD;
+	_word_data = verb_word + DICT_BYTES_FOR_WORD;
 	! check if it is a direction
 	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
 		! try a direction instead
@@ -383,7 +384,6 @@
 	}
 
 	! Now it is known word, and it is not a direction, in the first position
-	verb_word = _verb;
 	meta = (_word_data->0) & 2;
 
 !   print "Parse array: ", parse_array, "^";
@@ -425,7 +425,9 @@
 		_check_held = 0;
 		_check_creature = 0;
 		_unknown_noun_found = 0;
+		_multiple_object_modifier = 0;
 		action = (_pattern --> 0) & $03ff;
+		action_reverse = ((_pattern --> 0) & $400 ~= 0);
 
 		while(true) {
 			_pattern_index = _pattern_index + 3;
@@ -487,7 +489,7 @@
 				!
 				! first take care of take all/drop all
 				if(_parse_pointer-->0 == ALL_WORD &&
-					_token_data == MULTI_OBJECT or MULTIHELD_OBJECT) {
+					_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 					! take all etc.
 					! absort the "all" keyword
 					++wn;
@@ -499,9 +501,7 @@
 						print "Nothing to do!^";
 						return -wn;
 					}
-					continue;
-				}
-				if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
+				} else if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 					_noun = GetNextNoun(_parse_pointer);
 					if(_noun == 0) {
 						_unknown_noun_found = true;
@@ -514,6 +514,7 @@
 					if(_token_data == HELD_OBJECT && _noun notin player) {
 						_check_held = _noun;
 					}
+
 					if(_noun_tokens == 0) {
 						noun = _noun;
 						inp1 = _noun;
@@ -521,8 +522,7 @@
 						second = _noun;
 						inp2 = _noun;
 					}
-					_noun_tokens++;
-				} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT) {
+				} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 					! TODO: perhaps merge NOUN_OBJECT and MULTI_OBJECT
 					! and friends? Lots of code in common
 					for(::) {
@@ -546,7 +546,8 @@
 						! no nouns found, so this pattern didn't match
 						break;
 					}
-					_noun_tokens++;
+					if(_token_data == MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT)
+						_multiple_object_modifier = _token_data;
 				} else if(_token_data == TOPIC_OBJECT) {
 					consult_from = wn;
 					consult_words = 0;
@@ -565,22 +566,20 @@
 							break;
 						}
 					}
-					_noun_tokens++;
-				!TODO } else if(_token_data == MULTIEXCEPT_OBJECT) {
-				!TODO } else if(_token_data == MULTIINSIDE_OBJECT) {
 				!TODO } else if(_token_data == SPECIAL_OBJECT) {
 				!TODO } else if(_token_data == NUMBER_OBJECT) {
 				} else {
 					RunTimeError("unexpected _token_data");
 					break;
 				}
+				_noun_tokens++;
 			!TODO } else if(_token_type == TT_ROUTINE_FILTER) {
 			!TODO } else if(_token_type == TT_ATTR_FILTER) {
 			!TODO } else if(_token_type == TT_SCOPE) {
 			!TODO } else if(_token_type == TT_PARSE_ROUTINE) {
 			} else {
-					RunTimeError("unexpected _token_type");
-					break;
+				RunTimeError("unexpected _token_type");
+				break;
 			}
 		}
 		! This pattern has failed.
@@ -589,7 +588,7 @@
 #EndIf;
 		! Scan to the end of this pattern
 		while(_pattern_index -> 0 ~= TT_END) _pattern_index = _pattern_index + 3;
-		++_pattern;
+		_pattern = _pattern_index + 1;
 	}
 	if(_unknown_noun_found) "You can't see any such thing.";
 	"Sorry, I didn't understand that.";
@@ -604,7 +603,17 @@
 .parse_success;
 	! we want to return how long the successfully sentence was
 	! but wn can be destroyed by action routines, so store in _i
-	_i = -(wn - 1);
+	num_words_parsed = -(wn - 1);
+
+	if(action_reverse) {
+		_i = second;
+		second = noun;
+		noun = _i;
+		inp1 = noun;
+		inp2 = second;
+	}
+	if(_multiple_object_modifier > 0) {
+	}
 
 	if(actor ~= player) {
 		! The player's "orders" property can refuse to allow conversation
@@ -624,7 +633,7 @@
 		}
 		if(RunLife(actor, ##Order)) rtrue;
 		print (The) actor, " has better things to do.";
-		return _i;
+		return num_words_parsed;
 	}
 	if(_check_held > 0) {
 		print "(first taking ", (the) _check_held, ")^^";
@@ -652,7 +661,7 @@
 			PerformPreparedAction();
 		}
 	}
-	return _i;
+	return num_words_parsed;
 ];
 
 [ AddMultipleNouns multiple_objects_type   _i _addobj _obj;
@@ -661,10 +670,10 @@
 		_obj = scope-->_i;
 		_addobj = false;
 		switch(multiple_objects_type) {
-		MULTI_OBJECT:
-			_addobj = _obj hasnt scenery or concealed;
 		MULTIHELD_OBJECT:
 			_addobj = _obj in player;
+		MULTI_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
+			_addobj = _obj hasnt scenery or concealed;
 		}
 		if(_addobj) {
 			multiple_objects --> 0 = 1 + (multiple_objects --> 0);
