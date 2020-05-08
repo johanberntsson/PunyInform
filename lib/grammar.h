@@ -59,13 +59,13 @@
     ! if successful, true if unsuccessful, printing a suitable message
     ! in the latter case.
     ! People cannot ordinarily be taken.
-    if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
-    if(noun has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
-    if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
-    if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
-	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
-	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT); rtrue; }
-    if(AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
+    if(noun == player) return PrintMsg(MSG_TAKE_YOURSELF);
+    if(noun has animate) return PrintMsg(MSG_TAKE_ANIMATE);
+    if(noun has scenery) return PrintMsg(MSG_TAKE_SCENERY);
+    if(noun has static) return PrintMsg(MSG_TAKE_STATIC);
+	if(noun in player) return PrintMsg(MSG_TAKE_ALREADY_HAVE);
+	if(IndirectlyContains(noun, player)) return PrintMsg(MSG_TAKE_PLAYER_PARENT);
+    if(AtFullCapacity(player)) return PrintMsg(MSG_TAKE_NO_CAPACITY);
 
 	move noun to player;
 	give noun moved;
@@ -80,7 +80,7 @@
 ];
 
 [ EatSub;
-    if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
+    if(noun has animate) return PrintMsg(MSG_EAT_ANIMATE);
     PrintMsg(MSG_EAT_INEDIBLE);
 ];
 
@@ -89,7 +89,7 @@
 ];
 
 [ DropSub;
-	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
+	if(noun notin player) return PrintMsg(MSG_DROP_NOT_HOLDING);
 	move noun to location;
 	if(AfterRoutines() == 1) rtrue;
     if(keep_silent) return;
@@ -107,17 +107,14 @@
         PrintMsg(MSG_THROW_FIRST_TAKING);
 		if (noun has worn && noun in player) rtrue;
 	}
-	if(second hasnt animate) { PrintMsg(MSG_THROW_ANIMATE); rtrue; }
+	if(second hasnt animate) return PrintMsg(MSG_THROW_ANIMATE);
 	if(RunLife(second,##ThrowAt) ~= 0) rfalse;
 	PrintMsg(MSG_THROW_SUCCESS);
 ];
 
 [ OpenSub;
-	if(noun hasnt openable) {
-		PrintMsg(MSG_OPEN_YOU_CANT);
-		rtrue;
-	}
-	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
+	if(noun hasnt openable) return PrintMsg(MSG_OPEN_YOU_CANT);
+	if(noun has open) return PrintMsg(MSG_OPEN_ALREADY);
 	give noun open;
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
@@ -125,11 +122,8 @@
 ];
 
 [ CloseSub;
-	if(noun hasnt openable) {
-		PrintMsg(MSG_CLOSE_YOU_CANT);
-		rtrue;
-	}
-	if(noun hasnt open) PrintMsg(MSG_CLOSE_NOT_OPEN);
+	if(noun hasnt openable) return PrintMsg(MSG_CLOSE_YOU_CANT);
+	if(noun hasnt open) return PrintMsg(MSG_CLOSE_NOT_OPEN);
 	give noun ~open;
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
@@ -137,7 +131,7 @@
 ];
 
 [ ShowSub;
-    if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
+    if (parent(noun) ~= player) return PrintMsg(MSG_SHOW_NOT_HOLDING);
     if (second == player) <<Examine noun>>;
     if (RunLife(second, ##Show) ~= 0) rfalse;
     PrintMsg(MSG_SHOW_SUCCESS);
@@ -148,8 +142,8 @@
 ];
 
 [ GiveSub;
-    if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
-    if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
+    if (parent(noun) ~= player) return PrintMsg(MSG_GIVE_NOT_HOLDING);
+    if (second == player)  return PrintMsg(MSG_GIVE_PLAYER);
     if (RunLife(second, ##Give) ~= 0) rfalse;
     PrintMsg(MSG_GIVE_SUCCESS);
 ];
@@ -169,18 +163,15 @@
 ];
 
 [ TellSub;
-    if (noun == player) PrintMsg(MSG_TELL_PLAYER);
+    if (noun == player) return PrintMsg(MSG_TELL_PLAYER);
     if (RunLife(noun, ##Tell) ~= 0) rfalse;
     PrintMsg(MSG_TELL_SUCCESS);
 ];
 
 [ EnterSub;
-	if(noun hasnt enterable) {
-		PrintMsg(MSG_ENTER_YOU_CANT);
-		rtrue;
-	}
-	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
-	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN); rtrue; }
+	if(noun hasnt enterable) return PrintMsg(MSG_ENTER_YOU_CANT);
+	if(player in noun) return PrintMsg(MSG_ENTER_ALREADY);
+	if(noun has container && noun hasnt open) return PrintMsg(MSG_ENTER_NOT_OPEN);
 	PlayerTo(noun);
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
@@ -189,13 +180,13 @@
 
 [ ExitSub;
 	if(noun == 0) noun = parent(player);
-	if(player in location) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
+	if(player in location) return PrintMsg(MSG_EXIT_ALREADY);
 	if(player notin noun) {
-		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE); rtrue; }
-		if(noun has supporter) { PrintMsg(MSG_EXIT_NOT_ON); rtrue; }
-			PrintMsg(MSG_EXIT_NOT_IN); rtrue;
+		if(IndirectlyContains(noun, player)) return PrintMsg(MSG_EXIT_FIRST_LEAVE);
+		if(noun has supporter) return PrintMsg(MSG_EXIT_NOT_ON);
+		return PrintMsg(MSG_EXIT_NOT_IN);
 	}
-	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN); rtrue; }
+	if(noun has container && noun hasnt open) return PrintMsg(MSG_EXIT_NOT_OPEN);
 	PlayerTo(parent(noun));
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
@@ -208,7 +199,7 @@
 ];
 
 [ InventorySub;
-	if(child(player) == 0) { PrintMsg(MSG_INVENTORY_EMPTY); rtrue; }
+	if(child(player) == 0) return PrintMsg(MSG_INVENTORY_EMPTY);
     PrintMsg(MSG_INVENTORY_SUCCESS);
 ];
 
@@ -221,7 +212,7 @@
 ];
 
 [ GoDir p_property _new_location;
-	if(player notin location) { PrintMsg(MSG_GO_LEAVE_FIRST); rtrue; }
+	if(player notin location) return PrintMsg(MSG_GO_LEAVE_FIRST);
 	if(location provides p_property) {
 		@get_prop location p_property -> _new_location; ! works in z3 and z5
 	}
@@ -229,7 +220,7 @@
 		if(location provides cant_go) {
 			print_ret (string) location.cant_go;
 		}
-        PrintMsg(MSG_GO_CANT_GO); rtrue;
+        return PrintMsg(MSG_GO_CANT_GO);
 	}
 	location = _new_location;
 	PlayerTo(location);
@@ -239,13 +230,13 @@
 #IfV3;
 [ SaveSub;
 	@save ?save_success;
-	PrintMsg(MSG_SAVE_FAILED); rtrue;
+	return PrintMsg(MSG_SAVE_FAILED);
 .save_success;
     PrintMsg(MSG_SAVE_SUCCESS);
 #IfNot;
 [ SaveSub _result;
 	@save -> _result;
-	if(_result == 0) { PrintMsg(MSG_SAVE_FAILED); rtrue; }
+	if(_result == 0) return PrintMsg(MSG_SAVE_FAILED);
 	PrintMsg(MSG_SAVE_SUCCESS); ! _result = 1: save ok, 2: Restore ok
 #EndIf;
 ];
@@ -253,7 +244,7 @@
 #IfV3;
 [ RestoreSub;
 	@restore ?restore_success; ! can't use @restore because of compiler test
-	PrintMsg(MSG_RESTORE_FAILED);
+	return PrintMsg(MSG_RESTORE_FAILED);
 .restore_success; ! This is never reached, since a successful restore continues after save opcode.
 #IfNot;
 [ RestoreSub _flag;
@@ -300,7 +291,7 @@
 [ KissSub;
     !if (ObjectIsUntouchable(noun)) return; ! TODO
     if (RunLife(noun, ##Kiss) ~= 0) rfalse;
-    if (noun == player) { PrintMsg(MSG_KISS_PLAYER); rtrue; }
+    if (noun == player) return PrintMsg(MSG_KISS_PLAYER);
     PrintMsg(MSG_KISS_SUCCESS);
 ];
 
