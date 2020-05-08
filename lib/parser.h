@@ -487,6 +487,9 @@
 				! MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT, CREATURE_OBJECT,
 				! SPECIAL_OBJECT, NUMBER_OBJECT or TOPIC_OBJECT
 				!
+				! remember if except or inside found, so we can filter later
+				if(_token_data == MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT)
+					_multiple_object_modifier = _token_data;
 				! first take care of take all/drop all
 				if(_parse_pointer-->0 == ALL_WORD &&
 					_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
@@ -546,8 +549,6 @@
 						! no nouns found, so this pattern didn't match
 						break;
 					}
-					if(_token_data == MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT)
-						_multiple_object_modifier = _token_data;
 				} else if(_token_data == TOPIC_OBJECT) {
 					consult_from = wn;
 					consult_words = 0;
@@ -612,8 +613,6 @@
 		inp1 = noun;
 		inp2 = second;
 	}
-	if(_multiple_object_modifier > 0) {
-	}
 
 	if(actor ~= player) {
 		! The player's "orders" property can refuse to allow conversation
@@ -657,6 +656,12 @@
 		for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
 			inp1 = multiple_objects --> _noun;
 			noun = inp1;
+			switch(_multiple_object_modifier) {
+			MULTIEXCEPT_OBJECT:
+				if(noun == second) continue; ! eg take all except X
+			MULTIINSIDE_OBJECT:
+				if(noun notin second) continue; ! eg get all from X
+			}
 			print (name) noun, ": ";
 			PerformPreparedAction();
 		}

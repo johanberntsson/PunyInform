@@ -100,9 +100,6 @@ Constant MSG_INSERT_ALREADY "Already there.";
 #Ifndef MSG_INSERT_ITSELF;
 Constant MSG_INSERT_ITSELF "Cannot put something inside itself.";
 #Endif;
-#Ifndef MSG_INSERT_NOT_OPEN;
-Constant MSG_INSERT_NOT_OPEN "Closed.";
-#Endif;
 #Ifndef MSG_INSERT_NOT_CONTAINER;
 Constant MSG_INSERT_NOT_CONTAINER "That can't contain things.";
 #Endif;
@@ -213,6 +210,9 @@ Constant MSG_RESTART_FAILED 28;
 #Ifndef MSG_INSERT_SUCCESS;
 Constant MSG_INSERT_SUCCESS 29;
 #Endif;
+#Ifndef MSG_INSERT_NOT_OPEN;
+Constant MSG_INSERT_NOT_OPEN 30;
+#Endif;
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
 #Endif;
@@ -267,6 +267,8 @@ Constant LibraryMessages 0;
         "Failed ", (PrintVerb) verb_word, ".";
     MSG_INSERT_SUCCESS:
         "You put ", (the) noun, " into ", (the) second, ".";
+	MSG_INSERT_NOT_OPEN:
+		"You can't, because ", (the) second, " is closed.";
 
 	default:
 		! No code found. Print an error message.

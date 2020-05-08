@@ -272,15 +272,15 @@
 ];
 
 [ InsertSub _ancestor;
-    if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
+    if (parent(noun) == second) return PrintMsg(MSG_INSERT_ALREADY);
     _ancestor = CommonAncestor(noun, second);
-    if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
+    if (_ancestor == noun) return PrintMsg(MSG_INSERT_ITSELF);
     if (second ~= _ancestor) {
-        if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN); rtrue; }
+        if (second has container && second hasnt open) return PrintMsg(MSG_INSERT_NOT_OPEN);
     }
-    if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
+    if (second hasnt container) return PrintMsg(MSG_INSERT_NOT_CONTAINER);
 
-    if (AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
+    if (AtFullCapacity(noun, second)) return PrintMsg(MSG_INSERT_NO_ROOM);
 
     move noun to second;
     if (keep_silent) return;
