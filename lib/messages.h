@@ -277,14 +277,13 @@ Constant LibraryMessages 0;
 ];
 
 [ ItorThem obj;
-    if (obj == player)            { print "yourself"; return; }
-    if (obj has pluralname)       { print "them"; return; }
+    if (obj == player) "yourself"; 
+    if (obj has pluralname) "them";
     if (obj has animate) {
-        if (obj has female)       { print "her"; return; }
-        else
-            if (obj hasnt neuter) { print "him"; return; }
+        if (obj has female) "her";
+        else if (obj hasnt neuter) "him";
     }
-    print "it";
+    "it";
 ];
 
 

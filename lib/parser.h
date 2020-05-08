@@ -174,6 +174,18 @@
 	return NextWord();
 ];
 
+[ PronounNotice p_object;
+	if(p_object == 0) return;
+	if(p_object == player) return;
+	if(p_object has pluralname) return;
+	if(p_object has animate) {
+		if(p_object has female) herobj = p_object;
+		else if(p_object has neuter) itobj = p_object;
+		else himobj = p_object;
+	} else itobj = p_object;
+	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
+];
+
 ! ----------------------------------------------------------------------------
 !  The UserFilter routine consults the user's filter (or checks on attribute)
 !  to see what already-accepted nouns are acceptable
@@ -316,6 +328,15 @@
 	! - if found, then wn will be updated
 	! NOTE: you need to update parse_pointer after calling GetNextNoun since
 	! wn can change
+
+	! check for pronouns
+	switch(p_parse_pointer --> 0) {
+	'it': ++wn; return itobj;
+	'him': ++wn; return himobj;
+	'her': ++wn; return herobj;
+	}
+
+	! not a pronoun, continue
 	_noun = CheckNoun(p_parse_pointer, parse_array->1);
 .recheck_noun;
 	if(_noun < 0) {
@@ -545,7 +566,6 @@
 					_token_data = MULTI_OBJECT;
 				else 
 					_token_data = NOUN_OBJECT;
-
 			} else if(_token_type == TT_PARSE_ROUTINE) {
 				RunTimeError("general parse routines are not implemented");
 				break;
@@ -559,6 +579,7 @@
 					! returned an objekt
 				}
 			}
+			! then parse objects or prepositions
 			if(_token_type == TT_PREPOSITION) { 
 #IfDef DEBUG;
 				print "Preposition: ", _token_data, "^";
@@ -740,6 +761,7 @@
 		print (The) actor, " has better things to do.";
 		return num_words_parsed;
 	}
+
 	if(_check_held > 0) {
 		print "(first taking ", (the) _check_held, ")^^";
 		keep_silent = true;
@@ -749,6 +771,8 @@
 	}
 	if(_check_creature > 0 && _check_creature hasnt animate)
 		"You can only do that to something animate.";
+
+
 
 	if(multiple_objects --> 0 == 0) {
 		! single action
@@ -772,6 +796,7 @@
 			PerformPreparedAction();
 		}
 	}
+	PronounNotice(noun);
 	return num_words_parsed;
 ];
 

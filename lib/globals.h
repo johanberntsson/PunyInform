@@ -185,6 +185,10 @@ Global game_state;
 Global scope_objects;
 Global scope_stage;      ! for scope=Routine grammar: 1, 2 then 3
 Global keep_silent;
+Global itobj = 0;        ! The object which is currently "it"
+Global himobj = 0;       ! The object which is currently "him"
+Global herobj = 0;       ! The object which is currently "her"
+
 #IfV5;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
