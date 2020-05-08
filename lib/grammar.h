@@ -262,6 +262,7 @@
 	}
 ];
 
+#IfDef DEBUG_VERBS;
 [ PredictableSub _i; 
 	! sets the random seed, thus making randomness predictable
 	! also a test of special and number, thus the fancy grammar
@@ -271,6 +272,7 @@
 	random(-_i);
 	"The random seed is set to ", _i, ".";
 ];
+#EndIf;
 
 [ InsertSub _ancestor;
     if (parent(noun) == second) return PrintMsg(MSG_INSERT_ALREADY);
@@ -410,12 +412,14 @@ Verb meta 'restore'
 Verb meta 'restart'
 	* -> Restart;
 
+#IfDef DEBUG_VERBS;
 ! sets the random seed, thus making randomness predictable
 ! also a test of special and number, thus the fancy grammar
 Verb meta 'random'
 	* -> Predictable
 	* special -> Predictable
 	* 'to' number -> Predictable;
+#EndIf;
 
 Verb 'wake' 'awake' 'awaken'
     *                                           -> Wake
