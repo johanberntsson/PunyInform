@@ -1,11 +1,12 @@
 ! Part of PunyInform, a standard library for writing interactive fiction using Inform 6.
-
-
-! OPTIONALS:
+!
+! CONSTANTS that can be set in the game to turn parts of PunyInform
+! on or off (to save memory).
 !
 ! FULL_DIRECTIONS: to allow ne, se, sw, and nw as directions
 ! ALLOW_WRITTEN_NUMBERS: to be able to parse one, two etc as numbers
-
+! DEBUG_VERBS: enable some debuggin verbs for game development
+!
 Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
 Constant NULL         = $ffff;
@@ -17,7 +18,6 @@ Constant AND_WORD     = 'and';
 Constant THEN_WORD    = 'then';
 Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
                                    ! for commas in parse buffers
-
 Attribute light;
 Attribute supporter;
 Attribute container;
@@ -181,6 +181,7 @@ Global noun;
 Global second;
 Global inp1;             ! the same as noun, except when noun is a number
 Global inp2;             ! the same as second, except when second is a number
+Global num_noun_groups;  ! how many noun groups the current sentence contains
 Global game_state;
 Global scope_objects;
 Global scope_stage;      ! for scope=Routine grammar: 1, 2 then 3

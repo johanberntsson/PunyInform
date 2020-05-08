@@ -390,22 +390,26 @@
 	}
 ];
 
+[ UpdateNounSecond p_noun p_inp p_id;
+	if(num_noun_groups == 0) {
+		!print p_id, ": setting noun: ", p_noun, " inp1 ", p_inp, "^";
+		noun = p_noun;
+		inp1 = p_inp;
+	} else if(num_noun_groups == 1){
+		!print p_id, ": setting second: ", p_noun, " inp2 ", p_inp, "^";
+		second = p_noun;
+		inp2 = p_inp;
+	}
+	++num_noun_groups;
+];
+
 [ IsSentenceDivider p_parse_pointer;
 	! check if current parse_array block, indicated by p_parse_pointer,
 	! is a period or other sentence divider
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseNextObject;
-	! this works like a general parse routines and returns
-	! GPR_FAIL: is no object found
-	! GPR_MULTIPLE: if multiple objects found (stored in multiple_objects)
-	! GPR_NUMBER: if a number, returned in parsed_number
-	! GPR_PREPOSITION: if a preposition was found
-	! GPR_REPARSE: if the input is changed and we need to reparse
-];
-
-[ ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun_tokens _noun _check_held _check_creature _unknown_noun_found _multiple_object_modifier;
+[ ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun _check_held _check_creature _unknown_noun_found _multiple_object_modifier;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -513,7 +517,7 @@
 		wn = verb_wordnum + 1;
 		_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
 		_pattern_index = _pattern - 1;
-		_noun_tokens = 0;
+		num_noun_groups = 0;
 		noun = 0;
 		second = 0;
 		inp1 = 0;
@@ -576,18 +580,27 @@
 				else 
 					_token_data = NOUN_OBJECT;
 			} else if(_token_type == TT_PARSE_ROUTINE) {
-				RunTimeError("general parse routines are not implemented");
-				break;
-				ParseNextObject();
-				switch(indirect(_token_data)) {
+				_noun = indirect(_token_data);
+				! the parse routine can change wn, so update _parse_pointer
+				_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+				switch(_noun) {
 				GPR_FAIL:
+					break;
 				GPR_MULTIPLE:
+					! multiple_objects contains the objects
+					UpdateNounSecond(0, 0);
 				GPR_NUMBER:
+					! parsed_number contains the new number
+					UpdateNounSecond(parsed_number, 1);
 				GPR_PREPOSITION:
+					! do nothing
 				GPR_REPARSE:
+					rfalse;
 				default:
 					! returned an objekt
+					UpdateNounSecond(_noun, _noun);
 				}
+				continue;
 			}
 			! then parse objects or prepositions
 			if(_token_type == TT_PREPOSITION) { 
@@ -636,6 +649,13 @@
 					if(multiple_objects --> 0 == 0) {
 						print "Nothing to do!^";
 						return -wn;
+					} else if(multiple_objects --> 0 == 1) {
+						! single object
+						_noun = multiple_objects --> 1;
+						UpdateNounSecond(_noun, _noun);
+					} else {
+						! multiple objects
+						UpdateNounSecond(0, 0);
 					}
 				} else if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 					_noun = GetNextNoun(_parse_pointer);
@@ -650,17 +670,8 @@
 					if(_token_data == HELD_OBJECT && _noun notin player) {
 						_check_held = _noun;
 					}
-
-					if(_noun_tokens == 0) {
-						noun = _noun;
-						inp1 = _noun;
-					} else if(_noun_tokens == 1){
-						second = _noun;
-						inp2 = _noun;
-					}
+					UpdateNounSecond(_noun, _noun, 1); ! JB
 				} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
-					! TODO: perhaps merge NOUN_OBJECT and MULTI_OBJECT
-					! and friends? Lots of code in common
 					for(::) {
 						_noun = GetNextNoun(_parse_pointer);
 						if(_noun == 0) {
@@ -682,6 +693,7 @@
 						! no nouns found, so this pattern didn't match
 						break;
 					}
+					UpdateNounSecond(0, 0);
 				} else if(_token_data == TOPIC_OBJECT) {
 					consult_from = wn;
 					consult_words = 0;
@@ -700,24 +712,19 @@
 							break;
 						}
 					}
+					UpdateNounSecond(0, 0);
 				} else if(_token_data == SPECIAL_OBJECT) {
 					_i = TryNumber(wn);
 					special_word = NextWord();
 					if (_i == -1000) _i = special_word;
 					special_number = _i;
+					UpdateNounSecond(0, 0);
 				} else if(_token_data == NUMBER_OBJECT) {
 					_i=TryNumber(wn++);
             		if (_i == -1000) break;
             		parsed_number = _i;
-					if(_noun_tokens == 0) {
-						noun = parsed_number;
-						inp1 = 1;
-					} else if(_noun_tokens == 1){
-						second = parsed_number;
-						inp2 = 1;
-					}
+					UpdateNounSecond(parsed_number, 1);
 				}
-				_noun_tokens++;
 			}
 		}
 		! This pattern has failed.
