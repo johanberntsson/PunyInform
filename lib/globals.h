@@ -122,6 +122,12 @@ Constant SPECIAL_OBJECT      = 7;
 Constant NUMBER_OBJECT       = 8;
 Constant TOPIC_OBJECT        = 9;
 
+Constant GPR_FAIL           = -1;   ! Return values from General Parsing
+Constant GPR_PREPOSITION    = 0;    ! Routines
+Constant GPR_NUMBER         = 1;
+Constant GPR_MULTIPLE       = 2;
+Constant GPR_REPARSE        = 10000;
+
 ! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
 Constant TOKEN_SINGLE_PREP   = $42;
 Constant TOKEN_FIRST_PREP    = $62;
@@ -177,6 +183,7 @@ Global inp1;             ! the same as noun, except when noun is a number
 Global inp2;             ! the same as second, except when second is a number
 Global game_state;
 Global scope_objects;
+Global scope_stage;      ! for scope=Routine grammar: 1, 2 then 3
 Global keep_silent;
 #IfV5;
 Global statusline_current_height = 0;

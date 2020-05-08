@@ -533,10 +533,32 @@
 				noun_filter = _token_data;
 				_token_type = TT_OBJECT;
 				_token_data = NOUN_OBJECT;
+			} else if(_token_type == TT_ATTR_FILTER) {
+				noun_filter = 1 + _token_data;
+				_token_type = TT_OBJECT;
+				_token_data = NOUN_OBJECT;
+			} else if(_token_type == TT_SCOPE) {
+				_token_type = TT_OBJECT;
+				scope_stage = 1; ! has to be defined according to DM
+				_i = indirect(_token_data);
+				if(_i == 1) 
+					_token_data = MULTI_OBJECT;
+				else 
+					_token_data = NOUN_OBJECT;
+
+			} else if(_token_type == TT_PARSE_ROUTINE) {
+				RunTimeError("general parse routines are not implemented");
+				break;
+				switch(indirect(_token_data)) {
+				GPR_FAIL:
+				GPR_MULTIPLE:
+				GPR_NUMBER:
+				GPR_PREPOSITION:
+				GPR_REPARSE:
+				default:
+					! returned an objekt
+				}
 			}
-			!TODO } else if(_token_type == TT_ATTR_FILTER) {
-			!TODO } else if(_token_type == TT_SCOPE) {
-			!TODO } else if(_token_type == TT_PARSE_ROUTINE) {
 			if(_token_type == TT_PREPOSITION) { 
 #IfDef DEBUG;
 				print "Preposition: ", _token_data, "^";
@@ -665,9 +687,6 @@
 					}
 				}
 				_noun_tokens++;
-			} else {
-				RunTimeError("unexpected _token_type");
-				break;
 			}
 		}
 		! This pattern has failed.
