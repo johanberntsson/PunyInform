@@ -514,7 +514,7 @@ Include "parser.h";
 
 [ RunTimersAndDaemons _j _t;
 	for (current_timer=0 : current_timer<active_timers : current_timer++) {
-		if (game_state == GS_DEAD) return;
+		if (deadflag >= GS_DEAD) return;
 		_j = the_timers-->current_timer;
 		if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
 		else {
@@ -687,6 +687,18 @@ Include "parser.h";
 
 #EndIf;
 
+#IfnDef RUNTIME_ERRORS;
+[RT__Err err_no par1 par2;
+	print "Inform error: ";
+	if(err_no ofclass String)
+		print (string) err_no, " - ";
+	else
+		print_ret err_no;
+	print_ret " (", par1, ", ", par2, ")";
+];
+#EndIf;
+	
+
 Object DefaultPlayer "you"
 	with
 		name 'me',
@@ -710,12 +722,12 @@ Object DefaultPlayer "you"
 	print "PunyInform 0.0^^";
 
 	player = DefaultPlayer;
-	game_state = GS_PLAYING;
+	deadflag = GS_PLAYING;
 	Initialise();
 	if(parent(player) == 0) PlayerTo(location);
 	<Look>; ! Equivalent to PerformAction(##Look);
 
-	while(game_state == GS_PLAYING) {
+	while(deadflag == GS_PLAYING) {
 		status_field_1 = score;
 		status_field_2 = turns;
 		print "^";
@@ -755,11 +767,10 @@ Object DefaultPlayer "you"
 			parse_array->1 = 0;
 		}
 	}
-	if(game_state == GS_QUIT) @quit;
-	if(game_state == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON, true);
-	else if(game_state == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED, true);
-	else if(game_state == GS_DEATHMESSAGE) DeathMessage();
-	print ".^";
+	if(deadflag == GS_QUIT) @quit;
+	if(deadflag == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
+	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
+	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
 	for (::)
 	{
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT, true);

@@ -134,11 +134,11 @@ Constant TOKEN_FIRST_PREP    = $62;
 Constant TOKEN_MIDDLE_PREP   = $72;
 Constant TOKEN_LAST_PREP     = $52;
 
-Constant GS_PLAYING          = 1;
-Constant GS_QUIT             = 2;
-Constant GS_DEAD             = 3;
-Constant GS_WIN              = 4;
-Constant GS_DEATHMESSAGE     = 5;
+Constant GS_QUIT             = -1;
+Constant GS_PLAYING          = 0;
+Constant GS_WIN              = 1;
+Constant GS_DEAD             = 2;
+Constant GS_DEATHMESSAGE     = 3; 
 
 Constant FORM_CDEF           = 1;
 Constant FORM_DEF            = 2;
@@ -182,7 +182,7 @@ Global second;
 Global inp1;             ! the same as noun, except when noun is a number
 Global inp2;             ! the same as second, except when second is a number
 Global num_noun_groups;  ! how many noun groups the current sentence contains
-Global game_state;
+Global deadflag;
 Global scope_objects;
 Global scope_stage;      ! for scope=Routine grammar: 1, 2 then 3
 Global keep_silent;
@@ -225,3 +225,10 @@ Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an ex
 ! extra arrays to be able to ask for additional info (do you mean X or Y?)
 Array temp_player_input_array->(MAX_INPUT_CHARS + 3);
 Array temp_parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); 
+
+#IfDef DEBUG;
+#IfnDef RUNTIME_ERRORS;
+Constant RUNTIME_ERRORS;
+#EndIf;
+#EndIf;
+
