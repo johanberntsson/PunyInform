@@ -103,12 +103,9 @@
 	return parse_array->(p_wordnum*4);	
 ];
 
-[ PeekAtNextWord _i _j _wn;
-	_i = wn*2-1;
-	_j = parse_array-->_i;
-	if (_j == ',//') _j = comma_word;
-	if (_j == './/') _j = THEN_WORD;
-	return _j;
+[ PeekAtNextWord;
+	--wn;
+	return NextWord();
 ];
 
 [ NextWord _i _j;
@@ -493,7 +490,7 @@
 					_token_data == MULTI_OBJECT or MULTIHELD_OBJECT) {
 					! take all etc.
 					! absort the "all" keyword
-					wn = wn + 1;
+					++wn;
 					_parse_pointer = _parse_pointer + 4;
 					! Add all reasonable objects in scope
 					! to the multiple_objects array
@@ -540,7 +537,7 @@
 						multiple_objects --> (multiple_objects --> 0) = _noun;
 						! check if we should continue: and or comma
 						if(PeekAtNextWord() == comma_word or AND_WORD) {
-							wn = wn + 1;
+							++wn;
 							_parse_pointer = _parse_pointer + 4;
 							continue;
 						} else break;
@@ -560,8 +557,8 @@
 					!print (_pattern_index + 4) --> 0, "^"; ! token_data 
 					_i = (_pattern_index + 4) --> 0; ! word to stop at
 					for(::) {
-						wn = wn + 1;
-						consult_words = consult_words + 1;
+						++wn;
+						++consult_words;
 						_parse_pointer = _parse_pointer + 4;
 						if(wn > parse_array->1 || _parse_pointer --> 0 == _i) {
 							! found the stop token, or end of line
@@ -592,7 +589,7 @@
 #EndIf;
 		! Scan to the end of this pattern
 		while(_pattern_index -> 0 ~= TT_END) _pattern_index = _pattern_index + 3;
-		_pattern = _pattern_index + 1;
+		++_pattern;
 	}
 	if(_unknown_noun_found) "You can't see any such thing.";
 	"Sorry, I didn't understand that.";
@@ -605,6 +602,10 @@
 	! fall through to jump parse_success;
 
 .parse_success;
+	! we want to return how long the successfully sentence was
+	! but wn can be destroyed by action routines, so store in _i
+	_i = -(wn - 1);
+
 	if(actor ~= player) {
 		! The player's "orders" property can refuse to allow conversation
 		! here, by returning true.  If not, the order is sent to the
@@ -623,7 +624,7 @@
 		}
 		if(RunLife(actor, ##Order)) rtrue;
 		print (The) actor, " has better things to do.";
-		return -(wn - 1);
+		return _i;
 	}
 	if(_check_held > 0) {
 		print "(first taking ", (the) _check_held, ")^^";
@@ -651,7 +652,7 @@
 			PerformPreparedAction();
 		}
 	}
-	return -(wn - 1);
+	return _i;
 ];
 
 [ AddMultipleNouns multiple_objects_type   _i _addobj _obj;

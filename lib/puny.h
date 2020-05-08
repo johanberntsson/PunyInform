@@ -393,14 +393,12 @@ Include "parser.h";
 
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
-[ PerformPreparedAction _wn;
+[ PerformPreparedAction;
 	!print "Performing action ", action, "^";
 	sw__var = action;
 
 	if ((BeforeRoutines() == false) && action < 4096) {
-		_wn = wn; ! actions can change wn
 		ActionPrimitive();
-		wn = _wn; ! restore wn
 	}
 ];
 
