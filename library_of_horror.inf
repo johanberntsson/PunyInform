@@ -2,6 +2,11 @@
 
 ! Library of Horror - a sample game which uses PunyInform
 
+! Uncomment to add optional features to PunyLib
+!Constant FULL_DIRECTIONS;
+!Constant ALLOW_WRITTEN_NUMBERS;
+Constant DEBUG_VERBS;
+
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
