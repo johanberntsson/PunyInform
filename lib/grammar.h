@@ -262,6 +262,19 @@
 	}
 ];
 
+[ PredictableSub _i; 
+	! sets the random seed, thus making randomness predictable
+	! also a test of special and number, thus the fancy grammar
+	if(special_word ~=0) "You can't send randomness to an object!";
+	_i = parsed_number;
+	if(_i == 0) {
+		print "Using a default seed of 100. ";
+		_i = 100;
+	}
+	random(-_i);
+	"The randomness will now be less random.";
+];
+
 [ InsertSub _ancestor;
     if (parent(noun) == second) return PrintMsg(MSG_INSERT_ALREADY);
     _ancestor = CommonAncestor(noun, second);
@@ -397,6 +410,13 @@ Verb meta 'restore'
 
 Verb meta 'restart'
 	* -> Restart;
+
+! sets the random seed, thus making randomness predictable
+! also a test of special and number, thus the fancy grammar
+Verb meta 'random'
+	* -> Predictable
+	* special -> Predictable
+	* 'to' number -> Predictable;
 
 Verb 'wake' 'awake' 'awaken'
     *                                           -> Wake

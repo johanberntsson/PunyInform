@@ -45,6 +45,57 @@
     }
 ];
 
+#Ifdef ALLOW_WRITTEN_NUMBERS;
+[ NumberWord p_o _i _n;
+    ! try to parse  "one" up to "twenty".
+    _n = LanguageNumbers-->0;
+    for(_i = 1 : _i <= _n : _i = _i + 2)
+        if (p_o == LanguageNumbers-->_i) return LanguageNumbers-->(_i+1);
+    return 0;
+];
+#Endif;
+
+[ TryNumber p_wordnum _i _j _c _num _len _mul _d _tot _digit;
+	!  Takes word number p_wordnum and tries to parse it as an
+	! unsigned decimal number, returning
+	!
+	!  -1000                if it is not a number
+	!  the number           if it has between 1 and 4 digits
+	!  10000                if it has 5 or more digits.
+    _i = wn; wn = p_wordnum; _j = NextWord(); wn = _i;
+#Ifdef ALLOW_WRITTEN_NUMBERS;
+    _j = NumberWord(_j); if (_j >= 1) return _j;
+#Endif;
+
+    _i = p_wordnum*4+1; _j = parse_array->_i; _num = _j+player_input_array; _len = parse_array->(_i-1);
+
+    !TODO? tot=ParseNumber(num, len); if (tot ~= 0) return tot;
+    if (_len >= 4) _mul=1000;
+    if (_len == 3) _mul=100;
+    if (_len == 2) _mul=10;
+    if (_len == 1) _mul=1;
+
+    _tot = 0; _c = 0; --_len;
+    for (_c=0 : _c <= _len : _c++) {
+        _digit = _num->_c;
+        if(_digit == '0') { _d = 0; jump digok; }
+        if(_digit == '1') { _d = 1; jump digok; }
+        if(_digit == '2') { _d = 2; jump digok; }
+        if(_digit == '3') { _d = 3; jump digok; }
+        if(_digit == '4') { _d = 4; jump digok; }
+        if(_digit == '5') { _d = 5; jump digok; }
+        if(_digit == '6') { _d = 6; jump digok; }
+        if(_digit == '7') { _d = 7; jump digok; }
+        if(_digit == '8') { _d = 8; jump digok; }
+        if(_digit == '9') { _d = 9; jump digok; }
+        return -1000;
+.digok;
+        _tot = _tot+_mul*_d; _mul = _mul/10;
+    }
+    if (_len > 3) _tot=10000;
+    return _tot;
+];
+
 [ CopyInputArray p_src_input_array p_dst_input_array _n _i;
 	_n = MAX_INPUT_CHARS + 3;
 	for(_i = 0: _i < _n: _i++)
@@ -567,8 +618,22 @@
 							break;
 						}
 					}
-				!TODO } else if(_token_data == SPECIAL_OBJECT) {
-				!TODO } else if(_token_data == NUMBER_OBJECT) {
+				} else if(_token_data == SPECIAL_OBJECT) {
+					_i = TryNumber(wn);
+					special_word = NextWord();
+					if (_i == -1000) _i = special_word;
+					parsed_number = _i;
+				} else if(_token_data == NUMBER_OBJECT) {
+					_i=TryNumber(wn++);
+            		if (_i == -1000) break;
+            		parsed_number = _i;
+					if(_noun_tokens == 0) {
+						noun = parsed_number;
+						inp1 = 1;
+					} else if(_noun_tokens == 1){
+						second = parsed_number;
+						inp2 = 1;
+					}
 				} else {
 					RunTimeError("unexpected _token_data");
 					break;

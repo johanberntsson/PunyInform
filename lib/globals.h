@@ -1,5 +1,11 @@
 ! Part of PunyInform, a standard library for writing interactive fiction using Inform 6.
 
+
+! OPTIONALS:
+!
+! FULL_DIRECTIONS: to allow ne, se, sw, and nw as directions
+! ALLOW_WRITTEN_NUMBERS: to be able to parse one, two etc as numbers
+
 Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
 Constant NULL         = $ffff;
@@ -83,6 +89,15 @@ Array full_directions_array table 'north' 'south' 'east' 'west' 'up' 'down' 'in'
 Array direction_properties_array table n_to s_to e_to w_to u_to d_to in_to out_to;
 #EndIf;
 
+#IfDef ALLOW_WRITTEN_NUMBERS;
+Array LanguageNumbers table
+    'one' 1 'two' 2 'three' 3 'four' 4 'five' 5
+    'six' 6 'seven' 7 'eight' 8 'nine' 9 'ten' 10
+    'eleven' 11 'twelve' 12 'thirteen' 13 'fourteen' 14 'fifteen' 15
+    'sixteen' 16 'seventeen' 17 'eighteen' 18 'nineteen' 19 'twenty' 20;
+#EndIf;
+
+
 ! Header constants
 Constant HEADER_DICTIONARY   = 4;    ! 2*4 = $8
 Constant HEADER_STATIC_MEM   = 7;    ! 2*7 = $c
@@ -152,6 +167,9 @@ Global verb_wordnum;     ! the position of the verb in the current sentence
 Global consult_from;     ! Word that a "consult" topic starts on
 Global consult_words;    ! ...and number of words in topic
 Global num_words_parsed; ! Number of words successfully parsed
+Global special_word;     ! Dictionary address for "special" token
+Global special_number;   ! Number typed for "special" token
+Global parsed_number;    ! For user-supplied parsing routines
 Global noun;
 Global second;
 Global inp1;             ! the same as noun, except when noun is a number
