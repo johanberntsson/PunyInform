@@ -771,18 +771,14 @@ Object DefaultPlayer "you"
 	if(deadflag == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
-	for (::)
-	{
+	for (::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT, true);
-#IFV3;
-		read player_input_array parse_array;
-#IFNOT;
-		read player_input_array parse_array DrawStatusLine;
-#ENDIF;
-		_i=parse_array-->1;
-		if (_i=='restart') @restart;
-		if (_i=='restore') RestoreSub();
-		if (_i=='quit') @quit;
+		ReadPlayerInput(true);
+		switch(parse_array-->1) {
+		'restart': @restart;
+		'restore': RestoreSub();
+		'quit': @quit;
+		}
 	}
 ];
 
