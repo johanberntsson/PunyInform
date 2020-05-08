@@ -170,6 +170,7 @@ Global num_words_parsed; ! Number of words successfully parsed
 Global special_word;     ! Dictionary address for "special" token
 Global special_number;   ! Number typed for "special" token
 Global parsed_number;    ! For user-supplied parsing routines
+Global noun_filter;      ! For noun filtering by user routines
 Global noun;
 Global second;
 Global inp1;             ! the same as noun, except when noun is a number

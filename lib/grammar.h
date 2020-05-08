@@ -387,7 +387,9 @@ Verb 'put'
 Verb 'insert'
     * multiexcept 'in'/'into' noun              -> Insert;
 
-[ ADirection; return (noun == Directions); ];
+[ ADirection; 
+	return (noun == Directions);
+];
 
 Verb 'go'
 	* noun=ADirection -> Go

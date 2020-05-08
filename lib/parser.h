@@ -174,6 +174,19 @@
 	return NextWord();
 ];
 
+! ----------------------------------------------------------------------------
+!  The UserFilter routine consults the user's filter (or checks on attribute)
+!  to see what already-accepted nouns are acceptable
+! ----------------------------------------------------------------------------
+[ UserFilter _obj;
+    if(noun_filter > 0 && noun_filter < 49) {
+        if (_obj has (noun_filter-1)) rtrue;
+        rfalse;
+    }
+    noun = _obj;
+    return indirect(noun_filter);
+];
+
 [ CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
@@ -191,6 +204,10 @@
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
 		!   if(_obj == nothing) continue;
+		if(noun_filter ~= 0 && UserFilter(_obj) == 0) {
+			!print "noun_filter rejected ", (the) _obj,"^";
+			continue;
+		}
 		if(_obj provides parse_name) {
 			_j = wn;
 			_result = PrintOrRun(_obj, parse_name);
@@ -219,7 +236,6 @@
 			_name_array_len = _obj.#name / 2;
 
 			while(_n <= p_parse_length && IsSentenceDivider(_p) == false) {
-			!while(_n <= parse_array->1 && IsSentenceDivider(_p) == false) {
 				if(_current_word == nothing) return 0; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
@@ -511,6 +527,16 @@
 #IfDef DEBUG;
 			print "token type ", _token_type, ", data ",_token_data,"^";
 #EndIf;
+			! first set up filters, if any
+			noun_filter = 0;
+			if(_token_type == TT_ROUTINE_FILTER) {
+				noun_filter = _token_data;
+				_token_type = TT_OBJECT;
+				_token_data = NOUN_OBJECT;
+			}
+			!TODO } else if(_token_type == TT_ATTR_FILTER) {
+			!TODO } else if(_token_type == TT_SCOPE) {
+			!TODO } else if(_token_type == TT_PARSE_ROUTINE) {
 			if(_token_type == TT_PREPOSITION) { 
 #IfDef DEBUG;
 				print "Preposition: ", _token_data, "^";
@@ -637,15 +663,8 @@
 						second = parsed_number;
 						inp2 = 1;
 					}
-				} else {
-					RunTimeError("unexpected _token_data");
-					break;
 				}
 				_noun_tokens++;
-			!TODO } else if(_token_type == TT_ROUTINE_FILTER) {
-			!TODO } else if(_token_type == TT_ATTR_FILTER) {
-			!TODO } else if(_token_type == TT_SCOPE) {
-			!TODO } else if(_token_type == TT_PARSE_ROUTINE) {
 			} else {
 				RunTimeError("unexpected _token_type");
 				break;
