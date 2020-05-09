@@ -772,7 +772,7 @@ Object DefaultPlayer "you"
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
 	for (::) {
-		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT, true);
+		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		ReadPlayerInput(true);
 		switch(parse_array-->1) {
 		'restart': @restart;

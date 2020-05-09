@@ -7,12 +7,6 @@ Constant MSG_YOU_HAVE_WON "You have won.";
 #Ifndef MSG_YOU_HAVE_DIED;
 Constant MSG_YOU_HAVE_DIED "You have died.";
 #EndIf;
-#Ifndef MSG_RESTART_RESTORE_OR_QUIT;
-Constant MSG_RESTART_RESTORE_OR_QUIT "^Would you like to RESTART, RESTORE or QUIT? ";
-#EndIf;
-#Ifndef MSG_AREYOUSUREQUIT;
-Constant MSG_AREYOUSUREQUIT "Are you sure you want to quit? ";
-#EndIf;
 #Ifndef MSG_TAKE_YOURSELF;
 Constant MSG_TAKE_YOURSELF "You are always self-possessed.";
 #EndIf;
@@ -213,6 +207,12 @@ Constant MSG_ASK_SUCCESS 31;
 #Ifndef MSG_ANSWER_SUCCESS;
 Constant MSG_ANSWER_SUCCESS 32;
 #Endif;
+#Ifndef MSG_RESTART_RESTORE_OR_QUIT;
+Constant MSG_RESTART_RESTORE_OR_QUIT 33;
+#EndIf;
+#Ifndef MSG_AREYOUSUREQUIT;
+Constant MSG_AREYOUSUREQUIT 34;
+#EndIf;
 
 
 
@@ -221,17 +221,13 @@ Constant LibraryMessages 0;
 #Endif;
 
 
-[ PrintMsg p_msg p_dontprintnewline arg1;
-	if(p_msg ofclass String) {
-		print (string) p_msg;
-		if(p_dontprintnewline == 0) 
-			new_line;
-		rtrue;
-	}
+[ PrintMsg p_msg p_arg1;
+	if(p_msg ofclass String)
+		print_ret (string) p_msg;
 
-	if(LibraryMessages(p_msg, p_dontprintnewline, arg1))
+	if(LibraryMessages(p_msg, p_arg1))
 		rtrue;
-		
+
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
 	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT:
@@ -241,7 +237,7 @@ Constant LibraryMessages 0;
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
-		"First, you'd have to leave ", (the) arg1, ".";
+		"First, you'd have to leave ", (the) p_arg1, ".";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING:
 		"You aren't holding ", (ItOrThem) noun, ".";
     MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS:
@@ -253,11 +249,12 @@ Constant LibraryMessages 0;
     MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
         print_ret (The) noun, " has better things to do.";
     MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN:
-        "You can't, since ",(the) arg1, " is closed.";
+        "You can't, since ",(the) p_arg1, " is closed.";
     MSG_EXIT_SUCCESS:
 	    "You leave ", (the) noun, ".";
     MSG_INVENTORY_SUCCESS:
 	    PrintContents("You are holding ", ".^", player);
+		rtrue;
     MSG_GIVE_PLAYER:
         "You already have ", (ItOrThem) noun, ".";
     MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
@@ -266,10 +263,15 @@ Constant LibraryMessages 0;
         "You put ", (the) noun, " into ", (the) second, ".";
 	MSG_ASK_SUCCESS, MSG_ANSWER_SUCCESS: 
 		"There is no reply.";
-
+	MSG_RESTART_RESTORE_OR_QUIT:
+		print "^Would you like to RESTART, RESTORE or QUIT? ";
+		rtrue;
+	MSG_AREYOUSUREQUIT:
+		print "Are you sure you want to quit? ";
+		rtrue;
 	default:
 		! No code found. Print an error message.
-		RuntimeError("Unknown message#");
+		RuntimeError(ERR_UNKNOWN_MSGNO);
 	}
 ];
 
@@ -290,6 +292,8 @@ Constant LibraryMessages 0;
 Constant ERR_TOO_MANY_TIMERS_DAEMONS 1;
 Constant ERR_OBJECT_HASNT_PROPERTY 2;
 Constant ERR_SCOPE_FULL 3;
+Constant ERR_UNKNOWN_MSGNO 4;
+Constant ERR_INVALID_DIR_PROP 5;
 
 [RunTimeError p_err;
 	print "[Puny error: ";
@@ -301,6 +305,10 @@ Constant ERR_SCOPE_FULL 3;
 		print "Object lacks that property";
 	ERR_SCOPE_FULL:
 		print "Scope full";
+	ERR_UNKNOWN_MSGNO:
+		print "Unknown message#"
+	ERR_INVALID_DIR_PROP:
+		print "Invalid direction prop in GoSub";
 	default:
 		print "Unknown error (", p_err, ")";
 	}

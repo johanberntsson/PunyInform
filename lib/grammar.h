@@ -48,7 +48,7 @@
 ];
 
 [ QuitSub;
-	PrintMsg(MSG_AREYOUSUREQUIT, true);
+	PrintMsg(MSG_AREYOUSUREQUIT);
 	if(YesOrNo()) {
 		deadflag = GS_QUIT;
 	}
@@ -64,7 +64,7 @@
     if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
     if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
 	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
-	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, false, noun); rtrue; }
+	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
     if(AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
 	move noun to player;
@@ -171,7 +171,7 @@
 [ EnterSub;
 	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
 	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
-	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, false, noun); rtrue; }
+	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
 	PlayerTo(noun);
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
@@ -182,12 +182,12 @@
 	if(noun == 0) noun = parent(player);
 	if(player in location) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
 	if(player notin noun) {
-		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE, false, parent(player)); rtrue; }
+		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE, parent(player)); rtrue; }
 		if(noun has supporter) { PrintMsg(MSG_EXIT_NOT_ON); rtrue; }
 		PrintMsg(MSG_EXIT_NOT_IN);
 		rtrue;
 	}
-	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN, false, noun); rtrue; }
+	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN, noun); rtrue; }
 	PlayerTo(parent(noun));
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
@@ -207,13 +207,13 @@
 [ GoSub _prop;
 	! when called Directions have been set properly
 	_prop = Directions.selected_dir_prop;
-	if(_prop == 0) return RuntimeError("Invalid direction prop in GoSub");
+	if(_prop == 0) return RuntimeError(ERR_INVALID_DIR_PROP);
 	GoDir(_prop);
 	rtrue;
 ];
 
 [ GoDir p_property _new_location;
-	if(player notin location) { PrintMsg(MSG_GO_FIRST_LEAVE, false, parent(player)); rtrue; }
+	if(player notin location) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
 	if(location provides p_property) {
 		@get_prop location p_property -> _new_location; ! works in z3 and z5
 	}
@@ -259,7 +259,7 @@
 ];
 
 [ RestartSub;
-    PrintMsg(MSG_RESTART_CONFIRM, true);
+    PrintMsg(MSG_RESTART_CONFIRM);
 	if(YesOrNo()) {
 		@restart;
         PrintMsg(MSG_RESTART_FAILED);
@@ -284,7 +284,7 @@
     _ancestor = CommonAncestor(noun, second);
     if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
     if (second ~= _ancestor) {
-        if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN, false, second); rtrue; }
+        if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN, second); rtrue; }
     }
     if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
 
