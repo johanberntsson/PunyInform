@@ -174,7 +174,7 @@ Global consult_from;     ! Word that a "consult" topic starts on
 Global consult_words;    ! ...and number of words in topic
 Global num_words_parsed; ! Number of words successfully parsed
 Global special_word;     ! Dictionary address for "special" token
-Global special_number;   ! Number typed for "special" token
+Global special_number;   ! Number typed special orders, e.g "john, 34"
 Global parsed_number;    ! For user-supplied parsing routines
 Global noun_filter;      ! For noun filtering by user routines
 Global noun;

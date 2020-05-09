@@ -555,15 +555,12 @@
 			}
 			return GPR_NUMBER;
 		} else if(_token_data == SPECIAL_OBJECT) {
-			_i = TryNumber(wn);
+			parsed_number = TryNumber(wn);
 			special_word = NextWord();
-			if (_i == -1000) _i = special_word;
-			special_number = _i;
+			if(parsed_number == -1000) parsed_number = special_word;
 			return GPR_NUMBER;
 		} else if(_token_data == NUMBER_OBJECT) {
-			_i=TryNumber(wn++);
-			if (_i == -1000) return GPR_FAIL;
-			parsed_number = _i;
+			parsed_number = TryNumber(wn++);
 			return GPR_NUMBER;
 		}
 	}
@@ -620,7 +617,7 @@
 		}
 		! not a direction, check if beginning of a command
 		_noun = CheckNoun(parse_array+2, parse_array->1);
-		if(_noun > 0) {
+		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now 
 			! check if comma afterwards
 			wn = wn + which_object->0;
@@ -721,9 +718,11 @@
 			_noun = ParseNextObject(_pattern_pointer, _parse_pointer);
 			! the parse routine can change wn, so update _parse_pointer
 			_parse_pointer = parse_array + 2 + 4 * (wn - 1);
-			switch(_noun) {
-			GPR_FAIL:
+			if(_noun == GPR_FAIL) {
+				! can't put in switch, since we want 'break'
+				! to stop the while(true) loop instead.
 				break;
+			} else switch(_noun) {
 			GPR_MULTIPLE:
 				! multiple_objects contains the objects
 				UpdateNounSecond(0, 0);
@@ -761,6 +760,8 @@
 	action = ##NotUnderstood;
 	consult_from = wn;
 	consult_words = parse_array->1 - wn + 1;
+	special_number = TryNumber(wn);
+	special_word = NextWord();
 	! fall through to jump parse_success;
 
 .parse_success;
@@ -808,6 +809,9 @@
 	if(parser_check_creature > 0 && parser_check_creature hasnt animate)
 		"You can only do that to something animate.";
 
+	if(parsed_number == -1000) 
+		"I didn't understand that number.";
+
 	if(multiple_objects --> 0 == 0) {
 		! single action
 		PerformPreparedAction();
@@ -830,7 +834,7 @@
 			PerformPreparedAction();
 		}
 	}
-	UpdatePronoun(noun);
+	if(inp1 ~= 1) UpdatePronoun(noun);
 	return num_words_parsed;
 ];
 

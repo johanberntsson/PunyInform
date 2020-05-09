@@ -39,6 +39,23 @@ Constant MSG_OPEN_YOU_CANT 1000;
 Include "puny.h";
 #Endif;
 
+#Ifdef USEINFORM;
+[ PredictableSub _i;
+    ! sets the random seed, thus making randomness predictable
+    ! also a test of special and number, thus the fancy grammar
+    print special_word, " ", special_number," ",parsed_number,"^";
+    if(special_word ~=0) "You can't send randomness to an object!";
+    _i = parsed_number;
+    if(_i == 0) _i = 100; ! default
+    random(-_i);
+    "The random seed is set to ", _i, ".";
+];
+Verb meta 'random'
+    * -> Predictable
+    * special -> Predictable
+    * 'to' number -> Predictable;
+#Endif;
+
 Class Book
 	with
 		description [;
@@ -164,7 +181,9 @@ Object -> John "John"
 		],
 		orders [;
 			Go: "~I must not leave this room.~";
-			NotUnderstood: "~You speak in riddles.~";
+			NotUnderstood: 
+				!print special_number, " ", special_word, " ", 'pink', " ", consult_from;
+				"~You speak in riddles.~";
 		],
 		life [c w1 w2;
 		! Attack Kiss WakeOther ThrowAt Give Show Ask Tell Answer Order

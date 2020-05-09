@@ -270,8 +270,9 @@
 [ PredictableSub _i; 
 	! sets the random seed, thus making randomness predictable
 	! also a test of special and number, thus the fancy grammar
+	!print special_word, " ", special_number," ",parsed_number,"^";
 	if(special_word ~=0) "You can't send randomness to an object!";
-	_i = parsed_number + special_number; ! allow both special and number
+	_i = parsed_number;
 	if(_i == 0) _i = 100; ! default
 	random(-_i);
 	"The random seed is set to ", _i, ".";
