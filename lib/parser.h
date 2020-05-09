@@ -174,7 +174,7 @@
 	return NextWord();
 ];
 
-[ PronounNotice p_object;
+[ UpdatePronoun p_object;
 	if(p_object == 0) return;
 	if(p_object == player) return;
 	if(p_object has pluralname) return;
@@ -409,7 +409,172 @@
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_index _token _token_type _token_data _parse_pointer _noun _check_held _check_creature _unknown_noun_found _multiple_object_modifier;
+Global parser_check_held;
+Global parser_check_creature;
+Global parser_check_multiple;
+Global parser_unknown_noun_found;
+
+[ ParseNextObject p_pattern_index p_parse_pointer _noun _i _token _token_type _token_data;
+	! ParseNextObject is similar to a general parse routine,
+	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
+	! GPR_PREPOSITION, GPR_REPARSE or the object number
+	! However, it also taks the current grammar token as input
+	! while a general parse routine takes no arguments.
+	! (this is mostly to avoid recalculating the values from wn
+	! when the calling routine already has them at hand)
+
+	_token = (p_pattern_index -> 0);
+	_token_type = _token & $0f;
+	_token_data = (p_pattern_index + 1) --> 0;
+
+	! first set up filters, if any
+	noun_filter = 0;
+	if(_token_type == TT_ROUTINE_FILTER) {
+		noun_filter = _token_data;
+		_token_type = TT_OBJECT;
+		_token_data = NOUN_OBJECT;
+	} else if(_token_type == TT_ATTR_FILTER) {
+		noun_filter = 1 + _token_data;
+		_token_type = TT_OBJECT;
+		_token_data = NOUN_OBJECT;
+	} else if(_token_type == TT_SCOPE) {
+		_token_type = TT_OBJECT;
+		scope_stage = 1; ! has to be defined according to DM
+		_i = indirect(_token_data);
+		if(_i == 1) 
+			_token_data = MULTI_OBJECT;
+		else 
+			_token_data = NOUN_OBJECT;
+	} else if(_token_type == TT_PARSE_ROUTINE) {
+		return  indirect(_token_data);
+	}
+	! then parse objects or prepositions
+	if(_token_type == TT_PREPOSITION) { 
+#IfDef DEBUG;
+		print "Preposition: ", _token_data, "^";
+#EndIf;
+		if(p_parse_pointer --> 0 == _token_data) {
+#IfDef DEBUG;
+			print "Match!^";
+#EndIf;
+			wn++;
+			!TODO p_parse_pointer = p_parse_pointer + 4;
+			!TODO while(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) { ! Alternative prepositions which are not at the end of the list
+#IfDef DEBUG;
+		!TODO 		print "Skipping one alternative...^";
+#EndIf;
+			!TODO 	!_pattern_index = _pattern_index + 3;
+		!TODO 		_token = _pattern_index -> 0;
+			!TODO }
+			return GPR_PREPOSITION;
+		}
+#IfDef DEBUG;
+		print "Failed prep: ", p_parse_pointer, ":", p_parse_pointer --> 0, " should have been ", _token_data, "^";
+#EndIf;
+		if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) return GPR_PREPOSITION; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
+		return GPR_FAIL; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
+	} else if(_token_type == TT_OBJECT) {
+		! here _token_data will be one of 
+		! NOUN_OBJECT, HELD_OBJECT, MULTI_OBJECT, MULTIHELD_OBJECT,
+		! MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT, CREATURE_OBJECT,
+		! SPECIAL_OBJECT, NUMBER_OBJECT or TOPIC_OBJECT
+		!
+		! remember if except or inside found, so we can filter later
+		if(_token_data == MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT)
+			parser_check_multiple = _token_data;
+		! first take care of take all/drop all
+		if(p_parse_pointer-->0 == ALL_WORD &&
+			_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
+			! take all etc.
+			! absort the "all" keyword
+			++wn;
+			p_parse_pointer = p_parse_pointer + 4;
+			! Add all reasonable objects in scope
+			! to the multiple_objects array
+			AddMultipleNouns(_token_data);
+			if(multiple_objects --> 0 == 0) {
+				print "Nothing to do!^";
+				return -wn;
+			} else if(multiple_objects --> 0 == 1) {
+				! single object
+				_noun = multiple_objects --> 1;
+				return _noun;
+			} else {
+				! multiple objects
+				return GPR_MULTIPLE;
+			}
+		} else if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
+			_noun = GetNextNoun(p_parse_pointer);
+			if(_noun == 0) {
+				parser_unknown_noun_found = p_parse_pointer;
+				return GPR_FAIL;
+			}
+			if(_noun == -1) return GPR_REPARSE;
+			p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+			if(_token_data == CREATURE_OBJECT && _noun hasnt animate)
+				parser_check_creature = _noun;
+			if(_token_data == HELD_OBJECT && _noun notin player) {
+				parser_check_held = _noun;
+			}
+			return _noun;
+		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
+			for(::) {
+				_noun = GetNextNoun(p_parse_pointer);
+				if(_noun == 0) {
+					parser_unknown_noun_found = p_parse_pointer;
+					return GPR_FAIL;
+				}
+				if(_noun == -1) return GPR_REPARSE;
+				p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+				multiple_objects --> 0 = 1 + (multiple_objects --> 0);
+				multiple_objects --> (multiple_objects --> 0) = _noun;
+				! check if we should continue: and or comma
+				if(PeekAtNextWord() == comma_word or AND_WORD) {
+					++wn;
+					p_parse_pointer = p_parse_pointer + 4;
+					continue;
+				} else break;
+			}
+			if(multiple_objects --> 0 == 0) {
+				! no nouns found, so this pattern didn't match
+				return GPR_FAIL;
+			}
+			return GPR_MULTIPLE;
+		} else if(_token_data == TOPIC_OBJECT) {
+			consult_from = wn;
+			consult_words = 0;
+			! topic continues until end of line or
+			! until the word matches the preposition
+			! defined in the next pattern
+			!print (_pattern_index + 3) -> 0, "^"; ! token
+			!print (_pattern_index + 4) --> 0, "^"; ! token_data 
+			_i = (p_pattern_index + 4) --> 0; ! word to stop at
+			for(::) {
+				++wn;
+				++consult_words;
+				p_parse_pointer = p_parse_pointer + 4;
+				if(wn > parse_array->1 || p_parse_pointer --> 0 == _i) {
+					! found the stop token, or end of line
+					break;
+				}
+			}
+			return GPR_NUMBER;
+		} else if(_token_data == SPECIAL_OBJECT) {
+			_i = TryNumber(wn);
+			special_word = NextWord();
+			if (_i == -1000) _i = special_word;
+			special_number = _i;
+			return GPR_NUMBER;
+		} else if(_token_data == NUMBER_OBJECT) {
+			_i=TryNumber(wn++);
+			if (_i == -1000) return GPR_FAIL;
+			parsed_number = _i;
+			return GPR_NUMBER;
+		}
+	}
+];
+
+[ ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -516,7 +681,7 @@
 #EndIf;
 		wn = verb_wordnum + 1;
 		_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
-		_pattern_index = _pattern - 1;
+		_pattern_pointer = _pattern - 1;
 		num_noun_groups = 0;
 		noun = 0;
 		second = 0;
@@ -526,23 +691,20 @@
 		special_word = 0;
 		parsed_number = 0;
 		multiple_objects --> 0 = 0;
-		_check_held = 0;
-		_check_creature = 0;
-		_unknown_noun_found = 0;
-		_multiple_object_modifier = 0;
+		parser_check_held = 0;
+		parser_check_creature = 0;
+		parser_check_multiple = 0;
+		parser_unknown_noun_found = 0;
 		action = (_pattern --> 0) & $03ff;
 		action_reverse = ((_pattern --> 0) & $400 ~= 0);
 
 		while(true) {
-			_pattern_index = _pattern_index + 3;
-			_token = (_pattern_index -> 0);
-			_token_type = _token & $0f;
-			_token_data = (_pattern_index + 1) --> 0;
+			_pattern_pointer = _pattern_pointer + 3;
 #IfDef DEBUG;
-			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, " _token_data ", _token_data, "^";
+			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
-			if(_token_type == TT_END) {
+			if(((_pattern_pointer -> 0) & $0f) == TT_END) {
 				if(IsSentenceDivider(_parse_pointer)) {
 					wn++;
 					jump parse_success;
@@ -561,170 +723,25 @@
 #IfDef DEBUG;
 			print "token type ", _token_type, ", data ",_token_data,"^";
 #EndIf;
-			! first set up filters, if any
-			noun_filter = 0;
-			if(_token_type == TT_ROUTINE_FILTER) {
-				noun_filter = _token_data;
-				_token_type = TT_OBJECT;
-				_token_data = NOUN_OBJECT;
-			} else if(_token_type == TT_ATTR_FILTER) {
-				noun_filter = 1 + _token_data;
-				_token_type = TT_OBJECT;
-				_token_data = NOUN_OBJECT;
-			} else if(_token_type == TT_SCOPE) {
-				_token_type = TT_OBJECT;
-				scope_stage = 1; ! has to be defined according to DM
-				_i = indirect(_token_data);
-				if(_i == 1) 
-					_token_data = MULTI_OBJECT;
-				else 
-					_token_data = NOUN_OBJECT;
-			} else if(_token_type == TT_PARSE_ROUTINE) {
-				_noun = indirect(_token_data);
-				! the parse routine can change wn, so update _parse_pointer
-				_parse_pointer = parse_array + 2 + 4 * (wn - 1);
-				switch(_noun) {
-				GPR_FAIL:
-					break;
-				GPR_MULTIPLE:
-					! multiple_objects contains the objects
-					UpdateNounSecond(0, 0);
-				GPR_NUMBER:
-					! parsed_number contains the new number
-					UpdateNounSecond(parsed_number, 1);
-				GPR_PREPOSITION:
-					! do nothing
-				GPR_REPARSE:
-					rfalse;
-				default:
-					! returned an objekt
-					UpdateNounSecond(_noun, _noun);
-				}
-				continue;
-			}
-			! then parse objects or prepositions
-			if(_token_type == TT_PREPOSITION) { 
-#IfDef DEBUG;
-				print "Preposition: ", _token_data, "^";
-#EndIf;
-				if(_parse_pointer --> 0 == _token_data) {
-#IfDef DEBUG;
-					print "Match!^";
-#EndIf;
-					wn++;
-					_parse_pointer = _parse_pointer + 4;
-					while(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) { ! Alternative prepositions which are not at the end of the list
-#IfDef DEBUG;
-						print "Skipping one alternative...^";
-#EndIf;
-						_pattern_index = _pattern_index + 3;
-						_token = _pattern_index -> 0;
-					}
-					continue;
-				}
-#IfDef DEBUG;
-				print "Failed prep: ", _parse_pointer, ":", _parse_pointer --> 0, " should have been ", _token_data, "^";
-#EndIf;
-				if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) continue; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
-				break; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
-			} else if(_token_type == TT_OBJECT) {
-				! here _token_data will be one of 
-				! NOUN_OBJECT, HELD_OBJECT, MULTI_OBJECT, MULTIHELD_OBJECT,
-				! MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT, CREATURE_OBJECT,
-				! SPECIAL_OBJECT, NUMBER_OBJECT or TOPIC_OBJECT
-				!
-				! remember if except or inside found, so we can filter later
-				if(_token_data == MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT)
-					_multiple_object_modifier = _token_data;
-				! first take care of take all/drop all
-				if(_parse_pointer-->0 == ALL_WORD &&
-					_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
-					! take all etc.
-					! absort the "all" keyword
-					++wn;
-					_parse_pointer = _parse_pointer + 4;
-					! Add all reasonable objects in scope
-					! to the multiple_objects array
-					AddMultipleNouns(_token_data);
-					if(multiple_objects --> 0 == 0) {
-						print "Nothing to do!^";
-						return -wn;
-					} else if(multiple_objects --> 0 == 1) {
-						! single object
-						_noun = multiple_objects --> 1;
-						UpdateNounSecond(_noun, _noun);
-					} else {
-						! multiple objects
-						UpdateNounSecond(0, 0);
-					}
-				} else if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
-					_noun = GetNextNoun(_parse_pointer);
-					if(_noun == 0) {
-						_unknown_noun_found = true;
-						break;
-					}
-					if(_noun == -1) rfalse;
-					_parse_pointer = parse_array + 2 + 4 * (wn - 1);
-					if(_token_data == CREATURE_OBJECT && _noun hasnt animate)
-						_check_creature = _noun;
-					if(_token_data == HELD_OBJECT && _noun notin player) {
-						_check_held = _noun;
-					}
-					UpdateNounSecond(_noun, _noun, 1); ! JB
-				} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
-					for(::) {
-						_noun = GetNextNoun(_parse_pointer);
-						if(_noun == 0) {
-							_unknown_noun_found = true;
-							break;
-						}
-						if(_noun == -1) rfalse;
-						_parse_pointer = parse_array + 2 + 4 * (wn - 1);
-						multiple_objects --> 0 = 1 + (multiple_objects --> 0);
-						multiple_objects --> (multiple_objects --> 0) = _noun;
-						! check if we should continue: and or comma
-						if(PeekAtNextWord() == comma_word or AND_WORD) {
-							++wn;
-							_parse_pointer = _parse_pointer + 4;
-							continue;
-						} else break;
-					}
-					if(multiple_objects --> 0 == 0) {
-						! no nouns found, so this pattern didn't match
-						break;
-					}
-					UpdateNounSecond(0, 0);
-				} else if(_token_data == TOPIC_OBJECT) {
-					consult_from = wn;
-					consult_words = 0;
-					! topic continues until end of line or
-					! until the word matches the preposition
-					! defined in the next pattern
-					!print (_pattern_index + 3) -> 0, "^"; ! token
-					!print (_pattern_index + 4) --> 0, "^"; ! token_data 
-					_i = (_pattern_index + 4) --> 0; ! word to stop at
-					for(::) {
-						++wn;
-						++consult_words;
-						_parse_pointer = _parse_pointer + 4;
-						if(wn > parse_array->1 || _parse_pointer --> 0 == _i) {
-							! found the stop token, or end of line
-							break;
-						}
-					}
-					UpdateNounSecond(0, 0);
-				} else if(_token_data == SPECIAL_OBJECT) {
-					_i = TryNumber(wn);
-					special_word = NextWord();
-					if (_i == -1000) _i = special_word;
-					special_number = _i;
-					UpdateNounSecond(0, 0);
-				} else if(_token_data == NUMBER_OBJECT) {
-					_i=TryNumber(wn++);
-            		if (_i == -1000) break;
-            		parsed_number = _i;
-					UpdateNounSecond(parsed_number, 1);
-				}
+			_noun = ParseNextObject(_pattern_pointer, _parse_pointer);
+			! the parse routine can change wn, so update _parse_pointer
+			_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+			switch(_noun) {
+			GPR_FAIL:
+				break;
+			GPR_MULTIPLE:
+				! multiple_objects contains the objects
+				UpdateNounSecond(0, 0);
+			GPR_NUMBER:
+				! parsed_number contains the new number
+				UpdateNounSecond(parsed_number, 1);
+			GPR_PREPOSITION:
+				! do nothing
+			GPR_REPARSE:
+				rfalse;
+			default:
+				! returned an objekt
+				UpdateNounSecond(_noun, _noun);
 			}
 		}
 		! This pattern has failed.
@@ -732,10 +749,16 @@
 		print "Pattern didn't match.^";
 #EndIf;
 		! Scan to the end of this pattern
-		while(_pattern_index -> 0 ~= TT_END) _pattern_index = _pattern_index + 3;
-		_pattern = _pattern_index + 1;
+		while(_pattern_pointer -> 0 ~= TT_END) _pattern_pointer = _pattern_pointer + 3;
+		_pattern = _pattern_pointer + 1;
 	}
-	if(_unknown_noun_found) "You can't see any such thing.";
+	if(parser_unknown_noun_found) {
+		print "Sorry, I don't understand what ~";
+		for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
+			print (char) player_input_array->(_i + parser_unknown_noun_found->3);
+		}
+		"~ means.";
+	}
 	"Sorry, I didn't understand that.";
 
 .treat_bad_line_as_conversation;
@@ -779,17 +802,16 @@
 		return num_words_parsed;
 	}
 
-	if(_check_held > 0) {
-		print "(first taking ", (the) _check_held, ")^^";
+	if(parser_check_held > 0) {
+		print "(first taking ", (the) parser_check_held, ")^^";
 		keep_silent = true;
-		<take _check_held>;
+		<take parser_check_held>;
 		keep_silent = false;
-		if(_check_held notin player) rtrue;
+		if(parser_check_held notin player) rtrue;
 	}
-	if(_check_creature > 0 && _check_creature hasnt animate)
+
+	if(parser_check_creature > 0 && parser_check_creature hasnt animate)
 		"You can only do that to something animate.";
-
-
 
 	if(multiple_objects --> 0 == 0) {
 		! single action
@@ -803,7 +825,7 @@
 		for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
 			inp1 = multiple_objects --> _noun;
 			noun = inp1;
-			switch(_multiple_object_modifier) {
+			switch(parser_check_multiple) {
 			MULTIEXCEPT_OBJECT:
 				if(noun == second) continue; ! eg take all except X
 			MULTIINSIDE_OBJECT:
@@ -813,16 +835,16 @@
 			PerformPreparedAction();
 		}
 	}
-	PronounNotice(noun);
+	UpdatePronoun(noun);
 	return num_words_parsed;
 ];
 
-[ AddMultipleNouns multiple_objects_type   _i _addobj _obj;
+[ AddMultipleNouns p_multiple_objects_type   _i _addobj _obj;
 	multiple_objects --> 0 = 0;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 		_addobj = false;
-		switch(multiple_objects_type) {
+		switch(p_multiple_objects_type) {
 		MULTIHELD_OBJECT:
 			_addobj = _obj in player;
 		MULTI_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
