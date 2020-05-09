@@ -409,11 +409,6 @@
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-Global parser_check_held;
-Global parser_check_creature;
-Global parser_check_multiple;
-Global parser_unknown_noun_found;
-
 [ ParseNextObject p_pattern_index p_parse_pointer _noun _i _token _token_type _token_data;
 	! ParseNextObject is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
