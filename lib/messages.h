@@ -244,9 +244,9 @@ Constant MSG_PUTON_NO_ROOM 42;
 #Ifndef MSG_PUTON_SUCCESS;
 Constant MSG_PUTON_SUCCESS 43;
 #Endif;
-
 #Ifndef MSG_NOT_SWITCHABLE;
 Constant MSG_NOT_SWITCHABLE 44;
+#EndIf;
 #Ifndef MSG_SWITCH_ON_NOT_SWITCHABLE;
 Constant MSG_SWITCH_ON_NOT_SWITCHABLE 45;
 #EndIf;
@@ -424,23 +424,27 @@ Constant ERR_INVALID_DIR_PROP 5;
 
 [RunTimeError p_err;
 	print "[Puny error: ";
+	if(p_err ofclass string)
+		print (string) p_err;
+	else {
 #IfDef RUNTIME_ERRORS;
-	switch(p_err) {
-	ERR_TOO_MANY_TIMERS_DAEMONS:
-		print "Too many timers/daemons";
-	ERR_OBJECT_HASNT_PROPERTY:
-		print "Object lacks that property";
-	ERR_SCOPE_FULL:
-		print "Scope full";
-	ERR_UNKNOWN_MSGNO:
-		print "Unknown message#"
-	ERR_INVALID_DIR_PROP:
-		print "Invalid direction prop in GoSub";
-	default:
-		print "Unknown error (", p_err, ")";
-	}
+		switch(p_err) {
+		ERR_TOO_MANY_TIMERS_DAEMONS:
+			print "Too many timers/daemons";
+		ERR_OBJECT_HASNT_PROPERTY:
+			print "Object lacks that property";
+		ERR_SCOPE_FULL:
+			print "Scope full";
+		ERR_UNKNOWN_MSGNO:
+			print "Unknown message#"
+		ERR_INVALID_DIR_PROP:
+			print "Invalid direction prop in GoSub";
+		default:
+			print "Unknown error (", p_err, ")";
+		}
 #IfNot;
-	print p_err;
+		print p_err;
 #EndIf;
+	}
 	"]";
 ];
