@@ -344,46 +344,46 @@
 
 [ TurnSub;
     !if (ObjectIsUntouchable(noun)) return; !TODO
-    if (noun has static)   { PrintMsg(MSG_FIXED_IN_PLACE); rtrue; }
-    if (noun has scenery)  { PrintMsg(MSG_UNABLE_TO_TURN); rtrue; }
-    if (noun has animate)  { PrintMsg(MSG_LESS_THAN_COURTEOUS); rtrue; }
-    PrintMsg(MSG_NOTHING_OBVIOUS);
+    if (noun has static)   { PrintMsg(MSG_TURN_STATIC); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_TURN_SCENERY); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_TURN_ANIMATE); rtrue; }
+    PrintMsg(MSG_TURN_SUCCESS);
 ];
 
-[ SwitchonSub;
+[ SwitchOnSub;
     !if (ObjectIsUntouchable(noun)) return; !TODO
-    if (noun hasnt switchable) { PrintMsg(MSG_NOT_SWITCHABLE); rtrue; }
-    if (noun has on)           { PrintMsg(MSG_ALREADY_ON_OFF); rtrue; } 
+    if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
+    if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; } 
     give noun on;
     if (AfterRoutines() == 1) rtrue;
     if (keep_silent == 1) rtrue;
-	PrintMsg(MSG_SWITCH_ON_OFF_SUCCESS);
+	PrintMsg(MSG_SWITCH_ON_SUCCESS);
 ];
 
-[ SwitchoffSub;
+[ SwitchOffSub;
     !if (ObjectIsUntouchable(noun)) return; !TODO
-    if (noun hasnt switchable) { PrintMsg(MSG_NOT_SWITCHABLE); rtrue; }
-    if (noun hasnt on)         { PrintMsg(MSG_ALREADY_ON_OFF); rtrue; }
+    if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_OFF_NOT_SWITCHABLE); rtrue; }
+    if (noun hasnt on)         { PrintMsg(MSG_SWITCH_OFF_NOT_ON); rtrue; }
     give noun ~on;
     if (AfterRoutines() == 1) rtrue;
     if (keep_silent == 1) rtrue;
-	PrintMsg(MSG_SWITCH_ON_OFF_SUCCESS);
+	PrintMsg(MSG_SWITCH_OFF_SUCCESS);
 ];
 
 [ PullSub;
     !if (ObjectIsUntouchable(noun)) return; !TODO
-	if (noun has static)   { PrintMsg(MSG_FIXED_IN_PLACE); rtrue; }
-    if (noun has scenery)  { PrintMsg(MSG_UNABLE_TO_TURN); rtrue; }
-    if (noun has animate)  { PrintMsg(MSG_LESS_THAN_COURTEOUS); rtrue; }
-    PrintMsg(MSG_NOTHING_OBVIOUS);
+	if (noun has static)   { PrintMsg(MSG_PULL_STATIC); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_PULL_SCENERY); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_PULL_ANIMATE); rtrue; }
+    PrintMsg(MSG_PULL_SUCCESS); !Nothing obvious happens
 ];
 
 [ PushSub;
     !if (ObjectIsUntouchable(noun)) return;
-    if (noun has static)   { PrintMsg(MSG_FIXED_IN_PLACE); rtrue; }
-    if (noun has scenery)  { PrintMsg(MSG_UNABLE_TO_TURN); rtrue; }
-    if (noun has animate)  { PrintMsg(MSG_LESS_THAN_COURTEOUS); rtrue; }
-    PrintMsg(MSG_NOTHING_OBVIOUS);
+    if (noun has static)   { PrintMsg(MSG_PUSH_STATIC); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_PUSH_SCENERY); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_PUSH_ANIMATE); rtrue; }
+    PrintMsg(MSG_PUSH_SUCCESS);
 ];
 
 
@@ -521,17 +521,17 @@ Verb 'attack' 'break' 'crack' 'destroy'
 
 Verb 'turn' 'rotate' 'screw' 'twist' 'unscrew'
     * noun                                      -> Turn
-    * noun 'on'                                 -> Switchon
-    * noun 'off'                                -> Switchoff
-    * 'on' noun                                 -> Switchon
-    * 'off' noun                                -> Switchoff;
+    * noun 'on'                                 -> SwitchOn
+    * noun 'off'                                -> SwitchOff
+    * 'on' noun                                 -> SwitchOn
+    * 'off' noun                                -> SwitchOff;
 
 Verb 'switch'
-    * noun                                      -> Switchon
-    * noun 'on'                                 -> Switchon
-    * noun 'off'                                -> Switchoff
-    * 'on' noun                                 -> Switchon
-    * 'off' noun                                -> Switchoff;
+    * noun                                      -> SwitchOn
+    * noun 'on'                                 -> SwitchOn
+    * noun 'off'                                -> SwitchOff
+    * 'on' noun                                 -> SwitchOn
+    * 'off' noun                                -> SwitchOff;
 
 Verb 'pull' 'drag'
     * noun                                      -> Pull;

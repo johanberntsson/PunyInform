@@ -110,15 +110,6 @@ Constant MSG_KISS_SUCCESS "Keep your mind on the game.";
 Constant MSG_ATTACK_NO_VIOLENCE "Violence isn't the answer to this one.";
 #Endif;
 
-#Ifndef MSG_UNABLE_TO_TURN;
-Constant MSG_UNABLE_TO_TURN "You are unable to.";
-#Endif;
-#Ifndef MSG_NOTHING_OBVIOUS;
-Constant MSG_NOTHING_OBVIOUS "Nothing obvious happens.";
-#Endif;
-#Ifndef MSG_LESS_THAN_COURTEOUS;
-Constant MSG_LESS_THAN_COURTEOUS "That would be less than courteous.";
-#Endif;
 
 !
 ! complex messages (enumerated)
@@ -254,21 +245,62 @@ Constant MSG_PUTON_NO_ROOM 42;
 Constant MSG_PUTON_SUCCESS 43;
 #Endif;
 
-
-
 #Ifndef MSG_NOT_SWITCHABLE;
-Constant MSG_NOT_SWITCHABLE 35;
+Constant MSG_NOT_SWITCHABLE 44;
+#Ifndef MSG_SWITCH_ON_NOT_SWITCHABLE;
+Constant MSG_SWITCH_ON_NOT_SWITCHABLE 45;
 #EndIf;
-#Ifndef MSG_ALREADY_ON_OFF;
-Constant MSG_ALREADY_ON_OFF 36;
+#Ifndef MSG_SWITCH_OFF_NOT_SWITCHABLE;
+Constant MSG_SWITCH_OFF_NOT_SWITCHABLE 46;
 #EndIf;
-#Ifndef MSG_SWITCH_ON_OFF_SUCCESS;
-Constant MSG_SWITCH_ON_OFF_SUCCESS 37;
+#Ifndef MSG_SWITCH_ON_ON;
+Constant MSG_SWITCH_ON_ON 47;
 #EndIf;
-#Ifndef MSG_FIXED_IN_PLACE;
-Constant MSG_FIXED_IN_PLACE 38;
+#Ifndef MSG_SWITCH_OFF_NOT_ON;
+Constant MSG_SWITCH_OFF_NOT_ON 48;
 #EndIf;
-
+#Ifndef MSG_SWITCH_ON_SUCCESS;
+Constant MSG_SWITCH_ON_SUCCESS 49;
+#EndIf;
+#Ifndef MSG_SWITCH_OFF_SUCCESS;
+Constant MSG_SWITCH_OFF_SUCCESS 50;
+#EndIf;
+#Ifndef MSG_PUSH_STATIC;
+Constant MSG_PUSH_STATIC 51;
+#EndIf;
+#Ifndef MSG_PULL_STATIC;
+Constant MSG_PULL_STATIC 52;
+#EndIf;
+#Ifndef MSG_TURN_STATIC;
+Constant MSG_TURN_STATIC 53;
+#EndIf;
+#Ifndef MSG_PUSH_SCENERY;
+Constant MSG_PUSH_SCENERY 54;
+#EndIf;
+#Ifndef MSG_PULL_SCENERY;
+Constant MSG_PULL_SCENERY 55;
+#EndIf;
+#Ifndef MSG_TURN_SCENERY;
+Constant MSG_TURN_SCENERY 56;
+#EndIf;
+#Ifndef MSG_PUSH_ANIMATE;
+Constant MSG_PUSH_ANIMATE 57;
+#EndIf;
+#Ifndef MSG_PULL_ANIMATE;
+Constant MSG_PULL_ANIMATE 58;
+#EndIf;
+#Ifndef MSG_TURN_ANIMATE;
+Constant MSG_TURN_ANIMATE 59;
+#EndIf;
+#Ifndef MSG_TURN_SUCCESS;
+Constant MSG_TURN_SUCCESS 60;
+#EndIf;
+#Ifndef MSG_PUSH_SUCCESS;
+Constant MSG_PUSH_SUCCESS 61;
+#EndIf;
+#Ifndef MSG_PULL_SUCCESS;
+Constant MSG_PULL_SUCCESS 62;
+#EndIf;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -333,16 +365,21 @@ Constant LibraryMessages 0;
 	MSG_AREYOUSUREQUIT:
 		print "Are you sure you want to quit? ";
 		rtrue;
-	MSG_NOT_SWITCHABLE:
+	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
 		print_ret (ctheyreorthats) noun, " not something you can switch.";
-	MSG_ALREADY_ON_OFF:
+	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
 		print_ret (ctheyreorthats) noun, " already ", (OnOff) noun, ". ";
-	MSG_SWITCH_ON_OFF_SUCCESS:
-		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 
-	!TODO: Use same for Pull,Push,Turn: 
-	MSG_FIXED_IN_PLACE:
+	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
+		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
+	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
 		if (noun has pluralname) print "Those are "; else print "It is ";
 		"fixed in place.";
+	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
+		"Nothing obvious happens.";
+	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE:
+		"That would be less than courteous.";
+	MSG_TURN_STATIC, MSG_PUSH_STATIC, MSG_PULL_STATIC:
+		"You are unable to.";
 	default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
