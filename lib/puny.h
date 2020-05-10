@@ -703,7 +703,7 @@ Object DefaultPlayer "you"
 		before_implicit NULL,
 	has concealed animate proper transparent;
 
-[ main _i _j _copylength _sentencelength _parsearraylength;
+[ main _i _j _copylength _sentencelength _parsearraylength _score;
 	print "PunyInform 0.0^^";
 
 	player = DefaultPlayer;
@@ -712,6 +712,7 @@ Object DefaultPlayer "you"
 	if(parent(player) == 0) PlayerTo(location);
 	<Look>; ! Equivalent to PerformAction(##Look);
 
+	_score = score;
 	while(deadflag == GS_PLAYING) {
 		status_field_1 = score;
 		status_field_2 = turns;
@@ -729,6 +730,16 @@ Object DefaultPlayer "you"
             RunTimersAndDaemons();
             turns++;
         }
+
+        if(_score < score) {
+        	print "^[The score has just gone up by ";
+        	if(score - _score == 1) {
+        		print "one point.]^";
+			} else {
+        		print score - _score, " points.]^";
+			}
+        	_score = score;
+		}
 
 		_parsearraylength = parse_array->1;
 		if(_parsearraylength > _sentencelength) {
