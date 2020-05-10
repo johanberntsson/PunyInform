@@ -316,16 +316,27 @@ Constant LibraryMessages 0;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
-	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING:
-		"You can't ", (PrintVerb) verb_word, " that!";
+    MSG_INVENTORY_SUCCESS:
+	    PrintContents("You are holding ", ".^", player);
+		rtrue;
 	MSG_EXAMINE_NOTHING_SPECIAL:
 		"There is nothing special about ", (the) noun, ".";
+	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
+		print_ret (CTheyreOrThats) noun, " fixed in place.";
+	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
+		"Nothing obvious happens.";
+	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE:
+		"That would be less than courteous.";
+	MSG_TURN_STATIC, MSG_PUSH_STATIC, MSG_PULL_STATIC:
+		"You are unable to.";
+	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
+		"You aren't holding ", (ItOrThem) noun, ".";
+	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING:
+		"You can't ", (PrintVerb) verb_word, " that!";
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg1, ".";
-	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
-		"You aren't holding ", (ItOrThem) noun, ".";
     MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS:
 	    "You ", (PrintVerb) verb_word, " ", (the) noun, ".";
     MSG_THROW_FIRST_TAKING:
@@ -338,9 +349,6 @@ Constant LibraryMessages 0;
         "You can't, since ",(the) p_arg1, " is closed.";
     MSG_EXIT_SUCCESS:
 	    "You leave ", (the) noun, ".";
-    MSG_INVENTORY_SUCCESS:
-	    PrintContents("You are holding ", ".^", player);
-		rtrue;
     MSG_GIVE_PLAYER:
         "You already have ", (ItOrThem) noun, ".";
     MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
@@ -359,27 +367,18 @@ Constant LibraryMessages 0;
 		"You are already wearing ", (ItOrThem) noun, ".";
     MSG_WEAR_SUCCESS:
 	    "You are now wearing ", (the) noun, ".";
+	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
+		print_ret (CTheyreOrThats) noun, " not something you can switch.";
+	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
+		print_ret (CTheyreOrThats) noun, " already ", (OnOff) noun, ". ";
+	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
+		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE or QUIT? ";
 		rtrue;
 	MSG_AREYOUSUREQUIT:
 		print "Are you sure you want to quit? ";
 		rtrue;
-	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
-		print_ret (ctheyreorthats) noun, " not something you can switch.";
-	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
-		print_ret (ctheyreorthats) noun, " already ", (OnOff) noun, ". ";
-	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
-		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
-	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
-		if (noun has pluralname) print "Those are "; else print "It is ";
-		"fixed in place.";
-	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
-		"Nothing obvious happens.";
-	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE:
-		"That would be less than courteous.";
-	MSG_TURN_STATIC, MSG_PUSH_STATIC, MSG_PULL_STATIC:
-		"You are unable to.";
 	default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
