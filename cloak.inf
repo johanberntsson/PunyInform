@@ -59,21 +59,24 @@ Object  bar "Foyer bar"
             of the foyer to the north, is completely empty. There seems to
             be some sort of message scrawled in the sawdust on the floor.",
         n_to  foyer,
-        before [;
+        before [ _test;
+			Look, Inv:
+				rfalse;
             Go:
 #ifdef USEINFORM;
-                if (self hasnt light && noun ~= n_obj) {
+				_test = self hasnt light && noun ~= n_obj;
 #IfNot;
-                if (self hasnt light && (noun ~= Directions || Directions.selected_dir_prop ~= n_to)) {
+                _test = self hasnt light && (noun ~= Directions || Directions.selected_dir_prop ~= n_to);
 #EndIf;
+                if (_test) {
                     message.number = message.number + 2;
                     "Blundering around in the dark isn't a good idea!";
-                    }
+				}
             default:
                 if (self hasnt light) {
                     message.number = message.number + 1;
                     "In the dark? You could easily disturb something!";
-                    }
+				}
             ],
   has   ~light;
 

@@ -154,7 +154,7 @@
 ];
 
 [ AskForSub;
-    if (noun == player) <<Inventory>>;
+    if (noun == player) { <Inv>; rtrue; }
     PrintMsg(MSG_ASKFOR_SUCCESS);
 ];
 
@@ -199,7 +199,7 @@
     PrintMsg(MSG_ANSWER_SUCCESS);
 ];
 
-[ InventorySub;
+[ InvSub;
 	if(child(player) == 0) { PrintMsg(MSG_INVENTORY_EMPTY); rtrue; }
     PrintMsg(MSG_INVENTORY_SUCCESS);
 ];
@@ -218,7 +218,6 @@
 	_prop = Directions.selected_dir_prop;
 	if(_prop == 0) return RuntimeError(ERR_INVALID_DIR_PROP);
 	GoDir(_prop);
-	rtrue;
 ];
 
 [ GoDir p_property _new_location;
@@ -339,7 +338,7 @@
 
 
 Verb 'i' 'inventory'
-	* -> Inventory;
+	* -> Inv;
 
 Verb 'answer' 'say' 'shout' 'speak'
     * topic 'to' creature -> Answer;

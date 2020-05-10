@@ -324,7 +324,7 @@ Array TenSpaces -> "          ";
 	objectloop(_obj in p_obj) {
 !   print "Considering ", (object) _obj, "...^";
 !   if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
-		if(_obj hasnt concealed && (_obj has moved || _obj.initial == 0)) {
+		if(_obj hasnt concealed && _obj hasnt scenery && (_obj has moved || _obj.initial == 0)) {
 			if(_printed_first_text == 0) {
 				print (string) p_first_text;
 				_printed_first_text = 1;
