@@ -73,7 +73,6 @@ Class Book
 !			print "c is ", c, "^";
 		];
 
-
 Object CarPark "Car Park"
 	with
 		short_name [; print "In front of the library!"; rtrue; ],
@@ -85,12 +84,84 @@ Object CarPark "Car Park"
 		cant_go "Without a car the only viable exit is to the north.",
 	has light;
 
+Object Toilet "The toilet"
+	with
+		short_name [; print "A toilet"; rtrue; ],
+		description[;
+			print "This toilet is in dire need of cleaning. ";
+			if(Faucet has on) {
+				"Water is streaming from the faucet into the sink. ";
+			}
+			rtrue;
+		],
+		w_to Library;
+
+Object -> Goblin "Goblin"
+	with 
+		short_name "Goblin",
+		description "He is a mean looking creature, not to be messed around with. ",
+		name 'goblin' 'creature',
+		before[;
+			Attack: 
+				print "But he has a grim looking scimitar, and you are defenceless. Are you sure that's a good idea? ";
+				if(YesOrNo()) {
+					deadflag = 2;
+					"You'd never believe that so much blood was possible to be contained within this body. ";
+				} else {
+					"Wise call.";
+				}
+
+				rtrue;
+		],
+	has animate;	
+
+
+Object -> Sink "Sink"
+	with
+		short_name "sink",
+		name 'sink' 'water',
+		description[;
+			print "It's a regular white sink with a faucet for turning water on or off. ";
+			if(Faucet has on) {
+				"There's water running into the sink from the faucet. ";
+			}
+			rtrue;
+		],
+	has container static scenery; !TODO: scenery objects still shown in room description
+
+Object -> Faucet "faucet"
+	with
+		short_name "faucet",
+		name 'faucet',
+		description[;
+			print "It's a faucet, possible to switch on/off. ";
+			"It's currently ", (OnOff) self, ".";
+		],
+	has switchable static scenery; !TODO: scenery objects still shown in room description
+
 Object Library "The Library"
 	with
 		short_name [; print "Huge library"; rtrue; ],
-		description "You are in an old and deserted library. There is an exit leading south.",
+		description "You are in an old and deserted library. There is an exit leading south and a toilet to the east.",
 		s_to CarPark,
+		e_to Toilet,
 	has light;
+
+Object -> LightSwitch "LightSwitch"
+	with
+		short_name "light switch",
+		description "It's a switch located near the toilet. ",
+		name 'light' 'switch',
+		after[;
+			SwitchOn:
+				give toilet light;
+				"You flip the light switch next to the toilet upwards ";
+			SwitchOff:	
+				give toilet ~light;
+				"You flip the light switch next to the toilet downwards";
+		],
+	has switchable static;
+
 
 Object -> LargeBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
 	with
@@ -144,12 +215,15 @@ Object -> BlueBook "blue book" class Book
 			" is standing on a shelf. Looking at ", (the) self, " makes you dizzy.";
 		],
 		before [;
+			Turn:
+				"You turn the book around and around. It is endlessly fun. ";
             Drop:
                 if (self in player) {
                    StopDaemon(Self);
                 }
 		],
 		after [;
+
 			Take: 
 				if(RedBook in player) {
 					print "The red book does not want to be near the blue book and jumps out of your grasp and lands on the floor.^^";
@@ -173,11 +247,24 @@ Object -> John "John"
 	with
 		name 'john',
 		description "John is the meanest gangster around. Don't mess with him.",
+		messed_with 0,
 		react_before [;
 			Take:
 				if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
 					print_ret (The) John, " says, ~Oh no! That's mine!~";
 				}
+		],
+		before[; 
+			Pull, Push: 
+			switch(++self.messed_with) {
+				1: "~I'm gonna make you regret that!~, John mutters. ";
+				2: "~This is your final warning!~, John says. ";
+				3: deadflag=2;
+					"Oh dear, who would have guessed John was carrying a double barrelled gun with him to the library. ";
+				
+			}
+			
+
 		],
 		orders [;
 			Go: "~I must not leave this room.~";

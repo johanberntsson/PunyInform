@@ -106,6 +106,19 @@ Constant MSG_KISS_PLAYER "If you think that'll help.";
 #Ifndef MSG_KISS_SUCCESS;
 Constant MSG_KISS_SUCCESS "Keep your mind on the game.";
 #Endif;
+#Ifndef MSG_ATTACK_NO_VIOLENCE;
+Constant MSG_ATTACK_NO_VIOLENCE "Violence isn't the answer to this one.";
+#Endif;
+
+#Ifndef MSG_UNABLE_TO_TURN;
+Constant MSG_UNABLE_TO_TURN "You are unable to.";
+#Endif;
+#Ifndef MSG_NOTHING_OBVIOUS;
+Constant MSG_NOTHING_OBVIOUS "Nothing obvious happens.";
+#Endif;
+#Ifndef MSG_LESS_THAN_COURTEOUS;
+Constant MSG_LESS_THAN_COURTEOUS "That would be less than courteous.";
+#Endif;
 
 !
 ! complex messages (enumerated)
@@ -243,6 +256,18 @@ Constant MSG_PUTON_SUCCESS 43;
 
 
 
+#Ifndef MSG_NOT_SWITCHABLE;
+Constant MSG_NOT_SWITCHABLE 35;
+#EndIf;
+#Ifndef MSG_ALREADY_ON_OFF;
+Constant MSG_ALREADY_ON_OFF 36;
+#EndIf;
+#Ifndef MSG_SWITCH_ON_OFF_SUCCESS;
+Constant MSG_SWITCH_ON_OFF_SUCCESS 37;
+#EndIf;
+#Ifndef MSG_FIXED_IN_PLACE;
+Constant MSG_FIXED_IN_PLACE 38;
+#EndIf;
 
 
 #Ifndef LibraryMessages;
@@ -307,11 +332,37 @@ Constant LibraryMessages 0;
 		rtrue;
 	MSG_AREYOUSUREQUIT:
 		print "Are you sure you want to quit? ";
-		rtrue;	
+		rtrue;
+	MSG_NOT_SWITCHABLE:
+		print_ret (ctheyreorthats) noun, " not something you can switch.";
+	MSG_ALREADY_ON_OFF:
+		print_ret (ctheyreorthats) noun, " already ", (OnOff) noun, ". ";
+	MSG_SWITCH_ON_OFF_SUCCESS:
+		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 
+	!TODO: Use same for Pull,Push,Turn: 
+	MSG_FIXED_IN_PLACE:
+		if (noun has pluralname) print "Those are "; else print "It is ";
+		"fixed in place.";
 	default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
 	}
+];
+
+[OnOff obj;
+	if(obj has on) print "on";
+	else print "off";
+	return;
+];
+
+[ CTheyreorThats obj;
+    if (obj == player)             { print "You're"; return; }
+    if (obj has pluralname)        { print "They're"; return; }
+    if (obj has animate) {
+        if (obj has female)        { print "She's"; return; }
+        else if (obj hasnt neuter) { print "He's"; return; }
+    }
+    print "That's";
 ];
 
 [ ItorThem obj;

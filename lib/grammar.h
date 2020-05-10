@@ -336,6 +336,56 @@
     PrintMsg(MSG_KISS_SUCCESS);
 ];
 
+[ AttackSub;
+    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
+	PrintMsg(MSG_ATTACK_NO_VIOLENCE);
+];
+
+[ TurnSub;
+    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (noun has static)   { PrintMsg(MSG_FIXED_IN_PLACE); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_UNABLE_TO_TURN); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_LESS_THAN_COURTEOUS); rtrue; }
+    PrintMsg(MSG_NOTHING_OBVIOUS);
+];
+
+[ SwitchonSub;
+    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (noun hasnt switchable) { PrintMsg(MSG_NOT_SWITCHABLE); rtrue; }
+    if (noun has on)           { PrintMsg(MSG_ALREADY_ON_OFF); rtrue; } 
+    give noun on;
+    if (AfterRoutines() == 1) rtrue;
+    if (keep_silent == 1) rtrue;
+	PrintMsg(MSG_SWITCH_ON_OFF_SUCCESS);
+];
+
+[ SwitchoffSub;
+    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (noun hasnt switchable) { PrintMsg(MSG_NOT_SWITCHABLE); rtrue; }
+    if (noun hasnt on)         { PrintMsg(MSG_ALREADY_ON_OFF); rtrue; }
+    give noun ~on;
+    if (AfterRoutines() == 1) rtrue;
+    if (keep_silent == 1) rtrue;
+	PrintMsg(MSG_SWITCH_ON_OFF_SUCCESS);
+];
+
+[ PullSub;
+    !if (ObjectIsUntouchable(noun)) return; !TODO
+	if (noun has static)   { PrintMsg(MSG_FIXED_IN_PLACE); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_UNABLE_TO_TURN); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_LESS_THAN_COURTEOUS); rtrue; }
+    PrintMsg(MSG_NOTHING_OBVIOUS);
+];
+
+[ PushSub;
+    !if (ObjectIsUntouchable(noun)) return;
+    if (noun has static)   { PrintMsg(MSG_FIXED_IN_PLACE); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_UNABLE_TO_TURN); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_LESS_THAN_COURTEOUS); rtrue; }
+    PrintMsg(MSG_NOTHING_OBVIOUS);
+];
+
 
 Verb 'i' 'inventory'
 	* -> Inv;
@@ -374,7 +424,8 @@ Verb 'tell'
 	* creature 'to' topic                       -> AskTo;
 
 Verb 'close'
-	* noun -> Close;
+	* noun -> Close
+	* 'off' noun                                -> SwitchOff;
 
 Verb 'get'
 	* 'up' -> Exit
@@ -430,7 +481,7 @@ Verb 'go'
 Verb 'examine' 'x//'
 	* noun -> Examine;
 
-Verb meta 'quit'
+Verb meta 'quit' 'q//'
 	* -> Quit;
 
 Verb meta 'save'
@@ -463,3 +514,29 @@ Verb 'kiss' 'embrace' 'hug'
 
 Verb 'wear'
 	* held										-> Wear;
+Verb 'attack' 'break' 'crack' 'destroy'
+     'fight' 'hit' 'kill' 'murder' 'punch'
+     'smash' 'thump' 'torture' 'wreck'
+    * noun                                      -> Attack;
+
+Verb 'turn' 'rotate' 'screw' 'twist' 'unscrew'
+    * noun                                      -> Turn
+    * noun 'on'                                 -> Switchon
+    * noun 'off'                                -> Switchoff
+    * 'on' noun                                 -> Switchon
+    * 'off' noun                                -> Switchoff;
+
+Verb 'switch'
+    * noun                                      -> Switchon
+    * noun 'on'                                 -> Switchon
+    * noun 'off'                                -> Switchoff
+    * 'on' noun                                 -> Switchon
+    * 'off' noun                                -> Switchoff;
+
+Verb 'pull' 'drag'
+    * noun                                      -> Pull;
+Verb 'push' 'clear' 'move' 'press' 'shift'
+    * noun                                      -> Push
+    !TODO: * noun noun                                 -> PushDir
+    !TODO: * noun 'to' noun                            -> Transfer
+	;
