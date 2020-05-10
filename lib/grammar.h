@@ -540,3 +540,26 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
     !TODO: * noun noun                                 -> PushDir
     !TODO: * noun 'to' noun                            -> Transfer
 	;
+
+
+[ PrintVerb p_v;
+	switch(p_v) {
+#IfV3;
+		'examine': p_v = "examine";
+		'restart': p_v = "restart";
+		'restore': p_v = "restore";
+		'display': p_v = "display";
+		'present': p_v = "present";
+		'embrace': p_v = "embrace";
+		'destroy': p_v = "destroy";
+		'torture': p_v = "torture";
+		'unscrew': p_v = "unscrew";
+#EndIf;
+		'i', 'inventory': p_v = "inventory";
+		'l': p_v = "look";
+		'z': p_v = "wait";
+	}
+
+	print (address) p_v;
+];
+

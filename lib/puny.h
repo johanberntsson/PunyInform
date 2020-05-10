@@ -59,21 +59,6 @@ Include "grammar.h";
 
 ! ######################### Helper routines
 
-[ PrintVerb p_v;
-#IfV3;
-	switch(p_v) {
-		'examine': p_v = "examine";
-	}
-#EndIf;
-	switch(p_v) {
-		'i', 'inventory': p_v = "inventory";
-		'l': p_v = "look";
-		'z': p_v = "wait";
-	}
-
-	print (address) p_v;
-];
-
 [ GetVisibilityCeiling p_actor _parent;
 	for(:: p_actor = _parent) {
 		_parent = parent(p_actor);
