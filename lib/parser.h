@@ -115,7 +115,8 @@
 	p_pattern = p_pattern + 2;
 	action = _action_number & $3ff;
 	action_reverse = (_action_number & $400 ~= 0);
-	print "Action#: ", action, " Reverse: ", reverse, "^";
+!	print "Action#: ", action, " Reverse: ", reverse, "^";
+	print "Action#: ", action, "^";
 
 	for(_i = 0: : _i++) {
 		if(p_pattern->0 == TT_END) break;
@@ -581,7 +582,7 @@
 	verb_wordnum = 1;
 
 .reparse;
-	verb_word = (parse_array + 2 + 4 * (verb_wordnum - 1)) --> 0;
+	verb_word = (parse_array - 2) --> (2 * verb_wordnum) ;
 	if(verb_word < (0-->HEADER_DICTIONARY)) {
 		! unknown word
 #IfDef DEBUG;
@@ -681,7 +682,7 @@
 		while(true) {
 			_pattern_pointer = _pattern_pointer + 3;
 #IfDef DEBUG;
-			print "TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+			print "TOKEN: ", _pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
 			if(((_pattern_pointer -> 0) & $0f) == TT_END) {
@@ -701,7 +702,7 @@
 				break;
 			}
 #IfDef DEBUG;
-			print "token type ", _token_type, ", data ",_token_data,"^";
+			print "token type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
 #EndIf;
 			_noun = ParseNextObject(_pattern_pointer, _parse_pointer);
 			! the parse routine can change wn, so update _parse_pointer

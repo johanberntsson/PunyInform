@@ -435,7 +435,7 @@ Constant ERR_INVALID_DIR_PROP 5;
 		ERR_SCOPE_FULL:
 			print "Scope full";
 		ERR_UNKNOWN_MSGNO:
-			print "Unknown message#"
+			print "Unknown message#";
 		ERR_INVALID_DIR_PROP:
 			print "Invalid direction prop in GoSub";
 		default:

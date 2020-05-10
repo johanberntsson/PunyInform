@@ -542,28 +542,28 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
 	;
 
 
-[ PrintVerb p_v;
+[ PrintVerb p_v _string_name;
 #IfV3;
 	switch(p_v) {
-		'restart': p_v = "restart";
-		'restore': p_v = "restore";
-		'display': p_v = "display";
-		'present': p_v = "present";
-		'embrace': p_v = "embrace";
-		'destroy': p_v = "destroy";
-		'torture': p_v = "torture";
-		'unscrew': p_v = "unscrew";
+		'restart': _string_name = "restart";
+		'restore': _string_name = "restore";
+		'display': _string_name = "display";
+		'present': _string_name = "present";
+		'embrace': _string_name = "embrace";
+		'destroy': _string_name = "destroy";
+		'torture': _string_name = "torture";
+		'unscrew': _string_name = "unscrew";
 	}
 #EndIf;
 	switch(p_v) {
-		'x//', 'examine': p_v = "examine";		! 'examine' is really only needed for z3, but this creates smaller code in z3
-		'i//', 'inventory': p_v = "inventory";	! 'inventory' is really only needed for z3, but this creates smaller code in z3
-		'l//': p_v = "look";
-		'z//': p_v = "wait";
-		'q//': p_v = "quit";
+		'x//', 'examine': _string_name = "examine";		! 'examine' is really only needed for z3, but this creates smaller code in z3
+		'i//', 'inventory': _string_name = "inventory";	! 'inventory' is really only needed for z3, but this creates smaller code in z3
+		'l//': _string_name = "look";
+		'z//': _string_name = "wait";
+		'q//': _string_name = "quit";
 	}
-	if(p_v ofclass string)
-		print (string) p_v;
+	if(_string_name)
+		print (string) _string_name;
 	else
 		print (address) p_v;
 ];
