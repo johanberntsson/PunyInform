@@ -1,27 +1,24 @@
-!% -~S
-
 ! ============================================================================ !
 !   Cloak of Darkness - a simple demonstration of Interactive Fiction
-!       This version for Inform written by Roger Firth on 17Sep99
+!       This version for INFORM written by Roger Firth on 17Sep99
 ! ============================================================================ !
+#Iffalse (#version_number == 3);
+Constant USEINFORM;
+#Endif;
 
 Constant Story      "Cloak of Darkness";
 Constant Headline   "^A basic IF demonstration.^";
 Constant MANUAL_PRONOUNS;
 Constant MAX_SCORE  2;
 
-! PunyInform version used instead of Inform stdlib
-Attribute worn;
-Attribute scenery;
-Attribute clothing;
-Attribute general;
-
-[ PutOnSub; ];
-[ DeathMessage; print "You have lost"; ];
-
+#Ifndef USEINFORM;
+Include "globals.h";
 Include "puny.h";
-!Include "Parser";
-!Include "VerbLib";
+#Endif;
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#Endif;
 
 ! ============================================================================ !
 
@@ -61,8 +58,7 @@ Object  bar "Foyer bar"
         n_to  foyer,
         before [;
             Go:
-!                if (self hasnt light && noun ~= n_obj) {
-                if (self hasnt light) { ! TODO
+                if (self hasnt light && noun ~= n_obj) {
                     message.number = message.number + 2;
                     "Blundering around in the dark isn't a good idea!";
                     }
@@ -103,13 +99,11 @@ Object  message "scrawled message" bar
         description [;
             if (self.number < 2) {
                 score++;
-!                deadflag = 2;
-                game_state = GS_WIN;
+                deadflag = 2;
                 print "The message, neatly marked in the sawdust, reads...";
                 }
             else {
-!                deadflag = 3;
-                game_state = GS_DEATHMESSAGE;
+                deadflag = 3;
                 print "The message has been carelessly trampled, making it
                   difficult to read. You can just distinguish the words...";
                 }
@@ -126,13 +120,12 @@ Object  message "scrawled message" bar
     people about but, hey, what do you expect in a cheap demo game...?^^";
     ];
 
+[ DeathMessage; print "You have lost"; ];
 
 ! ============================================================================ !
 
-!Include "Grammar";
+Include "Grammar";
 
 Verb 'hang'     * held 'on' noun    -> PutOn;
 
-
 ! ============================================================================ !
-
