@@ -106,8 +106,8 @@ Constant MSG_KISS_PLAYER "If you think that'll help.";
 #Ifndef MSG_KISS_SUCCESS;
 Constant MSG_KISS_SUCCESS "Keep your mind on the game.";
 #Endif;
-#Ifndef MSG_ATTACK_NO_VIOLENCE;
-Constant MSG_ATTACK_NO_VIOLENCE "Violence isn't the answer to this one.";
+#Ifndef MSG_ATTACK_SUCCESS;
+Constant MSG_ATTACK_SUCCESS "Violence isn't the answer to this one.";
 #Endif;
 
 

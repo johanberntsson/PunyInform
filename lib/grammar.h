@@ -339,7 +339,7 @@
 [ AttackSub;
     !if (ObjectIsUntouchable(noun)) return; !TODO
     if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
-	PrintMsg(MSG_ATTACK_NO_VIOLENCE);
+	PrintMsg(MSG_ATTACK_SUCCESS);
 ];
 
 [ TurnSub;
