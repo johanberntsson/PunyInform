@@ -82,17 +82,17 @@ Constant MSG_YES_OR_NO "Please answer yes or no: ";
 #Ifndef MSG_RESTART_CONFIRM;
 Constant MSG_RESTART_CONFIRM "Are you sure you want to restart? ";
 #Endif;
-#Ifndef MSG_INSERT_ALREADY;
-Constant MSG_INSERT_ALREADY "Already there.";
-#Endif;
 #Ifndef MSG_INSERT_ITSELF;
 Constant MSG_INSERT_ITSELF "Cannot put something inside itself.";
 #Endif;
 #Ifndef MSG_INSERT_NOT_CONTAINER;
 Constant MSG_INSERT_NOT_CONTAINER "That can't contain things.";
 #Endif;
-#Ifndef MSG_INSERT_NO_ROOM;
-Constant MSG_INSERT_NO_ROOM "There is no more room.";
+#Ifndef MSG_PUTON_NOT_SUPPORTER;
+Constant MSG_PUTON_NOT_SUPPORTER "You can't put things on top of that.";
+#Endif;
+#Ifndef MSG_PUTON_ITSELF;
+Constant MSG_PUTON_ITSELF "Cannot put something on itself.";
 #Endif;
 #Ifndef MSG_WAKE_SUCCESS;
 Constant MSG_WAKE_SUCCESS "The dreadful truth is, this is not a dream.";
@@ -213,6 +213,35 @@ Constant MSG_RESTART_RESTORE_OR_QUIT 33;
 #Ifndef MSG_AREYOUSUREQUIT;
 Constant MSG_AREYOUSUREQUIT 34;
 #EndIf;
+#Ifndef MSG_WEAR_ALREADY_WORN;
+Constant MSG_WEAR_ALREADY_WORN 35;
+#EndIf;
+#Ifndef MSG_WEAR_NOT_CLOTHING;
+Constant MSG_WEAR_NOT_CLOTHING 36;
+#EndIf;
+#Ifndef MSG_WEAR_NOT_HOLDING;
+Constant MSG_WEAR_NOT_HOLDING 37;
+#EndIf;
+#Ifndef MSG_WEAR_SUCCESS;
+Constant MSG_WEAR_SUCCESS 38;
+#EndIf;
+#Ifndef MSG_INSERT_ALREADY;
+Constant MSG_INSERT_ALREADY 39;
+#Endif;
+#Ifndef MSG_INSERT_NO_ROOM;
+Constant MSG_INSERT_NO_ROOM 40;
+#Endif;
+#Ifndef MSG_PUTON_ALREADY;
+Constant MSG_PUTON_ALREADY 41;
+#Endif;
+#Ifndef MSG_PUTON_NO_ROOM;
+Constant MSG_PUTON_NO_ROOM 42;
+#Endif;
+#Ifndef MSG_PUTON_SUCCESS;
+Constant MSG_PUTON_SUCCESS 43;
+#Endif;
+
+
 
 
 
@@ -230,7 +259,7 @@ Constant LibraryMessages 0;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
-	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT:
+	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING:
 		"You can't ", (PrintVerb) verb_word, " that!";
 	MSG_EXAMINE_NOTHING_SPECIAL:
 		"There is nothing special about ", (the) noun, ".";
@@ -238,7 +267,7 @@ Constant LibraryMessages 0;
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg1, ".";
-	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING:
+	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItOrThem) noun, ".";
     MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS:
 	    "You ", (PrintVerb) verb_word, " ", (the) noun, ".";
@@ -259,16 +288,26 @@ Constant LibraryMessages 0;
         "You already have ", (ItOrThem) noun, ".";
     MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
         "Failed ", (PrintVerb) verb_word, ".";
+	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY:
+		"Already there.";
+	MSG_INSERT_NO_ROOM, MSG_PUTON_NO_ROOM:
+		"There is no more room.";
     MSG_INSERT_SUCCESS:
         "You put ", (the) noun, " into ", (the) second, ".";
+    MSG_PUTON_SUCCESS:
+        "You put ", (the) noun, " on ", (the) second, ".";
 	MSG_ASK_SUCCESS, MSG_ANSWER_SUCCESS: 
 		"There is no reply.";
+	MSG_WEAR_ALREADY_WORN:	
+		"You are already wearing ", (ItOrThem) noun, ".";
+    MSG_WEAR_SUCCESS:
+	    "You are now wearing ", (the) noun, ".";
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE or QUIT? ";
 		rtrue;
 	MSG_AREYOUSUREQUIT:
 		print "Are you sure you want to quit? ";
-		rtrue;
+		rtrue;	
 	default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);

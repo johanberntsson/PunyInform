@@ -132,7 +132,7 @@
 
 [ ShowSub;
     if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
-    if (second == player) <<Examine noun>>;
+    if (second == player) { <Examine noun>; rtrue; }
     if (RunLife(second, ##Show) ~= 0) rfalse;
     PrintMsg(MSG_SHOW_SUCCESS);
 ];
@@ -204,6 +204,15 @@
     PrintMsg(MSG_INVENTORY_SUCCESS);
 ];
 
+[ WearSub;
+	if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
+	if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING); rtrue; }
+    if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
+	give noun worn;
+	PrintMsg(MSG_WEAR_SUCCESS);
+];
+	
+
 [ GoSub _prop;
 	! when called Directions have been set properly
 	_prop = Directions.selected_dir_prop;
@@ -216,6 +225,9 @@
 	if(player notin location) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
 	if(location provides p_property) {
 		@get_prop location p_property -> _new_location; ! works in z3 and z5
+	}
+	if(_new_location ofclass String) {
+		print_ret (string) _new_location;
 	}
 	if(_new_location == 0) {
 		if(location provides cant_go) {
@@ -280,19 +292,32 @@
 #EndIf;
 
 [ InsertSub _ancestor;
+    if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
     if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
     _ancestor = CommonAncestor(noun, second);
     if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
     if (second ~= _ancestor) {
         if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN, second); rtrue; }
     }
-    if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
 
     if (AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
     move noun to second;
     if (keep_silent) return;
     PrintMsg(MSG_INSERT_SUCCESS);
+];
+
+[ PutOnSub _ancestor;
+    if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
+    if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
+    _ancestor = CommonAncestor(noun, second);
+    if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
+
+    if (AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
+
+    move noun to second;
+    if (keep_silent) return;
+    PrintMsg(MSG_PUTON_SUCCESS);
 ];
 
 [ WakeSub;
@@ -389,7 +414,8 @@ Verb 'exit' 'leave'
 	* noun -> Exit;
 
 Verb 'put'
-    * multiexcept 'in'/'inside'/'into' noun     -> Insert;
+    * multiexcept 'in'/'inside'/'into' noun     -> Insert
+	* 'on' held									-> Wear;
 
 Verb 'insert'
     * multiexcept 'in'/'into' noun              -> Insert;
@@ -436,3 +462,5 @@ Verb 'wake' 'awake' 'awaken'
 Verb 'kiss' 'embrace' 'hug'
     * creature                                  -> Kiss;
 
+Verb 'wear'
+	* held										-> Wear;

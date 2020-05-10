@@ -11,6 +11,9 @@ Constant Headline   "^A basic IF demonstration.^";
 Constant MANUAL_PRONOUNS;
 Constant MAX_SCORE  2;
 
+[ DeathMessage; print "You have lost"; ];
+
+
 #Ifndef USEINFORM;
 Include "globals.h";
 Include "puny.h";
@@ -58,7 +61,11 @@ Object  bar "Foyer bar"
         n_to  foyer,
         before [;
             Go:
+#ifdef USEINFORM;
                 if (self hasnt light && noun ~= n_obj) {
+#IfNot;
+                if (self hasnt light && (noun ~= Directions || Directions.selected_dir_prop ~= n_to)) {
+#EndIf;
                     message.number = message.number + 2;
                     "Blundering around in the dark isn't a good idea!";
                     }
@@ -71,7 +78,12 @@ Object  bar "Foyer bar"
   has   ~light;
 
 Object  cloak "velvet cloak"
-  with  name 'handsome' 'dark' 'black' 'velvet' 'satin' 'cloak',
+  with
+		parse_name [ _words;
+			while(NextWord() == 'handsome' or 'dark' or 'black' or 'velvet' or 'satin' or 'cloak') _words++;
+			return _words;
+		],
+!		name 'handsome' 'dark' 'black' 'velvet' 'satin' 'cloak',
         description
            "A handsome cloak, of velvet trimmed with satin, and slightly
             spattered with raindrops. Its blackness is so deep that it
@@ -120,11 +132,13 @@ Object  message "scrawled message" bar
     people about but, hey, what do you expect in a cheap demo game...?^^";
     ];
 
-[ DeathMessage; print "You have lost"; ];
 
 ! ============================================================================ !
 
+
+#Ifdef USEINFORM;
 Include "Grammar";
+#Endif;
 
 Verb 'hang'     * held 'on' noun    -> PutOn;
 

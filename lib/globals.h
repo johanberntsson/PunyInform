@@ -32,10 +32,12 @@ Attribute proper;
 Attribute scenery;
 Attribute static;
 Attribute animate;
+Attribute clothing;
 Attribute worn;
 Attribute pluralname;
 Attribute female;
 Attribute neuter;
+Attribute general;
 
 ! when you order a NPC, but the command isn't understood
 ! See: http://www.inform-fiction.org/manual/html/s18.html
