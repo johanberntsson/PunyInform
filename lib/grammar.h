@@ -387,13 +387,13 @@
 ];
 
 
-Verb 'i' 'inventory'
+Verb 'i//' 'inventory'
 	* -> Inv;
 
 Verb 'answer' 'say' 'shout' 'speak'
     * topic 'to' creature -> Answer;
 
-Verb 'look' 'l'
+Verb 'look' 'l//'
 	* -> Look
 	* 'at' noun -> Examine;
 
@@ -543,9 +543,8 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
 
 
 [ PrintVerb p_v;
-	switch(p_v) {
 #IfV3;
-		'examine': p_v = "examine";
+	switch(p_v) {
 		'restart': p_v = "restart";
 		'restore': p_v = "restore";
 		'display': p_v = "display";
@@ -554,12 +553,18 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
 		'destroy': p_v = "destroy";
 		'torture': p_v = "torture";
 		'unscrew': p_v = "unscrew";
-#EndIf;
-		'i', 'inventory': p_v = "inventory";
-		'l': p_v = "look";
-		'z': p_v = "wait";
 	}
-
-	print (address) p_v;
+#EndIf;
+	switch(p_v) {
+		'x//', 'examine': p_v = "examine";		! 'examine' is really only needed for z3, but this creates smaller code in z3
+		'i//', 'inventory': p_v = "inventory";	! 'inventory' is really only needed for z3, but this creates smaller code in z3
+		'l//': p_v = "look";
+		'z//': p_v = "wait";
+		'q//': p_v = "quit";
+	}
+	if(p_v ofclass string)
+		print (string) p_v;
+	else
+		print (address) p_v;
 ];
 
