@@ -1,6 +1,6 @@
 !% -~S
 
-! Library of Horror - a sample game which uses PunyInform
+! Minimal.inf - a sample game which uses PunyInform
 
 ! Uncomment to add optional features to PunyLib
 !Constant FULL_DIRECTIONS;

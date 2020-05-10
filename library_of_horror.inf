@@ -28,12 +28,17 @@ Include "./lib/flags.h";
 #Ifndef USEINFORM;
 Include "globals.h";
 
-Constant MSG_AREYOUSUREQUIT "You ain't no quitter eh? ";
 Constant MSG_OPEN_YOU_CANT 1000;
+Constant MSG_AREYOUSUREQUIT 1001;
 
 [LibraryMessages p_msg;
-	if(p_msg == MSG_OPEN_YOU_CANT)
+	switch(p_msg) {
+	MSG_OPEN_YOU_CANT:
 		"How would you go about opening ", (a) noun, "?";
+	MSG_AREYOUSUREQUIT:
+		print "You ain't no quitter eh? ";
+		rtrue;
+	}
 	rfalse;
 ];
 Include "puny.h";
@@ -328,6 +333,13 @@ Book -> PinkBook "pink book"
 	    ],
 		description "The book is nice and tidy.",
 		;
+
+[TestSub;
+	print_ret "Noun is ", noun;
+];
+
+Verb 'test'
+	* special	-> Test;
 
 [Initialise b i;
 	location = Library;
