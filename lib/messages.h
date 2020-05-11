@@ -317,12 +317,12 @@ Constant LibraryMessages 0;
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
     MSG_INVENTORY_SUCCESS:
-	    PrintContents("You are holding ", ".^", player);
+	    _PrintContents("You are holding ", ".^", player);
 		rtrue;
 	MSG_EXAMINE_NOTHING_SPECIAL:
 		"There is nothing special about ", (the) noun, ".";
 	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
-		print_ret (CTheyreOrThats) noun, " fixed in place.";
+		print_ret (CTheyreorThats) noun, " fixed in place.";
 	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
 		"Nothing obvious happens.";
 	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE:
@@ -330,7 +330,7 @@ Constant LibraryMessages 0;
 	MSG_TURN_STATIC, MSG_PUSH_STATIC, MSG_PULL_STATIC:
 		"You are unable to.";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
-		"You aren't holding ", (ItOrThem) noun, ".";
+		"You aren't holding ", (ItorThem) noun, ".";
 	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING:
 		"You can't ", (PrintVerb) verb_word, " that!";
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
@@ -350,7 +350,7 @@ Constant LibraryMessages 0;
     MSG_EXIT_SUCCESS:
 	    "You leave ", (the) noun, ".";
     MSG_GIVE_PLAYER:
-        "You already have ", (ItOrThem) noun, ".";
+        "You already have ", (ItorThem) noun, ".";
     MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
         "Failed ", (PrintVerb) verb_word, ".";
 	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY:
@@ -364,13 +364,13 @@ Constant LibraryMessages 0;
 	MSG_ASK_SUCCESS, MSG_ANSWER_SUCCESS: 
 		"There is no reply.";
 	MSG_WEAR_ALREADY_WORN:	
-		"You are already wearing ", (ItOrThem) noun, ".";
+		"You are already wearing ", (ItorThem) noun, ".";
     MSG_WEAR_SUCCESS:
 	    "You are now wearing ", (the) noun, ".";
 	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
-		print_ret (CTheyreOrThats) noun, " not something you can switch.";
+		print_ret (CTheyreorThats) noun, " not something you can switch.";
 	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
-		print_ret (CTheyreOrThats) noun, " already ", (OnOff) noun, ". ";
+		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ". ";
 	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
 		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
 	MSG_RESTART_RESTORE_OR_QUIT:

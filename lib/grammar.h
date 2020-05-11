@@ -1,14 +1,13 @@
 ! ######################### Grammar + Actions
 
-
 [ LookSub _obj _ceil _player_parent;
 
-	_ceil = GetVisibilityCeiling(player);
+	_ceil = _GetVisibilityCeiling(player);
 
 ! print "Ceiling is object ", _ceil, ": ", (object) _ceil, ".^";
 	! ### Print room name
 	if(_ceil == location) {
-		PrintObjName(location);
+		_PrintObjName(location);
 	} else {
 		print (The) _ceil;
 	}
@@ -27,7 +26,7 @@
 		PrintOrRun(_ceil, description, 1);
 	}
 
-	PrintContents(" You can also see ", " here.", _ceil);
+	_PrintContents(" You can also see ", " here.", _ceil);
 	@new_line;
 
 	objectloop(_obj in _ceil) {
@@ -65,7 +64,7 @@
     if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
 	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
 	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
-    if(AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
+    if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
 	move noun to player;
 	give noun moved;
@@ -299,7 +298,7 @@
         if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN, second); rtrue; }
     }
 
-    if (AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
+    if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
     move noun to second;
     if (keep_silent) return;
@@ -312,7 +311,7 @@
     _ancestor = CommonAncestor(noun, second);
     if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
 
-    if (AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
+    if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
 
     move noun to second;
     if (keep_silent) return;
@@ -324,26 +323,26 @@
 ];
 
 [ WakeOtherSub;
-    !if (ObjectIsUntouchable(noun)) return; ! TODO
+    if (ObjectIsUntouchable(noun)) return;
     if (RunLife(noun, ##WakeOther) ~= 0) rfalse;
     PrintMsg(MSG_WAKEOTHER_SUCCESS);
 ];
 
 [ KissSub;
-    !if (ObjectIsUntouchable(noun)) return; ! TODO
+    if (ObjectIsUntouchable(noun)) return;
     if (RunLife(noun, ##Kiss) ~= 0) rfalse;
     if (noun == player) { PrintMsg(MSG_KISS_PLAYER); rtrue; }
     PrintMsg(MSG_KISS_SUCCESS);
 ];
 
 [ AttackSub;
-    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (ObjectIsUntouchable(noun)) return;
     if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
 	PrintMsg(MSG_ATTACK_SUCCESS);
 ];
 
 [ TurnSub;
-    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (ObjectIsUntouchable(noun)) return;
     if (noun has static)   { PrintMsg(MSG_TURN_STATIC); rtrue; }
     if (noun has scenery)  { PrintMsg(MSG_TURN_SCENERY); rtrue; }
     if (noun has animate)  { PrintMsg(MSG_TURN_ANIMATE); rtrue; }
@@ -351,7 +350,7 @@
 ];
 
 [ SwitchOnSub;
-    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (ObjectIsUntouchable(noun)) return;
     if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
     if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; } 
     give noun on;
@@ -361,7 +360,7 @@
 ];
 
 [ SwitchOffSub;
-    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (ObjectIsUntouchable(noun)) return;
     if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_OFF_NOT_SWITCHABLE); rtrue; }
     if (noun hasnt on)         { PrintMsg(MSG_SWITCH_OFF_NOT_ON); rtrue; }
     give noun ~on;
@@ -371,7 +370,7 @@
 ];
 
 [ PullSub;
-    !if (ObjectIsUntouchable(noun)) return; !TODO
+    if (ObjectIsUntouchable(noun)) return;
 	if (noun has static)   { PrintMsg(MSG_PULL_STATIC); rtrue; }
     if (noun has scenery)  { PrintMsg(MSG_PULL_SCENERY); rtrue; }
     if (noun has animate)  { PrintMsg(MSG_PULL_ANIMATE); rtrue; }
@@ -465,6 +464,7 @@ Verb 'exit' 'leave'
 
 Verb 'put'
     * multiexcept 'in'/'inside'/'into' noun     -> Insert
+    * multiexcept 'on'/'onto' noun              -> PutOn
 	* 'on' held									-> Wear;
 
 Verb 'insert'

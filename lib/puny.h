@@ -1,9 +1,43 @@
 ! PunyInform: A small stdlib and parser for interactive fiction
 ! suitable for old-school computers such as the Commodore 64.
 ! Designed to be similar, but not identical, to the Inform 6 library.
-
-! Always use grammar version 2 which is easier to parse and more economical
-! See: section 8.6 in https://www.inform-fiction.org/source/tm/TechMan.txt
+!
+! Public routines (described in DM, available for a game developer)
+! LIBRARY ROUTINES:
+! - DrawStatusLine
+! - InScope
+! - LoopOverScope
+! - NextWord
+! - NextWordStopped
+! - NumberWord
+! - ObjectIsUntouchable
+! - PlayerTo
+! - ParseToken
+! - PlaceInScope
+! - PronounNotice
+! - ScopeWithin
+! - TestScope
+! - TryNumber
+! - WordAddress
+! - WordLenght
+! - YesOrNo
+! OTHERS:
+! - CommonAncestor
+! - IndirectlyContains
+! - PrintMsg (only PunyInform)
+! - PrintOrRun
+! - RunRoutines
+! - RunTimeError
+! PRINT UTILITIES
+! -OnOff (only PunyInform)
+! -CTheyreorThats
+! -ItorThem
+!
+! Reference documentation
+! DM: http://www.inform-fiction.org/manual/html/dm4index.html
+! Tech: https://www.inform-fiction.org/source/tm/TechMan.txt
+!
+! PunyInform uses grammar version 2 which is easier to parse and economical
 
 Include "messages.h";
 
@@ -59,7 +93,7 @@ Include "grammar.h";
 
 ! ######################### Helper routines
 
-[ GetVisibilityCeiling p_actor _parent;
+[ _GetVisibilityCeiling p_actor _parent;
 	for(:: p_actor = _parent) {
 		_parent = parent(p_actor);
 		!   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
@@ -94,12 +128,11 @@ Include "grammar.h";
     return 0;
 ];
 
-
 #IfV5;
 
 Array cursor_pos --> 2;
 
-[ StatusLineHeight p_height;
+[ _StatusLineHeight p_height;
 	if (statusline_current_height ~= p_height) {
 		@split_window p_height;
 		statusline_current_height = p_height;
@@ -107,7 +140,7 @@ Array cursor_pos --> 2;
 ];
 
 
-[ MoveCursor line column;  ! 1-based postion on text grid
+[ _MoveCursor line column;  ! 1-based postion on text grid
 	if (~~statuswin_current) {
 		@set_window 1;
 		if (clr_on && clr_bgstatus > 1) {
@@ -124,7 +157,7 @@ Array cursor_pos --> 2;
 	statuswin_current = true;
 ];
 
-[ MainWindow;
+[ _MainWindow;
 	if (statuswin_current) {
 		if (clr_on && clr_bgstatus > 1) {
 			@set_colour clr_fg clr_bg;
@@ -138,7 +171,7 @@ Array cursor_pos --> 2;
 
 #IfNot; !IfV5
 
-! [ MoveCursor line column;  ! 1-based postion on text grid
+! [ _MoveCursor line column;  ! 1-based postion on text grid
 !   if (~~statuswin_current) {
 !     @set_window 1;
 !     style reverse;
@@ -151,7 +184,7 @@ Array cursor_pos --> 2;
 !   statuswin_current = true;
 ! ];
 
-! [ MainWindow;
+! [ _MainWindow;
 !   if (statuswin_current) {
 !     style roman;
 !     @set_window 0;
@@ -166,13 +199,13 @@ Array cursor_pos --> 2;
 
 Array TenSpaces -> "          ";
 
-[ PrintSpacesOrMoveBack p_col p_space_before _current_col _go_to_col;
+[ _PrintSpacesOrMoveBack p_col p_space_before _current_col _go_to_col;
 	@get_cursor cursor_pos;
 	_current_col = cursor_pos --> 1;
 	_go_to_col = p_col - p_space_before;
 
 	if(_current_col > _go_to_col || cursor_pos --> 0 > 1) {
-		MoveCursor(1, _go_to_col);
+		_MoveCursor(1, _go_to_col);
 		_current_col = _go_to_col;
 	}
 
@@ -184,7 +217,7 @@ Array TenSpaces -> "          ";
 	@print_table TenSpaces p_col;
 ];
 
-[ DrawStatusLine _width _visibility_ceiling;
+[ _DrawStatusLine _width _visibility_ceiling;
 	! For wide screens (67+ columns):
 	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right.
 	! * Room names up to 39 characters are never truncated.
@@ -199,11 +232,11 @@ Array TenSpaces -> "          ";
 
 	_width = HDR_SCREENWCHARS->0;
 
-	StatusLineHeight(statusline_height);
-	MoveCursor(1, 1); ! This also sets the upper window as active.
+	_StatusLineHeight(statusline_height);
+	_MoveCursor(1, 1); ! This also sets the upper window as active.
 	if(_width > 66) @print_char ' ';
 
-!     MoveCursor(1, 2);
+!     _MoveCursor(1, 2);
 !     if (location == thedark) {
 !         print (name) location;
 !     }
@@ -213,14 +246,14 @@ Array TenSpaces -> "          ";
 	_visibility_ceiling = GetVisibilityCeiling(player);
 ! print (object) _visibility_ceiling;
 	if (_visibility_ceiling == location) {
-		PrintObjName(location);
+		_PrintObjName(location);
 !   print (name) _visibility_ceiling;
 	} else {
 		print (The) _visibility_ceiling;
 	}
 
 !     if (sys_statusline_flag && width > 53) {
-!         MoveCursor(1, posa);
+!         _MoveCursor(1, posa);
 !         print (string) TIME__TX;
 !         LanguageTimeOfDay(sline1, sline2);
 !     }
@@ -228,23 +261,23 @@ Array TenSpaces -> "          ";
 	if (_width > 24) {
 		if (_width < 30) {
 			! Width is 25-29, only print score as "0", no moves
-			PrintSpacesOrMoveBack(_width - 2, 1);
+			_PrintSpacesOrMoveBack(_width - 2, 1);
 			print status_field_1;
 		} else {
 			if (_width > 66) {
 				! Width is 67-, print "Score: 0 Moves: 0"
-				PrintSpacesOrMoveBack(_width - 26, 1);
+				_PrintSpacesOrMoveBack(_width - 26, 1);
 				print (string) SCORE__TX, status_field_1;
-				PrintSpacesOrMoveBack(_width - 13);
+				_PrintSpacesOrMoveBack(_width - 13);
 				print (string) MOVES__TX;
 			} else {
 				if (_width > 36) {
 					! Width is 37-66, print "Score: 0/0"
-					PrintSpacesOrMoveBack(_width - 14, 1);
+					_PrintSpacesOrMoveBack(_width - 14, 1);
 					print (string) SCORE__TX;
 				} else {
 					! Width is 29-35, print "0/0"
-					PrintSpacesOrMoveBack(_width - 7, 1);
+					_PrintSpacesOrMoveBack(_width - 7, 1);
 				}
 				print status_field_1;
 				@print_char '/';
@@ -253,22 +286,22 @@ Array TenSpaces -> "          ";
 		}
 	}
 	! Regardless of what kind of status line we have printed, print spaces to the end.
-	PrintSpacesOrMoveBack(_width + 1);
-	MainWindow(); ! set_window
+	_PrintSpacesOrMoveBack(_width + 1);
+	_MainWindow(); ! set_window
 ];
 #Endif;
 
-[ AtFullCapacity p_s _obj _k;
+[ _AtFullCapacity p_s _obj _k;
     if (p_s.&capacity == 0) rfalse; ! We will consider that no capacity specified implies infinite capacity.
     if (p_s == player) {
         objectloop (_obj in p_s)
             if (_obj hasnt worn) _k++;
     } else
         _k = children(p_s);
-    if (_k < RunRoutines(p_s, capacity) || (p_s == player && RoomInSack())) rfalse;
+    if (_k < RunRoutines(p_s, capacity) || (p_s == player && _RoomInSack())) rfalse;
 ];
 
-[ RoomInSack _obj _ks;
+[ _RoomInSack _obj _ks;
     if (SACK_OBJECT && SACK_OBJECT in player) {
         for (_obj=youngest(player) : _obj : _obj=elder(_obj))
             if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
@@ -286,7 +319,7 @@ Array TenSpaces -> "          ";
     rfalse;
 ];
 
-[ PrintObjName p_obj p_form _done;
+[ _PrintObjName p_obj p_form _done;
 	if(p_obj hasnt proper) {
 		if(p_form == FORM_CDEF) {
 			print "The ";
@@ -304,7 +337,7 @@ Array TenSpaces -> "          ";
 	}
 ];
 
-[ PrintContents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
+[ _PrintContents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
 !   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
 !   print "Considering ", (object) _obj, "...^";
@@ -317,7 +350,7 @@ Array TenSpaces -> "          ";
 			! Push obj onto queue, printing the object that is shifted out, if any
 			if(_last_obj) {
 				if(_printed_any_objects) print ", ";
-				PrintObjName(_last_obj, FORM_INDEF);
+				_PrintObjName(_last_obj, FORM_INDEF);
 				_printed_any_objects = 1;
 			}
 			_last_obj = _obj;
@@ -325,7 +358,7 @@ Array TenSpaces -> "          ";
 	}
 	if(_last_obj) {
 		if(_printed_any_objects) print " and ";
-		PrintObjName(_last_obj, FORM_INDEF);
+		_PrintObjName(_last_obj, FORM_INDEF);
 		print (string) p_last_text;
 	}
 
@@ -446,15 +479,15 @@ Include "parser.h";
 ];
 
 [ CDefArt p_obj _result;
-	_result = PrintObjName(p_obj, FORM_CDEF);
+	_result = _PrintObjName(p_obj, FORM_CDEF);
 ];
 
 [ DefArt p_obj _result;
-	_result = PrintObjName(p_obj, FORM_DEF);
+	_result = _PrintObjName(p_obj, FORM_DEF);
 ];
 
 [ IndefArt p_obj _result;
-	_result = PrintObjName(p_obj, FORM_INDEF);
+	_result = _PrintObjName(p_obj, FORM_INDEF);
 ];
 
 [ StartTimer p_obj p_timer;
@@ -718,9 +751,9 @@ Object DefaultPlayer "you"
 		status_field_2 = turns;
 		print "^";
 		if(parse_array->1 == 0) {
-			ReadPlayerInput();
+			_ReadPlayerInput();
 		}
-		_sentencelength = ParseAndPerformAction();
+		_sentencelength = _ParseAndPerformAction();
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
 #IfDef DEBUG;
@@ -747,7 +780,7 @@ Object DefaultPlayer "you"
 			! and executed. Now remove it from parse_array so that
 			! the next sentence can be parsed
 #IfDef DEBUG;
-			PrintParseArray(parse_array);
+			_PrintParseArray(parse_array);
 #Endif;
 			_copylength = 2 * _parsearraylength + 1;
 			for(_i = 1, _j = 2 * _sentencelength + 1: _j < _copylength: _i++, _j++)
@@ -755,7 +788,7 @@ Object DefaultPlayer "you"
 
 			parse_array->1 = _parsearraylength - _sentencelength;
 #IfDef DEBUG;
-			PrintParseArray(parse_array);
+			_PrintParseArray(parse_array);
 			print "^";
 #Endif;
 		} else {
@@ -769,7 +802,7 @@ Object DefaultPlayer "you"
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
 	for (::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
-		ReadPlayerInput(true);
+		_ReadPlayerInput(true);
 		switch(parse_array-->1) {
 		'restart': @restart;
 		'restore': RestoreSub();

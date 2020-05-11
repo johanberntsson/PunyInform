@@ -1,7 +1,8 @@
 ! ######################### Parser
-! https://www.inform-fiction.org/source/tm/TechMan.txt
+! PunyInform uses grammar version 2 which is easier to parse and economical
 
-[ ReadPlayerInput p_no_prompt _result;
+
+[ _ReadPlayerInput p_no_prompt _result;
 ! #IfV5;
 !   print "Width: ", HDR_SCREENWCHARS->0,"^";
 ! #EndIf;
@@ -22,7 +23,7 @@
 	if(player in location) {
 		@sread player_input_array parse_array;
 	} else {
-		_result = location; location = GetVisibilityCeiling(player);
+		_result = location; location = _GetVisibilityCeiling(player);
 		@sread player_input_array parse_array;
 		location = _result;
 	}
@@ -35,7 +36,7 @@
 
 [ YesOrNo;
     for (::) {
-        ReadPlayerInput(true);
+        _ReadPlayerInput(true);
         if(parse_array -> 1 == 1) {
         	! one word reply
             if(parse_array --> 1 == 'yes' or 'y//') rtrue;
@@ -84,13 +85,13 @@
 	return -1000;
 ];
 
-[ CopyInputArray p_src_input_array p_dst_input_array _n _i;
+[ _CopyInputArray p_src_input_array p_dst_input_array _n _i;
 	_n = MAX_INPUT_CHARS + 3;
 	for(_i = 0: _i < _n: _i++)
 		p_dst_input_array->_i = p_src_input_array->_i;
 ];
 
-[ CopyParserArray p_src_parse_array p_dst_parse_array _n _i;
+[ _CopyParserArray p_src_parse_array p_dst_parse_array _n _i;
 	_n = 2 + 4 * (MAX_INPUT_WORDS + 1); 
 	for(_i = 0: _i < _n: _i++)
 		p_dst_parse_array->_i = p_src_parse_array->_i;
@@ -98,7 +99,7 @@
 
 #IfDef DEBUG;
 
-[ PrintParseArray p_parse_array _i;
+[ _PrintParseArray p_parse_array _i;
 	print "PARSE_ARRAY: ", p_parse_array->1, " entries^";
 	for(_i = 0; _i < p_parse_array -> 1; _i++) {
 		print "Word " ,_i,
@@ -109,7 +110,7 @@
 ];
 
 
-[ CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
+[ _CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
 	! action number is the first two bytes
 	_action_number = p_pattern-->0;
 	p_pattern = p_pattern + 2;
@@ -132,8 +133,8 @@
 #EndIf;
 
 
-! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to CheckNoun, 
-! since they will typically be called from parse_name routines, which are called from CheckNoun
+! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to _CheckNoun, 
+! since they will typically be called from parse_name routines, which are called from _CheckNoun
 
 [ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
 	return player_input_array + parse_array->(p_wordnum*4+1);
@@ -143,7 +144,7 @@
 	return parse_array->(p_wordnum*4);	
 ];
 
-[ PeekAtNextWord _i;
+[ _PeekAtNextWord _i;
 	_i = NextWord();
 	--wn; ! wn was modified by NextWord, restore it
 	return _i;
@@ -163,7 +164,7 @@
 	return NextWord();
 ];
 
-[ UpdatePronoun p_object;
+[ PronounNotice p_object;
 	if(p_object == 0) return;
 	if(p_object == player) return;
 	if(p_object has pluralname) return;
@@ -175,11 +176,9 @@
 	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
 ];
 
-! ----------------------------------------------------------------------------
-!  The UserFilter routine consults the user's filter (or checks on attribute)
-!  to see what already-accepted nouns are acceptable
-! ----------------------------------------------------------------------------
-[ UserFilter _obj;
+[ _UserFilter _obj;
+	!  UserFilter consults the user's filter (or checks on attribute)
+	!  to see what already-accepted nouns are acceptable
     if(noun_filter > 0 && noun_filter < 49) {
         if (_obj has (noun_filter-1)) rtrue;
         rfalse;
@@ -188,7 +187,7 @@
     return indirect(noun_filter);
 ];
 
-[ CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+[ _CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
@@ -205,7 +204,7 @@
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
 		!   if(_obj == nothing) continue;
-		if(noun_filter ~= 0 && UserFilter(_obj) == 0) {
+		if(noun_filter ~= 0 && _UserFilter(_obj) == 0) {
 			!print "noun_filter rejected ", (the) _obj,"^";
 			continue;
 		}
@@ -236,7 +235,7 @@
 			_name_array = _obj.&name;
 			_name_array_len = _obj.#name / 2;
 
-			while(_n <= p_parse_length && IsSentenceDivider(_p) == false) {
+			while(_n <= p_parse_length && _IsSentenceDivider(_p) == false) {
 				if(_current_word == nothing) return 0; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
@@ -290,7 +289,7 @@
 	return 0;
 ];
 
-[ AskWhichNoun p_noun_name p_num_matching_nouns _i; 
+[ _AskWhichNoun p_noun_name p_num_matching_nouns _i; 
 	print "Which ", (address) p_noun_name, " do you mean? ";
 	for(_i = 0 : _i < p_num_matching_nouns : _i++) {
 		if(_i == 0) {
@@ -307,7 +306,7 @@
 	"?";
 ];
 
-[ GetNextNoun p_parse_pointer _noun _oldwn;
+[ _GetNextNoun p_parse_pointer _noun _oldwn;
 	! try getting a noun from the <p_parse_pointer> entry in parse_array
 	! return <noun number> if found, 0 if no noun found, or -1
 	! if we should give up parsing completely (because the
@@ -315,7 +314,7 @@
 	! 
 	! Side effects:
 	! - if found, then wn will be updated
-	! NOTE: you need to update parse_pointer after calling GetNextNoun since
+	! NOTE: you need to update parse_pointer after calling _GetNextNoun since
 	! wn can change
 
 	! check for pronouns
@@ -326,28 +325,28 @@
 	}
 
 	! not a pronoun, continue
-	_noun = CheckNoun(p_parse_pointer, parse_array->1);
+	_noun = _CheckNoun(p_parse_pointer, parse_array->1);
 .recheck_noun;
 	if(_noun < 0) {
-		AskWhichNoun(p_parse_pointer --> 0, -_noun);
+		_AskWhichNoun(p_parse_pointer --> 0, -_noun);
 		! read a new line of input
 		! I need to use parse_array since NextWord
 		! for parse_name and others hardcode this
 		! usage, so I first store the old input into
 		! temp arrays that I will restore if I can
 		! disambiguate successfully.
-		CopyInputArray(player_input_array, temp_player_input_array);
-		CopyParserArray(parse_array, temp_parse_array);
-		ReadPlayerInput();
+		_CopyInputArray(player_input_array, temp_player_input_array);
+		_CopyParserArray(parse_array, temp_parse_array);
+		_ReadPlayerInput();
 		! is this a reply to the question?
 		if((parse_array->1 == 1) &&  
 			(((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
 			! only one word, and it is not a verb. Assume
 			! a valid reply and add the other 
 			! entry into parse_array, then retry
-			_oldwn = wn; ! wn is used in CheckNoun, so save it
+			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 			wn = 1;
-			_noun = CheckNoun(parse_array+2, 1);
+			_noun = _CheckNoun(parse_array+2, 1);
 			wn = _oldwn; ! and restore it after the call
 			if(_noun > 0) {
 				! TODO: here I assume that only one word was
@@ -360,8 +359,8 @@
 				! one noun word before disambiguation
 				which_object->0 = 1;
 				! don't forget to restore the old arrays
-				CopyInputArray(temp_player_input_array, player_input_array);
-				CopyParserArray(temp_parse_array, parse_array);
+				_CopyInputArray(temp_player_input_array, player_input_array);
+				_CopyParserArray(temp_parse_array, parse_array);
 				jump recheck_noun;
 			}
 		}
@@ -379,7 +378,7 @@
 	}
 ];
 
-[ UpdateNounSecond p_noun p_inp p_id;
+[ _UpdateNounSecond p_noun p_inp p_id;
 	if(num_noun_groups == 0) {
 		!print p_id, ": setting noun: ", p_noun, " inp1 ", p_inp, "^";
 		noun = p_noun;
@@ -392,14 +391,15 @@
 	++num_noun_groups;
 ];
 
-[ IsSentenceDivider p_parse_pointer;
+[ _IsSentenceDivider p_parse_pointer;
 	! check if current parse_array block, indicated by p_parse_pointer,
 	! is a period or other sentence divider
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseNextObject p_pattern_index p_parse_pointer _noun _i _token _token_type _token_data;
-	! ParseNextObject is similar to a general parse routine,
+[ ParseToken p_pattern_index p_parse_pointer _noun _i _token _token_type _token_data;
+	! TODO: USE DM arguments
+	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
 	! However, it also taks the current grammar token as input
@@ -475,7 +475,7 @@
 			p_parse_pointer = p_parse_pointer + 4;
 			! Add all reasonable objects in scope
 			! to the multiple_objects array
-			AddMultipleNouns(_token_data);
+			_AddMultipleNouns(_token_data);
 			if(multiple_objects --> 0 == 0) {
 				print "Nothing to do!^";
 				return -wn;
@@ -488,7 +488,7 @@
 				return GPR_MULTIPLE;
 			}
 		} else if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
-			_noun = GetNextNoun(p_parse_pointer);
+			_noun = _GetNextNoun(p_parse_pointer);
 			if(_noun == 0) {
 				parser_unknown_noun_found = p_parse_pointer;
 				return GPR_FAIL;
@@ -503,7 +503,7 @@
 			return _noun;
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
-				_noun = GetNextNoun(p_parse_pointer);
+				_noun = _GetNextNoun(p_parse_pointer);
 				if(_noun == 0) {
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
@@ -513,7 +513,7 @@
 				multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 				multiple_objects --> (multiple_objects --> 0) = _noun;
 				! check if we should continue: and or comma
-				if(PeekAtNextWord() == comma_word or AND_WORD) {
+				if(_PeekAtNextWord() == comma_word or AND_WORD) {
 					++wn;
 					p_parse_pointer = p_parse_pointer + 4;
 					continue;
@@ -555,7 +555,7 @@
 	}
 ];
 
-[ ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -569,11 +569,11 @@
 
 	action = -1;
 	which_object --> 0 = 0;
-	if(IsSentenceDivider(parse_array + 2))
+	if(_IsSentenceDivider(parse_array + 2))
 		return -1;
 
 	actor = player;
-	UpdateScope(GetVisibilityCeiling(player));
+	_UpdateScope(_GetVisibilityCeiling(player));
 
 	if(parse_array->1 < 1) {
 		"Come again?";
@@ -605,7 +605,7 @@
 			return -1;
 		}
 		! not a direction, check if beginning of a command
-		_noun = CheckNoun(parse_array+2, parse_array->1);
+		_noun = _CheckNoun(parse_array+2, parse_array->1);
 		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now 
 			! check if comma afterwards
@@ -650,7 +650,7 @@
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _verb_grammar->0: _i++) {
 		print "############ Pattern ",_i,"^";
-		_pattern = CheckPattern(_pattern);
+		_pattern = _CheckPattern(_pattern);
 	}
 	@new_line;
 #EndIf;
@@ -686,7 +686,7 @@
 #EndIf;
 
 			if(((_pattern_pointer -> 0) & $0f) == TT_END) {
-				if(IsSentenceDivider(_parse_pointer)) {
+				if(_IsSentenceDivider(_parse_pointer)) {
 					wn++;
 					jump parse_success;
 				}
@@ -704,7 +704,7 @@
 #IfDef DEBUG;
 			print "token type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
 #EndIf;
-			_noun = ParseNextObject(_pattern_pointer, _parse_pointer);
+			_noun = ParseToken(_pattern_pointer, _parse_pointer);
 			! the parse routine can change wn, so update _parse_pointer
 			_parse_pointer = parse_array + 2 + 4 * (wn - 1);
 			if(_noun == GPR_FAIL) {
@@ -714,17 +714,17 @@
 			} else switch(_noun) {
 			GPR_MULTIPLE:
 				! multiple_objects contains the objects
-				UpdateNounSecond(0, 0);
+				_UpdateNounSecond(0, 0);
 			GPR_NUMBER:
 				! parsed_number contains the new number
-				UpdateNounSecond(parsed_number, 1);
+				_UpdateNounSecond(parsed_number, 1);
 			GPR_PREPOSITION:
 				! do nothing
 			GPR_REPARSE:
 				rfalse;
 			default:
 				! returned an objekt
-				UpdateNounSecond(_noun, _noun);
+				_UpdateNounSecond(_noun, _noun);
 			}
 		}
 		! This pattern has failed.
@@ -823,11 +823,11 @@
 			PerformPreparedAction();
 		}
 	}
-	if(inp1 ~= 1) UpdatePronoun(noun);
+	if(inp1 ~= 1) PronounNotice(noun);
 	return num_words_parsed;
 ];
 
-[ AddMultipleNouns p_multiple_objects_type   _i _addobj _obj;
+[ _AddMultipleNouns p_multiple_objects_type   _i _addobj _obj;
 	multiple_objects --> 0 = 0;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
