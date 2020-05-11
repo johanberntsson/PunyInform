@@ -19,7 +19,7 @@
 ! - TestScope
 ! - TryNumber
 ! - WordAddress
-! - WordLenght
+! - WordLength
 ! - YesOrNo
 ! OTHERS:
 ! - CommonAncestor
@@ -36,8 +36,6 @@
 ! Reference documentation
 ! DM: http://www.inform-fiction.org/manual/html/dm4index.html
 ! Tech: https://www.inform-fiction.org/source/tm/TechMan.txt
-!
-! PunyInform uses grammar version 2 which is easier to parse and economical
 
 Include "messages.h";
 
@@ -412,7 +410,6 @@ Include "parser.h";
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
 [ PerformPreparedAction;
-	!print "Performing action ", action, "^";
 	sw__var = action;
 	if ((BeforeRoutines() == false) && action < 4096) {
 		ActionPrimitive();
@@ -433,7 +430,7 @@ Include "parser.h";
 	if(location provides before && RunRoutines(location, before)) {
 		rtrue;
 	}
-	if(inp1 provides before && RunRoutines(inp1, before)) {
+	if(inp1 > 1 && inp1 provides before && RunRoutines(inp1, before)) {
 		rtrue;
 	}
 	rfalse;
@@ -745,11 +742,11 @@ Object DefaultPlayer "you"
 	if(parent(player) == 0) PlayerTo(location);
 	<Look>; ! Equivalent to PerformAction(##Look);
 
-	_score = score;
 	while(deadflag == GS_PLAYING) {
 		status_field_1 = score;
 		status_field_2 = turns;
 		print "^";
+		_score = score;
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
 		}
@@ -764,14 +761,13 @@ Object DefaultPlayer "you"
             turns++;
         }
 
-        if(_score < score) {
+        if(deadflag == GS_PLAYING && _score < score) {
         	print "^[The score has just gone up by ";
         	if(score - _score == 1) {
         		print "one point.]^";
 			} else {
         		print score - _score, " points.]^";
 			}
-        	_score = score;
 		}
 
 		_parsearraylength = parse_array->1;
@@ -796,10 +792,12 @@ Object DefaultPlayer "you"
 			parse_array->1 = 0;
 		}
 	}
+	print "^^  *** ";
 	if(deadflag == GS_QUIT) @quit;
 	if(deadflag == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
+	print "  ***^";
 	for (::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		_ReadPlayerInput(true);

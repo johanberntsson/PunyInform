@@ -140,8 +140,8 @@ Constant TOKEN_LAST_PREP     = $52;
 
 Constant GS_QUIT             = -1;
 Constant GS_PLAYING          = 0;
-Constant GS_WIN              = 1;
-Constant GS_DEAD             = 2;
+Constant GS_DEAD             = 1;
+Constant GS_WIN              = 2;
 Constant GS_DEATHMESSAGE     = 3; 
 
 Constant FORM_CDEF           = 1;

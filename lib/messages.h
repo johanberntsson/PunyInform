@@ -1,12 +1,6 @@
 !
 ! Simple string messages
 !
-#Ifndef MSG_YOU_HAVE_WON;
-Constant MSG_YOU_HAVE_WON "You have won.";
-#EndIf;
-#Ifndef MSG_YOU_HAVE_DIED;
-Constant MSG_YOU_HAVE_DIED "You have died.";
-#EndIf;
 #Ifndef MSG_TAKE_YOURSELF;
 Constant MSG_TAKE_YOURSELF "You are always self-possessed.";
 #EndIf;
@@ -301,6 +295,12 @@ Constant MSG_PUSH_SUCCESS 61;
 #Ifndef MSG_PULL_SUCCESS;
 Constant MSG_PULL_SUCCESS 62;
 #EndIf;
+#Ifndef MSG_YOU_HAVE_WON;
+Constant MSG_YOU_HAVE_WON 63;
+#EndIf;
+#Ifndef MSG_YOU_HAVE_DIED;
+Constant MSG_YOU_HAVE_DIED 64;
+#EndIf;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -379,7 +379,13 @@ Constant LibraryMessages 0;
 	MSG_AREYOUSUREQUIT:
 		print "Are you sure you want to quit? ";
 		rtrue;
-	default:
+ 	MSG_YOU_HAVE_WON:
+ 		print "You have won.";
+ 		rtrue;
+	MSG_YOU_HAVE_DIED:
+		print "You have died.";
+		rtrue;
+default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
 	}

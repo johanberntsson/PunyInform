@@ -2,6 +2,8 @@
 
 [ LookSub _obj _ceil _player_parent;
 
+	if(location hasnt light) "It is pitch dark here!";
+
 	_ceil = _GetVisibilityCeiling(player);
 
 ! print "Ceiling is object ", _ceil, ": ", (object) _ceil, ".^";
@@ -479,6 +481,9 @@ Verb 'go'
 	* noun -> Enter;
 
 Verb 'examine' 'x//'
+	* noun -> Examine;
+
+Verb 'read'
 	* noun -> Examine;
 
 Verb meta 'quit' 'q//'
