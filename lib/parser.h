@@ -63,8 +63,7 @@
 	!  -1000                if it is not a number
 	!  the number           if it has between 1 and 4 digits
 	!  10000                if it has 5 or more digits.
-	! TODO: goes wrong when > 32768 because of signed/unsigned
-	! TODO: should return -1 if bad
+
     _i = wn; wn = p_wordnum; _j = NextWord(); wn = _i;
 #Ifdef ALLOW_WRITTEN_NUMBERS;
     _j = NumberWord(_j); if (_j >= 1) return _j;
