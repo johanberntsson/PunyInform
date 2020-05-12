@@ -174,7 +174,7 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 		name 'box',
 		description [;
 #Ifndef USEINFORM;
-			if(GetVisibilityCeiling(player) == self) {
+			if(_GetVisibilityCeiling(player) == self) {
 				print "The box looked pretty big from the outside, but you feel really confined in here.";
 				rtrue;
 			} else {

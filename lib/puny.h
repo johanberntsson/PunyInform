@@ -734,6 +734,13 @@ Object DefaultPlayer "you"
 	has concealed animate proper transparent;
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score;
+	if(Story ~= 0) {
+		print (string) Story;
+		if(Headline ~= 0) print (string) Headline;
+		print "Release ", (0-->1) & $03ff, " / Serial number ";
+ 		for (_i = 18:_i < 24: _i++) print (char) 0->_i;
+		print ": using ";
+	}
 	print "PunyInform 0.0^^";
 
 	player = DefaultPlayer;
@@ -745,7 +752,7 @@ Object DefaultPlayer "you"
 	while(deadflag == GS_PLAYING) {
 		status_field_1 = score;
 		status_field_2 = turns;
-		print "^";
+		new_line;
 		_score = score;
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
@@ -785,7 +792,7 @@ Object DefaultPlayer "you"
 			parse_array->1 = _parsearraylength - _sentencelength;
 #IfDef DEBUG;
 			_PrintParseArray(parse_array);
-			print "^";
+			new_line;
 #Endif;
 		} else {
 			! the input was just one sentence
@@ -828,7 +835,6 @@ Object DefaultPlayer "you"
 !#Stub ParserError     1;
 !#Stub ParseNumber     2;
 !#Stub ChooseObjects   2;
-!TODO: should we use Story and Headline?
-!#Default Story 0;
-!#Default Headline 0;
+#Default Story 0;
+#Default Headline 0;
 
