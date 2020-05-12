@@ -293,8 +293,8 @@
 	! else return object number
 	! side effects: 
 	!   which_object
-	!     - stores all matching nouns if more than one
-	!     - stores number of words consumed if single match 
+	!     - stores number of words consumed in --> 0
+	!     - stores all matching nouns if more than one in -->1 ...
 	for(_i = 0: _i < scope_objects: _i++) {
 		_n = wn;
 		_p = p_parse_pointer;
@@ -315,8 +315,8 @@
 			wn = _j;
 			if(_n > wn) {
 				if(_n == _best_score) {
-					which_object->_matches = _obj;
 					_matches++;
+					which_object-->_matches = _obj;
 #IfDef DEBUG;
 					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
@@ -328,7 +328,7 @@
 					_last_match = _obj;
 					_best_score = _n;
 					_matches = 1;
-					which_object->0 = _obj;
+					which_object-->1 = _obj;
 				}
 			}
 		} else if(_obj.#name > 1) {
@@ -353,8 +353,8 @@
 				_p = _p + 4;
 				_current_word = _p-->0;
 				if(_n == _best_score) {
-					which_object->_matches = _obj;
 					_matches++;
+					which_object-->_matches = _obj;
 #IfDef DEBUG;
 					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
@@ -366,7 +366,7 @@
 #EndIf;
 					_last_match = _obj;
 					_best_score = _n;
-					which_object->0 = _obj;
+					which_object-->1 = _obj;
 				}
 			}
 		}
@@ -374,11 +374,11 @@
 
 !   print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
+	which_object-->0 = _best_score - wn;
 	if(_matches == 1) {
-		which_object->0 = _best_score - wn;
 #IfDef DEBUG;
 		print "Matched a single object: ", (the) _last_match,
-			", len ", which_object->0, "^";
+			", len ", which_object-->0, "^";
 #EndIf;
 		return _last_match;
 	}
@@ -393,20 +393,20 @@
 	print "Which ", (address) p_noun_name, " do you mean? ";
 	for(_i = 0 : _i < p_num_matching_nouns : _i++) {
 		if(_i == 0) {
-			print (The) which_object->_i;
+			print (The) which_object-->(_i + 1);
 		} else {
 			if (_i == p_num_matching_nouns - 1) {
 				print " or ";
 			} else {
 				print ", ";
 			}
-			print (the) which_object->_i;
+			print (the) which_object-->_i;
 		}
 	}
 	"?";
 ];
 
-[ _GetNextNoun p_parse_pointer p_keep_silent _noun _oldwn;
+[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase;
 	! try getting a noun from the <p_parse_pointer> entry in parse_array
 	! return <noun number> if found, 0 if no noun found, or -1
 	! if we should give up parsing completely (because the
@@ -426,10 +426,11 @@
 
 	! not a pronoun, continue
 	_noun = _CheckNoun(p_parse_pointer, parse_array->1);
+	_num_words_in_nounphrase = which_object --> 0;
+
 .recheck_noun;
-	if(p_keep_silent == true && _noun < 0) {
+	if(p_phase == PHASE1 && _noun < 0) {
 		_noun = 1; ! a random noun in phase 1 just to avoid which? question
-		which_object->0 = 1; ! TODO: we need info from _CheckNoun how many words the noun phrase consisted of
 	}
 	if(_noun < 0) {
 		_AskWhichNoun(p_parse_pointer --> 0, -_noun);
@@ -453,15 +454,11 @@
 			_noun = _CheckNoun(parse_array+2, 1);
 			wn = _oldwn; ! and restore it after the call
 			if(_noun > 0) {
-				! TODO: here I assume that only one word was
-				! give in the original input
-				! > take book
-				! which book, the blue or the green
-				! > green
-				! and then I skip book when accepting the
-				! new reply. Will fail if more than
-				! one noun word before disambiguation
-				which_object->0 = 1;
+				! we have successfully disambiguated the noun phrase.
+				! now we need to restore the length of the
+				! noun phrase so that it will be absorbed when we
+				! return from the routine.
+				which_object-->0 = _num_words_in_nounphrase;
 				! don't forget to restore the old arrays
 				_CopyInputArray(temp_player_input_array, player_input_array);
 				_CopyParserArray(temp_parse_array, parse_array);
@@ -472,9 +469,9 @@
 		return -1; ! start from the beginning
 	} else if(_noun > 0) {
 #IfDef DEBUG;
-		print "Noun match! ", _noun, " ", which_object -> 0, "^";
+		print "Noun match! ", _noun, " ", which_object--> 0, "^";
 #EndIf;
-		wn = wn + which_object->0;
+		wn = wn + which_object-->0;
 		return _noun;
 	} else {
 		! this is not a recognized word at all
@@ -501,7 +498,7 @@
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseToken p_pattern_index p_parse_pointer p_keep_silent _noun _i _token _token_type _token_data;
+[ ParseToken p_pattern_index p_parse_pointer p_phase _noun _i _token _token_type _token_data;
 	! TODO: USE DM arguments
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
@@ -584,22 +581,26 @@
 				return GPR_MULTIPLE;
 			}
 		} else if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
-			_noun = _GetNextNoun(p_parse_pointer, p_keep_silent);
+			_noun = _GetNextNoun(p_parse_pointer, p_phase);
 			if(_noun == 0) {
 				parser_unknown_noun_found = p_parse_pointer;
 				return GPR_FAIL;
 			}
 			if(_noun == -1) return GPR_REPARSE;
 			p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
-			if(_token_data == CREATURE_OBJECT && _noun hasnt animate)
-				parser_check_creature = _noun;
+			if(_token_data == CREATURE_OBJECT && _noun hasnt animate) {
+				if(p_phase == PHASE2) {
+					print "You can only do that to something animate.^";
+					return GPR_FAIL;
+				}
+			}
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				parser_check_held = _noun;
 			}
 			return _noun;
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
-				_noun = _GetNextNoun(p_parse_pointer, p_keep_silent);
+				_noun = _GetNextNoun(p_parse_pointer, p_phase);
 				if(_noun == 0) {
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
@@ -651,7 +652,7 @@
 	}
 ];
 
-[ _ParsePattern p_pattern p_keep_silent   _pattern_pointer _parse_pointer _noun;
+[ _ParsePattern p_pattern p_phase   _pattern_pointer _parse_pointer _noun;
 	! return 0 if no match, >0 if match
 	wn = verb_wordnum + 1;
 	_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
@@ -666,7 +667,6 @@
 	parsed_number = 0;
 	multiple_objects --> 0 = 0;
 	parser_check_held = 0;
-	parser_check_creature = 0;
 	parser_check_multiple = 0;
 	parser_unknown_noun_found = 0;
 	action = (p_pattern --> 0) & $03ff;
@@ -697,7 +697,7 @@
 #IfDef DEBUG;
 		print "token type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
 #EndIf;
-		_noun = ParseToken(_pattern_pointer, _parse_pointer, p_keep_silent);
+		_noun = ParseToken(_pattern_pointer, _parse_pointer, p_phase);
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse_array + 2 + 4 * (wn - 1);
 		switch(_noun) {
@@ -733,7 +733,7 @@
 	! the whole input is matched and 2 returned.
 
 	action = -1;
-	which_object --> 0 = 0;
+	which_object-->0 = 0;
 	if(_IsSentenceDivider(parse_array + 2))
 		return -1;
 
@@ -774,7 +774,7 @@
 		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now 
 			! check if comma afterwards
-			wn = wn + which_object->0;
+			wn = wn + which_object-->0;
 			_pattern = NextWord();
 			if(_pattern == comma_word) {
 				jump conversation;
@@ -827,7 +827,7 @@
 #IfDef DEBUG;
 		print "############ Pattern ",_i," address ", _pattern, "^";
 #EndIf;
-		_score = _ParsePattern(_pattern, true);
+		_score = _ParsePattern(_pattern, PHASE1);
 		if(_score == 0) {
 			! This pattern has failed.
 #IfDef DEBUG;
@@ -843,18 +843,21 @@
 		_pattern = _pattern_pointer + 1;
 	}
 
+	if(_best_pattern == 0) {
+		if(parser_unknown_noun_found) {
+			print "Sorry, I don't understand what ~";
+			for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
+				print (char) player_input_array->(_i + parser_unknown_noun_found->3);
+			}
+			"~ means.";
+		}
+		"Sorry, I didn't understand that.";
+	}
+
 	! Phase 2: reparse best pattern and ask for additional info if
 	! needed (which book? etc)
-	if(_best_pattern > 0 && _ParsePattern(_best_pattern, false)) jump parse_success;
-
-	if(parser_unknown_noun_found) {
-		print "Sorry, I don't understand what ~";
-		for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
-			print (char) player_input_array->(_i + parser_unknown_noun_found->3);
-		}
-		"~ means.";
-	}
-	"Sorry, I didn't understand that.";
+	if(_ParsePattern(_best_pattern, PHASE2)) jump parse_success;
+	rtrue; ! ParsePattern wrote some error message
 
 .treat_bad_line_as_conversation;
 	! this is used when not understood and the actor is an NPC
@@ -906,9 +909,6 @@
 		keep_silent = false;
 		if(parser_check_held notin player) rtrue;
 	}
-
-	if(parser_check_creature > 0 && parser_check_creature hasnt animate)
-		"You can only do that to something animate.";
 
 	if(parsed_number == -1000) 
 		"I didn't understand that number.";

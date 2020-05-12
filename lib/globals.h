@@ -11,6 +11,10 @@ Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
 Constant NULL         = $ffff;
 
+Constant PHASE1 = 1; ! just check if pattern matches (no side effects such as which? questions or indirect actions)
+Constant PHASE2 = 2; ! parse the given pattern with side effects
+
+
 !Constant WORDSIZE 2; ! set by the compiler from Inform 6.30
 
 Constant ALL_WORD     = 'all';
@@ -187,7 +191,6 @@ Global inp1;             ! the same as noun, except when noun is a number
 Global inp2;             ! the same as second, except when second is a number
 Global num_noun_groups;  ! how many noun groups the current sentence contains
 Global parser_check_held;        ! parser should check if held
-Global parser_check_creature;    ! parser should check if alive
 Global parser_check_multiple;    ! parser should check if multiheld/multiinside
 Global parser_unknown_noun_found;! parser should report unknown word
 Global deadflag;
