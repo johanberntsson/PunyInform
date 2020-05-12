@@ -97,6 +97,106 @@
 		p_dst_parse_array->_i = p_src_parse_array->_i;
 ];
 
+#IfDef USEINJECT;
+[ _InjectInputAndParseArray p_param_array
+		_src_input_array _dst_input_array 
+		_src_parse_array _dst_parse_array 
+		_src_start_word _dst_start_word _word_count 
+		_n _i _j _k _m _char_count _pos_diff;
+	_i = p_param_array - 4;
+	for(_j = 2 : _j < 9 : _j++) {
+		_m = _i-->_j;
+		@store [_j] _m;
+	}
+	_src_start_word--;
+	_dst_start_word--;
+	
+!	print "_src_start_word=",_src_start_word,"^";
+!	print "_dst_start_word=",_dst_start_word,"^";
+!	print "_word_count=",_word_count,"^";
+!	_src_input_array = p_param_array-->0;
+!	_dst_input_array = p_param_array-->1;
+!	_src_parse_array = p_param_array-->2;
+!	_dst_parse_array = p_param_array-->3;
+!	_src_start_word = p_param_array-->4 - 1;
+!	_dst_start_word = p_param_array-->5 - 1;
+!	_word_count = p_param_array-->6;
+
+	! If we are not to copy anything, signal success
+	if(_word_count == 0)
+		rtrue;
+
+	! If there isn't enough room in the destination parse array, signal failure
+	if(_dst_parse_array->1 + _word_count > MAX_INPUT_WORDS)
+		rfalse;
+!	print "Parse array room is OK!^";
+
+	! If there isn't enough room in the destination input array, signal failure
+#IfV5;
+	_n = _dst_input_array->1;
+#IfNot;
+	while(_dst_input_array->++_n); ! {print _dst_input_array->_n, "-";}
+	_n--;
+#EndIf;
+	_i = 4 * (_src_start_word + _word_count); ! Last word
+	_j = _src_parse_array->(5 + 4 * _src_start_word); ! Start position of first word to be copied in source input buffer
+!	print "i = ", _i, "^";
+!	print "Final word length: ", _src_parse_array->(_i + 2), "Final word start: ", _src_parse_array->(_i + 3), "^";	
+!	print "Final char: ", _src_parse_array->(_i + 2) + _src_parse_array->(_i + 3), "First char: ", 
+!			_src_parse_array->(2 + 4 * (_src_start_word - 1) + 3), "^";	
+	_char_count = _src_parse_array->_i + _src_parse_array->(_i + 1) - _j + 1; ! Add one for a space after each word
+!	print "n = ", _n, ", char_count = ", _char_count, "^";
+	if(_n + _char_count > MAX_INPUT_CHARS)
+		rfalse;
+!	print "Input array room is OK!^";
+
+	_m = _dst_parse_array->(5 + 4 * _dst_start_word);  ! Position where new words are to be inserted in destination input buffer
+	_pos_diff = _m - _j; 
+
+	! Step 1: Make room in destination input array, and copy characters from source to destination
+#IfV5;
+	_src_input_array++;
+	_dst_input_array++;
+	_dst_input_array->0 = _dst_input_array->0 + _char_count;
+#EndIf;
+	! Make room in destination input array
+	for(_i = _n + 1: _i > _m: _i--) ! Copy one extra byte - null-byte if z3
+		_dst_input_array->(_i + _char_count) = _dst_input_array->_i;
+	! Copy the words
+	_k = _m + 1; 
+	for(_i = _src_start_word : _i < _src_start_word + _word_count : _i++) {
+		_m = 4 + 4 * _i;
+		for(_j=0 : _j < _src_parse_array->_m : _j++) {
+			_dst_input_array->(_k++) = _src_input_array->(_src_parse_array->(1 + _m) + _j + 1);
+		}
+		_dst_input_array->(_k++) = ' ';
+	}
+
+	! Step 2: Make room in destination parse array, and modify start position for all words after injection point
+	_k = _dst_parse_array + 2;
+!	print "k = ",_k,"^";
+	for(_i = _dst_parse_array->1 - 1: _i >= _dst_start_word : _i--) {
+!		print "Moving word #",_i,"^";
+		_m = 4 * (_i + _word_count);
+		for(_j=0 : _j < 3 : _j++)
+			_k->(_m + _j) = _k->(4 * _i + _j);
+		_k->(3 + _m) = _k->(3 + 4 * _i) + _char_count;
+	}
+	! Copy the parse data
+	for(_i = 0 : _i < 4 * _word_count : _i++) {
+!		print "Copying from pos ", (2 + 4 * _src_start_word - 4 + _i);
+		_m = _src_parse_array->(2 + 4 * _src_start_word + _i);
+		_j = 4 *_dst_start_word + _i;
+		if(_i % 4 == 3)
+			_k->_j = _m + _pos_diff;
+		else	
+			_k->_j = _m;
+	}
+	_dst_parse_array->1 = _dst_parse_array->1 + _word_count;
+	rtrue;	
+];
+#Endif;
+
 #IfDef DEBUG;
 
 [ _PrintParseArray p_parse_array _i;
@@ -355,7 +455,7 @@
 				! which book, the blue or the green
 				! > green
 				! and then I skip book when accepting the
-				! new reply. Will fail if more then
+				! new reply. Will fail if more than
 				! one noun word before disambiguation
 				which_object->0 = 1;
 				! don't forget to restore the old arrays
