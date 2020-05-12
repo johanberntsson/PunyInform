@@ -91,7 +91,7 @@
 		p_dst_input_array->_i = p_src_input_array->_i;
 ];
 
-[ _CopyParserArray p_src_parse_array p_dst_parse_array _n _i;
+[ _CopyParseArray p_src_parse_array p_dst_parse_array _n _i;
 	_n = 2 + 4 * (MAX_INPUT_WORDS + 1); 
 	for(_i = 0: _i < _n: _i++)
 		p_dst_parse_array->_i = p_src_parse_array->_i;
@@ -157,7 +157,7 @@
 #IfV5;
 	_src_input_array++;
 	_dst_input_array++;
-	_dst_input_array->0 = _dst_input_array->0 + _char_count;
+	_dst_input_array->0 = _n + _char_count;
 #EndIf;
 	! Make room in destination input array
 	for(_i = _n + 1: _i > _m: _i--) ! Copy one extra byte - null-byte if z3
@@ -441,7 +441,7 @@
 		! temp arrays that I will restore if I can
 		! disambiguate successfully.
 		_CopyInputArray(player_input_array, temp_player_input_array);
-		_CopyParserArray(parse_array, temp_parse_array);
+		_CopyParseArray(parse_array, temp_parse_array);
 		_ReadPlayerInput();
 		! is this a reply to the question?
 		if((parse_array->1 == 1) &&  
@@ -461,7 +461,7 @@
 				which_object-->0 = _num_words_in_nounphrase;
 				! don't forget to restore the old arrays
 				_CopyInputArray(temp_player_input_array, player_input_array);
-				_CopyParserArray(temp_parse_array, parse_array);
+				_CopyParseArray(temp_parse_array, parse_array);
 				jump recheck_noun;
 			}
 		}
