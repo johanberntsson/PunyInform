@@ -63,7 +63,6 @@
 	!  -1000                if it is not a number
 	!  the number           if it has between 1 and 4 digits
 	!  10000                if it has 5 or more digits.
-
     _i = wn; wn = p_wordnum; _j = NextWord(); wn = _i;
 #Ifdef ALLOW_WRITTEN_NUMBERS;
     _j = NumberWord(_j); if (_j >= 1) return _j;
@@ -72,8 +71,9 @@
     _i = p_wordnum*4+1; _j = parse_array->_i; _num = _j+player_input_array; _len = parse_array->(_i-1);
 
     !TODO? tot=ParseNumber(num, len); if (tot ~= 0) return tot;
-
-	_i = _len;
+    _digit = _num->0; if(_digit < '0' || _digit > '9') jump baddigit;
+   	if (_len > 4) return 10000;
+	
 	_mul=1; --_len;
     for (: _len >= 0 : _len--) {
         _digit = _num->_len;
@@ -81,7 +81,6 @@
 		_d = _digit - '0';
         _tot = _tot + _mul * _d; _mul = _mul * 10;
     }
-   	if (_i > 4) return 10000;
     return _tot;
 .baddigit;
 	return -1000;
