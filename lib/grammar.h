@@ -285,7 +285,7 @@
 	!print special_word, " ", special_number," ",parsed_number,"^";
 	if(special_word ~=0) "You can't send randomness to an object!";
 	_i = parsed_number;
-	if(_i == 0) _i = 100; ! default
+	if(_i == 0) _i = 100; ! either 'xxxx' (unknown special) or '0'
 	random(-_i);
 	"The random seed is set to ", _i, ".";
 ];
