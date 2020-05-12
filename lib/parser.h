@@ -73,15 +73,16 @@
     _i = p_wordnum*4+1; _j = parse_array->_i; _num = _j+player_input_array; _len = parse_array->(_i-1);
 
     !TODO? tot=ParseNumber(num, len); if (tot ~= 0) return tot;
-	
+
+	_i = _len;
 	_mul=1; --_len;
     for (: _len >= 0 : _len--) {
         _digit = _num->_len;
         if(_digit < '0' || _digit > '9') jump baddigit;
 		_d = _digit - '0';
-    	if (_len > 4) return 10000;
         _tot = _tot + _mul * _d; _mul = _mul * 10;
     }
+   	if (_i > 4) return 10000;
     return _tot;
 .baddigit;
 	return -1000;
