@@ -524,7 +524,10 @@ Verb 'attack' 'break' 'crack' 'destroy'
      'smash' 'thump' 'torture' 'wreck'
     * noun                                      -> Attack;
 
-Verb 'turn' 'rotate' 'screw' 'twist' 'unscrew'
+Verb 'rotate' 'screw' 'twist' 'unscrew'
+    * noun                                      -> Turn;
+
+Verb 'turn'
     * noun                                      -> Turn
     * noun 'on'                                 -> SwitchOn
     * noun 'off'                                -> SwitchOff
