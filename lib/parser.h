@@ -406,7 +406,7 @@
 	"?";
 ];
 
-[ _GetNextNoun p_parse_pointer _noun _oldwn;
+[ _GetNextNoun p_parse_pointer p_keep_silent _noun _oldwn;
 	! try getting a noun from the <p_parse_pointer> entry in parse_array
 	! return <noun number> if found, 0 if no noun found, or -1
 	! if we should give up parsing completely (because the
@@ -427,6 +427,10 @@
 	! not a pronoun, continue
 	_noun = _CheckNoun(p_parse_pointer, parse_array->1);
 .recheck_noun;
+	if(p_keep_silent == true && _noun < 0) {
+		_noun = 1; ! a random noun in phase 1 just to avoid which? question
+		which_object->0 = 1; ! TODO: we need info from _CheckNoun how many words the noun phrase consisted of
+	}
 	if(_noun < 0) {
 		_AskWhichNoun(p_parse_pointer --> 0, -_noun);
 		! read a new line of input
@@ -497,7 +501,7 @@
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseToken p_pattern_index p_parse_pointer _noun _i _token _token_type _token_data;
+[ ParseToken p_pattern_index p_parse_pointer p_keep_silent _noun _i _token _token_type _token_data;
 	! TODO: USE DM arguments
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
@@ -542,14 +546,6 @@
 			print "Match!^";
 #EndIf;
 			wn++;
-			!TODO p_parse_pointer = p_parse_pointer + 4;
-			!TODO while(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) { ! Alternative prepositions which are not at the end of the list
-#IfDef DEBUG;
-		!TODO 		print "Skipping one alternative...^";
-#EndIf;
-			!TODO 	!_pattern_index = _pattern_index + 3;
-		!TODO 		_token = _pattern_index -> 0;
-			!TODO }
 			return GPR_PREPOSITION;
 		}
 #IfDef DEBUG;
@@ -588,7 +584,7 @@
 				return GPR_MULTIPLE;
 			}
 		} else if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
-			_noun = _GetNextNoun(p_parse_pointer);
+			_noun = _GetNextNoun(p_parse_pointer, p_keep_silent);
 			if(_noun == 0) {
 				parser_unknown_noun_found = p_parse_pointer;
 				return GPR_FAIL;
@@ -603,7 +599,7 @@
 			return _noun;
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
-				_noun = _GetNextNoun(p_parse_pointer);
+				_noun = _GetNextNoun(p_parse_pointer, p_keep_silent);
 				if(_noun == 0) {
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
@@ -655,7 +651,76 @@
 	}
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun;
+[ _ParsePattern p_pattern p_keep_silent   _pattern_pointer _parse_pointer _noun;
+	! return 0 if no match, >0 if match
+	wn = verb_wordnum + 1;
+	_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
+	_pattern_pointer = p_pattern - 1;
+	num_noun_groups = 0;
+	noun = 0;
+	second = 0;
+	inp1 = 0;
+	inp2 = 0;
+	special_number = 0;
+	special_word = 0;
+	parsed_number = 0;
+	multiple_objects --> 0 = 0;
+	parser_check_held = 0;
+	parser_check_creature = 0;
+	parser_check_multiple = 0;
+	parser_unknown_noun_found = 0;
+	action = (p_pattern --> 0) & $03ff;
+	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
+
+	while(true) {
+		_pattern_pointer = _pattern_pointer + 3;
+#IfDef DEBUG;
+		print "TOKEN: ", _pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+#EndIf;
+
+		if(((_pattern_pointer -> 0) & $0f) == TT_END) {
+			if(_IsSentenceDivider(_parse_pointer)) {
+				wn++;
+				return 1; ! jump parse_success;
+			}
+			if(wn == 1 + parse_array->1) {
+				return 1; ! jump parse_success;
+			}
+			rfalse; ! Fail because the grammar line ends here but not the input
+		}
+		if(wn >= 1 + parse_array->1) {
+#IfDef DEBUG;
+			print "Fail, since grammar line has not ended but player input has.^";
+#EndIf;
+			rfalse ;!Fail because input ends here but not the grammar line
+		}
+#IfDef DEBUG;
+		print "token type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
+#EndIf;
+		_noun = ParseToken(_pattern_pointer, _parse_pointer, p_keep_silent);
+		! the parse routine can change wn, so update _parse_pointer
+		_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+		switch(_noun) {
+		GPR_FAIL:
+			rfalse; ! didn't match
+		GPR_MULTIPLE:
+			! multiple_objects contains the objects
+			_UpdateNounSecond(0, 0);
+		GPR_NUMBER:
+			! parsed_number contains the new number
+			_UpdateNounSecond(parsed_number, 1);
+		GPR_PREPOSITION:
+			! do nothing
+		GPR_REPARSE:
+			rfalse;
+		default:
+			! returned an objekt
+			_UpdateNounSecond(_noun, _noun);
+		}
+	}
+];
+
+[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun _score _best_pattern;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -755,86 +820,33 @@
 	@new_line;
 #EndIf;
 
+	! Phase 1: look for best pattern without side effects
+	_best_pattern = 0;
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _verb_grammar->0 : _i++) {
 #IfDef DEBUG;
 		print "############ Pattern ",_i," address ", _pattern, "^";
 #EndIf;
-		wn = verb_wordnum + 1;
-		_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
-		_pattern_pointer = _pattern - 1;
-		num_noun_groups = 0;
-		noun = 0;
-		second = 0;
-		inp1 = 0;
-		inp2 = 0;
-		special_number = 0;
-		special_word = 0;
-		parsed_number = 0;
-		multiple_objects --> 0 = 0;
-		parser_check_held = 0;
-		parser_check_creature = 0;
-		parser_check_multiple = 0;
-		parser_unknown_noun_found = 0;
-		action = (_pattern --> 0) & $03ff;
-		action_reverse = ((_pattern --> 0) & $400 ~= 0);
-
-		while(true) {
-			_pattern_pointer = _pattern_pointer + 3;
+		_score = _ParsePattern(_pattern, true);
+		if(_score == 0) {
+			! This pattern has failed.
 #IfDef DEBUG;
-			print "TOKEN: ", _pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+			print "Pattern didn't match.^";
 #EndIf;
-
-			if(((_pattern_pointer -> 0) & $0f) == TT_END) {
-				if(_IsSentenceDivider(_parse_pointer)) {
-					wn++;
-					jump parse_success;
-				}
-				if(wn == 1 + parse_array->1) {
-					jump parse_success;
-				}
-				break; ! Fail because the grammar line ends here but not the input
-			}
-			if(wn >= 1 + parse_array->1) { !Fail because input ends here but not the grammar line
-#IfDef DEBUG;
-				print "Fail, since grammar line has not ended but player input has.^";
-#EndIf;
-				break;
-			}
-#IfDef DEBUG;
-			print "token type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
-#EndIf;
-			_noun = ParseToken(_pattern_pointer, _parse_pointer);
-			! the parse routine can change wn, so update _parse_pointer
-			_parse_pointer = parse_array + 2 + 4 * (wn - 1);
-			if(_noun == GPR_FAIL) {
-				! can't put in switch, since we want 'break'
-				! to stop the while(true) loop instead.
-				break;
-			} else switch(_noun) {
-			GPR_MULTIPLE:
-				! multiple_objects contains the objects
-				_UpdateNounSecond(0, 0);
-			GPR_NUMBER:
-				! parsed_number contains the new number
-				_UpdateNounSecond(parsed_number, 1);
-			GPR_PREPOSITION:
-				! do nothing
-			GPR_REPARSE:
-				rfalse;
-			default:
-				! returned an objekt
-				_UpdateNounSecond(_noun, _noun);
-			}
+		} else {
+			_best_pattern = _pattern;
+			continue;
 		}
-		! This pattern has failed.
-#IfDef DEBUG;
-		print "Pattern didn't match.^";
-#EndIf;
 		! Scan to the end of this pattern
+		_pattern_pointer = _pattern - 1;
 		while(_pattern_pointer -> 0 ~= TT_END) _pattern_pointer = _pattern_pointer + 3;
 		_pattern = _pattern_pointer + 1;
 	}
+
+	! Phase 2: reparse best pattern and ask for additional info if
+	! needed (which book? etc)
+	if(_best_pattern > 0 && _ParsePattern(_best_pattern, false)) jump parse_success;
+
 	if(parser_unknown_noun_found) {
 		print "Sorry, I don't understand what ~";
 		for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
