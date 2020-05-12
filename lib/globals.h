@@ -190,7 +190,6 @@ Global second;
 Global inp1;             ! the same as noun, except when noun is a number
 Global inp2;             ! the same as second, except when second is a number
 Global num_noun_groups;  ! how many noun groups the current sentence contains
-Global parser_check_held;        ! parser should check if held
 Global parser_check_multiple;    ! parser should check if multiheld/multiinside
 Global parser_unknown_noun_found;! parser should report unknown word
 Global deadflag;

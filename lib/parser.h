@@ -63,6 +63,8 @@
 	!  -1000                if it is not a number
 	!  the number           if it has between 1 and 4 digits
 	!  10000                if it has 5 or more digits.
+	! TODO: goes wrong when > 32768 because of signed/unsigned
+	! TODO: should return -1 if bad
     _i = wn; wn = p_wordnum; _j = NextWord(); wn = _i;
 #Ifdef ALLOW_WRITTEN_NUMBERS;
     _j = NumberWord(_j); if (_j >= 1) return _j;
@@ -71,13 +73,13 @@
     _i = p_wordnum*4+1; _j = parse_array->_i; _num = _j+player_input_array; _len = parse_array->(_i-1);
 
     !TODO? tot=ParseNumber(num, len); if (tot ~= 0) return tot;
-    if (_len > 4) return 10000;
 	
 	_mul=1; --_len;
     for (: _len >= 0 : _len--) {
         _digit = _num->_len;
         if(_digit < '0' || _digit > '9') jump baddigit;
 		_d = _digit - '0';
+    	if (_len > 4) return 10000;
         _tot = _tot + _mul * _d; _mul = _mul * 10;
     }
     return _tot;
@@ -157,7 +159,7 @@
 #IfV5;
 	_src_input_array++;
 	_dst_input_array++;
-	_dst_input_array->0 = _n + _char_count;
+	_dst_input_array->0 = _dst_input_array->0 + _char_count;
 #EndIf;
 	! Make room in destination input array
 	for(_i = _n + 1: _i > _m: _i--) ! Copy one extra byte - null-byte if z3
@@ -595,7 +597,13 @@
 				}
 			}
 			if(_token_data == HELD_OBJECT && _noun notin player) {
-				parser_check_held = _noun;
+				if(p_phase == PHASE2) {
+					print "(first taking ", (the) _noun, ")^^";
+					keep_silent = true;
+					<take _noun>;
+					keep_silent = false;
+					if(_noun notin player) return GPR_FAIL;
+				}
 			}
 			return _noun;
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
@@ -666,7 +674,6 @@
 	special_word = 0;
 	parsed_number = 0;
 	multiple_objects --> 0 = 0;
-	parser_check_held = 0;
 	parser_check_multiple = 0;
 	parser_unknown_noun_found = 0;
 	action = (p_pattern --> 0) & $03ff;
@@ -708,6 +715,10 @@
 			_UpdateNounSecond(0, 0);
 		GPR_NUMBER:
 			! parsed_number contains the new number
+			if(p_phase == PHASE2 && parsed_number == -1000)  {
+				print "I didn't understand that number.^";
+				rfalse;
+			}
 			_UpdateNounSecond(parsed_number, 1);
 		GPR_PREPOSITION:
 			! do nothing
@@ -901,17 +912,6 @@
 		print (The) actor, " has better things to do.";
 		return num_words_parsed;
 	}
-
-	if(parser_check_held > 0) {
-		print "(first taking ", (the) parser_check_held, ")^^";
-		keep_silent = true;
-		<take parser_check_held>;
-		keep_silent = false;
-		if(parser_check_held notin player) rtrue;
-	}
-
-	if(parsed_number == -1000) 
-		"I didn't understand that number.";
 
 	if(multiple_objects --> 0 == 0) {
 		! single action
