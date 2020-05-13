@@ -37,6 +37,15 @@
 ! DM: http://www.inform-fiction.org/manual/html/dm4index.html
 ! Tech: https://www.inform-fiction.org/source/tm/TechMan.txt
 
+! comment/uncomment to restrict debug messages as needed
+#IfDef DEBUG;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+Constant DEBUG_PARSETOKEN;
+Constant DEBUG_PARSEPATTERN;
+Constant DEBUG_PARSEANDPERFORM;
+#Endif;
+
 Include "messages.h";
 
 Object Directions
@@ -760,9 +769,6 @@ Object DefaultPlayer "you"
 		_sentencelength = _ParseAndPerformAction();
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
-#IfDef DEBUG;
-		print "ParseAndPerformAction returned ", _sentencelength, "^";
-#Endif;
 		if(action >= 0 && meta == false) {
             RunTimersAndDaemons();
             turns++;

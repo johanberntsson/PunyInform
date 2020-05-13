@@ -1,7 +1,6 @@
 ! ######################### Parser
 ! PunyInform uses grammar version 2 which is easier to parse and economical
 
-
 [ _ReadPlayerInput p_no_prompt _result;
 ! #IfV5;
 !   print "Width: ", HDR_SCREENWCHARS->0,"^";
@@ -225,7 +224,9 @@
 		_token_top = (p_pattern->0 & $c0)/64; ! top (2 bits)
 		_token_next = (p_pattern->0 & $30)/16;  ! next (2 bits)
 		_token_bottom = p_pattern->0 & $0f; ! bottom (4 bits)
-		print "Token#: ", _i, " Type: ", p_pattern->0, " (top ", _token_top, ", next ",_token_next, ", bottom ",_token_bottom, ") Next byte: ",(p_pattern + 1)-->0,"^";
+		print "Token#: ", _i, " Type: ", p_pattern->0, " (top ", _token_top, ", next ",_token_next, ", bottom ",_token_bottom, ") data: " ,(p_pattern + 1)-->0;
+		if((p_pattern + 1)-->0>4000) print" " ,(address) (p_pattern + 1)-->0;
+		new_line;
 		p_pattern = p_pattern + 3;
 	}
 	! print ": ", i, " tokens^";
@@ -301,7 +302,7 @@
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
 		_obj = scope-->_i;
-#IfDef DEBUG;
+#IfDef DEBUG_CHECKNOUN;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
 		!   if(_obj == nothing) continue;
@@ -318,12 +319,12 @@
 				if(_n == _best_score) {
 					_matches++;
 					which_object-->_matches = _obj;
-#IfDef DEBUG;
+#IfDef DEBUG_CHECKNOUN;
 					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
 				}
 				if(_n > _best_score) {
-#IfDef DEBUG;
+#IfDef DEBUG_CHECKNOUN;
 					print "New best score - matched with parse_name ", _n,"^";
 #EndIf;
 					_last_match = _obj;
@@ -347,7 +348,7 @@
 #EndIf;
 				jump not_matched;
 .success;
-#IfDef DEBUG;
+#IfDef DEBUG_CHECKNOUN;
 				print " - matched ", (address) _current_word,"^";
 #EndIf;
 				_n++;
@@ -356,13 +357,13 @@
 				if(_n == _best_score) {
 					_matches++;
 					which_object-->_matches = _obj;
-#IfDef DEBUG;
+#IfDef DEBUG_CHECKNOUN;
 					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
 				}
 				if(_n > _best_score) {
 					_matches = 1;
-#IfDef DEBUG;
+#IfDef DEBUG_CHECKNOUN;
 					print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
 #EndIf;
 					_last_match = _obj;
@@ -377,13 +378,13 @@
 	}
 	which_object-->0 = _best_score - wn;
 	if(_matches == 1) {
-#IfDef DEBUG;
+#IfDef DEBUG_CHECKNOUN;
 		print "Matched a single object: ", (the) _last_match,
 			", len ", which_object-->0, "^";
 #EndIf;
 		return _last_match;
 	}
-#IfDef DEBUG;
+#IfDef DEBUG_CHECKNOUN;
 				print "Matches: ", _matches,"^";
 #EndIf;
 	if(_matches > 1) return -_matches;
@@ -469,7 +470,7 @@
 		! completely new input.
 		return -1; ! start from the beginning
 	} else if(_noun > 0) {
-#IfDef DEBUG;
+#IfDef DEBUG_GETNEXTNOUN;
 		print "Noun match! ", _noun, " ", which_object--> 0, "^";
 #EndIf;
 		wn = wn + which_object-->0;
@@ -527,7 +528,6 @@
 		_token_data = (p_pattern_pointer + 1) --> 0;
 	}
 	_token_type = _token & $0f;
-
 	! first set up filters, if any
 	noun_filter = 0;
 	if(_token_type == TT_ROUTINE_FILTER) {
@@ -551,18 +551,18 @@
 	}
 	! then parse objects or prepositions
 	if(_token_type == TT_PREPOSITION) { 
-#IfDef DEBUG;
-		print "Preposition: ", _token_data, "^";
+#IfDef DEBUG_PARSETOKEN;
+		print "Preposition: _token ", _token, " _token_type ", _token_type, ": data '", (address) _token_data, "' ", _token_data, "^";
 #EndIf;
 		if(p_parse_pointer --> 0 == _token_data) {
-#IfDef DEBUG;
+#IfDef DEBUG_PARSETOKEN;
 			print "Match!^";
 #EndIf;
 			wn++;
 			return GPR_PREPOSITION;
 		}
-#IfDef DEBUG;
-		print "Failed prep: ", p_parse_pointer, ":", p_parse_pointer --> 0, " should have been ", _token_data, "^";
+#IfDef DEBUG_PARSETOKEN;
+		print "Failed prep: ", p_parse_pointer, ": ", (address) p_parse_pointer --> 0, " doesn't match ", (address) _token_data, "^";
 #EndIf;
 		if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) return GPR_PREPOSITION; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 		return GPR_FAIL; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
@@ -678,7 +678,7 @@
 	}
 ];
 
-[ _ParsePattern p_pattern p_phase   _pattern_pointer _parse_pointer _noun;
+[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun;
 	! return 0 if no match, >0 if match
 	wn = verb_wordnum + 1;
 	_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
@@ -699,7 +699,7 @@
 
 	while(true) {
 		_pattern_pointer = _pattern_pointer + 3;
-#IfDef DEBUG;
+#IfDef DEBUG_PARSEPATTERN;
 		print "TOKEN: ", _pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
@@ -714,13 +714,13 @@
 			rfalse; ! Fail because the grammar line ends here but not the input
 		}
 		if(wn >= 1 + parse_array->1) {
-#IfDef DEBUG;
+#IfDef DEBUG_PARSEPATTERN;
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
 			rfalse ;!Fail because input ends here but not the grammar line
 		}
-#IfDef DEBUG;
-		print "token type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
+#IfDef DEBUG_PARSEPATTERN;
+		print "token ", _pattern_pointer->0," type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
 #EndIf;
 		_noun = _ParseToken(_pattern_pointer, _parse_pointer, p_phase);
 		! the parse routine can change wn, so update _parse_pointer
@@ -779,7 +779,7 @@
 	verb_word = (parse_array - 2) --> (2 * verb_wordnum) ;
 	if(verb_word < (0-->HEADER_DICTIONARY)) {
 		! unknown word
-#IfDef DEBUG;
+#IfDef DEBUG_PARSEANDPERFORM;
 		print "Case 1, Word ", verb_word, "^";
 #EndIf;
 		if(actor ~= player) jump treat_bad_line_as_conversation;
@@ -835,7 +835,7 @@
 	_i = 255 - (_word_data->1); ! was _verb_num
 	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_i;
 
-#IfDef DEBUG;
+#IfDef DEBUG_PARSEANDPERFORM;
 	print "Verb#: ",_i,", meta ",meta,".^";
 	print "Grammar address for this verb: ",_verb_grammar,"^";
 	print "Number of patterns: ", _verb_grammar->0 ,"^";
@@ -853,18 +853,21 @@
 	_best_pattern = 0;
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _verb_grammar->0 : _i++) {
-#IfDef DEBUG;
-		print "############ Pattern ",_i," address ", _pattern, "^";
+#IfDef DEBUG_PARSEANDPERFORM;
+		print "### PHASE 1: Pattern ",_i," address ", _pattern, "^";
 #EndIf;
 		_score = _ParsePattern(_pattern, PHASE1);
+#IfDef DEBUG_PARSEANDPERFORM;
+		print "### PHASE 1: result ", _score, "^";
+#EndIf;
 		if(_score == 0) {
 			! This pattern has failed.
-#IfDef DEBUG;
+#IfDef DEBUG_PARSEANDPERFORM;
 			print "Pattern didn't match.^";
 #EndIf;
 		} else {
 			_best_pattern = _pattern;
-			continue;
+			!continue;
 		}
 		! Scan to the end of this pattern
 		_pattern_pointer = _pattern - 1;
@@ -885,7 +888,14 @@
 
 	! Phase 2: reparse best pattern and ask for additional info if
 	! needed (which book? etc)
-	if(_ParsePattern(_best_pattern, PHASE2)) jump parse_success;
+#IfDef DEBUG_PARSEANDPERFORM;
+		print "### PHASE 2: Pattern address ", _best_pattern, "^";
+#EndIf;
+	_score = _ParsePattern(_best_pattern, PHASE2);
+#IfDef DEBUG_PARSEANDPERFORM;
+		print "### PHASE 2: result ", _score, "^";
+#EndIf;
+	if(_score) jump parse_success;
 	rtrue; ! ParsePattern wrote some error message
 
 .treat_bad_line_as_conversation;
