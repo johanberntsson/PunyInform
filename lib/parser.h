@@ -499,8 +499,15 @@
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseToken p_pattern_index p_parse_pointer p_phase _noun _i _token _token_type _token_data;
-	! TODO: USE DM arguments
+[ ParseToken p_token_type p_token_data _parse_pointer;
+	! DM defines ParseToken as ParseToken(tokentype,tokendata)
+	! ParseToken is similar to a general parse routine,
+	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
+	! GPR_PREPOSITION, GPR_REPARSE or the object number
+	return _ParseToken(-p_token_type, -p_token_data, PHASE1);
+];
+
+[ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
@@ -509,9 +516,17 @@
 	! (this is mostly to avoid recalculating the values from wn
 	! when the calling routine already has them at hand)
 
-	_token = (p_pattern_index -> 0);
+	if(p_pattern_pointer < 0) {
+		! called from ParseToken (DM library API)
+		_token = -p_pattern_pointer;
+		_token_data = -p_parse_pointer;
+		p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+		p_pattern_pointer = 0;
+	} else {
+		_token = (p_pattern_pointer -> 0);
+		_token_data = (p_pattern_pointer + 1) --> 0;
+	}
 	_token_type = _token & $0f;
-	_token_data = (p_pattern_index + 1) --> 0;
 
 	! first set up filters, if any
 	noun_filter = 0;
@@ -634,9 +649,13 @@
 			! topic continues until end of line or
 			! until the word matches the preposition
 			! defined in the next pattern
-			!print (_pattern_index + 3) -> 0, "^"; ! token
-			!print (_pattern_index + 4) --> 0, "^"; ! token_data 
-			_i = (p_pattern_index + 4) --> 0; ! word to stop at
+			!print (p_pattern_pointer + 3) -> 0, "^"; ! token
+			!print (p_pattern_pointer + 4) --> 0, "^"; ! token_data 
+			if(p_pattern_pointer > 0) {
+				_i = (p_pattern_pointer + 4) --> 0; ! word to stop at
+			} else {
+				_i = NULL;
+			}
 			for(::) {
 				++wn;
 				++consult_words;
@@ -703,7 +722,7 @@
 #IfDef DEBUG;
 		print "token type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
 #EndIf;
-		_noun = ParseToken(_pattern_pointer, _parse_pointer, p_phase);
+		_noun = _ParseToken(_pattern_pointer, _parse_pointer, p_phase);
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse_array + 2 + 4 * (wn - 1);
 		switch(_noun) {
