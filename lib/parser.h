@@ -564,6 +564,7 @@
 #IfDef DEBUG_PARSETOKEN;
 		print "Failed prep: ", p_parse_pointer, ": ", (address) p_parse_pointer --> 0, " doesn't match ", (address) _token_data, "^";
 #EndIf;
+		!TODO JB: this should be a level up instead
 		if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) return GPR_PREPOSITION; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
 		return GPR_FAIL; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
 	} else if(_token_type == TT_OBJECT) {
@@ -720,11 +721,12 @@
 			rfalse ;!Fail because input ends here but not the grammar line
 		}
 #IfDef DEBUG_PARSEPATTERN;
-		print "token ", _pattern_pointer->0," type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
+		print "Calling ParseToken: token ", _pattern_pointer->0," type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
 #EndIf;
 		_noun = _ParseToken(_pattern_pointer, _parse_pointer, p_phase);
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+
 		switch(_noun) {
 		GPR_FAIL:
 			rfalse; ! didn't match
@@ -843,7 +845,7 @@
 	! First print all patterns, for debug purposes
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _verb_grammar->0: _i++) {
-		print "############ Pattern ",_i,"^";
+		print "############ Pattern ",_i," ",_pattern,"^";
 		_pattern = _CheckPattern(_pattern);
 	}
 	@new_line;
@@ -870,8 +872,10 @@
 			!continue;
 		}
 		! Scan to the end of this pattern
-		_pattern_pointer = _pattern - 1;
-		while(_pattern_pointer -> 0 ~= TT_END) _pattern_pointer = _pattern_pointer + 3;
+		_pattern_pointer = _pattern + 2;
+		while(_pattern_pointer -> 0 ~= TT_END) {
+			_pattern_pointer = _pattern_pointer + 3;
+		}
 		_pattern = _pattern_pointer + 1;
 	}
 
