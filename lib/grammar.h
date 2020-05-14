@@ -146,6 +146,10 @@
     PrintMsg(MSG_SMELL_SUCCESS);
 ];
 
+[ ListenSub;
+    PrintMsg(MSG_LISTEN_SUCCESS);
+];
+
 [ GiveSub;
     if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
     if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
@@ -465,6 +469,10 @@ Verb 'jump'
 	* 'out' 'of'/'from' noun  -> Exit
 	* 'off' noun        -> Exit;
 
+Verb 'listen'
+	* -> Listen
+	* 'to' noun -> Listen;
+
 Verb 'exit' 'leave'
 	* noun -> Exit;
 
@@ -526,6 +534,7 @@ Verb 'kiss' 'embrace' 'hug'
 
 Verb 'wear'
 	* held										-> Wear;
+
 Verb 'attack' 'break' 'crack' 'destroy'
      'fight' 'hit' 'kill' 'murder' 'punch'
      'smash' 'thump' 'torture' 'wreck'
@@ -550,6 +559,7 @@ Verb 'switch'
 
 Verb 'pull' 'drag'
     * noun                                      -> Pull;
+
 Verb 'push' 'clear' 'move' 'press' 'shift'
     * noun                                      -> Push
     !TODO: * noun noun                                 -> PushDir
