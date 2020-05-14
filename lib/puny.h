@@ -39,8 +39,8 @@
 
 ! comment/uncomment to restrict debug messages as needed
 #IfDef DEBUG;
-!Constant DEBUG_CHECKNOUN;
-!Constant DEBUG_GETNEXTNOUN;
+Constant DEBUG_CHECKNOUN;
+Constant DEBUG_GETNEXTNOUN;
 Constant DEBUG_PARSETOKEN;
 Constant DEBUG_PARSEPATTERN;
 Constant DEBUG_PARSEANDPERFORM;

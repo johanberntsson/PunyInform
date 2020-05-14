@@ -50,6 +50,7 @@ Attribute on;
 Fake_Action Order; 
 Fake_Action ThrownAt;
 Fake_Action NotUnderstood; 
+Fake_Action PluralFound; 
 
 ! Property name; ! This seems to be hardcoded in the Inform compiler
 Property initial;
@@ -190,6 +191,7 @@ Global second;
 Global inp1;             ! the same as noun, except when noun is a number
 Global inp2;             ! the same as second, except when second is a number
 Global num_noun_groups;  ! how many noun groups the current sentence contains
+Global parser_action;    ! needed for parse_name, ##PluralFound (see DM)
 Global parser_check_multiple;    ! parser should check if multiheld/multiinside
 Global parser_unknown_noun_found;! parser should report unknown word
 Global deadflag;
@@ -215,6 +217,8 @@ Global clr_fgstatus          = 8;
 Global debug_flag            = 0;
 #endif;
 
+Constant MAX_WHICH_OBJECTS   = 10;
+Constant MAX_MULTIPLE_OBJECTS= 32;
 Constant MAX_INPUT_CHARS     = 78;
 Constant MAX_INPUT_WORDS     = 20;
 
@@ -226,8 +230,8 @@ Array  the_timers  --> MAX_TIMERS;
 Global active_timers;               ! Number of timers/daemons active
 Global current_timer;               ! Index of the timer which is currently being executed
 
-Array which_object-->10;      ! options for "which do you mean?"
-Array multiple_objects-->32;  ! holds nouns when multi* grammar used
+Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
+Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used
 
 Array player_input_array->(MAX_INPUT_CHARS + 3);
 Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0

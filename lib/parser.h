@@ -295,7 +295,8 @@
 	! else return object number
 	! side effects: 
 	!   which_object
-	!     - stores number of words consumed in --> 0
+	!     - stores number of objects in -> 0
+	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
 	for(_i = 0: _i < scope_objects: _i++) {
 		_n = wn;
@@ -376,39 +377,38 @@
 
 !   print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
-	which_object-->0 = _best_score - wn;
+	which_object->0 = _matches;
+	which_object->1 = _best_score - wn;
 	if(_matches == 1) {
 #IfDef DEBUG_CHECKNOUN;
 		print "Matched a single object: ", (the) _last_match,
-			", len ", which_object-->0, "^";
+			", num words ", which_object->1, "^";
 #EndIf;
 		return _last_match;
 	}
 #IfDef DEBUG_CHECKNOUN;
-				print "Matches: ", _matches,"^";
+				print "Matches: ", _matches,", num words ", which_object->1, "^";
 #EndIf;
 	if(_matches > 1) return -_matches;
 	return 0;
 ];
 
 [ _AskWhichNoun p_noun_name p_num_matching_nouns _i; 
-	print "Which ", (address) p_noun_name, " do you mean? ";
-	for(_i = 0 : _i < p_num_matching_nouns : _i++) {
-		if(_i == 0) {
-			print (The) which_object-->(_i + 1);
-		} else {
-			if (_i == p_num_matching_nouns - 1) {
+	print "Do you mean ";
+	for(_i = 1 : _i <= p_num_matching_nouns : _i++) {
+		if(_i > 1) {
+			if(_i == p_num_matching_nouns) {
 				print " or ";
 			} else {
 				print ", ";
 			}
-			print (the) which_object-->_i;
 		}
+		print (the) which_object --> _i;
 	}
-	"?";
+	print "? ";
 ];
 
-[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase;
+[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword;
 	! try getting a noun from the <p_parse_pointer> entry in parse_array
 	! return <noun number> if found, 0 if no noun found, or -1
 	! if we should give up parsing completely (because the
@@ -416,8 +416,21 @@
 	! 
 	! Side effects:
 	! - if found, then wn will be updated
+	! - if plural matched, then parser_action set to ##PluralFound
 	! NOTE: you need to update parse_pointer after calling _GetNextNoun since
 	! wn can change
+
+	parser_action = 0;
+
+	! skip 'the', 'all' etc
+	while(p_parse_pointer --> 0 == 'a' or 'the' or 'an' or ALL_WORD) {
+		! TODO: == 'a' doesn't work (but 'the' etc are fine). Why?
+#IfDef DEBUG_GETNEXTNOUN;
+		print "skipping ",(address) p_parse_pointer --> 0,"^";
+#Endif;
+		++wn;
+		p_parse_pointer = p_parse_pointer + 4;
+	}
 
 	! check for pronouns
 	switch(p_parse_pointer --> 0) {
@@ -427,14 +440,25 @@
 	}
 
 	! not a pronoun, continue
+	_pluralword = ((p_parse_pointer-->0) -> #dict_par1) & 4;
+#IfDef DEBUG_GETNEXTNOUN;
+	print "Calling _CheckNoun(",p_parse_pointer,",", parse_array->1,");^";
+	if(p_parse_pointer-->0 > 2000) print (address) p_parse_pointer-->0, " ", _pluralword, "^";
+#Endif;
 	_noun = _CheckNoun(p_parse_pointer, parse_array->1);
-	_num_words_in_nounphrase = which_object --> 0;
+	_num_words_in_nounphrase = which_object -> 1;
 
 .recheck_noun;
 	if(p_phase == PHASE1 && _noun < 0) {
 		_noun = 1; ! a random noun in phase 1 just to avoid which? question
 	}
 	if(_noun < 0) {
+		if(_pluralword) {
+			! we don't have to ask here, because the input was
+			! "take books" or "take all books"
+			parser_action = ##PluralFound;
+			return 0;
+		}
 		_AskWhichNoun(p_parse_pointer --> 0, -_noun);
 		! read a new line of input
 		! I need to use parse_array since NextWord
@@ -460,7 +484,7 @@
 				! now we need to restore the length of the
 				! noun phrase so that it will be absorbed when we
 				! return from the routine.
-				which_object-->0 = _num_words_in_nounphrase;
+				which_object->1 = _num_words_in_nounphrase;
 				! don't forget to restore the old arrays
 				_CopyInputArray(temp_player_input_array, player_input_array);
 				_CopyParseArray(temp_parse_array, parse_array);
@@ -471,12 +495,15 @@
 		return -1; ! start from the beginning
 	} else if(_noun > 0) {
 #IfDef DEBUG_GETNEXTNOUN;
-		print "Noun match! ", _noun, " ", which_object--> 0, "^";
+		print "Noun match! ", _noun, " ", which_object->1, "^";
 #EndIf;
-		wn = wn + which_object-->0;
+		wn = wn + which_object->1;
 		return _noun;
 	} else {
 		! this is not a recognized word at all
+#IfDef DEBUG_GETNEXTNOUN;
+		print "it wasn't a noun^";
+#EndIf;
 		return 0;
 	}
 ];
@@ -580,28 +607,8 @@
 		! remember if except or inside found, so we can filter later
 		if(_token_data == MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT)
 			parser_check_multiple = _token_data;
-		! first take care of take all/drop all
-		if(p_parse_pointer-->0 == ALL_WORD &&
-			_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
-			! take all etc.
-			! absort the "all" keyword
-			++wn;
-			p_parse_pointer = p_parse_pointer + 4;
-			! Add all reasonable objects in scope
-			! to the multiple_objects array
-			_AddMultipleNouns(_token_data);
-			if(multiple_objects --> 0 == 0) {
-				print "Nothing to do!^";
-				return -wn;
-			} else if(multiple_objects --> 0 == 1) {
-				! single object
-				_noun = multiple_objects --> 1;
-				return _noun;
-			} else {
-				! multiple objects
-				return GPR_MULTIPLE;
-			}
-		} else if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
+
+		if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 			_noun = _GetNextNoun(p_parse_pointer, p_phase);
 			if(_noun == 0) {
 				parser_unknown_noun_found = p_parse_pointer;
@@ -629,6 +636,35 @@
 			for(::) {
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
 				if(_noun == 0) {
+					if(parser_action == ##PluralFound) {
+						! take books or take all books
+						! copy which_object to multiple_objects
+						for(_i = 0; _i < which_object->0; _i++) {
+							multiple_objects --> 0 = 1 + (multiple_objects --> 0);
+							multiple_objects --> (multiple_objects --> 0) = which_object--> (_i + 1);
+						}
+#IfDef DEBUG_PARSETOKEN;
+						print "adding plural ", which_object->0, " ", which_object->1, " ", multiple_objects --> 0, "^";
+#Endif;
+						wn = wn + which_object->1;
+						return GPR_MULTIPLE;
+					}
+					if(p_parse_pointer-->0 == ALL_WORD) {
+						! take all etc.
+						! Add all reasonable objects in scope
+						! to the multiple_objects array
+						_AddMultipleNouns(_token_data);
+						if(multiple_objects --> 0 == 0) {
+							return GPR_FAIL;
+						} else if(multiple_objects --> 0 == 1) {
+							! single object
+							_noun = multiple_objects --> 1;
+							return _noun;
+						} else {
+							! multiple objects
+							return GPR_MULTIPLE;
+						}
+					}
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
 				}
@@ -771,7 +807,7 @@
 	}
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun _score _best_pattern;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun _score _best_score _best_pattern;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -784,7 +820,7 @@
 	! the whole input is matched and 2 returned.
 
 	action = -1;
-	which_object-->0 = 0;
+	which_object->1 = 0;
 	if(_IsSentenceDivider(parse_array + 2))
 		return -1;
 
@@ -825,7 +861,7 @@
 		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now 
 			! check if comma afterwards
-			wn = wn + which_object-->0;
+			wn = wn + which_object->1;
 			_pattern = NextWord();
 			if(_pattern == comma_word) {
 				jump conversation;
@@ -872,6 +908,7 @@
 #EndIf;
 
 	! Phase 1: look for best pattern without side effects
+	_best_score = 0;
 	_best_pattern = 0;
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _verb_grammar->0 : _i++) {
@@ -887,7 +924,8 @@
 #IfDef DEBUG_PARSEANDPERFORM;
 			print "Pattern didn't match.^";
 #EndIf;
-		} else {
+		} else if(_score > _best_score) {
+			_best_score = _score;
 			_best_pattern = _pattern;
 			!continue;
 		}
@@ -935,7 +973,6 @@
 	! we want to return how long the successfully sentence was
 	! but wn can be destroyed by action routines, so store in _i
 	num_words_parsed = -(wn - 1);
-
 	if(action_reverse) {
 		_i = second;
 		second = noun;
