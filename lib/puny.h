@@ -218,7 +218,7 @@ Array TenSpaces -> "          ";
 	@print_table TenSpaces p_col;
 ];
 
-[ _DrawStatusLine _width _visibility_ceiling;
+[ DrawStatusLine _width _visibility_ceiling;
 	! For wide screens (67+ columns):
 	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right.
 	! * Room names up to 39 characters are never truncated.
@@ -244,7 +244,7 @@ Array TenSpaces -> "          ";
 !     else {
 !         FindVisibilityLevels();
 !         if (visibility_ceiling == location)
-	_visibility_ceiling = GetVisibilityCeiling(player);
+	_visibility_ceiling = _GetVisibilityCeiling(player);
 ! print (object) _visibility_ceiling;
 	if (_visibility_ceiling == location) {
 		_PrintObjName(location);

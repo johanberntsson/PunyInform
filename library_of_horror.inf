@@ -18,12 +18,20 @@ Constant SACK_OBJECT infiniteBag;
 #Ifdef USEINFORM;
 Include "Parser";
 Include "VerbLib";
-Include "./lib/flags.h";
+Include "./lib/ext_flags.h";
 #Endif;
+
 #Ifndef USEINFORM;
 Include "globals.h";
 
 ! Setup cheap scenery
+[SceneryReply;
+	Push:
+		"Now how would you do that?";
+	default:
+		rfalse;
+];
+
 Include "ext_cheap_scenery.h";
 
 Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";

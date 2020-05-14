@@ -19,7 +19,22 @@
 ! If you want to use the same description for a scenery object in several locations,
 ! declare a constant to hold that string, and refer to the constant in each location.
 !
+! Before including this extension, you can also define a string or routine called 
+! SceneryReply. If you do, it will be used whenever the player does something to a 
+! scenery object other than examining it. If it's a string, it's printed. If it's a
+! routine it's called. If the routine prints something, it should return true, 
+! otherwise false. 
+!
 ! Example usage:
+
+! [SceneryReply;
+!   Push:
+!     "Now how would you do that?";
+!   default:
+!     rfalse;
+! ];
+!
+! Include "ext_cheap_scenery.h";
 !
 ! Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
 ! [SCN_SUN; 

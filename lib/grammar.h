@@ -244,8 +244,7 @@
         PrintMsg(MSG_GO_CANT_GO); 
 		rtrue;
 	}
-	location = _new_location;
-	PlayerTo(location);
+	PlayerTo(_new_location);
 	<Look>; ! Equivalent to PerformAction(##Look);
 ];
 
