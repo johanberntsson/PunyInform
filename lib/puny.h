@@ -468,19 +468,21 @@ Include "parser.h";
     return RunRoutines(p_actor,life);
 ];
 
+[ _SetDirectionIfIsFakeDir p_obj _idx;
+	if(p_obj >= FAKE_N_OBJ && p_obj <= FAKE_OUT_OBJ) {
+		_idx = p_obj - FAKE_N_OBJ;
+		selected_direction_index = _idx + 1;
+		selected_direction = _idx + n_to;
+		noun = Directions;
+	}
+];
+
 [ PerformAction p_action p_noun p_second _sa _sn _ss _sdi _sd;
 	_sa = action; _sn = noun; _ss = second; _sdi = selected_direction_index; _sd = selected_direction;
 	action = p_action; noun = p_noun; second = p_second;
 	selected_direction_index = 0; selected_direction = 0;
-	if(noun >= FAKE_N_OBJ && noun <= FAKE_OUT_OBJ) {
-		selected_direction_index = noun - FAKE_N_OBJ + 1;
-		selected_direction = (noun - FAKE_N_OBJ) + n_to;
-		noun = Directions;
-	} else if(second >= FAKE_N_OBJ && second <= FAKE_OUT_OBJ) {
-		selected_direction_index = noun - FAKE_N_OBJ + 1;
-		selected_direction = (noun - FAKE_N_OBJ) + n_to;
-		second = Directions;
-	}
+	_SetDirectionIfIsFakeDir(noun);
+	_SetDirectionIfIsFakeDir(second);
 	PerformPreparedAction();
 	action = _sa; noun = _sn; second = _ss; selected_direction_index = _sdi; selected_direction = _sd;
 ];
