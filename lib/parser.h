@@ -423,7 +423,7 @@
 	parser_action = 0;
 
 	! skip 'the', 'all' etc
-	while(p_parse_pointer --> 0 == 'a' or 'the' or 'an' or ALL_WORD) {
+	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD) {
 		! TODO: == 'a' doesn't work (but 'the' etc are fine). Why?
 #IfDef DEBUG_GETNEXTNOUN;
 		print "skipping ",(address) p_parse_pointer --> 0,"^";
