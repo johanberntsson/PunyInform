@@ -552,7 +552,13 @@
 	! then parse objects or prepositions
 	if(_token_type == TT_PREPOSITION) { 
 #IfDef DEBUG_PARSETOKEN;
-		print "Preposition: _token ", _token, " _token_type ", _token_type, ": data '", (address) _token_data, "' ", _token_data, "^";
+		print "Preposition: _token ", _token, " _token_type ", _token_type, ": data ", _token_data;
+		if(_token_data > 1000) {
+			print " '", (address) _token_data, "'";
+		} else {
+			print " (this is not a preposition!)";
+		}
+		new_line;
 #EndIf;
 		if(p_parse_pointer --> 0 == _token_data) {
 #IfDef DEBUG_PARSETOKEN;
@@ -564,9 +570,7 @@
 #IfDef DEBUG_PARSETOKEN;
 		print "Failed prep: ", p_parse_pointer, ": ", (address) p_parse_pointer --> 0, " doesn't match ", (address) _token_data, "^";
 #EndIf;
-		!TODO JB: this should be a level up instead
-		if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) return GPR_PREPOSITION; ! First in a list or in the middle of a list of alternative prepositions, so keep parsing!
-		return GPR_FAIL; ! Fail because this is the only or the last alternative preposition and the word in player input doesn't match it
+		return GPR_FAIL;
 	} else if(_token_type == TT_OBJECT) {
 		! here _token_data will be one of 
 		! NOUN_OBJECT, HELD_OBJECT, MULTI_OBJECT, MULTIHELD_OBJECT,
@@ -669,7 +673,7 @@
 			return GPR_NUMBER;
 		} else if(_token_data == SPECIAL_OBJECT) {
 			parsed_number = TryNumber(wn);
-			special_word = NextWord();
+			special_word = NextWord(); ! will make wn++
 			if(parsed_number == -1000) parsed_number = special_word;
 			return GPR_NUMBER;
 		} else if(_token_data == NUMBER_OBJECT) {
@@ -729,7 +733,25 @@
 
 		switch(_noun) {
 		GPR_FAIL:
+			if(_pattern_pointer->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) {
+				! First or in the middle of a list of alternative prepositions
+#IfDef DEBUG_PARSEPATTERN;
+				print "Preposition failed, but more options available so reparsing^";
+#Endif;
+				continue; ! keep parsing
+			}
 			rfalse; ! didn't match
+		GPR_PREPOSITION:
+			! advance until the end of the list of prepositions
+#IfDef DEBUG_PARSEPATTERN;
+			print "-- preposition mached ", _pattern_pointer, " ", _pattern_pointer->0, "^";
+#Endif;
+			while(_pattern_pointer->0 ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
+#IfDef DEBUG_PARSEPATTERN;
+			print "-- increasing _pattern_pointer^";
+#Endif;
+				_pattern_pointer = _pattern_pointer + 3;
+			}
 		GPR_MULTIPLE:
 			! multiple_objects contains the objects
 			_UpdateNounSecond(0, 0);
@@ -740,8 +762,6 @@
 				rfalse;
 			}
 			_UpdateNounSecond(parsed_number, 1);
-		GPR_PREPOSITION:
-			! do nothing
 		GPR_REPARSE:
 			rfalse;
 		default:

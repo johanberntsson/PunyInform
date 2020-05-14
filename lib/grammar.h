@@ -504,7 +504,7 @@ Verb meta 'restart'
 Verb meta 'random'
 	* -> Predictable
 	* special -> Predictable
-	* 'to' number -> Predictable;
+	* 'to'/'seed' number -> Predictable;
 #EndIf;
 
 Verb 'wake' 'awake' 'awaken'
