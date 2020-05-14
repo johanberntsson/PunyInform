@@ -224,7 +224,7 @@
 
 [ GoSub _prop;
 	! when called Directions have been set properly
-	_prop = Directions.selected_dir_prop;
+	_prop = selected_direction;
 	if(_prop == 0) return RuntimeError(ERR_INVALID_DIR_PROP);
 	GoDir(_prop);
 ];

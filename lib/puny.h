@@ -50,40 +50,38 @@ Include "messages.h";
 
 Object Directions
 	with
-		selected_dir 0,
-		selected_dir_prop 0,
 #IfV5;
 		parse_name [_len _i _w _arr;
 #IfNot;
 		parse_name [_len _i _w;
 #EndIf;
 			_w = (parse_array+4*wn-2)-->0;
-			_len = abbr_directions_array-->0;
+			_len = abbr_direction_array-->0;
 #IfV5;
-			_arr = abbr_directions_array + 2;
+			_arr = abbr_direction_array + 2;
 			@scan_table _w _arr _len -> _i ?success;
 			! not found in abbr, try full
-			_arr = full_directions_array + 2;
+			_arr = full_direction_array + 2;
 			@scan_table _w _arr _len -> _i ?success;
 			! no match
-			self.selected_dir = 0;
-			self.selected_dir_prop = 0;
+			selected_direction_index = 0;
+			selected_direction = 0;
 			return 0;
 .success;
-			self.selected_dir = (_i - _arr)/2;
-			self.selected_dir_prop = direction_properties_array --> (self.selected_dir + 1);
+			selected_direction_index = (_i - _arr)/2;
+			selected_direction = direction_properties_array --> (selected_direction_index + 1);
 			return 1;
 #IfNot;
 			for(_i = 1 : _i <= _len : _i++) {
-				if(_w == abbr_directions_array --> _i or full_directions_array --> _i) {
-					self.selected_dir = _i;
-					self.selected_dir_prop = direction_properties_array --> _i;
+				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
+					selected_direction_index = _i;
+					selected_direction = direction_properties_array --> _i;
 					return 1;
 				}
 			}
 			! failure
-			self.selected_dir = 0;
-			self.selected_dir_prop = 0;
+			selected_direction_index = 0;
+			selected_direction = 0;
 			return 0;
 #EndIf;
 		]
@@ -470,11 +468,21 @@ Include "parser.h";
     return RunRoutines(p_actor,life);
 ];
 
-[ PerformAction p_action p_noun p_second _sa _sn _ss;
-	_sa = action; _sn = noun; _ss = second;
+[ PerformAction p_action p_noun p_second _sa _sn _ss _sdi _sd;
+	_sa = action; _sn = noun; _ss = second; _sdi = selected_direction_index; _sd = selected_direction;
 	action = p_action; noun = p_noun; second = p_second;
+	selected_direction_index = 0; selected_direction = 0;
+	if(noun >= FAKE_N_OBJ && noun <= FAKE_OUT_OBJ) {
+		selected_direction_index = noun - FAKE_N_OBJ + 1;
+		selected_direction = (noun - FAKE_N_OBJ) + n_to;
+		noun = Directions;
+	} else if(second >= FAKE_N_OBJ && second <= FAKE_OUT_OBJ) {
+		selected_direction_index = noun - FAKE_N_OBJ + 1;
+		selected_direction = (noun - FAKE_N_OBJ) + n_to;
+		second = Directions;
+	}
 	PerformPreparedAction();
-	action = _sa; noun = _sn; second = _ss;
+	action = _sa; noun = _sn; second = _ss; selected_direction_index = _sdi; selected_direction = _sd;
 ];
 
 [ R_Process p_action p_noun p_second _s1 _s2;

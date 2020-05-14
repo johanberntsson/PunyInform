@@ -66,7 +66,7 @@ Object  bar "Foyer bar"
 #ifdef USEINFORM;
 				_test = self hasnt light && noun ~= n_obj;
 #IfNot;
-                _test = self hasnt light && (noun ~= Directions || Directions.selected_dir_prop ~= n_to);
+                _test = self hasnt light && selected_direction ~= n_to;
 #EndIf;
                 if (_test) {
                     message.number = message.number + 2;

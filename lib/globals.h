@@ -88,14 +88,32 @@ Property out_to;
 
 Property cant_go;
 
+Constant FAKE_N_OBJ = 10001;
+Constant FAKE_S_OBJ = 10002;
+Constant FAKE_E_OBJ = 10003;
+Constant FAKE_W_OBJ = 10004;
 #IfDef FULL_DIRECTIONS;
-Array abbr_directions_array table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' ',,' ',,';
-Array full_directions_array table 'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
+Constant FAKE_NE_OBJ = 10005;
+Constant FAKE_NW_OBJ = 10006;
+Constant FAKE_SE_OBJ = 10007;
+Constant FAKE_SW_OBJ = 10008;
+Constant FAKE_U_OBJ = 10009;
+Constant FAKE_D_OBJ = 10010;
+Constant FAKE_IN_OBJ = 10011;
+Constant FAKE_OUT_OBJ = 10012;
+Array abbr_direction_array table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' ',,' ',,';
+Array full_direction_array table 'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
 Array direction_properties_array table n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
+Array direction_name_array table "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
 #IfNot;
-Array abbr_directions_array table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' ',,' ',,';
-Array full_directions_array table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
+Constant FAKE_U_OBJ = 10005;
+Constant FAKE_D_OBJ = 10006;
+Constant FAKE_IN_OBJ = 10007;
+Constant FAKE_OUT_OBJ = 10008;
+Array abbr_direction_array table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' ',,' ',,';
+Array full_direction_array table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
 Array direction_properties_array table n_to s_to e_to w_to u_to d_to in_to out_to;
+Array direction_name_array table "north" "south" "east" "west" "up" "down" "in" "out";
 #EndIf;
 
 #IfDef ALLOW_WRITTEN_NUMBERS;
@@ -188,6 +206,8 @@ Global parsed_number;    ! For user-supplied parsing routines
 Global noun_filter;      ! For noun filtering by user routines
 Global noun;
 Global second;
+Global selected_direction;
+Global selected_direction_index;
 Global inp1;             ! the same as noun, except when noun is a number
 Global inp2;             ! the same as second, except when second is a number
 Global num_noun_groups;  ! how many noun groups the current sentence contains
