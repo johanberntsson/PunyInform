@@ -639,7 +639,7 @@
 					if(parser_action == ##PluralFound) {
 						! take books or take all books
 						! copy which_object to multiple_objects
-						for(_i = 0; _i < which_object->0; _i++) {
+						for(_i = 0: _i < which_object->0: _i++) {
 							multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 							multiple_objects --> (multiple_objects --> 0) = which_object--> (_i + 1);
 						}

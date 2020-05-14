@@ -1,12 +1,14 @@
-! FLAGS.H by Fredrik Ramsberg, adapted from FLAGS.H by Adam Cadre.
+! ext_flags.h by Fredrik Ramsberg, adapted from flags.h by Adam Cadre.
 
 ! This is a simple system to provide on/off flags that only take up one bit of
 ! memory; thus, there's no need to waste memory (and global variables) by
 ! declaring a variable such as "doneflag" or some such, allocating an entire
-! eight bits to a variable that will never be anything other than 0 or 1.
+! sixteen bits to a variable that will never be anything other than 0 or 1.
 
-! Here's how to use it in your programs. First of all, set the constant
-! FLAG_COUNT to the number of flags you need before including puny.h!
+! Here's how to use it in your programs. After inclusing globals.h, 
+! set the constant FLAG_COUNT to the number of flags you need, then include
+! ext_flags.h.
+!
 ! When you start using a new flag, create a constant with a descriptive name.
 ! You may also want to add a comment, or keep a list on the side regarding
 ! the meaning of each flag.
@@ -15,10 +17,10 @@
 ! Constant F_TICKET_OK 1; ! Has Hildegard booked her plane tickets with the correct credit card?
 ! Constant F_SAVED_CAT 2;   ! Has the player saved the cat in the tree?
 
-! You get the idea. Note that the first flag is flag #0, not flag #1.
+! You get the idea. Note that the first flag is flag #0.
 
-! Setting a flag on or off means calling the routing SetFlag(flag#) or
-! ClearFlag(flag#) to indicate that the player has saved the cat,
+! Setting a flag on or off means calling the routine SetFlag(flag#) or
+! ClearFlag(flag#). To indicate that the player has saved the cat,
 ! call "SetFlag(F_SAVED_CAT);", and to turn off that flag, call
 ! "ClearFlag(F_SAVED_CAT);"  (Minus the quote marks, of course.)
 

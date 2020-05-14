@@ -12,11 +12,6 @@ Constant DEBUG_VERBS;
 Constant USEINFORM;
 #Endif;
 
-Constant FLAG_COUNT 8;
-Constant F_SQUIRREL_ESCAPED 0;
-Constant F_PARROT_FED 1;
-Constant F_BOUGHT_TICKETS 2;
-
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
@@ -28,9 +23,28 @@ Include "./lib/flags.h";
 #Ifndef USEINFORM;
 Include "globals.h";
 
+! Setup cheap scenery
+Include "ext_cheap_scenery.h";
+
+Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
+[SCN_SUN; 
+  deadflag = 1;
+  "As you stare right into the sun, you feel a burning sensation in your eyes. 
+    After a while, all goes black. With no eyesight, you have little hope of
+    completing your investigations."; 
+];
+
+
+! Setup flags
+Constant FLAG_COUNT 8;
+Constant F_SQUIRREL_ESCAPED 0;
+Constant F_PARROT_FED 1;
+Constant F_BOUGHT_TICKETS 2;
+Include "ext_flags.h";
+
+! Setup custom library messages
 Constant MSG_OPEN_YOU_CANT 1000;
 Constant MSG_AREYOUSUREQUIT 1001;
-
 [LibraryMessages p_msg;
 	switch(p_msg) {
 	MSG_OPEN_YOU_CANT:
@@ -41,6 +55,7 @@ Constant MSG_AREYOUSUREQUIT 1001;
 	}
 	rfalse;
 ];
+
 Include "puny.h";
 #Endif;
 
@@ -82,13 +97,24 @@ Class Book
 Object CarPark "Car Park"
 	with
 		short_name [; print "In front of the library!"; rtrue; ],
-		description "You are in a car park in front of the library. You can enter to the north.",
+		description "You are in a car park in front of the library. You can enter to the north. There is a river off to the east.",
 		n_to Library,
+		e_to RiverBank,
 ! 		exits [;
 ! 			N_TO: return Library;
 ! 		],
 		cant_go "Without a car the only viable exit is to the north.",
 	has light;
+
+Object RiverBank "River Bank"
+  with
+    description "The river is quite wide here. The sun reflects in the blue water, the birds are 
+      flying high up above.",
+    cheap_scenery
+      'blue' 'water' SCN_WATER
+      'bird' 'birds' "They seem so careless."
+      1 'sun' SCN_SUN,
+   has light;
 
 Object Toilet "The toilet"
 	with

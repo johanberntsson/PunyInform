@@ -103,6 +103,9 @@ Constant MSG_KISS_SUCCESS "Keep your mind on the game.";
 #Ifndef MSG_ATTACK_SUCCESS;
 Constant MSG_ATTACK_SUCCESS "Violence isn't the answer to this one.";
 #Endif;
+#Ifndef MSG_SEARCH_NOTHING_SPECIAL;
+Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
+#EndIf;
 
 
 !

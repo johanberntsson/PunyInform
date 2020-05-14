@@ -89,6 +89,10 @@
 	PrintMsg(MSG_DRINK_NOTHING_SUITABLE);
 ];
 
+[ SearchSub;
+	PrintMsg(MSG_SEARCH_NOTHING_SPECIAL);
+];
+
 [ DropSub;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
 	move noun to location;
@@ -468,6 +472,9 @@ Verb 'put'
     * multiexcept 'in'/'inside'/'into' noun     -> Insert
     * multiexcept 'on'/'onto' noun              -> PutOn
 	* 'on' held									-> Wear;
+
+Verb 'search'
+	* noun -> Search;
 
 Verb 'insert'
     * multiexcept 'in'/'into' noun              -> Insert;

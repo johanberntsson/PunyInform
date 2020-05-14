@@ -91,10 +91,6 @@ has scenery;
 
 ! ######################### Include utility files
 
-#IfDef FLAG_COUNT;
-Include "flags.h";
-#EndIf;
-
 Include "scope.h";
 Include "grammar.h";
 
@@ -404,14 +400,18 @@ Array TenSpaces -> "          ";
 	}
 ];
 
-[ PlayerTo p_loc _p;
+[ PlayerTo p_loc _p _old_loc;
+	_old_loc = location;
 	move Player to p_loc;
 	location = p_loc;
 	while(true) {
 		_p = parent(location);
-		if(_p == 0) rtrue;
+		if(_p == 0) break;
 		location = _p;
 	}
+	if(_old_loc ~= location)
+		NewRoom();
+	rtrue;
 ];
 
 Include "parser.h";
@@ -827,7 +827,7 @@ Object DefaultPlayer "you"
 !#Stub Amusing         0;
 #Stub DeathMessage    0;
 !#Stub DarkToDark      0;
-!#Stub NewRoom         0;
+#Stub NewRoom         0;
 !#Stub LookRoutine     0;
 !#Stub AfterLife       0;
 !#Stub GamePreRoutine  0;
