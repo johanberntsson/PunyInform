@@ -326,6 +326,7 @@ Object -> John "John"
 
 Object -> infiniteBag "infinite bag"
 	with
+		short_name "sack",
 		name 'infinite' 'bag',
 		description "An infinitely deep bag.",
 	has container open;
