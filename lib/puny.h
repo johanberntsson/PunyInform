@@ -51,7 +51,13 @@ Include "messages.h";
 
 Object Directions
 	with
-		short_name [; print "unknown direction"; rtrue; ], !TODO: doesn't work?
+		short_name [; 
+			if(selected_direction_index)
+				print (string) direction_name_array-->selected_direction_index;
+			else
+				print "unknown direction"; 
+			rtrue; 
+		], !TODO: doesn't work?
 #IfV5;
 		parse_name [_len _i _w _arr;
 #IfNot;
@@ -87,7 +93,7 @@ Object Directions
 			return 0;
 #EndIf;
 		]
-has scenery;
+has scenery proper;
 
 ! ######################### Include utility files
 
@@ -579,6 +585,28 @@ Include "parser.h";
 
 #IfV3;
 ! These routines are implemented by Veneer, but the default implementations give compile errors for z3
+
+[ Print__PName prop p size cla i;
+	 if (prop & $c000)
+	 {   cla = #classes_table-->(prop & $ff);
+		 print (name) cla, "::";
+		 if ((prop & $8000) == 0) prop = (prop & $3f00)/$100;
+		 else
+		 {   prop = (prop & $7f00)/$100;
+			 i = cla.3;
+			 while ((i-->0 ~= 0) && (prop>0))
+			 {   i = i + i->2 + 3;
+				 prop--;
+			 }
+			 prop = (i-->0) & $7fff;
+		 }
+	 }
+	 p = #identifiers_table;
+	 size = p-->0;
+	 if (prop<=0 || prop>=size || p-->prop==0)
+		 print "<number ", prop, ">";
+	 else print (string) p-->prop;
+ ];
 
 [ FindIndivPropValue p_obj p_property _x _prop_id;
 	_x = p_obj.3;
