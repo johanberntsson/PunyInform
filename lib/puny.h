@@ -771,9 +771,9 @@ Object DefaultPlayer "you"
 		if(Headline ~= 0) print (string) Headline;
 		print "Release ", (0-->1) & $03ff, " / Serial number ";
  		for (_i = 18:_i < 24: _i++) print (char) 0->_i;
-		print ": using ";
+		print " / ";
 	}
-	print "PunyInform 0.0^^";
+	print "PunyInform 0.1^^";
 
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
