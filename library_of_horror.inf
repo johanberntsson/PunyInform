@@ -15,6 +15,15 @@ Constant USEINFORM;
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
+! Setup cheap scenery
+[SceneryReply;
+	Push:
+		"Now how would you do that?";
+	default:
+		rfalse;
+];
+
+
 ! Setup flags
 Constant FLAG_COUNT 8;
 Constant F_SQUIRREL_ESCAPED 0;
@@ -24,7 +33,8 @@ Constant F_BOUGHT_TICKETS 2;
 #Ifdef USEINFORM;
 Include "Parser";
 Include "VerbLib";
-Include "./lib/ext_flags.h";
+Include "../lib/ext_cheap_scenery.h";
+Include "../lib/ext_flags.h";
 
 [OnOff obj; ! TODO: is there something like this in I6? change name if needed
     if(obj has on) print "on";
@@ -36,13 +46,6 @@ Include "./lib/ext_flags.h";
 #Ifndef USEINFORM;
 Include "globals.h";
 
-! Setup cheap scenery
-[SceneryReply;
-	Push:
-		"Now how would you do that?";
-	default:
-		rfalse;
-];
 
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
