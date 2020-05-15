@@ -322,6 +322,17 @@ Array TenSpaces -> "          ";
     rfalse;
 ];
 
+[ PrintShortName o;
+    if (o == 0) { print "nothing"; rtrue; }
+    switch (metaclass(o)) {
+      Routine:  print "<routine ", o, ">"; rtrue;
+      String:   print "<string ~", (string) o, "~>"; rtrue;
+      nothing:  print "<illegal object number ", o, ">"; rtrue;
+    }
+    if (o.&short_name ~= 0 && PrintOrRun(o, short_name, 1) ~= 0) rtrue;
+    print (object) o;
+];
+
 [ _PrintObjName p_obj p_form _done;
 	if(p_obj hasnt proper) {
 		if(p_form == FORM_CDEF) {
