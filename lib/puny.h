@@ -50,6 +50,7 @@ Include "messages.h";
 
 Object Directions
 	with
+		short_name [; print "unknown direction"; rtrue; ], !TODO: doesn't work?
 #IfV5;
 		parse_name [_len _i _w _arr;
 #IfNot;

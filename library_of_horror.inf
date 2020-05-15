@@ -15,10 +15,22 @@ Constant USEINFORM;
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
+! Setup flags
+Constant FLAG_COUNT 8;
+Constant F_SQUIRREL_ESCAPED 0;
+Constant F_PARROT_FED 1;
+Constant F_BOUGHT_TICKETS 2;
+
 #Ifdef USEINFORM;
 Include "Parser";
 Include "VerbLib";
 Include "./lib/ext_flags.h";
+
+[OnOff obj; ! TODO: is there something like this in I6? change name if needed
+    if(obj has on) print "on";
+    else print "off";
+    return;
+];
 #Endif;
 
 #Ifndef USEINFORM;
@@ -33,21 +45,6 @@ Include "globals.h";
 ];
 
 Include "ext_cheap_scenery.h";
-
-Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
-[SCN_SUN; 
-  deadflag = 1;
-  "As you stare right into the sun, you feel a burning sensation in your eyes. 
-    After a while, all goes black. With no eyesight, you have little hope of
-    completing your investigations."; 
-];
-
-
-! Setup flags
-Constant FLAG_COUNT 8;
-Constant F_SQUIRREL_ESCAPED 0;
-Constant F_PARROT_FED 1;
-Constant F_BOUGHT_TICKETS 2;
 Include "ext_flags.h";
 
 ! Setup custom library messages
@@ -67,22 +64,13 @@ Constant MSG_AREYOUSUREQUIT 1001;
 Include "puny.h";
 #Endif;
 
-#Ifdef USEINFORM;
-[ PredictableSub _i;
-    ! sets the random seed, thus making randomness predictable
-    ! also a test of special and number, thus the fancy grammar
-    print special_word, " ", special_number," ",parsed_number,"^";
-    if(special_word ~=0) "You can't send randomness to an object!";
-    _i = parsed_number;
-    if(_i == 0) _i = 100; ! default
-    random(-_i);
-    "The random seed is set to ", _i, ".";
+Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
+[SCN_SUN; 
+  deadflag = 1;
+  "As you stare right into the sun, you feel a burning sensation in your eyes. 
+    After a while, all goes black. With no eyesight, you have little hope of
+    completing your investigations."; 
 ];
-Verb meta 'random'
-    * -> Predictable
-    * special -> Predictable
-    * 'to' number -> Predictable;
-#Endif;
 
 Class Book
 	with
@@ -338,6 +326,7 @@ Object -> John "John"
 
 Object -> infiniteBag "infinite bag"
 	with
+		short_name "hhhh",
 		name 'infinite' 'bag',
 		description "An infinitely deep bag.",
 	has container open;
