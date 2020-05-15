@@ -306,7 +306,6 @@
 #IfDef DEBUG_CHECKNOUN;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
-		!   if(_obj == nothing) continue;
 		if(noun_filter ~= 0 && _UserFilter(_obj) == 0) {
 			!print "noun_filter rejected ", (the) _obj,"^";
 			continue;
@@ -339,7 +338,6 @@
 			_name_array_len = _obj.#name / 2;
 
 			while(_n <= p_parse_length && _IsSentenceDivider(_p) == false) {
-				if(_current_word == nothing) return 0; ! not in dictionary
 #IfV5;
 				@scan_table _current_word _name_array _name_array_len -> _result ?success;
 #IfNot;
