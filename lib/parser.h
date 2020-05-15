@@ -812,11 +812,15 @@
 				continue; ! keep parsing
 			}
 			if(p_phase == PHASE2 && parser_unknown_noun_found > 0) {
-				print "Sorry, I don't understand what ~";
-				for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
-					print (char) player_input_array->(_i + parser_unknown_noun_found->3);
+				if(parser_unknown_noun_found --> 0 > 0) {
+					print "You can't see any such thing.^";
+				} else {
+					print "Sorry, I don't understand what ~";
+					for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
+						print (char) player_input_array->(_i + parser_unknown_noun_found->3);
+					}
+					print "~ means.^";
 				}
-				print "~ means.^";
 			}
 			return wn - verb_wordnum; ! pattern didn't match
 		GPR_PREPOSITION:
