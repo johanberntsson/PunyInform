@@ -536,6 +536,14 @@
 	return _ParseToken(-p_token_type, -p_token_data, PHASE1);
 ];
 
+[ _GrabIfNotHeld p_noun;
+	if(p_noun in player) return;
+	print "(first taking ", (the) p_noun, ")^^";
+	keep_silent = true;
+	<take p_noun>;
+	keep_silent = false;
+];
+
 [ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
@@ -625,10 +633,7 @@
 			}
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				if(p_phase == PHASE2) {
-					print "(first taking ", (the) _noun, ")^^";
-					keep_silent = true;
-					<take _noun>;
-					keep_silent = false;
+					_GrabIfNotHeld(_noun);
 					if(_noun notin player) return GPR_FAIL;
 				}
 			}
@@ -720,11 +725,9 @@
 	}
 ];
 
-[ _PrintPartialMatch p_msg p_start p_stop _start _stop _i;
+[ _PrintPartialMatch p_start p_stop _start _stop _i;
 	_i = (parse_array-2+(4*p_start));
 	_start = _i->3; ! index to input line for first word
-	
-	print (string) p_msg;
 	if(p_stop > parse_array -> 1) {
 		_stop = player_input_array->0; ! until the end of the input
 	} else {
@@ -735,7 +738,6 @@
 		if(player_input_array -> _i == 0) break;
 		print (char) player_input_array -> _i;
 	}
-	".";
 ];
 
 [ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i;
@@ -775,14 +777,22 @@
 			if(wn == 1 + parse_array->1) {
 				return 100; ! pattern matched
 			}
-			if(p_phase == PHASE2) _PrintPartialMatch("I only understood you as far as ", verb_wordnum, wn - 1);
+			if(p_phase == PHASE2) {
+				print "I only understood you as far as ~";
+				_PrintPartialMatch(verb_wordnum, wn - 1);
+				print "~ but then you lost me.^";
+			}
 			return wn - verb_wordnum; ! Fail because the grammar line ends here but not the input
 		}
 		if(wn >= 1 + parse_array->1) {
 #IfDef DEBUG_PARSEPATTERN;
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
-			if(p_phase == PHASE2) _PrintPartialMatch( "You must tell me what to ", verb_wordnum, wn);
+			if(p_phase == PHASE2) {
+				print "You must tell me what to ";
+				_PrintPartialMatch(verb_wordnum, wn - 1);
+				print ".^";
+			};
 			return wn - verb_wordnum;!Fail because input ends here but not the grammar line
 		}
 #IfDef DEBUG_PARSEPATTERN;
@@ -1045,8 +1055,7 @@
 			MULTIINSIDE_OBJECT:
 				if(noun notin second) continue; ! eg get all from X
 			}
-			!if(multiple_objects --> 0 > 1) print (name) noun, ": ";
-			print (name) noun, ": ";
+			if(multiple_objects --> 0 > 1) print (name) noun, ": ";
 			PerformPreparedAction();
 		}
 	}

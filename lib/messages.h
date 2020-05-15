@@ -304,6 +304,9 @@ Constant MSG_YOU_HAVE_WON 63;
 #Ifndef MSG_YOU_HAVE_DIED;
 Constant MSG_YOU_HAVE_DIED 64;
 #EndIf;
+#Ifndef MSG_INSERT_NOT_HELD;
+Constant MSG_INSERT_NOT_HELD 65;
+#Endif;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -379,15 +382,17 @@ Constant LibraryMessages 0;
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE or QUIT? ";
 		rtrue;
-	MSG_AREYOUSUREQUIT:
+	MSG_AREYOUSUREQUIT: ! print and rtrue to avoid newline
 		print "Are you sure you want to quit? ";
 		rtrue;
- 	MSG_YOU_HAVE_WON:
+ 	MSG_YOU_HAVE_WON: ! print and rtrue to avoid newline
  		print "You have won.";
  		rtrue;
-	MSG_YOU_HAVE_DIED:
+	MSG_YOU_HAVE_DIED: ! print and rtrue to avoid newline
 		print "You have died.";
 		rtrue;
+	MSG_INSERT_NOT_HELD:
+		"You are not holding ", (the) noun, ".";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);

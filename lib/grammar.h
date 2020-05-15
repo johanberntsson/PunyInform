@@ -307,6 +307,9 @@
         if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN, second); rtrue; }
     }
 
+    _GrabIfNotHeld(noun);
+    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
+
     if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
     move noun to second;
