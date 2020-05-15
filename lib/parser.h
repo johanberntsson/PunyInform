@@ -410,13 +410,16 @@
 
 [ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword;
 	! try getting a noun from the <p_parse_pointer> entry in parse_array
-	! return <noun number> if found, 0 if no noun found, or -1
-	! if we should give up parsing completely (because the
-	! player has entered a new command line).
+	! return:
+	!   <noun number> if found, 
+	!   0  if no noun found, or
+	!   -1 if we should give up parsing completely (because
+	!      the player has entered a new command line).
 	! 
 	! Side effects:
 	! - if found, then wn will be updated
 	! - if plural matched, then parser_action set to ##PluralFound
+	!
 	! NOTE: you need to update parse_pointer after calling _GetNextNoun since
 	! wn can change
 
@@ -488,6 +491,7 @@
 				! don't forget to restore the old arrays
 				_CopyInputArray(temp_player_input_array, player_input_array);
 				_CopyParseArray(temp_parse_array, parse_array);
+				new_line;
 				jump recheck_noun;
 			}
 		}
@@ -635,6 +639,7 @@
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
+				if(_noun == -1) return GPR_REPARSE;
 				if(_noun == 0) {
 					if(parser_action == ##PluralFound) {
 						! take books or take all books
@@ -668,7 +673,6 @@
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
 				}
-				if(_noun == -1) return GPR_REPARSE;
 				p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
 				multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 				multiple_objects --> (multiple_objects --> 0) = _noun;
@@ -720,7 +724,11 @@
 ];
 
 [ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun;
-	! return 0 if no match, >0 if match
+	! Check if the current pattern will parse, with side effects if PHASE2
+	! _ParsePattern will return:
+	!   0 if no match,
+	!   >0 if match
+	!   -1 if need to reparse
 	wn = verb_wordnum + 1;
 	_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
 	_pattern_pointer = p_pattern - 1;
@@ -747,10 +755,10 @@
 		if(((_pattern_pointer -> 0) & $0f) == TT_END) {
 			if(_IsSentenceDivider(_parse_pointer)) {
 				wn++;
-				return 1; ! jump parse_success;
+				return 1; ! pattern matched
 			}
 			if(wn == 1 + parse_array->1) {
-				return 1; ! jump parse_success;
+				return 1; ! pattern matched
 			}
 			rfalse; ! Fail because the grammar line ends here but not the input
 		}
@@ -776,7 +784,7 @@
 #Endif;
 				continue; ! keep parsing
 			}
-			rfalse; ! didn't match
+			return 0; ! pattern didn't match
 		GPR_PREPOSITION:
 			! advance until the end of the list of prepositions
 #IfDef DEBUG_PARSEPATTERN;
@@ -799,12 +807,14 @@
 			}
 			_UpdateNounSecond(parsed_number, 1);
 		GPR_REPARSE:
-			rfalse;
+			return -1; ! the player_input and parse_array have changed
 		default:
-			! returned an objekt
+			! _noun was a valid noun
 			_UpdateNounSecond(_noun, _noun);
 		}
 	}
+	! we should never reach this line
+	! the while(true) loop is only exited by return statements
 ];
 
 [ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun _score _best_score _best_pattern;
@@ -919,6 +929,7 @@
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: result ", _score, "^";
 #EndIf;
+		! note that _ParsePattern will never return -1 in PHASE1
 		if(_score == 0) {
 			! This pattern has failed.
 #IfDef DEBUG_PARSEANDPERFORM;
@@ -951,12 +962,13 @@
 	! Phase 2: reparse best pattern and ask for additional info if
 	! needed (which book? etc)
 #IfDef DEBUG_PARSEANDPERFORM;
-		print "### PHASE 2: Pattern address ", _best_pattern, "^";
+	print "### PHASE 2: Pattern address ", _best_pattern, "^";
 #EndIf;
 	_score = _ParsePattern(_best_pattern, PHASE2);
 #IfDef DEBUG_PARSEANDPERFORM;
-		print "### PHASE 2: result ", _score, "^";
+	print "### PHASE 2: result ", _score, "^";
 #EndIf;
+	if(_score == -1) rfalse; ! force a complete reparse
 	if(_score) jump parse_success;
 	rtrue; ! ParsePattern wrote some error message
 
