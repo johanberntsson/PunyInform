@@ -36,6 +36,7 @@
 ! Reference documentation
 ! DM: http://www.inform-fiction.org/manual/html/dm4index.html
 ! Tech: https://www.inform-fiction.org/source/tm/TechMan.txt
+! Z-machine: https://www.inform-fiction.org/zmachine/standards/z1point1
 
 ! comment/uncomment to restrict debug messages as needed
 #IfDef DEBUG;

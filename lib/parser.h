@@ -209,7 +209,6 @@
 	}
 ];
 
-
 [ _CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
 	! action number is the first two bytes
 	_action_number = p_pattern-->0;
@@ -721,12 +720,30 @@
 	}
 ];
 
-[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun;
+[ _PrintPartialMatch p_msg p_start p_stop _start _stop _i;
+	_i = (parse_array-2+(4*p_start));
+	_start = _i->3; ! index to input line for first word
+	
+	print (string) p_msg;
+	if(p_stop > parse_array -> 1) {
+		_stop = player_input_array->0; ! until the end of the input
+	} else {
+		_i = (parse_array-2+(4*p_stop));
+		_stop = _i->2 + _i->3; ! until the index of the stop word + its length
+	}
+	for(_i = _start: _i < _stop: _i ++) {
+		if(player_input_array -> _i == 0) break;
+		print (char) player_input_array -> _i;
+	}
+	".";
+];
+
+[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
-	!   0 if no match,
-	!   >0 if match
 	!   -1 if need to reparse
+	!   0..99 how many words were matched before the match failed
+	!   100 if perfect match
 	wn = verb_wordnum + 1;
 	_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
 	_pattern_pointer = p_pattern - 1;
@@ -753,18 +770,20 @@
 		if(((_pattern_pointer -> 0) & $0f) == TT_END) {
 			if(_IsSentenceDivider(_parse_pointer)) {
 				wn++;
-				return 1; ! pattern matched
+				return 100; ! pattern matched
 			}
 			if(wn == 1 + parse_array->1) {
-				return 1; ! pattern matched
+				return 100; ! pattern matched
 			}
-			rfalse; ! Fail because the grammar line ends here but not the input
+			if(p_phase == PHASE2) _PrintPartialMatch("I only understood you as far as ", verb_wordnum, wn - 1);
+			return wn - verb_wordnum; ! Fail because the grammar line ends here but not the input
 		}
 		if(wn >= 1 + parse_array->1) {
 #IfDef DEBUG_PARSEPATTERN;
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
-			rfalse ;!Fail because input ends here but not the grammar line
+			if(p_phase == PHASE2) _PrintPartialMatch( "You must tell me what to ", verb_wordnum, wn);
+			return wn - verb_wordnum;!Fail because input ends here but not the grammar line
 		}
 #IfDef DEBUG_PARSEPATTERN;
 		print "Calling ParseToken: token ", _pattern_pointer->0," type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
@@ -782,7 +801,14 @@
 #Endif;
 				continue; ! keep parsing
 			}
-			return 0; ! pattern didn't match
+			if(p_phase == PHASE2 && parser_unknown_noun_found > 0) {
+				print "Sorry, I don't understand what ~";
+				for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
+					print (char) player_input_array->(_i + parser_unknown_noun_found->3);
+				}
+				print "~ means.^";
+			}
+			return wn - verb_wordnum; ! pattern didn't match
 		GPR_PREPOSITION:
 			! advance until the end of the list of prepositions
 #IfDef DEBUG_PARSEPATTERN;
@@ -801,7 +827,7 @@
 			! parsed_number contains the new number
 			if(p_phase == PHASE2 && parsed_number == -1000)  {
 				print "I didn't understand that number.^";
-				rfalse;
+				return wn - verb_wordnum; ! bad match
 			}
 			_UpdateNounSecond(parsed_number, 1);
 		GPR_REPARSE:
@@ -946,17 +972,6 @@
 		_pattern = _pattern_pointer + 1;
 	}
 
-	if(_best_pattern == 0) {
-		if(parser_unknown_noun_found) {
-			print "Sorry, I don't understand what ~";
-			for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
-				print (char) player_input_array->(_i + parser_unknown_noun_found->3);
-			}
-			"~ means.";
-		}
-		"Sorry, I didn't understand that.";
-	}
-
 	! Phase 2: reparse best pattern and ask for additional info if
 	! needed (which book? etc)
 #IfDef DEBUG_PARSEANDPERFORM;
@@ -967,7 +982,7 @@
 	print "### PHASE 2: result ", _score, "^";
 #EndIf;
 	if(_score == -1) rfalse; ! force a complete reparse
-	if(_score) jump parse_success;
+	if(_score == 100) jump parse_success;
 	rtrue; ! ParsePattern wrote some error message
 
 .treat_bad_line_as_conversation;
@@ -1030,6 +1045,7 @@
 			MULTIINSIDE_OBJECT:
 				if(noun notin second) continue; ! eg get all from X
 			}
+			!if(multiple_objects --> 0 > 1) print (name) noun, ": ";
 			print (name) noun, ": ";
 			PerformPreparedAction();
 		}
