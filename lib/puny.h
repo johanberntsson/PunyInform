@@ -41,11 +41,11 @@
 ! comment/uncomment to restrict debug messages as needed
 #IfDef DEBUG;
 Constant DEBUG_SCOPE;
-!Constant DEBUG_CHECKNOUN;
-!Constant DEBUG_GETNEXTNOUN;
-!Constant DEBUG_PARSETOKEN;
-!Constant DEBUG_PARSEPATTERN;
-!Constant DEBUG_PARSEANDPERFORM;
+Constant DEBUG_CHECKNOUN;
+Constant DEBUG_GETNEXTNOUN;
+Constant DEBUG_PARSETOKEN;
+Constant DEBUG_PARSEPATTERN;
+Constant DEBUG_PARSEANDPERFORM;
 #Endif;
 
 Include "messages.h";

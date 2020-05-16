@@ -141,7 +141,7 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	!print "TestScope ", (object) p_obj, "^";
 
 	! special case for debugging verbs; everything is in scope
-	if(action == ##Scope) rtrue;
+	if(action_debug) rtrue;
 
 	for(_i = 0: _i < scope_objects: _i++) {
 		if(scope-->_i == p_obj) rtrue;

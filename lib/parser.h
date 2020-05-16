@@ -288,7 +288,7 @@
     return indirect(noun_filter);
 ];
 
-[ _CheckNoun p_parse_pointer p_parse_length _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+[ _CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _best_score _result _start _stop;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
@@ -297,13 +297,18 @@
 	!     - stores number of objects in -> 0
 	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
-	!for(_i = 0: _i < scope_objects: _i++) {
-	objectloop(_obj) {
+	if(action_debug) {
+		_start = Directions; _stop = top_object + 1;
+	} else {
+		_start = 0; _stop = scope_objects;
+	}
+
+	for(_i = _start: _i < _stop: _i++) {
 		_n = wn;
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
-		!_obj = scope-->_i;
-		if(TestScope(_obj, player) == false) continue;
+		if(action_debug) _obj = _i; else _obj = scope-->_i;
+		!if(TestScope(_obj, player) == false) continue;
 #IfDef DEBUG_CHECKNOUN;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
@@ -336,13 +341,13 @@
 			}
 		} else if(_obj.#name > 1) {
 			_name_array = _obj.&name;
-			_name_array_len = _obj.#name / 2;
+			_start = _obj.#name / 2; ! was _name_array_len, but out of params
 
 			while(_n <= p_parse_length && _IsSentenceDivider(_p) == false) {
 #IfV5;
-				@scan_table _current_word _name_array _name_array_len -> _result ?success;
+				@scan_table _current_word _name_array _start -> _result ?success;
 #IfNot;
-				for(_j = 0: _j < _name_array_len: _j++) {
+				for(_j = 0: _j < _start: _j++) {
 					if(_name_array-->_j == _current_word) jump success;
 				}
 #EndIf;
@@ -764,6 +769,7 @@
 	parser_unknown_noun_found = 0;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
+	action_debug = (action == ##Scope);
 
 	while(true) {
 		_pattern_pointer = _pattern_pointer + 3;
