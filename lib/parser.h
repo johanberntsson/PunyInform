@@ -297,18 +297,26 @@
 	!     - stores number of objects in -> 0
 	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
+#IfDef DEBUG_VERBS;
 	if(action_debug) {
 		_start = Directions; _stop = top_object + 1;
 	} else {
 		_start = 0; _stop = scope_objects;
 	}
-
 	for(_i = _start: _i < _stop: _i++) {
+#Endif;
+#IfnDef DEBUG_VERBS;
+	for(_i = 0: _i < scope_objects: _i++) {
+#Endif;
 		_n = wn;
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
+#IfDef DEBUG_VERBS;
 		if(action_debug) _obj = _i; else _obj = scope-->_i;
-		!if(TestScope(_obj, player) == false) continue;
+#Endif;
+#IfnDef DEBUG_VERBS;
+		_obj = scope-->_i;
+#Endif;
 #IfDef DEBUG_CHECKNOUN;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
@@ -769,7 +777,9 @@
 	parser_unknown_noun_found = 0;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
+#IfDef DEBUG_VERBS;
 	action_debug = (action == ##Scope);
+#EndIf;
 
 	while(true) {
 		_pattern_pointer = _pattern_pointer + 3;
