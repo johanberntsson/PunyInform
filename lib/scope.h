@@ -58,10 +58,13 @@ Array scope-->MAX_SCOPE;
 	! ScopeWithin. No return value
 ];
 
-[ LoopOverScope p_routine p_actor;
+[ LoopOverScope p_routine p_actor _i;
 	! Calls routine p_routine(obj) for each object obj in scope for the
 	! given actor. If no actor is given, the actor defaults to be the player.
 	! No return value
+
+	! TODO: use p_actor
+	for(_i = 0: _i < scope_objects: _i++) p_routine(scope-->_i);
 ];
 
 [ PlaceInScope p_obj;

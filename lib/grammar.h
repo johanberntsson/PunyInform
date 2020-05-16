@@ -286,6 +286,19 @@
 ];
 
 #IfDef DEBUG_VERBS;
+Global scope_cnt;
+[ _ScopeSubHelper p_obj;
+	print scope_cnt++,": ", (a) p_obj, " (", p_obj, ")";
+	if(ObjectIsUntouchable(p_obj)) print " [untouchable]";
+	new_line;
+];
+
+[ ScopeSub _i _obj;
+	scope_cnt = 1;
+	LoopOverScope(_ScopeSubHelper, noun);
+	if(scope_cnt == 0) "Nothing in scope.^";
+];
+
 [ PredictableSub _i; 
 	! sets the random seed, thus making randomness predictable
 	! also a test of special and number, thus the fancy grammar
@@ -519,9 +532,13 @@ Verb meta 'restart'
 ! sets the random seed, thus making randomness predictable
 ! also a test of special and number, thus the fancy grammar
 Verb meta 'random'
-	* -> Predictable
-	* special -> Predictable
-	* 'to'/'seed' number -> Predictable;
+	*                                           -> Predictable
+	* special                                   -> Predictable
+	* 'seed' number                             -> Predictable;
+
+Verb meta 'scope'
+    *                                           -> Scope
+    * noun                                      -> Scope;
 #EndIf;
 
 Verb 'wake' 'awake' 'awaken'
