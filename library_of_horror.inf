@@ -120,13 +120,38 @@ Object Toilet "The toilet"
 	with
 		short_name [; print "A toilet"; rtrue; ],
 		description[;
-			print "This toilet is in dire need of cleaning. ";
+			print "This toilet is in dire need of cleaning. The toilet door leads west back into the library. ";
 			if(Faucet has on) {
 				"Water is streaming from the faucet into the sink. ";
 			}
 			rtrue;
 		],
-		w_to Library;
+		w_to ToiletDoor;
+
+Object -> ToiletDoor "toilet door"
+	with 
+		parse_name [ _w; 
+			_w = NextWord();
+			if(_w == 'toilet') {
+				_w = NextWord();
+				if(_w == 'door')
+					return 2;
+				return 0;
+			}
+			if(_w == 'door')
+				return 1;
+		],
+		description "Surprisingly clean.",
+		door_to [; 
+			if(location == Toilet) return Library;
+			return Toilet;
+		],
+		door_dir [;
+			if(location == Toilet) return w_to;
+			return e_to;
+		],
+	has door open openable concealed;
+
 
 Object -> Goblin "Goblin"
 	with 

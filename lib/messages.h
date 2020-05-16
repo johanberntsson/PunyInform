@@ -244,6 +244,9 @@ Constant MSG_PUTON_NO_ROOM 42;
 #Ifndef MSG_PUTON_SUCCESS;
 Constant MSG_PUTON_SUCCESS 43;
 #Endif;
+#Ifndef MSG_GO_DOOR_CLOSED;
+Constant MSG_GO_DOOR_CLOSED 44;
+#Endif;
 #Ifndef MSG_SWITCH_ON_NOT_SWITCHABLE;
 Constant MSG_SWITCH_ON_NOT_SWITCHABLE 45;
 #EndIf;
@@ -351,7 +354,7 @@ Constant LibraryMessages 0;
         print_ret (The) second, " doesn't seem interested.";
     MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
         print_ret (The) noun, " has better things to do.";
-    MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN:
+    MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
         "You can't, since ",(the) p_arg1, " is closed.";
     MSG_EXIT_SUCCESS:
 	    "You leave ", (the) noun, ".";

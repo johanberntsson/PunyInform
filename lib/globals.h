@@ -44,6 +44,7 @@ Attribute neuter;
 Attribute general;
 Attribute switchable;
 Attribute on;
+Attribute door;
 
 ! when you order a NPC, but the command isn't understood
 ! See: http://www.inform-fiction.org/manual/html/s18.html
@@ -88,6 +89,8 @@ Property in_to;
 Property out_to;
 
 Property cant_go;
+Property door_to alias n_to;
+Property door_dir alias s_to;
 
 Constant FAKE_N_OBJ = 10001;
 Constant FAKE_S_OBJ = 10002;

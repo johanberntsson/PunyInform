@@ -177,7 +177,17 @@
     PrintMsg(MSG_TELL_SUCCESS);
 ];
 
-[ EnterSub;
+[ EnterSub _door_dir;
+	if(noun has door) {
+		_door_dir = noun.door_dir;
+		if(_door_dir > top_object) {
+			_door_dir = noun.door_dir();
+		}
+		! Convert to fake object
+		_door_dir = _door_dir - n_to + FAKE_N_OBJ;
+		<<Go _door_dir>>; 
+	}
+	if(noun has enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
 	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
 	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
@@ -229,13 +239,32 @@
 	GoDir(_prop);
 ];
 
-[ GoDir p_property _new_location;
+[ GoDir p_property _new_location _door_to;
 	if(player notin location) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
 	if(location provides p_property) {
 		@get_prop location p_property -> _new_location; ! works in z3 and z5
 	}
-	if(_new_location ofclass String) {
+	if(_new_location ofclass String)
 		print_ret (string) _new_location;
+	if(_new_location > top_object) {
+		_new_location = PrintOrRun(location, p_property);
+		if(_new_location == 1)
+			rtrue;
+	}
+	
+	! Check for a door
+	if(_new_location) {
+		if(_new_location has door) {
+			_door_to = _new_location.door_to;
+			! The destination is in fact a door
+			if(_new_location hasnt open) { PrintMsg(MSG_GO_DOOR_CLOSED, _new_location); rtrue; }
+			if(_door_to > top_object) {
+				_new_location = PrintOrRun(_new_location, door_to);
+				if(_new_location == 1)
+					rtrue;
+			} else
+				_new_location = _door_to;
+		}
 	}
 	if(_new_location == 0) {
 		if(location provides cant_go) {
