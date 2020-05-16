@@ -419,10 +419,11 @@
 [ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword;
 	! try getting a noun from the <p_parse_pointer> entry in parse_array
 	! return:
-	!   <noun number> if found, 
-	!   0  if no noun found, or
+	!   <noun number> if found
+	!   0  if no noun found (but we didn't write an error message)
 	!   -1 if we should give up parsing completely (because
 	!      the player has entered a new command line).
+	!   -2 if parsing failed, and error message written
 	! 
 	! Side effects:
 	! - if found, then wn will be updated
@@ -444,10 +445,25 @@
 	}
 
 	! check for pronouns
-	switch(p_parse_pointer --> 0) {
-	'it': ++wn; return itobj;
-	'him': ++wn; return himobj;
-	'her': ++wn; return herobj;
+	if(p_parse_pointer --> 0 == 'it' or 'him' or 'her') {
+		switch(p_parse_pointer --> 0) {
+		'it': _noun = itobj;
+		'him': _noun = himobj;
+		'her': _noun = herobj;
+		}
+		if(_noun == 0) {
+			if(p_phase == PHASE2) {
+				print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
+				return -2;
+			}
+		} else if(TestScope(_noun) == false) {
+			if(p_phase == PHASE2) {
+				print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^"; 
+				return -2;
+			}
+		}
+		++wn; 
+		return _noun;
 	}
 
 	! not a pronoun, continue
@@ -630,11 +646,12 @@
 
 		if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 			_noun = _GetNextNoun(p_parse_pointer, p_phase);
+			if(_noun == -2) return GPR_FAIL;
+			if(_noun == -1) return GPR_REPARSE;
 			if(_noun == 0) {
 				parser_unknown_noun_found = p_parse_pointer;
 				return GPR_FAIL;
 			}
-			if(_noun == -1) return GPR_REPARSE;
 			p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _noun hasnt animate) {
 				if(p_phase == PHASE2) {
@@ -652,6 +669,7 @@
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
+				if(_noun == -2) return GPR_FAIL;
 				if(_noun == -1) return GPR_REPARSE;
 				if(_noun == 0) {
 					if(parser_action == ##PluralFound) {

@@ -65,6 +65,7 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 
 [ _UpdateScope p_actor _start_pos;
 	! scope is already calculated
+	if(p_actor == 0) p_actor = player;
 	if(scope_pov == p_actor) return;
 
 	scope_pov = p_actor;
@@ -109,7 +110,6 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	! given actor. If no actor is given, the actor defaults to be the player.
 	! No return value
 
-	if(p_actor == 0) p_actor = player;
 	_UpdateScope(p_actor);
 	for(_i = 0: _i < scope_objects: _i++) p_routine(scope-->_i);
 ];
@@ -143,6 +143,7 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	! special case for debugging verbs; everything is in scope
 	if(action_debug) rtrue;
 
+	_UpdateScope(p_actor);
 	for(_i = 0: _i < scope_objects: _i++) {
 		if(scope-->_i == p_obj) rtrue;
 	}
