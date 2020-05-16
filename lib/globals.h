@@ -63,6 +63,7 @@ Property after;
 Property before;
 Property parse_name;
 Property capacity;
+Property article;
 
 ! Daemons and timers
 

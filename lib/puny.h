@@ -334,19 +334,25 @@ Array TenSpaces -> "          ";
       String:   print "<string ~", (string) o, "~>"; rtrue;
       nothing:  print "<illegal object number ", o, ">"; rtrue;
     }
-    if (o.&short_name ~= 0 && PrintOrRun(o, short_name, 1) ~= 0) rtrue;
+    if (o.&short_name ~= 0 && PrintOrRun(o, short_name, true) ~= 0) rtrue;
     print (object) o;
 ];
 
 [ _PrintObjName p_obj p_form _done;
 	if(p_obj hasnt proper) {
 		if(p_form == FORM_CDEF) {
-			print "The ";
+			print "The";
 		} else if(p_form == FORM_DEF) {
-			print "the ";
+			print "the";
 		} else if(p_form == FORM_INDEF) {
-			print "a ";
+			if(p_obj.&article)
+				PrintOrRun(p_obj, article, true);
+			else if(p_obj has pluralname)
+				print "some";
+			else
+				print "a";
 		}
+		print " ";
 	}
 	if(p_obj.short_name) {
 		_done = PrintOrRun(p_obj, short_name, true);

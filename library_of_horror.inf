@@ -333,6 +333,7 @@ Object -> John "John"
 Object -> infiniteBag "infinite bag"
 	with
 		name 'infinite' 'bag',
+		article "an",
 		description "An infinitely deep bag.",
 	has container open;
 
