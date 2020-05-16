@@ -304,19 +304,15 @@
 		_start = 0; _stop = scope_objects;
 	}
 	for(_i = _start: _i < _stop: _i++) {
+		if(action_debug) _obj = _i; else _obj = scope-->_i;
 #Endif;
 #IfnDef DEBUG_VERBS;
 	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
 #Endif;
 		_n = wn;
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
-#IfDef DEBUG_VERBS;
-		if(action_debug) _obj = _i; else _obj = scope-->_i;
-#Endif;
-#IfnDef DEBUG_VERBS;
-		_obj = scope-->_i;
-#Endif;
 #IfDef DEBUG_CHECKNOUN;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;

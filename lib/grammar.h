@@ -299,6 +299,10 @@ Global scope_cnt;
 	if(scope_cnt == 0) "Nothing in scope.^";
 ];
 
+[ PronounsSub;
+	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
+];
+
 [ PredictableSub _i; 
 	! sets the random seed, thus making randomness predictable
 	! also a test of special and number, thus the fancy grammar
@@ -539,6 +543,9 @@ Verb meta 'random'
 Verb meta 'scope'
     *                                           -> Scope
     * noun                                      -> Scope;
+
+Verb meta 'pronoun' 'pronouns'
+    *                                           -> Pronouns;
 #EndIf;
 
 Verb 'wake' 'awake' 'awaken'
