@@ -6,6 +6,7 @@
 !Constant FULL_DIRECTIONS;
 !Constant ALLOW_WRITTEN_NUMBERS;
 Constant DEBUG_VERBS;
+!Constant DEBUG_SCOPE;
 
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
 #Iftrue (#version_number == 8);

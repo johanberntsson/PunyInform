@@ -102,6 +102,14 @@ Include "scope.h";
 Include "grammar.h";
 
 ! ######################### Helper routines
+[ UnsignedCompare x y u v;
+    if (x == y) return 0;
+    if (x < 0 && y >= 0) return 1;
+    if (x >= 0 && y < 0) return -1;
+    u = x&~WORD_HIGHBIT; v= y&~WORD_HIGHBIT;
+    if (u > v) return 1;
+    return -1;
+];
 
 [ IndirectlyContains p_o1 p_o2;
 	! Does o1 indirectly contain o2?  (Same as testing if o1 is one of the ancestors of o2.)
@@ -786,6 +794,7 @@ Object DefaultPlayer "you"
 	has concealed animate proper transparent;
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score;
+	top_object = #largest_object-255;
 	if(Story ~= 0) {
 		print (string) Story;
 		if(Headline ~= 0) print (string) Headline;

@@ -221,6 +221,7 @@ Global keep_silent;
 Global itobj = 0;        ! The object which is currently "it"
 Global himobj = 0;       ! The object which is currently "him"
 Global herobj = 0;       ! The object which is currently "her"
+Global top_object;
 
 #IfV5;
 Global statusline_current_height = 0;
