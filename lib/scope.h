@@ -17,7 +17,7 @@ Constant MAX_SCOPE = 32;
 Global scope_pov;        ! Whose POV the scope is from (usually the player)
 Array scope-->MAX_SCOPE; ! objects visible from the current POV
 
-[ _SearchScope p_obj _child _add_this;
+[ _SearchScope p_obj _child _add_this _i;
 	while(p_obj) {
 #IfDef DEBUG_SCOPE;
 		print "Adding ",(object) p_obj," to scope. Action = ", action, "^";
@@ -26,8 +26,29 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 			RunTimeError(ERR_SCOPE_FULL);
 			return;
 		}			
+
 		scope-->(scope_objects++) = p_obj;
-		if(p_obj.add_to_scope) p_obj.add_to_scope();
+
+		if(p_obj provides add_to_scope) {
+			! routine or a list of objects
+			if(metaclass(p_obj.add_to_scope) == Routine) {
+#IfDef DEBUG_SCOPE;
+				print "add_to_scope routine^";
+#EndIf;
+				p_obj.add_to_scope();
+			} else {
+#IfDef DEBUG_SCOPE;
+				print "add_to_scope list^";
+#EndIf;
+				for(_i = 0: (_i * WORDSIZE) < p_obj.#add_to_scope: _i++) {
+					_child =  p_obj.&add_to_scope --> _i;
+					_SearchScope(_child);
+#IfDef DEBUG_SCOPE;
+					print _i, ": ", _child, "^";
+#EndIf;
+				}
+			}
+		}
 		_child = child(p_obj);
 		_add_this = _child ~= 0 && (p_obj hasnt container || p_obj has open || p_obj has transparent);
 		if(_add_this) {

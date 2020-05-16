@@ -279,7 +279,8 @@ Object -> John "John"
 		name 'john' 'johan',
 		description "John is the meanest gangster around. Don't mess with him.",
 		messed_with 0,
-		add_to_scope Hair,
+		add_to_scope Hair Beard,
+		!add_to_scope [; PlaceInScope(Hair); ],
 		react_before [;
 			Take:
 				if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
@@ -391,7 +392,15 @@ Object  Hair "John's hair"
   with  name 'hair' 'head',
         before [;
             Examine,Pull,Search:
-                "John has great hair!";
+                "John doesn't want to you to mess up his hair.";
+            default: "Huh?";
+        ],
+  has   proper;
+Object  Beard "John's beard"
+  with  name 'beard',
+        before [;
+            Examine,Pull,Search:
+                "You wouldn't dare to touch his beard.";
             default: "Huh?";
         ],
   has   proper;
