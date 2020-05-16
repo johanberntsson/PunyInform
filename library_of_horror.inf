@@ -150,7 +150,8 @@ Object -> ToiletDoor "toilet door"
 			if(location == Toilet) return w_to;
 			return e_to;
 		],
-	has door open openable concealed;
+		found_in Toilet Library,
+	has door open openable concealed static;
 
 
 Object -> Goblin "Goblin"

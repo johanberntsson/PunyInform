@@ -65,6 +65,7 @@ Property before;
 Property parse_name;
 Property capacity;
 Property article;
+Property found_in;
 
 ! Daemons and timers
 
@@ -252,9 +253,14 @@ Constant WORD_HIGHBIT = $8000;
 #Ifndef MAX_TIMERS;
 Constant MAX_TIMERS  32;            ! Max number timers/daemons active at once
 #Endif; ! MAX_TIMERS
-Array  the_timers  --> MAX_TIMERS;
+Array  the_timers --> MAX_TIMERS;
 Global active_timers;               ! Number of timers/daemons active
 Global current_timer;               ! Index of the timer which is currently being executed
+
+#Ifndef MAX_FLOATING_OBJECTS;
+Constant MAX_FLOATING_OBJECTS  32;            ! Max number of objects that have found_in property
+#Endif; ! MAX_FLOATING_OBJECTS
+Array floating_objects --> MAX_FLOATING_OBJECTS + 1;
 
 Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
 Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used

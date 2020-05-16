@@ -422,6 +422,38 @@ Array TenSpaces -> "          ";
 	}
 ];
 
+[ _InitFloatingObjects _i _k _stop;
+	_stop = top_object + 1;
+	for(_i = Directions : _i < _stop : _i++)
+		if(_i.&found_in) {
+			if(_k >= MAX_FLOATING_OBJECTS) {
+				RunTimeError(ERR_TOO_MANY_FLOATING);
+				rtrue;
+			}
+			floating_objects-->(_k++) = _i;
+		}
+];
+
+[ MoveFloatingObjects _i _j _len _obj _present;
+	while((_obj = floating_objects-->_i) ~= 0) {
+		_present = 0;
+		_len = _obj.#found_in / WORDSIZE;
+		if(_len == 1 && _obj.found_in > top_object) {
+			_present = RunRoutines(_obj, found_in);
+		} else
+			for(_j = _len - 1 : _j >= 0 : _j--)
+				if(_obj.&found_in-->_j == location) {
+					_present = 1;
+					break;
+				}
+		if(_present)
+			move _obj to location;
+		else
+			remove _obj;
+		_i++;
+	}
+];
+
 [ PlayerTo p_loc _p _old_loc;
 	_old_loc = location;
 	move Player to p_loc;
@@ -431,7 +463,10 @@ Array TenSpaces -> "          ";
 		if(_p == 0) break;
 		location = _p;
 	}
-	if(_old_loc ~= location) NewRoom();
+	if(_old_loc ~= location) {
+		NewRoom();
+		MoveFloatingObjects();
+	}
 	_ResetScope();
 	_UpdateScope(player);
 	rtrue;
@@ -810,6 +845,7 @@ Object DefaultPlayer "you"
 	}
 	print "PunyInform 0.1^^";
 
+	_InitFloatingObjects();
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
 	Initialise();

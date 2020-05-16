@@ -437,6 +437,7 @@ Constant ERR_OBJECT_HASNT_PROPERTY 2;
 Constant ERR_SCOPE_FULL 3;
 Constant ERR_UNKNOWN_MSGNO 4;
 Constant ERR_INVALID_DIR_PROP 5;
+Constant ERR_TOO_MANY_FLOATING 6;
 
 [RunTimeError p_err;
 	print "[Puny error: ";
@@ -455,6 +456,8 @@ Constant ERR_INVALID_DIR_PROP 5;
 			print "Unknown message#";
 		ERR_INVALID_DIR_PROP:
 			print "Invalid direction prop in GoSub";
+		ERR_TOO_MANY_FLOATING:
+			print "Too many floating objects";
 		default:
 			print "Unknown error (", p_err, ")";
 		}
