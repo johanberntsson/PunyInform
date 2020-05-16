@@ -4,7 +4,7 @@
 
 	if(location hasnt light) "It is pitch dark here!";
 
-	_ceil = _GetVisibilityCeiling(player);
+	_ceil = ScopeCeiling(player);
 
 ! print "Ceiling is object ", _ceil, ": ", (object) _ceil, ".^";
 	! ### Print room name

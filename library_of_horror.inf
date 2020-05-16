@@ -200,7 +200,7 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 		name 'box',
 		description [;
 #Ifndef USEINFORM;
-			if(_GetVisibilityCeiling(player) == self) {
+			if(ScopeCeiling(player) == self) {
 				print "The box looked pretty big from the outside, but you feel really confined in here.";
 				rtrue;
 			} else {
@@ -276,9 +276,10 @@ Object -> BlueBook "blue book" class Book
 
 Object -> John "John"
 	with
-		name 'john',
+		name 'john' 'johan',
 		description "John is the meanest gangster around. Don't mess with him.",
 		messed_with 0,
+		add_to_scope Hair,
 		react_before [;
 			Take:
 				if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
@@ -386,6 +387,14 @@ Object -> "long count"
        description "The Long Count is the great Mayan cycle of
            time, which began in 3114 BC and will finish with
            the world's end in 2012 AD.";
+Object  Hair "John's hair"
+  with  name 'hair' 'head',
+        before [;
+            Examine,Pull,Search:
+                "John has great hair!";
+            default: "Huh?";
+        ],
+  has   proper;
 
 [Initialise b i;
 	location = Library;

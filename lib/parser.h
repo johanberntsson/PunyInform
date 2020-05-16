@@ -22,7 +22,7 @@
 	if(player in location) {
 		@sread player_input_array parse_array;
 	} else {
-		_result = location; location = _GetVisibilityCeiling(player);
+		_result = location; location = ScopeCeiling(player);
 		@sread player_input_array parse_array;
 		location = _result;
 	}
@@ -288,7 +288,7 @@
     return indirect(noun_filter);
 ];
 
-[ _CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
+[ _CheckNoun p_parse_pointer p_parse_length _j _n _p _obj _matches _last_match _current_word _name_array _name_array_len _best_score _result;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
@@ -297,11 +297,13 @@
 	!     - stores number of objects in -> 0
 	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
-	for(_i = 0: _i < scope_objects: _i++) {
+	!for(_i = 0: _i < scope_objects: _i++) {
+	objectloop(_obj) {
 		_n = wn;
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
-		_obj = scope-->_i;
+		!_obj = scope-->_i;
+		if(TestScope(_obj, player) == false) continue;
 #IfDef DEBUG_CHECKNOUN;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
@@ -873,7 +875,7 @@
 		return -1;
 
 	actor = player;
-	_UpdateScope(_GetVisibilityCeiling(player));
+	_UpdateScope(player);
 
 	if(parse_array->1 < 1) {
 		"Come again?";

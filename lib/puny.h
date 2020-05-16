@@ -2,6 +2,11 @@
 ! suitable for old-school computers such as the Commodore 64.
 ! Designed to be similar, but not identical, to the Inform 6 library.
 !
+! Reference documentation
+! DM: http://www.inform-fiction.org/manual/html/dm4index.html
+! Tech: https://www.inform-fiction.org/source/tm/TechMan.txt
+! Z-machine: https://www.inform-fiction.org/zmachine/standards/z1point1
+!
 ! Public routines (described in DM, available for a game developer)
 ! LIBRARY ROUTINES:
 ! - DrawStatusLine
@@ -32,19 +37,15 @@
 ! -OnOff (only PunyInform)
 ! -CTheyreorThats
 ! -ItorThem
-!
-! Reference documentation
-! DM: http://www.inform-fiction.org/manual/html/dm4index.html
-! Tech: https://www.inform-fiction.org/source/tm/TechMan.txt
-! Z-machine: https://www.inform-fiction.org/zmachine/standards/z1point1
 
 ! comment/uncomment to restrict debug messages as needed
 #IfDef DEBUG;
-Constant DEBUG_CHECKNOUN;
-Constant DEBUG_GETNEXTNOUN;
-Constant DEBUG_PARSETOKEN;
-Constant DEBUG_PARSEPATTERN;
-Constant DEBUG_PARSEANDPERFORM;
+Constant DEBUG_SCOPE;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSEANDPERFORM;
 #Endif;
 
 Include "messages.h";
@@ -101,16 +102,6 @@ Include "scope.h";
 Include "grammar.h";
 
 ! ######################### Helper routines
-
-[ _GetVisibilityCeiling p_actor _parent;
-	for(:: p_actor = _parent) {
-		_parent = parent(p_actor);
-		!   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
-		if(_parent == 0 || (p_actor has container && p_actor hasnt transparent or open)) {
-			return p_actor;
-		}
-	}
-];
 
 [ IndirectlyContains p_o1 p_o2;
 	! Does o1 indirectly contain o2?  (Same as testing if o1 is one of the ancestors of o2.)
@@ -252,7 +243,7 @@ Array TenSpaces -> "          ";
 !     else {
 !         FindVisibilityLevels();
 !         if (visibility_ceiling == location)
-	_visibility_ceiling = _GetVisibilityCeiling(player);
+	_visibility_ceiling = ScopeCeiling(player);
 ! print (object) _visibility_ceiling;
 	if (_visibility_ceiling == location) {
 		_PrintObjName(location);
@@ -426,8 +417,9 @@ Array TenSpaces -> "          ";
 		if(_p == 0) break;
 		location = _p;
 	}
-	if(_old_loc ~= location)
-		NewRoom();
+	if(_old_loc ~= location) NewRoom();
+	_ResetScope();
+	_UpdateScope(player);
 	rtrue;
 ];
 
