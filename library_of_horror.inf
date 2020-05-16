@@ -369,6 +369,24 @@ Book -> PinkBook "pink book"
 Verb 'test'
 	* special	-> Test;
 
+! -- testing scope grammar token
+! See: https://www.inform-fiction.org/manual/html/s32.html 
+[ QueryTopic;
+  switch (scope_stage) {
+      1: rfalse;
+      2: ScopeWithin(questions); rtrue;
+      3: "At the moment, even the simplest questions confuse you.";
+  }
+];
+[ QuerySub; noun.description();];
+Verb 'what' * 'is'/'was' scope=QueryTopic -> Query;
+Object questions;
+Object -> "long count"
+  with name 'long' 'count',
+       description "The Long Count is the great Mayan cycle of
+           time, which began in 3114 BC and will finish with
+           the world's end in 2012 AD.";
+
 [Initialise b i;
 	location = Library;
 !	PlayerTo(LargeBox);

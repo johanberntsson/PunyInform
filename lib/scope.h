@@ -49,6 +49,7 @@ Array scope-->MAX_SCOPE;
 
 [ AddToScope p_obj;
 	! according to DM this can be called from add_to_scope
+	print "[<AddToScope> not implemented... YET!]^";
 ];
 
 [ InScope p_obj;
@@ -56,6 +57,7 @@ Array scope-->MAX_SCOPE;
 	! Places obj in scope for the token currently being parsed. No other
 	! objects are placed in scope as a result of this, unlike the case of
 	! ScopeWithin. No return value
+	print "[<InScope> not implemented... YET!]^";
 ];
 
 [ LoopOverScope p_routine p_actor _i;
@@ -72,6 +74,7 @@ Array scope-->MAX_SCOPE;
 	! Places obj in scope for the token currently being parsed. No other
 	! objects are placed in scope as a result of this, unlike the case of
 	! ScopeWithin. No return value
+	print "[<PlaceInScope> not implemented... YET!]^";
 ];
 
 [ ScopeWithin p_obj;
@@ -80,6 +83,7 @@ Array scope-->MAX_SCOPE;
 	! parsed, and applies the rules of scope recursively so that contents of
 	! see-through objects are also in scope, as is anything added to scope.
 	! No return value
+	print "[<ScopeWithin> not implemented... YET!]^";
 ];
 
 [ TestScope p_obj p_actor;
