@@ -152,7 +152,7 @@ Object -> ToiletDoor "toilet door"
 			return e_to;
 		],
 		found_in Toilet Library,
-	has door open openable concealed static;
+	has door openable concealed static;
 
 
 Object -> Goblin "Goblin"
@@ -203,7 +203,8 @@ Object Library "The Library"
 		short_name [; print "Huge library"; rtrue; ],
 		description "You are in an old and deserted library. There is an exit leading south and a toilet to the east.",
 		s_to CarPark,
-		e_to Toilet,
+		e_to ToiletDoor,
+		!e_to Toilet,
 	has light;
 
 Object -> LightSwitch "LightSwitch"

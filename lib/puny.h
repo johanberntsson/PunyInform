@@ -424,7 +424,7 @@ Array TenSpaces -> "          ";
 
 [ _InitFloatingObjects _i _k _stop;
 	_stop = top_object + 1;
-	for(_i = Directions : _i < _stop : _i++)
+	for(_i = Directions : _i < _stop : _i++) {
 		if(_i.&found_in) {
 			if(_k >= MAX_FLOATING_OBJECTS) {
 				RunTimeError(ERR_TOO_MANY_FLOATING);
@@ -432,6 +432,8 @@ Array TenSpaces -> "          ";
 			}
 			floating_objects-->(_k++) = _i;
 		}
+	}
+	MoveFloatingObjects();
 ];
 
 [ MoveFloatingObjects _i _j _len _obj _present;
@@ -845,10 +847,10 @@ Object DefaultPlayer "you"
 	}
 	print "PunyInform 0.1^^";
 
-	_InitFloatingObjects();
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
 	Initialise();
+	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) PlayerTo(location);
 	<Look>; ! Equivalent to PerformAction(##Look);
 
