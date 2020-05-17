@@ -10,18 +10,16 @@
 	@buffer_mode 0;
 #EndIf;
 	if(p_no_prompt == false) print "> ";
-	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
 	DrawStatusLine();
-	player_input_array->0 = MAX_INPUT_CHARS;
 	player_input_array->1 = 0;
 	@aread player_input_array parse_array -> _result;
 	@buffer_mode 1;
 #IfNot;
-	player_input_array->0 = MAX_INPUT_CHARS - 1;
 	if(player in location) {
 		@sread player_input_array parse_array;
 	} else {
+		! need to adjust location to make the status line correct
 		_result = location; location = ScopeCeiling(player);
 		@sread player_input_array parse_array;
 		location = _result;

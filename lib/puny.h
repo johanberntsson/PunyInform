@@ -839,7 +839,15 @@ Object DefaultPlayer "you"
 	has concealed animate proper transparent;
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score;
+	parse_array->0 = MAX_INPUT_WORDS;
+#IfV5;
+    player_input_array->0 = MAX_INPUT_CHARS;
+#IfNot;
+    player_input_array->0 = MAX_INPUT_CHARS - 1;
+#EndIf;
+
 	top_object = #largest_object-255;
+
 	if(Story ~= 0) {
 		print (string) Story;
 		if(Headline ~= 0) print (string) Headline;
