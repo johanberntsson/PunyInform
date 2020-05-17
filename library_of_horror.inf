@@ -5,7 +5,11 @@
 ! Uncomment to add optional features to PunyLib
 !Constant FULL_DIRECTIONS;
 !Constant ALLOW_WRITTEN_NUMBERS;
-Constant DEBUG_VERBS;
+!Constant DEBUG_VERBS;
+!Constant DEBUG_SCOPE;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
 !Constant DEBUG_SCOPE;
 
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
@@ -438,19 +442,19 @@ Object  Beard "John's beard"
 [Initialise b i;
 	location = Library;
 !	PlayerTo(LargeBox);
-	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
-	SetFlag(F_PARROT_FED);
-	print "Have set. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
-	ClearFlag(F_PARROT_FED);
-	print "Have cleared. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
-	print "Parrot fed != ", FlagIsClear(F_PARROT_FED),"^";
+!	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
+!	SetFlag(F_PARROT_FED);
+!	print "Have set. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
+!	ClearFlag(F_PARROT_FED);
+!	print "Have cleared. Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
+!	print "Parrot fed != ", FlagIsClear(F_PARROT_FED),"^";
 
 !	b = BlueBook.&pants;
 !	for(i=0 : i<BlueBook.#pants / 2 : i++)
 !		print "BlueBook pants(",i,") is ", b-->i, "^";
-	BlueBook.description();
+!	BlueBook.description();
 !	print "BlueBook.party is ", BlueBook.party, "^";
-	BlueBook.party(5);
+!	BlueBook.party(5);
 	print "^^And so the story begins...^^";
 ];
 #Ifdef USEINFORM;

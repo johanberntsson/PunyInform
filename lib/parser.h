@@ -287,6 +287,7 @@
 ];
 
 [ _CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _best_score _result _start _stop;
+!	print "OY!";
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
@@ -341,41 +342,56 @@
 					which_object-->1 = _obj;
 				}
 			}
-		} else if(_obj.#name > 1) {
-			_name_array = _obj.&name;
-			_start = _obj.#name / 2; ! was _name_array_len, but out of params
-
-			while(_n <= p_parse_length && _IsSentenceDivider(_p) == false) {
+		} else {
+!			_name_array = _obj.&name;
+			@get_prop_addr _obj name -> _name_array;
+			if(_name_array) {
+!			_start = _obj.#name / 2; ! was _name_array_len, but out of params
+				! Assembler equivalent of _start = _obj.#name / 2  
+				@get_prop_len _name_array -> _start;
 #IfV5;
-				@scan_table _current_word _name_array _start -> _result ?success;
+				@log_shift _start 1 -> _start;
 #IfNot;
-				for(_j = 0: _j < _start: _j++) {
-					if(_name_array-->_j == _current_word) jump success;
-				}
+				@div _start 2 -> _start;
 #EndIf;
-				jump not_matched;
+
+				while(_n <= p_parse_length && _IsSentenceDivider(_p) == false) {
+#IfV5;
+					@scan_table _current_word _name_array _start -> _result ?success;
+#IfNot;
+					_j = 0;
+					@dec _start; ! This is needed for the loop. Do we need to undo it after?
+.next_word_in_name_prop;
+					if(_name_array-->_j == _current_word) jump success;
+					@inc_chk _j _start ?~next_word_in_name_prop;
+!					for(_j = 0: _j < _start: _j++) {
+!						if(_name_array-->_j == _current_word) jump success;
+!					}
+#EndIf;
+					jump not_matched;
 .success;
 #IfDef DEBUG_CHECKNOUN;
-				print " - matched ", (address) _current_word,"^";
+					print " - matched ", (address) _current_word,"^";
 #EndIf;
-				_n++;
-				_p = _p + 4;
-				_current_word = _p-->0;
-				if(_n == _best_score) {
-					_matches++;
-					which_object-->_matches = _obj;
+					_n++;
+					_p = _p + 4;
+					_current_word = _p-->0;
+					if(_n == _best_score) {
+						_matches++;
+						which_object-->_matches = _obj;
 #IfDef DEBUG_CHECKNOUN;
-					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+						print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
-				}
-				if(_n > _best_score) {
-					_matches = 1;
+					}
+					if(_n > _best_score) {
+						_matches = 1;
 #IfDef DEBUG_CHECKNOUN;
-					print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
+						print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
 #EndIf;
-					_last_match = _obj;
-					_best_score = _n;
-					which_object-->1 = _obj;
+						_last_match = _obj;
+						_best_score = _n;
+						which_object-->1 = _obj;
+					}
 				}
 			}
 		}
@@ -385,6 +401,7 @@
 	}
 	which_object->0 = _matches;
 	which_object->1 = _best_score - wn;
+	
 	if(_matches == 1) {
 #IfDef DEBUG_CHECKNOUN;
 		print "Matched a single object: ", (the) _last_match,
