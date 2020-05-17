@@ -187,7 +187,6 @@
 		_door_dir = _door_dir - n_to + FAKE_N_OBJ;
 		<<Go _door_dir>>; 
 	}
-	if(noun has enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
 	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
 	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
