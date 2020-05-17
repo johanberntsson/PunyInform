@@ -108,13 +108,14 @@ Object CarPark "Car Park"
 
 Object RiverBank "River Bank"
   with
-    description "The river is quite wide here. The sun reflects in the blue water, the birds are 
+		description "The river is quite wide here. The sun reflects in the blue water, the birds are 
       flying high up above.",
-    cheap_scenery
-      'blue' 'water' SCN_WATER
-      'bird' 'birds' "They seem so careless."
-      1 'sun' SCN_SUN,
-   has light;
+		w_to CarPark,
+		cheap_scenery
+			'blue' 'water' SCN_WATER
+			'bird' 'birds' "They seem so careless."
+			1 'sun' SCN_SUN,
+	has light;
 
 Object Toilet "The toilet"
 	with
@@ -423,7 +424,7 @@ Object  Hair "John's hair"
                 "John doesn't want to you to mess up his hair.";
             default: "Huh?";
         ],
-  has   proper;
+  has   proper concealed;
 Object  Beard "John's beard"
   with  name 'beard',
         before [;
@@ -431,7 +432,7 @@ Object  Beard "John's beard"
                 "You wouldn't dare to touch his beard.";
             default: "Huh?";
         ],
-  has   proper;
+  has   proper concealed;
 
 [Initialise b i;
 	location = Library;

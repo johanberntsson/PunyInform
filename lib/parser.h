@@ -1107,6 +1107,7 @@
 		MULTI_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
 			_addobj = _obj hasnt scenery or concealed;
 		}
+		if(action == ##Take && _obj in player) _addobj = false;
 		if(_addobj) {
 			multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 			multiple_objects --> (multiple_objects --> 0) = _obj;
