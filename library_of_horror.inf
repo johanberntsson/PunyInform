@@ -10,7 +10,10 @@
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSETOKEN;
 !Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
 !Constant DEBUG_SCOPE;
+
+Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0 
 
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
 #Iftrue (#version_number == 8);

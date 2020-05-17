@@ -287,7 +287,9 @@
 ];
 
 [ _CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _best_score _result _start _stop;
-!	print "OY!";
+#IfDef DEBUG_CHECKNOUN;
+	print "Entering _CheckNoun!^";
+#EndIf;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
@@ -296,6 +298,10 @@
 	!     - stores number of objects in -> 0
 	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
+	if(wn == no_noun_position) {
+		which_object-->0 = 0; ! Set both # of objs and # of words to 0
+		return 0;
+	}
 #IfDef DEBUG_VERBS;
 	if(action_debug) {
 		_start = Directions; _stop = top_object + 1;
@@ -402,6 +408,9 @@
 	which_object->0 = _matches;
 	which_object->1 = _best_score - wn;
 	
+	if(_matches == 0)
+		no_noun_position = wn;
+	
 	if(_matches == 1) {
 #IfDef DEBUG_CHECKNOUN;
 		print "Matched a single object: ", (the) _last_match,
@@ -483,7 +492,12 @@
 	print "Calling _CheckNoun(",p_parse_pointer,",", parse_array->1,");^";
 	if(p_parse_pointer-->0 > 2000) print (address) p_parse_pointer-->0, " ", _pluralword, "^";
 #Endif;
+	timing_1 = $1c-->0;
 	_noun = _CheckNoun(p_parse_pointer, parse_array->1);
+#IfDef DEBUG_GETNEXTNOUN;
+	timing_2 = $1c-->0 - timing_1;
+	print "Checknoun took ",timing_2," jiffies.^";
+#Endif;
 	_num_words_in_nounphrase = which_object -> 1;
 
 .recheck_noun;
@@ -914,6 +928,7 @@
 	! 1 is returned. If the input is "open box" then
 	! the whole input is matched and 2 returned.
 
+	no_noun_position = -1;
 	action = -1;
 	which_object->1 = 0;
 	if(_IsSentenceDivider(parse_array + 2))
