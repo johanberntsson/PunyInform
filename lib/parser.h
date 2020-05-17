@@ -451,16 +451,12 @@
 		'him': _noun = himobj;
 		'her': _noun = herobj;
 		}
-		if(_noun == 0) {
-			if(p_phase == PHASE2) {
-				print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
-				return -2;
-			}
-		} else if(TestScope(_noun) == false) {
-			if(p_phase == PHASE2) {
-				print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^"; 
-				return -2;
-			}
+		if(_noun == 0 && p_phase == PHASE2) {
+			print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
+			return -2;
+		} else if(TestScope(_noun) == false && p_phase == PHASE2) {
+			print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^"; 
+			return -2;
 		}
 		++wn; 
 		return _noun;
@@ -691,6 +687,7 @@
 						! to the multiple_objects array
 						_AddMultipleNouns(_token_data);
 						if(multiple_objects --> 0 == 0) {
+							if(p_phase == PHASE2) print "There is nothing to ",  (address) verb_word,".^";
 							return GPR_FAIL;
 						} else if(multiple_objects --> 0 == 1) {
 							! single object
