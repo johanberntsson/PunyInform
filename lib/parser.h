@@ -502,6 +502,7 @@
 
 .recheck_noun;
 	if(p_phase == PHASE1 && _noun < 0) {
+		wn = wn + _num_words_in_nounphrase;
 		_noun = 1; ! a random noun in phase 1 just to avoid which? question
 	}
 	if(_noun < 0) {
@@ -550,7 +551,7 @@
 #IfDef DEBUG_GETNEXTNOUN;
 		print "Noun match! ", _noun, " ", which_object->1, "^";
 #EndIf;
-		wn = wn + which_object->1;
+		wn = wn + _num_words_in_nounphrase;
 		return _noun;
 	} else {
 		! this is not a recognized word at all
