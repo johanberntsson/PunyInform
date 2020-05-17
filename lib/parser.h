@@ -686,8 +686,10 @@
 						! Add all reasonable objects in scope
 						! to the multiple_objects array
 						_AddMultipleNouns(_token_data);
+						parser_all_found = true;
 						if(multiple_objects --> 0 == 0) {
-							if(p_phase == PHASE2) print "There is nothing to ",  (address) verb_word,".^";
+							if(p_phase == PHASE2)
+								PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
 							return GPR_FAIL;
 						} else if(multiple_objects --> 0 == 1) {
 							! single object
@@ -786,6 +788,7 @@
 	multiple_objects --> 0 = 0;
 	parser_check_multiple = 0;
 	parser_unknown_noun_found = 0;
+	parser_all_found = false;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 #IfDef DEBUG_VERBS;
@@ -1079,6 +1082,7 @@
 		! (b) warn the player if it has been cut short because too long;
 		! (c) generate a sequence of actions from the list
 		!     (stopping in the event of death or movement away).
+		_score = 0;
 		for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
 			inp1 = multiple_objects --> _noun;
 			noun = inp1;
@@ -1088,9 +1092,11 @@
 			MULTIINSIDE_OBJECT:
 				if(noun notin second) continue; ! eg get all from X
 			}
-			if(multiple_objects --> 0 > 1) print (name) noun, ": ";
+			if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
+			++_score;
 			PerformPreparedAction();
 		}
+		if(_score == 0) PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
 	}
 	if(inp1 ~= 1) PronounNotice(noun);
 	return num_words_parsed;

@@ -310,6 +310,9 @@ Constant MSG_YOU_HAVE_DIED 64;
 #Ifndef MSG_INSERT_NOT_HELD;
 Constant MSG_INSERT_NOT_HELD 65;
 #Endif;
+#Ifndef MSG_PARSER_NOTHING_TO_VERB;
+Constant MSG_PARSER_NOTHING_TO_VERB 66;
+#Endif;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -396,6 +399,8 @@ Constant LibraryMessages 0;
 		rtrue;
 	MSG_INSERT_NOT_HELD:
 		"You are not holding ", (the) noun, ".";
+	MSG_PARSER_NOTHING_TO_VERB:
+		"There is nothing to ",  (address) verb_word,".";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);

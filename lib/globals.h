@@ -220,6 +220,7 @@ Global num_noun_groups;  ! how many noun groups the current sentence contains
 Global parser_action;    ! needed for parse_name, ##PluralFound (see DM)
 Global parser_check_multiple;    ! parser should check if multiheld/multiinside
 Global parser_unknown_noun_found;! parser should report unknown word
+Global parser_all_found;! parser encountered 'all'
 Global deadflag;
 Global scope_objects;
 Global scope_stage;      ! for scope=Routine grammar: 1, 2 then 3
