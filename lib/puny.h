@@ -508,8 +508,8 @@ Array TenSpaces -> "          ";
 		NewRoom();
 		MoveFloatingObjects();
 	}
-	_ResetScope();
-	_UpdateScope(player);
+	!_ResetScope();
+	!_UpdateScope(player);
 	rtrue;
 ];
 

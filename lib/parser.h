@@ -969,8 +969,9 @@
 		! in the previous _ParseAndPerformAction,
 		! which can have added stuff to the scope
 		! Calling _ResetScope to force  a scope refresh
-		_ResetScope();
+		!_ResetScope();
 	}
+	_ResetScope(); ! since open and closing containers can change, it is safest to always reset scope
 	_UpdateScope(player);
 	scope_routine = 0; ! prepare for a new scope=Routine
 
