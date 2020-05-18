@@ -230,9 +230,12 @@ Global itobj = 0;        ! The object which is currently "it"
 Global himobj = 0;       ! The object which is currently "him"
 Global herobj = 0;       ! The object which is currently "her"
 Global top_object;
-
-Global timing_1 = 0;
-Global timing_2 = 0;
+#IfDef DEBUG_TIMER;
+Global timer1_start = 0;
+Global timer1_stop = 0;
+Global timer2_start = 0;
+Global timer2_stop = 0;
+#EndIf;
 
 Global no_noun_position;
 
