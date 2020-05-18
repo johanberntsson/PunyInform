@@ -156,6 +156,11 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	rfalse;
 ];
 
+[ ObjectIsInvisible p_item p_flag;
+	! TODO: things can be visible but still untouchable
+	return ObjectIsUntouchable(p_item, p_flag);
+];
+
 [ ObjectIsUntouchable p_item p_flag _ancestor _i;
 	! DM: ObjectIsUntouchable(obj,flag)
 	! Determines whether any solid barrier, that is, any container that is

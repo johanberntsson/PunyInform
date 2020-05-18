@@ -339,7 +339,7 @@
 			_result = PrintOrRun(_obj, parse_name);
 			_n = _n + _result; ! number of words consumed
 			wn = _j;
-			if(_n > wn) {
+			if(_n > wn && ObjectIsInvisible(_obj, true) == false) {
 				if(_n == _best_score) {
 					_matches++;
 					which_object-->_matches = _obj;
@@ -391,21 +391,23 @@
 					_n++;
 					_p = _p + 4;
 					_current_word = _p-->0;
-					if(_n == _best_score) {
-						_matches++;
-						which_object-->_matches = _obj;
+					if(_n >= _best_score && ObjectIsInvisible(_obj, true) == false) {
+						if(_n == _best_score) {
+							_matches++;
+							which_object-->_matches = _obj;
 #IfDef DEBUG_CHECKNOUN;
-						print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+							print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
-					}
-					if(_n > _best_score) {
-						_matches = 1;
+						}
+						if(_n > _best_score) {
+							_matches = 1;
 #IfDef DEBUG_CHECKNOUN;
-						print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
+							print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
 #EndIf;
-						_last_match = _obj;
-						_best_score = _n;
-						which_object-->1 = _obj;
+							_last_match = _obj;
+							_best_score = _n;
+							which_object-->1 = _obj;
+						}
 					}
 				}
 			}
