@@ -409,7 +409,7 @@ Book -> PinkBook "pink book"
 !			return 0;
 	    ],
 		description "The book is nice and tidy.",
-		;
+	has light;
 
 [TestSub;
 	print_ret "Noun is ", noun;
