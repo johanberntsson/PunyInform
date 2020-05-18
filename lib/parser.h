@@ -430,7 +430,7 @@
 				print "Matches: ", _matches,", num words ", which_object->1, "^";
 #EndIf;
 	if(_matches > 1) {
-		nouncache_result = _matches;
+		nouncache_result = -_matches;
 		return -_matches;
 	}
 	nouncache_result = 0;

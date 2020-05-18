@@ -163,6 +163,8 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	! routine never prints anything; otherwise it prints a message like
 	! “You can't, because ! … is in the way.” if any barrier is found.
 	! The routine returns true if a barrier is found, false if not.
-    rfalse;
+	_ancestor = CommonAncestor(player, p_item);
+	print "ObjectIsUntouchable ", (name) p_item, " _ancestor ", (name) _ancestor, "^";
+	rfalse;
 ];
 
