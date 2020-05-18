@@ -298,10 +298,19 @@
 	!     - stores number of objects in -> 0
 	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
-	if(wn == no_noun_position) {
-		which_object-->0 = 0; ! Set both # of objs and # of words to 0
+
+	if(wn == nouncache_wn) {
+		return nouncache_result;
+	}
+	nouncache_wn = wn;
+
+	if((((p_parse_pointer-->0) -> #dict_par1) & 128) == 0) {
+		! this word doesn't have the noun flag set,
+		! so it can't be part of a noun phrase
+		nouncache_result = 0;
 		return 0;
 	}
+
 #IfDef DEBUG_VERBS;
 	if(action_debug) {
 		_start = Directions; _stop = top_object + 1;
@@ -405,23 +414,26 @@
 
 !   print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
+
 	which_object->0 = _matches;
 	which_object->1 = _best_score - wn;
-	
-	if(_matches == 0)
-		no_noun_position = wn;
-	
+
 	if(_matches == 1) {
 #IfDef DEBUG_CHECKNOUN;
 		print "Matched a single object: ", (the) _last_match,
 			", num words ", which_object->1, "^";
 #EndIf;
+		nouncache_result = _last_match;
 		return _last_match;
 	}
 #IfDef DEBUG_CHECKNOUN;
 				print "Matches: ", _matches,", num words ", which_object->1, "^";
 #EndIf;
-	if(_matches > 1) return -_matches;
+	if(_matches > 1) {
+		nouncache_result = _matches;
+		return -_matches;
+	}
+	nouncache_result = 0;
 	return 0;
 ];
 
@@ -947,8 +959,9 @@
 
 	action = -1;
 	which_object->1 = 0;
-	no_noun_position = -1;
 	actor = player;
+	nouncache_wn = -1; ! clear noun cache
+
 	if(scope_routine ~= 0) {
 		! if true, then scope=Routine was executed
 		! in the previous _ParseAndPerformAction,

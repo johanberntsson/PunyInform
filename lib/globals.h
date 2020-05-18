@@ -236,9 +236,8 @@ Global timer1_stop = 0;
 Global timer2_start = 0;
 Global timer2_stop = 0;
 #EndIf;
-
-Global no_noun_position;
-
+Global nouncache_wn;
+Global nouncache_result;
 #IfV5;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
