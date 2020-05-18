@@ -1,0 +1,76 @@
+!% -~S
+
+!=========================================================================
+! storm.inf - The Origins of the Storm
+! An example game by Pablo Martínez
+! Based on "The House on the Other Side of the Storm",
+! a previous game written in DAAD by the author.
+!=========================================================================
+
+! Uncomment to add optional features to PunyLib
+Constant FULL_DIRECTIONS;
+!Constant ALLOW_WRITTEN_NUMBERS;
+!Constant DEBUG_VERBS;
+
+Constant Story      "The Origins of the Storm";
+Constant Headline   "^An horror fantasy.^";
+
+Include "globals.h";
+
+Include "puny.h";
+
+Include "storm-part1.inf";
+
+!Location for all disappearing objects.
+Object Limbo "Limbo"
+	with
+		description "Fake location";
+
+!=========================================================================
+!Subroutines
+!=========================================================================
+
+!=========================================================================
+!Entry Point Routines
+!=========================================================================
+
+[Initialise;
+	location = P1L_Flying_Boat;
+    move P1O_Notebook to player;
+	"by Pablo Martinez
+    ^(With thanks to Gareth Pitchford, for helping me correct my dreadful initial translation)
+    ^^PART I: THE HOUSE ON THE OTHER SIDE OF THE STORM
+    ^^When your father was on his deathbed, he made you promise him that you would lead a normal life, that you would look for
+    a good wife and a house and leave adventures and explorations to those who have little appreciation for their life. But
+    you are an empath, as were your father and your entire family line for generations. And empaths are restless and curious
+    to the point of illness. So, you did the only thing you could do, what he himself expected you to do; you lied.
+    ^Now, as you fly across the Phantom Zone in the small, old-fashioned family boat, that creaks at every gust of wind, and
+    gaze upon the dangerously close clouds of a storm, you wonder if you should not have relied more on your father's
+    experience and stayed on dry land...^";
+];
+
+[HelpSub;
+    "If you need help, please refer to the documentation attached to this game. If you don't know what to do, leave the game
+    for a few hours and take it up again later: Many times the answer is found when we are not actively looking for it. Good
+    luck!";
+];
+
+[RaiseSub;
+    <<Push noun>>;
+];
+
+[LowerSub;
+    <<Push noun>>;
+];
+
+!=========================================================================
+!New and Extended Verbs go here.
+!=========================================================================
+Verb "help" "hint" "hints"
+    * -> Help;
+
+Verb "raise" "hoist"
+    * noun -> Raise;
+
+Verb "lower"
+    * noun -> Lower;
