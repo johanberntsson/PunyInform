@@ -163,8 +163,42 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	! routine never prints anything; otherwise it prints a message like
 	! “You can't, because ! … is in the way.” if any barrier is found.
 	! The routine returns true if a barrier is found, false if not.
+
 	_ancestor = CommonAncestor(player, p_item);
-	print "ObjectIsUntouchable ", (name) p_item, " _ancestor ", (name) _ancestor, "^";
-	rfalse;
+	if(_ancestor == 0) {
+		_ancestor = p_item;
+		while (_ancestor && (_i = ObjectScopedBySomething(_ancestor)) == 0)
+			_ancestor = parent(_ancestor);
+		if(_i ~= 0) {
+			if(ObjectIsUntouchable(_i, p_flag)) return; ! An item immediately added to scope
+		}
+	} else if(player ~= _ancestor) {
+		! First, a barrier between the player and the ancestor.  The player
+		! can only be in a sequence of enterable objects, and only closed
+		! containers form a barrier.
+		_i = parent(player);
+		while (_i ~= _ancestor) {
+			if (_i has container && _i hasnt open) {
+				if(p_flag == false) PrintMsg(MSG_TOUCHABLE_FOUND_CLOSED, _i);
+				rtrue;
+			}
+			_i = parent(_i);
+		}
+    }
+
+	! Second, a barrier between the item and the ancestor.  The item can
+	! be carried by someone, part of a piece of machinery, in or on top
+	! of something and so on.
+	if (p_item ~= _ancestor) {
+		_i = parent(p_item);
+		while (_i ~= _ancestor) {
+			if (_i has container && _i hasnt open) {
+				if(p_flag == false) PrintMsg(MSG_TOUCHABLE_FOUND_CLOSED, _i);
+				rtrue;
+			}
+			_i = parent(_i);
+		}
+	}
+    rfalse;
 ];
 

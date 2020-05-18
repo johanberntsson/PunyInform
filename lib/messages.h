@@ -313,6 +313,9 @@ Constant MSG_INSERT_NOT_HELD 65;
 #Ifndef MSG_PARSER_NOTHING_TO_VERB;
 Constant MSG_PARSER_NOTHING_TO_VERB 66;
 #Endif;
+#Ifndef MSG_TOUCHABLE_FOUND_CLOSED;
+Constant MSG_TOUCHABLE_FOUND_CLOSED 67;
+#Endif;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -401,6 +404,8 @@ Constant LibraryMessages 0;
 		"You are not holding ", (the) noun, ".";
 	MSG_PARSER_NOTHING_TO_VERB:
 		"There is nothing to ",  (address) verb_word,".";
+	MSG_TOUCHABLE_FOUND_CLOSED:
+		print_ret (The) p_arg1, " isn't open.";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);

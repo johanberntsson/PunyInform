@@ -65,6 +65,7 @@
     if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
     if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
 	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
+	if(ObjectIsUntouchable(noun, false)) rtrue;
 	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
     if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
