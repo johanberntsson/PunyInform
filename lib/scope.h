@@ -157,11 +157,10 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 ];
 
 [ ObjectIsInvisible p_item p_flag;
-	! TODO: things can be visible but still untouchable
-	return ObjectIsUntouchable(p_item, p_flag);
+	return ObjectIsUntouchable(p_item, p_flag, true);
 ];
 
-[ ObjectIsUntouchable p_item p_flag _ancestor _i;
+[ ObjectIsUntouchable p_item p_flag p_checkvisible _ancestor _i;
 	! DM: ObjectIsUntouchable(obj,flag)
 	! Determines whether any solid barrier, that is, any container that is
 	! not open, lies between the player and obj. If flag is true, this
@@ -183,7 +182,8 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 		! containers form a barrier.
 		_i = parent(player);
 		while (_i ~= _ancestor) {
-			if (_i has container && _i hasnt open) {
+			if(_i has container && _i hasnt open &&
+				(p_checkvisible == false || _i hasnt transparent)) {
 				if(p_flag == false) PrintMsg(MSG_TOUCHABLE_FOUND_CLOSED, _i);
 				rtrue;
 			}
@@ -197,7 +197,8 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	if (p_item ~= _ancestor) {
 		_i = parent(p_item);
 		while (_i ~= _ancestor) {
-			if (_i has container && _i hasnt open) {
+			if(_i has container && _i hasnt open &&
+				(p_checkvisible == false || _i hasnt transparent)) {
 				if(p_flag == false) PrintMsg(MSG_TOUCHABLE_FOUND_CLOSED, _i);
 				rtrue;
 			}
