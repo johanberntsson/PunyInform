@@ -5,7 +5,7 @@
 ! Uncomment to add optional features to PunyLib
 !Constant FULL_DIRECTIONS;
 !Constant ALLOW_WRITTEN_NUMBERS;
-!Constant DEBUG_VERBS;
+Constant DEBUG_VERBS;
 !Constant DEBUG_SCOPE;
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSETOKEN;
@@ -417,14 +417,20 @@ Verb 'test'
       3: "At the moment, even the simplest questions confuse you.";
   }
 ];
+
 [ QuerySub; noun.description();];
 Verb 'what' * 'is'/'was' scope=QueryTopic -> Query;
-Object questions;
+
+Object questions "questions";
 Object -> "long count"
   with name 'long' 'count',
        description "The Long Count is the great Mayan cycle of
            time, which began in 3114 BC and will finish with
            the world's end in 2012 AD.";
+Object -> "samarkand"
+  with name 'samarkand',
+       description "Samarkand is a city in south-eastern Uzbekistan.";
+
 Object  Hair "John's hair"
   with  name 'hair' 'head',
         before [;

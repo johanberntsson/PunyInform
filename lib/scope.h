@@ -1,17 +1,7 @@
 ! Routines to update what is in scope
 ! http://www.inform-fiction.org/manual/html/s32.html#p244
 !
-! add_to_scoe
-!
-! scope_stage:
-! 1: allow multiple objects or not (true, false)
-! 2: use ScopeWithin an PlaceInScope to add objects to scope
-! 3: write an error message
 
-! TODO
-! - everything should be in scope for debugging verbs such as Scope
-! - you should be able to get the scope from an NPC's point of view
-! - 
 Constant MAX_SCOPE = 32;
 
 Global scope_pov;        ! Whose POV the scope is from (usually the player)
@@ -20,7 +10,7 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 [ _SearchScope p_obj _child _add_this _i _len _addr;
 	while(p_obj) {
 #IfDef DEBUG_SCOPE;
-		print "Adding ",(object) p_obj," to scope. Action = ", action, "^";
+		print "Adding ",(object) p_obj," (", p_obj,") to scope. Action = ", action, "^";
 #EndIf;
 		if(scope_objects >= MAX_SCOPE) {
 			RunTimeError(ERR_SCOPE_FULL);
@@ -99,11 +89,6 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
     }
 ];
 
-[ AddToScope p_obj;
-	! Mentioned in DM
-	print "[<AddToScope> not implemented... YET!]^";
-];
-
 [ LoopOverScope p_routine p_actor _i;
 	! DM: LoopOverScope(R,actor)
 	! Calls routine p_routine(obj) for each object obj in scope for the
@@ -114,23 +99,44 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	for(_i = 0: _i < scope_objects: _i++) p_routine(scope-->_i);
 ];
 
-[ PlaceInScope p_obj;
+[ PlaceInScope p_obj _i;
 	! DM: PlaceInScope(obj)
 	! Used in “scope routines” (only) when scope_stage is set to 2 (only).
 	! Places obj in scope for the token currently being parsed. No other
 	! objects are placed in scope as a result of this, unlike the case of
 	! ScopeWithin. No return value
-	print "[<PlaceInScope> not implemented... YET!]^";
+
+	! skip if already added
+	for(_i = 0: _i < scope_objects: _i++) {
+		if(scope-->_i == p_obj) return;
+	}
+	! add it
+	if(scope_objects >= MAX_SCOPE) {
+		RunTimeError(ERR_SCOPE_FULL);
+		return;
+	}			
+	scope-->(scope_objects++) = p_obj;
 ];
 
-[ ScopeWithin p_obj;
+[ ScopeWithin p_obj _i;
 	! DM: ScopeWithin(obj)
 	! Used in “scope routines” (only) when scope_stage is set to 2 (only).
 	! Places the contents of obj in scope for the token currently being
 	! parsed, and applies the rules of scope recursively so that contents of
 	! see-through objects are also in scope, as is anything added to scope.
 	! No return value
-	print "[<ScopeWithin> not implemented... YET!]^";
+
+	! is there a child?
+	p_obj = child(p_obj);
+	if(p_obj == nothing) return;
+
+	! skip if already added
+	for(_i = 0: _i < scope_objects: _i++) {
+		if(scope-->_i == p_obj) return;
+	}
+
+	! add all children
+	_SearchScope(p_obj);
 ];
 
 [ TestScope p_obj p_actor _i;
@@ -147,7 +153,6 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	for(_i = 0: _i < scope_objects: _i++) {
 		if(scope-->_i == p_obj) rtrue;
 	}
-	!print "TestScope failed^";
 	rfalse;
 ];
 

@@ -629,12 +629,17 @@
 		_token_data = NOUN_OBJECT;
 	} else if(_token_type == TT_SCOPE) {
 		_token_type = TT_OBJECT;
-		scope_stage = 1; ! has to be defined according to DM
-		_i = indirect(_token_data);
+		scope_routine = _token_data;
+		! check what type of routine (single or multi)
+		scope_stage = 1;
+		_i = indirect(scope_routine);
 		if(_i == 1) 
 			_token_data = MULTI_OBJECT;
 		else 
 			_token_data = NOUN_OBJECT;
+		! trigger add to scope
+		scope_stage = 2;
+		indirect(scope_routine);
 	} else if(_token_type == TT_PARSE_ROUTINE) {
 		return  indirect(_token_data);
 	}
@@ -874,7 +879,10 @@
 				continue; ! keep parsing
 			}
 			if(p_phase == PHASE2 && parser_unknown_noun_found > 0) {
-				if(parser_unknown_noun_found --> 0 > 0) {
+				if(scope_routine ~= 0) {
+					scope_stage = 3;
+					indirect(scope_routine);
+				} else if(parser_unknown_noun_found --> 0 > 0) {
 					print "You can't see any such thing.^";
 				} else {
 					print "Sorry, I don't understand what ~";
@@ -929,14 +937,22 @@
 	! 1 is returned. If the input is "open box" then
 	! the whole input is matched and 2 returned.
 
-	no_noun_position = -1;
-	action = -1;
-	which_object->1 = 0;
 	if(_IsSentenceDivider(parse_array + 2))
 		return -1;
 
+	action = -1;
+	which_object->1 = 0;
+	no_noun_position = -1;
 	actor = player;
+	if(scope_routine ~= 0) {
+		! if true, then scope=Routine was executed
+		! in the previous _ParseAndPerformAction,
+		! which can have added stuff to the scope
+		! Calling _ResetScope to force  a scope refresh
+		_ResetScope();
+	}
 	_UpdateScope(player);
+	scope_routine = 0; ! prepare for a new scope=Routine
 
 	if(parse_array->1 < 1) {
 		"Come again?";

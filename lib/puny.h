@@ -38,14 +38,27 @@
 ! -CTheyreorThats
 ! -ItorThem
 
-! comment/uncomment to restrict debug messages as needed
+! comment/uncomment to restrict default debug messages behaviour
+! (all can be overridden by adding them in the game source)
 #IfDef DEBUG;
-Constant DEBUG_SCOPE;
-Constant DEBUG_CHECKNOUN;
-Constant DEBUG_GETNEXTNOUN;
-Constant DEBUG_PARSETOKEN;
-Constant DEBUG_PARSEPATTERN;
-Constant DEBUG_PARSEANDPERFORM;
+	#IfnDef DEBUG_SCOPE;
+		Constant DEBUG_SCOPE;
+	#Endif;
+	#IfnDef DEBUG_CHECKNOUN;
+		Constant DEBUG_CHECKNOUN;
+	#Endif;
+	#IfnDef DEBUG_GETNEXTNOUN;
+		Constant DEBUG_GETNEXTNOUN;
+	#Endif;
+	#IfnDef DEBUG_PARSETOKEN;
+		Constant DEBUG_PARSETOKEN;
+	#Endif;
+	#IfnDef DEBUG_PARSEPATTERN;
+		Constant DEBUG_PARSEPATTERN;
+	#Endif;
+	#IfnDef DEBUG_PARSEANDPERFORM;
+		Constant DEBUG_PARSEANDPERFORM;
+	#Endif;
 #Endif;
 
 Include "messages.h";
