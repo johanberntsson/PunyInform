@@ -388,7 +388,7 @@ Global scope_cnt;
 ];
 
 [ PredictableSub _i; 
-	! sets the random seed, thus making randomness predictable
+	! sets the random seed, making randomness predictable
 	! also a test of special and number, thus the fancy grammar
 	!print special_word, " ", special_number," ",parsed_number,"^";
 	if(special_word ~=0) "You can't send randomness to an object!";
@@ -496,6 +496,19 @@ Global scope_cnt;
     if (noun has scenery)  { PrintMsg(MSG_PUSH_SCENERY); rtrue; }
     if (noun has animate)  { PrintMsg(MSG_PUSH_ANIMATE); rtrue; }
     PrintMsg(MSG_PUSH_SUCCESS);
+];
+
+[ PushDirSub;
+    PrintMsg(MSG_PUSHDIR_DEFAULT);
+];
+
+[ TransferSub;
+    _GrabIfNotHeld(noun);
+    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
+    if (second has supporter) { PutOnSub(); rtrue; }
+    !if (second == d_obj) <<Drop noun>>;
+    ! doesn't work in z3: <<Insert noun second>>;
+    InsertSub();
 ];
 
 [ WaitSub;
@@ -664,8 +677,6 @@ Verb meta 'oops'
     * special -> OopsCorrection;
 
 #IfDef DEBUG_VERBS;
-! sets the random seed, thus making randomness predictable
-! also a test of special and number, thus the fancy grammar
 Verb meta 'random'
 	*                                           -> Predictable
 	* special                                   -> Predictable
@@ -720,9 +731,8 @@ Verb 'pull' 'drag'
 
 Verb 'push' 'clear' 'move' 'press' 'shift'
     * noun                                      -> Push
-    !TODO: * noun noun                                 -> PushDir
-    !TODO: * noun 'to' noun                            -> Transfer
-	;
+    * noun noun                                 -> PushDir
+    * noun 'to' noun                            -> Transfer;
 
 Verb "wait" "z"
     *                                           -> Wait;

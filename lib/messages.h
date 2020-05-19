@@ -130,6 +130,9 @@ Constant MSG_WAIT_SUCCESS "Nothing happens.";
 #Ifndef MSG_TOUCH_SUCCESS;
 Constant MSG_TOUCH_SUCCESS "You don't feel anything unexpected.";
 #EndIf;
+#Ifndef MSG_PUSHDIR_DEFAULT;
+Constant MSG_PUSHDIR_DEFAULT "Is that the best you can think of?";
+#EndIf;
 
 !
 ! complex messages (enumerated)
