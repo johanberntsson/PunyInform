@@ -947,8 +947,21 @@ Object DefaultPlayer "you"
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
 		}
+		parser_oops = parser_unknown_noun_found;
 .do_it_again;
 		_sentencelength = _ParseAndPerformAction();
+		if(action == ##OopsCorrection) {
+			if(_again_saved && parser_oops > 0) {
+				!print "Oops not implemented^";
+				_CopyInputArray(temp_player_input_array, player_input_array);
+				_CopyParseArray(temp_parse_array, parse_array);
+				parser_oops-->0 = special_word;
+				_again_saved = false;
+				jump do_it_again;
+			} else {
+				print "Sorry, that can't be corrected.^";
+			}
+		}
 		if(action == ##Again) {
 			! restore from the 'again' buffers and reparse
 			if(_again_saved) {
@@ -963,9 +976,6 @@ Object DefaultPlayer "you"
 			_again_saved = true;
 			_CopyInputArray(player_input_array, temp_player_input_array);
 			_CopyParseArray(parse_array, temp_parse_array);
-		}
-		if(action == ##OopsCorrection) {
-			print "Sorry, that can't be corrected.^";
 		}
 
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
