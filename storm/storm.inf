@@ -7,6 +7,11 @@
 ! a previous game written in DAAD by the author.
 !=========================================================================
 
+! compile as z8 to use Inform stdlib instead of puny (for debugging)
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
 ! Uncomment to add optional features to PunyLib
 Constant FULL_DIRECTIONS;
 !Constant ALLOW_WRITTEN_NUMBERS;
@@ -15,9 +20,13 @@ Constant FULL_DIRECTIONS;
 Constant Story      "The Origins of the Storm";
 Constant Headline   "^An horror fantasy.^";
 
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
 Include "globals.h";
-
 Include "puny.h";
+#EndIf;
 
 Include "storm-part1.inf";
 
@@ -48,6 +57,11 @@ Object Limbo "Limbo"
     gaze upon the dangerously close clouds of a storm, you wonder if you should not have relied more on your father's
     experience and stayed on dry land...^";
 ];
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+
 
 [HelpSub;
     "If you need help, please refer to the documentation attached to this game. If you don't know what to do, leave the game
