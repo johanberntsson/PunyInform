@@ -507,6 +507,11 @@ Verb 'close'
 	* noun -> Close
 	* 'off' noun                                -> SwitchOff;
 
+Verb 'stand'
+    *                                           -> Exit
+    * 'up'                                      -> Exit
+    * 'on' noun                                 -> Enter;
+
 Verb 'get'
 	* 'up' -> Exit
 	* 'out' -> Exit
