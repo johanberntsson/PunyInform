@@ -561,10 +561,14 @@ Include "parser.h";
 [ BeforeRoutines _i _obj;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
+#IfDef GamePreRoutine;
+	if(GamePreRoutine()) rtrue;
+#EndIf;
+	if(RunRoutines(player, orders)) rtrue;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 		if (_obj provides react_before) {
-			if(PrintOrRun(_obj, react_before)) {
+			if(RunRoutines(_obj, react_before)) {
 				rtrue;
 			}
 		}
@@ -584,7 +588,7 @@ Include "parser.h";
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 		if (_obj provides react_after) {
-			if(PrintOrRun(_obj, react_after)) {
+			if(RunRoutines(_obj, react_after)) {
 				rtrue;
 			}
 		}
@@ -1041,7 +1045,7 @@ Object DefaultPlayer "you"
 #Stub NewRoom         0;
 !#Stub LookRoutine     0;
 !#Stub AfterLife       0;
-!#Stub GamePreRoutine  0;
+!#Stub GamePreRoutine  0; Use ifdef instead of stub
 !#Stub GamePostRoutine 0;
 !#Stub AfterPrompt     0;
 !#Stub BeforeParsing   0;
