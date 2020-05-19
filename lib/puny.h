@@ -964,6 +964,9 @@ Object DefaultPlayer "you"
 			_CopyInputArray(player_input_array, temp_player_input_array);
 			_CopyParseArray(parse_array, temp_parse_array);
 		}
+		if(action == ##OopsCorrection) {
+			print "Sorry, that can't be corrected.^";
+		}
 
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;

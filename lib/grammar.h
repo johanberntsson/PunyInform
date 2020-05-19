@@ -330,6 +330,13 @@
 	! nothing here - this is taken care of in the main game loop instead
 ];
 
+[ OopsSub;
+	"Think nothing of it.";
+];
+[ OopsCorrectionSub;
+	! nothing here - this is taken care of in the main game loop instead
+];
+
 #IfDef DEBUG_VERBS;
 Global scope_cnt;
 [ _ScopeSubHelper p_obj;
@@ -580,6 +587,10 @@ Verb meta 'restart'
 
 Verb meta 'again' 'g//'
     * -> Again;
+
+Verb meta 'oops'
+    * -> Oops
+    * special -> OopsCorrection;
 
 #IfDef DEBUG_VERBS;
 ! sets the random seed, thus making randomness predictable
