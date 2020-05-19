@@ -261,10 +261,10 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 		time_left 0,
 	has container openable enterable static;
 
-Book -> -> RedBook "red book"
+Book -> RedBook "red book"
 	with
 		name 'red' 'book',
-		initial "On the bottom of the box, there is a red book.",
+		!initial "On the bottom of the box, there is a red book.",
 		description "The book is old and worn.",
 		before [;
  			Take:

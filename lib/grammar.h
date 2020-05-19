@@ -538,7 +538,7 @@ Verb 'put'
 	* 'on' held									-> Wear;
 
 Verb 'search'
-	* noun -> Search;
+	* noun                                      -> Search;
 
 Verb 'insert'
     * multiexcept 'in'/'into' noun              -> Insert;
