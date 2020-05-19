@@ -377,7 +377,7 @@ Object -> infiniteBag "infinite bag"
 Book -> GreenBook "green book"
 	with
 		name 'book' 'green',
-		describe "An old and torn green book is here.",
+		describe [; print "An old and torn green book is here."; ];
 		description "The book is nice and tidy.",
 		;
 
