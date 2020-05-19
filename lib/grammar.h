@@ -21,17 +21,18 @@
 	}
 	@new_line;
 
-	! room description
-	if(_ceil.description) {
-		PrintOrRun(_ceil, description, 1);
-	}
-
 	if(_player_parent ~= _ceil) {
+		if(_player_parent.inside_description) {
+			PrintOrRun(_player_parent, inside_description, 1);
+		} else if(_ceil.description) {
+			PrintOrRun(_ceil, description, 1);
+		}
 		! the contents of the container you are inside
 		_PrintContents(" There is ", " here.", _player_parent);
 		! all other objects
-		_PrintContents(" Outside you can also see ", ".", _ceil);
+		_PrintContents(" Outside you can see ", ".", _ceil);
 	} else {
+		if(_ceil.description) PrintOrRun(_ceil, description, 1);
 		! all other objects
 		_PrintContents(" You can also see ", " here.", _ceil);
 	}
