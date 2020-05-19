@@ -38,7 +38,7 @@
 	@new_line;
 
 	objectloop(_obj in _player_parent) {
-		if(_obj.describe ~= 0) {
+		if(_obj.&describe) {
 			! describe is used if present
 			@new_line; 
 			PrintOrRun(_obj, describe);
