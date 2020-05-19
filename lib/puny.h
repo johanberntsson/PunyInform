@@ -909,7 +909,7 @@ Object DefaultPlayer "you"
 		before_implicit NULL,
 	has concealed animate proper transparent;
 
-[ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved;
+[ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
     player_input_array->0 = MAX_INPUT_CHARS;
@@ -947,15 +947,15 @@ Object DefaultPlayer "you"
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
 		}
-		parser_oops = parser_unknown_noun_found;
+		_parser_oops = parser_unknown_noun_found;
 .do_it_again;
 		_sentencelength = _ParseAndPerformAction();
 		if(action == ##OopsCorrection) {
-			if(_again_saved && parser_oops > 0) {
+			if(_again_saved && _parser_oops > 0) {
 				!print "Oops not implemented^";
 				_CopyInputArray(temp_player_input_array, player_input_array);
 				_CopyParseArray(temp_parse_array, parse_array);
-				parser_oops-->0 = special_word;
+				_parser_oops-->0 = special_word;
 				_again_saved = false;
 				jump do_it_again;
 			} else {
