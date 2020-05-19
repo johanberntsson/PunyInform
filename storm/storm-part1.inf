@@ -14,6 +14,30 @@ Object P1L_Flying_Boat "The flying boat"
 	with
 		description "The old boat that your father and grandfather used to sail the aether from one end to the other when they were young. It now shows its
             age, creaking threateningly against the wind of the nearby storm. The black clouds roar and turn, advancing at full speed towards your flying vessel.",
+        cheap_scenery
+            1 'mast' "The mast crackles incessantly, constantly threatening to break."
+            1 'storm' "The storm draws closer and closer and threatens to engulf your small boat within its black clouds. From time to time,
+                lightning illuminates its dark surface."
+            'flying' 'boat' "The boat has a long and intense history compared to other, larger vessels. Thanks to it, your father was able to
+                discover the Infinite River on the other side of the northern divide. Thanks to it, your grandfather found the ruins
+                of Neuba Yorka, with its large, broken glass towers. And thanks to you, the boat's fate is now in the hands of the storm...",
+        turns_active,
+        daemon [;
+            switch (++(self.turns_active)) {
+                4: "^For a moment the clouds open up and in the distance you spot a small floating islet, sparsely covered in weatherworn vegetation.
+                    You think you can discern the ruins of a building, perched on top of the island, just before it is swallowed up again by the fog.";
+                6: "^Strong lightning illuminates the entire sky for a tenth of a second.";
+                9: "^The storm is about to engulf your boat!";
+                10: StopDaemon(self);
+                    move P1O_Notebook to Limbo;
+                    PlayerTo(P1L_Cliff);
+                    print "^With a loud burst, lightning strikes your small boat, splitting it in two halves! Your body is thrown out, flying like a rag doll towards certain
+                    death...^^^^You wake up dazed, your back aching but surprisingly intact. It seems that, instead of smashing against some floating rock or, even
+                    worse, spending your days endless spinning through the infinite aether, you have had the immense luck of falling a short distance onto a soft
+                    mattress of grass...^^";
+                    <Look>;
+            }
+        ],
 	has light;
 
 Object -> P1O_Notebook "notebook"

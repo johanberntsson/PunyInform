@@ -19,11 +19,15 @@ Constant USEINFORM;
 Constant Story      "The Origins of the Storm";
 Constant Headline   "^An horror fantasy.^";
 
+Constant SceneryReply "That doesn't seem something very useful to do.";
+
 #Ifdef USEINFORM;
 Include "Parser";
 Include "VerbLib";
+Include "ext_cheap_scenery.h";
 #IfNot;
 Include "globals.h";
+Include "ext_cheap_scenery.h";
 Include "puny.h";
 #EndIf;
 
@@ -44,6 +48,7 @@ Object Limbo "Limbo"
 
 [Initialise;
 	location = P1L_Flying_Boat;
+    startDaemon(P1L_Flying_Boat);
     move P1O_Notebook to player;
 	"by Pablo Martinez
     ^(With thanks to Gareth Pitchford, for helping me correct my dreadful initial translation)

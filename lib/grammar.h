@@ -498,6 +498,10 @@ Global scope_cnt;
     PrintMsg(MSG_PUSH_SUCCESS);
 ];
 
+[ WaitSub;
+    PrintMsg(MSG_WAIT_SUCCESS);
+];
+
 
 Verb 'i//' 'inventory'
 	* -> Inv;
@@ -715,6 +719,9 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
     !TODO: * noun noun                                 -> PushDir
     !TODO: * noun 'to' noun                            -> Transfer
 	;
+
+Verb "wait" "z"
+    *                                           -> Wait;
 
 
 [ PrintVerb p_v _string_name;
