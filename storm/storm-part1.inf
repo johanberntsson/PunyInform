@@ -116,14 +116,12 @@ Object P1L_Cliff "The cliff"
                 allows navigation between them."
             1 'cliff' "Shaped over many years by the harsh weather, the cliff is at the very edge of the floating island, where the aether begins."
             1 'grass' "The grass rises with vigour as far as your eyes can see.",
-        w_to "Just the emptiness of the aether in that direction. It is not possible to go that way.",
-        nw_to "Just the emptiness of the aether in that direction. It is not possible to go that way.",
-        sw_to "Just the emptiness of the aether in that direction. It is not possible to go that way.",
         n_to P1L_Cliff,
         s_to P1L_Cliff,
         ne_to P1L_Esplanade,
         e_to P1L_Esplanade,
         se_to P1L_Esplanade,
+        cant_go "Just the emptiness of the aether in that direction. It is not possible to go that way.",
 	has light;
 
 !-------------------------------------------------    
@@ -188,28 +186,46 @@ Object P1L_Visitors "Visitors?"
 	with
 		description [;
             print "The esplanade continues endlessly here as well.^";
-            if (self hasnt general) "Not far away you can see a figure of extreme slenderness, with its back to you. It seems to contemplate the night sky,
+            if (self.turns_active < 2) "Not far away you can see a figure of extreme slenderness, with its back to you. It seems to contemplate the night sky,
                 immersed in deep reflection.";
             "Dozens of ~pale ones~ approach you from all directions except the east.";
         ],
-        react_after [;
-            if (self hasnt general) {
-                give self general;
-                print "The figure turns when it hears the crunch of your footsteps and you immediately understand the danger you are in. Its
-                ash-coloured, almost transparent skin and eyes like two bright white beacons reveal that it is a ~pale one~, one of the
-                many spectral beings that roam the Phantom Zone. The clothes he is wearing - now you are able to distinguish them - are
-                faded rags that barely cover his skinny body.
-                ^When he sees you, he opens his mouth and utters a groan similar to an electric sizzle, to which many others are added.
-                From nowhere, dozens of other ~pale ones~ appear and walk towards you from multiple directions. These beings covet the
-                warmth and energy of the living, and now long for yours. If they touch you, they will absorb your vitality and
-                you will become one of them...^^";
-                <<Look>>;
+        turns_active,
+        before [;
+            if (self.turns_active == 0) startDaemon(self);
+            if (self.turns_active == 1) rtrue;
+        ],
+        daemon [;
+            switch (++(self.turns_active)) {
+                2: print "The figure turns when it hears the crunch of your footsteps and you immediately understand the danger you are in. Its
+                    ash-coloured, almost transparent skin and eyes like two bright white beacons reveal that it is a ~pale one~, one of the
+                    many spectral beings that roam the Phantom Zone. The clothes he is wearing - now you are able to distinguish them - are
+                    faded rags that barely cover his skinny body.
+                    ^When he sees you, he opens his mouth and utters a groan similar to an electric sizzle, to which many others are added.
+                    From nowhere, dozens of other ~pale ones~ appear and walk towards you from multiple directions. These beings covet the
+                    warmth and energy of the living, and now long for yours. If they touch you, they will absorb your vitality and
+                    you will become one of them...^^";
+                    <<Look>>;
+                5: deadflag = 1;
+					"They soon surround you, closing off every possible avenue of escape. You try to defend yourself, but it is useless. Several of their
+                    outstretched hands touch your body and pass through your skin, flooding your chest with a deadly cold. Your life escapes from
+                    your body like liquid from a spilled bottle...
+                    ^Finally, your skin becomes ashen and your eyes light up like headlights. You are now, and will always be, one of them.";
             }
         ],
         cheap_scenery
             1 'aether' "Aether is the substance that flows through the known universe, sustains the flight of floating islands and continents and
                 allows navigation between them."
+            1 'figure' "There are almost a hundred of them, approaching you from all directions. Even in their skeletal form you can guess
+                what they were in another life: Peasants, children, some old people... And each one wants to steal your vital energy!"
+            'pale' 'ones' "There are almost a hundred of them, approaching you from all directions. Even in their skeletal form you can guess
+                what they were in another life: Peasants, children, some old people... And each one wants to steal your vital energy!"
             1 'grass' "The grass rises with vigour as far as your eyes can see.",
+        e_to [;
+            self.turns_active = 2;
+            return P1L_Abandoned_House;
+        ],
+        cant_go "You can't go that way... There are too many ~pale ones~ in that direction and they would catch you!",
 	has light;
     
 !-------------------------------------------------
@@ -222,8 +238,29 @@ Object P1L_Abandoned_House "An abandoned house"
             The deteriorated entrance door is open and allows access to the interior of the building.
             ^From all directions around the house, hundreds of ~pale ones~ approach you, squeaking with their electric voices,
             longing for the warmth of your vital essence...",
+        cheap_scenery
+            1 'aether' "Aether is the substance that flows through the known universe, sustains the flight of floating islands and continents and
+                allows navigation between them."
+            'pale' 'ones' "There are almost a hundred of them, approaching you from all directions. Even in their skeletal form you can guess
+                what they were in another life: Peasants, children, some old people... And each one wants to steal your vital energy!"
+            1 'grass' "The grass rises with vigour as far as your eyes can see.",
+        in_to [;
+            <<Enter P1O_House_door>>;
+        ],
+        cant_go "You can't go that way... There are too many ~pale ones~ in that direction and they would catch you!",
 	has light;
-    
+
+Object -> P1O_House_door "house door"
+    with
+        name 'abandoned' 'house' 'door',
+        description "A Victorian-style home, once the abode of a small well-to-do family, lies in ruins, abandoned to the harsh weather
+            of the Phantom Zone. A door leads to its interior.",
+        before [;
+            Enter: stopDaemon(P1L_Visitors);
+                PlayerTo(P1L_Entrance);
+                <<Look>>;
+        ],
+    has scenery enterable;
 !-------------------------------------------------
 !----- Entrance hall
 !-------------------------------------------------
