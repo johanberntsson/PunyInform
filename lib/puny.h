@@ -930,7 +930,6 @@ Object DefaultPlayer "you"
 
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
-	_again_saved = false;
 	Initialise();
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) PlayerTo(location);
@@ -957,7 +956,6 @@ Object DefaultPlayer "you"
 				_CopyParseArray(temp_parse_array, parse_array);
 				jump do_it_again;
 			} else {
-				_again_saved = false;
 				print "You can hardly repeat that.^";
 			}
 		} else {

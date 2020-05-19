@@ -85,12 +85,15 @@
 
 [ _CopyInputArray p_src_input_array p_dst_input_array _n _i;
 	_n = MAX_INPUT_CHARS + 3;
-	for(_i = 0: _i < _n: _i++)
+	for(_i = 0: _i < _n: _i++) {
 		p_dst_input_array->_i = p_src_input_array->_i;
+		if(p_dst_input_array->_i == 0) break;
+	}
 ];
 
 [ _CopyParseArray p_src_parse_array p_dst_parse_array _n _i;
-	_n = 2 + 4 * (MAX_INPUT_WORDS + 1); 
+	!_n = 2 + 4 * (MAX_INPUT_WORDS + 1); 
+	_n = 2 + 4*p_src_parse_array->1;
 	for(_i = 0: _i < _n: _i++)
 		p_dst_parse_array->_i = p_src_parse_array->_i;
 ];
