@@ -53,26 +53,6 @@ Fake_Action ThrownAt;
 Fake_Action NotUnderstood; 
 Fake_Action PluralFound; 
 
-! Property name; ! This seems to be hardcoded in the Inform compiler
-Property initial;
-Property description;
-Property short_name;
-Property add_to_scope;
-Property react_after;
-Property react_before;
-Property after;
-Property before;
-Property parse_name;
-Property capacity;
-Property article;
-Property found_in;
-
-! Daemons and timers
-
-Property additive time_out NULL;
-Property daemon alias time_out;
-Property time_left;
-
 ! directions
 Property n_to;
 Property s_to;
@@ -120,6 +100,27 @@ Array full_direction_array table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 
 Array direction_properties_array table n_to s_to e_to w_to u_to d_to in_to out_to;
 Array direction_name_array table "north" "south" "east" "west" "up" "down" "in" "out";
 #EndIf;
+
+! Property name; ! 'name' seems to be hardcoded in the Inform compiler
+Property initial;
+Property describe alias e_to;
+Property description;
+Property short_name;
+Property add_to_scope;
+Property react_after;
+Property react_before;
+Property after;
+Property before;
+Property parse_name;
+Property capacity;
+Property article;
+Property found_in;
+
+! Daemons and timers
+
+Property additive time_out NULL;
+Property daemon alias time_out;
+Property time_left;
 
 #IfDef ALLOW_WRITTEN_NUMBERS;
 Array LanguageNumbers table

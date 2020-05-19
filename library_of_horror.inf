@@ -5,7 +5,7 @@
 ! Uncomment to add optional features to PunyLib
 !Constant FULL_DIRECTIONS;
 !Constant ALLOW_WRITTEN_NUMBERS;
-!Constant DEBUG_VERBS;
+Constant DEBUG_VERBS;
 !Constant DEBUG_TIMER; ! requires special Ozmoo
 !Constant DEBUG_SCOPE;
 !Constant DEBUG_PARSEPATTERN;
@@ -233,6 +233,13 @@ Object -> LightSwitch "LightSwitch"
 	has switchable static;
 
 
+Object -> Aquarium "aquarium"
+	with
+		name 'aquarium',
+		article "an",
+		description "A big glass aquarium with a lid.",
+	has container open openable transparent static;
+
 Object -> LargeBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
 	with
 		short_name "box",
@@ -378,6 +385,7 @@ Object -> infiniteBag "infinite bag"
 Book -> GreenBook "green book"
 	with
 		name 'book' 'green',
+		describe "An old and torn green book is here.",
 		description "The book is nice and tidy.",
 		;
 
@@ -402,7 +410,7 @@ Book -> PinkBook "pink book"
 !			return 0;
 	    ],
 		description "The book is nice and tidy.",
-		;
+	has light;
 
 [TestSub;
 	print_ret "Noun is ", noun;

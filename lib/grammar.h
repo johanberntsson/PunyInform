@@ -23,17 +23,30 @@
 
 	@new_line;
 
-	! ### Print room description
+	! room description
 	if(_ceil.description) {
 		PrintOrRun(_ceil, description, 1);
 	}
 
-	_PrintContents(" You can also see ", " here.", _ceil);
-	@new_line;
+	if(_player_parent ~= _ceil) {
+		! the contents of the container you are inside
+		_PrintContents(" There is ", " here.", _player_parent);
+		! all other objects
+		_PrintContents(" Outside you can also see ", ".^", _ceil);
+	} else {
+		! all other objects
+		_PrintContents(" You can also see ", " here.^", _ceil);
+	}
 
-	objectloop(_obj in _ceil) {
-		if(_obj hasnt moved && _obj.initial ~= 0) {
-			@new_line;
+
+	objectloop(_obj in _player_parent) {
+		if(_obj.describe ~= 0) {
+			! describe is used if present
+			@new_line; 
+			PrintOrRun(_obj, describe);
+		} else if(_obj hasnt moved && _obj.initial ~= 0) {
+			! intial descriptions (if any)
+			@new_line; 
 			PrintOrRun(_obj, initial);
 		}
 	}
@@ -318,8 +331,9 @@
 Global scope_cnt;
 [ _ScopeSubHelper p_obj;
 	print scope_cnt++,": ", (a) p_obj, " (", p_obj, ")";
-	if(ObjectIsUntouchable(p_obj)) print " [untouchable]";
-	new_line;
+	if(ObjectIsUntouchable(p_obj, true)) print " [untouchable]";
+	if(ObjectIsInvisible(p_obj, true)) print " [invisible]";
+	@new_line;
 ];
 
 [ ScopeSub _i _obj;
@@ -530,7 +544,7 @@ Verb 'put'
 	* 'on' held									-> Wear;
 
 Verb 'search'
-	* noun -> Search;
+	* noun                                      -> Search;
 
 Verb 'insert'
     * multiexcept 'in'/'into' noun              -> Insert;

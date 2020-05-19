@@ -392,12 +392,26 @@ Array TenSpaces -> "          ";
 	}
 ];
 
+[ _PrintAfterEntry p_obj;
+	if(p_obj has container && P_obj hasnt open) print " (which is closed)";
+	else if(p_obj has container && (p_obj has open || p_obj has transparent)) {
+		if(child(p_obj) == nothing) 
+			print " (which is empty)";
+		else
+			_PrintContents(" (which contains ", ")", p_obj);
+	}
+	if(p_obj has light && action == ##Inv) print " (providing light)";
+];
+
 [ _PrintContents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
 !   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
 !   print "Considering ", (object) _obj, "...^";
 !   if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
-		if(_obj hasnt concealed && _obj hasnt scenery && (_obj has moved || _obj.initial == 0)) {
+		if(_obj hasnt concealed && _obj hasnt scenery &&
+			_obj ~= parent(player) &&  ! don't print container when player in it
+			(_obj.describe == 0 || _obj notin parent(player)) && 
+			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
 			if(_printed_first_text == 0) {
 				print (string) p_first_text;
 				_printed_first_text = 1;
@@ -406,6 +420,7 @@ Array TenSpaces -> "          ";
 			if(_last_obj) {
 				if(_printed_any_objects) print ", ";
 				_PrintObjName(_last_obj, FORM_INDEF);
+				_PrintAfterEntry(_last_obj);
 				_printed_any_objects = 1;
 			}
 			_last_obj = _obj;
@@ -414,6 +429,7 @@ Array TenSpaces -> "          ";
 	if(_last_obj) {
 		if(_printed_any_objects) print " and ";
 		_PrintObjName(_last_obj, FORM_INDEF);
+		_PrintAfterEntry(_last_obj);
 		print (string) p_last_text;
 	}
 
@@ -499,8 +515,8 @@ Array TenSpaces -> "          ";
 		NewRoom();
 		MoveFloatingObjects();
 	}
-	_ResetScope();
-	_UpdateScope(player);
+	!_ResetScope();
+	!_UpdateScope(player);
 	rtrue;
 ];
 
@@ -692,7 +708,7 @@ Include "parser.h";
 		! print (hex) x-->0, " (", (property) x-->0, ")  length ", x->2, ": ";
 		!       for (n = 0: n< (x->2)/2: n++)
 		!           print (hex) (x+3)-->n, " ";
-		!       new_line;
+		!       @new_line;
 		_x = _x + _x->2 + 3;
 	}
 	return _x;
@@ -857,7 +873,7 @@ Object DefaultPlayer "you"
 		life NULL,
 		each_turn NULL,
 		time_out NULL,
-		describe NULL,
+		! describe NULL, ! TODO: uncommenting causes erorr LookSub
 		add_to_scope 0,
 		capacity MAX_CARRIED,
 		!parse_name 0, ! TODO: uncommenting causes error (open box)
@@ -895,7 +911,7 @@ Object DefaultPlayer "you"
 	while(deadflag == GS_PLAYING) {
 		status_field_1 = score;
 		status_field_2 = turns;
-		new_line;
+		@new_line;
 		_score = score;
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
@@ -932,7 +948,7 @@ Object DefaultPlayer "you"
 			parse_array->1 = _parsearraylength - _sentencelength;
 #IfDef DEBUG;
 			_PrintParseArray(parse_array);
-			new_line;
+			@new_line;
 #Endif;
 		} else {
 			! the input was just one sentence

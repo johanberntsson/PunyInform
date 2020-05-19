@@ -1,0 +1,310 @@
+!-------------------------------------------------
+! PART I: THE HOUSE ON THE OTHER SIDE OF THE STORM
+!-------------------------------------------------
+
+!-------------------------------------------------
+! Locations
+!-------------------------------------------------
+
+!-------------------------------------------------
+!----- The flying boat
+!-------------------------------------------------
+
+Object P1L_Flying_Boat "The flying boat"
+	with
+		description "The old boat that your father and grandfather used to sail the aether from one end to the other when they were young. It now shows its
+            age, creaking threateningly against the wind of the nearby storm. The black clouds roar and turn, advancing at full speed towards your flying vessel.",
+	has light;
+
+Object -> P1O_Notebook "notebook"
+	with
+		name 'notebook',
+        page 0,
+        description [;
+            print "Your old notebook has been with you for longer than you can remember. Its bruised cover wears the
+                scratches and scars gained over the years with dignity.^";
+            if (self.page < 3) self.page++;
+            switch(self.page) {
+                1: "You open the notebook at the last entry, the fruit of your research before beginning this journey:
+                    ^^THE PHANTOM ZONE:
+                    ^Although commonly referred to by this singular term, in reality there are many phantom zones, scattered in very diverse sections
+                    of the aether. They are highly unstable areas, both climatologically and energetically. Despite the difficulty of life
+                    developing on the few floating islands existing in the zones, numerous travellers have claimed to see ruins of human buildings.
+                    ^It's not just these structures that give the areas the name ~Phantom Zone~, it's also the swarms of spectral beings,
+                    commonly known as ~pale ones~, who seem attracted to them.
+                    ^Many theorise that these zones are close to some of the cataclysms that occurred prior to the Great Transformation; the event
+                    that changed the face of the known universe. Traveling around these places is discouraged due to their dangerous nature.
+                    ^^The notes continue, but you find the words difficult to focus on, given how your life is in danger right now. You decide to
+                    close the notebook.";
+                2: "You open the notebook at one of the oldest entries. Written in adolescent handwriting, this research was a product of your concern at the time
+                    about the changes you were experiencing and could not explain:
+                    ^^EMPATHS:
+                    ^Empaths can perceive emotions as a physical or spiritual current between bodies. It is said they
+                    can sometimes contact the astral world and communicate with the dead, or perceive past situations that have left an
+                    indelible mark on a particular place.
+                    ^Empaths usually have a restless personality prone to violent emotional outbursts. That is why some scientists doubt their
+                    existence, considering any symptoms a product of a kind of collective hysteria.
+                    ^^You took even more notes on the subject, but you already know them by heart, and this is not the place or the best time to
+                    consult them.";
+                default: "There are many more entries in this notebook, but none of them are useful to you in this time of crisis.";
+            }
+        ],
+        before [;
+            Open: <<Examine self>>;
+        ];
+
+Object -> P1O_Sail "sail"
+    with
+        name 'sail',
+        describe [;
+            if (self has general) "Despite having the sail lowered, the force of the wind seems capable by itself of tearing the mast from your vessel...";
+            "The sail hits the mast violently, and threatens to split it in two if it is not lowered...";
+        ],
+        description [;
+            if (self has general) "The sail has been lowered. At least there is now one part of this boat that may survive the next few minutes.";
+            "The hoisted sail, swollen with the winds of the storm, dangerously bashes against the mast. 
+            Perhaps it would be advisable to lower it until the storm passes...";
+        ],
+        before [;
+            Lower: if (self has general) "The sail is already lowered!";
+                give self general;
+                "You attempt to lower the sail, with extreme difficulty, fighting against the elements at every stage. You finally succeed, but 
+                even with the sail down it seems that the situation has improved only marginally...";
+            Raise: if (self hasnt general) "The sail is hoisted already!";
+                "Now is not the time to hoist the sail! If you do, it's likely to split with the force of the wind...";
+        ],
+	has static;
+
+
+!-------------------------------------------------
+!----- The cliff
+!-------------------------------------------------
+
+Object P1L_Cliff "The cliff"
+	with
+		description "You find yourself on a cliff, at night, with a large grass esplanade stretching eastwards. To the west
+            there remains only the abyss, the vast immensity of the aether. Although the wind persists, it seems that it is far from its
+            previous violence.",
+	has light;
+
+!-------------------------------------------------    
+!----- The esplanade
+!-------------------------------------------------
+
+Object P1L_Esplanade "The esplanade"
+	with
+		description "The grass esplanade opens up around you in all directions, gently rocked by the night wind.",
+	has light;
+    
+!-------------------------------------------------
+!----- Visitors?
+!-------------------------------------------------
+
+Object P1L_Visitors "Visitors?"
+	with
+		description "The esplanade continues endlessly here as well.",
+	has light;
+    
+!-------------------------------------------------
+!----- An abandoned house
+!-------------------------------------------------
+
+Object P1L_Abandoned_House "An abandoned house"
+	with
+		description "The grass esplanade rises slightly to the ruins of an old Victorian-looking house.
+            The deteriorated entrance door is open and allows access to the interior of the building.
+            ^From all directions around the house, hundreds of ~pale ones~ approach you, squeaking with their electric voices,
+            longing for the warmth of your vital essence...",
+	has light;
+    
+!-------------------------------------------------
+!----- Entrance hall
+!-------------------------------------------------
+
+Object P1L_Entrance "Entrance hall"
+	with
+		description "A narrow hall, once small and charming, but long fallen into ruinous decay. A
+            splintered and broken old grandfather clock stands dejectedly near the narrow staircase with rotten steps
+            that ascends to the first floor. To the north and east, two arches lead to two rooms.",
+	has light;
+    
+!-------------------------------------------------
+!----- Lower corridor
+!-------------------------------------------------
+
+Object P1L_Lower_corridor "Lower corridor"
+	with
+		description "The decrepit corridor on the lower floor, with a portrait on the wall as the only ornament, leads to various rooms to
+            through exits to the north, east, west, southeast and southwest.",
+	has light;
+
+!-------------------------------------------------
+!----- Laundry room
+!-------------------------------------------------
+
+Object P1L_Laundry_room "Laundry room"
+	with
+		description "In the laundry room, the strong odour of stagnant water hits you in the face.  It seems to be coming from the wash basin over in one corner. 
+            Towards the south is the exit door.",
+	has light;
+    
+!-------------------------------------------------
+!----- Basin bottom
+!-------------------------------------------------
+
+Object P1L_Basin_bottom "Basin bottom"
+	with
+		description "Murky water surrounds you at the bottom of this impossibly deep basin. An invisible force pins you to the muddy
+            ground, preventing you from surfacing. Above you, a pallid woman stares at you with her big, unnatural eyes.",
+	has light;
+
+!-------------------------------------------------
+!----- Kitchen
+!-------------------------------------------------
+
+Object P1L_Kitchen "Kitchen"
+	with
+		description "The kitchen seems to have withstood the passage of time better than other parts of this house. Only the old-fashioned look of
+            the stoves and cupboards betray the inexorable passage of time. A door returns you to the corridor to the west.",
+	has light;
+
+!-------------------------------------------------
+!----- Lounge
+!-------------------------------------------------
+
+Object P1L_Lounge "Lounge"
+	with
+		description "The once comfortable lounge is now dilapidated, with its sofa, moth-eaten chairs, and table seemingly about to
+            fall to pieces on the floor. To the east you can go back to the corridor.",
+	has light;
+
+!-------------------------------------------------
+!----- Office
+!-------------------------------------------------
+
+Object P1L_Office "Office"
+	with
+		description "A sober and tiny office, with a leather armchair, a desk and a shelf with a few books. The diploma on the desk displays
+            the credentials of the owner of the house. A colourful carpet covers most of the floor here. To the north and west there are exits.",
+	has light;
+
+!-------------------------------------------------
+!----- Upper corridor
+!-------------------------------------------------
+
+Object P1L_Upper_corridor "Upper corridor"
+	with
+		description "Abundant damp patches plague the upper hallway of the house. One of the two exits to the north has been walled up, more
+            quickly than expertly. Another exit to the east leads to a bathroom. It is also possible to descend to the lower floor, and in
+            the ceiling a hatch can be seen.",
+	has light;
+
+!-------------------------------------------------
+!----- Bedroom
+!-------------------------------------------------
+
+Object P1L_Bedroom "Bedroom"
+	with
+		description "The marital bedroom, with a large bed that was once luxurious but is now just pasture for moths
+            and moisture. A window to the north leads to a small balcony, and to the south you can return to the corridor.",
+	has light;
+
+!-------------------------------------------------
+!----- Bedroom balcony
+!-------------------------------------------------
+
+Object P1L_Bedroom_balcony "Bedroom balcony"
+	with
+		description "On the balcony you're assaulted by the icy wind outside. Darkness prevents you from seeing far into the distance, but it is still
+            possible to distinguish the figures of the ~pale ones~ ceaselessly circling the building. To your right,
+            not far away, is the balcony of another nearby room and the master bedroom lies to the south.",
+	has light;
+
+!-------------------------------------------------
+!----- A Child's Room
+!-------------------------------------------------
+
+Object P1L_Childs_room "A Child's Room"
+	with
+		description "A strong, stale stench greets you in this room. The crib and the abandoned toys next to the table here, seem to indicate
+            that this was a child's room. The door is walled up, so the only way out is via the balcony back to the north.",
+	has light;
+
+!-------------------------------------------------
+!----- Abandoned balcony
+!-------------------------------------------------
+
+Object P1L_Abandoned_balcony "Abandoned balcony"
+	with
+		description "This balcony is in a state of even greater disrepair than the adjacent one. The floor beneath your feet seems
+            to be shaking worryingly. A broken window leads south inside.",
+	has light;
+
+!-------------------------------------------------
+!----- Bathroom
+!-------------------------------------------------
+
+Object P1L_Bathroom "Bathroom"
+	with
+		description "A small washbasin, with its rusty taps, lies sadly abandoned next to the toilet and the bathtub.",
+	has light;
+
+!-------------------------------------------------
+!----- Basement
+!-------------------------------------------------
+
+Object P1L_Basement "Basement"
+	with
+		description "This basement looks like a more informal version of the office on the floor above, with wooden boxes instead of chairs, a
+            plank on two easels as a table, and a broken kerosene lamp which once provided lighting.
+            The makeshift table features a small shelf. From here you can go up to the upper floor or go east to a storeroom.",
+	has light;
+
+!-------------------------------------------------
+!----- Storage room
+!-------------------------------------------------
+
+Object P1L_Storage_room "Storage room"
+	with
+		description "A narrow, uncomfortable storeroom plagued with seemingly useless objects. The only exit is to the west.";
+
+!-------------------------------------------------
+!----- Attic
+!-------------------------------------------------
+
+Object P1L_Attic "Attic"
+	with
+		description "This attic is full of broken and dusty furniture covered in cobwebs. Its sloping roof is spanned by colossal wooden beams.
+            In the back of the attic, towards the east, you can see some shelves. It is also possible to descend to the first floor.";
+
+!-------------------------------------------------
+!----- Back of the Attic
+!-------------------------------------------------
+
+Object P1L_Back_Attic "Back of the Attic"
+	with
+		description "A small improvised room at the back of the attic, delineated by four empty shelves. The only way out is west.";
+
+!-------------------------------------------------
+!----- On a beam
+!-------------------------------------------------
+
+Object P1L_On_Beam "On a beam"
+	with
+		description "You are sitting on one of the main beams up in the roof of the attic. A small circular window is set nearby in
+            the wall to the north. A shelf unit rests on the beam, allowing you to descend to the attic floor.";
+
+!-------------------------------------------------
+!----- Bonfire Tower
+!-------------------------------------------------
+
+Object P1L_Bonfire_Tower "Bonfire Tower"
+	with
+		description "You're on top of a small tower, with an extinguished bonfire in its centre. The remnants of an old tattered rope are tied
+            to what remains of the roof. The night sky surrounds you. At some point in time there were steps that
+            descended to a lower floor, but they have long since collapsed. The only way out is by crossing the totem pole, which forms an
+            improvised bridge leading south to the attic.",
+	has light;
+
+
+ 
