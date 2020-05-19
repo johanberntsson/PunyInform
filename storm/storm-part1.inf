@@ -138,8 +138,10 @@ Object P1L_Esplanade "The esplanade"
                 allows navigation between them."
             1 'grass' "The grass rises with vigour as far as your eyes can see.",
         before [;
-            Go: move P1O_Echo1 to Limbo;
-                rfalse;
+            Go: if (self hasnt general) {
+                    move P1O_Echo1 to Limbo;
+                    give self general;
+                }
         ],
         nw_to P1L_Cliff,
         w_to P1L_Cliff,
@@ -184,7 +186,30 @@ Object -> P1O_Echo1 "echo"
 
 Object P1L_Visitors "Visitors?"
 	with
-		description "The esplanade continues endlessly here as well.",
+		description [;
+            print "The esplanade continues endlessly here as well.^";
+            if (self hasnt general) "Not far away you can see a figure of extreme slenderness, with its back to you. It seems to contemplate the night sky,
+                immersed in deep reflection.";
+            "Dozens of ~pale ones~ approach you from all directions except the east.";
+        ],
+        react_after [;
+            if (self hasnt general) {
+                give self general;
+                print "The figure turns when it hears the crunch of your footsteps and you immediately understand the danger you are in. Its
+                ash-coloured, almost transparent skin and eyes like two bright white beacons reveal that it is a ~pale one~, one of the
+                many spectral beings that roam the Phantom Zone. The clothes he is wearing - now you are able to distinguish them - are
+                faded rags that barely cover his skinny body.
+                ^When he sees you, he opens his mouth and utters a groan similar to an electric sizzle, to which many others are added.
+                From nowhere, dozens of other ~pale ones~ appear and walk towards you from multiple directions. These beings covet the
+                warmth and energy of the living, and now long for yours. If they touch you, they will absorb your vitality and
+                you will become one of them...^^";
+                <<Look>>;
+            }
+        ],
+        cheap_scenery
+            1 'aether' "Aether is the substance that flows through the known universe, sustains the flight of floating islands and continents and
+                allows navigation between them."
+            1 'grass' "The grass rises with vigour as far as your eyes can see.",
 	has light;
     
 !-------------------------------------------------
@@ -193,10 +218,6 @@ Object P1L_Visitors "Visitors?"
 
 Object P1L_Abandoned_House "An abandoned house"
 	with
-        describe [;
-            if (self has general) "Despite having the sail lowered, the force of the wind seems capable by itself of tearing the mast from your vessel...";
-            "The sail hits the mast violently, and threatens to split it in two if it is not lowered...";
-        ],
 		description "The grass esplanade rises slightly to the ruins of an old Victorian-looking house.
             The deteriorated entrance door is open and allows access to the interior of the building.
             ^From all directions around the house, hundreds of ~pale ones~ approach you, squeaking with their electric voices,
