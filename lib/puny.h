@@ -558,6 +558,19 @@ Include "parser.h";
 	}
 ];
 
+[ RunEachTurn _i _obj;
+	! Loop over the scope to find possible react_before routines
+	! to run in each object, if it's found stop the action by returning true
+#IfDef GamePreRoutine;
+	if(GamePreRoutine()) rtrue;
+#EndIf;
+	RunRoutines(location, each_turn);
+	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
+		RunRoutines(_obj, each_turn);
+	}
+];
+
 [ BeforeRoutines _i _obj;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
@@ -985,7 +998,11 @@ Object DefaultPlayer "you"
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
 		if(action >= 0 && meta == false) {
-            RunTimersAndDaemons();
+			RunTimersAndDaemons();
+			RunEachTurn();
+#IfDef TimePasses;
+			TimePasses();
+#EndIf;
             turns++;
         }
 
@@ -1038,14 +1055,14 @@ Object DefaultPlayer "you"
 ];
 
 !  provide entry point routines if the user hasn't already:
-!#Stub TimePasses      0;
+!#Stub TimePasses      0; ! Uses ifdef instead of stub
 !#Stub Amusing         0;
 #Stub DeathMessage    0;
 !#Stub DarkToDark      0;
 #Stub NewRoom         0;
 !#Stub LookRoutine     0;
 !#Stub AfterLife       0;
-!#Stub GamePreRoutine  0; Use ifdef instead of stub
+!#Stub GamePreRoutine  0; ! Uses ifdef instead of stub
 !#Stub GamePostRoutine 0;
 !#Stub AfterPrompt     0;
 !#Stub BeforeParsing   0;
