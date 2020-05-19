@@ -55,6 +55,10 @@
 	PrintMsg(MSG_CONSULT_NOTHING_INTERESTING);
 ];
 
+[ CutSub;
+	PrintMsg(MSG_CUT_NO_USE);
+];
+
 [ ExamineSub;
 	if(noun provides description) {
 		PrintOrRun(noun, description);
@@ -580,8 +584,11 @@ Verb 'examine' 'x//'
 
 Verb 'read'
 	* noun                                      -> Examine
-    * 'about' topic 'in' noun                   -> Consult
-    * topic 'in' noun                           -> Consult;
+	* 'about' topic 'in' noun                   -> Consult
+	* topic 'in' noun                           -> Consult;
+
+Verb 'cut' 'chop' 'prune' 'slice'
+	* noun                                      -> Cut;
 
 Verb meta 'quit' 'q//'
 	* -> Quit;

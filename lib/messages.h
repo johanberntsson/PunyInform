@@ -319,6 +319,9 @@ Constant MSG_TOUCHABLE_FOUND_CLOSED 67;
 #Ifndef MSG_CONSULT_NOTHING_INTERESTING;
 Constant MSG_CONSULT_NOTHING_INTERESTING 68;
 #Endif;
+#Ifndef MSG_CUT_NO_USE;
+Constant MSG_CUT_NO_USE 69;
+#Endif;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -411,6 +414,8 @@ Constant LibraryMessages 0;
 		print_ret (The) p_arg1, " isn't open.";
 	MSG_CONSULT_NOTHING_INTERESTING:
 		"You discover nothing of interest in ", (the) second, ".";
+	MSG_CUT_NO_USE:
+		"Cutting ", (the) noun, " up would achieve little.";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
