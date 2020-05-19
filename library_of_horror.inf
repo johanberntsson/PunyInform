@@ -244,17 +244,8 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 	with
 		short_name "box",
 		name 'box',
-		description [;
-#Ifndef USEINFORM;
-			if(ScopeCeiling(player) == self) {
-				print "The box looked pretty big from the outside, but you feel really confined in here.";
-				rtrue;
-			} else {
-				print "It's a large box. You could probably fit several people in there.";
-				rtrue;
-			}
-#Endif;
-		],
+		inside_description "The box looked pretty big from the outside, but you feel really confined in here.",
+		description "It's a large box. You could probably fit several people in there.",
         time_out [;
             print "^The box goes BOOM.^";
         ],

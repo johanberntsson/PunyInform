@@ -104,6 +104,7 @@ Array direction_name_array table "north" "south" "east" "west" "up" "down" "in" 
 ! Property name; ! 'name' seems to be hardcoded in the Inform compiler
 Property initial;
 Property describe alias e_to;
+Property inside_description alias d_to;
 Property description;
 Property short_name;
 Property add_to_scope;
