@@ -23,20 +23,28 @@
 
 	@new_line;
 
-	! ### Print room description
+	! room description
 	if(_ceil.description) {
 		PrintOrRun(_ceil, description, 1);
 	}
 
-	_PrintContents(" You can also see ", " here.", _ceil);
-	@new_line;
 
 	objectloop(_obj in _ceil) {
-		if(_obj hasnt moved && _obj.initial ~= 0) {
-			@new_line;
+		if(_obj.describe ~= 0) {
+			! describe is used if present
+			new_line; new_line;
+			PrintOrRun(_obj, describe);
+		} else if(_obj hasnt moved && _obj.initial ~= 0) {
+			! intial descriptions (if any)
+			new_line; new_line;
 			PrintOrRun(_obj, initial);
 		}
 	}
+
+	! all other objects
+	_PrintContents("^You can also see ", " here.", _ceil);
+	@new_line;
+
 
 ];
 

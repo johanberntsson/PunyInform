@@ -55,6 +55,7 @@ Fake_Action PluralFound;
 
 ! Property name; ! This seems to be hardcoded in the Inform compiler
 Property initial;
+Property describe;
 Property description;
 Property short_name;
 Property add_to_scope;

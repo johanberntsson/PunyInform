@@ -404,7 +404,9 @@ Array TenSpaces -> "          ";
 	objectloop(_obj in p_obj) {
 !   print "Considering ", (object) _obj, "...^";
 !   if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
-		if(_obj hasnt concealed && _obj hasnt scenery &&  (_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
+		if(_obj hasnt concealed && _obj hasnt scenery &&
+			(_obj.describe == 0 || _obj notin parent(player)) && 
+			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
 			if(_printed_first_text == 0) {
 				print (string) p_first_text;
 				_printed_first_text = 1;
@@ -866,7 +868,7 @@ Object DefaultPlayer "you"
 		life NULL,
 		each_turn NULL,
 		time_out NULL,
-		describe NULL,
+		! describe NULL, ! TODO: uncommenting causes erorr LookSub
 		add_to_scope 0,
 		capacity MAX_CARRIED,
 		!parse_name 0, ! TODO: uncommenting causes error (open box)

@@ -282,6 +282,7 @@ Book -> -> RedBook "red book"
 Object -> BlueBook "blue book" class Book
 	with
 		name 'book' 'blue',
+		!describe "An old and torn blue book is here.",
 		initial [;
 			!print "Self is ", self, ". ";
 			!if(BlueBook provides hello && BlueBook.hello > 10) {
