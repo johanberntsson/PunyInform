@@ -115,6 +115,15 @@ Constant MSG_FILL_NO_WATER "But there's no water here to carry.";
 #Ifndef MSG_DIG_NO_USE;
 Constant MSG_DIG_NO_USE "Digging would achieve nothing here.";
 #EndIf;
+#Ifndef MSG_RUB_DEFAULT;
+Constant MSG_RUB_DEFAULT "You achieve nothing by this.";
+#EndIf;
+#Ifndef MSG_MILD_DEFAULT;
+Constant MSG_MILD_DEFAULT "Quite.";
+#EndIf;
+#Ifndef MSG_STRONG_DEFAULT;
+Constant MSG_STRONG_DEFAULT "Real adventurers do not use such language.";
+#EndIf;
 
 
 !
@@ -328,6 +337,9 @@ Constant MSG_CONSULT_NOTHING_INTERESTING 68;
 #Ifndef MSG_CUT_NO_USE;
 Constant MSG_CUT_NO_USE 69;
 #Endif;
+#Ifndef MSG_BLOW_DEFAULT;
+Constant MSG_BLOW_DEFAULT 70;
+#EndIf;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -422,6 +434,8 @@ Constant LibraryMessages 0;
 		"You discover nothing of interest in ", (the) second, ".";
 	MSG_CUT_NO_USE:
 		"Cutting ", (the) noun, " up would achieve little.";
+	MSG_BLOW_DEFAULT:
+		"You can't usefully blow ", (the) noun, ".";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);

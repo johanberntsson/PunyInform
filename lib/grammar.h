@@ -59,6 +59,22 @@
 	PrintMsg(MSG_DIG_NO_USE);
 ];
 
+[ RubSub;
+	PrintMsg(MSG_RUB_DEFAULT);
+];
+
+[ MildSub;
+	PrintMsg(MSG_MILD_DEFAULT);
+];
+
+[ StrongSub;
+	PrintMsg(MSG_STRONG_DEFAULT);
+];
+
+[ BlowSub;
+	PrintMsg(MSG_BLOW_DEFAULT);
+];
+
 [ ConsultSub;
 	PrintMsg(MSG_CONSULT_NOTHING_INTERESTING);
 ];
@@ -603,7 +619,22 @@ Verb 'fill'
 	* noun                                      -> Fill;
 
 Verb 'cut' 'chop' 'prune' 'slice'
-	* noun                                      -> Cut;
+	* noun                                      -> Cut
+	* noun 'with' held                          -> Attack;
+
+Verb 'rub' 'clean' 'dust' 'polish' 'scrub' 'shine' 'sweep' 'wipe'
+	* noun                                      -> Rub;
+
+Verb 'bother' 'curses' 'darn' 'drat'
+	*                                           -> Mild
+	* topic                                     -> Mild;
+
+Verb 'shit' 'damn' 'fuck' 'sod'
+	*                                           -> Strong
+	* topic                                     -> Strong;
+
+Verb 'blow'
+	* held                                      -> Blow;
 
 Verb meta 'quit' 'q//'
 	* -> Quit;
@@ -656,7 +687,8 @@ Verb 'wear'
 Verb 'attack' 'break' 'crack' 'destroy'
      'fight' 'hit' 'kill' 'murder' 'punch'
      'smash' 'thump' 'torture' 'wreck'
-    * noun                                      -> Attack;
+    * noun                                      -> Attack
+    * noun 'with' held                          -> Attack;
 
 Verb 'rotate' 'screw' 'twist' 'unscrew'
     * noun                                      -> Turn;
