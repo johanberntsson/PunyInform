@@ -51,6 +51,10 @@
 
 ];
 
+[ ConsultSub;
+	PrintMsg(MSG_CONSULT_NOTHING_INTERESTING);
+];
+
 [ ExamineSub;
 	if(noun provides description) {
 		PrintOrRun(noun, description);
@@ -575,7 +579,9 @@ Verb 'examine' 'x//'
 	* noun -> Examine;
 
 Verb 'read'
-	* noun -> Examine;
+	* noun                                      -> Examine
+    * 'about' topic 'in' noun                   -> Consult
+    * topic 'in' noun                           -> Consult;
 
 Verb meta 'quit' 'q//'
 	* -> Quit;

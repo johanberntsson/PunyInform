@@ -316,6 +316,9 @@ Constant MSG_PARSER_NOTHING_TO_VERB 66;
 #Ifndef MSG_TOUCHABLE_FOUND_CLOSED;
 Constant MSG_TOUCHABLE_FOUND_CLOSED 67;
 #Endif;
+#Ifndef MSG_CONSULT_NOTHING_INTERESTING;
+Constant MSG_CONSULT_NOTHING_INTERESTING 68;
+#Endif;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -406,6 +409,8 @@ Constant LibraryMessages 0;
 		"There is nothing to ",  (address) verb_word,".";
 	MSG_TOUCHABLE_FOUND_CLOSED:
 		print_ret (The) p_arg1, " isn't open.";
+	MSG_CONSULT_NOTHING_INTERESTING:
+		"You discover nothing of interest in ", (the) second, ".";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
