@@ -703,7 +703,7 @@ Include "parser.h";
 		! print (hex) x-->0, " (", (property) x-->0, ")  length ", x->2, ": ";
 		!       for (n = 0: n< (x->2)/2: n++)
 		!           print (hex) (x+3)-->n, " ";
-		!       new_line;
+		!       @new_line;
 		_x = _x + _x->2 + 3;
 	}
 	return _x;
@@ -906,7 +906,7 @@ Object DefaultPlayer "you"
 	while(deadflag == GS_PLAYING) {
 		status_field_1 = score;
 		status_field_2 = turns;
-		new_line;
+		@new_line;
 		_score = score;
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
@@ -943,7 +943,7 @@ Object DefaultPlayer "you"
 			parse_array->1 = _parsearraylength - _sentencelength;
 #IfDef DEBUG;
 			_PrintParseArray(parse_array);
-			new_line;
+			@new_line;
 #Endif;
 		} else {
 			! the input was just one sentence

@@ -28,22 +28,21 @@
 		PrintOrRun(_ceil, description, 1);
 	}
 
+	! all other objects
+	_PrintContents(" You can also see ", " here.^", _ceil);
 
 	objectloop(_obj in _ceil) {
 		if(_obj.describe ~= 0) {
 			! describe is used if present
-			new_line; new_line;
+			@new_line; 
 			PrintOrRun(_obj, describe);
 		} else if(_obj hasnt moved && _obj.initial ~= 0) {
 			! intial descriptions (if any)
-			new_line; new_line;
+			@new_line; 
 			PrintOrRun(_obj, initial);
 		}
 	}
 
-	! all other objects
-	_PrintContents("^You can also see ", " here.", _ceil);
-	@new_line;
 
 
 ];
@@ -328,7 +327,7 @@ Global scope_cnt;
 	print scope_cnt++,": ", (a) p_obj, " (", p_obj, ")";
 	if(ObjectIsUntouchable(p_obj, true)) print " [untouchable]";
 	if(ObjectIsInvisible(p_obj, true)) print " [invisible]";
-	new_line;
+	@new_line;
 ];
 
 [ ScopeSub _i _obj;

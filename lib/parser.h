@@ -223,7 +223,7 @@
 		_token_bottom = p_pattern->0 & $0f; ! bottom (4 bits)
 		print "Token#: ", _i, " Type: ", p_pattern->0, " (top ", _token_top, ", next ",_token_next, ", bottom ",_token_bottom, ") data: " ,(p_pattern + 1)-->0;
 		if((p_pattern + 1)-->0>4000) print" " ,(address) (p_pattern + 1)-->0;
-		new_line;
+		@new_line;
 		p_pattern = p_pattern + 3;
 	}
 	! print ": ", i, " tokens^";
@@ -557,7 +557,7 @@
 				! don't forget to restore the old arrays
 				_CopyInputArray(temp_player_input_array, player_input_array);
 				_CopyParseArray(temp_parse_array, parse_array);
-				new_line;
+				@new_line;
 				jump recheck_noun;
 			}
 		}
@@ -668,7 +668,7 @@
 		} else {
 			print " (this is not a preposition!)";
 		}
-		new_line;
+		@new_line;
 #EndIf;
 		if(p_parse_pointer --> 0 == _token_data) {
 #IfDef DEBUG_PARSETOKEN;
