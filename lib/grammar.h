@@ -326,6 +326,10 @@
 	}
 ];
 
+[ AgainSub;
+	! nothing here - this is taken care of in the main game loop instead
+];
+
 #IfDef DEBUG_VERBS;
 Global scope_cnt;
 [ _ScopeSubHelper p_obj;
@@ -574,6 +578,9 @@ Verb meta 'restore'
 Verb meta 'restart'
 	* -> Restart;
 
+Verb meta 'again' 'g//'
+    * -> Again;
+
 #IfDef DEBUG_VERBS;
 ! sets the random seed, thus making randomness predictable
 ! also a test of special and number, thus the fancy grammar
@@ -654,6 +661,7 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
 		'l//': _string_name = "look";
 		'z//': _string_name = "wait";
 		'q//': _string_name = "quit";
+		'g//': _string_name = "again";
 	}
 	if(_string_name)
 		print (string) _string_name;

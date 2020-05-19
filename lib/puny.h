@@ -909,7 +909,7 @@ Object DefaultPlayer "you"
 		before_implicit NULL,
 	has concealed animate proper transparent;
 
-[ main _i _j _copylength _sentencelength _parsearraylength _score;
+[ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved;
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
     player_input_array->0 = MAX_INPUT_CHARS;
@@ -930,6 +930,7 @@ Object DefaultPlayer "you"
 
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
+	_again_saved = false;
 	Initialise();
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) PlayerTo(location);
@@ -947,7 +948,25 @@ Object DefaultPlayer "you"
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
 		}
+.do_it_again;
 		_sentencelength = _ParseAndPerformAction();
+		if(action == ##Again) {
+			! restore from the 'again' buffers and reparse
+			if(_again_saved) {
+				_CopyInputArray(temp_player_input_array, player_input_array);
+				_CopyParseArray(temp_parse_array, parse_array);
+				jump do_it_again;
+			} else {
+				_again_saved = false;
+				print "You can hardly repeat that.^";
+			}
+		} else {
+			! store the current buffer to 'again'
+			_again_saved = true;
+			_CopyInputArray(player_input_array, temp_player_input_array);
+			_CopyParseArray(parse_array, temp_parse_array);
+		}
+
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
 		if(action >= 0 && meta == false) {

@@ -806,6 +806,26 @@
 	}
 ];
 
+[ _AddMultipleNouns p_multiple_objects_type   _i _addobj _obj;
+	multiple_objects --> 0 = 0;
+	for(_i = 0: _i < scope_objects: _i++) {
+		_obj = scope-->_i;
+		_addobj = false;
+		switch(p_multiple_objects_type) {
+		MULTIHELD_OBJECT:
+			_addobj = _obj in player;
+		MULTI_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
+			_addobj = _obj hasnt scenery or concealed;
+		}
+		if(action == ##Take && _obj in player) _addobj = false;
+		if(_addobj) {
+			multiple_objects --> 0 = 1 + (multiple_objects --> 0);
+			multiple_objects --> (multiple_objects --> 0) = _obj;
+			!print "Adding ", (name) _obj, "^";
+		}
+	}
+];
+
 [ _PrintPartialMatch p_start p_stop _start _stop _i;
 	_i = (parse_array-2+(4*p_start));
 	_start = _i->3; ! index to input line for first word
@@ -1194,22 +1214,3 @@
 	return num_words_parsed;
 ];
 
-[ _AddMultipleNouns p_multiple_objects_type   _i _addobj _obj;
-	multiple_objects --> 0 = 0;
-	for(_i = 0: _i < scope_objects: _i++) {
-		_obj = scope-->_i;
-		_addobj = false;
-		switch(p_multiple_objects_type) {
-		MULTIHELD_OBJECT:
-			_addobj = _obj in player;
-		MULTI_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
-			_addobj = _obj hasnt scenery or concealed;
-		}
-		if(action == ##Take && _obj in player) _addobj = false;
-		if(_addobj) {
-			multiple_objects --> 0 = 1 + (multiple_objects --> 0);
-			multiple_objects --> (multiple_objects --> 0) = _obj;
-			!print "Adding ", (name) _obj, "^";
-		}
-	}
-];
