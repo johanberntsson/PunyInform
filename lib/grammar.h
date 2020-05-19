@@ -28,10 +28,18 @@
 		PrintOrRun(_ceil, description, 1);
 	}
 
-	! all other objects
-	_PrintContents(" You can also see ", " here.^", _ceil);
+	if(_player_parent ~= _ceil) {
+		! the contents of the container you are inside
+		_PrintContents(" There is ", " here.", _player_parent);
+		! all other objects
+		_PrintContents(" Outside you can also see ", ".^", _ceil);
+	} else {
+		! all other objects
+		_PrintContents(" You can also see ", " here.^", _ceil);
+	}
 
-	objectloop(_obj in _ceil) {
+
+	objectloop(_obj in _player_parent) {
 		if(_obj.describe ~= 0) {
 			! describe is used if present
 			@new_line; 
@@ -42,8 +50,6 @@
 			PrintOrRun(_obj, initial);
 		}
 	}
-
-
 
 ];
 

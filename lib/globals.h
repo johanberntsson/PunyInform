@@ -101,7 +101,7 @@ Array direction_properties_array table n_to s_to e_to w_to u_to d_to in_to out_t
 Array direction_name_array table "north" "south" "east" "west" "up" "down" "in" "out";
 #EndIf;
 
-! Property name; ! This seems to be hardcoded in the Inform compiler
+! Property name; ! 'name' seems to be hardcoded in the Inform compiler
 Property initial;
 Property describe alias e_to;
 Property description;
