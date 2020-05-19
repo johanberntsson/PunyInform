@@ -13,7 +13,6 @@ Constant USEINFORM;
 #Endif;
 
 ! Uncomment to add optional features to PunyLib
-Constant FULL_DIRECTIONS;
 !Constant ALLOW_WRITTEN_NUMBERS;
 !Constant DEBUG_VERBS;
 

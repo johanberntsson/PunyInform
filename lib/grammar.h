@@ -36,19 +36,22 @@
 		! all other objects
 		_PrintContents(" You can also see ", " here.", _ceil);
 	}
-	@new_line;
 
 	objectloop(_obj in _player_parent) {
 		if(_obj.&describe) {
 			! describe is used if present
-			@new_line; 
-			PrintOrRun(_obj, describe);
+			! @new_line;
+            print " ";
+			PrintOrRun(_obj, describe, 1);
 		} else if(_obj hasnt moved && _obj.initial ~= 0) {
 			! intial descriptions (if any)
-			@new_line; 
-			PrintOrRun(_obj, initial);
+			! @new_line;
+            print " ";
+			PrintOrRun(_obj, initial, 1);
 		}
 	}
+
+	@new_line;
 
 ];
 
