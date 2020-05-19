@@ -60,6 +60,7 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 
 	scope_pov = p_actor;
 	_start_pos = ScopeCeiling(p_actor);
+
 #IfDef DEBUG_SCOPE;
 	print "updating scope for ",(object) _start_pos,"^";
 #EndIf;
@@ -67,14 +68,22 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	! the directions are always in scope
 	scope-->0 = Directions;
 	scope_objects = 1;
+
 	! if we are in a container, add it to scope
 	if(_start_pos ~= location) {
 		scope-->(scope_objects++) = _start_pos;
 	}
+
 	! give the starting pos a chance to add objects to scope
 	if(_start_pos.add_to_scope) _start_pos.add_to_scope();
-	! Add all in player location (which may be inside an object)
-	_SearchScope(child(_start_pos));
+
+	if(darkness) {
+		! only the player's possessions are in scope
+		_SearchScope(child(player));
+	} else {
+		! Add all in player location (which may be inside an object)
+		_SearchScope(child(_start_pos));
+	}
 ];
 
 [ ScopeCeiling p_actor _parent;

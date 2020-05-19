@@ -512,13 +512,40 @@ Array TenSpaces -> "          ";
 		location = _p;
 	}
 	if(_old_loc ~= location) {
+		! new location, update scope (assuming light)
+		! (we need to assume light first so that we
+		! UpdateDarkness can find light sources that
+		! are in the room, but not carried by the player)
+		darkness = false;
+		_ResetScope();
+		_UpdateScope(player);
 		NewRoom();
 		MoveFloatingObjects();
+		_UpdateDarkness();
+		if(darkness) {
+			! no lights found, so update scope again
+			_ResetScope();
+			_UpdateScope(player);
+		}
 	}
-	!_ResetScope();
-	!_UpdateScope(player);
 	rtrue;
 ];
+
+[ _UpdateDarkness _i _j;
+	darkness = location hasnt light;
+	if(darkness) {
+		! check if we have a light source
+		for(_i = 0: _i < scope_objects: _i++) {
+			_j = scope-->_i;
+			if(_j has light && ObjectIsInvisible(_j) == false) {
+				darkness = false;
+				break;
+			}
+		}
+	}
+	!print "_UpdateDarkness: ", (name) location, " ", darkness, "^";
+];
+
 
 Include "parser.h";
 
@@ -912,7 +939,11 @@ Object DefaultPlayer "you"
 		status_field_1 = score;
 		status_field_2 = turns;
 		@new_line;
+
+		_ResetScope();
+		_UpdateScope();
 		_score = score;
+		_UpdateDarkness();
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
 		}

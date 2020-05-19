@@ -195,6 +195,7 @@ Global status_field_1 = 0; ! Must be second global. Is used to show score or hou
 Global status_field_2 = 0; ! Must be third global. Is used to show turns or minutes
 Global score;
 Global turns;
+Global darkness;
 Global player;
 Global actor;
 Global wn;               ! word number within parse

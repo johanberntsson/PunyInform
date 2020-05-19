@@ -337,6 +337,7 @@
 		if(_obj provides parse_name) {
 			_j = wn;
 			_result = PrintOrRun(_obj, parse_name);
+			if(_result == -1) jump try_name_match;
 			_n = _n + _result; ! number of words consumed
 			wn = _j;
 			if(_n > wn && ObjectIsInvisible(_obj, true) == false) {
@@ -358,6 +359,7 @@
 				}
 			}
 		} else {
+.try_name_match;
 !			_name_array = _obj.&name;
 			@get_prop_addr _obj name -> _name_array;
 			if(_name_array) {
@@ -819,6 +821,12 @@
 	}
 ];
 
+[ _PrintUknownWord _i;
+	for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
+		print (char) player_input_array->(_i + parser_unknown_noun_found->3);
+	}
+];
+
 [ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
@@ -899,12 +907,26 @@
 					scope_stage = 3;
 					indirect(scope_routine);
 				} else if(parser_unknown_noun_found --> 0 > 0) {
-					print "You can't see any such thing.^";
+					! is it one of the location.name words?
+					inp1 = -1;
+					if(location.name ~= 0) {
+						for(_i = 0: _i < location.#name / 2: _i++) {
+							if(parser_unknown_noun_found --> 0 ==
+								location.&name --> _i) {
+								inp1 = _i;
+							}
+						}
+					}
+					if(inp1 > -1) {
+						print "You don't need to refer to ~";
+						_PrintUknownWord();
+						print "~ in this game.^";
+					} else {
+						print "You can't see any such thing.^";
+					}
 				} else {
 					print "Sorry, I don't understand what ~";
-					for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
-						print (char) player_input_array->(_i + parser_unknown_noun_found->3);
-					}
+					_PrintUknownWord();
 					print "~ means.^";
 				}
 			}
@@ -971,8 +993,6 @@
 		! Calling _ResetScope to force  a scope refresh
 		!_ResetScope();
 	}
-	_ResetScope(); ! since open and closing containers can change, it is safest to always reset scope
-	_UpdateScope(player);
 	scope_routine = 0; ! prepare for a new scope=Routine
 
 	if(parse_array->1 < 1) {

@@ -2,7 +2,7 @@
 
 [ LookSub _obj _ceil _player_parent;
 
-	if(location hasnt light) "It is pitch dark here!";
+	if(darkness) "It is pitch dark here!";
 
 	_ceil = ScopeCeiling(player);
 
@@ -13,14 +13,12 @@
 	} else {
 		print (The) _ceil;
 	}
-
 	_player_parent = parent(player);
 	if(_player_parent ~= _ceil) {
 		if(_player_parent has supporter) print " (on ";
 		else print " (in ";
 		print (the) _player_parent, ")";
 	}
-
 	@new_line;
 
 	! room description
@@ -32,12 +30,12 @@
 		! the contents of the container you are inside
 		_PrintContents(" There is ", " here.", _player_parent);
 		! all other objects
-		_PrintContents(" Outside you can also see ", ".^", _ceil);
+		_PrintContents(" Outside you can also see ", ".", _ceil);
 	} else {
 		! all other objects
-		_PrintContents(" You can also see ", " here.^", _ceil);
+		_PrintContents(" You can also see ", " here.", _ceil);
 	}
-
+	@new_line;
 
 	objectloop(_obj in _player_parent) {
 		if(_obj.describe ~= 0) {
