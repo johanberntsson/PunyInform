@@ -932,7 +932,7 @@ Object DefaultPlayer "you"
 	deadflag = GS_PLAYING;
 	Initialise();
 	_InitFloatingObjects(); ! after initialise since location set there
-	if(parent(player) == 0) PlayerTo(location);
+	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
 	<Look>; ! Equivalent to PerformAction(##Look);
 
 	while(deadflag == GS_PLAYING) {
