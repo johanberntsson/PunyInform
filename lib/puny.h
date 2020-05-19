@@ -94,13 +94,17 @@ Object Directions
 			selected_direction = direction_properties_array --> (selected_direction_index + 1);
 			return 1;
 #IfNot;
-			for(_i = 1 : _i <= _len : _i++) {
+			_i = 1;
+!			for(_i = 1 : _i <= _len : _i++) {
+.checkNextDir;
 				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
 					selected_direction_index = _i;
 					selected_direction = direction_properties_array --> _i;
 					return 1;
 				}
-			}
+!			}
+				@inc_chk _i _len ?~checkNextDir;
+			
 			! failure
 			selected_direction_index = 0;
 			selected_direction = 0;
