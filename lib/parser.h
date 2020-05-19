@@ -83,11 +83,13 @@
 	return -1000;
 ];
 
-[ _CopyInputArray p_src_input_array p_dst_input_array _n _i;
-	_n = MAX_INPUT_CHARS + 3;
-	for(_i = 0: _i < _n: _i++) {
+[ _CopyInputArray p_src_input_array p_dst_input_array _i;
+	!_n = MAX_INPUT_CHARS + 3;
+	for(_i = 0: : _i++) {
 		p_dst_input_array->_i = p_src_input_array->_i;
-		if(p_dst_input_array->_i == 0) break;
+		! abort when 0 found in the text, which starts
+		! from 1 in v1-4, and from 2 in v5-v8.
+		if(p_dst_input_array->_i == 0 && _i>1) break;
 	}
 ];
 
