@@ -18,6 +18,8 @@ Object P1L_Flying_Boat "The flying boat"
             1 'mast' "The mast crackles incessantly, constantly threatening to break."
             1 'storm' "The storm draws closer and closer and threatens to engulf your small boat within its black clouds. From time to time,
                 lightning illuminates its dark surface."
+            1 'aether' "Aether is the substance that flows through the known universe, sustains the flight of floating islands and continents and
+                allows navigation between them."
             'flying' 'boat' "The boat has a long and intense history compared to other, larger vessels. Thanks to it, your father was able to
                 discover the Infinite River on the other side of the northern divide. Thanks to it, your grandfather found the ruins
                 of Neuba Yorka, with its large, broken glass towers. And thanks to you, the boat's fate is now in the hands of the storm...",
@@ -109,6 +111,19 @@ Object P1L_Cliff "The cliff"
 		description "You find yourself on a cliff, at night, with a large grass esplanade stretching eastwards. To the west
             there remains only the abyss, the vast immensity of the aether. Although the wind persists, it seems that it is far from its
             previous violence.",
+        cheap_scenery
+            1 'aether' "Aether is the substance that flows through the known universe, sustains the flight of floating islands and continents and
+                allows navigation between them."
+            1 'cliff' "Shaped over many years by the harsh weather, the cliff is at the very edge of the floating island, where the aether begins."
+            1 'grass' "The grass rises with vigour as far as your eyes can see.",
+        w_to "Just the emptiness of the aether in that direction. It is not possible to go that way.",
+        nw_to "Just the emptiness of the aether in that direction. It is not possible to go that way.",
+        sw_to "Just the emptiness of the aether in that direction. It is not possible to go that way.",
+        n_to P1L_Cliff,
+        s_to P1L_Cliff,
+        ne_to P1L_Esplanade,
+        e_to P1L_Esplanade,
+        se_to P1L_Esplanade,
 	has light;
 
 !-------------------------------------------------    
@@ -118,7 +133,50 @@ Object P1L_Cliff "The cliff"
 Object P1L_Esplanade "The esplanade"
 	with
 		description "The grass esplanade opens up around you in all directions, gently rocked by the night wind.",
+        cheap_scenery
+            1 'aether' "Aether is the substance that flows through the known universe, sustains the flight of floating islands and continents and
+                allows navigation between them."
+            1 'grass' "The grass rises with vigour as far as your eyes can see.",
+        before [;
+            Go: move P1O_Echo1 to Limbo;
+                rfalse;
+        ],
+        nw_to P1L_Cliff,
+        w_to P1L_Cliff,
+        sw_to P1L_Cliff,
+        n_to P1L_Esplanade,
+        s_to P1L_Esplanade,
+        ne_to P1L_Visitors,
+        e_to P1L_Visitors,
+        se_to P1L_Visitors,
 	has light;
+    
+Object -> P1O_Echo1 "echo"
+    with
+        name 'echo',
+        describe [;
+            "The air seems strangely electrified in this area. You perceive loose images and sounds, which appear and disappear in
+            fractions of a second, on the grass. Faces, and voices, that vanish so suddenly that it is not possible to fully comprehend them.
+            You know this phenomenon well: It is an ~echo~, a memory of past events that only the empaths like you are able to
+            perceive.";
+        ],
+        description "You examine the echo from a distance. You can vaguely distinguish a man and a woman in changing positions.
+            You know that the only way to understand an echo is by touching it, by coming into direct contact with it.",
+        before [;
+            Touch: move self to Limbo;
+                print "You touch the echo with your fingers and instantly experience the well-known sensation of vertigo, while the images and
+                sounds flood your mind...
+                ^^You find yourself in this same grass esplanade, albeit during the day. To the west you can't see the cliff, but a few low
+                hills dotted with trees.
+                ^In front of you are a man and a woman, dressed as newlyweds, posing in front of a camera. The photographer, hidden under
+                the camera's cloth, gives instructions to the couple.
+                ^The two couldn't be more different. She, in her white dress, looks fragile and almost sickly pale, her eyes open like a
+                frightened little bird. She caresses her pregnant belly with her thin hands.
+                ^The man, on the other hand, is tall and robust, with a prominent chin, abundant moustache and imposing appearance. When he
+                surrounds his new bride with his arm, he appears like a black hawk stalking his prey...^^";
+                <<Look>>;
+        ],
+    has static;
     
 !-------------------------------------------------
 !----- Visitors?
@@ -135,6 +193,10 @@ Object P1L_Visitors "Visitors?"
 
 Object P1L_Abandoned_House "An abandoned house"
 	with
+        describe [;
+            if (self has general) "Despite having the sail lowered, the force of the wind seems capable by itself of tearing the mast from your vessel...";
+            "The sail hits the mast violently, and threatens to split it in two if it is not lowered...";
+        ],
 		description "The grass esplanade rises slightly to the ruins of an old Victorian-looking house.
             The deteriorated entrance door is open and allows access to the interior of the building.
             ^From all directions around the house, hundreds of ~pale ones~ approach you, squeaking with their electric voices,

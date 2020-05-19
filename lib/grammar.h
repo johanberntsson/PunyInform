@@ -502,6 +502,10 @@ Global scope_cnt;
     PrintMsg(MSG_WAIT_SUCCESS);
 ];
 
+[ TouchSub;
+    PrintMsg(MSG_TOUCH_SUCCESS);
+];
+
 
 Verb 'i//' 'inventory'
 	* -> Inv;
@@ -722,6 +726,9 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
 
 Verb "wait" "z"
     *                                           -> Wait;
+
+Verb 'touch'
+	* noun                                      -> Touch;
 
 
 [ PrintVerb p_v _string_name;

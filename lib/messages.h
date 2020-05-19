@@ -127,6 +127,9 @@ Constant MSG_STRONG_DEFAULT "Real adventurers do not use such language.";
 #Ifndef MSG_WAIT_SUCCESS;
 Constant MSG_WAIT_SUCCESS "Nothing happens.";
 #EndIf;
+#Ifndef MSG_TOUCH_SUCCESS;
+Constant MSG_TOUCH_SUCCESS "You don't feel anything unexpected.";
+#EndIf;
 
 !
 ! complex messages (enumerated)
