@@ -109,6 +109,12 @@ Constant MSG_ATTACK_SUCCESS "Violence isn't the answer to this one.";
 #Ifndef MSG_SEARCH_NOTHING_SPECIAL;
 Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
 #EndIf;
+#Ifndef MSG_FILL_NO_WATER;
+Constant MSG_FILL_NO_WATER "But there's no water here to carry.";
+#EndIf;
+#Ifndef MSG_DIG_NO_USE;
+Constant MSG_DIG_NO_USE "Digging would achieve nothing here.";
+#EndIf;
 
 
 !

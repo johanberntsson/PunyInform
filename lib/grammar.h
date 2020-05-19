@@ -51,6 +51,14 @@
 
 ];
 
+[ FillSub;
+	PrintMsg(MSG_FILL_NO_WATER);
+];
+
+[ DigSub;
+	PrintMsg(MSG_DIG_NO_USE);
+];
+
 [ ConsultSub;
 	PrintMsg(MSG_CONSULT_NOTHING_INTERESTING);
 ];
@@ -586,6 +594,13 @@ Verb 'read'
 	* noun                                      -> Examine
 	* 'about' topic 'in' noun                   -> Consult
 	* topic 'in' noun                           -> Consult;
+
+Verb 'dig'
+	* noun                                      -> Dig
+	* noun 'with' held                          -> Dig;
+
+Verb 'fill'
+	* noun                                      -> Fill;
 
 Verb 'cut' 'chop' 'prune' 'slice'
 	* noun                                      -> Cut;
