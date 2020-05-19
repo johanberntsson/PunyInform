@@ -410,7 +410,7 @@ Array TenSpaces -> "          ";
 !   if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
 		if(_obj hasnt concealed && _obj hasnt scenery &&
 			_obj ~= parent(player) &&  ! don't print container when player in it
-			(_obj.describe == 0 || _obj notin parent(player)) && 
+			(_obj.&describe == 0 || _obj notin parent(player)) && 
 			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
 			if(_printed_first_text == 0) {
 				print (string) p_first_text;
