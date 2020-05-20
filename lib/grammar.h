@@ -191,6 +191,18 @@
 	PrintMsg(MSG_TAKE_SUCCESS);
 ];
 
+[ RemoveSub i;
+    i = parent(noun);
+    if (i has container && i hasnt open) print_ret (The) i, " is unfortunately closed.";
+    if (i ~= second) "But ", (the) noun, " isn't there now.";
+    if (i has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
+    if(TryToTakeNoun() == 1) rtrue;
+    action = ##Remove; if (AfterRoutines() == 1) rtrue;
+    action = ##Take;   if (AfterRoutines() == 1) rtrue;
+    if (keep_silent == 1) rtrue;
+    "Removed.";
+];
+
 [ EatSub;
     if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
     PrintMsg(MSG_EAT_INEDIBLE);
@@ -365,6 +377,18 @@
 	PrintMsg(MSG_WEAR_SUCCESS);
 ];
 	
+[ DisrobeSub;
+    if (ObjectIsUntouchable(noun)) return;
+    if (noun hasnt worn) "You're not wearing ", (the) noun, ".";
+    give noun ~worn;
+    if (AfterRoutines() == 1) rtrue;
+    if (keep_silent == 1) rtrue;
+    "You take off ", (the) noun, ".";
+];
+
+[ JumpSub; "You jump on the spot, fruitlessly."; ];
+
+[ JumpOverSub; "You would achieve nothing by this."; ];
 
 [ GoSub _prop;
 	! when called Directions have been set properly
@@ -687,12 +711,21 @@ Verb 'stand'
     * 'on' noun                                 -> Enter;
 
 Verb 'get'
-	* 'up' -> Exit
-	* 'out' -> Exit
-	* multi -> Take;
+	* 'up'                                      -> Exit
+	* 'out'                                     -> Exit
+	* multi                                     -> Take;
 
 Verb 'take'
-	* multi -> Take;
+	* multi                                     -> Take
+	* 'off' worn                                -> Disrobe
+	* multiinside 'from' noun                   -> Remove
+	* multiinside 'off' noun                    -> Remove
+	* 'inventory'                               -> Inv;
+
+Verb 'remove'
+    * held                                      -> Disrobe
+    * multi                                     -> Take
+    * multiinside 'from' noun                   -> Remove;
 
 Verb 'throw'
 	* held 'at'/'against'/'on'/'onto' noun      -> ThrowAt;
@@ -704,31 +737,33 @@ Verb 'drink'
     * noun                                      -> Drink;
 
 Verb 'drop'
-	* multiheld -> Drop
+	* multiheld                                 -> Drop
 	* multiexcept 'in'/'into'/'down' noun       -> Insert;
 
 Verb 'enter'
-	* noun -> Enter;
+	* noun                                      -> Enter;
 
 Verb 'climb'
-	* 'into'/'onto' noun    -> Enter
-	* 'out' 'of'/'from' noun  -> Exit;
+	* 'into'/'onto' noun                        -> Enter
+	* 'out' 'of'/'from' noun                    -> Exit;
 
 Verb 'jump'
-	* 'into'/'onto' noun    -> Enter
-	* 'out' 'of'/'from' noun  -> Exit
-	* 'off' noun        -> Exit;
+	*                                           -> Jump
+	* 'over' noun                               -> JumpOver
+	* 'into'/'onto' noun                        -> Enter
+	* 'out' 'of'/'from' noun                    -> Exit
+	* 'off' noun                                -> Exit;
 
 Verb 'listen'
-	* -> Listen
-	* 'to' noun -> Listen;
+	*                                           -> Listen
+	* 'to' noun                                 -> Listen;
 
 Verb 'exit' 'leave'
-	* noun -> Exit;
+	* noun                                      -> Exit;
 
 Verb 'put'
-    * multiexcept 'in'/'inside'/'into' noun     -> Insert
-    * multiexcept 'on'/'onto' noun              -> PutOn
+	* multiexcept 'in'/'inside'/'into' noun     -> Insert
+	* multiexcept 'on'/'onto' noun              -> PutOn
 	* 'on' held									-> Wear;
 
 Verb 'search'

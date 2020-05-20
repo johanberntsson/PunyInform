@@ -479,9 +479,17 @@
 
 	parser_action = 0;
 
+	! special rule to avoid "all in"
+	! (since 'in' in this combination is usually
+	! a preposition but also matches a direction noun)
+	if(p_parse_pointer-->0 == 'all' && 
+		(p_parse_pointer + 4)-->0 == 'in') {
+		++wn;
+		return 0;
+	}
+
 	! skip 'the', 'all' etc
 	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD) {
-		! TODO: == 'a' doesn't work (but 'the' etc are fine). Why?
 #IfDef DEBUG_GETNEXTNOUN;
 		print "skipping ",(address) p_parse_pointer --> 0,"^";
 #Endif;
@@ -533,6 +541,7 @@
 			! we don't have to ask here, because the input was
 			! "take books" or "take all books"
 			parser_action = ##PluralFound;
+			!wn = wn + which_object->1;
 			return 0;
 		}
 		_AskWhichNoun(p_parse_pointer --> 0, -_noun);
@@ -905,9 +914,11 @@
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
 			if(p_phase == PHASE2) {
-				print "You must tell me what to ", (address) verb_word;
 				if(noun) {
+					print "You must tell me what to ", (address) verb_word;
 					print " ", (the) noun, " with";
+				} else {
+					print "You must tell me how to ", (address) verb_word;
 				}
 				print ".^";
 			};
