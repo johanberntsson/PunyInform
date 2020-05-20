@@ -76,7 +76,8 @@
 
 	if(_PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
 
-!	if(_initial_found) @new_line;
+!	if(_initial_found) 
+	@new_line;
 ];
 
 [ LookSub _old_lookmode;
