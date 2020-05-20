@@ -193,14 +193,14 @@
 
 [ RemoveSub i;
     i = parent(noun);
-    if (i has container && i hasnt open) print_ret (The) i, " is unfortunately closed.";
-    if (i ~= second) "But ", (the) noun, " isn't there now.";
+    if (i has container && i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED); rtrue; }
+    if (i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
     if (i has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
     if(TryToTakeNoun() == 1) rtrue;
     action = ##Remove; if (AfterRoutines() == 1) rtrue;
     action = ##Take;   if (AfterRoutines() == 1) rtrue;
     if (keep_silent == 1) rtrue;
-    "Removed.";
+    PrintMsg(MSG_REMOVE_SUCCESS);
 ];
 
 [ EatSub;
@@ -379,16 +379,16 @@
 	
 [ DisrobeSub;
     if (ObjectIsUntouchable(noun)) return;
-    if (noun hasnt worn) "You're not wearing ", (the) noun, ".";
+    if (noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
     give noun ~worn;
     if (AfterRoutines() == 1) rtrue;
     if (keep_silent == 1) rtrue;
-    "You take off ", (the) noun, ".";
+    PrintMsg(MSG_DISROBE_SUCCESS);
 ];
 
-[ JumpSub; "You jump on the spot, fruitlessly."; ];
+[ JumpSub; PrintMsg(MSG_JUMP); ];
 
-[ JumpOverSub; "You would achieve nothing by this."; ];
+[ JumpOverSub; PrintMsg(MSG_JUMP_OVER); ];
 
 [ GoSub _prop;
 	! when called Directions have been set properly

@@ -136,6 +136,15 @@ Constant MSG_TOUCH_SUCCESS "You don't feel anything unexpected.";
 #Ifndef MSG_PUSHDIR_DEFAULT;
 Constant MSG_PUSHDIR_DEFAULT "Is that the best you can think of?";
 #EndIf;
+#Ifndef MSG_JUMP;
+Constant MSG_JUMP "You jump on the spot, fruitlessly.";
+#EndIf;
+#Ifndef MSG_JUMP_OVER;
+Constant MSG_JUMP_OVER "You would achieve nothing by this.";
+#EndIf;
+#Ifndef MSG_REMOVE_SUCCESS;
+Constant MSG_REMOVE_SUCCESS "Removed.";
+#EndIf;
 
 !
 ! complex messages (enumerated)
@@ -366,6 +375,19 @@ Constant MSG_LOCK_KEY_DOESNT_FIT 74;
 #Ifndef MSG_LOCK_SUCCESS;
 Constant MSG_LOCK_SUCCESS 75;
 #EndIf;
+#Ifndef MSG_DISROBE_NOT_WEARING;
+Constant MSG_DISROBE_NOT_WEARING 76;
+#EndIf;
+#Ifndef MSG_DISROBE_SUCCESS;
+Constant MSG_DISROBE_SUCCESS 77;
+#EndIf;
+#Ifndef MSG_REMOVE_CLOSED;
+Constant MSG_REMOVE_CLOSED 78;
+#EndIf;
+#Ifndef MSG_REMOVE_NOT_HERE;
+Constant MSG_REMOVE_NOT_HERE 79;
+#EndIf;
+
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -475,6 +497,14 @@ Constant LibraryMessages 0;
 		print_ret (The) second, " doesn't seem to fit the lock.";
 	MSG_LOCK_SUCCESS:
 		"You ", (PrintVerb) verb_word, " ", (the) noun, ".";
+	MSG_DISROBE_NOT_WEARING:
+		"You're not wearing ", (the) noun, ".";
+	MSG_DISROBE_SUCCESS:
+		"You take off ", (the) noun, ".";
+	MSG_REMOVE_CLOSED:
+		print_ret (The) p_arg1, " is unfortunately closed.";
+	MSG_REMOVE_NOT_HERE:
+		"But ", (the) noun, " isn't there now.";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
