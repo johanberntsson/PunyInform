@@ -398,20 +398,21 @@ Array TenSpaces -> "          ";
 		if(child(p_obj) == nothing) 
 			print " (which is empty)";
 		else
-			_PrintContents(" (which contains ", ")", p_obj);
+			if(_PrintContents(" (which contains ", p_obj)) print ")";
 	}
 	if(p_obj has light && action == ##Inv) print " (providing light)";
 ];
 
-[ _PrintContents p_first_text p_last_text p_obj _obj _printed_first_text _printed_any_objects _last_obj;
+[ _PrintContents p_first_text p_obj p_check_workflag _obj _printed_first_text _printed_any_objects _last_obj;
 !   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
 !   print "Considering ", (object) _obj, "...^";
 !   if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
 		if(_obj hasnt concealed && _obj hasnt scenery &&
 			_obj ~= parent(player) &&  ! don't print container when player in it
-			(_obj.&describe == 0 || _obj notin parent(player)) && 
-			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
+			(p_check_workflag == false || _obj hasnt workflag)) {
+!			(_obj.&describe == 0 || _obj notin parent(player)) && 
+!			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
 			if(_printed_first_text == 0) {
 				print (string) p_first_text;
 				_printed_first_text = 1;
@@ -430,7 +431,7 @@ Array TenSpaces -> "          ";
 		if(_printed_any_objects) print " and ";
 		_PrintObjName(_last_obj, FORM_INDEF);
 		_PrintAfterEntry(_last_obj);
-		print (string) p_last_text;
+!		print (string) p_last_text;
 	}
 
 !
@@ -447,7 +448,7 @@ Array TenSpaces -> "          ";
 !       @new_line;
 !     }
 !   }
-	!print "(",_printed_first_text, ")";
+! print "(",_printed_first_text, ")";
 	return _printed_first_text;
 ];
 

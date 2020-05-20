@@ -422,7 +422,7 @@ Constant LibraryMessages 0;
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
     MSG_INVENTORY_SUCCESS:
-	    _PrintContents("You are holding ", ".^", player);
+	    if(_PrintContents("You are holding ", player)) print ".^";
 		rtrue;
 	MSG_EXAMINE_NOTHING_SPECIAL:
 		"There is nothing special about ", (the) noun, ".";
@@ -525,10 +525,10 @@ Constant LibraryMessages 0;
 		"But ", (the) noun, " isn't there now.";
 	MSG_SEARCH_IN_IT_ISARE:
 		print "In ", (the) noun, " ", (isorare) noun;
-        _PrintContents(" ", ".^", noun);
+        if(_PrintContents(" ", noun)) print ".^";
 	MSG_SEARCH_ON_IT_ISARE:
 		print "On ", (the) noun, " ", (isorare) noun;
-        _PrintContents(" ", ".^", noun);
+        if(_PrintContents(" ", noun)) print ".^";
 	MSG_SEARCH_EMPTY:
 		print_ret (The) noun, " is empty.";
 	MSG_SEARCH_NOTHING_ON:
