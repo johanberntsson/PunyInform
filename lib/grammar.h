@@ -25,32 +25,32 @@
 	if(_player_parent ~= _ceil) {
 		if(_player_parent.inside_description && _describe_room) {
 			PrintOrRun(_player_parent, inside_description, 1);
-			print " ";
+			@new_line;
 		} else if(_ceil.description && _describe_room) {
 			PrintOrRun(_ceil, description, 1);
-			print " ";
+			@new_line;
 		}
 		! the contents of the container you are inside
-		if(_PrintContents("There is ", _player_parent)) print " here. ";
+		if(_PrintContents("^There is ", _player_parent)) print " here. ";
 		! all other objects
 		_you_can_see_1 = "^Outside you can see ";
-		_you_can_see_2 = ".";
+		_you_can_see_2 = ".^";
 	} else {
 		if(_ceil.description && _describe_room) {
 			PrintOrRun(_ceil, description, 1);
-			print " ";
+			@new_line;
 		}
 		! all other objects
 		_you_can_see_1 = "^You can see ";
-		_you_can_see_2 = " here. ";
+		_you_can_see_2 = " here.^";
 	}
-	@new_line;
 
 	! write intial and describe messages in a new paragraph
 	objectloop(_obj in _player_parent) {
 		give _obj ~workflag;
 		if(_obj.&describe) {
 			if(PrintOrRun(_obj, describe, 0)) {
+				_initial_found = true;
 				give _obj workflag;
 				continue;
 			}
@@ -68,16 +68,18 @@
 		else
 			_desc_prop = initial;
 		if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
+			_initial_found = true;
 			give _obj workflag;
 			@new_line;
 			PrintOrRun(_obj, _desc_prop);
 		}
 	}
 
+!	if(_initial_found) 
+!		@new_line;
+
 	if(_PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
 
-!	if(_initial_found) 
-	@new_line;
 ];
 
 [ LookSub _old_lookmode;
