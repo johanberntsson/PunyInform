@@ -52,6 +52,58 @@
 	if(_initial_found) @new_line;
 ];
 
+[ Achieved num;
+    if (task_done->num == 0) {
+        task_done->num = 1;
+        score = score + task_scores->num;
+    }
+];
+
+#IfnDef PrintRank;
+[ PrintRank; "."; ];
+#EndIf;
+
+[ ScoreSub;
+	if (deadflag) print "In that game you scored "; else print "You have so far scored ";
+	print score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
+	if(turns ~= 1) print "s";
+	PrintRank();
+];
+
+[ PANum p_m _n;
+	print "  ";
+	_n = p_m;
+	if(_n < 0)    { _n = -p_m; _n = _n*10; }
+	if(_n < 10)   { print "   "; jump Panuml; }
+	if(_n < 100)  { print "  "; jump Panuml; }
+	if(_n < 1000) { print " "; }
+.Panuml;
+	print p_m, " ";
+];
+
+[ FullScoreSub _i;
+	ScoreSub();
+	new_line;
+	if(deadflag) print "The score was "; else print "The score is ";
+    print "made up as follows:^";
+	for(_i=0 : _i<NUMBER_TASKS : _i++)
+		if (task_done->_i == 1) {
+		PANum(task_scores->(_i));
+		PrintTaskName(_i);
+	}
+	!if(things_score ~= 0) {
+	!	PANum(things_score);
+	!	"finding sundry items";
+	!}
+	!if(places_score ~= 0) {
+	!	PANum(places_score);
+	!	"visiting various places";
+	!}
+	@new_line; 
+	PANum(score);
+	"total (out of ", MAX_SCORE, ")";
+];
+
 [ FillSub;
 	PrintMsg(MSG_FILL_NO_WATER);
 ];
@@ -668,23 +720,29 @@ Verb 'blow'
 	* held                                      -> Blow;
 
 Verb meta 'quit' 'q//'
-	* -> Quit;
+	*                                           -> Quit;
 
 Verb meta 'save'
-	* -> Save;
+	*                                           -> Save;
 
 Verb meta 'restore'
-	* -> Restore;
+	*                                           -> Restore;
 
 Verb meta 'restart'
-	* -> Restart;
+	*                                           -> Restart;
 
 Verb meta 'again' 'g//'
-    * -> Again;
+    *                                           -> Again;
 
 Verb meta 'oops'
-    * -> Oops
-    * special -> OopsCorrection;
+    *                                           -> Oops
+    * special                                   -> OopsCorrection;
+
+Verb meta 'score'
+    *                                           -> Score;
+Verb meta 'fullscore' 'full'
+    *                                           -> FullScore
+    * 'score'                                   -> FullScore;
 
 #IfDef DEBUG_VERBS;
 Verb meta 'random'
@@ -744,7 +802,7 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
     * noun noun                                 -> PushDir
     * noun 'to' noun                            -> Transfer;
 
-Verb "wait" "z"
+Verb 'wait' 'z'
     *                                           -> Wait;
 
 Verb 'touch'

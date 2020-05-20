@@ -1052,6 +1052,8 @@ Object DefaultPlayer "you"
 		switch(parse_array-->1) {
 		'restart': @restart;
 		'restore': RestoreSub();
+		'full': FullScoreSub();
+		'amusing': Amusing();
 		'quit': @quit;
 		}
 	}
@@ -1059,7 +1061,7 @@ Object DefaultPlayer "you"
 
 !  provide entry point routines if the user hasn't already:
 !#Stub TimePasses      0; ! Uses ifdef instead of stub
-!#Stub Amusing         0;
+#Stub Amusing         0;
 #Stub DeathMessage    0;
 !#Stub DarkToDark      0;
 #Stub NewRoom         0;
@@ -1069,7 +1071,7 @@ Object DefaultPlayer "you"
 !#Stub GamePostRoutine 0;
 !#Stub AfterPrompt     0;
 !#Stub BeforeParsing   0;
-!#Stub PrintTaskName   1;
+#Stub PrintTaskName   1;
 !#Stub InScope         1;
 !#Stub UnknownVerb     1;
 !#Stub PrintVerb       1;

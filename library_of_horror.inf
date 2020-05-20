@@ -26,7 +26,15 @@ Constant USEINFORM;
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
+Constant MAX_SCORE = 5;
+Array task_scores -> 3 0; ! inform doens't like array of length 1
+Constant TASKS_PROVIDED;
+Constant NUMBER_TASKS = 1;
 Constant AMUSING_PROVIDED;
+
+[ Amusing;
+	"^Did you try?^^1. Pushing John many times.^2. Going outside and looking at the sun";
+];
 
 ! Setup cheap scenery
 [SceneryReply;
@@ -54,12 +62,24 @@ Include "ext_flags.h";
     else print "off";
     return;
 ];
-#Endif;
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+[ PrintRank;
+  print ", earning you the rank of ";
+  if (score >= 3) "Treasure hunter.";
+  if (score >= 2) "Explorer.";
+  "Tourist.";
+];
+[ PrintTaskName task_number;
+  switch (task_number) {
+      0: "opening the box";
+  }
+];
+
 
 #Ifndef USEINFORM;
-Include "globals.h";
-
-
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
 
@@ -252,10 +272,12 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
             print "^The box goes BOOM.^";
         ],
         after [;
+        Open:
+        	Achieved(0); ! opening the box is an achievement
         Receive: 
         	++score;
         	! win if you put two things in the box
-        	if(score > 1) deadflag = 2;
+        	if(score >= MAX_SCORE) deadflag = 2;
        	],
 		time_left 0,
 	has container openable enterable static;

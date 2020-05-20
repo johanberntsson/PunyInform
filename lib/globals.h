@@ -304,11 +304,14 @@ Constant MOVES__TX = "Moves: ";
 Constant SCORE__TX = "Score: ";
 #EndIf;
 
+Default MAX_SCORE           0;
+Default NUMBER_TASKS        1;
+Default TASKS_PROVIDED      1;
 Default AMUSING_PROVIDED    1;
 Default MAX_CARRIED         100;
 Default SACK_OBJECT         0;
-Default NUMBER_TASKS        1;
-Default TASKS_PROVIDED      1;
+
+Array  task_done -> NUMBER_TASKS;
 
 Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
