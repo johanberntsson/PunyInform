@@ -280,7 +280,7 @@ Object -> BlueBook "blue book" class Book
 			!}
 			print "A ";
 			PrintShortName(self);
-			" is standing on a shelf. Looking at ", (the) self, " makes you dizzy.";
+			print " is standing on a shelf. Looking at ", (the) self, " makes you dizzy.";
 		],
 		before [;
 			Turn:

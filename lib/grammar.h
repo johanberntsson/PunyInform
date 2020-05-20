@@ -1,6 +1,6 @@
 ! ######################### Grammar + Actions
 
-[ LookSub _obj _ceil _player_parent;
+[ LookSub _obj _ceil _player_parent _initial_found;
 
 	if(darkness) "It is pitch dark here!";
 
@@ -37,18 +37,20 @@
 		_PrintContents(" You can also see ", " here.", _ceil);
 	}
 
+	@new_line;
+
 	objectloop(_obj in _player_parent) {
 		if(_obj.&describe) {
 			! describe is used if present
-            print " ";
-			PrintOrRun(_obj, describe, 1);
+			if(_initial_found++) print " "; else @new_line;
+			PrintOrRun(_obj, describe, 0);
 		} else if(_obj hasnt moved && _obj.initial ~= 0) {
 			! intial descriptions (if any)
-            print " ";
-			PrintOrRun(_obj, initial, 1);
+			if(_initial_found++) print " "; else @new_line;
+			PrintOrRun(_obj, initial, 0);
 		}
 	}
-
+	if(_initial_found) @new_line;
 ];
 
 [ FillSub;
