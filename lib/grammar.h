@@ -240,8 +240,26 @@
 	PrintMsg(MSG_DRINK_NOTHING_SUITABLE);
 ];
 
-[ SearchSub;
-	PrintMsg(MSG_SEARCH_NOTHING_SPECIAL);
+[ SearchSub _f _i;
+	if(darkness) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
+	if (ObjectIsUntouchable(noun)) return;
+	objectloop(_i in noun) if(_i hasnt concealed && _i hasnt scenery) _f++;
+	if(noun has supporter) {
+		if(_f == 0) 
+			PrintMsg(MSG_SEARCH_NOTHING_ON);
+		else 
+			PrintMsg(MSG_SEARCH_ON_IT_ISARE);
+		rtrue;
+	}
+	if(noun hasnt container) { PrintMsg(MSG_SEARCH_NOTHING_SPECIAL); rtrue; }
+	if(noun hasnt transparent && noun hasnt open) { 
+		PrintMsg(MSG_SEARCH_CANT_SEE_CLOSED); rtrue; 
+	}
+	if(AfterRoutines() == 1) rtrue;
+	if(_f == 0) 
+		PrintMsg(MSG_SEARCH_EMPTY);
+	else 
+		PrintMsg(MSG_SEARCH_IN_IT_ISARE);
 ];
 
 [ DropSub;

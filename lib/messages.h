@@ -109,9 +109,6 @@ Constant MSG_KISS_SUCCESS "Keep your mind on the game.";
 #Ifndef MSG_ATTACK_SUCCESS;
 Constant MSG_ATTACK_SUCCESS "Violence isn't the answer to this one.";
 #Endif;
-#Ifndef MSG_SEARCH_NOTHING_SPECIAL;
-Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
-#EndIf;
 #Ifndef MSG_FILL_NO_WATER;
 Constant MSG_FILL_NO_WATER "But there's no water here to carry.";
 #EndIf;
@@ -144,6 +141,12 @@ Constant MSG_JUMP_OVER "You would achieve nothing by this.";
 #EndIf;
 #Ifndef MSG_REMOVE_SUCCESS;
 Constant MSG_REMOVE_SUCCESS "Removed.";
+#EndIf;
+#Ifndef MSG_SEARCH_DARK;
+Constant MSG_SEARCH_DARK "But it's dark.";
+#EndIf;
+#Ifndef MSG_SEARCH_NOTHING_SPECIAL;
+Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
 #EndIf;
 
 !
@@ -387,6 +390,21 @@ Constant MSG_REMOVE_CLOSED 78;
 #Ifndef MSG_REMOVE_NOT_HERE;
 Constant MSG_REMOVE_NOT_HERE 79;
 #EndIf;
+#Ifndef MSG_SEARCH_IN_IT_ISARE;
+Constant MSG_SEARCH_IN_IT_ISARE 80;
+#EndIf;
+#Ifndef MSG_SEARCH_ON_IT_ISARE;
+Constant MSG_SEARCH_ON_IT_ISARE 81;
+#EndIf;
+#Ifndef MSG_SEARCH_EMPTY;
+Constant MSG_SEARCH_EMPTY 82;
+#EndIf;
+#Ifndef MSG_SEARCH_NOTHING_ON;
+Constant MSG_SEARCH_NOTHING_ON 83;
+#EndIf;
+#Ifndef MSG_SEARCH_CANT_SEE_CLOSED;
+Constant MSG_SEARCH_CANT_SEE_CLOSED 84;
+#EndIf;
 
 
 #Ifndef LibraryMessages;
@@ -505,6 +523,18 @@ Constant LibraryMessages 0;
 		print_ret (The) p_arg1, " is unfortunately closed.";
 	MSG_REMOVE_NOT_HERE:
 		"But ", (the) noun, " isn't there now.";
+	MSG_SEARCH_IN_IT_ISARE:
+		print "In ", (the) noun, " ", (isorare) noun;
+        _PrintContents(" ", ".^", noun);
+	MSG_SEARCH_ON_IT_ISARE:
+		print "On ", (the) noun, " ", (isorare) noun;
+        _PrintContents(" ", ".^", noun);
+	MSG_SEARCH_EMPTY:
+		print_ret (The) noun, " is empty.";
+	MSG_SEARCH_NOTHING_ON:
+		"There is nothing on ", (the) noun, ".";
+	MSG_SEARCH_CANT_SEE_CLOSED:
+		"You can't see inside, since ", (the) noun, " is closed.";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
@@ -525,6 +555,10 @@ default:
         else if (obj hasnt neuter) { print "He's"; return; }
     }
     print "That's";
+];
+
+[ IsorAre obj;
+    if (obj has pluralname || obj == player) print "are"; else print "is";
 ];
 
 [ ItorThem obj;
