@@ -319,6 +319,7 @@ Global status_field_2 = 0; ! Must be third global. Is used to show turns or minu
 Global score;
 Global turns;
 Global darkness;
+Global lookmode = 1;
 Global player;
 Global actor;
 Global wn;               ! word number within parse

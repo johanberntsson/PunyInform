@@ -1,9 +1,11 @@
 ! ######################### Grammar + Actions
 
-[ LookSub _obj _ceil _player_parent _initial_found;
-	_ceil = ScopeCeiling(player);
-
+[ Look _obj _ceil _player_parent _initial_found _describe_room;
 	if(darkness) "It is pitch dark here!";
+
+	_ceil = ScopeCeiling(player);
+	_describe_room = ((lookmode == 1 && location hasnt visited) || lookmode == 2);
+	give location visited;
 
 	! write the room name
 	if(_ceil == location) {
@@ -21,19 +23,24 @@
 
 	! write room description and normal objects in a new paragraph
 	if(_player_parent ~= _ceil) {
-		if(_player_parent.inside_description) {
+		if(_player_parent.inside_description && _describe_room) {
 			PrintOrRun(_player_parent, inside_description, 1);
-		} else if(_ceil.description) {
+			print " ";
+		} else if(_ceil.description && _describe_room) {
 			PrintOrRun(_ceil, description, 1);
+			print " ";
 		}
 		! the contents of the container you are inside
-		_PrintContents(" There is ", " here.", _player_parent);
+		_PrintContents("There is ", " here.", _player_parent);
 		! all other objects
 		_PrintContents(" Outside you can see ", ".", _ceil);
 	} else {
-		if(_ceil.description) PrintOrRun(_ceil, description, 1);
+		if(_ceil.description && _describe_room) {
+			PrintOrRun(_ceil, description, 1);
+			print " ";
+		}
 		! all other objects
-		_PrintContents(" You can also see ", " here.", _ceil);
+		_PrintContents("You can see ", " here.", _ceil);
 	}
 	@new_line;
 
@@ -50,6 +57,13 @@
 		}
 	}
 	if(_initial_found) @new_line;
+];
+
+[ LookSub _old_lookmode;
+	_old_lookmode = lookmode;
+	lookmode = 2; ! force long description
+	Look();
+	lookmode = _old_lookmode;
 ];
 
 [ Achieved num;
@@ -370,7 +384,7 @@
 		rtrue;
 	}
 	PlayerTo(_new_location);
-	<Look>; ! Equivalent to PerformAction(##Look);
+	Look();
 ];
 
 #IfV3;
@@ -581,6 +595,20 @@ Global scope_cnt;
     PrintMsg(MSG_TOUCH_SUCCESS);
 ];
 
+[ LookModeNormalSub;
+	lookmode=1; 
+	"This game is now in its normal ~brief~ printing mode, which gives long descriptions of places never before visited and short descriptions otherwise.";
+];
+
+[ LookModeLongSub; 
+	lookmode=2;
+	"This game is now in its ~verbose~ mode, which always gives long descriptions of locations (even if you've been there before).";
+];
+
+[ LookModeShortSub; 
+	lookmode=3;
+	"This game is now in its ~superbrief~ mode, which always gives short descriptions of locations (even if you haven't been there before).";
+];
 
 Verb 'i//' 'inventory'
 	* -> Inv;
@@ -718,6 +746,15 @@ Verb 'shit' 'damn' 'fuck' 'sod'
 
 Verb 'blow'
 	* held                                      -> Blow;
+
+Verb meta 'brief' 'normal'
+	*                                           -> LookModeNormal;
+
+Verb meta 'verbose' 'long'
+	*                                           -> LookModeLong;
+
+Verb meta 'superbrief' 'short'
+	*                                           -> LookModeShort;
 
 Verb meta 'quit' 'q//'
 	*                                           -> Quit;

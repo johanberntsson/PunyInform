@@ -953,7 +953,7 @@ Object DefaultPlayer "you"
 	Initialise();
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
-	<Look>; ! Equivalent to PerformAction(##Look);
+	Look();
 
 	while(deadflag == GS_PLAYING) {
 		status_field_1 = score;
