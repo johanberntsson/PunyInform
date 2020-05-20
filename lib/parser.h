@@ -1238,6 +1238,7 @@
 			MULTIINSIDE_OBJECT:
 				if(noun notin second) continue; ! eg get all from X
 			}
+			if(action == ##Take && noun == parent(player)) continue; ! don' pick up the box when you are in it
 			if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
 			++_score;
 			PerformPreparedAction();
