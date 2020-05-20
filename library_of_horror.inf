@@ -26,6 +26,8 @@ Constant USEINFORM;
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
+Constant AMUSING_PROVIDED;
+
 ! Setup cheap scenery
 [SceneryReply;
 	Push:
@@ -249,6 +251,12 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
         time_out [;
             print "^The box goes BOOM.^";
         ],
+        after [;
+        Receive: 
+        	++score;
+        	! win if you put two things in the box
+        	if(score > 1) deadflag = 2;
+       	],
 		time_left 0,
 	has container openable enterable static;
 

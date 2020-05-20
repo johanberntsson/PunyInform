@@ -116,6 +116,7 @@ Attribute door;
 ! when you order a NPC, but the command isn't understood
 ! See: http://www.inform-fiction.org/manual/html/s18.html
 Fake_Action Order; 
+Fake_Action Receive;
 Fake_Action ThrownAt;
 Fake_Action NotUnderstood; 
 Fake_Action PluralFound; 
@@ -303,8 +304,11 @@ Constant MOVES__TX = "Moves: ";
 Constant SCORE__TX = "Score: ";
 #EndIf;
 
+Default AMUSING_PROVIDED    1;
 Default MAX_CARRIED         100;
 Default SACK_OBJECT         0;
+Default NUMBER_TASKS        1;
+Default TASKS_PROVIDED      1;
 
 Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours

@@ -1,13 +1,11 @@
 ! ######################### Grammar + Actions
 
 [ LookSub _obj _ceil _player_parent _initial_found;
+	_ceil = ScopeCeiling(player);
 
 	if(darkness) "It is pitch dark here!";
 
-	_ceil = ScopeCeiling(player);
-
-! print "Ceiling is object ", _ceil, ": ", (object) _ceil, ".^";
-	! ### Print room name
+	! write the room name
 	if(_ceil == location) {
 		_PrintObjName(location);
 	} else {
@@ -21,6 +19,7 @@
 	}
 	@new_line;
 
+	! write room description and normal objects in a new paragraph
 	if(_player_parent ~= _ceil) {
 		if(_player_parent.inside_description) {
 			PrintOrRun(_player_parent, inside_description, 1);
@@ -36,9 +35,9 @@
 		! all other objects
 		_PrintContents(" You can also see ", " here.", _ceil);
 	}
-
 	@new_line;
 
+	! write intial and describe messages in a new paragraph
 	objectloop(_obj in _player_parent) {
 		if(_obj.&describe) {
 			! describe is used if present
@@ -416,6 +415,15 @@ Global scope_cnt;
     if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
     move noun to second;
+
+	! run after on object
+	if(AfterRoutines() == 1) rtrue;
+
+	! run after on receiver 
+	action = ##Receive;
+	if(RunRoutines(second, after) ~= 0) { action = ##Insert; rtrue; }
+	action = ##Insert;
+
     if (keep_silent) return;
     PrintMsg(MSG_INSERT_SUCCESS);
 ];

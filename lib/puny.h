@@ -452,6 +452,7 @@ Array TenSpaces -> "          ";
 ];
 
 [ RunRoutines p_obj p_prop;
+	sw__var = action;
 	if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
 	return p_obj.p_prop();
 ];
@@ -552,7 +553,6 @@ Include "parser.h";
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
 [ PerformPreparedAction;
-	sw__var = action;
 	if ((BeforeRoutines() == false) && action < 4096) {
 		ActionPrimitive();
 	}
@@ -615,9 +615,12 @@ Include "parser.h";
 	rfalse;
 ];
 
-[ RunLife p_actor p_reason;
-	sw__var = p_reason;
-    return RunRoutines(p_actor,life);
+[ RunLife p_actor p_reason _old_action _result;
+	_old_action = action;
+	action = p_reason;
+    _result = RunRoutines(p_actor,life);
+    action = _old_action;
+    return _result;
 ];
 
 [ _SetDirectionIfIsFakeDir p_obj _idx;

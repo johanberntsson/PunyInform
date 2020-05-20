@@ -421,7 +421,10 @@ Constant LibraryMessages 0;
 	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
 		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
 	MSG_RESTART_RESTORE_OR_QUIT:
-		print "^Would you like to RESTART, RESTORE or QUIT? ";
+		print "^Would you like to RESTART, RESTORE";
+		if(TASKS_PROVIDED == 0) print ", give the FULL score for that game";
+		if(deadflag == 2 && AMUSING_PROVIDED == 0) print ", see some suggestions for AMUSING things to do";
+		print " or QUIT? ";
 		rtrue;
 	MSG_AREYOUSUREQUIT: ! print and rtrue to avoid newline
 		print "Are you sure you want to quit? ";
