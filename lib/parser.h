@@ -914,13 +914,26 @@
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
 			if(p_phase == PHASE2) {
-				if(noun) {
-					print "You must tell me what to ", (address) verb_word;
-					print " ", (the) noun, " with";
-				} else {
-					print "You must tell me how to ", (address) verb_word;
-				}
-				print ".^";
+!				if(noun) {
+					! INFORM:
+					! lock: What do you want to lock?
+					! lock door: What do you want to lock the toilet door with?
+					! lock door with: What do you want to lock the toilet door with?
+					! lock door on: I didn't understand that sentence.
+					!
+					!print (address) (_pattern_pointer+1)-->0,"^"; ! with if "lock door"
+					!print (address) (_pattern_pointer-2)-->0,"^"; ! with if "lock door with"
+					!print wn, " ", (address) (parse_array+2+(wn-2)*4)-->0,"^"; ! with if "lock door with"
+					!if((_pattern_pointer-2)-->0 == (parse_array+2+(wn-2)*4)-->0) {
+					!	print "preposition same^";
+					!}
+!					print "You must tell me what to ", (address) verb_word;
+!					print " ", (the) noun, " with";
+!				} else {
+!					print "You must tell me how to ", (address) verb_word;
+!				}
+!				print ".^";
+				print "You need to be more specific.^";
 			};
 			return wn - verb_wordnum;!Fail because input ends here but not the grammar line
 		}
@@ -967,6 +980,9 @@
 					_PrintUknownWord();
 					print "~ means.^";
 				}
+			} else if(p_phase == PHASE2) {
+				! bad preposition
+				print "I didn't understand that sentence.^";
 			}
 			return wn - verb_wordnum; ! pattern didn't match
 		GPR_PREPOSITION:
