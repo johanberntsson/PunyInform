@@ -316,6 +316,9 @@ Default MAX_CARRIED         100;
 Default SACK_OBJECT         0;
 
 Array  task_done -> NUMBER_TASKS;
+#Ifndef task_scores;
+Array task_scores -> 0 0; ! Inform breaks if only one entry
+#Endif;
 
 Global location = 1; ! Must be first global
 Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
