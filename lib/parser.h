@@ -905,8 +905,10 @@
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
 			if(p_phase == PHASE2) {
-				print "You must tell me what to ";
-				_PrintPartialMatch(verb_wordnum, wn - 1);
+				print "You must tell me what to ", (address) verb_word;
+				if(noun) {
+					print " ", (the) noun, " with";
+				}
 				print ".^";
 			};
 			return wn - verb_wordnum;!Fail because input ends here but not the grammar line

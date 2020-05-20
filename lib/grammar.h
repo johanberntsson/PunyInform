@@ -228,8 +228,32 @@
 	PrintMsg(MSG_THROW_SUCCESS);
 ];
 
+[ LockSub;
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK); rtrue; }
+	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED); rtrue; }
+	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
+	if (noun.with_key ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
+	give noun locked;
+	if (AfterRoutines() == 1) rtrue;
+	if (keep_silent == 1) rtrue;
+	PrintMsg(MSG_LOCK_SUCCESS);
+];
+
+[ UnlockSub;
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK); rtrue; }
+	if (noun hasnt locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED); rtrue; }
+	if (noun.with_key ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
+	give noun ~locked;
+	if (AfterRoutines() == 1) rtrue;
+	if (keep_silent == 1) rtrue;
+	PrintMsg(MSG_LOCK_SUCCESS);
+];
+
 [ OpenSub;
 	if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT); rtrue; }
+	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
 	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
 	give noun open;
 	if(AfterRoutines() == 1) rtrue;
@@ -620,8 +644,15 @@ Verb 'look' 'l//'
 	* -> Look
 	* 'at' noun -> Examine;
 
+Verb 'lock'
+	* noun 'with' held                          -> Lock;
+
+Verb 'unlock'
+	* noun 'with' held                          -> Unlock;
+
 Verb 'open'
-	* noun -> Open;
+	* noun                                      -> Open
+	* noun 'with' held                          -> Unlock;
 
 Verb 'show' 'display' 'present'
 	* creature held                             -> Show reverse

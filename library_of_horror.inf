@@ -184,7 +184,8 @@ Object -> ToiletDoor "toilet door"
 			return e_to;
 		],
 		found_in Toilet Library,
-	has door openable concealed static;
+		with_key Key,
+	has door openable concealed static lockable;
 
 Object -> Goblin "Goblin"
 	with 
@@ -409,6 +410,11 @@ Book -> GreenBook "green book"
 		name 'book' 'green',
 		describe [; print "An old and torn green book is here."; ],
 		description "The book is nice and tidy.",
+		;
+
+Object -> Key "key"
+	with
+		name 'key',
 		;
 
 Book -> PinkBook "pink book"

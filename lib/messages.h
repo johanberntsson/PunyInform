@@ -31,6 +31,9 @@ Constant MSG_DROP_DROPPED "Dropped.";
 #Ifndef MSG_OPEN_ALREADY;
 Constant MSG_OPEN_ALREADY "It's already open.";
 #Endif;
+#Ifndef MSG_OPEN_LOCKED;
+Constant MSG_OPEN_LOCKED "It seems to be locked.";
+#Endif;
 #Ifndef MSG_THROW_ANIMATE;
 Constant MSG_THROW_ANIMATE "Futile.";
 #Endif;
@@ -348,6 +351,21 @@ Constant MSG_CUT_NO_USE 69;
 #Ifndef MSG_BLOW_DEFAULT;
 Constant MSG_BLOW_DEFAULT 70;
 #EndIf;
+#Ifndef MSG_LOCK_NOT_A_LOCK;
+Constant MSG_LOCK_NOT_A_LOCK 71;
+#EndIf;
+#Ifndef MSG_LOCK_ALREADY_LOCKED;
+Constant MSG_LOCK_ALREADY_LOCKED 72;
+#EndIf;
+#Ifndef MSG_LOCK_CLOSE_FIRST;
+Constant MSG_LOCK_CLOSE_FIRST 73;
+#EndIf;
+#Ifndef MSG_LOCK_KEY_DOESNT_FIT;
+Constant MSG_LOCK_KEY_DOESNT_FIT 74;
+#EndIf;
+#Ifndef MSG_LOCK_SUCCESS;
+Constant MSG_LOCK_SUCCESS 75;
+#EndIf;
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -447,6 +465,16 @@ Constant LibraryMessages 0;
 		"Cutting ", (the) noun, " up would achieve little.";
 	MSG_BLOW_DEFAULT:
 		"You can't usefully blow ", (the) noun, ".";
+	MSG_LOCK_NOT_A_LOCK:
+		"That doesn't seem to be something you can ", (PrintVerb) verb_word, ".";
+	MSG_LOCK_ALREADY_LOCKED:
+		print_ret (The) noun, " is already ", (PrintVerb) verb_word, ".";
+	MSG_LOCK_CLOSE_FIRST:
+		"First you have to close ", (the) noun, ".";
+	MSG_LOCK_KEY_DOESNT_FIT:
+		print_ret (The) second, " doesn't seem to fit the lock.";
+	MSG_LOCK_SUCCESS:
+		"You ", (PrintVerb) verb_word, " ", (the) noun, ".";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);

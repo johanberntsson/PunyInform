@@ -112,6 +112,8 @@ Attribute general;
 Attribute switchable;
 Attribute on;
 Attribute door;
+Attribute locked;
+Attribute lockable;
 
 ! when you order a NPC, but the command isn't understood
 ! See: http://www.inform-fiction.org/manual/html/s18.html
