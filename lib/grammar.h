@@ -1,6 +1,6 @@
 ! ######################### Grammar + Actions
 
-[ Look _obj _ceil _player_parent _initial_found _describe_room;
+[ Look _obj _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop;
 	if(darkness) "It is pitch dark here!";
 
 	_ceil = ScopeCeiling(player);
@@ -31,26 +31,54 @@
 			print " ";
 		}
 		! the contents of the container you are inside
-		_PrintContents("There is ", " here.", _player_parent);
+		_PrintContents("There is ", " here. ", _player_parent);
 		! all other objects
-		_PrintContents(" Outside you can see ", ".", _ceil);
+		_you_can_see_1 = "Outside you can see ";
+		_you_can_see_2 = ".";
 	} else {
 		if(_ceil.description && _describe_room) {
 			PrintOrRun(_ceil, description, 1);
 			print " ";
 		}
 		! all other objects
-		_PrintContents("You can see ", " here.", _ceil);
+		_you_can_see_1 = "You can see ";
+		_you_can_see_2 = " here. ";
 	}
 	@new_line;
 
 	! write intial and describe messages in a new paragraph
 	objectloop(_obj in _player_parent) {
+		give _obj ~workflag;
 		if(_obj.&describe) {
-			! describe is used if present
-			if(_initial_found++) print " "; else @new_line;
-			PrintOrRun(_obj, describe, 0);
-		} else if(_obj hasnt moved && _obj.initial ~= 0) {
+			if(PrintOrRun(_obj, describe, 0)) {
+				give _obj workflag;
+				continue;
+			}
+		}
+		if(_obj has container or door)
+			if(_obj has open)
+				_desc_prop = when_open;
+			else
+				_desc_prop = when_closed;
+		else if(_obj has switchable)
+			if(_obj has on)
+				_desc_prop = when_on;
+			else
+				_desc_prop = when_off;
+		else
+			_desc_prop = initial;
+		if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
+			give _obj workflag;
+			@new_line;
+			PrintOrRun(_obj, initial);
+		}
+	}
+
+	_PrintContents(_you_can_see_1, _you_can_see_2, _ceil);
+
+	! write intial and describe messages in a new paragraph
+	objectloop(_obj in _player_parent) {
+		if(_obj hasnt moved && _obj.initial ~= 0) {
 			! intial descriptions (if any)
 			if(_initial_found++) print " "; else @new_line;
 			PrintOrRun(_obj, initial, 0);

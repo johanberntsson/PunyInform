@@ -114,6 +114,8 @@ Attribute on;
 Attribute door;
 Attribute locked;
 Attribute lockable;
+Attribute workflag;
+
 
 ! when you order a NPC, but the command isn't understood
 ! See: http://www.inform-fiction.org/manual/html/s18.html
