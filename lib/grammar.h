@@ -105,9 +105,7 @@
 #EndIf;
 
 [ ScoreSub;
-	if (deadflag) print "In that game you scored "; else print "You have so far scored ";
-	print score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
-	if(turns ~= 1) print "s";
+	PrintMsg(MSG_SCORE_SUCCESS);
 	PrintRank();
 ];
 
@@ -125,8 +123,7 @@
 [ FullScoreSub _i;
 	ScoreSub();
 	new_line;
-	if(deadflag) print "The score was "; else print "The score is ";
-    print "made up as follows:^";
+	PrintMsg(MSG_FULLSCORE_START);
 	for(_i=0 : _i<NUMBER_TASKS : _i++)
 		if (task_done->_i == 1) {
 		PANum(task_scores->(_i));
@@ -142,7 +139,7 @@
 	!}
 	@new_line; 
 	PANum(score);
-	"total (out of ", MAX_SCORE, ")";
+	PrintMsg(MSG_FULLSCORE_END);
 ];
 
 [ FillSub;
@@ -696,18 +693,18 @@ Global scope_cnt;
 ];
 
 [ LookModeNormalSub;
-	lookmode=1; 
-	"This game is now in its normal ~brief~ printing mode, which gives long descriptions of places never before visited and short descriptions otherwise.";
+	lookmode=1;
+	PrintMsg(MSG_LOOKMODE_NORMAL);
 ];
 
 [ LookModeLongSub; 
 	lookmode=2;
-	"This game is now in its ~verbose~ mode, which always gives long descriptions of locations (even if you've been there before).";
+	PrintMsg(MSG_LOOKMODE_LONG);
 ];
 
 [ LookModeShortSub; 
 	lookmode=3;
-	"This game is now in its ~superbrief~ mode, which always gives short descriptions of locations (even if you haven't been there before).";
+	PrintMsg(MSG_LOOKMODE_SHORT);
 ];
 
 Verb 'i//' 'inventory'

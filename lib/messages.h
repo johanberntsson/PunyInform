@@ -148,6 +148,15 @@ Constant MSG_SEARCH_DARK "But it's dark.";
 #Ifndef MSG_SEARCH_NOTHING_SPECIAL;
 Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
 #EndIf;
+#Ifndef MSG_LOOKMODE_NORMAL;
+Constant MSG_LOOKMODE_NORMAL "This game is now in its normal ~brief~ printing mode, which gives long descriptions of places never before visited and short descriptions otherwise.";
+#EndIf;
+#Ifndef MSG_LOOKMODE_LONG;
+Constant MSG_LOOKMODE_LONG "This game is now in its ~verbose~ mode, which always gives long descriptions of locations (even if you've been there before).";
+#EndIf;
+#Ifndef MSG_LOOKMODE_SHORT;
+Constant MSG_LOOKMODE_SHORT "This game is now in its ~superbrief~ mode, which always gives short descriptions of locations (even if you haven't been there before).";
+#EndIf;
 
 !
 ! complex messages (enumerated)
@@ -408,7 +417,15 @@ Constant MSG_SEARCH_CANT_SEE_CLOSED 84;
 #Ifndef MSG_EAT_SUCCESS;
 Constant MSG_EAT_SUCCESS = 85;
 #Endif;
-
+#ifndef MSG_FULLSCORE_START;
+Constant MSG_FULLSCORE_START 86;
+#Endif;	
+#ifndef MSG_FULLSCORE_END;
+Constant MSG_FULLSCORE_END 87;
+#Endif;	
+#ifndef MSG_SCORE_SUCCESS;
+Constant MSG_SCORE_SUCCESS 88;
+#Endif;	
 
 #Ifndef LibraryMessages;
 Constant LibraryMessages 0;
@@ -439,8 +456,8 @@ Constant LibraryMessages 0;
 		"You are unable to.";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItorThem) noun, ".";
-	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING:
-		"You can't ", (verbname) verb_word, " that!";
+	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING, MSG_LOCK_NOT_A_LOCK:
+		"That doesn't seem to be something you can ", (verbname) verb_word, ".";
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
@@ -481,21 +498,6 @@ Constant LibraryMessages 0;
 		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ". ";
 	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
 		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
-	MSG_RESTART_RESTORE_OR_QUIT:
-		print "^Would you like to RESTART, RESTORE";
-		if(TASKS_PROVIDED == 0) print ", give the FULL score for that game";
-		if(deadflag == 2 && AMUSING_PROVIDED == 0) print ", see some suggestions for AMUSING things to do";
-		print " or QUIT? ";
-		rtrue;
-	MSG_AREYOUSUREQUIT: ! print and rtrue to avoid newline
-		print "Are you sure you want to quit? ";
-		rtrue;
- 	MSG_YOU_HAVE_WON: ! print and rtrue to avoid newline
- 		print "You have won.";
- 		rtrue;
-	MSG_YOU_HAVE_DIED: ! print and rtrue to avoid newline
-		print "You have died.";
-		rtrue;
 	MSG_INSERT_NOT_HELD:
 		"You are not holding ", (the) noun, ".";
 	MSG_PARSER_NOTHING_TO_VERB:
@@ -508,8 +510,6 @@ Constant LibraryMessages 0;
 		"Cutting ", (the) noun, " up would achieve little.";
 	MSG_BLOW_DEFAULT:
 		"You can't usefully blow ", (the) noun, ".";
-	MSG_LOCK_NOT_A_LOCK:
-		"That doesn't seem to be something you can ", (verbname) verb_word, ".";
 	MSG_LOCK_ALREADY_LOCKED:
 		print_ret (The) noun, " is already ", (verbname) verb_word, ".";
 	MSG_LOCK_CLOSE_FIRST:
@@ -540,6 +540,31 @@ Constant LibraryMessages 0;
 		"You can't see inside, since ", (the) noun, " is closed.";
 	MSG_EAT_SUCCESS:
 		"You eat ", (the) noun, ". Not bad.";
+	MSG_SCORE_SUCCESS:
+		if (deadflag) print "In that game you"; else print "You have so far";
+		print " scored ", score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
+		if(turns ~= 1) print "s";
+	MSG_FULLSCORE_START:
+		print "The score ";
+		if(deadflag) print "wa"; else print "i";
+		"s made up as follows:";
+	MSG_FULLSCORE_END:
+		"total (out of ", MAX_SCORE, ")";	
+	MSG_RESTART_RESTORE_OR_QUIT:
+		print "^Would you like to RESTART, RESTORE";
+		if(TASKS_PROVIDED == 0) print ", give the FULL score for that game";
+		if(deadflag == 2 && AMUSING_PROVIDED == 0) print ", see some suggestions for AMUSING things to do";
+		print " or QUIT? ";
+		rtrue;
+	MSG_AREYOUSUREQUIT: ! print and rtrue to avoid newline
+		print "Are you sure you want to quit? ";
+		rtrue;
+ 	MSG_YOU_HAVE_WON: ! print and rtrue to avoid newline
+ 		print "You have won.";
+ 		rtrue;
+	MSG_YOU_HAVE_DIED: ! print and rtrue to avoid newline
+		print "You have died.";
+		rtrue;
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);

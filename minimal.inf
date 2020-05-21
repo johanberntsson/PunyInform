@@ -14,24 +14,12 @@ Include "puny.h";
 Object Library "The Library"
 	with
 		number 0,
-		before [;
-			Look, Examine, Search:
-				rfalse;
-			default:
-			   if (++self.number == 2) {
-				   "YOU CAN'T!";
-           }
-		],
-		each_turn [;
-			print "Room each_turn...";
-		],
 		description "You are in a library.",
 	has light;
 
 Object -> Box "box"
 	with
 		name 'box',
-		each_turn 0,
 	has container open;
 
 
