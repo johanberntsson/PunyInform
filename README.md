@@ -19,4 +19,7 @@ There is a rudimentary parser in place. The verbs GO, LOOK, OPEN, CLOSE, ENTER, 
 
 PunyInform is not ready to be used for writing an actual game yet. If you are interested in our progress, please star or follow the project here on Github.
 
+You can see the manual on our [wiki](https://github.com/johanberntsson/PunyInform/wiki/Manual).
+
+
 You can see what tasks we're currently working on, tasks we've done and tasks coming up on our Trello board: https://trello.com/b/mfGVsB4H/punyinform
