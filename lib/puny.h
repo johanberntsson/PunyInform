@@ -9,7 +9,9 @@
 !
 ! Public routines (described in DM, available for a game developer)
 ! LIBRARY ROUTINES:
+! - CommonAncestor
 ! - DrawStatusLine
+! - IndirectlyContains
 ! - InScope
 ! - LoopOverScope
 ! - NextWord
@@ -27,16 +29,17 @@
 ! - WordLength
 ! - YesOrNo
 ! OTHERS:
-! - CommonAncestor
-! - IndirectlyContains
-! - PrintMsg (only PunyInform)
 ! - PrintOrRun
 ! - RunRoutines
+! PRINT UTILITIES:
+! - CTheyreorThats
+! - ItorThem
+! - IsOrAre
+! PUNYINFORM ONLY:
+! - OnOff
+! - ObjectIsInvisible
+! - PrintMsg
 ! - RunTimeError
-! PRINT UTILITIES
-! -OnOff (only PunyInform)
-! -CTheyreorThats
-! -ItorThem
 
 ! comment/uncomment to restrict default debug messages behaviour
 ! (all can be overridden by adding them in the game source)
@@ -1068,24 +1071,21 @@ Object DefaultPlayer "you"
 ! Routines marked NO are not supported in Puny, usually
 ! because the implementations differ too much.
 !
-#Stub TimePasses      0; ! Uses ifdef instead of stub
-#Stub Amusing         0;
-#Stub DeathMessage    0;
-#Stub DarkToDark      0;
-#Stub NewRoom         0;
-#Stub LookRoutine     0;
 #Stub AfterLife       0;
-#Stub GamePreRoutine  0;
-#Stub GamePostRoutine 0;
 #Stub AfterPrompt     0;
+#Stub Amusing         0;
 #Stub BeforeParsing   0;
-#Stub PrintTaskName   1;
+#Stub DarkToDark      0;
+#Stub DeathMessage    0;
+#Stub GamePostRoutine 0;
+#Stub GamePreRoutine  0;
 #Stub InScope         1;
-#Stub UnknownVerb     1;
-#Stub PrintVerb       1;
-!NO #Stub ParserError     1;
+#Stub LookRoutine     0;
+#Stub NewRoom         0;
 #Stub ParseNumber     2;
+#Stub PrintTaskName   1;
+#Stub PrintVerb       1;
+#Stub TimePasses      0;
+#Stub UnknownVerb     1;
 !NO #Stub ChooseObjects   2;
-#Default Story 0;
-#Default Headline 0;
-
+!NO #Stub ParserError     1;

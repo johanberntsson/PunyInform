@@ -308,6 +308,9 @@ Constant MOVES__TX = "Moves: ";
 Constant SCORE__TX = "Score: ";
 #EndIf;
 
+#Default Story        0;
+#Default Headline     0;
+
 Default MAX_SCORE           0;
 Default NUMBER_TASKS        1;
 Default TASKS_PROVIDED      1;
