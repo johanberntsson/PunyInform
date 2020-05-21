@@ -437,13 +437,13 @@ Constant LibraryMessages 0;
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItorThem) noun, ".";
 	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING:
-		"You can't ", (PrintVerb) verb_word, " that!";
+		"You can't ", (verbname) verb_word, " that!";
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg1, ".";
     MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS:
-	    "You ", (PrintVerb) verb_word, " ", (the) noun, ".";
+	    "You ", (verbname) verb_word, " ", (the) noun, ".";
     MSG_THROW_FIRST_TAKING:
 		"(first taking ", (the) noun, " off)";
     MSG_GIVE_SUCCESS, MSG_SHOW_SUCCESS:
@@ -457,7 +457,7 @@ Constant LibraryMessages 0;
     MSG_GIVE_PLAYER:
         "You already have ", (ItorThem) noun, ".";
     MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
-        "Failed ", (PrintVerb) verb_word, ".";
+        "Failed ", (verbname) verb_word, ".";
 	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY:
 		"Already there.";
 	MSG_INSERT_NO_ROOM, MSG_PUTON_NO_ROOM:
@@ -496,7 +496,7 @@ Constant LibraryMessages 0;
 	MSG_INSERT_NOT_HELD:
 		"You are not holding ", (the) noun, ".";
 	MSG_PARSER_NOTHING_TO_VERB:
-		"There is nothing to ",  (address) verb_word,".";
+		"There is nothing to ",  (verbname) verb_word,".";
 	MSG_TOUCHABLE_FOUND_CLOSED:
 		print_ret (The) p_arg1, " isn't open.";
 	MSG_CONSULT_NOTHING_INTERESTING:
@@ -506,15 +506,15 @@ Constant LibraryMessages 0;
 	MSG_BLOW_DEFAULT:
 		"You can't usefully blow ", (the) noun, ".";
 	MSG_LOCK_NOT_A_LOCK:
-		"That doesn't seem to be something you can ", (PrintVerb) verb_word, ".";
+		"That doesn't seem to be something you can ", (verbname) verb_word, ".";
 	MSG_LOCK_ALREADY_LOCKED:
-		print_ret (The) noun, " is already ", (PrintVerb) verb_word, ".";
+		print_ret (The) noun, " is already ", (verbname) verb_word, ".";
 	MSG_LOCK_CLOSE_FIRST:
 		"First you have to close ", (the) noun, ".";
 	MSG_LOCK_KEY_DOESNT_FIT:
 		print_ret (The) second, " doesn't seem to fit the lock.";
 	MSG_LOCK_SUCCESS:
-		"You ", (PrintVerb) verb_word, " ", (the) noun, ".";
+		"You ", (verbname) verb_word, " ", (the) noun, ".";
 	MSG_DISROBE_NOT_WEARING:
 		"You're not wearing ", (the) noun, ".";
 	MSG_DISROBE_SUCCESS:

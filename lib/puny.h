@@ -504,8 +504,9 @@ Array TenSpaces -> "          ";
 	}
 ];
 
-[ PlayerTo p_loc _p _old_loc;
+[ PlayerTo p_loc _p _old_loc _old_darkness;
 	_old_loc = location;
+	_old_darkness = darkness;
 	move Player to p_loc;
 	location = p_loc;
 	while(true) {
@@ -528,6 +529,11 @@ Array TenSpaces -> "          ";
 			! no lights found, so update scope again
 			_ResetScope();
 			_UpdateScope(player);
+			if(_old_darkness) {
+				! we have moved between dark rooms
+				! give entry point a chance to react
+				DarkToDark();
+			}
 		}
 	}
 	rtrue;
@@ -575,9 +581,7 @@ Include "parser.h";
 [ BeforeRoutines _i _obj;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
-#IfDef GamePreRoutine;
 	if(GamePreRoutine()) rtrue;
-#EndIf;
 	if(RunRoutines(player, orders)) rtrue;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
@@ -607,13 +611,9 @@ Include "parser.h";
 			}
 		}
 	}
-	if(location provides after && RunRoutines(location, after)) {
-		rtrue;
-	}
-	if(inp1 provides after && RunRoutines(inp1, after)) {
-		rtrue;
-	}
-	rfalse;
+	if(location provides after && RunRoutines(location, after)) rtrue;
+	if(inp1 provides after && RunRoutines(inp1, after)) rtrue;
+	return GamePostRoutine();
 ];
 
 [ RunLife p_actor p_reason _old_action _result;
@@ -1004,11 +1004,15 @@ Object DefaultPlayer "you"
 		if(action >= 0 && meta == false) {
 			RunTimersAndDaemons();
 			RunEachTurn();
-#IfDef TimePasses;
 			TimePasses();
-#EndIf;
             turns++;
         }
+
+        if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {
+        	! we died somehow, use entry routine to give
+        	! a chance of resurrection
+        	AfterLife();
+		}
 
         if(deadflag == GS_PLAYING && _score < score) {
         	print "^[The score has just gone up by ";
@@ -1060,25 +1064,28 @@ Object DefaultPlayer "you"
 	}
 ];
 
-!  provide entry point routines if the user hasn't already:
-!#Stub TimePasses      0; ! Uses ifdef instead of stub
+! provide entry point routines if the user hasn't already:
+! Routines marked NO are not supported in Puny, usually
+! because the implementations differ too much.
+!
+#Stub TimePasses      0; ! Uses ifdef instead of stub
 #Stub Amusing         0;
 #Stub DeathMessage    0;
-!#Stub DarkToDark      0;
+#Stub DarkToDark      0;
 #Stub NewRoom         0;
-!#Stub LookRoutine     0;
-!#Stub AfterLife       0;
-!#Stub GamePreRoutine  0; ! Uses ifdef instead of stub
-!#Stub GamePostRoutine 0;
-!#Stub AfterPrompt     0;
-!#Stub BeforeParsing   0;
+#Stub LookRoutine     0;
+#Stub AfterLife       0;
+#Stub GamePreRoutine  0;
+#Stub GamePostRoutine 0;
+#Stub AfterPrompt     0;
+#Stub BeforeParsing   0;
 #Stub PrintTaskName   1;
-!#Stub InScope         1;
-!#Stub UnknownVerb     1;
-!#Stub PrintVerb       1;
-!#Stub ParserError     1;
-!#Stub ParseNumber     2;
-!#Stub ChooseObjects   2;
+#Stub InScope         1;
+#Stub UnknownVerb     1;
+#Stub PrintVerb       1;
+!NO #Stub ParserError     1;
+#Stub ParseNumber     2;
+!NO #Stub ChooseObjects   2;
 #Default Story 0;
 #Default Headline 0;
 

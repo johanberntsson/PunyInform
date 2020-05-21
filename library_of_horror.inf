@@ -66,6 +66,11 @@ Include "ext_flags.h";
 Include "globals.h";
 #EndIf;
 
+[ DarkToDark;
+	deadflag = 2;
+	"You are eaten by a grue.";
+];
+
 [ PrintRank;
   print ", earning you the rank of ";
   if (score >= 3) "Treasure hunter.";

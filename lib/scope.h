@@ -58,6 +58,9 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	if(p_actor == 0) p_actor = player;
 	if(scope_pov == p_actor) return;
 
+	! give entry routine a chance to override
+	if(InScope(p_actor)) rtrue;
+
 	scope_pov = p_actor;
 	_start_pos = ScopeCeiling(p_actor);
 

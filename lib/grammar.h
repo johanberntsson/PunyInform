@@ -80,11 +80,10 @@
 		}
 	}
 
-!	if(_initial_found) 
-!		@new_line;
-
 	if(_PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
 
+	! finally, call the optional library entry routine
+	LookRoutine();
 ];
 
 [ LookSub _old_lookmode;
@@ -961,7 +960,10 @@ Verb 'touch'
 	* noun                                      -> Touch;
 
 
-[ PrintVerb p_v _string_name;
+[ VerbName p_v _string_name;
+	! first give entry routine a chance to override
+	if(PrintVerb(p_v)) return;
+
 #IfV3;
 	switch(p_v) {
 		'restart': _string_name = "restart";

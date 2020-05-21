@@ -10,6 +10,8 @@
 	@buffer_mode 0;
 #EndIf;
 	if(p_no_prompt == false) print "> ";
+	! library entry routine
+	AfterPrompt();
 #IfV5;
 	DrawStatusLine();
 	player_input_array->1 = 0;
@@ -29,6 +31,9 @@
 	_result = 2 * (parse_array -> 1) + 1;
 	parse_array-->_result = 0;
 	parse_array-->(_result + 1) = 0;
+
+	! call library entry routine
+	BeforeParsing();
 ];
 
 [ YesOrNo;
@@ -67,9 +72,10 @@
 
     _i = p_wordnum*4+1; _j = parse_array->_i; _num = _j+player_input_array; _len = parse_array->(_i-1);
 
-    !TODO? tot=ParseNumber(num, len); if (tot ~= 0) return tot;
+    ! allow for a entry point routine to override normal parsing
+    _tot = ParseNumber(_num, _len); if(_tot ~= 0) return _tot;
+
 	_i = _len;
-	
 	_mul=1; --_len;
     for (: _len >= 0 : _len--) {
         _digit = _num->_len;
@@ -927,10 +933,10 @@
 					!if((_pattern_pointer-2)-->0 == (parse_array+2+(wn-2)*4)-->0) {
 					!	print "preposition same^";
 					!}
-!					print "You must tell me what to ", (address) verb_word;
+!					print "You must tell me what to ", (verbname) verb_word;
 !					print " ", (the) noun, " with";
 !				} else {
-!					print "You must tell me how to ", (address) verb_word;
+!					print "You must tell me how to ", (verbname) verb_word;
 !				}
 !				print ".^";
 				print "You need to be more specific.^";
@@ -1058,12 +1064,16 @@
 .reparse;
 	verb_word = (parse_array - 2) --> (2 * verb_wordnum) ;
 	if(verb_word < (0-->HEADER_DICTIONARY)) {
-		! unknown word
+		! Not a verb. Try the entry point routine before giving up
+		verb_word = UnknownVerb(verb_word);
+		if(verb_word == 0) {
+			! unknown word
 #IfDef DEBUG_PARSEANDPERFORM;
-		print "Case 1, Word ", verb_word, "^";
+			print "Case 1, Word ", verb_word, "^";
 #EndIf;
-		if(actor ~= player) jump treat_bad_line_as_conversation;
-		"I don't understand that word.";
+			if(actor ~= player) jump treat_bad_line_as_conversation;
+			"I don't understand that word.";
+		}
 	}
 
 	_word_data = verb_word + DICT_BYTES_FOR_WORD;
@@ -1137,7 +1147,14 @@
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: Pattern ",_i," address ", _pattern, "^";
 #EndIf;
+		scope_stage = 0;
 		_score = _ParsePattern(_pattern, PHASE1);
+		! reset scope if _ParsePattern messed with it
+		if(scope_stage > 0) {
+			_ResetScope();
+			_UpdateScope(player);
+		}
+
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: result ", _score, "^";
 #EndIf;
@@ -1152,6 +1169,10 @@
 			_best_pattern = _pattern;
 			!continue;
 		}
+
+		! check if pefect match found
+		if(_best_score == 100) break;
+
 		! Scan to the end of this pattern
 		_pattern_pointer = _pattern + 2;
 		while(_pattern_pointer -> 0 ~= TT_END) {
