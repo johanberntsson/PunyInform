@@ -91,7 +91,7 @@ Include "ext_flags.h";
 ! Setup custom library messages
 Constant MSG_OPEN_YOU_CANT 1000;
 Constant MSG_AREYOUSUREQUIT 1001;
-[LibraryMessages p_msg;
+[LibraryMessages p_msg p_arg_1;
 	switch(p_msg) {
 	MSG_OPEN_YOU_CANT:
 		"How would you go about opening ", (a) noun, "?";

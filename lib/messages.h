@@ -432,11 +432,11 @@ Constant LibraryMessages 0;
 #Endif;
 
 
-[ PrintMsg p_msg p_arg1;
+[ PrintMsg p_msg p_arg_1;
 	if(p_msg ofclass String)
 		print_ret (string) p_msg;
 
-	if(LibraryMessages(p_msg, p_arg1))
+	if(LibraryMessages(p_msg, p_arg_1))
 		rtrue;
 
 	! Not a string, there should be code for the message here
@@ -461,7 +461,7 @@ Constant LibraryMessages 0;
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
-		"First, you'd have to leave ", (the) p_arg1, ".";
+		"First, you'd have to leave ", (the) p_arg_1, ".";
     MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS:
 	    "You ", (verbname) verb_word, " ", (the) noun, ".";
     MSG_THROW_FIRST_TAKING:
@@ -471,7 +471,7 @@ Constant LibraryMessages 0;
     MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
         print_ret (The) noun, " has better things to do.";
     MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
-        "You can't, since ",(the) p_arg1, " is closed.";
+        "You can't, since ",(the) p_arg_1, " is closed.";
     MSG_EXIT_SUCCESS:
 	    "You leave ", (the) noun, ".";
     MSG_GIVE_PLAYER:
@@ -503,7 +503,7 @@ Constant LibraryMessages 0;
 	MSG_PARSER_NOTHING_TO_VERB:
 		"There is nothing to ",  (verbname) verb_word,".";
 	MSG_TOUCHABLE_FOUND_CLOSED:
-		print_ret (The) p_arg1, " isn't open.";
+		print_ret (The) p_arg_1, " isn't open.";
 	MSG_CONSULT_NOTHING_INTERESTING:
 		"You discover nothing of interest in ", (the) second, ".";
 	MSG_CUT_NO_USE:
@@ -523,7 +523,7 @@ Constant LibraryMessages 0;
 	MSG_DISROBE_SUCCESS:
 		"You take off ", (the) noun, ".";
 	MSG_REMOVE_CLOSED:
-		print_ret (The) p_arg1, " is unfortunately closed.";
+		print_ret (The) p_arg_1, " is unfortunately closed.";
 	MSG_REMOVE_NOT_HERE:
 		"But ", (the) noun, " isn't there now.";
 	MSG_SEARCH_IN_IT_ISARE:
