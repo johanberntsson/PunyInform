@@ -31,7 +31,12 @@
 			@new_line;
 		}
 		! the contents of the container you are inside
-		if(_PrintContents("^There is ", _player_parent)) print " here. ";
+		objectloop(_obj in _player_parent) {
+			give _obj ~workflag;
+			if(_obj.&describe) give _obj workflag;
+			if(_obj hasnt moved && _obj.&initial) give _obj workflag;
+		}
+		if(_PrintContents("^There is ", _player_parent, true)) print " here.^";
 		! all other objects
 		_you_can_see_1 = "^Outside you can see ";
 		_you_can_see_2 = ".^";
@@ -260,6 +265,7 @@
 [ DropSub;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
 	move noun to location;
+	give noun moved;
 	if(AfterRoutines() == 1) rtrue;
     if(keep_silent) return;
 	PrintMsg(MSG_DROP_DROPPED);
@@ -570,6 +576,7 @@ Global scope_cnt;
     if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
     move noun to second;
+	give noun moved;
 
 	! run after on object
 	if(AfterRoutines() == 1) rtrue;
@@ -592,6 +599,7 @@ Global scope_cnt;
     if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
 
     move noun to second;
+	give noun moved;
     if (keep_silent) return;
     PrintMsg(MSG_PUTON_SUCCESS);
 ];
