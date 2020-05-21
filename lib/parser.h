@@ -1103,7 +1103,7 @@
 		"That is not a verb I recognize.";
 
 .conversation;
-		if(_noun hasnt animate) {
+		if(_noun hasnt animate && _noun hasnt talkable) {
 			"You can't talk to ", (the) _noun, ".";
 		}
 		! See http://www.inform-fiction.org/manual/html/s18.html

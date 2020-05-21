@@ -488,7 +488,7 @@ Array TenSpaces -> "          ";
 ];
 
 [ MoveFloatingObjects _i _j _len _obj _present;
-	while((_obj = floating_objects-->_i) ~= 0) {
+	while((_obj = floating_objects-->_i) ~= 0 && _obj hasnt absent) {
 		_present = 0;
 		_len = _obj.#found_in / WORDSIZE;
 		if(_len == 1 && _obj.found_in > top_object) {

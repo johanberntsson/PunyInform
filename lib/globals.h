@@ -90,6 +90,9 @@ Constant THEN_WORD    = 'then';
 Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
                                    ! for commas in parse buffers
 Attribute light;
+Attribute edible;
+Attribute absent;
+Attribute talkable;
 Attribute supporter;
 Attribute container;
 Attribute enterable;

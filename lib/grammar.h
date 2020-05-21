@@ -232,7 +232,11 @@
 
 [ EatSub;
     if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
-    PrintMsg(MSG_EAT_INEDIBLE);
+    if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
+	remove noun;
+	if (AfterRoutines() == 1) rtrue;
+	if (keep_silent == 1) rtrue;
+    PrintMsg(MSG_EAT_SUCCESS);
 ];
 
 [ DrinkSub;

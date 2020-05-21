@@ -405,6 +405,9 @@ Constant MSG_SEARCH_NOTHING_ON 83;
 #Ifndef MSG_SEARCH_CANT_SEE_CLOSED;
 Constant MSG_SEARCH_CANT_SEE_CLOSED 84;
 #EndIf;
+#Ifndef MSG_EAT_SUCCESS;
+Constant MSG_EAT_SUCCESS = 85;
+#Endif;
 
 
 #Ifndef LibraryMessages;
@@ -535,6 +538,8 @@ Constant LibraryMessages 0;
 		"There is nothing on ", (the) noun, ".";
 	MSG_SEARCH_CANT_SEE_CLOSED:
 		"You can't see inside, since ", (the) noun, " is closed.";
+	MSG_EAT_SUCCESS:
+		"You eat ", (the) noun, ". Not bad.";
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
