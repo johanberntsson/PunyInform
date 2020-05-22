@@ -297,7 +297,7 @@
     return indirect(noun_filter);
 ];
 
-[ _CheckNoun p_parse_pointer p_parse_length _i _j _n _p _obj _matches _last_match _current_word _name_array _best_score _result _start _stop;
+[ _CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _last_match_len _current_word _name_array _name_array_len _best_score _result _stop;
 #IfDef DEBUG_CHECKNOUN;
 	print "Entering _CheckNoun!^";
 #EndIf;
@@ -324,14 +324,13 @@
 
 #IfDef DEBUG_VERBS;
 	if(action_debug) {
-		_start = Directions; _stop = top_object + 1;
+		_name_array_len = Directions; _stop = top_object + 1;
 	} else {
-		_start = 0; _stop = scope_objects;
+		_name_array_len = 0; _stop = scope_objects;
 	}
-	for(_i = _start: _i < _stop: _i++) {
+	for(_i = _name_array_len: _i < _stop: _i++) {
 		if(action_debug) _obj = _i; else _obj = scope-->_i;
-#Endif;
-#IfnDef DEBUG_VERBS;
+#IfNot;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 #Endif;
@@ -343,7 +342,7 @@
 #EndIf;
 		if(noun_filter ~= 0 && _UserFilter(_obj) == 0) {
 			!print "noun_filter rejected ", (the) _obj,"^";
-			continue;
+			jump not_matched;
 		}
 		if(_obj provides parse_name) {
 			_j = wn;
@@ -352,6 +351,15 @@
 			_n = _n + _result; ! number of words consumed
 			wn = _j;
 			if(_n > wn && ObjectIsInvisible(_obj, true) == false) {
+				if(_obj has concealed or scenery) {
+					! don't consider for which, but remember
+					! as last resort if nothing else matches
+					if(_last_match == 0) {
+						_last_match = _obj;
+						_last_match_len = _n;
+					}
+					jump not_matched;
+				}
 				if(_n == _best_score) {
 					_matches++;
 					which_object-->_matches = _obj;
@@ -371,30 +379,25 @@
 			}
 		} else {
 .try_name_match;
-!			_name_array = _obj.&name;
 			@get_prop_addr _obj name -> _name_array;
 			if(_name_array) {
-!			_start = _obj.#name / 2; ! was _name_array_len, but out of params
-				! Assembler equivalent of _start = _obj.#name / 2  
-				@get_prop_len _name_array -> _start;
+				! Assembler equivalent of _name_array_len = _obj.#name / 2  
+				@get_prop_len _name_array -> _name_array_len;
 #IfV5;
-				@log_shift _start 1 -> _start;
+				@log_shift _name_array_len 1 -> _name_array_len;
 #IfNot;
-				@div _start 2 -> _start;
+				@div _name_array_len 2 -> _name_array_len;
 #EndIf;
 
-				while(_n <= p_parse_length && _IsSentenceDivider(_p) == false) {
+				while(_IsSentenceDivider(_p) == false) {
 #IfV5;
-					@scan_table _current_word _name_array _start -> _result ?success;
+					@scan_table _current_word _name_array _name_array_len -> _result ?success;
 #IfNot;
 					_j = 0;
-					@dec _start; ! This is needed for the loop. Do we need to undo it after?
+					@dec _name_array_len; ! This is needed for the loop. Do we need to undo it after?
 .next_word_in_name_prop;
 					if(_name_array-->_j == _current_word) jump success;
-					@inc_chk _j _start ?~next_word_in_name_prop;
-!					for(_j = 0: _j < _start: _j++) {
-!						if(_name_array-->_j == _current_word) jump success;
-!					}
+					@inc_chk _j _name_array_len ?~next_word_in_name_prop;
 #EndIf;
 					jump not_matched;
 .success;
@@ -405,6 +408,15 @@
 					_p = _p + 4;
 					_current_word = _p-->0;
 					if(_n >= _best_score && ObjectIsInvisible(_obj, true) == false) {
+						if(_obj has concealed or scenery) {
+							! don't consider for which, but remember
+							! as last resort if nothing else matches
+							if(_last_match == 0) {
+								_last_match = _obj;
+								_last_match_len = _n;
+							}
+							jump not_matched;
+						}
 						if(_n == _best_score) {
 							_matches++;
 							which_object-->_matches = _obj;
@@ -428,6 +440,12 @@
 .not_matched;
 
 !   print "checking ", _obj.&name-->0, " ", _current_word, "^";
+	}
+
+	if(_matches == 0 && _last_match > 0) {
+		! only scenery or concealed objects matched.
+		_matches = 1;
+		_best_score = _last_match_len;
 	}
 
 	which_object->0 = _matches;
@@ -524,13 +542,13 @@
 	! not a pronoun, continue
 	_pluralword = ((p_parse_pointer-->0) -> #dict_par1) & 4;
 #IfDef DEBUG_GETNEXTNOUN;
-	print "Calling _CheckNoun(",p_parse_pointer,",", parse_array->1,");^";
+	print "Calling _CheckNoun(",p_parse_pointer,");^";
 	if(p_parse_pointer-->0 > 2000) print (address) p_parse_pointer-->0, " ", _pluralword, "^";
 #Endif;
 #IfDef DEBUG_TIMER;
 	timer2_start = $1c-->0;
 #Endif;
-	_noun = _CheckNoun(p_parse_pointer, parse_array->1);
+	_noun = _CheckNoun(p_parse_pointer);
 #IfDef DEBUG_TIMER;
 	timer2_stop = $1c-->0 - timer2_start;
 	print "[_CheckNoun took ",timer2_stop," jiffies]^";
@@ -568,7 +586,7 @@
 			! entry into parse_array, then retry
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 			wn = 1;
-			_noun = _CheckNoun(parse_array+2, 1);
+			_noun = _CheckNoun(parse_array+2);
 			wn = _oldwn; ! and restore it after the call
 			if(_noun > 0) {
 				! we have successfully disambiguated the noun phrase.
@@ -1093,7 +1111,7 @@
 			return -1;
 		}
 		! not a direction, check if beginning of a command
-		_noun = _CheckNoun(parse_array+2, parse_array->1);
+		_noun = _CheckNoun(parse_array+2);
 		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now 
 			! check if comma afterwards
