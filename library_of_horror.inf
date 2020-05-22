@@ -272,7 +272,7 @@ Object Library "The Library"
 		e_to ToiletDoor,
 		!e_to Toilet,
 #IfDef TEST_BEFOREAFTER;
-		after [; print "*** Library.after^"; rtrue;],
+		after [; print "*** Library.after^"; ],
 		before [; print "*** Library.before^"; ],
 #EndIf;
 	has light;
