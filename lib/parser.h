@@ -959,36 +959,40 @@
 #Endif;
 				continue; ! keep parsing
 			}
-			if(p_phase == PHASE2 && parser_unknown_noun_found > 0) {
-				if(scope_routine ~= 0) {
-					scope_stage = 3;
-					indirect(scope_routine);
-				} else if(parser_unknown_noun_found --> 0 > 0) {
-					! is it one of the location.name words?
-					inp1 = -1;
-					if(location.name ~= 0) {
-						for(_i = 0: _i < location.#name / 2: _i++) {
-							if(parser_unknown_noun_found --> 0 ==
-								location.&name --> _i) {
-								inp1 = _i;
+
+			! write error messages if PHASE2 as needed
+			if(p_phase == PHASE2) {
+				if(_pattern_pointer->0 == TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
+					! bad preposition
+					print "I didn't understand that sentence.^";
+				} else if(parser_unknown_noun_found > 0) {
+					if(scope_routine ~= 0) {
+						scope_stage = 3;
+						indirect(scope_routine);
+					} else if(parser_unknown_noun_found --> 0 > 0) {
+						! is it one of the location.name words?
+						inp1 = -1;
+						if(location.name ~= 0) {
+							for(_i = 0: _i < location.#name / 2: _i++) {
+								if(parser_unknown_noun_found --> 0 ==
+									location.&name --> _i) {
+									inp1 = _i;
+								}
 							}
 						}
-					}
-					if(inp1 > -1) {
-						print "You don't need to refer to ~";
-						_PrintUknownWord();
-						print "~ in this game.^";
+						if(inp1 > -1) {
+							print "You don't need to refer to ~";
+							_PrintUknownWord();
+							print "~ in this game.^";
+						} else {
+							print "You can't see any such thing.^";
+						}
 					} else {
-						print "You can't see any such thing.^";
+						print "Sorry, I don't understand what ~";
+						_PrintUknownWord();
+						print "~ means.^";
 					}
-				} else {
-					print "Sorry, I don't understand what ~";
-					_PrintUknownWord();
-					print "~ means.^";
 				}
-			} else if(p_phase == PHASE2) {
-				! bad preposition
-				print "I didn't understand that sentence.^";
 			}
 			return wn - verb_wordnum; ! pattern didn't match
 		GPR_PREPOSITION:

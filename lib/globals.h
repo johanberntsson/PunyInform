@@ -285,11 +285,10 @@ Constant GPR_NUMBER         = 1;
 Constant GPR_MULTIPLE       = 2;
 Constant GPR_REPARSE        = 10000;
 
-! $42 = Single prep, $62 = Beginning of list of alternatives, $72 = middle of list, $52 = end of list
-Constant TOKEN_SINGLE_PREP   = $42;
-Constant TOKEN_FIRST_PREP    = $62;
-Constant TOKEN_MIDDLE_PREP   = $72;
-Constant TOKEN_LAST_PREP     = $52;
+Constant TOKEN_SINGLE_PREP   = $42; ! 66
+Constant TOKEN_FIRST_PREP    = $62; ! 98
+Constant TOKEN_MIDDLE_PREP   = $72; ! 114
+Constant TOKEN_LAST_PREP     = $52; ! 82
 
 Constant GS_QUIT             = -1;
 Constant GS_PLAYING          = 0;
