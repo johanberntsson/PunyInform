@@ -554,6 +554,11 @@ Array TenSpaces -> "          ";
 			}
 		}
 	}
+	if(darkness) {
+		fake_location = TheDark;
+	} else {
+		fake_location = location;
+	}
 	!print "_UpdateDarkness: ", (name) location, " ", darkness, "^";
 ];
 
@@ -932,6 +937,8 @@ Object DefaultPlayer "you"
 		number 0,
 		before_implicit NULL,
 	has concealed animate proper transparent;
+
+Object TheDark "Darkness";
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
 	parse_array->0 = MAX_INPUT_WORDS;
