@@ -290,7 +290,7 @@ Default LibraryMessages 0;
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg_1, ".";
-    MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS:
+    MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS, MSG_UNLOCK_SUCCESS:
 	    "You ", (verbname) verb_word, " ", (the) noun, ".";
     MSG_THROW_FIRST_TAKING:
 		"(first taking ", (the) noun, " off)";
@@ -344,8 +344,6 @@ Default LibraryMessages 0;
 		"First you have to close ", (the) noun, ".";
 	MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT:
 		print_ret (The) second, " doesn't seem to fit the lock.";
-	MSG_LOCK_SUCCESS, MSG_UNLOCK_SUCCESS:
-		"You ", (verbname) verb_word, " ", (the) noun, ".";
 	MSG_DISROBE_NOT_WEARING:
 		"You're not wearing ", (the) noun, ".";
 	MSG_DISROBE_SUCCESS:

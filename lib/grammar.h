@@ -265,9 +265,14 @@
 		PrintMsg(MSG_SEARCH_IN_IT_ISARE);
 ];
 
-[ DropSub;
+[ DropSub _p;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
-	move noun to location;
+	_p =parent(player);
+	if(_p ~= location) {
+		<Insert noun _p>;
+		rtrue;
+	}
+	move noun to parent(player);
 	give noun moved;
 	if(AfterRoutines() == 1) rtrue;
     if(keep_silent) return;
