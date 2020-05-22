@@ -1,6 +1,7 @@
 ! ######################### Grammar + Actions
 
 [ Look _obj _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop;
+	@new_line;
 	if(darkness) "It is pitch dark here!";
 
 	_ceil = ScopeCeiling(player);
