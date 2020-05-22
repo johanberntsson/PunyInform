@@ -325,9 +325,9 @@ Array  task_done -> NUMBER_TASKS;
 Array task_scores -> 0 0; ! Inform breaks if only one entry
 #Endif;
 
-Global fake_location = TheDark; ! Must be first global
-Global status_field_1 = 0; ! Must be second global. Is used to show score or hours
-Global status_field_2 = 0; ! Must be third global. Is used to show turns or minutes
+Global fake_location;      ! Must be the first global to show location name
+Global status_field_1 = 0; ! Must be the second global to show score or hours
+Global status_field_2 = 0; ! Must be the third global to show turns or minutes
 Global location;
 Global score;
 Global turns;

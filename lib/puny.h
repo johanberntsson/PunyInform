@@ -555,7 +555,7 @@ Array TenSpaces -> "          ";
 		}
 	}
 	if(darkness) {
-		fake_location = TheDark;
+		fake_location = _TheDark;
 	} else {
 		fake_location = location;
 	}
@@ -938,7 +938,7 @@ Object DefaultPlayer "you"
 		before_implicit NULL,
 	has concealed animate proper transparent;
 
-Object TheDark "Darkness";
+Object _TheDark "Darkness";
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
 	parse_array->0 = MAX_INPUT_WORDS;
@@ -957,7 +957,7 @@ Object TheDark "Darkness";
  		for (_i = 18:_i < 24: _i++) print (char) 0->_i;
 		print " / ";
 	}
-	print "PunyInform 0.1^^";
+	print "PunyInform 1.0 (beta 1)^^";
 
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
