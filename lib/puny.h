@@ -493,12 +493,20 @@ Array TenSpaces -> "          ";
 		_len = _obj.#found_in / WORDSIZE;
 		if(_len == 1 && _obj.found_in > top_object) {
 			_present = RunRoutines(_obj, found_in);
-		} else
+		} else {
+#IfV5;
+			_j = _obj.&found_in;
+			@scan_table location _j _len -> _present ?~no_success; ! The position is only a throw-away value here.
+			_present = 1;
+.no_success;
+#IfNot;
 			for(_j = _len - 1 : _j >= 0 : _j--)
 				if(_obj.&found_in-->_j == location) {
 					_present = 1;
 					break;
 				}
+#EndIf;
+		}
 		if(_present)
 			move _obj to location;
 		else
