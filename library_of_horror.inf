@@ -1,5 +1,7 @@
 !% -~S
 
+!Constant TEST_BEFOREAFTER;
+
 ! Library of Horror - a sample game which uses PunyInform
 
 ! Uncomment to add optional features to PunyLib
@@ -140,8 +142,21 @@ Object CarPark "Car Park"
 ! 		exits [;
 ! 			N_TO: return Library;
 ! 		],
+#IfDef TEST_BEFOREAFTER;
+		after [; print "*** CarPark.after^"; ],
+		before [; print "*** CarPark.before^"; ],
+#EndIf;
 		cant_go "Without a car the only viable exit is to the north.",
 	has light;
+
+Object -> Key "key"
+	with
+		name 'key',
+#IfDef TEST_BEFOREAFTER;
+		after [; print "*** Key.after^"; ],
+		before [; print "*** Key.before^"; ],
+#EndIf;
+		;
 
 Object RiverBank "River Bank"
   with
@@ -192,6 +207,10 @@ Object -> ToiletDoor "toilet door"
 		when_closed "The toilet door is closed.",
 		found_in Toilet Library,
 		with_key Key,
+#IfDef TEST_BEFOREAFTER;
+		after [; print "*** ToiletDoor.after^"; ],
+		before [; print "*** ToiletDoor.before^"; ],
+#EndIf;
 	has door openable concealed static lockable;
 
 Object -> Goblin "Goblin"
@@ -245,6 +264,10 @@ Object Library "The Library"
 		s_to CarPark,
 		e_to ToiletDoor,
 		!e_to Toilet,
+#IfDef TEST_BEFOREAFTER;
+		after [; print "*** Library.after^"; ],
+		before [; print "*** Library.before^"; ],
+#EndIf;
 	has light;
 
 Object -> LightSwitch "LightSwitch"
@@ -419,10 +442,6 @@ Book -> GreenBook "green book"
 		description "The book is nice and tidy.",
 		;
 
-Object -> Key "key"
-	with
-		name 'key',
-		;
 
 Book -> PinkBook "pink book"
 	with
