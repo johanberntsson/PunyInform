@@ -20,9 +20,7 @@ Object Library "The Library"
 Object -> Box "box"
 	with
 		name 'box',
-	has container open;
-
-
+	has container open openable;
 
 [Initialise;
 	location = Library;
