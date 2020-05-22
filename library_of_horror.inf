@@ -138,7 +138,12 @@ Class Book
 			print "a is ", a, "^";
 !			print "b is ", b, "^";
 !			print "c is ", c, "^";
-		];
+		],
+		before [;
+			Open:
+				"You've never been much of a reader.";
+		],
+	has openable;
 
 Object CarPark "Car Park"
 	with
@@ -190,17 +195,18 @@ Object Toilet "The toilet"
 
 Object -> ToiletDoor "toilet door"
 	with 
-		parse_name [ _w; 
-			_w = NextWord();
-			if(_w == 'toilet') {
-				_w = NextWord();
-				if(_w == 'door')
-					return 2;
-				return 0;
-			}
-			if(_w == 'door')
-				return 1;
-		],
+		name 'toilet' 'door',
+!		parse_name [ _w; 
+!			_w = NextWord();
+!			if(_w == 'toilet') {
+!				_w = NextWord();
+!				if(_w == 'door')
+!					return 2;
+!				return 0;
+!			}
+!			if(_w == 'door')
+!				return 1;
+!		],
 		description "Surprisingly clean.",
 		door_to [; 
 			if(location == Toilet) return Library;
@@ -290,6 +296,13 @@ Object -> LightSwitch "LightSwitch"
 		short_name "light switch",
 		description "It's a switch located near the toilet. ",
 		name 'light' 'switch',
+		before [;
+			Push:
+				if(self has on)
+					<<SwitchOff self>>;
+				else
+					<<SwitchOn self>>;
+		],
 		after[;
 			SwitchOn:
 				give toilet light;
