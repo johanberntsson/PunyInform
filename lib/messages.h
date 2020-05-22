@@ -250,6 +250,10 @@ Default MSG_EAT_SUCCESS = 85;
 Default MSG_FULLSCORE_START 86;
 Default MSG_FULLSCORE_END 87;
 Default MSG_SCORE_SUCCESS 88;
+Default MSG_UNLOCK_NOT_A_LOCK 89;
+Default MSG_UNLOCK_ALREADY_LOCKED 90;
+Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
+Default MSG_UNLOCK_SUCCESS 92;
 
 
 Default LibraryMessages 0;
@@ -279,7 +283,8 @@ Default LibraryMessages 0;
 		"You are unable to.";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItorThem) noun, ".";
-	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING, MSG_LOCK_NOT_A_LOCK:
+	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING, 
+		MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK:
 		"That doesn't seem to be something you can ", (verbname) verb_word, ".";
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
@@ -333,13 +338,13 @@ Default LibraryMessages 0;
 		"Cutting ", (the) noun, " up would achieve little.";
 	MSG_BLOW_DEFAULT:
 		"You can't usefully blow ", (the) noun, ".";
-	MSG_LOCK_ALREADY_LOCKED:
-		print_ret (The) noun, " is already ", (verbname) verb_word, ".";
+	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_LOCKED:
+		print_ret (The) noun, " is already ", (verbname) verb_word, "ed.";
 	MSG_LOCK_CLOSE_FIRST:
 		"First you have to close ", (the) noun, ".";
-	MSG_LOCK_KEY_DOESNT_FIT:
+	MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT:
 		print_ret (The) second, " doesn't seem to fit the lock.";
-	MSG_LOCK_SUCCESS:
+	MSG_LOCK_SUCCESS, MSG_UNLOCK_SUCCESS:
 		"You ", (verbname) verb_word, " ", (the) noun, ".";
 	MSG_DISROBE_NOT_WEARING:
 		"You're not wearing ", (the) noun, ".";

@@ -304,13 +304,13 @@
 
 [ UnlockSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK); rtrue; }
-	if (noun hasnt locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED); rtrue; }
-	if (noun.with_key ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
+	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK); rtrue; }
+	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_LOCKED); rtrue; }
+	if (noun.with_key ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun ~locked;
 	if (AfterRoutines() == 1) rtrue;
 	if (keep_silent == 1) rtrue;
-	PrintMsg(MSG_LOCK_SUCCESS);
+	PrintMsg(MSG_UNLOCK_SUCCESS);
 ];
 
 [ OpenSub;
