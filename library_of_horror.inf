@@ -53,6 +53,13 @@ Constant F_SQUIRREL_ESCAPED 0;
 Constant F_PARROT_FED 1;
 Constant F_BOUGHT_TICKETS 2;
 
+#IfDef TEST_BEFOREAFTER;
+[LookRoutine;
+	"***** LookRoutine, yay!";
+];	
+#EndIf;
+
+
 #Ifdef USEINFORM;
 Include "Parser";
 Include "VerbLib";
@@ -265,7 +272,7 @@ Object Library "The Library"
 		e_to ToiletDoor,
 		!e_to Toilet,
 #IfDef TEST_BEFOREAFTER;
-		after [; print "*** Library.after^"; ],
+		after [; print "*** Library.after^"; rtrue;],
 		before [; print "*** Library.before^"; ],
 #EndIf;
 	has light;

@@ -84,6 +84,8 @@
 
 	! finally, call the optional library entry routine
 	LookRoutine();
+
+	AfterRoutines();
 ];
 
 [ LookSub _old_lookmode;
