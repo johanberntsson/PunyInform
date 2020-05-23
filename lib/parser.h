@@ -305,7 +305,8 @@
 	! return -n if more n matches found (n > 1)
 	! else return object number
 	! side effects: 
-	!   which_object
+	! - uses parser_check_multiple
+	! - which_object
 	!     - stores number of objects in -> 0
 	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
@@ -342,6 +343,9 @@
 #EndIf;
 		if(noun_filter ~= 0 && _UserFilter(_obj) == 0) {
 			!print "noun_filter rejected ", (the) _obj,"^";
+			jump not_matched;
+		}
+		if(parser_check_multiple == MULTIHELD_OBJECT && _obj notin player) {
 			jump not_matched;
 		}
 		if(_obj provides parse_name) {
@@ -728,8 +732,7 @@
 		! SPECIAL_OBJECT, NUMBER_OBJECT or TOPIC_OBJECT
 		!
 		! remember if except or inside found, so we can filter later
-		if(_token_data == MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT)
-			parser_check_multiple = _token_data;
+		parser_check_multiple = _token_data;
 
 		if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 			_noun = _GetNextNoun(p_parse_pointer, p_phase);

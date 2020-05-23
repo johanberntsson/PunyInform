@@ -285,7 +285,7 @@ Object Library "The Library"
 			Look:
 				if(self hasnt general) {
 					give self general;
-					QuoteBox(quote_1);
+					!QuoteBox(quote_1);
 				}
 		],
 #EndIf;
