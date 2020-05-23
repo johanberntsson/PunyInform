@@ -885,6 +885,40 @@
 	}
 ];
 
+[ _PrintIncompleteSentenceMessage p_pattern_token;
+	! Called because sentence shorter than the pattern
+	! Available data: wn, parse_array and p_pattern_token (last matched token)
+	!
+	! INFORM:
+	! lock: What do you want to lock?
+	! lock door: What do you want to lock the toilet door with?
+	! lock door with: What do you want to lock the toilet door with?
+	! lock door on: I didn't understand that sentence.
+	! give john: What do you want to give John?
+	! jump at: I only understood you as far as wanting to jump.
+	! jump over: What do you want to jump over?
+	!
+	! Inform tries the 'itobj' if second missing, and his/herobj
+	! is creature missing (or if only one animate object in scope)
+
+	!print (address) (p_pattern_token + 1)-->0,"^"; ! with if "lock door"
+	!print (address) (p_pattern_token - 2)-->0,"^"; ! with if "lock door with"
+
+	if(noun) {
+		print "I think you wanted to say ~";
+		print (verbname) verb_word, " ", (the) noun, " ";
+		if((p_pattern_token - 2)-->0 == (parse_array + 2 + (wn - 2) * 4)-->0) {
+			! same preposition
+			print (address) (p_pattern_token - 2)-->0;
+		} else {
+			print (address) (p_pattern_token + 1)-->0;
+		}
+		print " something~. Please try again.^";
+	} else {
+		print "You need to be more specific.^";
+	}
+];
+
 [ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
@@ -938,26 +972,8 @@
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
 			if(p_phase == PHASE2) {
-!				if(noun) {
-					! INFORM:
-					! lock: What do you want to lock?
-					! lock door: What do you want to lock the toilet door with?
-					! lock door with: What do you want to lock the toilet door with?
-					! lock door on: I didn't understand that sentence.
-					!
-					!print (address) (_pattern_pointer+1)-->0,"^"; ! with if "lock door"
-					!print (address) (_pattern_pointer-2)-->0,"^"; ! with if "lock door with"
-					!print wn, " ", (address) (parse_array+2+(wn-2)*4)-->0,"^"; ! with if "lock door with"
-					!if((_pattern_pointer-2)-->0 == (parse_array+2+(wn-2)*4)-->0) {
-					!	print "preposition same^";
-					!}
-!					print "You must tell me what to ", (verbname) verb_word;
-!					print " ", (the) noun, " with";
-!				} else {
-!					print "You must tell me how to ", (verbname) verb_word;
-!				}
-!				print ".^";
-				print "You need to be more specific.^";
+				!print "You need to be more specific.^";
+				_PrintIncompleteSentenceMessage(_pattern_pointer);
 			};
 			return wn - verb_wordnum;!Fail because input ends here but not the grammar line
 		}
