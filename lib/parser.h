@@ -647,7 +647,7 @@
 
 [ _GrabIfNotHeld p_noun;
 	if(p_noun in player) return;
-	print "(first taking ", (the) p_noun, ")^^";
+	print "(first taking ", (the) p_noun, ")^";
 	keep_silent = true;
 	<take p_noun>;
 	keep_silent = false;
@@ -885,9 +885,12 @@
 	}
 ];
 
-[ _PrintIncompleteSentenceMessage p_pattern_token;
+[ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second;
 	! Called because sentence shorter than the pattern
 	! Available data: wn, parse_array and p_pattern_token (last matched token)
+	!
+	! Either guess missing parts in the pattern and return true,
+	! or print a suitable error message and return false
 	!
 	! INFORM:
 	! lock: What do you want to lock?
@@ -901,22 +904,49 @@
 	! Inform tries the 'itobj' if second missing, and his/herobj
 	! is creature missing (or if only one animate object in scope)
 
-	!print (address) (p_pattern_token + 1)-->0,"^"; ! with if "lock door"
-	!print (address) (p_pattern_token - 2)-->0,"^"; ! with if "lock door with"
-
-	if(noun) {
-		print "I think you wanted to say ~";
-		print (verbname) verb_word, " ", (the) noun, " ";
-		if((p_pattern_token - 2)-->0 == (parse_array + 2 + (wn - 2) * 4)-->0) {
-			! same preposition
-			print (address) (p_pattern_token - 2)-->0;
+	! analyse the rest of the pattern to see if second and prep are expected
+	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
+		_type = _token -> 0;
+		if(_type > 9) {
+			_prep = _token;
 		} else {
-			print (address) (p_pattern_token + 1)-->0;
+			if(_noun == 0) {
+				_noun = _token;
+			} else {
+				_second = _token;
+			}
 		}
-		print " something~. Please try again.^";
-	} else {
-		print "You need to be more specific.^";
 	}
+
+	! try to guess missing parts in the pattern
+	! return true if we could fix everything
+	if(_second->2 == CREATURE_OBJECT && second == 0) {
+		if(himobj ~= 0 && TestScope(himobj)) {
+			second = himobj; 
+			print "(";
+			if(_prep) print (address) (_prep+1) --> 0, " ";
+			print_ret (the) himobj, ")";
+		}
+	}
+
+	! write an error message and return false
+	print "I think you wanted to say ~";
+	print (verbname) verb_word;
+	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
+		_type = _token -> 0;
+		_data = (_token + 1) --> 0;
+		if(_type > 9) {
+			print " ", (address) _data;
+		} else {
+			if(_noun == 0) {
+				if(noun == 0) print " something"; else print " ", (name) noun;
+			} else {
+				if(_token->2 == CREATURE_OBJECT) print " someone"; else print " something";
+			}
+		}
+	}
+	print "~. Please try again.^";
+	rfalse;
 ];
 
 [ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i;
@@ -973,7 +1003,10 @@
 #EndIf;
 			if(p_phase == PHASE2) {
 				!print "You need to be more specific.^";
-				_PrintIncompleteSentenceMessage(_pattern_pointer);
+				if(_FixIncompleteSentenceOrComplain(p_pattern - 1)) {
+					! sentence was corrected
+					return 100;
+				}
 			};
 			return wn - verb_wordnum;!Fail because input ends here but not the grammar line
 		}
