@@ -283,9 +283,11 @@ Default LibraryMessages 0;
 		"You are unable to.";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItorThem) noun, ".";
-	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, MSG_WEAR_NOT_CLOTHING, 
+	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, 
 		MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK:
 		"That doesn't seem to be something you can ", (verbname) verb_word, ".";
+	MSG_WEAR_NOT_CLOTHING:
+		"That's not something you can wear.";
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
@@ -320,6 +322,10 @@ Default LibraryMessages 0;
 		"You are already wearing ", (ItorThem) noun, ".";
     MSG_WEAR_SUCCESS:
 	    "You are now wearing ", (the) noun, ".";
+	MSG_DISROBE_NOT_WEARING:
+		"You're not wearing ", (the) noun, ".";
+	MSG_DISROBE_SUCCESS:
+		"You take off ", (the) noun, ".";
 	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
 		print_ret (CTheyreorThats) noun, " not something you can switch.";
 	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
@@ -344,10 +350,6 @@ Default LibraryMessages 0;
 		"First you have to close ", (the) noun, ".";
 	MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT:
 		print_ret (The) second, " doesn't seem to fit the lock.";
-	MSG_DISROBE_NOT_WEARING:
-		"You're not wearing ", (the) noun, ".";
-	MSG_DISROBE_SUCCESS:
-		"You take off ", (the) noun, ".";
 	MSG_REMOVE_CLOSED:
 		print_ret (The) p_arg_1, " is unfortunately closed.";
 	MSG_REMOVE_NOT_HERE:

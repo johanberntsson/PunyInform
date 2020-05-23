@@ -208,48 +208,20 @@ Array cursor_pos --> 2;
 	statuswin_current = false;
 ];
 
-#IfNot; !IfV5
-
-! [ _MoveCursor line column;  ! 1-based postion on text grid
-!   if (~~statuswin_current) {
-!     @set_window 1;
-!     style reverse;
-!   }
-!   if (line == 0) {
-!     line = 1;
-!     column = 1;
-!   }
-!   @set_cursor line column;
-!   statuswin_current = true;
-! ];
-
-! [ _MainWindow;
-!   if (statuswin_current) {
-!     style roman;
-!     @set_window 0;
-!   }
-!   statuswin_current = false;
-! ];
-#EndIf;
-
-
-#IfV3;
-#IfNot;
 
 Array TenSpaces -> "          ";
 
-[ _PrintSpacesOrMoveBack p_col p_space_before _current_col _go_to_col;
+[ _PrintSpacesOrMoveBack p_col _current_col;
 	@get_cursor cursor_pos;
 	_current_col = cursor_pos --> 1;
-	_go_to_col = p_col - p_space_before;
 
-	if(_current_col > _go_to_col || cursor_pos --> 0 > 1) {
-		_MoveCursor(1, _go_to_col);
-		_current_col = _go_to_col;
+	if(_current_col > p_col || cursor_pos --> 0 > 1) {
+		_MoveCursor(1, p_col);
+		rtrue;
 	}
 
 	p_col = p_col - _current_col;
-	while(p_col >= 10) {
+	while(p_col > 10) {
 		@print_table TenSpaces 10;
 		p_col = p_col - 10;
 	}
@@ -300,23 +272,23 @@ Array TenSpaces -> "          ";
 	if (_width > 24) {
 		if (_width < 30) {
 			! Width is 25-29, only print score as "0", no moves
-			_PrintSpacesOrMoveBack(_width - 2, 1);
+			_PrintSpacesOrMoveBack(_width - 3);
 			print status_field_1;
 		} else {
 			if (_width > 66) {
 				! Width is 67-, print "Score: 0 Moves: 0"
-				_PrintSpacesOrMoveBack(_width - 26, 1);
+				_PrintSpacesOrMoveBack(_width - 27);
 				print (string) SCORE__TX, status_field_1;
 				_PrintSpacesOrMoveBack(_width - 13);
 				print (string) MOVES__TX;
 			} else {
 				if (_width > 36) {
 					! Width is 37-66, print "Score: 0/0"
-					_PrintSpacesOrMoveBack(_width - 14, 1);
+					_PrintSpacesOrMoveBack(_width - 13);
 					print (string) SCORE__TX;
 				} else {
 					! Width is 29-35, print "0/0"
-					_PrintSpacesOrMoveBack(_width - 7, 1);
+					_PrintSpacesOrMoveBack(_width - 8);
 				}
 				print status_field_1;
 				@print_char '/';
@@ -328,7 +300,7 @@ Array TenSpaces -> "          ";
 	_PrintSpacesOrMoveBack(_width + 1);
 	_MainWindow(); ! set_window
 ];
-#Endif;
+#EndIf;
 
 [ _AtFullCapacity p_s _obj _k;
     if (p_s.&capacity == 0) rfalse; ! We will consider that no capacity specified implies infinite capacity.
@@ -387,12 +359,7 @@ Array TenSpaces -> "          ";
 		}
 		! print " "; ! not ok, adds space in room name
 	}
-	if(p_obj.short_name) {
-		_done = PrintOrRun(p_obj, short_name, true);
-	}
-	if(_done == 0) {
-		print (object) p_obj;
-	}
+	PrintShortName(p_obj);
 ];
 
 [ _PrintAfterEntry p_obj;
@@ -434,24 +401,8 @@ Array TenSpaces -> "          ";
 		if(_printed_any_objects) print " and ";
 		_PrintObjName(_last_obj, FORM_INDEF);
 		_PrintAfterEntry(_last_obj);
-!		print (string) p_last_text;
 	}
 
-!
-!   for(_i = 0: _i < scope_objects: _i++) {
-!     _obj = scope-->_i;
-!     if(_obj ~= nothing) {
-!       @new_line;
-!       _text = _obj.initial;
-!       if(_text) {
-!         PrintOrRun(_text);
-!       } else {
-!         print "There is a ",(name) scope-->_i, " here. ";
-!       }
-!       @new_line;
-!     }
-!   }
-! print "(",_printed_first_text, ")";
 	return _printed_first_text;
 ];
 
@@ -484,28 +435,30 @@ Array TenSpaces -> "          ";
 			floating_objects-->(_k++) = _i;
 		}
 	}
-	MoveFloatingObjects();
 ];
 
 [ MoveFloatingObjects _i _j _len _obj _present;
 	while((_obj = floating_objects-->_i) ~= 0 && _obj hasnt absent) {
-		_present = 0;
 		_len = _obj.#found_in / WORDSIZE;
 		if(_len == 1 && _obj.found_in > top_object) {
 			_present = RunRoutines(_obj, found_in);
 		} else {
-#IfV5;
 			_j = _obj.&found_in;
+#IfV5;
 			@scan_table location _j _len -> _present ?~no_success; ! The position is only a throw-away value here.
 			_present = 1;
 .no_success;
 #IfNot;
-			for(_j = _len - 1 : _j >= 0 : _j--)
-				if(_obj.&found_in-->_j == location) {
+			_len = _len - 1;
+.next_value;
+				if(_j-->_len == location) {
 					_present = 1;
-					break;
+					jump after_loop;
 				}
+			@dec_chk _len 0 ?~next_value;
+.after_loop;
 #EndIf;
+
 		}
 		if(_present)
 			move _obj to location;

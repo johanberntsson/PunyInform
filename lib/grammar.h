@@ -8,12 +8,18 @@
 	_describe_room = ((lookmode == 1 && location hasnt visited) || lookmode == 2);
 	give location visited;
 
+#IfV5;
+	style bold;
+#EndIf;
 	! write the room name
 	if(_ceil == location) {
 		_PrintObjName(location);
 	} else {
 		print (The) _ceil;
 	}
+#IfV5;
+	style roman;
+#EndIf;
 	_player_parent = parent(player);
 	if(_player_parent ~= _ceil) {
 		if(_player_parent has supporter) print " (on ";
