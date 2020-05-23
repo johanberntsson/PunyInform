@@ -938,6 +938,22 @@
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
 			if(p_phase == PHASE2) {
+#IfnDef BETTERERRORS;
+				if(noun) {
+					print "I think you wanted to say ~";
+					print (verbname) verb_word, " ", (the) noun, " ";
+					if((_pattern_pointer-2)-->0 == (parse_array+2+(wn-2)*4)-->0) {
+						print (address) (_pattern_pointer-2)-->0;
+					} else {
+						print (address) (_pattern_pointer+1)-->0;
+					}
+					print " something~. Please try again.^";
+				} else {
+					print "You need to be more specific.^";
+				}
+#IfNot;
+				print "You need to be more specific.^";
+#EndIf;
 !				if(noun) {
 					! INFORM:
 					! lock: What do you want to lock?
@@ -957,7 +973,8 @@
 !					print "You must tell me how to ", (verbname) verb_word;
 !				}
 !				print ".^";
-				print "You need to be more specific.^";
+!"I think you meant "unlock door with *something*". Please try again.";
+	!			print "You need to be more specific.^";
 			};
 			return wn - verb_wordnum;!Fail because input ends here but not the grammar line
 		}
