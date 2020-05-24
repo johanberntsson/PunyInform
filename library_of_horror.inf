@@ -1,13 +1,14 @@
 !% -~S
 
-!Constant TEST_BEFOREAFTER;
-
 ! Library of Horror - a sample game which uses PunyInform
 
 ! Uncomment to add optional features to PunyLib
-!Constant FULL_DIRECTIONS;
-!Constant ALLOW_WRITTEN_NUMBERS;
-Constant DEBUG_VERBS;
+!Constant OPTIONAL_DEBUG_VERBS;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+
 !Constant DEBUG_TIMER; ! requires special Ozmoo
 !Constant DEBUG_SCOPE;
 !Constant DEBUG_PARSEPATTERN;
@@ -15,6 +16,8 @@ Constant DEBUG_VERBS;
 !Constant DEBUG_CHECKNOUN;
 !Constant DEBUG_GETNEXTNOUN;
 !Constant DEBUG_SCOPE;
+
+!Constant TEST_BEFOREAFTER;
 
 #IfDef DEBUG_TIMER;
 Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0 

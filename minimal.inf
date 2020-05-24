@@ -3,9 +3,12 @@
 ! Minimal.inf - a sample game which uses PunyInform
 
 ! Uncomment to add optional features to PunyLib
-!Constant FULL_DIRECTIONS;
-!Constant ALLOW_WRITTEN_NUMBERS;
-!Constant DEBUG_VERBS;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_DEBUG_VERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 
 Include "globals.h";
 

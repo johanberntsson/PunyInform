@@ -48,7 +48,7 @@
     }
 ];
 
-#Ifdef ALLOW_WRITTEN_NUMBERS;
+#Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 [ NumberWord p_o _i _n;
     ! try to parse  "one" up to "twenty".
     _n = LanguageNumbers-->0;
@@ -66,7 +66,7 @@
 	!  the number           if it has between 1 and 4 digits
 	!  10000                if it has 5 or more digits.
     _i = wn; wn = p_wordnum; _j = NextWord(); wn = _i;
-#Ifdef ALLOW_WRITTEN_NUMBERS;
+#Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
     _j = NumberWord(_j); if (_j >= 1) return _j;
 #Endif;
 
@@ -323,7 +323,7 @@
 		return 0;
 	}
 
-#IfDef DEBUG_VERBS;
+#IfDef OPTIONAL_DEBUG_VERBS;
 	if(action_debug) {
 		_name_array_len = Directions; _stop = top_object + 1;
 	} else {
@@ -889,6 +889,8 @@
 ];
 
 
+#IfDef OPTIONAL_GUESS_MISSING_NOUN;
+
 [ _GuessMissingNoun p_type p_prep _i _noun _creature _creature_num _held _held_num _thing _thing_num _container _container_num _door _door_num;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_noun = scope-->_i;
@@ -946,6 +948,8 @@
 	return _noun;
 ];
 
+#EndIf;
+
 [ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second;
 	! Called because sentence shorter than the pattern
 	! Available data: wn, parse_array and p_pattern_token (last matched token)
@@ -981,12 +985,14 @@
 
 	! try to guess missing parts in the pattern
 	! return true if we could fix everything
+#IfDef OPTIONAL_GUESS_MISSING_NOUN;
 	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0);
 	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep);
 	if((_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
 		!print "message complete: ", noun, " ", second, "^";
 		rtrue;
 	}
+#EndIf;
 
 	! write an error message and return false
 	print "I think you wanted to say ~";
@@ -1031,7 +1037,7 @@
 	parser_all_found = false;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
-#IfDef DEBUG_VERBS;
+#IfDef OPTIONAL_DEBUG_VERBS;
 	action_debug = (action == ##Scope);
 #EndIf;
 

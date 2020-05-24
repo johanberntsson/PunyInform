@@ -1,12 +1,5 @@
 ! Part of PunyInform, a standard library for writing interactive fiction using Inform 6.
 !
-! CONSTANTS that can be set in the game to turn parts of PunyInform
-! on or off (to save memory).
-!
-! FULL_DIRECTIONS: to allow ne, se, sw, and nw as directions
-! ALLOW_WRITTEN_NUMBERS: to be able to parse one, two etc as numbers
-! DEBUG_VERBS: enable some debuggin verbs for game development
-!
 #IfnDef CUSTOM_ABBREVIATIONS;
 Abbreviate ". ";
 Abbreviate ", ";
@@ -181,7 +174,7 @@ Property long parse_name 0;
 ! Property s_to;
 ! Property e_to;
 ! Property w_to;
-! #IfDef FULL_DIRECTIONS;
+! #IfDef OPTIONAL_FULL_DIRECTIONS;
 ! Property ne_to;
 ! Property nw_to;
 ! Property se_to;
@@ -195,13 +188,13 @@ Property long parse_name 0;
 ! Property cant_go;
 ! Property door_to alias n_to;
 ! Property door_dir alias s_to;
-Constant FULL_DIRECTIONS;
+Constant OPTIONAL_FULL_DIRECTIONS;
 
 Constant FAKE_N_OBJ = 10001;
 Constant FAKE_S_OBJ = 10002;
 Constant FAKE_E_OBJ = 10003;
 Constant FAKE_W_OBJ = 10004;
-#IfDef FULL_DIRECTIONS;
+#IfDef OPTIONAL_FULL_DIRECTIONS;
 Constant FAKE_NE_OBJ = 10005;
 Constant FAKE_NW_OBJ = 10006;
 Constant FAKE_SE_OBJ = 10007;

@@ -544,7 +544,7 @@
 	! nothing here - this is taken care of in the main game loop instead
 ];
 
-#IfDef DEBUG_VERBS;
+#IfDef OPTIONAL_DEBUG_VERBS;
 Global scope_cnt;
 [ _ScopeSubHelper p_obj;
 	print scope_cnt++,": ", (a) p_obj, " (", p_obj, ")";
@@ -910,7 +910,7 @@ Verb meta 'fullscore' 'full'
     *                                           -> FullScore
     * 'score'                                   -> FullScore;
 
-#IfDef DEBUG_VERBS;
+#IfDef OPTIONAL_DEBUG_VERBS;
 Verb meta 'random'
 	*                                           -> Predictable
 	* special                                   -> Predictable

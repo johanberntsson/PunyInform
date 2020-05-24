@@ -43,25 +43,18 @@
 
 ! comment/uncomment to restrict default debug messages behaviour
 ! (all can be overridden by adding them in the game source)
+!Constant DEBUG_SCOPE;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSEANDPERFORM;
+
+! add debug verbs if in debug mode
 #IfDef DEBUG;
-	#IfnDef DEBUG_SCOPE;
-		Constant DEBUG_SCOPE;
-	#Endif;
-	#IfnDef DEBUG_CHECKNOUN;
-		Constant DEBUG_CHECKNOUN;
-	#Endif;
-	#IfnDef DEBUG_GETNEXTNOUN;
-		Constant DEBUG_GETNEXTNOUN;
-	#Endif;
-	#IfnDef DEBUG_PARSETOKEN;
-		Constant DEBUG_PARSETOKEN;
-	#Endif;
-	#IfnDef DEBUG_PARSEPATTERN;
-		Constant DEBUG_PARSEPATTERN;
-	#Endif;
-	#IfnDef DEBUG_PARSEANDPERFORM;
-		Constant DEBUG_PARSEANDPERFORM;
-	#Endif;
+	#IfnDef OPTIONAL_DEBUG_VERBS;
+		Constant OPTIONAL_DEBUG_VERBS;
+	#EndIf;
 #Endif;
 
 Include "messages.h";
