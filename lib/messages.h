@@ -231,7 +231,6 @@ Default MSG_PARSER_NOTHING_TO_VERB 66;
 Default MSG_TOUCHABLE_FOUND_CLOSED 67;
 Default MSG_CONSULT_NOTHING_INTERESTING 68;
 Default MSG_CUT_NO_USE 69;
-Default MSG_BLOW_DEFAULT 70;
 Default MSG_LOCK_NOT_A_LOCK 71;
 Default MSG_LOCK_ALREADY_LOCKED 72;
 Default MSG_LOCK_CLOSE_FIRST 73;
@@ -255,6 +254,9 @@ Default MSG_UNLOCK_ALREADY_LOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
 Default MSG_UNLOCK_SUCCESS 92;
 
+#IfDef OPTIONAL_EXTENDED_VERBSET;
+Default MSG_BLOW_DEFAULT 70;
+#EndIf;
 
 Default LibraryMessages 0;
 
@@ -342,8 +344,6 @@ Default LibraryMessages 0;
 		"You discover nothing of interest in ", (the) second, ".";
 	MSG_CUT_NO_USE:
 		"Cutting ", (the) noun, " up would achieve little.";
-	MSG_BLOW_DEFAULT:
-		"You can't usefully blow ", (the) noun, ".";
 	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_LOCKED:
 		print_ret (The) noun, " is already ", (verbname) verb_word, "ed.";
 	MSG_LOCK_CLOSE_FIRST:
@@ -393,6 +393,12 @@ Default LibraryMessages 0;
 	MSG_YOU_HAVE_DIED: ! print and rtrue to avoid newline
 		print "You have died.";
 		rtrue;
+
+#IfDef OPTIONAL_EXTENDED_VERBSET;
+	MSG_BLOW_DEFAULT:
+		"You can't usefully blow ", (the) noun, ".";
+#EndIf;
+
 default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);

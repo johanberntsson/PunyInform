@@ -171,10 +171,6 @@
 	PrintMsg(MSG_STRONG_DEFAULT);
 ];
 
-[ BlowSub;
-	PrintMsg(MSG_BLOW_DEFAULT);
-];
-
 [ ConsultSub;
 	PrintMsg(MSG_CONSULT_NOTHING_INTERESTING);
 ];
@@ -873,9 +869,6 @@ Verb 'shit' 'damn' 'fuck' 'sod'
 	*                                           -> Strong
 	* topic                                     -> Strong;
 
-Verb 'blow'
-	* held                                      -> Blow;
-
 Verb meta 'brief' 'normal'
 	*                                           -> LookModeNormal;
 
@@ -974,6 +967,15 @@ Verb 'wait' 'z'
 Verb 'touch'
 	* noun                                      -> Touch;
 
+#IfDef OPTIONAL_EXTENDED_VERBSET;
+
+[ BlowSub;
+	PrintMsg(MSG_BLOW_DEFAULT);
+];
+
+Verb 'blow'
+	* held                                      -> Blow;
+#EndIf;
 
 [ VerbName p_v _string_name;
 	! first give entry routine a chance to override
