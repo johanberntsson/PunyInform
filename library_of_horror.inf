@@ -19,6 +19,9 @@ Constant OPTIONAL_GUESS_MISSING_NOUN;
 
 !Constant TEST_BEFOREAFTER;
 
+Constant Story      "The Library Of Horror";
+Constant Headline   "^A sandbox for PunyInform development^";
+
 #IfDef DEBUG_TIMER;
 Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0 
 #EndIf;
