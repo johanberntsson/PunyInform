@@ -888,6 +888,64 @@
 	}
 ];
 
+
+[ _GuessMissingNoun p_type p_prep _i _noun _creature _creature_num _held _held_num _thing _thing_num _container _container_num _door _door_num;
+	for(_i = 0: _i < scope_objects: _i++) {
+		_noun = scope-->_i;
+		if(_noun == player) continue;
+		if(ObjectIsInvisible(_noun)) continue;
+		if(_noun has door) {
+			_door = _noun;
+			++_door_num;
+			!print "found door ", (the) _door, "^";
+		}
+		if(_noun has container) {
+			_container = _noun;
+			++_container_num;
+			!print "found container ", (the) _container, "^";
+		}
+		if(_noun has animate) {
+			_creature = _noun;
+			++_creature_num;
+			!print "found creature ", (the) _creature, "^";
+		} 
+		if(_noun in player) {
+			_held = _noun;
+			++_held_num;
+			!print "found held ", (the) _held, "^";
+		}
+		if(_noun hasnt scenery or concealed) {
+		   	_thing = _noun;
+		   	++_thing_num;
+			!print "found thing ", (the) _thing, "^";
+		}
+	}
+
+	_noun = 0;
+	switch(p_type) {
+	HELD_OBJECT: if(_held_num == 1) _noun = _held;
+	CREATURE_OBJECT: if(_creature_num == 1) _noun = _creature;
+	default: 
+		if(_noun == 0 && _container_num == 1 && action == ##Open or ##Close) {
+			_noun = _container;
+		}
+		if(_noun == 0 && _door_num == 1 && action == ##Lock or ##Unlock or ##Open or ##Close) {
+			_noun = _door;
+		}
+		if(_noun == 0 && _thing_num == 1) _noun = _thing;
+	}
+
+	if(_noun) {
+		print "(assuming ";
+		if(p_prep) {
+			print (address) (p_prep+1) --> 0, " ";
+		} else {
+		}
+		print (the) _noun, ")^";
+	}
+	return _noun;
+];
+
 [ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second;
 	! Called because sentence shorter than the pattern
 	! Available data: wn, parse_array and p_pattern_token (last matched token)
@@ -923,13 +981,11 @@
 
 	! try to guess missing parts in the pattern
 	! return true if we could fix everything
-	if(_second->2 == CREATURE_OBJECT && second == 0) {
-		if(himobj ~= 0 && TestScope(himobj)) {
-			second = himobj; 
-			print "(";
-			if(_prep) print (address) (_prep+1) --> 0, " ";
-			print_ret (the) himobj, ")";
-		}
+	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0);
+	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep);
+	if((_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
+		!print "message complete: ", noun, " ", second, "^";
+		rtrue;
 	}
 
 	! write an error message and return false
