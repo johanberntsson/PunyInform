@@ -702,6 +702,17 @@ Global scope_cnt;
     PrintMsg(MSG_TOUCH_SUCCESS);
 ];
 
+[ VersionSub _i;
+	if(Story ~= 0) {
+		print (string) Story;
+		if(Headline ~= 0) print (string) Headline;
+    }
+	print "Release ", (0-->1) & $03ff, " / Serial number ";
+	for (_i = 18:_i < 24: _i++) print (char) 0->_i;
+	print "  / PunyInform 1.0 (beta 1)";
+	print " / Inform v"; inversion; @new_line;
+];
+
 [ LookModeNormalSub;
 	lookmode=1;
 	PrintMsg(MSG_LOOKMODE_NORMAL);
@@ -868,6 +879,9 @@ Verb 'bother' 'curses' 'darn' 'drat'
 Verb 'shit' 'damn' 'fuck' 'sod'
 	*                                           -> Strong
 	* topic                                     -> Strong;
+
+Verb meta 'version'
+	*                                           -> Version;
 
 Verb meta 'brief' 'normal'
 	*                                           -> LookModeNormal;

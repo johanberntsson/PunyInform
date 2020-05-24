@@ -904,14 +904,7 @@ Object _TheDark "Darkness";
 
 	top_object = #largest_object-255;
 
-	if(Story ~= 0) {
-		print (string) Story;
-		if(Headline ~= 0) print (string) Headline;
-		print "Release ", (0-->1) & $03ff, " / Serial number ";
- 		for (_i = 18:_i < 24: _i++) print (char) 0->_i;
-		print " / ";
-	}
-	print "PunyInform 1.0 (beta 1)^^";
+	VersionSub();
 
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
