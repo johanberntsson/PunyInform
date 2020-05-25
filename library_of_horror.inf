@@ -347,6 +347,11 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 		time_left 0,
 	has container openable enterable static;
 
+Object -> -> Ladder "ladder"
+	with
+		name 'ladder'
+	has supporter enterable;
+
 Book -> -> RedBook "red book"
 	with
 		name 'red' 'book',
