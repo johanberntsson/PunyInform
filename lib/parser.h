@@ -1116,6 +1116,8 @@
 							print "You don't need to refer to ~";
 							_PrintUknownWord();
 							print "~ in this game.^";
+						} else if(parser_unknown_noun_found-->0 == ALL_WORD) {
+							print "You can't use multiple objects with that verb.^";
 						} else {
 							print "You can't see any such thing.^";
 						}
