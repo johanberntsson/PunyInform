@@ -711,21 +711,19 @@ Verb 'yes' 'y//'
 ];
 
 [ EmptySub;
-	!TODO: rewrite d_obj
-	!second = d_obj; 
+	selected_direction = d_to;
 	EmptyTSub();
 ];
 
 [ EmptyTSub i j k flag;
-	!TODO: rewrite d_obj
 	if(noun == second) { PrintMsg(MSG_EMPTY_WOULDNT_ACHIEVE); rtrue; }
 	if(ObjectIsUntouchable(noun)) return;
-	!if(second ~= d_obj) {
+	if(selected_direction ~= d_to) {
 		if(second hasnt supporter) {
 		if(second hasnt container) { PrintMsg(MSG_EMPTY_CANT_CONTAIN, second); rtrue; }
 		if(second hasnt open) { PrintMsg(MSG_EMPTY_IS_CLOSED, second); rtrue; }
 		}
-	!}
+	}
 	i = child(noun); k = children(noun);
 	if(i == 0) { PrintMsg(MSG_EMPTY_ALREADY_EMPTY, noun); rtrue; }
 	while(i ~= 0) {
@@ -734,12 +732,12 @@ Verb 'yes' 'y//'
 		if(ObjectIsUntouchable(noun)) flag = 1;
 		if(noun hasnt container) flag = 1;
 		if(noun hasnt open) flag = 1;
-		!if(second ~= d_obj) {
-		!	if(second hasnt supporter) {
-		!		if(second hasnt container) flag = 1;
-		!		if(second hasnt open) flag = 1;
-		!	}
-		!}
+		if(selected_direction ~= d_to) {
+			if(second hasnt supporter) {
+				if(second hasnt container) flag = 1;
+				if(second hasnt open) flag = 1;
+			}
+		}
 		if(k-- == 0) flag = 1;
 		if(flag) break;
 		if(keep_silent == 0) print (name) i, ": ";
@@ -749,8 +747,9 @@ Verb 'yes' 'y//'
 ];
 
 [ GoInSub;
-	! TODO: rewrite in_obj
-	!<<Go in_obj>>;
+	! shortcut to <<Go in>>
+	selected_direction = in_to;
+	GoSub();
 ];
 
 [ KissSub;
