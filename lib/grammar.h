@@ -263,9 +263,9 @@ Verb 'wear'
 
 [ DropSub _p;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
-	_p =parent(player);
+	_p = parent(player);
 	if(_p ~= location) {
-		<Insert noun _p>;
+		PerformAction(##Insert, noun, _p); ! <Insert noun _p>; works if compiler version >= 6.34
 		rtrue;
 	}
 	move noun to parent(player);
@@ -562,7 +562,7 @@ Verb 'wear'
     if (second has supporter) { PutOnSub(); rtrue; }
     !if (second == d_obj) <<Drop noun>>;
     ! doesn't work in z3: <<Insert noun second>>;
-    InsertSub();
+	PerformAction(##Insert, noun, second); ! <Insert noun second>; works if compiler version >= 6.34
 ];
 
 [ TurnSub;
@@ -711,45 +711,50 @@ Verb 'yes' 'y//'
 ];
 
 [ EmptySub;
-	selected_direction = d_to;
-	EmptyTSub();
+	PerformAction(##EmptyT, noun, FAKE_D_OBJ); ! 	<EmptyT noun FAKE_D_OBJ>; works in Inform 6.34+
 ];
 
-[ EmptyTSub i j k flag;
+[ EmptyTSub _i _j _k _flag _recipient;
 	if(noun == second) { PrintMsg(MSG_EMPTY_WOULDNT_ACHIEVE); rtrue; }
 	if(ObjectIsUntouchable(noun)) return;
+!		_recipient = TouchCeiling(player);
 	if(selected_direction ~= d_to) {
+!	else {
+		_recipient = second;
 		if(second hasnt supporter) {
 		if(second hasnt container) { PrintMsg(MSG_EMPTY_CANT_CONTAIN, second); rtrue; }
 		if(second hasnt open) { PrintMsg(MSG_EMPTY_IS_CLOSED, second); rtrue; }
 		}
 	}
-	i = child(noun); k = children(noun);
-	if(i == 0) { PrintMsg(MSG_EMPTY_ALREADY_EMPTY, noun); rtrue; }
-	while(i ~= 0) {
-		j = sibling(i);
-		flag = 0;
-		if(ObjectIsUntouchable(noun)) flag = 1;
-		if(noun hasnt container) flag = 1;
-		if(noun hasnt open) flag = 1;
+	_i = child(noun); _k = children(noun);
+	if(_i == 0) { PrintMsg(MSG_EMPTY_ALREADY_EMPTY, noun); rtrue; }
+	while(_i ~= 0) {
+		_j = sibling(_i);
+		_flag = 0;
+		if(ObjectIsUntouchable(noun)) _flag = 1;
+		if(noun hasnt container) _flag = 1;
+		if(noun hasnt open) _flag = 1;
 		if(selected_direction ~= d_to) {
 			if(second hasnt supporter) {
-				if(second hasnt container) flag = 1;
-				if(second hasnt open) flag = 1;
+				if(second hasnt container) _flag = 1;
+				if(second hasnt open) _flag = 1;
 			}
 		}
-		if(k-- == 0) flag = 1;
-		if(flag) break;
-		if(keep_silent == 0) print (name) i, ": ";
-		<Transfer i second>;
-		i = j;
+		if(_k-- == 0) _flag = 1;
+		if(_flag) break;
+		if(keep_silent == 0) print (name) _i, ": ";
+		if(selected_direction == d_to) {
+		    _GrabIfNotHeld(_i);
+			<Drop _i>;
+		} else
+			PerformAction(##Transfer, _i, _recipient); ! <Transfer _i _recipient>; works if compiler version >= 6.34
+		_i = _j;
 	}
 ];
 
 [ GoInSub;
 	! shortcut to <<Go in>>
-	selected_direction = in_to;
-	GoSub();
+	<Go FAKE_IN_OBJ>;
 ];
 
 [ KissSub;

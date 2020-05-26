@@ -586,12 +586,15 @@ Include "parser.h";
     return _result;
 ];
 
-[ _SetDirectionIfIsFakeDir p_obj _idx;
+[ _SetDirectionIfIsFakeDir p_obj p_noun_no _idx;
 	if(p_obj >= FAKE_N_OBJ && p_obj <= FAKE_OUT_OBJ) {
 		_idx = p_obj - FAKE_N_OBJ;
 		selected_direction_index = _idx + 1;
 		selected_direction = _idx + n_to;
-		noun = Directions;
+		if(p_noun_no == 1)
+			noun = Directions;
+		else
+			second = Directions;
 	}
 ];
 
@@ -599,8 +602,8 @@ Include "parser.h";
 	_sa = action; _sn = noun; _ss = second; _sdi = selected_direction_index; _sd = selected_direction;
 	action = p_action; noun = p_noun; second = p_second;
 	selected_direction_index = 0; selected_direction = 0;
-	_SetDirectionIfIsFakeDir(noun);
-	_SetDirectionIfIsFakeDir(second);
+	_SetDirectionIfIsFakeDir(noun, 1);
+	_SetDirectionIfIsFakeDir(second, 2);
 	PerformPreparedAction();
 	action = _sa; noun = _sn; second = _ss; selected_direction_index = _sdi; selected_direction = _sd;
 ];

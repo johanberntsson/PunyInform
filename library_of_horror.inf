@@ -347,10 +347,23 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 		time_left 0,
 	has container openable enterable static;
 
+Object -> -> Gun "gun"
+	with
+		name 'gun',
+		before [;
+			Examine: rtrue;
+			default: "It's very dangerous, better just leave it alone!";
+		];
+
 Object -> -> Ladder "ladder"
 	with
-		name 'ladder'
+		name 'ladder',
+		inside_description "It's a really good ladder for standing on.",
 	has supporter enterable;
+
+Object -> -> -> Sticker "sticker"
+	with
+		name 'sticker';
 
 Book -> -> RedBook "red book"
 	with
