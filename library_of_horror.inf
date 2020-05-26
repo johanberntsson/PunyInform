@@ -3,11 +3,11 @@
 ! Library of Horror - a sample game which uses PunyInform
 
 ! Uncomment to add optional features to PunyLib
-!Constant OPTIONAL_DEBUG_VERBS;
-!Constant OPTIONAL_FULL_DIRECTIONS;
-Constant OPTIONAL_EXTENDED_VERBSET;
-Constant OPTIONAL_GUESS_MISSING_NOUN;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_DEBUG_VERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_GUESS_MISSING_NOUN;
 
 !Constant DEBUG_TIMER; ! requires special Ozmoo
 !Constant DEBUG_SCOPE;

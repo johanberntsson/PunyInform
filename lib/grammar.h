@@ -1,5 +1,1051 @@
 ! ######################### Grammar + Actions
 
+! ---------------------
+! Base verbs
+! ---------------------
+
+Verb 'answer' 'say' 'shout' 'speak'
+    * topic 'to' creature                       -> Answer;
+
+Verb 'ask'
+	* creature 'about' topic                    -> Ask
+	* creature 'for' noun                       -> AskFor
+	* creature 'to' topic                       -> AskTo
+	* 'that' creature topic                     -> AskTo;
+
+Verb 'attack' 'break' 'crack' 'destroy'
+     'fight' 'hit' 'kill' 'murder' 'punch'
+     'smash' 'thump' 'torture' 'wreck'
+    * noun                                      -> Attack
+    * noun 'with' held                          -> Attack;
+
+Verb 'climb' 'scale'
+	* 'into'/'onto' noun                        -> Enter
+	* 'out' 'of'/'from' noun                    -> Exit;
+
+Verb 'close' 'cover' 'shut'
+	* noun                                      -> Close
+	* 'off' noun                                -> SwitchOff;
+
+Verb 'cut' 'chop' 'prune' 'slice'
+	* noun                                      -> Cut
+	* noun 'with' held                          -> Attack;
+
+Verb 'dig'
+	* noun                                      -> Dig
+	* noun 'with' held                          -> Dig;
+
+Verb 'drink' 'sip' 'swallow'
+    * noun                                      -> Drink;
+
+Verb 'drop' 'discard' 'throw'
+	* multiheld                                 -> Drop
+	* multiexcept 'in'/'into'/'down' noun       -> Insert
+	* held 'at'/'against'/'on'/'onto' noun      -> ThrowAt;
+
+Verb 'eat'
+    * held                                      -> Eat;
+
+Verb 'enter'
+	* noun                                      -> Enter;
+
+Verb 'examine' 'x//'
+	* noun -> Examine;
+
+Verb 'exit'
+	* noun                                      -> Exit;
+
+Verb 'fill'
+	* noun                                      -> Fill;
+
+Verb 'get'
+	* 'up'                                      -> Exit
+	* 'out'                                     -> Exit
+	* multi                                     -> Take;
+
+Verb 'give' 'feed' 'offer' 'pay'
+	* held 'to' creature                        -> Give
+	* creature held                             -> Give reverse
+	* 'over' held 'to' creature                 -> Give;
+
+[ ADirection; 
+	return (noun == Directions);
+];
+
+Verb 'go'
+	* noun=ADirection                           -> Go
+	* noun                                      -> Enter;
+
+Verb 'insert'
+    * multiexcept 'in'/'into' noun              -> Insert;
+
+Verb 'inventory' 'i//'
+	* -> Inv;
+
+Verb 'jump'
+	*                                           -> Jump
+	* 'over' noun                               -> JumpOver
+	* 'into'/'onto' noun                        -> Enter
+	* 'out' 'of'/'from' noun                    -> Exit
+	* 'off' noun                                -> Exit;
+
+Verb 'leave'
+	* noun=ADirection                           -> Go
+	* noun                                      -> Exit;
+
+Verb 'listen'
+	*                                           -> Listen
+	* 'to' noun                                 -> Listen;
+
+Verb 'lock'
+	* noun 'with' held                          -> Lock;
+
+Verb 'look' 'l//'
+	*                                           -> Look
+	* 'at' noun                                 -> Examine;
+
+Verb 'open' 'uncover' 'unwrap'
+	* noun                                      -> Open
+	* noun 'with' held                          -> Unlock;
+
+Verb 'pick' 
+	* 'up' multi                                -> Take
+	* multi 'up'                                -> Take;
+
+Verb 'pull' 'drag'
+    * noun                                      -> Pull;
+
+Verb 'push' 'clear' 'move' 'press' 'shift'
+    * noun                                      -> Push
+    * noun noun                                 -> PushDir
+    * noun 'to' noun                            -> Transfer;
+
+Verb 'put'
+	* multiexcept 'in'/'inside'/'into' noun     -> Insert
+	* multiexcept 'on'/'onto' noun              -> PutOn
+	* 'on' held									-> Wear;
+
+Verb 'read'
+	* noun                                      -> Examine
+	* 'about' topic 'in' noun                   -> Consult
+	* topic 'in' noun                           -> Consult;
+
+Verb 'remove'
+	* held                                      -> Disrobe
+	* multi                                     -> Take
+	* multiinside 'from' noun                   -> Remove;
+
+Verb 'rub' 'clean' 'dust' 'polish' 'scrub' 'shine' 'sweep' 'wipe'
+	* noun                                      -> Rub;
+
+Verb 'search'
+	* noun                                      -> Search;
+
+Verb 'shed' 'disrobe' 'doff'
+	* held                                      -> Disrobe;
+
+Verb 'show' 'display' 'present'
+	* creature held                             -> Show reverse
+	* held 'to' creature                        -> Show;
+
+Verb 'sit' 'lie'
+	* 'on' 'top' 'of' noun                      -> Enter
+	* 'on'/'in'/'inside' noun                   -> Enter;
+
+Verb 'smell'
+	*                                           -> Smell
+	* noun                                      -> Smell;
+
+Verb 'stand'
+	*                                           -> Exit
+	* 'up'                                      -> Exit
+	* 'on' noun                                 -> Enter;
+
+Verb 'switch'
+	* noun                                      -> SwitchOn
+	* noun 'on'                                 -> SwitchOn
+	* noun 'off'                                -> SwitchOff
+	* 'on' noun                                 -> SwitchOn
+	* 'off' noun                                -> SwitchOff;
+
+Verb 'take' 'carry' 'hold'
+	* multi                                     -> Take
+	* 'off' worn                                -> Disrobe
+	* multiinside 'from' noun                   -> Remove
+	* multiinside 'off' noun                    -> Remove
+	* 'inventory'                               -> Inv;
+
+Verb 'tell'
+	* creature 'about' topic                    -> Tell
+	* creature 'to' topic                       -> AskTo;
+
+Verb 'tie' 'attach' 'fasten' 'fix'
+	* noun                                      -> Tie
+	* noun 'to' noun                            -> Tie;
+
+Verb 'touch'
+	* noun                                      -> Touch;
+
+Verb 'turn' 'rotate' 'screw' 'twist' 'unscrew'
+	* noun                                      -> Turn
+	* noun 'on'                                 -> SwitchOn
+	* noun 'off'                                -> SwitchOff
+	* 'on' noun                                 -> SwitchOn
+	* 'off' noun                                -> SwitchOff;
+
+Verb 'unlock'
+	* noun 'with' held                          -> Unlock;
+
+Verb 'wait' 'z'
+    *                                           -> Wait;
+
+Verb 'wear'
+	* held										-> Wear;
+
+[ AnswerSub;
+    if (second ~= 0 && RunLife(second,##Answer) ~= 0) rfalse;
+    PrintMsg(MSG_ANSWER_SUCCESS);
+];
+
+[ AskSub;
+    if (RunLife(noun,##Ask) ~= 0) rfalse;
+    PrintMsg(MSG_ASK_SUCCESS);
+];
+
+[ AskToSub;
+    PrintMsg(MSG_ASKTO_SUCCESS);
+];
+
+[ AskForSub;
+    if (noun == player) { <Inv>; rtrue; }
+    PrintMsg(MSG_ASKFOR_SUCCESS);
+];
+
+[ AttackSub;
+    if (ObjectIsUntouchable(noun)) return;
+    if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
+	PrintMsg(MSG_ATTACK_SUCCESS);
+];
+
+[ CloseSub;
+	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT); rtrue; }
+	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN); rtrue; }
+	give noun ~open;
+	if(AfterRoutines() == 1) rtrue;
+    if (keep_silent) return;
+	PrintMsg(MSG_CLOSE_SUCCESS);
+];
+
+[ ConsultSub;
+	PrintMsg(MSG_CONSULT_NOTHING_INTERESTING);
+];
+
+[ CutSub;
+	PrintMsg(MSG_CUT_NO_USE);
+];
+
+[ DigSub;
+	PrintMsg(MSG_DIG_NO_USE);
+];
+
+[ DisrobeSub;
+    if (ObjectIsUntouchable(noun)) return;
+    if (noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
+    give noun ~worn;
+    if (AfterRoutines() == 1) rtrue;
+    if (keep_silent == 1) rtrue;
+    PrintMsg(MSG_DISROBE_SUCCESS);
+];
+
+[ DrinkSub;
+	PrintMsg(MSG_DRINK_NOTHING_SUITABLE);
+];
+
+[ DropSub _p;
+	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
+	_p =parent(player);
+	if(_p ~= location) {
+		<Insert noun _p>;
+		rtrue;
+	}
+	move noun to parent(player);
+	give noun moved;
+	if(AfterRoutines() == 1) rtrue;
+    if(keep_silent) return;
+	PrintMsg(MSG_DROP_DROPPED);
+];
+
+[ EatSub;
+    if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
+    if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
+	remove noun;
+	if (AfterRoutines() == 1) rtrue;
+	if (keep_silent == 1) rtrue;
+    PrintMsg(MSG_EAT_SUCCESS);
+];
+
+[ EnterSub _door_dir;
+	if(noun has door) {
+		_door_dir = noun.door_dir;
+		if(_door_dir > top_object) {
+			_door_dir = noun.door_dir();
+		}
+		! Convert to fake object
+		_door_dir = _door_dir - n_to + FAKE_N_OBJ;
+		<<Go _door_dir>>; 
+	}
+	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
+	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
+	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
+	PlayerTo(noun);
+	if(AfterRoutines() == 1) rtrue;
+    if (keep_silent) return;
+    PrintMsg(MSG_ENTER_SUCCESS);
+];
+
+[ ExamineSub;
+	if(noun provides description) {
+		PrintOrRun(noun, description);
+	} else {
+		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
+	}
+];
+
+[ ExitSub;
+	if(noun == 0) noun = parent(player);
+	if(player in location) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
+	if(player notin noun) {
+		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE, parent(player)); rtrue; }
+		if(noun has supporter) { PrintMsg(MSG_EXIT_NOT_ON); rtrue; }
+		PrintMsg(MSG_EXIT_NOT_IN);
+		rtrue;
+	}
+	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN, noun); rtrue; }
+	PlayerTo(parent(noun));
+	if(AfterRoutines() == 1) rtrue;
+    if (keep_silent) return;
+    PrintMsg(MSG_EXIT_SUCCESS);
+];
+
+[ FillSub;
+	PrintMsg(MSG_FILL_NO_WATER);
+];
+
+[ GiveSub;
+    if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
+    if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
+    if (RunLife(second, ##Give) ~= 0) rfalse;
+    PrintMsg(MSG_GIVE_SUCCESS);
+];
+
+[ GoSub _prop;
+	! when called Directions have been set properly
+	_prop = selected_direction;
+	if(_prop == 0) return RuntimeError(ERR_INVALID_DIR_PROP);
+	GoDir(_prop);
+];
+
+[ InvSub;
+	if(child(player) == 0) { PrintMsg(MSG_INVENTORY_EMPTY); rtrue; }
+    PrintMsg(MSG_INVENTORY_SUCCESS);
+];
+
+[ InsertSub _ancestor;
+    if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
+    if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
+    _ancestor = CommonAncestor(noun, second);
+    if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
+    if (second ~= _ancestor) {
+        if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN, second); rtrue; }
+    }
+
+    _GrabIfNotHeld(noun);
+    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
+
+    if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
+
+    move noun to second;
+	give noun moved;
+
+	! run after on object
+	if(AfterRoutines() == 1) rtrue;
+
+	! run after on receiver 
+	action = ##Receive;
+	if(RunRoutines(second, after) ~= 0) { action = ##Insert; rtrue; }
+	action = ##Insert;
+
+    if (keep_silent) return;
+    PrintMsg(MSG_INSERT_SUCCESS);
+];
+
+[ JumpSub; PrintMsg(MSG_JUMP); ];
+
+[ JumpOverSub; PrintMsg(MSG_JUMP_OVER); ];
+
+[ ListenSub;
+    PrintMsg(MSG_LISTEN_SUCCESS);
+];
+
+[ LockSub;
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK); rtrue; }
+	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED); rtrue; }
+	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
+	if (noun.with_key ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
+	give noun locked;
+	if (AfterRoutines() == 1) rtrue;
+	if (keep_silent == 1) rtrue;
+	PrintMsg(MSG_LOCK_SUCCESS);
+];
+
+[ LookSub _old_lookmode;
+	_old_lookmode = lookmode;
+	lookmode = 2; ! force long description
+	Look();
+	lookmode = _old_lookmode;
+];
+
+[ OpenSub;
+	if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT); rtrue; }
+	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
+	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
+	give noun open;
+	if(AfterRoutines() == 1) rtrue;
+    if (keep_silent) return;
+	PrintMsg(MSG_OPEN_SUCCESS);
+];
+
+[ PullSub;
+    if (ObjectIsUntouchable(noun)) return;
+	if (noun has static)   { PrintMsg(MSG_PULL_STATIC); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_PULL_SCENERY); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_PULL_ANIMATE); rtrue; }
+    PrintMsg(MSG_PULL_SUCCESS); !Nothing obvious happens
+];
+
+[ PushSub;
+    !if (ObjectIsUntouchable(noun)) return;
+    if (noun has static)   { PrintMsg(MSG_PUSH_STATIC); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_PUSH_SCENERY); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_PUSH_ANIMATE); rtrue; }
+    PrintMsg(MSG_PUSH_SUCCESS);
+];
+
+[ PushDirSub;
+    PrintMsg(MSG_PUSHDIR_DEFAULT);
+];
+
+[ PutOnSub _ancestor;
+    if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
+    if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
+    _ancestor = CommonAncestor(noun, second);
+    if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
+
+    if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
+
+    move noun to second;
+	give noun moved;
+    if (keep_silent) return;
+    PrintMsg(MSG_PUTON_SUCCESS);
+];
+
+[ RemoveSub i;
+    i = parent(noun);
+    if (i has container && i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED); rtrue; }
+    if (i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
+    if (i has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
+    if(TryToTakeNoun() == 1) rtrue;
+    action = ##Remove; if (AfterRoutines() == 1) rtrue;
+    action = ##Take;   if (AfterRoutines() == 1) rtrue;
+    if (keep_silent == 1) rtrue;
+    PrintMsg(MSG_REMOVE_SUCCESS);
+];
+
+[ RubSub;
+	PrintMsg(MSG_RUB_DEFAULT);
+];
+
+[ SearchSub _f _i;
+	if(darkness) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
+	if (ObjectIsUntouchable(noun)) return;
+	objectloop(_i in noun) if(_i hasnt concealed && _i hasnt scenery) _f++;
+	if(noun has supporter) {
+		if(_f == 0) 
+			PrintMsg(MSG_SEARCH_NOTHING_ON);
+		else 
+			PrintMsg(MSG_SEARCH_ON_IT_ISARE);
+		rtrue;
+	}
+	if(noun hasnt container) { PrintMsg(MSG_SEARCH_NOTHING_SPECIAL); rtrue; }
+	if(noun hasnt transparent && noun hasnt open) { 
+		PrintMsg(MSG_SEARCH_CANT_SEE_CLOSED); rtrue; 
+	}
+	if(AfterRoutines() == 1) rtrue;
+	if(_f == 0) 
+		PrintMsg(MSG_SEARCH_EMPTY);
+	else 
+		PrintMsg(MSG_SEARCH_IN_IT_ISARE);
+];
+
+[ ShowSub;
+    if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
+    if (second == player) { <Examine noun>; rtrue; }
+    if (RunLife(second, ##Show) ~= 0) rfalse;
+    PrintMsg(MSG_SHOW_SUCCESS);
+];
+
+[ SmellSub;
+    PrintMsg(MSG_SMELL_SUCCESS);
+];
+
+[ SwitchOffSub;
+    if (ObjectIsUntouchable(noun)) return;
+    if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_OFF_NOT_SWITCHABLE); rtrue; }
+    if (noun hasnt on)         { PrintMsg(MSG_SWITCH_OFF_NOT_ON); rtrue; }
+    give noun ~on;
+    if (AfterRoutines() == 1) rtrue;
+    if (keep_silent == 1) rtrue;
+	PrintMsg(MSG_SWITCH_OFF_SUCCESS);
+];
+
+[ SwitchOnSub;
+    if (ObjectIsUntouchable(noun)) return;
+    if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
+    if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; } 
+    give noun on;
+    if (AfterRoutines() == 1) rtrue;
+    if (keep_silent == 1) rtrue;
+	PrintMsg(MSG_SWITCH_ON_SUCCESS);
+];
+
+[ TakeSub;
+	if(TryToTakeNoun() == 1) rtrue;
+	if(AfterRoutines() == 1) rtrue;
+    if (keep_silent) return;
+	PrintMsg(MSG_TAKE_SUCCESS);
+];
+
+[ TieSub;
+	PrintMsg(MSG_TIE_DEFAULT);
+];
+
+[ TellSub;
+    if (noun == player) { PrintMsg(MSG_TELL_PLAYER); rtrue; }
+    if (RunLife(noun, ##Tell) ~= 0) rfalse;
+    PrintMsg(MSG_TELL_SUCCESS);
+];
+
+[ ThrowAtSub;
+	if(ObjectIsUntouchable(noun)) return;
+	if(second > 1) {
+		action = ##ThrownAt;
+		if (RunRoutines(second, before) ~= 0) { action = ##ThrowAt; rtrue; }
+		action = ##ThrowAt;
+	}
+	if(noun has worn) {
+        PrintMsg(MSG_THROW_FIRST_TAKING);
+		if (noun has worn && noun in player) rtrue;
+	}
+	if(second hasnt animate) { PrintMsg(MSG_THROW_ANIMATE); rtrue; }
+	if(RunLife(second,##ThrowAt) ~= 0) rfalse;
+	PrintMsg(MSG_THROW_SUCCESS);
+];
+
+[ TouchSub;
+    PrintMsg(MSG_TOUCH_SUCCESS);
+];
+
+[ TransferSub;
+    _GrabIfNotHeld(noun);
+    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
+    if (second has supporter) { PutOnSub(); rtrue; }
+    !if (second == d_obj) <<Drop noun>>;
+    ! doesn't work in z3: <<Insert noun second>>;
+    InsertSub();
+];
+
+[ TurnSub;
+    if (ObjectIsUntouchable(noun)) return;
+    if (noun has static)   { PrintMsg(MSG_TURN_STATIC); rtrue; }
+    if (noun has scenery)  { PrintMsg(MSG_TURN_SCENERY); rtrue; }
+    if (noun has animate)  { PrintMsg(MSG_TURN_ANIMATE); rtrue; }
+    PrintMsg(MSG_TURN_SUCCESS);
+];
+
+[ UnlockSub;
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK); rtrue; }
+	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_LOCKED); rtrue; }
+	if (noun.with_key ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
+	give noun ~locked;
+	if (AfterRoutines() == 1) rtrue;
+	if (keep_silent == 1) rtrue;
+	PrintMsg(MSG_UNLOCK_SUCCESS);
+];
+
+[ WaitSub;
+    PrintMsg(MSG_WAIT_SUCCESS);
+];
+
+[ WearSub;
+	if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
+	if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING); rtrue; }
+    if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
+	give noun worn;
+	PrintMsg(MSG_WEAR_SUCCESS);
+];
+	
+
+! ---------------------
+! Extended verbs
+! ---------------------
+
+#IfDef OPTIONAL_EXTENDED_VERBSET;
+
+Verb 'blow'
+	* held                                      -> Blow;
+
+Verb 'bother' 'curses' 'darn' 'drat'
+	*                                           -> Mild
+	* topic                                     -> Mild;
+
+Verb 'burn' 'light'
+	* noun                                      -> Burn
+	* noun 'with' held                          -> Burn;
+
+Verb 'buy' 'purchase'
+	* noun                                      -> Buy;
+
+Verb 'consult'
+	* noun 'about' topic                        -> Consult
+	* noun 'on' topic                           -> Consult;
+
+Verb 'empty' 
+	* noun                                      -> Empty 
+	* 'out' noun                                -> Empty 
+	* noun 'out'                                -> Empty 
+	* noun 'to'/'into'/'on'/'onto' noun         -> EmptyT; 
+
+Verb 'in' 'inside' 
+	*                                           -> GoIn; 
+
+Verb 'kiss' 'embrace' 'hug'
+    * creature                                  -> Kiss;
+
+Verb 'no' 
+	*                                           -> No;
+
+Verb 'peel' 
+	* noun                                      -> Take
+	* 'off' noun                                -> Take;
+
+Verb 'pray' 
+    *                                           -> Pray; 
+
+Verb 'pry' 'prise' 'prize' 'lever' 'jemmy' 'force' 
+	* noun 'with' held                          -> Unlock 
+	* 'apart'/'open' noun 'with' held           -> Unlock 
+	* noun 'apart'/'open' 'with' held           -> Unlock; 
+
+Verb 'set' 'adjust'
+	* noun                                      -> Set
+	* noun 'to' special                         -> SetTo;
+
+Verb 'shit' 'damn' 'fuck' 'sod'
+	*                                           -> Strong
+	* topic                                     -> Strong;
+
+Verb 'sing'
+	*                                           -> Sing;
+
+Verb 'sleep' 'nap'
+	*                                           -> Sleep;
+
+Verb 'sorry'
+	*                                           -> Sorry;
+
+Verb 'squeeze' 'squash'
+	* noun                                      -> Squeeze;
+
+Verb 'swim' 'dive'
+	*                                           -> Swim;
+
+Verb 'swing'
+	* noun                                      -> Swing
+	* 'on' noun                                 -> Swing;
+
+Verb 'taste'
+	* noun                                      -> Taste;
+
+Verb 'think'
+	*                                           -> Think;
+
+Verb 'transfer'
+	* noun 'to' noun                            -> Transfer;
+
+Verb 'wake' 'awake' 'awaken'
+    *                                           -> Wake
+    * 'up'                                      -> Wake
+    * creature                                  -> WakeOther
+    * creature 'up'                             -> WakeOther
+    * 'up' creature                             -> WakeOther;
+
+Verb 'wave'
+	*                                           -> WaveHands
+	* noun                                      -> Wave;
+
+Verb 'yes' 'y//'
+	*                                           -> Yes;
+
+[ BlowSub;
+	PrintMsg(MSG_BLOW_DEFAULT);
+];
+
+[ BurnSub;
+	PrintMsg(MSG_BURN_DEFAULT);
+];
+
+[ BuySub;
+	PrintMsg(MSG_BUY_DEFAULT);
+];
+
+[ EmptySub;
+	!TODO: rewrite d_obj
+	!second = d_obj; 
+	EmptyTSub();
+];
+
+[ EmptyTSub i j k flag;
+	!TODO: rewrite d_obj
+	if(noun == second) { PrintMsg(MSG_EMPTY_WOULDNT_ACHIEVE); rtrue; }
+	if(ObjectIsUntouchable(noun)) return;
+	!if(second ~= d_obj) {
+		if(second hasnt supporter) {
+		if(second hasnt container) { PrintMsg(MSG_EMPTY_CANT_CONTAIN, second); rtrue; }
+		if(second hasnt open) { PrintMsg(MSG_EMPTY_IS_CLOSED, second); rtrue; }
+		}
+	!}
+	i = child(noun); k = children(noun);
+	if(i == 0) { PrintMsg(MSG_EMPTY_ALREADY_EMPTY, noun); rtrue; }
+	while(i ~= 0) {
+		j = sibling(i);
+		flag = 0;
+		if(ObjectIsUntouchable(noun)) flag = 1;
+		if(noun hasnt container) flag = 1;
+		if(noun hasnt open) flag = 1;
+		!if(second ~= d_obj) {
+		!	if(second hasnt supporter) {
+		!		if(second hasnt container) flag = 1;
+		!		if(second hasnt open) flag = 1;
+		!	}
+		!}
+		if(k-- == 0) flag = 1;
+		if(flag) break;
+		if(keep_silent == 0) print (name) i, ": ";
+		<Transfer i second>;
+		i = j;
+	}
+];
+
+[ GoInSub;
+	! TODO: rewrite in_obj
+	!<<Go in_obj>>;
+];
+
+[ KissSub;
+    if (ObjectIsUntouchable(noun)) return;
+    if (RunLife(noun, ##Kiss) ~= 0) rfalse;
+    if (noun == player) { PrintMsg(MSG_KISS_PLAYER); rtrue; }
+    PrintMsg(MSG_KISS_SUCCESS);
+];
+
+[ MildSub;
+	PrintMsg(MSG_MILD_DEFAULT);
+];
+
+[ NoSub;
+	PrintMsg(MSG_RHETORICAL_QUESTION);
+];
+
+[ PraySub;
+	PrintMsg(MSG_PRAY_DEFAULT);
+];
+
+[ SetSub;
+	PrintMsg(MSG_SET_DEFAULT);
+];
+
+[ SetToSub;
+	PrintMsg(MSG_SET_TO_DEFAULT);
+];
+
+[ SingSub;
+	PrintMsg(MSG_SING_DEFAULT);
+];
+
+[ SleepSub;
+	PrintMsg(MSG_SLEEP_DEFAULT);
+];
+
+[ SorrySub;
+	PrintMsg(MSG_SORRY_DEFAULT);
+];
+
+[ StrongSub;
+	PrintMsg(MSG_STRONG_DEFAULT);
+];
+
+[ SqueezeSub;
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun has animate) { PrintMsg(MSG_SQUEEZE_YOURSELF); rtrue; }
+	PrintMsg(MSG_SQUEEZE_DEFAULT);
+];
+
+[ SwimSub;
+	PrintMsg(MSG_SWIM_DEFAULT);
+];
+
+[ SwingSub;
+	PrintMsg(MSG_SWING_DEFAULT);
+];
+
+[ TasteSub;
+	PrintMsg(MSG_TASTE_DEFAULT);
+];
+
+[ ThinkSub;
+	PrintMsg(MSG_THINK_DEFAULT);
+];
+
+[ WakeSub;
+    PrintMsg(MSG_WAKE_SUCCESS);
+];
+
+[ WakeOtherSub;
+    if (ObjectIsUntouchable(noun)) return;
+    if (RunLife(noun, ##WakeOther) ~= 0) rfalse;
+    PrintMsg(MSG_WAKEOTHER_SUCCESS);
+];
+
+[ WaveSub;
+    if(parent(noun) ~= player) { PrintMsg(MSG_WAVE_NOTHOLDING); rtrue; }
+    PrintMsg(MSG_WAVE_DEFAULT);
+];
+
+[ WaveHandsSub;
+	PrintMsg(MSG_WAVEHANDS_DEFAULT);
+];
+
+[ YesSub;
+	PrintMsg(MSG_RHETORICAL_QUESTION);
+];
+
+#EndIf;
+
+! ---------------------
+! Meta verbs
+! ---------------------
+
+Verb meta 'again' 'g//'
+    *                                           -> Again;
+
+Verb meta 'brief' 'normal'
+	*                                           -> LookModeNormal;
+
+Verb meta 'fullscore' 'full'
+    *                                           -> FullScore
+    * 'score'                                   -> FullScore;
+
+Verb meta 'oops'
+    *                                           -> Oops
+    * special                                   -> OopsCorrection;
+
+Verb meta 'restart'
+	*                                           -> Restart;
+
+Verb meta 'restore'
+	*                                           -> Restore;
+
+Verb meta 'save'
+	*                                           -> Save;
+
+Verb meta 'score'
+    *                                           -> Score;
+
+Verb meta 'superbrief' 'short'
+	*                                           -> LookModeShort;
+
+Verb meta 'verbose' 'long'
+	*                                           -> LookModeLong;
+
+Verb meta 'version'
+	*                                           -> Version;
+
+Verb meta 'quit' 'q//'
+	*                                           -> Quit;
+
+[ AgainSub;
+	! nothing here - this is taken care of in the main game loop instead
+];
+
+[ FullScoreSub _i;
+	ScoreSub();
+	new_line;
+	PrintMsg(MSG_FULLSCORE_START);
+	for(_i=0 : _i<NUMBER_TASKS : _i++)
+		if (task_done->_i == 1) {
+		PANum(task_scores->(_i));
+		PrintTaskName(_i);
+	}
+	!if(things_score ~= 0) {
+	!	PANum(things_score);
+	!	"finding sundry items";
+	!}
+	!if(places_score ~= 0) {
+	!	PANum(places_score);
+	!	"visiting various places";
+	!}
+	@new_line; 
+	PANum(score);
+	PrintMsg(MSG_FULLSCORE_END);
+];
+
+[ LookModeNormalSub;
+	lookmode=1;
+	PrintMsg(MSG_LOOKMODE_NORMAL);
+];
+
+[ LookModeLongSub; 
+	lookmode=2;
+	PrintMsg(MSG_LOOKMODE_LONG);
+];
+
+[ LookModeShortSub; 
+	lookmode=3;
+	PrintMsg(MSG_LOOKMODE_SHORT);
+];
+
+[ OopsSub;
+	"Think nothing of it.";
+];
+
+[ OopsCorrectionSub;
+	! nothing here - this is taken care of in the main game loop instead
+];
+
+[ RestartSub;
+    PrintMsg(MSG_RESTART_CONFIRM);
+	if(YesOrNo()) {
+		@restart;
+        PrintMsg(MSG_RESTART_FAILED);
+	}
+];
+
+#IfV3;
+[ RestoreSub;
+	@restore ?restore_success; ! can't use @restore because of compiler test
+	PrintMsg(MSG_RESTORE_FAILED);
+	rtrue;
+.restore_success; ! This is never reached, since a successful restore continues after save opcode.
+#IfNot;
+[ RestoreSub _flag;
+	@restore -> _flag;
+	! must have failed here so no need to check the flag
+	PrintMsg(MSG_RESTORE_FAILED);
+#EndIf;
+];
+
+#IfV3;
+[ SaveSub;
+	@save ?save_success;
+	PrintMsg(MSG_SAVE_FAILED); 
+	rtrue;
+.save_success;
+    PrintMsg(MSG_SAVE_SUCCESS);
+#IfNot;
+[ SaveSub _result;
+	@save -> _result;
+	if(_result == 0) { PrintMsg(MSG_SAVE_FAILED); rtrue; }
+	PrintMsg(MSG_SAVE_SUCCESS); ! _result = 1: save ok, 2: Restore ok
+#EndIf;
+];
+
+[ ScoreSub;
+	PrintMsg(MSG_SCORE_SUCCESS);
+	PrintRank();
+];
+
+[ VersionSub _i;
+	if(Story ~= 0) {
+		print (string) Story;
+		if(Headline ~= 0) print (string) Headline;
+    }
+	print "Release ", (0-->1) & $03ff, " / Serial number ";
+	for (_i = 18:_i < 24: _i++) print (char) 0->_i;
+	print "  / PunyInform 1.0 (beta 1)";
+	print " / Inform v"; inversion; @new_line;
+];
+
+[ QuitSub;
+	PrintMsg(MSG_AREYOUSUREQUIT);
+	if(YesOrNo()) {
+		deadflag = GS_QUIT;
+	}
+];
+
+! ---------------------
+! Debug verbs
+! ---------------------
+
+#IfDef OPTIONAL_DEBUG_VERBS;
+Verb meta 'pronoun' 'pronouns'
+    *                                           -> Pronouns;
+
+Verb meta 'random'
+	*                                           -> RandomSeed
+	* special                                   -> RandomSeed
+	* 'seed' number                             -> RandomSeed;
+
+Verb meta 'scope'
+    *                                           -> Scope
+    * noun                                      -> Scope;
+
+Global scope_cnt;
+[ PronounsSub;
+	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
+];
+
+[ RandomSeedSub _i; 
+	! sets the random seed, making randomness predictable
+	! also a test of special and number, thus the fancy grammar
+	!print special_word, " ", special_number," ",parsed_number,"^";
+	if(special_word ~=0) "You can't send randomness to an object!";
+	_i = parsed_number;
+	if(_i == 0) _i = 100; ! either 'xxxx' (unknown special) or '0'
+	random(-_i);
+	"The random seed is set to ", _i, ".";
+];
+
+[ _ScopeSubHelper p_obj;
+	print scope_cnt++,": ", (a) p_obj, " (", p_obj, ")";
+	if(ObjectIsUntouchable(p_obj, true)) print " [untouchable]";
+	if(ObjectIsInvisible(p_obj, true)) print " [invisible]";
+	@new_line;
+];
+
+[ ScopeSub _i _obj;
+	scope_cnt = 1;
+	LoopOverScope(_ScopeSubHelper, noun);
+	if(scope_cnt == 0) "Nothing in scope.^";
+];
+
+#EndIf;
+
+! ---------------------
+! HELP ROUTINES
+! ---------------------
+
 [ Look _obj _ceil _container_1 _container_2 _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop;
 	@new_line;
 	if(darkness) 
@@ -112,13 +1158,6 @@
 	AfterRoutines();
 ];
 
-[ LookSub _old_lookmode;
-	_old_lookmode = lookmode;
-	lookmode = 2; ! force long description
-	Look();
-	lookmode = _old_lookmode;
-];
-
 [ Achieved num;
     if (task_done->num == 0) {
         task_done->num = 1;
@@ -130,11 +1169,6 @@
 [ PrintRank; "."; ];
 #EndIf;
 
-[ ScoreSub;
-	PrintMsg(MSG_SCORE_SUCCESS);
-	PrintRank();
-];
-
 [ PANum p_m _n;
 	print "  ";
 	_n = p_m;
@@ -144,71 +1178,6 @@
 	if(_n < 1000) { print " "; }
 .Panuml;
 	print p_m, " ";
-];
-
-[ FullScoreSub _i;
-	ScoreSub();
-	new_line;
-	PrintMsg(MSG_FULLSCORE_START);
-	for(_i=0 : _i<NUMBER_TASKS : _i++)
-		if (task_done->_i == 1) {
-		PANum(task_scores->(_i));
-		PrintTaskName(_i);
-	}
-	!if(things_score ~= 0) {
-	!	PANum(things_score);
-	!	"finding sundry items";
-	!}
-	!if(places_score ~= 0) {
-	!	PANum(places_score);
-	!	"visiting various places";
-	!}
-	@new_line; 
-	PANum(score);
-	PrintMsg(MSG_FULLSCORE_END);
-];
-
-[ FillSub;
-	PrintMsg(MSG_FILL_NO_WATER);
-];
-
-[ DigSub;
-	PrintMsg(MSG_DIG_NO_USE);
-];
-
-[ RubSub;
-	PrintMsg(MSG_RUB_DEFAULT);
-];
-
-[ MildSub;
-	PrintMsg(MSG_MILD_DEFAULT);
-];
-
-[ StrongSub;
-	PrintMsg(MSG_STRONG_DEFAULT);
-];
-
-[ ConsultSub;
-	PrintMsg(MSG_CONSULT_NOTHING_INTERESTING);
-];
-
-[ CutSub;
-	PrintMsg(MSG_CUT_NO_USE);
-];
-
-[ ExamineSub;
-	if(noun provides description) {
-		PrintOrRun(noun, description);
-	} else {
-		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
-	}
-];
-
-[ QuitSub;
-	PrintMsg(MSG_AREYOUSUREQUIT);
-	if(YesOrNo()) {
-		deadflag = GS_QUIT;
-	}
 ];
 
 [ TryToTakeNoun;
@@ -228,247 +1197,6 @@
 	move noun to player;
 	give noun moved;
 	rfalse;
-];
-
-[ TakeSub;
-	if(TryToTakeNoun() == 1) rtrue;
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
-	PrintMsg(MSG_TAKE_SUCCESS);
-];
-
-[ RemoveSub i;
-    i = parent(noun);
-    if (i has container && i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED); rtrue; }
-    if (i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
-    if (i has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
-    if(TryToTakeNoun() == 1) rtrue;
-    action = ##Remove; if (AfterRoutines() == 1) rtrue;
-    action = ##Take;   if (AfterRoutines() == 1) rtrue;
-    if (keep_silent == 1) rtrue;
-    PrintMsg(MSG_REMOVE_SUCCESS);
-];
-
-[ EatSub;
-    if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
-    if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
-	remove noun;
-	if (AfterRoutines() == 1) rtrue;
-	if (keep_silent == 1) rtrue;
-    PrintMsg(MSG_EAT_SUCCESS);
-];
-
-[ DrinkSub;
-	PrintMsg(MSG_DRINK_NOTHING_SUITABLE);
-];
-
-[ SearchSub _f _i;
-	if(darkness) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
-	if (ObjectIsUntouchable(noun)) return;
-	objectloop(_i in noun) if(_i hasnt concealed && _i hasnt scenery) _f++;
-	if(noun has supporter) {
-		if(_f == 0) 
-			PrintMsg(MSG_SEARCH_NOTHING_ON);
-		else 
-			PrintMsg(MSG_SEARCH_ON_IT_ISARE);
-		rtrue;
-	}
-	if(noun hasnt container) { PrintMsg(MSG_SEARCH_NOTHING_SPECIAL); rtrue; }
-	if(noun hasnt transparent && noun hasnt open) { 
-		PrintMsg(MSG_SEARCH_CANT_SEE_CLOSED); rtrue; 
-	}
-	if(AfterRoutines() == 1) rtrue;
-	if(_f == 0) 
-		PrintMsg(MSG_SEARCH_EMPTY);
-	else 
-		PrintMsg(MSG_SEARCH_IN_IT_ISARE);
-];
-
-[ DropSub _p;
-	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
-	_p =parent(player);
-	if(_p ~= location) {
-		<Insert noun _p>;
-		rtrue;
-	}
-	move noun to parent(player);
-	give noun moved;
-	if(AfterRoutines() == 1) rtrue;
-    if(keep_silent) return;
-	PrintMsg(MSG_DROP_DROPPED);
-];
-
-[ ThrowAtSub;
-	if(ObjectIsUntouchable(noun)) return;
-	if(second > 1) {
-		action = ##ThrownAt;
-		if (RunRoutines(second, before) ~= 0) { action = ##ThrowAt; rtrue; }
-		action = ##ThrowAt;
-	}
-	if(noun has worn) {
-        PrintMsg(MSG_THROW_FIRST_TAKING);
-		if (noun has worn && noun in player) rtrue;
-	}
-	if(second hasnt animate) { PrintMsg(MSG_THROW_ANIMATE); rtrue; }
-	if(RunLife(second,##ThrowAt) ~= 0) rfalse;
-	PrintMsg(MSG_THROW_SUCCESS);
-];
-
-[ LockSub;
-	if (ObjectIsUntouchable(noun)) return;
-	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK); rtrue; }
-	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED); rtrue; }
-	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
-	if (noun.with_key ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
-	give noun locked;
-	if (AfterRoutines() == 1) rtrue;
-	if (keep_silent == 1) rtrue;
-	PrintMsg(MSG_LOCK_SUCCESS);
-];
-
-[ UnlockSub;
-	if (ObjectIsUntouchable(noun)) return;
-	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK); rtrue; }
-	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_LOCKED); rtrue; }
-	if (noun.with_key ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
-	give noun ~locked;
-	if (AfterRoutines() == 1) rtrue;
-	if (keep_silent == 1) rtrue;
-	PrintMsg(MSG_UNLOCK_SUCCESS);
-];
-
-[ OpenSub;
-	if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT); rtrue; }
-	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
-	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
-	give noun open;
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
-	PrintMsg(MSG_OPEN_SUCCESS);
-];
-
-[ CloseSub;
-	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT); rtrue; }
-	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN); rtrue; }
-	give noun ~open;
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
-	PrintMsg(MSG_CLOSE_SUCCESS);
-];
-
-[ ShowSub;
-    if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
-    if (second == player) { <Examine noun>; rtrue; }
-    if (RunLife(second, ##Show) ~= 0) rfalse;
-    PrintMsg(MSG_SHOW_SUCCESS);
-];
-
-[ SmellSub;
-    PrintMsg(MSG_SMELL_SUCCESS);
-];
-
-[ ListenSub;
-    PrintMsg(MSG_LISTEN_SUCCESS);
-];
-
-[ GiveSub;
-    if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
-    if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
-    if (RunLife(second, ##Give) ~= 0) rfalse;
-    PrintMsg(MSG_GIVE_SUCCESS);
-];
-
-[ AskSub;
-    if (RunLife(noun,##Ask) ~= 0) rfalse;
-    PrintMsg(MSG_ASK_SUCCESS);
-];
-
-[ AskForSub;
-    if (noun == player) { <Inv>; rtrue; }
-    PrintMsg(MSG_ASKFOR_SUCCESS);
-];
-
-[ AskToSub;
-    PrintMsg(MSG_ASKTO_SUCCESS);
-];
-
-[ TellSub;
-    if (noun == player) { PrintMsg(MSG_TELL_PLAYER); rtrue; }
-    if (RunLife(noun, ##Tell) ~= 0) rfalse;
-    PrintMsg(MSG_TELL_SUCCESS);
-];
-
-[ EnterSub _door_dir;
-	if(noun has door) {
-		_door_dir = noun.door_dir;
-		if(_door_dir > top_object) {
-			_door_dir = noun.door_dir();
-		}
-		! Convert to fake object
-		_door_dir = _door_dir - n_to + FAKE_N_OBJ;
-		<<Go _door_dir>>; 
-	}
-	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
-	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
-	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
-	PlayerTo(noun);
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
-    PrintMsg(MSG_ENTER_SUCCESS);
-];
-
-[ ExitSub;
-	if(noun == 0) noun = parent(player);
-	if(player in location) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
-	if(player notin noun) {
-		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE, parent(player)); rtrue; }
-		if(noun has supporter) { PrintMsg(MSG_EXIT_NOT_ON); rtrue; }
-		PrintMsg(MSG_EXIT_NOT_IN);
-		rtrue;
-	}
-	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN, noun); rtrue; }
-	PlayerTo(parent(noun));
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
-    PrintMsg(MSG_EXIT_SUCCESS);
-];
-
-[ AnswerSub;
-    if (second ~= 0 && RunLife(second,##Answer) ~= 0) rfalse;
-    PrintMsg(MSG_ANSWER_SUCCESS);
-];
-
-[ InvSub;
-	if(child(player) == 0) { PrintMsg(MSG_INVENTORY_EMPTY); rtrue; }
-    PrintMsg(MSG_INVENTORY_SUCCESS);
-];
-
-[ WearSub;
-	if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
-	if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING); rtrue; }
-    if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
-	give noun worn;
-	PrintMsg(MSG_WEAR_SUCCESS);
-];
-	
-[ DisrobeSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
-    give noun ~worn;
-    if (AfterRoutines() == 1) rtrue;
-    if (keep_silent == 1) rtrue;
-    PrintMsg(MSG_DISROBE_SUCCESS);
-];
-
-[ JumpSub; PrintMsg(MSG_JUMP); ];
-
-[ JumpOverSub; PrintMsg(MSG_JUMP_OVER); ];
-
-[ GoSub _prop;
-	! when called Directions have been set properly
-	_prop = selected_direction;
-	if(_prop == 0) return RuntimeError(ERR_INVALID_DIR_PROP);
-	GoDir(_prop);
 ];
 
 [ GoDir p_property _new_location _door_to;
@@ -509,504 +1237,6 @@
 	Look();
 ];
 
-#IfV3;
-[ SaveSub;
-	@save ?save_success;
-	PrintMsg(MSG_SAVE_FAILED); 
-	rtrue;
-.save_success;
-    PrintMsg(MSG_SAVE_SUCCESS);
-#IfNot;
-[ SaveSub _result;
-	@save -> _result;
-	if(_result == 0) { PrintMsg(MSG_SAVE_FAILED); rtrue; }
-	PrintMsg(MSG_SAVE_SUCCESS); ! _result = 1: save ok, 2: Restore ok
-#EndIf;
-];
-
-#IfV3;
-[ RestoreSub;
-	@restore ?restore_success; ! can't use @restore because of compiler test
-	PrintMsg(MSG_RESTORE_FAILED);
-	rtrue;
-.restore_success; ! This is never reached, since a successful restore continues after save opcode.
-#IfNot;
-[ RestoreSub _flag;
-	@restore -> _flag;
-	! must have failed here so no need to check the flag
-	PrintMsg(MSG_RESTORE_FAILED);
-#EndIf;
-];
-
-[ RestartSub;
-    PrintMsg(MSG_RESTART_CONFIRM);
-	if(YesOrNo()) {
-		@restart;
-        PrintMsg(MSG_RESTART_FAILED);
-	}
-];
-
-[ AgainSub;
-	! nothing here - this is taken care of in the main game loop instead
-];
-
-[ OopsSub;
-	"Think nothing of it.";
-];
-[ OopsCorrectionSub;
-	! nothing here - this is taken care of in the main game loop instead
-];
-
-#IfDef OPTIONAL_DEBUG_VERBS;
-Global scope_cnt;
-[ _ScopeSubHelper p_obj;
-	print scope_cnt++,": ", (a) p_obj, " (", p_obj, ")";
-	if(ObjectIsUntouchable(p_obj, true)) print " [untouchable]";
-	if(ObjectIsInvisible(p_obj, true)) print " [invisible]";
-	@new_line;
-];
-
-[ ScopeSub _i _obj;
-	scope_cnt = 1;
-	LoopOverScope(_ScopeSubHelper, noun);
-	if(scope_cnt == 0) "Nothing in scope.^";
-];
-
-[ PronounsSub;
-	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
-];
-
-[ PredictableSub _i; 
-	! sets the random seed, making randomness predictable
-	! also a test of special and number, thus the fancy grammar
-	!print special_word, " ", special_number," ",parsed_number,"^";
-	if(special_word ~=0) "You can't send randomness to an object!";
-	_i = parsed_number;
-	if(_i == 0) _i = 100; ! either 'xxxx' (unknown special) or '0'
-	random(-_i);
-	"The random seed is set to ", _i, ".";
-];
-#EndIf;
-
-[ InsertSub _ancestor;
-    if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
-    if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
-    _ancestor = CommonAncestor(noun, second);
-    if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
-    if (second ~= _ancestor) {
-        if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN, second); rtrue; }
-    }
-
-    _GrabIfNotHeld(noun);
-    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
-
-    if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
-
-    move noun to second;
-	give noun moved;
-
-	! run after on object
-	if(AfterRoutines() == 1) rtrue;
-
-	! run after on receiver 
-	action = ##Receive;
-	if(RunRoutines(second, after) ~= 0) { action = ##Insert; rtrue; }
-	action = ##Insert;
-
-    if (keep_silent) return;
-    PrintMsg(MSG_INSERT_SUCCESS);
-];
-
-[ PutOnSub _ancestor;
-    if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
-    if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
-    _ancestor = CommonAncestor(noun, second);
-    if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
-
-    if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
-
-    move noun to second;
-	give noun moved;
-    if (keep_silent) return;
-    PrintMsg(MSG_PUTON_SUCCESS);
-];
-
-[ WakeSub;
-    PrintMsg(MSG_WAKE_SUCCESS);
-];
-
-[ WakeOtherSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (RunLife(noun, ##WakeOther) ~= 0) rfalse;
-    PrintMsg(MSG_WAKEOTHER_SUCCESS);
-];
-
-[ KissSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (RunLife(noun, ##Kiss) ~= 0) rfalse;
-    if (noun == player) { PrintMsg(MSG_KISS_PLAYER); rtrue; }
-    PrintMsg(MSG_KISS_SUCCESS);
-];
-
-[ AttackSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
-	PrintMsg(MSG_ATTACK_SUCCESS);
-];
-
-[ TurnSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (noun has static)   { PrintMsg(MSG_TURN_STATIC); rtrue; }
-    if (noun has scenery)  { PrintMsg(MSG_TURN_SCENERY); rtrue; }
-    if (noun has animate)  { PrintMsg(MSG_TURN_ANIMATE); rtrue; }
-    PrintMsg(MSG_TURN_SUCCESS);
-];
-
-[ SwitchOnSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
-    if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; } 
-    give noun on;
-    if (AfterRoutines() == 1) rtrue;
-    if (keep_silent == 1) rtrue;
-	PrintMsg(MSG_SWITCH_ON_SUCCESS);
-];
-
-[ SwitchOffSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_OFF_NOT_SWITCHABLE); rtrue; }
-    if (noun hasnt on)         { PrintMsg(MSG_SWITCH_OFF_NOT_ON); rtrue; }
-    give noun ~on;
-    if (AfterRoutines() == 1) rtrue;
-    if (keep_silent == 1) rtrue;
-	PrintMsg(MSG_SWITCH_OFF_SUCCESS);
-];
-
-[ PullSub;
-    if (ObjectIsUntouchable(noun)) return;
-	if (noun has static)   { PrintMsg(MSG_PULL_STATIC); rtrue; }
-    if (noun has scenery)  { PrintMsg(MSG_PULL_SCENERY); rtrue; }
-    if (noun has animate)  { PrintMsg(MSG_PULL_ANIMATE); rtrue; }
-    PrintMsg(MSG_PULL_SUCCESS); !Nothing obvious happens
-];
-
-[ PushSub;
-    !if (ObjectIsUntouchable(noun)) return;
-    if (noun has static)   { PrintMsg(MSG_PUSH_STATIC); rtrue; }
-    if (noun has scenery)  { PrintMsg(MSG_PUSH_SCENERY); rtrue; }
-    if (noun has animate)  { PrintMsg(MSG_PUSH_ANIMATE); rtrue; }
-    PrintMsg(MSG_PUSH_SUCCESS);
-];
-
-[ PushDirSub;
-    PrintMsg(MSG_PUSHDIR_DEFAULT);
-];
-
-[ TransferSub;
-    _GrabIfNotHeld(noun);
-    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
-    if (second has supporter) { PutOnSub(); rtrue; }
-    !if (second == d_obj) <<Drop noun>>;
-    ! doesn't work in z3: <<Insert noun second>>;
-    InsertSub();
-];
-
-[ WaitSub;
-    PrintMsg(MSG_WAIT_SUCCESS);
-];
-
-[ TouchSub;
-    PrintMsg(MSG_TOUCH_SUCCESS);
-];
-
-[ VersionSub _i;
-	if(Story ~= 0) {
-		print (string) Story;
-		if(Headline ~= 0) print (string) Headline;
-    }
-	print "Release ", (0-->1) & $03ff, " / Serial number ";
-	for (_i = 18:_i < 24: _i++) print (char) 0->_i;
-	print "  / PunyInform 1.0 (beta 1)";
-	print " / Inform v"; inversion; @new_line;
-];
-
-[ LookModeNormalSub;
-	lookmode=1;
-	PrintMsg(MSG_LOOKMODE_NORMAL);
-];
-
-[ LookModeLongSub; 
-	lookmode=2;
-	PrintMsg(MSG_LOOKMODE_LONG);
-];
-
-[ LookModeShortSub; 
-	lookmode=3;
-	PrintMsg(MSG_LOOKMODE_SHORT);
-];
-
-Verb 'i//' 'inventory'
-	* -> Inv;
-
-Verb 'answer' 'say' 'shout' 'speak'
-    * topic 'to' creature -> Answer;
-
-Verb 'look' 'l//'
-	* -> Look
-	* 'at' noun -> Examine;
-
-Verb 'lock'
-	* noun 'with' held                          -> Lock;
-
-Verb 'unlock'
-	* noun 'with' held                          -> Unlock;
-
-Verb 'open'
-	* noun                                      -> Open
-	* noun 'with' held                          -> Unlock;
-
-Verb 'show' 'display' 'present'
-	* creature held                             -> Show reverse
-	* held 'to' creature                        -> Show;
-
-Verb 'smell'
-    *                                           -> Smell
-    * noun                                      -> Smell;
-
-Verb 'give' 'feed' 'offer' 'pay'
-	* held 'to' creature                        -> Give
-	* creature held                             -> Give reverse
-	* 'over' held 'to' creature                 -> Give;
-
-Verb 'ask'
-	* creature 'about' topic                    -> Ask
-	* creature 'for' noun                       -> AskFor
-	* creature 'to' topic                       -> AskTo
-	* 'that' creature topic                     -> AskTo;
-
-Verb 'tell'
-	* creature 'about' topic                    -> Tell
-	* creature 'to' topic                       -> AskTo;
-
-Verb 'close'
-	* noun -> Close
-	* 'off' noun                                -> SwitchOff;
-
-Verb 'stand'
-    *                                           -> Exit
-    * 'up'                                      -> Exit
-    * 'on' noun                                 -> Enter;
-
-Verb 'get'
-	* 'up'                                      -> Exit
-	* 'out'                                     -> Exit
-	* multi                                     -> Take;
-
-Verb 'take'
-	* multi                                     -> Take
-	* 'off' worn                                -> Disrobe
-	* multiinside 'from' noun                   -> Remove
-	* multiinside 'off' noun                    -> Remove
-	* 'inventory'                               -> Inv;
-
-Verb 'remove'
-    * held                                      -> Disrobe
-    * multi                                     -> Take
-    * multiinside 'from' noun                   -> Remove;
-
-Verb 'throw'
-	* held 'at'/'against'/'on'/'onto' noun      -> ThrowAt;
-
-Verb 'eat'
-    * held                                      -> Eat;
-
-Verb 'drink'
-    * noun                                      -> Drink;
-
-Verb 'drop'
-	* multiheld                                 -> Drop
-	* multiexcept 'in'/'into'/'down' noun       -> Insert;
-
-Verb 'enter'
-	* noun                                      -> Enter;
-
-Verb 'climb'
-	* 'into'/'onto' noun                        -> Enter
-	* 'out' 'of'/'from' noun                    -> Exit;
-
-Verb 'jump'
-	*                                           -> Jump
-	* 'over' noun                               -> JumpOver
-	* 'into'/'onto' noun                        -> Enter
-	* 'out' 'of'/'from' noun                    -> Exit
-	* 'off' noun                                -> Exit;
-
-Verb 'listen'
-	*                                           -> Listen
-	* 'to' noun                                 -> Listen;
-
-Verb 'exit' 'leave'
-	* noun                                      -> Exit;
-
-Verb 'put'
-	* multiexcept 'in'/'inside'/'into' noun     -> Insert
-	* multiexcept 'on'/'onto' noun              -> PutOn
-	* 'on' held									-> Wear;
-
-Verb 'search'
-	* noun                                      -> Search;
-
-Verb 'insert'
-    * multiexcept 'in'/'into' noun              -> Insert;
-
-[ ADirection; 
-	return (noun == Directions);
-];
-
-Verb 'go'
-	* noun=ADirection -> Go
-	* noun -> Enter;
-
-Verb 'examine' 'x//'
-	* noun -> Examine;
-
-Verb 'read'
-	* noun                                      -> Examine
-	* 'about' topic 'in' noun                   -> Consult
-	* topic 'in' noun                           -> Consult;
-
-Verb 'dig'
-	* noun                                      -> Dig
-	* noun 'with' held                          -> Dig;
-
-Verb 'fill'
-	* noun                                      -> Fill;
-
-Verb 'cut' 'chop' 'prune' 'slice'
-	* noun                                      -> Cut
-	* noun 'with' held                          -> Attack;
-
-Verb 'rub' 'clean' 'dust' 'polish' 'scrub' 'shine' 'sweep' 'wipe'
-	* noun                                      -> Rub;
-
-Verb 'bother' 'curses' 'darn' 'drat'
-	*                                           -> Mild
-	* topic                                     -> Mild;
-
-Verb 'shit' 'damn' 'fuck' 'sod'
-	*                                           -> Strong
-	* topic                                     -> Strong;
-
-Verb meta 'version'
-	*                                           -> Version;
-
-Verb meta 'brief' 'normal'
-	*                                           -> LookModeNormal;
-
-Verb meta 'verbose' 'long'
-	*                                           -> LookModeLong;
-
-Verb meta 'superbrief' 'short'
-	*                                           -> LookModeShort;
-
-Verb meta 'quit' 'q//'
-	*                                           -> Quit;
-
-Verb meta 'save'
-	*                                           -> Save;
-
-Verb meta 'restore'
-	*                                           -> Restore;
-
-Verb meta 'restart'
-	*                                           -> Restart;
-
-Verb meta 'again' 'g//'
-    *                                           -> Again;
-
-Verb meta 'oops'
-    *                                           -> Oops
-    * special                                   -> OopsCorrection;
-
-Verb meta 'score'
-    *                                           -> Score;
-Verb meta 'fullscore' 'full'
-    *                                           -> FullScore
-    * 'score'                                   -> FullScore;
-
-#IfDef OPTIONAL_DEBUG_VERBS;
-Verb meta 'random'
-	*                                           -> Predictable
-	* special                                   -> Predictable
-	* 'seed' number                             -> Predictable;
-
-Verb meta 'scope'
-    *                                           -> Scope
-    * noun                                      -> Scope;
-
-Verb meta 'pronoun' 'pronouns'
-    *                                           -> Pronouns;
-#EndIf;
-
-Verb 'wake' 'awake' 'awaken'
-    *                                           -> Wake
-    * 'up'                                      -> Wake
-    * creature                                  -> WakeOther
-    * creature 'up'                             -> WakeOther
-    * 'up' creature                             -> WakeOther;
-
-Verb 'kiss' 'embrace' 'hug'
-    * creature                                  -> Kiss;
-
-Verb 'wear'
-	* held										-> Wear;
-
-Verb 'attack' 'break' 'crack' 'destroy'
-     'fight' 'hit' 'kill' 'murder' 'punch'
-     'smash' 'thump' 'torture' 'wreck'
-    * noun                                      -> Attack
-    * noun 'with' held                          -> Attack;
-
-Verb 'rotate' 'screw' 'twist' 'unscrew'
-    * noun                                      -> Turn;
-
-Verb 'turn'
-    * noun                                      -> Turn
-    * noun 'on'                                 -> SwitchOn
-    * noun 'off'                                -> SwitchOff
-    * 'on' noun                                 -> SwitchOn
-    * 'off' noun                                -> SwitchOff;
-
-Verb 'switch'
-    * noun                                      -> SwitchOn
-    * noun 'on'                                 -> SwitchOn
-    * noun 'off'                                -> SwitchOff
-    * 'on' noun                                 -> SwitchOn
-    * 'off' noun                                -> SwitchOff;
-
-Verb 'pull' 'drag'
-    * noun                                      -> Pull;
-
-Verb 'push' 'clear' 'move' 'press' 'shift'
-    * noun                                      -> Push
-    * noun noun                                 -> PushDir
-    * noun 'to' noun                            -> Transfer;
-
-Verb 'wait' 'z'
-    *                                           -> Wait;
-
-Verb 'touch'
-	* noun                                      -> Touch;
-
-#IfDef OPTIONAL_EXTENDED_VERBSET;
-
-[ BlowSub;
-	PrintMsg(MSG_BLOW_DEFAULT);
-];
-
-Verb 'blow'
-	* held                                      -> Blow;
-#EndIf;
 
 [ VerbName p_v _string_name;
 	! first give entry routine a chance to override

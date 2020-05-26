@@ -157,6 +157,9 @@ Constant MSG_LOOKMODE_LONG "This game is now in its ~verbose~ mode, which always
 #Ifndef MSG_LOOKMODE_SHORT;
 Constant MSG_LOOKMODE_SHORT "This game is now in its ~superbrief~ mode, which always gives short descriptions of locations (even if you haven't been there before).";
 #EndIf;
+#Ifndef MSG_TIE_DEFAULT;
+Constant MSG_TIE_DEFAULT "You would achieve nothing by this.";
+#EndIf;
 
 !
 ! complex messages (enumerated)
@@ -255,7 +258,61 @@ Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
 Default MSG_UNLOCK_SUCCESS 92;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
+#Ifndef MSG_BURN_DEFAULT;
+Constant MSG_BURN_DEFAULT "This dangerous act would achieve little.";
+#EndIf;
+#Ifndef MSG_BUY_DEFAULT;
+Constant MSG_BUY_DEFAULT "Nothing is on sale.";
+#EndIf;
+#Ifndef MSG_EMPTY_WOULDNT_ACHIEVE;
+Constant MSG_EMPTY_WOULDNT_ACHIEVE "That would scarcely empty anything.";
+#EndIf;
+#Ifndef MSG_RHETORICAL_QUESTION;
+Constant	MSG_RHETORICAL_QUESTION "That was a rhetorical question.";
+#EndIf;
+#Ifndef MSG_PRAY_DEFAULT;
+Constant MSG_PRAY_DEFAULT "Nothing practical results from your prayer.";
+#EndIf;
+#Ifndef MSG_SING_DEFAULT;
+Constant MSG_SING_DEFAULT "Your singing is abominable.";
+#EndIf;
+#Ifndef MSG_SLEEP_DEFAULT;
+Constant MSG_SLEEP_DEFAULT "You aren't feeling especially drowsy.";
+#EndIf;
+#Ifndef MSG_SORRY_DEFAULT;
+Constant MSG_SORRY_DEFAULT "Oh, don't apologize.";
+#EndIf;
+#Ifndef MSG_SQUEEZE_YOURSELF;
+Constant MSG_SQUEEZE_YOURSELF "Keep your hands to yourself.";
+#EndIf;
+#Ifndef MSG_SQUEEZE_DEFAULT;
+Constant MSG_SQUEEZE_DEFAULT "You achieve nothing by this.";
+#EndIf;
+
+#Ifndef MSG_SWIM_DEFAULT;
+Constant MSG_SWIM_DEFAULT "There's not enough water to swim in.";
+#EndIf;
+#Ifndef MSG_SWING_DEFAULT;
+Constant MSG_SWING_DEFAULT "There's nothing sensible to swing here.";
+#EndIf;
+#Ifndef MSG_TASTE_DEFAULT;
+Constant MSG_TASTE_DEFAULT "You taste nothing unexpected.";
+#EndIf;
+#Ifndef MSG_THINK_DEFAULT;
+Constant MSG_THINK_DEFAULT "What a good idea.";
+#EndIf;
+#Ifndef MSG_WAVEHANDS_DEFAULT;
+Constant MSG_WAVEHANDS_DEFAULT "You wave, feeling foolish.";
+#EndIf;
+
 Default MSG_BLOW_DEFAULT 70;
+Default MSG_EMPTY_CANT_CONTAIN 94;
+Default MSG_EMPTY_IS_CLOSED 95;
+Default MSG_EMPTY_ALREADY_EMPTY 96;
+Default MSG_SET_DEFAULT 97;
+Default MSG_SET_TO_DEFAULT 98;
+Default MSG_WAVE_NOTHOLDING 99;
+Default MSG_WAVE_DEFAULT 100;
 #EndIf;
 
 Default LibraryMessages 0;
@@ -397,6 +454,21 @@ Default LibraryMessages 0;
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 	MSG_BLOW_DEFAULT:
 		"You can't usefully blow ", (the) noun, ".";
+	MSG_EMPTY_WOULDNT_ACHIEVE:
+	MSG_EMPTY_CANT_CONTAIN:
+		print_ret (The) p_arg_1, " can't contain things.";
+	MSG_EMPTY_IS_CLOSED:
+		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " closed.";
+	MSG_EMPTY_ALREADY_EMPTY:
+		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " empty already.";
+	MSG_SET_DEFAULT:
+		"No, you can't set ", (thatorthose) noun, ".";
+	MSG_SET_TO_DEFAULT:
+		"No, you can't set ", (thatorthose) noun, " to anything.";
+	MSG_WAVE_NOTHOLDING:
+		"But you aren't holding ", (thatorthose) noun, ".";
+	MSG_WAVE_DEFAULT:
+		"You look ridiculous waving ", (the) noun, ".";
 #EndIf;
 
 default:
@@ -423,6 +495,10 @@ default:
 
 [ IsorAre obj;
     if (obj has pluralname || obj == player) print "are"; else print "is";
+];
+
+[ ThatorThose obj;
+    if (obj has pluralname || obj == player) print "those"; else print "that";
 ];
 
 [ ItorThem obj;
