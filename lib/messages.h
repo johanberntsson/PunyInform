@@ -249,8 +249,10 @@ Default MSG_SEARCH_EMPTY 82;
 Default MSG_SEARCH_NOTHING_ON 83;
 Default MSG_SEARCH_CANT_SEE_CLOSED 84;
 Default MSG_EAT_SUCCESS = 85;
+#IfDef OPTIONAL_FULL_SCORE;
 Default MSG_FULLSCORE_START 86;
 Default MSG_FULLSCORE_END 87;
+#EndIf;
 Default MSG_SCORE_SUCCESS 88;
 Default MSG_UNLOCK_NOT_A_LOCK 89;
 Default MSG_UNLOCK_ALREADY_LOCKED 90;
@@ -429,15 +431,19 @@ Default LibraryMessages 0;
 		if (deadflag) print "In that game you"; else print "You have so far";
 		print " scored ", score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
 		if(turns ~= 1) print "s";
+#IfDef OPTIONAL_FULL_SCORE;
 	MSG_FULLSCORE_START:
 		print "The score ";
 		if(deadflag) print "wa"; else print "i";
 		"s made up as follows:";
 	MSG_FULLSCORE_END:
 		"total (out of ", MAX_SCORE, ")";	
+#EndIf;
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE";
+#IfDef OPTIONAL_FULL_SCORE;
 		if(TASKS_PROVIDED == 0) print ", give the FULL score for that game";
+#EndIf;
 		if(deadflag == 2 && AMUSING_PROVIDED == 0) print ", see some suggestions for AMUSING things to do";
 		print " or QUIT? ";
 		rtrue;

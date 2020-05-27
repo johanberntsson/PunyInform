@@ -6,7 +6,7 @@
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_DEBUG_VERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
-!Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
 
 !Constant DEBUG_TIMER; ! requires special Ozmoo
@@ -34,11 +34,17 @@ Constant USEINFORM;
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
-Constant MAX_SCORE = 5;
+Constant AMUSING_PROVIDED;
+
+#IfDef OPTIONAL_FULL_SCORE;
+Constant MAX_SCORE = 7;
+Constant OBJECT_SCORE = 1;
 Array task_scores -> 3 0; ! inform doens't like array of length 1
 Constant TASKS_PROVIDED;
 Constant NUMBER_TASKS = 1;
-Constant AMUSING_PROVIDED;
+#IfNot;
+Constant MAX_SCORE = 2;
+#EndIf;
 
 [ Amusing;
 	"^Did you try?^^1. Pushing John many times.^2. Going outside and looking at the sun";
@@ -165,7 +171,11 @@ Object CarPark "Car Park"
 		before [; print "*** CarPark.before^"; ],
 #EndIf;
 		cant_go "Without a car the only viable exit is to the north.",
+#IfDef OPTIONAL_FULL_SCORE;
+	has scored light;
+#IfNot;
 	has light;
+#EndIf;
 
 Object -> Key "key"
 	with
@@ -174,7 +184,10 @@ Object -> Key "key"
 		after [; print "*** Key.after^"; ],
 		before [; print "*** Key.before^"; ],
 #EndIf;
-		;
+#IfDef OPTIONAL_FULL_SCORE;
+	has scored
+#EndIf;
+	;
 
 Object RiverBank "River Bank"
   with
@@ -338,7 +351,9 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
         ],
         after [;
         Open:
+#IfDef OPTIONAL_FULL_SCORE;
         	Achieved(0); ! opening the box is an achievement
+#EndIf;
         Receive: 
         	++score;
         	! win if you put two things in the box

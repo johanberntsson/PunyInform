@@ -307,15 +307,23 @@ Constant SCORE__TX = "Score: ";
 #Default Headline     0;
 
 Default MAX_SCORE           0;
-Default NUMBER_TASKS        1;
-Default TASKS_PROVIDED      1;
 Default AMUSING_PROVIDED    1;
 Default MAX_CARRIED         100;
 Default SACK_OBJECT         0;
 
+#IfDef OPTIONAL_FULL_SCORE;
+Attribute scored;
+Global things_score;
+Global places_score;
+
+Default NUMBER_TASKS        1;
+Default TASKS_PROVIDED      1;
+Default OBJECT_SCORE        4;
+
 Array  task_done -> NUMBER_TASKS;
 #Ifndef task_scores;
 Array task_scores -> 0 0; ! Inform breaks if only one entry
+#Endif;
 #Endif;
 
 Global fake_location;      ! Must be the first global to show location name

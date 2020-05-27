@@ -857,9 +857,11 @@ Verb meta 'again' 'g//'
 Verb meta 'brief' 'normal'
 	*                                           -> LookModeNormal;
 
+#IfDef OPTIONAL_FULL_SCORE;
 Verb meta 'fullscore' 'full'
     *                                           -> FullScore
     * 'score'                                   -> FullScore;
+#EndIf;
 
 Verb meta 'oops'
     *                                           -> Oops
@@ -893,6 +895,7 @@ Verb meta 'quit' 'q//'
 	! nothing here - this is taken care of in the main game loop instead
 ];
 
+#IfDef OPTIONAL_FULL_SCORE;
 [ FullScoreSub _i;
 	ScoreSub();
 	new_line;
@@ -902,18 +905,19 @@ Verb meta 'quit' 'q//'
 		PANum(task_scores->(_i));
 		PrintTaskName(_i);
 	}
-	!if(things_score ~= 0) {
-	!	PANum(things_score);
-	!	"finding sundry items";
-	!}
-	!if(places_score ~= 0) {
-	!	PANum(places_score);
-	!	"visiting various places";
-	!}
+	if(things_score ~= 0) {
+		PANum(things_score);
+		print "finding sundry items^";
+	}
+	if(places_score ~= 0) {
+		PANum(places_score);
+		print "visiting various places^";
+	}
 	@new_line; 
 	PANum(score);
 	PrintMsg(MSG_FULLSCORE_END);
 ];
+#EndIf;
 
 [ LookModeNormalSub;
 	lookmode=1;
@@ -1065,6 +1069,12 @@ Global scope_cnt;
 			}
 		}
 		_describe_room = ((lookmode == 1 && location hasnt visited) || lookmode == 2);
+#IfDef OPTIONAL_FULL_SCORE;
+		if(location has scored && location hasnt visited) {
+			score = score + OBJECT_SCORE;
+			places_score = places_score + OBJECT_SCORE;
+		}
+#EndIf;
 		give location visited;
 
 #IfV5;
@@ -1162,16 +1172,17 @@ Global scope_cnt;
 	AfterRoutines();
 ];
 
+#IfnDef PrintRank;
+[ PrintRank; "."; ];
+#EndIf;
+
+#IfDef OPTIONAL_FULL_SCORE;
 [ Achieved num;
     if (task_done->num == 0) {
         task_done->num = 1;
         score = score + task_scores->num;
     }
 ];
-
-#IfnDef PrintRank;
-[ PrintRank; "."; ];
-#EndIf;
 
 [ PANum p_m _n;
 	print "  ";
@@ -1183,6 +1194,7 @@ Global scope_cnt;
 .Panuml;
 	print p_m, " ";
 ];
+#EndIf;
 
 [ TryToTakeNoun;
     ! Try to transfer the given item to the player: return false
@@ -1198,6 +1210,12 @@ Global scope_cnt;
 	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
     if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
+#IfDef OPTIONAL_FULL_SCORE;
+	if(noun hasnt moved && noun has scored) {
+		score = score + OBJECT_SCORE;
+		things_score = things_score + OBJECT_SCORE;
+	}
+#EndIf;
 	move noun to player;
 	give noun moved;
 	rfalse;

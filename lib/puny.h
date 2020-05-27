@@ -911,6 +911,13 @@ Object _TheDark "Darkness";
 
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
+	score = 0;
+#IfDef OPTIONAL_FULL_SCORE;
+	places_score = 0;
+	things_score = 0;
+	for(_i = 0; _i < NUMBER_TASKS; _i++) task_done->_i = 0;
+#EndIf;
+
 	Initialise();
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
@@ -1017,7 +1024,9 @@ Object _TheDark "Darkness";
 		switch(parse_array-->1) {
 		'restart': @restart;
 		'restore': RestoreSub();
+#IfDef OPTIONAL_FULL_SCORE;
 		'full': FullScoreSub();
+#EndIf;
 		'amusing': Amusing();
 		'quit': @quit;
 		}
