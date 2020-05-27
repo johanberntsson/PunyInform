@@ -377,7 +377,10 @@ Array TenSpaces -> "          ";
 !			(_obj.&describe == 0 || _obj notin parent(player)) && 
 !			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
 			if(_printed_first_text == 0) {
-				print (string) p_first_text;
+				if(p_first_text ofclass String)
+					print (string) p_first_text;
+				else
+					p_first_text(p_obj);
 				_printed_first_text = 1;
 			}
 			! Push obj onto queue, printing the object that is shifted out, if any

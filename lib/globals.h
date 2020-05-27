@@ -357,6 +357,7 @@ Global itobj = 0;        ! The object which is currently "it"
 Global himobj = 0;       ! The object which is currently "him"
 Global herobj = 0;       ! The object which is currently "her"
 Global top_object;
+Global also_flag;
 #IfDef DEBUG_TIMER;
 Global timer1_start = 0;
 Global timer1_stop = 0;

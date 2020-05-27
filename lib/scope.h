@@ -89,13 +89,13 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	}
 ];
 
-[ ScopeCeiling p_actor _parent;
+[ ScopeCeiling p_actor p_stop_before _parent;
 	! this routine is in I6 stdlib, but not in DM
 	!
     for(:: p_actor = _parent) {
         _parent = parent(p_actor);
         !   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
-        if(_parent == 0 || (p_actor has container && p_actor hasnt transparent or open)) {
+        if(_parent == 0 or p_stop_before || (p_actor has container && p_actor hasnt transparent or open)) {
             return p_actor;
         }
     }
