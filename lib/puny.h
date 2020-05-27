@@ -362,6 +362,9 @@ Array TenSpaces -> "          ";
 			print " (which is empty)";
 		else
 			if(_PrintContents(" (which contains ", p_obj)) print ")";
+	} 
+	if(p_obj has supporter && child(p_obj) ~= nothing) {
+		if(_PrintContents(" (on which is ", p_obj)) print ")";
 	}
 	if(p_obj has light && action == ##Inv) print " (providing light)";
 ];
