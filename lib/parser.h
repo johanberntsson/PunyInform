@@ -890,53 +890,79 @@
 
 
 #IfDef OPTIONAL_GUESS_MISSING_NOUN;
+Constant GUESS_CREATURE = 0;
+Constant GUESS_HELD = 1;
+Constant GUESS_CONTAINER = 2;
+Constant GUESS_THING = 3;
+Constant GUESS_DOOR = 4;
+Array guess_object-->5;
+Array guess_num_objects->5;
+[ _GuessMissingNoun p_type p_prep p_nounphrase_num _assumed _exclude _i _noun;
+	for(_i = 0: _i < 5: _i++) guess_num_objects->_i = 0;
 
-[ _GuessMissingNoun p_type p_prep _i _noun _creature _creature_num _held _held_num _thing _thing_num _container _container_num _door _door_num;
+	if(p_nounphrase_num == 1) {
+		_assumed = noun;
+	} else {
+		_assumed = second;
+		if(_assumed == 0) _assumed = noun;
+		_exclude = noun;
+	}
+
 	for(_i = 0: _i < scope_objects: _i++) {
 		_noun = scope-->_i;
 		if(_noun == player) continue;
 		if(ObjectIsInvisible(_noun)) continue;
-		if(_noun has door) {
-			_door = _noun;
-			++_door_num;
+		if(_noun has door && _noun ~= _exclude) {
+			guess_object-->GUESS_DOOR = _noun;
+			guess_num_objects->GUESS_DOOR = 1 + guess_num_objects->GUESS_DOOR;
 			!print "found door ", (the) _door, "^";
 		}
-		if(_noun has container) {
-			_container = _noun;
-			++_container_num;
+		if(_noun has container && _noun ~= _exclude) {
+			guess_object-->GUESS_CONTAINER = _noun;
+			guess_num_objects->GUESS_CONTAINER = 1 + guess_num_objects->GUESS_CONTAINER;
 			!print "found container ", (the) _container, "^";
 		}
-		if(_noun has animate) {
-			_creature = _noun;
-			++_creature_num;
+		if(_noun has animate && _noun ~= _exclude) {
+			guess_object-->GUESS_CREATURE = _noun;
+			guess_num_objects->GUESS_CREATURE = 1 + guess_num_objects->GUESS_CREATURE;
 			!print "found creature ", (the) _creature, "^";
 		} 
-		if(_noun in player) {
-			_held = _noun;
-			++_held_num;
+		if(_noun in player && _noun ~= _exclude) {
+			guess_object-->GUESS_HELD = _noun;
+			guess_num_objects->GUESS_HELD = 1 + guess_num_objects->GUESS_HELD;
 			!print "found held ", (the) _held, "^";
 		}
-		if(_noun hasnt scenery or concealed) {
-		   	_thing = _noun;
-		   	++_thing_num;
+		if(_noun hasnt scenery or concealed && _noun ~= _exclude) {
+			guess_object-->GUESS_THING = _noun;
+			guess_num_objects->GUESS_THING = 1 + guess_num_objects->GUESS_THING;
 			!print "found thing ", (the) _thing, "^";
 		}
 	}
 
 	_noun = 0;
 	switch(p_type) {
-	HELD_OBJECT: if(_held_num == 1) _noun = _held;
-	CREATURE_OBJECT: if(_creature_num == 1) _noun = _creature;
+	HELD_OBJECT: 
+		if(guess_num_objects->GUESS_HELD == 1)
+			_noun = guess_object-->GUESS_HELD;
+	CREATURE_OBJECT: 
+		if(guess_num_objects->GUESS_CREATURE == 1)
+			_noun = guess_object-->GUESS_CREATURE;
 	default: 
-		if(_noun == 0 && _container_num == 1 && action == ##Open or ##Close) {
-			_noun = _container;
+		if(_noun == 0 && guess_num_objects->GUESS_CONTAINER == 1 &&
+			action == ##Open or ##Close) {
+			_noun = guess_object-->GUESS_CONTAINER;
 		}
-		if(_noun == 0 && _door_num == 1 && action == ##Lock or ##Unlock or ##Open or ##Close) {
-			_noun = _door;
+		if(_noun == 0 && guess_num_objects->GUESS_DOOR == 1 &&
+			action == ##Lock or ##Unlock or ##Open or ##Close) {
+			_noun = guess_object-->GUESS_DOOR;
 		}
-		if(_noun == 0 && _thing_num == 1) _noun = _thing;
+		if(_noun == 0 && guess_num_objects->GUESS_THING == 1) {
+			_noun = guess_object-->GUESS_THING;
+		}
 	}
 
+	!print p_nounphrase_num, " ",_noun, " ", noun, " ", second, "^";
+	if(_noun == _assumed) _noun = 0;
 	if(_noun) {
 		print "(assuming ";
 		if(p_prep) {
@@ -950,7 +976,7 @@
 
 #EndIf;
 
-[ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second;
+[ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second _num_preps;
 	! Called because sentence shorter than the pattern
 	! Available data: wn, parse_array and p_pattern_token (last matched token)
 	!
@@ -986,8 +1012,8 @@
 	! try to guess missing parts in the pattern
 	! return true if we could fix everything
 #IfDef OPTIONAL_GUESS_MISSING_NOUN;
-	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0);
-	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep);
+	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0, 1);
+	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep, 2);
 	if((_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
 		!print "message complete: ", noun, " ", second, "^";
 		rtrue;
@@ -1001,12 +1027,20 @@
 		_type = _token -> 0;
 		_data = (_token + 1) --> 0;
 		if(_type > 9) {
-			print " ", (address) _data;
+			if(_num_preps == 0) print " ", (address) _data;
+			++_num_preps;
 		} else {
 			if(_noun == 0) {
-				if(noun == 0) print " something"; else print " ", (name) noun;
+				if(second == 0) print " something"; else print " ", (name) second;
 			} else {
-				if(_token->2 == CREATURE_OBJECT) print " someone"; else print " something";
+				if(noun ~= 0) {
+					_noun = 0; ! avoid repeat (and we don't need _noun anymore)
+					print " ",(name) noun;
+				} else if(_token->2 == CREATURE_OBJECT) {
+					print " someone";
+				} else {
+					print " something";
+				}
 			}
 		}
 	}
@@ -1142,19 +1176,23 @@
 			}
 		GPR_MULTIPLE:
 			! multiple_objects contains the objects
-			_UpdateNounSecond(0, 0);
+			if(multiple_objects-->0 == 0) {
+				_UpdateNounSecond(0, 0, 1);
+			} else {
+				_UpdateNounSecond(multiple_objects-->1, multiple_objects-->1, 1);
+			}
 		GPR_NUMBER:
 			! parsed_number contains the new number
 			if(p_phase == PHASE2 && parsed_number == -1000)  {
 				print "I didn't understand that number.^";
 				return wn - verb_wordnum; ! bad match
 			}
-			_UpdateNounSecond(parsed_number, 1);
+			_UpdateNounSecond(parsed_number, 1, 2);
 		GPR_REPARSE:
 			return -1; ! the player_input and parse_array have changed
 		default:
 			! _noun was a valid noun
-			_UpdateNounSecond(_noun, _noun);
+			_UpdateNounSecond(_noun, _noun, 3);
 		}
 	}
 	! we should never reach this line
