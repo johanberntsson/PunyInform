@@ -734,7 +734,9 @@
 		! SPECIAL_OBJECT, NUMBER_OBJECT or TOPIC_OBJECT
 		!
 		! remember if except or inside found, so we can filter later
-		parser_check_multiple = _token_data;
+		if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
+			parser_check_multiple = _token_data;
+		}
 
 		if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 			_noun = _GetNextNoun(p_parse_pointer, p_phase);
@@ -855,9 +857,9 @@
 		_obj = scope-->_i;
 		_addobj = false;
 		switch(p_multiple_objects_type) {
-		MULTIHELD_OBJECT:
+		MULTIHELD_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
 			_addobj = _obj in player;
-		MULTI_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
+		MULTI_OBJECT:
 			_addobj = _obj hasnt scenery or concealed or static or animate;
 		}
 		if(action == ##Take && _obj in player) _addobj = false;
