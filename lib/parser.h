@@ -583,9 +583,9 @@
 		_CopyParseArray(parse_array, temp_parse_array);
 		_ReadPlayerInput();
 		! is this a reply to the question?
-		if((parse_array->1 == 1) &&  
-			(((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
-			! only one word, and it is not a verb. Assume
+		!if((parse_array->1 == 1) &&  
+		if((((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
+			! the first word is not a verb. Assume
 			! a valid reply and add the other 
 			! entry into parse_array, then retry
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
@@ -651,6 +651,7 @@
 
 [ _GrabIfNotHeld p_noun;
 	if(p_noun in player) return;
+	if(p_noun has animate) return;
 	print "(first taking ", (the) p_noun, ")^";
 	keep_silent = true;
 	<take p_noun>;
@@ -856,7 +857,7 @@
 		MULTIHELD_OBJECT:
 			_addobj = _obj in player;
 		MULTI_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
-			_addobj = _obj hasnt scenery or concealed;
+			_addobj = _obj hasnt scenery or concealed or static or animate;
 		}
 		if(action == ##Take && _obj in player) _addobj = false;
 		if(_addobj) {
