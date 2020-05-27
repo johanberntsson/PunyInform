@@ -131,9 +131,15 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 	! ScopeWithin. No return value
 
 	! skip if already added
+#IfV5;
+	@scan_table p_obj scope scope_objects -> _i ?~not_found;
+	return;
+.not_found;
+#IfNot;
 	for(_i = 0: _i < scope_objects: _i++) {
 		if(scope-->_i == p_obj) return;
 	}
+#EndIf;
 	! add it
 	if(scope_objects >= MAX_SCOPE) {
 		RunTimeError(ERR_SCOPE_FULL);
