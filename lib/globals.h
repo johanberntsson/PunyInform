@@ -125,12 +125,12 @@ Property additive before $ffff;
 Property additive after  $ffff;
 Property additive life   $ffff;
 
-Property long n_to;  Property long s_to; !  Slightly wastefully, these are
-Property long e_to;  Property long w_to; !  long (they might be routines)
-Property long ne_to; Property long se_to;
-Property long nw_to; Property long sw_to;
-Property long u_to;  Property long d_to;
-Property long in_to; Property long out_to;
+Property n_to;  Property s_to; !  Slightly wastefully, these are
+Property e_to;  Property w_to; !  (they might be routines)
+Property ne_to; Property se_to;
+Property nw_to; Property sw_to;
+Property u_to;  Property d_to;
+Property in_to; Property out_to;
 
 Property door_to     alias n_to;     !  For economy: these properties are
 Property when_closed alias s_to;     !  used only by objects which
@@ -144,29 +144,29 @@ Property react_after  alias nw_to;
 Property grammar     alias in_to;
 Property orders      alias out_to;
 
-Property long initial;
+Property initial;
 Property when_open   alias initial;
 Property when_on     alias initial;
 Property when_off    alias when_closed;
 Property inside_description alias d_to;
-Property long description;
+Property description;
 Property additive describe $ffff;
 
 Property cant_go;
 Property article alias cant_go;
 
-Property long found_in;         !  For fiddly reasons this can't alias
+Property found_in;         !  For fiddly reasons this can't alias
 
-Property long time_left;
-Property long number;
+Property time_left;
+Property number;
 Property additive time_out $ffff;
 Property daemon alias time_out;
 Property additive each_turn $ffff;
 
 Property capacity 100;
 
-Property long short_name 0;
-Property long parse_name 0;
+Property short_name 0;
+Property parse_name 0;
 
 
 ! ! directions
@@ -188,7 +188,7 @@ Property long parse_name 0;
 ! Property cant_go;
 ! Property door_to alias n_to;
 ! Property door_dir alias s_to;
-Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_FULL_DIRECTIONS;
 
 Constant FAKE_N_OBJ = 10001;
 Constant FAKE_S_OBJ = 10002;
@@ -311,20 +311,7 @@ Default AMUSING_PROVIDED    1;
 Default MAX_CARRIED         100;
 Default SACK_OBJECT         0;
 
-#IfDef OPTIONAL_FULL_SCORE;
-Attribute scored;
-Global things_score;
-Global places_score;
-
-Default NUMBER_TASKS        1;
-Default TASKS_PROVIDED      1;
-Default OBJECT_SCORE        4;
-
-Array  task_done -> NUMBER_TASKS;
-#Ifndef task_scores;
-Array task_scores -> 0 0; ! Inform breaks if only one entry
-#Endif;
-#Endif;
+!#Endif;
 
 Global fake_location;      ! Must be the first global to show location name
 Global status_field_1 = 0; ! Must be the second global to show score or hours
@@ -427,3 +414,16 @@ Constant RUNTIME_ERRORS;
 #EndIf;
 #EndIf;
 
+#IfDef OPTIONAL_FULL_SCORE;
+Attribute scored;
+Global things_score;
+Global places_score;
+
+Default NUMBER_TASKS        1;
+Default TASKS_PROVIDED      1;
+Default OBJECT_SCORE        4;
+
+Array  task_done -> NUMBER_TASKS;
+#Ifndef task_scores;
+Array task_scores -> 0 0; ! Inform breaks if only one entry
+#Endif;

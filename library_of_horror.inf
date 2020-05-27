@@ -8,6 +8,7 @@ Constant OPTIONAL_DEBUG_VERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_FULL_DIRECTIONS;
 
 !Constant DEBUG_TIMER; ! requires special Ozmoo
 !Constant DEBUG_SCOPE;
@@ -479,7 +480,7 @@ Object -> John "John"
 			"John ignores your comment.";
 		Show, Give:
 			! TODO <<>> doesn't work if(noun==PinkBook) <<Ask self PinkBook>>;
-			if(noun==PinkBook) { <<Ask self PinkBook>>; rtrue; }
+			if(noun==PinkBook) { PerformAction(##Ask, self, PinkBook); rtrue; }
 			"John doesn't appear to be interested.";
 		Ask, Tell, Answer:
 			w1=0;
@@ -643,7 +644,7 @@ Array quote_buffer -> 83;
 ];
 
 
-[Initialise b i;
+[Initialise;
 	location = Library;
 !	PlayerTo(LargeBox);
 !	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";

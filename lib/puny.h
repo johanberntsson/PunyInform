@@ -334,7 +334,7 @@ Array TenSpaces -> "          ";
     print (object) o;
 ];
 
-[ _PrintObjName p_obj p_form _done;
+[ _PrintObjName p_obj p_form;
 	if(p_obj hasnt proper) {
 		if(p_form == FORM_CDEF) {
 			print "The ";
@@ -915,7 +915,7 @@ Object _TheDark "Darkness";
 #IfDef OPTIONAL_FULL_SCORE;
 	places_score = 0;
 	things_score = 0;
-	for(_i = 0; _i < NUMBER_TASKS; _i++) task_done->_i = 0;
+	for(_i = 0 : _i < NUMBER_TASKS : _i++) task_done->_i = 0;
 #EndIf;
 
 	Initialise();

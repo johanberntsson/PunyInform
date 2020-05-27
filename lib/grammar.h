@@ -1042,7 +1042,7 @@ Global scope_cnt;
 	@new_line;
 ];
 
-[ ScopeSub _i _obj;
+[ ScopeSub;
 	scope_cnt = 1;
 	LoopOverScope(_ScopeSubHelper, noun);
 	if(scope_cnt == 0) "Nothing in scope.^";

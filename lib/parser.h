@@ -474,7 +474,7 @@
 	return 0;
 ];
 
-[ _AskWhichNoun p_noun_name p_num_matching_nouns _i; 
+[ _AskWhichNoun p_num_matching_nouns _i; 
 	print "Do you mean ";
 	for(_i = 1 : _i <= p_num_matching_nouns : _i++) {
 		if(_i > 1) {
@@ -572,7 +572,8 @@
 			!wn = wn + which_object->1;
 			return 0;
 		}
-		_AskWhichNoun(p_parse_pointer --> 0, -_noun);
+!		_AskWhichNoun(p_parse_pointer --> 0, -_noun);
+		_AskWhichNoun(-_noun);
 		! read a new line of input
 		! I need to use parse_array since NextWord
 		! for parse_name and others hardcode this
@@ -622,7 +623,7 @@
 	}
 ];
 
-[ _UpdateNounSecond p_noun p_inp p_id;
+[ _UpdateNounSecond p_noun p_inp; ! p_id;
 	if(num_noun_groups == 0) {
 		!print p_id, ": setting noun: ", p_noun, " inp1 ", p_inp, "^";
 		noun = p_noun;
@@ -641,7 +642,7 @@
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
 
-[ ParseToken p_token_type p_token_data _parse_pointer;
+[ ParseToken p_token_type p_token_data;
 	! DM defines ParseToken as ParseToken(tokentype,tokendata)
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
