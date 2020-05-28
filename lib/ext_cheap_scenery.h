@@ -114,20 +114,9 @@ Object CheapScenery "object"
                 #endif;
                 "Get a grip on yourself.";
         ],
+		found_in [;
+			if(location provides cheap_scenery) rtrue;
+		],
     has concealed scenery;
 
-! If you get a conflict when compiling because you're already using NewRoom for 
-! something else (like another library extension), you can comment out NewRoom 
-! and uncomment InScope instead.
-
-![InScope;
-!    if(scope_reason == PARSING_REASON && location provides cheap_scenery)
-!        PlaceInScope(CheapScenery);
-!    rfalse;
-!];
-
-[NewRoom;
-    if(location provides cheap_scenery && CheapScenery notin location)
-        move CheapScenery to location;
-];
-
+	

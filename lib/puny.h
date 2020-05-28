@@ -59,55 +59,6 @@
 
 Include "messages.h";
 
-Object Directions
-	with
-		short_name [; 
-			if(selected_direction_index)
-				print (string) direction_name_array-->selected_direction_index;
-			else
-				print "unknown direction"; 
-			rtrue; 
-		], !TODO: doesn't work?
-#IfV5;
-		parse_name [_len _i _w _arr;
-#IfNot;
-		parse_name [_len _i _w;
-#EndIf;
-			_w = (parse_array+4*wn-2)-->0;
-			_len = abbr_direction_array-->0;
-#IfV5;
-			_arr = abbr_direction_array + 2;
-			@scan_table _w _arr _len -> _i ?success;
-			! not found in abbr, try full
-			_arr = full_direction_array + 2;
-			@scan_table _w _arr _len -> _i ?success;
-			! no match
-			selected_direction_index = 0;
-			selected_direction = 0;
-			return 0;
-.success;
-			selected_direction_index = (_i - _arr)/2;
-			selected_direction = direction_properties_array --> (selected_direction_index + 1);
-			return 1;
-#IfNot;
-			_i = 1;
-!			for(_i = 1 : _i <= _len : _i++) {
-.checkNextDir;
-				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
-					selected_direction_index = _i;
-					selected_direction = direction_properties_array --> _i;
-					return 1;
-				}
-!			}
-				@inc_chk _i _len ?~checkNextDir;
-			
-			! failure
-			selected_direction_index = 0;
-			selected_direction = 0;
-			return 0;
-#EndIf;
-		]
-has scenery proper;
 
 ! ######################### Include utility files
 
@@ -442,6 +393,7 @@ Array TenSpaces -> "          ";
 		if(_len == 1 && _obj.found_in > top_object) {
 			_present = RunRoutines(_obj, found_in);
 		} else {
+			_present = 0;
 			_j = _obj.&found_in;
 #IfV5;
 			@scan_table location _j _len -> _present ?~no_success; ! The position is only a throw-away value here.
