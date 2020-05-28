@@ -190,6 +190,19 @@ Object -> Key "key"
 #EndIf;
 	;
 
+Object car "little red car" CarPark
+  with name 'little' 'red' 'car',
+       description "Large enough to sit inside. Among the controls is a
+           prominent on/off switch. The numberplate is KAR 1.",
+       when_on
+           "The red car sits here, its engine still running.",
+       when_off "A little red car is parked here.",
+       before [;
+           Go: if (car has on) "Brmm! Brmm!";
+               print "(The ignition is off at the moment.)^";
+       ],
+  has  switchable enterable static container open;
+
 Object RiverBank "River Bank"
   with
 		description "The river is quite wide here. The sun reflects in the blue water, the birds are 

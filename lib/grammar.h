@@ -342,6 +342,7 @@ Verb 'wear'
 	! when called Directions have been set properly
 	_prop = selected_direction;
 	if(_prop == 0) return RuntimeError(ERR_INVALID_DIR_PROP);
+
 	GoDir(_prop);
 ];
 
@@ -1246,18 +1247,21 @@ Global scope_cnt;
 						continue;
 					}
 				}
-				if(_obj has container or door)
-					if(_obj has open)
+				if(_obj has container or door) {
+					if(_obj has open) {
 						_desc_prop = when_open;
-					else
+					} else {
 						_desc_prop = when_closed;
-				else if(_obj has switchable)
-					if(_obj has on)
+					}
+				} else if(_obj has switchable) {
+					if(_obj has on) {
 						_desc_prop = when_on;
-					else
+					} else {
 						_desc_prop = when_off;
-				else
+					}
+				} else {
 					_desc_prop = initial;
+				}
 				if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
 					_initial_found = true;
 					give _obj workflag;
@@ -1335,8 +1339,20 @@ Global scope_cnt;
 	rfalse;
 ];
 
-[ GoDir p_property _new_location _door_to;
-	if(player notin location) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
+[ GoDir p_property _new_location _door_to _vehicle _vehicle_mode;
+	if(parent(player) ~= location) {
+		! special rule when in enterable (veichles)
+		! before routine for the object is called with Go dir, and returns
+		! 0   to disallow the movement, printing a refusal;
+		! 1   to allow the movement, moving vehicle and player;
+		! 2   to disallow but print and do nothing; or
+		! 3   to allow but print and do nothing.
+		_vehicle = parent(player);
+		_vehicle_mode = RunRoutines(_vehicle, before);
+		if(_vehicle_mode == 0) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
+		if(_vehicle_mode == 2 or 3) rtrue;
+	}
+	!if(player notin location) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
 	if(location provides p_property) {
 		@get_prop location p_property -> _new_location; ! works in z3 and z5
 	}
@@ -1369,7 +1385,13 @@ Global scope_cnt;
         PrintMsg(MSG_GO_CANT_GO); 
 		rtrue;
 	}
+	if(_vehicle_mode == 1) {
+		move _vehicle to _new_location;
+		_new_location = _vehicle;
+	}
 	PlayerTo(_new_location);
+	if (AfterRoutines() == 1) rtrue;
+	if (keep_silent == 1) rtrue;
 	Look();
 ];
 
