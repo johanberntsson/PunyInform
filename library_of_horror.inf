@@ -22,13 +22,31 @@ Include "ext_flags.h";
 ! Setup cheap scenery
 Include "ext_cheap_scenery.h";
 
+! Setup quote box
+Constant QUOTE_V3_SCREEN_WIDTH 40;
+Include "ext_quote_box.h";
+
 Include "puny.h";
+
+Array quote_1 --> 5 35
+"When I die, I want to go peacefully"
+"in my sleep like my grandfather."
+"Not screaming in terror, like the" 
+"passengers in his car."
+"               -- Jack Handey";
+
 
 Object Library "The Library"
 	with
 		description "You are in a library.",
 		cheap_scenery
 			1 'library' "It's a beautiful old library.",
+		after [;
+			if(self hasnt general) {
+				give self general;
+				QuoteBox(quote_1);
+			}
+		],
 	has light;
 
 [Initialise;
