@@ -113,9 +113,9 @@ Include "ext_menu.h";
 
 [ HelpItems;
     print "There is information provided on the following:^^";
-    print "1. Instructions^";
-    print "2. About this game^";
-    print "3. Game credits^";
+    print "      Instructions^";
+    print "      About this game^";
+    print "      Game credits^";
 ];
 
 [ HelpMenu;
@@ -130,8 +130,8 @@ Include "ext_menu.h";
 [ HelpInfo;
     switch(menu_item) {
     1: "You play this game like any old Infocom game.^^Common commands lnclude examine, open, close, save, restore and quit.";
-    2: print "this is a test game";
-    3: print "this was was created by us";
+    2: "This is a test game";
+    3: "This was was created by us";
     }
 ];
 
