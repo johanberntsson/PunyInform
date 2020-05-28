@@ -53,6 +53,7 @@ Verb 'examine' 'x//'
 	* noun -> Examine;
 
 Verb 'exit'
+	*                                           -> Exit
 	* noun                                      -> Exit;
 
 Verb 'fill'
