@@ -17,19 +17,19 @@ Global menu_nesting;
 	else                              print (string) menu_choices;
 
 	for (::) {
-		print "^Type a number from 1 to ", lines, ", 0 to redisplay or press ENTER.";
+		print "^Type a number from 1 to ", lines, ", ENTER to redisplay or 0 to return to the game.^";
 		print "> ";
 
        _ReadPlayerInput(true);
 		j = parse_array->1; ! number of words
 		i = parse_array-->1;
-		if (j == 0) { ! || (i == QUIT1__WD or QUIT2__WD)) {
+		if (j == 0) jump LKRD;
+		i = TryNumber(1);
+		if(i == 0) {
 			menu_nesting--; if (menu_nesting > 0) rfalse;
 			if (deadflag == 0) <<Look>>;
 			rfalse;
 		}
-		i = TryNumber(1);
-		if (i == 0) jump LKRD;
 		if (i < 1 || i > lines) continue;
 		menu_item = i;
 		j = indirect(EntryR);
