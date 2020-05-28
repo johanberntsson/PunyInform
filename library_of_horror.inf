@@ -35,7 +35,6 @@ Array quote_1 --> 5 35
 "passengers in his car."
 "               -- Jack Handey";
 
-
 Object Library "The Library"
 	with
 		description "You are in a library.",
@@ -47,8 +46,38 @@ Object Library "The Library"
 				QuoteBox(quote_1);
 			}
 		],
+		e_to TopOfStairs,
 	has light;
 
+Object TopOfStairs "Staircase Leading Down"
+	with
+		description "The stairs descend into a forboding darkness.",
+		w_to Library,
+		d_to BottomOfStairs,
+	has light;
+		
+Object BottomOfStairs "Basement, Near Staircase"
+	with
+		description "It's nearly dark here, since the lamp in the ceiling is missing its light bulb.
+			However, there's enough light coming in from the stairs and surrounding rooms to make
+			out your surroundings.",
+		u_to TopOfStairs,
+	has light;
+	
+Object -> Frank "Frank the Robot"
+	with
+		name 'frank' 'the' 'robot',
+		when_on [;
+			give self moved;
+			"Frank the Robot is standing here, all dark and quiet. As you enter the room, some LEDs light up and Frank's eyes start to glow with a feeble yellow light.";
+		],
+		before [;
+			SwitchOff:
+				"An bright light arc juts out from near the button and the electric shock makes you jump back.";
+		],
+		description "Frank has a rather dreary look.",
+	has animate proper switchable on;
+	
 [Initialise;
 	location = Library;
 	print "^^And so the story begins...^^";
