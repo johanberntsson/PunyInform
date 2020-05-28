@@ -109,6 +109,37 @@ Include "globals.h";
 #Ifndef USEINFORM;
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
+Include "ext_menu.h";
+
+[ HelpItems;
+    print "There is information provided on the following:^^";
+    print "1. Instructions^";
+    print "2. About this game^";
+    print "3. Game credits^";
+];
+
+[ HelpMenu;
+    switch(menu_item) {
+    0: item_width=10; item_name="Help and Information"; return 3;
+    1: item_width=6; item_name="Instructions";
+    2: item_width=7; item_name="About this game";
+    3: item_width=6; item_name="Game credits";
+    }
+];
+
+[ HelpInfo;
+    switch(menu_item) {
+    1: "You play this game like any old Infocom game.^^Common commands lnclude examine, open, close, save, restore and quit.";
+    2: print "this is a test game";
+    3: print "this was was created by us";
+    }
+];
+
+[ HelpSub;
+    DoMenu(HelpItems, HelpMenu, HelpInfo);
+];
+Verb 'help' * -> Help;
+
 
 ! Setup custom library messages
 Constant MSG_OPEN_YOU_CANT 1000;
