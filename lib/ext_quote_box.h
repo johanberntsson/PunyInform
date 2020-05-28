@@ -103,13 +103,17 @@ Array quote_buffer -> 83;
 	}
 	
 !	print (string) p_line_1;
+!	@new_line;
+	@split_window 0;
+	@set_window 0;
 #IfV5;
+	print "[Press any key to continue]";
 	@read_char _i;
 #IfNot;
+	print "[Press ENTER to continue]";
 	quote_buffer -> 0 = 0;
 	read quote_buffer 0;
 #EndIf;
-	@split_window 0;
-	@set_window 0;
+	" Ok.";
 ];
 

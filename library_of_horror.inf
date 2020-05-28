@@ -4,6 +4,7 @@
 
 ! Uncomment to add optional features to PunyLib
 !Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_FULL_DIRECTIONS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 !Constant OPTIONAL_DEBUG_VERBS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
@@ -37,46 +38,80 @@ Array quote_1 --> 5 35
 
 Object Library "The Library"
 	with
-		description "You are in a library.",
+		description "You are in a library. The stairs leading down to the basement are to the east.",
 		cheap_scenery
 			1 'library' "It's a beautiful old library.",
+		e_to TopOfStairs,
+	has light;
+
+Object TopOfStairs "Staircase Leading Down"
+	with
+		description "The stairs descend into a forboding darkness. The main hall of the library is off to the west.",
+		w_to Library,
+		d_to BottomOfStairs,
 		after [;
 			if(self hasnt general) {
 				give self general;
 				QuoteBox(quote_1);
 			}
 		],
-		e_to TopOfStairs,
-	has light;
-
-Object TopOfStairs "Staircase Leading Down"
-	with
-		description "The stairs descend into a forboding darkness.",
-		w_to Library,
-		d_to BottomOfStairs,
 	has light;
 		
 Object BottomOfStairs "Basement, Near Staircase"
 	with
 		description "It's nearly dark here, since the lamp in the ceiling is missing its light bulb.
-			However, there's enough light coming in from the stairs and surrounding rooms to make
-			out your surroundings.",
+			However, there's enough light coming in from the stairs and nearby rooms to make
+			out your surroundings. There is more light to the east.",
 		u_to TopOfStairs,
+		e_to StorageRoom,
 	has light;
-	
+
+! Data that Frank needs to print where he came from.	
+#IfDef OPTION_FULL_DIRECTIONS;
+Array opposite_directions table "south" "north" "west" "east" "southwest" "southeast" "northwest" "northeast" "down" "up" "out" "in";
+#IfNot;
+Array opposite_directions table "south" "north" "west" "east" "down" "up" "out" "in";
+#EndIf;
+
 Object -> Frank "Frank the Robot"
 	with
 		name 'frank' 'the' 'robot',
-		when_on [;
+		when_off [;
+			give self on;
 			give self moved;
+			StartDaemon(self);
 			"Frank the Robot is standing here, all dark and quiet. As you enter the room, some LEDs light up and Frank's eyes start to glow with a feeble yellow light.";
 		],
 		before [;
 			SwitchOff:
 				"An bright light arc juts out from near the button and the electric shock makes you jump back.";
 		],
+		daemon [ _my_loc _i _dir_prop _dirs ;
+			default:
+				! Franks wants to follow the player around, but can't go up/down/in/out
+				_my_loc = parent(self);
+				if(location ~= _my_loc){
+					_dirs = direction_properties_array-->0;
+					for(_i=1 : _i <= _dirs : _i++) {
+						_dir_prop = direction_properties_array-->_i;
+						if(_dir_prop ~= u_to or d_to or in_to or out_to &&
+							_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
+							move self to location;
+							"^Frank enters from the ", (string) opposite_directions-->_i, ".";
+						}
+					}
+				}
+		],
 		description "Frank has a rather dreary look.",
-	has animate proper switchable on;
+	has animate proper switchable;
+	
+Object StorageRoom "Storage Room"
+	with 
+		description "A small storage room.",
+		w_to BottomOfStairs,
+	has light;
+	
+
 	
 [Initialise;
 	location = Library;
