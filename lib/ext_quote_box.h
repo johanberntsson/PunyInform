@@ -1,6 +1,38 @@
-#IfnDef QUOTE_V3_SCREEN_WIDTH;
-Constant QUOTE_V3_SCREEN_WIDTH = -2;
-#EndIf;
+! ext_quote_box.h, a library extension for PunyInform by Fredrik Ramsberg.
+!
+! This is an extension to let games show a simple quote box.
+! For z5+ games, the extension will try to center the quote box on the screen,
+! by reading the screen width reported by the interpreter in the header.
+! For z3, this information is not available. Instead, it can do it two ways:
+! 1: The game programmer tells the extension to assume the screen has a certain
+!      width and the extension uses this information to center the quote box.
+! 2: The game programmer tells the extension to just indent the quote box a
+!      fixed number of characters.
+
+! To use (1), set the constant QUOTE_V3_SCREEN_WIDTH to the desired width, which 
+! has to be > 6.
+
+! To use (2), set the constant QUOTE_V3_SCREEN_WIDTH to the desired number of
+! characters to indent by, which must be in the range 0-6.
+
+! By default, method (2) will be used, with 2 characters of indentation.
+
+! To display a quote box, create a word array holding the number of lines, the
+! number of characters in the longest line, and then a string per line, and call
+! QuoteBox with the array name as the argument.
+
+! Array quote_1 --> 5 35
+! "When I die, I want to go peacefully"
+! "in my sleep like my grandfather."
+! "Not screaming in terror, like the" 
+! "passengers in his car."
+! "               -- Jack Handey";
+!
+! [AnyRoutine;
+!   QuoteBox(quote_1);
+! ];
+
+Default QUOTE_V3_SCREEN_WIDTH = 2;
 
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 6;
 Constant QUOTE_INDENT_STRING = "      ";
