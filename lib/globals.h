@@ -428,3 +428,4 @@ Array  task_done -> NUMBER_TASKS;
 #Ifndef task_scores;
 Array task_scores -> 0 0; ! Inform breaks if only one entry
 #Endif;
+#Endif;

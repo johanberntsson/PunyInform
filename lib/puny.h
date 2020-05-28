@@ -913,6 +913,7 @@ Object _TheDark "Darkness";
 
 	top_object = #largest_object-255;
 
+	print "^^";
 	VersionSub();
 
 	player = DefaultPlayer;
