@@ -851,7 +851,7 @@ Verb 'yes' 'y//'
 #EndIf;
 
 ! ---------------------
-! Meta verbs
+! Base meta verbs
 ! ---------------------
 
 Verb meta 'again' 'g//'
@@ -865,6 +865,11 @@ Verb meta 'fullscore' 'full'
     *                                           -> FullScore
     * 'score'                                   -> FullScore;
 #EndIf;
+
+Verb meta 'notify'
+	*                                           -> NotifyOn
+	* 'on'                                      -> NotifyOn
+	* 'off'                                     -> NotifyOff;
 
 Verb meta 'oops'
     *                                           -> Oops
@@ -937,6 +942,16 @@ Verb meta 'quit' 'q//'
 	PrintMsg(MSG_LOOKMODE_SHORT);
 ];
 
+[ NotifyOnSub;
+	notify_mode = 1;
+	"Score notification on.";
+];
+
+[ NotifyOffSub;
+	notify_mode = 0;
+	"Score notification off.";
+];
+
 [ OopsSub;
 	"Think nothing of it.";
 ];
@@ -1004,6 +1019,127 @@ Verb meta 'quit' 'q//'
 		deadflag = GS_QUIT;
 	}
 ];
+
+! ---------------------
+! Extended meta verbs
+! ---------------------
+
+#IfDef OPTIONAL_EXTENDED_VERBSET;
+Constant HDR_GAMEFLAGS     $10;
+Global transcript_mode = false;        ! true when game scripting is on
+Global xcommsdir = false;              ! true if command recording is on
+
+Verb meta 'noscript' 'unscript'
+	*                                           -> ScriptOff;
+
+#Ifndef NO_PLACES;
+Verb meta 'objects'
+	*                                           -> Objects;
+Verb meta 'places'
+	*                                           -> Places;
+#Endif; ! NO_PLACES
+
+Verb meta 'recording'
+	*                                           -> CommandsOn
+	* 'on'                                      -> CommandsOn
+	* 'off'                                     -> CommandsOff;
+
+Verb meta 'replay'
+	*                                           -> CommandsRead;
+
+Verb meta 'script' 'transcript'
+	*                                           -> ScriptOn
+	* 'on'                                      -> ScriptOn
+	* 'off'                                     -> ScriptOff;
+
+Verb meta 'verify'
+	*                                           -> Verify;
+
+[ CommandsOnSub;
+	@output_stream 4;
+	xcommsdir = 1;
+	"[Command recording on.]";
+];
+
+[ CommandsOffSub;
+	if (xcommsdir == 1) @output_stream -4;
+	xcommsdir = 0;
+	"[Command recording off.]";
+];
+
+[ CommandsReadSub;
+	@input_stream 1;
+	xcommsdir = 2;
+	"[Replaying commands.]";
+];
+
+#Ifndef NO_PLACES;
+[ PlacesSub i j k;
+	print "You have visited: ";
+	objectloop (i has visited) j++;
+	objectloop (i has visited) {
+		print (name) i; k++;
+		if (k == j) { print ".^"; return; }
+		if (k == j-1) print " and ";
+		else          print ", ";
+	}
+];
+
+[ ObjectsSub i j f;
+	print "Objects you have handled:^";
+	objectloop (i has moved) {
+	f = 1; print (the) i; j = parent(i);
+		if (j) {
+		if (j == player) {
+			if (i has worn) print "   (worn)";
+			else            print "   (held)";
+				jump Obj__Ptd;
+			}
+			if (j has animate)   { print "   (given away)"; jump Obj__Ptd; }
+			if (j has visited)   { print "   (in ", (name) j, ")"; jump Obj__Ptd; }
+			if (j has container) { print "   (inside ", (the) j, ")"; jump Obj__Ptd; }
+			if (j has supporter) { print "   (on ", (the) j, ")"; jump Obj__Ptd; }
+			if (j has enterable) { print "   (in ", (the) j, ")"; jump Obj__Ptd; }
+		}
+		print "   (lost)";
+
+	.Obj__Ptd;
+		new_line;
+	}
+	if (f == 0) "None.";
+];
+#Endif; ! NO_PLACES
+
+[ ScriptOnSub;
+	transcript_mode = ((HDR_GAMEFLAGS-->0) & 1);
+	if (transcript_mode) "Transcripting is already on.";
+	@output_stream 2;
+	if (((HDR_GAMEFLAGS-->0) & 1) == 0) "Attempt to begin transcript failed.";
+	print "Start of a transcript of^";
+	VersionSub();
+	transcript_mode = true;
+];
+
+[ ScriptOffSub;
+	transcript_mode = ((HDR_GAMEFLAGS-->0) & 1);
+	if (transcript_mode == false) "Transcripting is already off.";
+	print "^End of transcript.^";
+	@output_stream -2;
+	if ((HDR_GAMEFLAGS-->0) & 1) "Attempt to end transcript failed.";
+	transcript_mode = false;
+];
+
+[ VerifySub;
+	@verify ?Vmaybe;
+	jump Vwrong;
+.Vmaybe;
+	"The game file has verified as intact.";
+.Vwrong;
+	"The game file did not verify as intact, and may be corrupt.";
+];
+
+
+#EndIf;
 
 ! ---------------------
 ! Debug verbs

@@ -318,6 +318,7 @@ Global status_field_1 = 0; ! Must be the second global to show score or hours
 Global status_field_2 = 0; ! Must be the third global to show turns or minutes
 Global location;
 Global score;
+Global notify_mode = true; ! Score notification
 Global turns;
 Global darkness;
 Global lookmode = 1;

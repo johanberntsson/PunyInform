@@ -940,7 +940,7 @@ Object _TheDark "Darkness";
         	AfterLife();
 		}
 
-        if(deadflag == GS_PLAYING && _score < score) {
+        if(deadflag == GS_PLAYING && _score < score && notify_mode == true) {
         	print "^[The score has just gone up by ";
         	if(score - _score == 1) {
         		print "one point.]^";
