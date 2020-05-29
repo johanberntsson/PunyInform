@@ -1076,37 +1076,41 @@ Verb meta 'verify'
 #Ifndef NO_PLACES;
 [ PlacesSub i j k;
 	print "You have visited: ";
-	objectloop (i has visited) j++;
-	objectloop (i has visited) {
-		print (name) i; k++;
-		if (k == j) { print ".^"; return; }
-		if (k == j-1) print " and ";
-		else          print ", ";
+	objectloop(i has visited) if(parent(i) == 0) j++;
+	objectloop(i has visited) {
+		if(parent(i) == 0) {
+			print (name) i; k++;
+			if (k == j) { print ".^"; return; }
+			if (k == j-1) print " and ";
+			else          print ", ";
+		}
 	}
 ];
 
 [ ObjectsSub i j f;
-	print "Objects you have handled:^";
+	print "Objects you have handled: ";
 	objectloop (i has moved) {
-	f = 1; print (the) i; j = parent(i);
-		if (j) {
-		if (j == player) {
-			if (i has worn) print "   (worn)";
-			else            print "   (held)";
-				jump Obj__Ptd;
-			}
-			if (j has animate)   { print "   (given away)"; jump Obj__Ptd; }
-			if (j has visited)   { print "   (in ", (name) j, ")"; jump Obj__Ptd; }
-			if (j has container) { print "   (inside ", (the) j, ")"; jump Obj__Ptd; }
-			if (j has supporter) { print "   (on ", (the) j, ")"; jump Obj__Ptd; }
-			if (j has enterable) { print "   (in ", (the) j, ")"; jump Obj__Ptd; }
+		j = parent(i);
+		if(j) {
+			if(f == 0) @new_line;
+			f = 1; 
+			print "- ", (the) i, "   ";
+			if (j == player) {
+				if (i has worn) {
+					print "(worn)";
+				} else {
+					print "(held)";
+				}
+			} else if(j has animate) print "(given away)"; 
+			else if(j has visited) print "(in ", (name) j, ")";
+			else if(j has container) print "(inside ", (the) j, ")";
+			else if(j has supporter) print "(on ", (the) j, ")";
+			else if(j has enterable) print "(in ", (the) j, ")";
+			else print "(lost)";
+			@new_line;
 		}
-		print "   (lost)";
-
-	.Obj__Ptd;
-		new_line;
 	}
-	if (f == 0) "None.";
+	if(f == 0) "none.";
 ];
 #Endif; ! NO_PLACES
 
