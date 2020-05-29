@@ -11,6 +11,12 @@
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
 
 Include "globals.h";
+ 
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
 
 Include "puny.h";
 

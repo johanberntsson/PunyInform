@@ -459,10 +459,10 @@ Default LibraryMessages 0;
 		rtrue;
 	MSG_ENTER_BAD_LOCATION:
 		print "You have to ";
-		if(player in location)
-			print "enter ", (the) parent(noun);
-		else
+		if(player notin location && player notin parent(noun))
 			print "leave ", (the) parent(player);
+		else
+			print "enter ", (the) parent(noun);
 		" first.";
 
 
