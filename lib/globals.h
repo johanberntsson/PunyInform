@@ -308,7 +308,7 @@ Constant SCORE__TX = "Score: ";
 
 Default MAX_SCORE           0;
 Default AMUSING_PROVIDED    1;
-Default MAX_CARRIED         100;
+Default MAX_CARRIED        32;
 Default SACK_OBJECT         0;
 
 !#Endif;
@@ -381,10 +381,14 @@ Global clr_fgstatus          = 8;
 Global debug_flag            = 0;
 #endif;
 
-Constant MAX_WHICH_OBJECTS   = 10;
-Constant MAX_MULTIPLE_OBJECTS= 32;
-Constant MAX_INPUT_CHARS     = 78;
-Constant MAX_INPUT_WORDS     = 20;
+Default MAX_WHICH_OBJECTS     10;
+Default MAX_MULTIPLE_OBJECTS  32;
+Default MAX_INPUT_CHARS       78;
+Default MAX_INPUT_WORDS       20;
+Default MAX_SCOPE             32;
+
+Global scope_pov;        ! Whose POV the scope is from (usually the player)
+Array scope-->MAX_SCOPE; ! objects visible from the current POV
 
 Constant WORD_HIGHBIT = $8000;
 #Ifndef MAX_TIMERS;

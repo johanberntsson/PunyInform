@@ -2,11 +2,6 @@
 ! http://www.inform-fiction.org/manual/html/s32.html#p244
 !
 
-Constant MAX_SCOPE = 32;
-
-Global scope_pov;        ! Whose POV the scope is from (usually the player)
-Array scope-->MAX_SCOPE; ! objects visible from the current POV
-
 [ _SearchScope p_obj _child _add_this _i _len _addr;
 	while(p_obj) {
 #IfDef DEBUG_SCOPE;
