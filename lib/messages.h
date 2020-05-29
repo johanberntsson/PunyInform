@@ -258,6 +258,7 @@ Default MSG_UNLOCK_NOT_A_LOCK 89;
 Default MSG_UNLOCK_ALREADY_LOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
 Default MSG_UNLOCK_SUCCESS 92;
+Default MSG_ENTER_BAD_LOCATION 101;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -456,6 +457,14 @@ Default LibraryMessages 0;
 	MSG_YOU_HAVE_DIED: ! print and rtrue to avoid newline
 		print "You have died.";
 		rtrue;
+	MSG_ENTER_BAD_LOCATION:
+		print "You have to ";
+		if(player in location)
+			print "enter ", (the) parent(noun);
+		else
+			print "leave ", (the) parent(player);
+		" first.";
+
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 	MSG_BLOW_DEFAULT:
