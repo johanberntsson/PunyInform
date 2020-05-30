@@ -23,6 +23,7 @@
 ! - PlaceInScope
 ! - PronounNotice
 ! - ScopeWithin
+! - SetTime
 ! - TestScope
 ! - TryNumber
 ! - WordAddress
@@ -109,6 +110,13 @@ Include "grammar.h";
         _i = parent(_i);
     }
     return 0;
+];
+
+[ SetTime p_time p_step;
+	the_time = p_time; 
+	time_rate = p_step; 
+	time_step = 0;
+	if(p_step < 0) time_step = -p_step;
 ];
 
 #IfV5;
@@ -864,6 +872,7 @@ Object _TheDark "Darkness";
 #EndIf;
 
 	top_object = #largest_object-255;
+	sys_statusline_flag = ( ($1->0) & 2 ) / 2;
 
 	print "^^";
 	VersionSub();
@@ -883,8 +892,13 @@ Object _TheDark "Darkness";
 	<Look>;
 
 	while(deadflag == GS_PLAYING) {
-		status_field_1 = score;
-		status_field_2 = turns;
+		if (sys_statusline_flag == 0) {
+			status_field_1 = score;
+			status_field_2 = turns;
+		} else {
+			status_field_1 = the_time/60;
+			status_field_2 = the_time%60;
+		}
 		@new_line;
 
 		_ResetScope();
@@ -932,6 +946,17 @@ Object _TheDark "Darkness";
 			RunEachTurn();
 			TimePasses();
             turns++;
+            if (the_time ~= NULL) {
+				if (time_rate >= 0) the_time=the_time+time_rate;
+				else {
+					time_step--;
+					if (time_step == 0) {
+						the_time++;
+						time_step = -time_rate;
+					}
+				}
+				the_time = the_time % 1440;
+			}
         }
 
         if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {

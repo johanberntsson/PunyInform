@@ -2,6 +2,9 @@
 
 ! Minimal.inf - a sample game which uses PunyInform
 
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
 ! Uncomment to add optional features to PunyLib
 !Constant CUSTOM_ABBREVIATIONS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;

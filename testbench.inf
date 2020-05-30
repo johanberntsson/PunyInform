@@ -2,6 +2,9 @@
 
 ! Library of Horror - a sample game which uses PunyInform
 
+! uncomment to show time instead of score/turns
+Statusline time;
+
 ! Uncomment to add optional features to PunyLib
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_DEBUG_VERBS;
@@ -647,6 +650,7 @@ Array quote_1 --> 5 35
 "               -- Jack Handey";
 
 [Initialise;
+	SetTime(65, 5); ! 1:05 am, each turn 5 minutes
 	location = Library;
 !	PlayerTo(LargeBox);
 !	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
