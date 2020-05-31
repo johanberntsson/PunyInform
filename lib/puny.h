@@ -180,7 +180,7 @@ Array TenSpaces -> "          ";
 	@print_table TenSpaces p_col;
 ];
 
-[ DrawStatusLine _width _visibility_ceiling;
+[ DrawStatusLine _width _visibility_ceiling _h _pm;
 	! For wide screens (67+ columns):
 	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right.
 	! * Room names up to 39 characters are never truncated.
@@ -215,37 +215,75 @@ Array TenSpaces -> "          ";
 		print (The) _visibility_ceiling;
 	}
 
-!     if (sys_statusline_flag && width > 53) {
+	if (sys_statusline_flag) {
+		! Statusline should show time rather than score
+		if (_width > 28) {	
+			if (_width > 39) {
+				if (_width > 66) {
+					! Width is 67-, print "Time: 12:34 pm" with some space to the right
+					_PrintSpacesOrMoveBack(_width - 20);
+				} else {
+					! Width is 40-66, print "Time: 12:34 pm" at right edge
+					_PrintSpacesOrMoveBack(_width - 14);
+				}
+				@print_char ' ';
+				print (string) TIME__TX;
+			} else {
+				! Width is 29-, print "12:34 pm" at right edge
+				_PrintSpacesOrMoveBack(_width - 8);
+				@print_char ' ';
+			}
+!			@print_char ' ';
+			_h = status_field_1;
+			if (_h > 11) {
+				_pm = true;
+			}
+			if (_h > 12) {
+				_h = _h - 12;
+			}
+			if (_h<10)
+				@print_char ' ';
+			print _h;
+			@print_char ':';
+			if (status_field_2<10)
+				@print_char '0';
+			print status_field_2;
+			if (_pm)
+				print " pm";
+			else
+				print " am";
+		}
 !         _MoveCursor(1, posa);
 !         print (string) TIME__TX;
 !         LanguageTimeOfDay(sline1, sline2);
-!     }
-!     else {
-	if (_width > 24) {
-		if (_width < 30) {
-			! Width is 25-29, only print score as "0", no moves
-			_PrintSpacesOrMoveBack(_width - 3);
-			print status_field_1;
-		} else {
-			if (_width > 66) {
-				! Width is 67-, print "Score: 0 Moves: 0"
-				_PrintSpacesOrMoveBack(_width - 27);
-				print (string) SCORE__TX, status_field_1;
-				_PrintSpacesOrMoveBack(_width - 13);
-				print (string) MOVES__TX;
-			} else {
-				if (_width > 36) {
-					! Width is 37-66, print "Score: 0/0"
-					_PrintSpacesOrMoveBack(_width - 13);
-					print (string) SCORE__TX;
-				} else {
-					! Width is 29-35, print "0/0"
-					_PrintSpacesOrMoveBack(_width - 8);
-				}
+	} else {
+		! Statusline should show score rather than time
+		if (_width > 24) {
+			if (_width < 30) {
+				! Width is 25-29, only print score as "0", no moves
+				_PrintSpacesOrMoveBack(_width - 3);
 				print status_field_1;
-				@print_char '/';
+			} else {
+				if (_width > 66) {
+					! Width is 67-, print "Score: 0 Moves: 0"
+					_PrintSpacesOrMoveBack(_width - 27);
+					print (string) SCORE__TX, status_field_1;
+					_PrintSpacesOrMoveBack(_width - 13);
+					print (string) MOVES__TX;
+				} else {
+					if (_width > 36) {
+						! Width is 37-66, print "Score: 0/0"
+						_PrintSpacesOrMoveBack(_width - 13);
+						print (string) SCORE__TX;
+					} else {
+						! Width is 29-35, print "0/0"
+						_PrintSpacesOrMoveBack(_width - 8);
+					}
+					print status_field_1;
+					@print_char '/';
+				}
+				print status_field_2;
 			}
-			print status_field_2;
 		}
 	}
 	! Regardless of what kind of status line we have printed, print spaces to the end.

@@ -301,6 +301,7 @@ Constant HDR_SCREENHCHARS    = $20;
 Constant HDR_SCREENWCHARS    = $21;
 Constant MOVES__TX = "Moves: ";
 Constant SCORE__TX = "Score: ";
+Constant TIME__TX = "Time: ";
 #EndIf;
 
 #Default Story        0;
