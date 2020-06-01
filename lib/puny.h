@@ -226,7 +226,6 @@ Array TenSpaces -> "          ";
 					! Width is 40-66, print "Time: 12:34 pm" at right edge
 					_PrintSpacesOrMoveBack(_width - 14);
 				}
-				@print_char ' ';
 				print (string) TIME__TX;
 			} else {
 				! Width is 29-, print "12:34 pm" at right edge
@@ -262,22 +261,24 @@ Array TenSpaces -> "          ";
 			if (_width < 30) {
 				! Width is 25-29, only print score as "0", no moves
 				_PrintSpacesOrMoveBack(_width - 3);
+				@print_char ' ';
 				print status_field_1;
 			} else {
 				if (_width > 66) {
 					! Width is 67-, print "Score: 0 Moves: 0"
-					_PrintSpacesOrMoveBack(_width - 27);
+					_PrintSpacesOrMoveBack(_width - 28);
 					print (string) SCORE__TX, status_field_1;
-					_PrintSpacesOrMoveBack(_width - 13);
+					_PrintSpacesOrMoveBack(_width - 14);
 					print (string) MOVES__TX;
 				} else {
 					if (_width > 36) {
 						! Width is 37-66, print "Score: 0/0"
-						_PrintSpacesOrMoveBack(_width - 13);
+						_PrintSpacesOrMoveBack(_width - 15);
 						print (string) SCORE__TX;
 					} else {
 						! Width is 29-35, print "0/0"
-						_PrintSpacesOrMoveBack(_width - 8);
+						_PrintSpacesOrMoveBack(_width - 9);
+						@print_char ' ';
 					}
 					print status_field_1;
 					@print_char '/';
