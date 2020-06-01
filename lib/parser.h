@@ -1261,12 +1261,13 @@ Array guess_num_objects->5;
 	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
 		! try a direction instead
 		wn = verb_wordnum;
-		if(Directions.parse_name()) {
+		_i = Directions.parse_name();
+		if(_i) {
+			wn = wn + _i; ! number of words in direction command
 			action = ##Go;
 			noun = Directions;
 			inp1 = Directions;
-			PerformPreparedAction();
-			return -1;
+			jump parse_success;
 		}
 		! not a direction, check if beginning of a command
 		_noun = _CheckNoun(parse_array+2);
@@ -1416,7 +1417,7 @@ Array guess_num_objects->5;
 			jump parse_success;
 		}
 		if(RunLife(actor, ##Order)) rtrue;
-		print (The) actor, " has better things to do.";
+		print (The) actor, " has better things to do.^";
 		return num_words_parsed;
 	}
 
