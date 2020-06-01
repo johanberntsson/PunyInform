@@ -403,8 +403,8 @@ Array TenSpaces -> "          ";
 	return _printed_first_text;
 ];
 
-[ RunRoutines p_obj p_prop;
-	sw__var = action;
+[ RunRoutines p_obj p_prop p_switch;
+	if(p_switch == 0) sw__var = action; else sw__var = p_switch;
 	if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
 	return p_obj.p_prop();
 ];
@@ -583,12 +583,8 @@ Include "parser.h";
 	return GamePostRoutine();
 ];
 
-[ RunLife p_actor p_reason _old_action _result;
-	_old_action = action;
-	action = p_reason;
-    _result = RunRoutines(p_actor,life);
-    action = _old_action;
-    return _result;
+[ RunLife p_actor p_reason _result;
+    return RunRoutines(p_actor,life, p_reason);
 ];
 
 [ _SetDirectionIfIsFakeDir p_obj p_noun_no _idx;
