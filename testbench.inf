@@ -7,7 +7,7 @@ Statusline time;
 
 ! Uncomment to add optional features to PunyLib
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-Constant OPTIONAL_DEBUG_VERBS;
+!Constant OPTIONAL_DEBUG_VERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;

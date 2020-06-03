@@ -400,7 +400,9 @@
 					_j = 0;
 					@dec _name_array_len; ! This is needed for the loop. Do we need to undo it after?
 .next_word_in_name_prop;
-					if(_name_array-->_j == _current_word) jump success;
+					@loadw _name_array _j -> _result;
+					@je _result _current_word ?success;
+!					if(_name_array-->_j == _current_word) jump success;
 					@inc_chk _j _name_array_len ?~next_word_in_name_prop;
 #EndIf;
 					jump not_matched;

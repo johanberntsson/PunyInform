@@ -454,7 +454,7 @@ Object Directions
 #IfV5;
 		parse_name [_len _i _w _arr;
 #IfNot;
-		parse_name [_len _i _w;
+		parse_name [_len _i _w _w1 _w2;
 #EndIf;
 			_w = (parse_array+4*wn-2)-->0;
 			_len = abbr_direction_array-->0;
@@ -476,12 +476,17 @@ Object Directions
 			_i = 1;
 !			for(_i = 1 : _i <= _len : _i++) {
 .checkNextDir;
-				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
+				@loadw abbr_direction_array _i -> _w1;
+				@loadw full_direction_array _i -> _w2;
+				@je _w _w1 _w2 ?~doesnt_match;
+				
+!				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
 					selected_direction_index = _i;
 					selected_direction = direction_properties_array --> _i;
 					return 1;
-				}
+!				}
 !			}
+.doesnt_match;
 				@inc_chk _i _len ?~checkNextDir;
 			
 			! failure
