@@ -1223,6 +1223,8 @@ Array guess_num_objects->5;
 	if(_IsSentenceDivider(parse_array + 2))
 		return -1;
 
+	selected_direction_index = 0;
+	selected_direction = 0;
 	action = -1;
 	which_object->1 = 0;
 	actor = player;
