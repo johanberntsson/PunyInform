@@ -218,7 +218,7 @@ Verb 'wear'
 ];
 
 [ AskForSub;
-    if (noun == player) { <Inv>; rtrue; }
+    if (noun == player) <<Inv>>; 
     PrintMsg(MSG_ASKFOR_SUCCESS);
 ];
 
@@ -265,10 +265,7 @@ Verb 'wear'
 [ DropSub _p;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
 	_p = parent(player);
-	if(_p ~= location) {
-		PerformAction(##Insert, noun, _p); ! <Insert noun _p>; works if compiler version >= 6.34
-		rtrue;
-	}
+	if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
 	give noun moved;
 	if(AfterRoutines() == 1) rtrue;
@@ -493,7 +490,7 @@ Verb 'wear'
 
 [ ShowSub;
     if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
-    if (second == player) { <Examine noun>; rtrue; }
+    if (second == player) <<Examine noun>>;
     if (RunLife(second, ##Show) ~= 0) rfalse;
     PrintMsg(MSG_SHOW_SUCCESS);
 ];
@@ -564,8 +561,7 @@ Verb 'wear'
     if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
     if (second has supporter) { PutOnSub(); rtrue; }
     !if (second == d_obj) <<Drop noun>>;
-    ! doesn't work in z3: <<Insert noun second>>;
-	PerformAction(##Insert, noun, second); ! <Insert noun second>; works if compiler version >= 6.34
+	<Insert noun second>;
 ];
 
 [ TurnSub;
@@ -714,7 +710,7 @@ Verb 'yes' 'y//'
 ];
 
 [ EmptySub;
-	PerformAction(##EmptyT, noun, FAKE_D_OBJ); ! 	<EmptyT noun FAKE_D_OBJ>; works in Inform 6.34+
+	<EmptyT noun FAKE_D_OBJ>;
 ];
 
 [ EmptyTSub _i _j _k _flag _recipient;
@@ -750,7 +746,7 @@ Verb 'yes' 'y//'
 		    _GrabIfNotHeld(_i);
 			<Drop _i>;
 		} else
-			PerformAction(##Transfer, _i, _recipient); ! <Transfer _i _recipient>; works if compiler version >= 6.34
+			<Transfer _i _recipient>;
 		_i = _j;
 	}
 ];
@@ -1328,7 +1324,7 @@ Global scope_cnt;
 	print "see ";
 ];
 
-[ Look _obj _ceil _container_1 _container_2 _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level;
+[ Look _obj _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level;
 	@new_line;
 	if(darkness) 
 		print "It is pitch dark here!^";

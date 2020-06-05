@@ -1,13 +1,14 @@
 !% -~S
+!% $OMIT_UNUSED_ROUTINES=1
 
-! Library of Horror - a sample game which uses PunyInform
+! Testbench - a platform for trying things out in PunyInform
 
 ! uncomment to show time instead of score/turns
 Statusline time;
 
 ! Uncomment to add optional features to PunyLib
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-!Constant OPTIONAL_DEBUG_VERBS;
+Constant OPTIONAL_DEBUG_VERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
@@ -159,6 +160,7 @@ Constant MSG_AREYOUSUREQUIT 1001;
 ];
 
 Include "puny.h";
+
 #Endif;
 
 Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
@@ -265,7 +267,10 @@ Object Toilet "The toilet"
 			}
 			rtrue;
 		],
-		w_to ToiletDoor;
+		w_to ToiletDoor,
+		add_to_scope [;
+			PlaceInScope(ToiletDoor);
+		];
 
 Object -> ToiletDoor "toilet door"
 	with 
@@ -533,14 +538,7 @@ Object -> John "John"
 			if(action==##Take) "~I don't need more possessions.~";
 			"John ignores your comment.";
 		Show, Give:
-			! TODO <<>> doesn't work if(noun==PinkBook) <<Ask self PinkBook>>;
-			if(noun==PinkBook) { 
-#Ifdef USEINFORM;
-				<<Ask self PinkBook>>; rtrue;
-#IfNot;
-				PerformAction(##Ask, self, PinkBook); rtrue;
-#EndIf;				
-			}
+			if(noun==PinkBook) <<Ask self PinkBook>>;
 			"John doesn't appear to be interested.";
 		Ask, Tell, Answer:
 			w1=0;
@@ -639,8 +637,6 @@ Object  Beard "John's beard"
             default: "Huh?";
         ],
   has   proper concealed;
-
-Array dummy_buffer -> 5;
 
 Array quote_1 --> 5 35
 "When I die, I want to go peacefully"

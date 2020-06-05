@@ -450,7 +450,7 @@ Object Directions
 			else
 				print "unknown direction"; 
 			rtrue; 
-		], !TODO: doesn't work?
+		],
 #IfV5;
 		parse_name [_len _i _w _arr;
 #IfNot;

@@ -1205,7 +1205,7 @@ Array guess_num_objects->5;
 	! the while(true) loop is only exited by return statements
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _parse_pointer _noun _score _best_score _best_pattern;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _noun _score _best_score _best_pattern;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")

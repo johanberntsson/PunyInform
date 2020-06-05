@@ -186,7 +186,7 @@ Array TenSpaces -> "          ";
 
 Constant ONE_SPACE_STRING = " ";
 
-[ DrawStatusLine _width _visibility_ceiling _pos _h _pm;
+[ DrawStatusLine _width _visibility_ceiling _h _pm;
 	! For wide screens (67+ columns):
 	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right.
 	! * Room names up to 39 characters are never truncated.
@@ -316,7 +316,7 @@ Constant ONE_SPACE_STRING = " ";
             if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
                 _ks = keep_silent;
                 Keep_silent = 1;
-                PerformAction(##Insert, _obj, SACK_OBJECT);
+                <Insert _obj SACK_OBJECT>;
                 keep_silent = _ks;
                 if (keep_silent) return;
                 if (_obj in SACK_OBJECT) {
@@ -590,7 +590,7 @@ Include "parser.h";
 	return GamePostRoutine();
 ];
 
-[ RunLife p_actor p_reason _result;
+[ RunLife p_actor p_reason;
     return RunRoutines(p_actor,life, p_reason);
 ];
 
@@ -696,66 +696,66 @@ Include "parser.h";
 #IfV3;
 ! These routines are implemented by Veneer, but the default implementations give compile errors for z3
 
-[ Print__PName prop p size cla i;
-	 if (prop & $c000)
-	 {   cla = #classes_table-->(prop & $ff);
-		 print (name) cla, "::";
-		 if ((prop & $8000) == 0) prop = (prop & $3f00)/$100;
-		 else
-		 {   prop = (prop & $7f00)/$100;
-			 i = cla.3;
-			 while ((i-->0 ~= 0) && (prop>0))
-			 {   i = i + i->2 + 3;
-				 prop--;
-			 }
-			 prop = (i-->0) & $7fff;
-		 }
-	 }
-	 p = #identifiers_table;
-	 size = p-->0;
-	 if (prop<=0 || prop>=size || p-->prop==0)
-		 print "<number ", prop, ">";
-	 else print (string) p-->prop;
- ];
+! [ Print__PName prop p size cla i;
+	 ! if (prop & $c000)
+	 ! {   cla = #classes_table-->(prop & $ff);
+		 ! print (name) cla, "::";
+		 ! if ((prop & $8000) == 0) prop = (prop & $3f00)/$100;
+		 ! else
+		 ! {   prop = (prop & $7f00)/$100;
+			 ! i = cla.3;
+			 ! while ((i-->0 ~= 0) && (prop>0))
+			 ! {   i = i + i->2 + 3;
+				 ! prop--;
+			 ! }
+			 ! prop = (i-->0) & $7fff;
+		 ! }
+	 ! }
+	 ! p = #identifiers_table;
+	 ! size = p-->0;
+	 ! if (prop<=0 || prop>=size || p-->prop==0)
+		 ! print "<number ", prop, ">";
+	 ! else print (string) p-->prop;
+ ! ];
 
-[ FindIndivPropValue p_obj p_property _x _prop_id;
-	_x = p_obj.3;
-	if (_x == 0) rfalse;
-	!  print "Table for ", (object) obj, " is at ", (hex) x, "^";
-	while (true) {
-		_prop_id = _x-->0;
-		if(_prop_id == 0) break;
-		if(_prop_id & 32767 == p_property) break;
-		! print (hex) x-->0, " (", (property) x-->0, ")  length ", x->2, ": ";
-		!       for (n = 0: n< (x->2)/2: n++)
-		!           print (hex) (x+3)-->n, " ";
-		!       @new_line;
-		_x = _x + _x->2 + 3;
-	}
-	return _x;
-];
+! [ FindIndivPropValue p_obj p_property _x _prop_id;
+	! _x = p_obj.3;
+	! if (_x == 0) rfalse;
+	! !  print "Table for ", (object) obj, " is at ", (hex) x, "^";
+	! while (true) {
+		! _prop_id = _x-->0;
+		! if(_prop_id == 0) break;
+		! if(_prop_id & 32767 == p_property) break;
+		! ! print (hex) x-->0, " (", (property) x-->0, ")  length ", x->2, ": ";
+		! !       for (n = 0: n< (x->2)/2: n++)
+		! !           print (hex) (x+3)-->n, " ";
+		! !       @new_line;
+		! _x = _x + _x->2 + 3;
+	! }
+	! return _x;
+! ];
 
-[ RV__Pr p_object p_property _value _address;
-	if(p_object == 0) {
-		print "*Error: Tried to read property ";
-		Print__PName(p_property);
-		" of nothing.*";
-	}
-	if(p_object provides p_property) {
-		if(p_property >= INDIV_PROP_START) {
-			_address = FindIndivPropValue(p_object, p_property);
-			return (_address + 3)-->0;
-		}
-		@get_prop p_object p_property -> _value;
-		return _value;
-	}
-	print "[Error: Tried to read undefined property ";
-	Print__PName(p_property);
-	print " of ";
-	PrintShortName(p_object);
-	print "]";
-	rfalse;
-];
+! [ RV__Pr p_object p_property _value _address;
+	! if(p_object == 0) {
+		! print "*Error: Tried to read property ";
+		! Print__PName(p_property);
+		! " of nothing.*";
+	! }
+	! if(p_object provides p_property) {
+		! if(p_property >= INDIV_PROP_START) {
+			! _address = FindIndivPropValue(p_object, p_property);
+			! return (_address + 3)-->0;
+		! }
+		! @get_prop p_object p_property -> _value;
+		! return _value;
+	! }
+	! print "[Error: Tried to read undefined property ";
+	! Print__PName(p_property);
+	! print " of ";
+	! PrintShortName(p_object);
+	! print "]";
+	! rfalse;
+! ];
 
 !      CA__Pr:  call, that is, print-or-run-or-read, a property:
 !                      this exactly implements obj..prop(...).  Note that
