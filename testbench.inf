@@ -646,7 +646,7 @@ Array quote_1 --> 5 35
 "               -- Jack Handey";
 
 [Initialise;
-	SetTime(65, 5); ! 1:05 am, each turn 5 minutes
+	SetTime(9*60+30, 5); ! 9:30 am, each turn 5 minutes
 	location = Library;
 !	PlayerTo(LargeBox);
 !	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";

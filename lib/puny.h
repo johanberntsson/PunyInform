@@ -223,22 +223,19 @@ Constant ONE_SPACE_STRING = " ";
 
 	if (sys_statusline_flag) {
 		! Statusline should show time rather than score
-		if (_width > 28) {	
+		if (_width > 29) {	
 			if (_width > 39) {
 				if (_width > 66) {
 					! Width is 67-, print "Time: 12:34 pm" with some space to the right
 					_PrintSpacesOrMoveBack(20, TIME__TX);
 				} else {
 					! Width is 40-66, print "Time: 12:34 pm" at right edge
-					_PrintSpacesOrMoveBack(14, TIME__TX);
+					_PrintSpacesOrMoveBack(15, TIME__TX);
 				}
-!				print (string) TIME__TX;
 			} else {
-				! Width is 29-, print "12:34 pm" at right edge
-				_PrintSpacesOrMoveBack(8, ONE_SPACE_STRING);
-!				@print_char ' ';
+				! Width is 30-, print "12:34 pm" at right edge
+				_PrintSpacesOrMoveBack(9, ONE_SPACE_STRING);
 			}
-!			@print_char ' ';
 			_h = status_field_1;
 			if (_h > 11) {
 				_pm = true;
@@ -246,8 +243,8 @@ Constant ONE_SPACE_STRING = " ";
 			if (_h > 12) {
 				_h = _h - 12;
 			}
-			if (_h<10)
-				@print_char ' ';
+!			if (_h<10)
+!				@print_char ' ';
 			print _h;
 			@print_char ':';
 			if (status_field_2<10)
@@ -258,34 +255,26 @@ Constant ONE_SPACE_STRING = " ";
 			else
 				print " am";
 		}
-!         _MoveCursor(1, posa);
-!         print (string) TIME__TX;
-!         LanguageTimeOfDay(sline1, sline2);
 	} else {
 		! Statusline should show score rather than time
 		if (_width > 24) {
 			if (_width < 30) {
 				! Width is 25-29, only print score as "0", no moves
 				_PrintSpacesOrMoveBack(3, ONE_SPACE_STRING);
-!				@print_char ' ';
 				print status_field_1;
 			} else {
 				if (_width > 66) {
 					! Width is 67-, print "Score: 0 Moves: 0"
 					_PrintSpacesOrMoveBack(28, SCORE__TX);
-!					print (string) SCORE__TX, status_field_1;
 					print status_field_1;
 					_PrintSpacesOrMoveBack(14, MOVES__TX);
-!					print (string) MOVES__TX;
 				} else {
 					if (_width > 36) {
 						! Width is 37-66, print "Score: 0/0"
 						_PrintSpacesOrMoveBack(15, SCORE__TX);
-!						print (string) SCORE__TX;
 					} else {
 						! Width is 29-35, print "0/0"
 						_PrintSpacesOrMoveBack(9, ONE_SPACE_STRING);
-!						@print_char ' ';
 					}
 					print status_field_1;
 					@print_char '/';
