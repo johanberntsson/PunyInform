@@ -7,12 +7,12 @@
 Statusline time;
 
 ! Uncomment to add optional features to PunyLib
-!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_DEBUG_VERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
-!Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_FULL_DIRECTIONS;
 
 !Constant DEBUG_TIMER; ! requires special Ozmoo
 !Constant DEBUG_SCOPE;

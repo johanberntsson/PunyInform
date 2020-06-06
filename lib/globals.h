@@ -203,19 +203,19 @@ Constant FAKE_U_OBJ = 10009;
 Constant FAKE_D_OBJ = 10010;
 Constant FAKE_IN_OBJ = 10011;
 Constant FAKE_OUT_OBJ = 10012;
-Array abbr_direction_array table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' ',,' ',,';
-Array full_direction_array table 'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
-Array direction_properties_array table n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
-Array direction_name_array table "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
+Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' ',,' ',,';
+Array full_direction_array static table 'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
+Array direction_properties_array static table n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
+Array direction_name_array static table "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
 #IfNot;
 Constant FAKE_U_OBJ = 10005;
 Constant FAKE_D_OBJ = 10006;
 Constant FAKE_IN_OBJ = 10007;
 Constant FAKE_OUT_OBJ = 10008;
-Array abbr_direction_array table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' ',,' ',,';
-Array full_direction_array table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
-Array direction_properties_array table n_to s_to e_to w_to u_to d_to in_to out_to;
-Array direction_name_array table "north" "south" "east" "west" "up" "down" "in" "out";
+Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' ',,' ',,';
+Array full_direction_array static table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
+Array direction_properties_array static table n_to s_to e_to w_to u_to d_to in_to out_to;
+Array direction_name_array static table "north" "south" "east" "west" "up" "down" "in" "out";
 #EndIf;
 
 ! ! Property name; ! 'name' seems to be hardcoded in the Inform compiler
@@ -240,7 +240,7 @@ Array direction_name_array table "north" "south" "east" "west" "up" "down" "in" 
 ! Property time_left;
 
 #IfDef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-Array LanguageNumbers table
+Array LanguageNumbers static table
     'one' 1 'two' 2 'three' 3 'four' 4 'five' 5
     'six' 6 'seven' 7 'eight' 8 'nine' 9 'ten' 10
     'eleven' 11 'twelve' 12 'thirteen' 13 'fourteen' 14 'fifteen' 15
