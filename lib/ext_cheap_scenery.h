@@ -46,77 +46,86 @@
 !
 ! Object RiverBank "River Bank"
 !   with
-!     description "The river is quite wide here. The sun reflects in the blue water, the birds are 
-!       flying high up above.",
-!     cheap_scenery
-!       'blue' 'water' SCN_WATER
-!       'bird' 'birds' "They seem so careless."
-!       1 'sun' SCN_SUN,
-!    has light;
+!	 description "The river is quite wide here. The sun reflects in the blue water, the birds are 
+!      flying high up above.",
+!	 cheap_scenery
+!      'blue' 'water' SCN_WATER
+!      'bird' 'birds' "They seem so careless."
+!      1 'sun' SCN_SUN,
+!   has light;
 
 
 System_file;
 
 Object CheapScenery "object"
-    with
-        article "an",
-        number 0,
-        parse_name [ w1 w2 i sw1 sw2 len;
-            w1 = NextWordStopped();
-            w2 = NextWordStopped();
-            i = 0;
-            len = location.#cheap_scenery / 2;
-            #ifdef DEBUG;
-            if(len % 3 > 0)
-                "ERROR: cheap_scenery property of current location has incorrect # of values!^";
-            while(i < len) {
-                sw1 = location.&cheap_scenery-->(i+2);
-                if(~~(sw1 ofclass String or Routine))
-                    "ERROR: Element ",i+2," in cheap_scenery property of current location is not a string or routine!^",
-                        "Element: ", (name) sw1, "^";
-                i = i + 3;
-            }
-            i = 0;
-            #endif;
-            while(i < len) {
-                sw1 = location.&cheap_scenery-->i;
-                sw2 = location.&cheap_scenery-->(i+1);
-                if(w1 == sw1 && w2 == sw2) {
-                    self.number = i;
-                    return 2;
-                }
-                if(w1 == sw1 or sw2) {
-                    self.number = i;
-                    return 1;
-                }
-                i = i + 3;
-            }
-            ! It would make sense to return 0 here, but property
-            ! routines return 0 by default anyway.
-        ],
-        description [k;
-            k = location.&cheap_scenery-->(self.number + 2);
-            if(k ofclass Routine) {
-                k();
-                rtrue;
-            }
-            print_ret (string) k;
-        ],
-        before [;
-            Examine, Search:
-                rfalse;
-            default:
-                #ifdef SceneryReply;
-                if(SceneryReply ofclass string)
-                    print_ret (string) SceneryReply;
-                if(SceneryReply())
-                    rtrue;
-                #endif;
-                "Get a grip on yourself.";
-        ],
+	with
+		article "an",
+		number 0,
+		parse_name [ w1 w2 i sw1 sw2 len;
+			w1 = NextWordStopped();
+			w2 = NextWordStopped();
+			i = 0;
+			len = location.#cheap_scenery / 2;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+			if(len % 3 > 0)
+#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+				"ERROR: cheap_scenery property of current location has incorrect # of values!^";
+#IfNot;
+				"cheap_scenery error 1!^";
+#EndIf;
+			while(i < len) {
+				sw1 = location.&cheap_scenery-->(i+2);
+				if(~~(sw1 ofclass String or Routine))
+#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+					"ERROR: Element ",i+2," in cheap_scenery property of current location is not a string or routine!^",
+						"Element: ", (name) sw1, "^";
+#IfNot;
+					"cheap_scenery error 2!^";
+#EndIf;
+
+				i = i + 3;
+			}
+			i = 0;
+#endif;
+			while(i < len) {
+				sw1 = location.&cheap_scenery-->i;
+				sw2 = location.&cheap_scenery-->(i+1);
+				if(w1 == sw1 && w2 == sw2) {
+					self.number = i;
+					return 2;
+				}
+				if(w1 == sw1 or sw2) {
+					self.number = i;
+					return 1;
+				}
+				i = i + 3;
+			}
+			! It would make sense to return 0 here, but property
+			! routines return 0 by default anyway.
+		],
+		description [k;
+			k = location.&cheap_scenery-->(self.number + 2);
+			if(k ofclass Routine) {
+				k();
+				rtrue;
+			}
+			print_ret (string) k;
+		],
+		before [;
+			Examine, Search:
+				rfalse;
+			default:
+				#ifdef SceneryReply;
+				if(SceneryReply ofclass string)
+					print_ret (string) SceneryReply;
+				if(SceneryReply())
+					rtrue;
+				#endif;
+				"Get a grip on yourself.";
+		],
 		found_in [;
 			if(location provides cheap_scenery) rtrue;
 		],
-    has concealed scenery;
+	has concealed scenery;
 
 	
