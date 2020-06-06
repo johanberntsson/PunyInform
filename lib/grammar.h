@@ -340,7 +340,9 @@ Verb 'wear'
 [ GoSub _prop;
 	! when called Directions have been set properly
 	_prop = selected_direction;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(_prop == 0) return RuntimeError(ERR_INVALID_DIR_PROP);
+#EndIf;
 
 	GoDir(_prop);
 ];

@@ -8,7 +8,9 @@
 		print "Adding ",(object) p_obj," (", p_obj,") to scope. Action = ", action, "^";
 #EndIf;
 		if(scope_objects >= MAX_SCOPE) {
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 			RunTimeError(ERR_SCOPE_FULL);
+#EndIf;
 			return;
 		}			
 
@@ -137,7 +139,9 @@
 #EndIf;
 	! add it
 	if(scope_objects >= MAX_SCOPE) {
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		RunTimeError(ERR_SCOPE_FULL);
+#EndIf;
 		return;
 	}			
 	scope-->(scope_objects++) = p_obj;

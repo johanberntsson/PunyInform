@@ -421,10 +421,12 @@ Constant ONE_SPACE_STRING = " ";
 	_stop = top_object + 1;
 	for(_i = Directions : _i < _stop : _i++) {
 		if(_i.&found_in) {
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 			if(_k >= MAX_FLOATING_OBJECTS) {
 				RunTimeError(ERR_TOO_MANY_FLOATING);
 				rtrue;
 			}
+#EndIf;
 			floating_objects-->(_k++) = _i;
 		}
 	}
@@ -634,10 +636,16 @@ Include "parser.h";
 	for (_i=0 : _i<active_timers : _i++)
 		if (the_timers-->_i == p_array_val) rfalse;
 	_i = active_timers++;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if (_i >= MAX_TIMERS) RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
+#EndIf;
 	if (p_timer > 0) {
-		if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
-		else p_obj.time_left = p_timer;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+		if (p_obj.&time_left == 0) { 
+			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; 
+		} else
+#EndIf;
+			p_obj.time_left = p_timer;
 	}
 	the_timers-->_i = p_array_val;
 ];
@@ -654,8 +662,12 @@ Include "parser.h";
 	rfalse;
 .FoundTSlot4;
 	if (p_obj == p_array_val) { ! This is a timer, not a daemon
-		if (p_obj.&time_left == 0) { RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; }
-		else p_obj.time_left = 0;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+		if (p_obj.&time_left == 0) { 
+			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; 
+		} else 
+#EndIf;
+			p_obj.time_left = 0;
 	}
 	if(_i <= current_timer)
 		current_timer--;
@@ -861,7 +873,7 @@ Include "parser.h";
 
 #EndIf;
 
-#IfnDef RUNTIME_ERRORS;
+#IfTrue RUNTIME_ERRORS < RTE_VERBOSE;
 [RT__Err err_no par1 par2;
 	print "Inform error: ";
 	if(err_no ofclass String)

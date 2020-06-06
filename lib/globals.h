@@ -421,9 +421,15 @@ Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an ex
 Array temp_player_input_array->(MAX_INPUT_CHARS + 3);
 Array temp_parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); 
 
-#IfDef DEBUG;
+Constant RTE_MINIMUM = 0;
+Constant RTE_NORMAL  = 1;
+Constant RTE_VERBOSE = 2;
+
 #IfnDef RUNTIME_ERRORS;
-Constant RUNTIME_ERRORS;
+#IfDef DEBUG;
+Constant RUNTIME_ERRORS RTE_VERBOSE;
+#IfNot;
+Constant RUNTIME_ERRORS RTE_NORMAL;
 #EndIf;
 #EndIf;
 

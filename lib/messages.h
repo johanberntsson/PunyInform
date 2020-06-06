@@ -542,7 +542,7 @@ Constant ERR_TOO_MANY_FLOATING 6;
 	if(p_err ofclass string)
 		print (string) p_err;
 	else {
-#IfDef RUNTIME_ERRORS;
+#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
 		switch(p_err) {
 		ERR_TOO_MANY_TIMERS_DAEMONS:
 			print "Too many timers/daemons";
