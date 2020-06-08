@@ -67,22 +67,28 @@ Include "scope.h";
 Include "grammar.h";
 
 ! ######################### Helper routines
-[ UnsignedCompare x y u v;
-	if (x == y) return 0;
-	if (x < 0 && y >= 0) return 1;
-	if (x >= 0 && y < 0) return -1;
-	u = x&~WORD_HIGHBIT; v= y&~WORD_HIGHBIT;
-	if (u > v) return 1;
+[ UnsignedCompare p_x p_y _u _v;
+	if (p_x == p_y) return 0;
+	if (p_x < 0 && p_y >= 0) return 1;
+	if (p_x >= 0 && p_y < 0) return -1;
+	_u = p_x&~WORD_HIGHBIT; _v = p_y&~WORD_HIGHBIT;
+	if (_u > _v) return 1;
 	return -1;
 ];
 
-[ ObjectScopedBySomething item i j k l m;
-	i = item;
-	objectloop (j .& add_to_scope) {
-		l = j.&add_to_scope;
-		k = (j.#add_to_scope)/WORDSIZE;
-		if (l-->0 ofclass Routine) continue;
-		for (m=0 : m<k : m++) if (l-->m == i) return j;
+[ ObjectScopedBySomething p_item _i _j _k _l _m;
+	_i = p_item;
+	objectloop (_j .& add_to_scope) {
+		_l = _j.&add_to_scope;
+		_k = (_j.#add_to_scope)/WORDSIZE;
+		if (_l-->0 ofclass Routine) continue;
+#IfV5;
+		@scan_table _i _l _k -> _m ?~failed;
+		return _j;
+.failed;
+#IfNot;
+		for (_m=0 : _m<_k : _m++) if (_l-->_m == _i) return _j;
+#EndIf;
 	}
 	rfalse;
 ];
