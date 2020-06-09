@@ -76,23 +76,6 @@ Include "grammar.h";
 	return -1;
 ];
 
-[ ObjectScopedBySomething p_item _i _j _k _l _m;
-	_i = p_item;
-	objectloop (_j .& add_to_scope) {
-		_l = _j.&add_to_scope;
-		_k = (_j.#add_to_scope)/WORDSIZE;
-		if (_l-->0 ofclass Routine) continue;
-#IfV5;
-		@scan_table _i _l _k -> _m ?~failed;
-		return _j;
-.failed;
-#IfNot;
-		for (_m=0 : _m<_k : _m++) if (_l-->_m == _i) return _j;
-#EndIf;
-	}
-	rfalse;
-];
-
 [ IndirectlyContains p_o1 p_o2;
 	! Does o1 indirectly contain o2?  (Same as testing if o1 is one of the ancestors of o2.)
 	while (p_o2 ~= 0) {

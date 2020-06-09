@@ -357,7 +357,6 @@ Object Library "The Library"
 		description "You are in an old and deserted library. There is an exit leading south and a toilet to the east.",
 		s_to CarPark,
 		e_to ToiletDoor,
-		!e_to Toilet,
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** Library.after^"; ],
 		before [; print "*** Library.before^"; ],

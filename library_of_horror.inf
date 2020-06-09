@@ -10,6 +10,7 @@
 !Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_FULL_SCORE;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 
 Constant Story      "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game^";
@@ -84,23 +85,22 @@ Object -> Frank "Frank the Robot"
 		],
 		before [;
 			SwitchOff:
-				"An bright light arc juts out from near the button and the electric shock makes you jump back.";
+				"A bright light arc juts out from near the button and the electric shock makes you jump back.";
 		],
 		daemon [ _my_loc _i _dir_prop _dirs ;
-			default:
-				! Franks wants to follow the player around, but can't go up/down/in/out
-				_my_loc = parent(self);
-				if(location ~= _my_loc){
-					_dirs = direction_properties_array-->0;
-					for(_i=1 : _i <= _dirs : _i++) {
-						_dir_prop = direction_properties_array-->_i;
-						if(_dir_prop ~= u_to or d_to or in_to or out_to &&
-							_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
-							move self to location;
-							"^Frank enters from the ", (string) opposite_directions-->_i, ".";
-						}
+			! Frank wants to follow the player around, but can't go up/down/in/out
+			_my_loc = parent(self);
+			if(location ~= _my_loc){
+				_dirs = direction_properties_array-->0;
+				for(_i=1 : _i <= _dirs : _i++) {
+					_dir_prop = direction_properties_array-->_i;
+					if(_dir_prop ~= u_to or d_to or in_to or out_to &&
+						_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
+						move self to location;
+						"^Frank enters from the ", (string) opposite_directions-->_i, ".";
 					}
 				}
+			}
 		],
 		description "Frank has a rather dreary look.",
 	has animate proper switchable;

@@ -61,55 +61,56 @@ Object CheapScenery "object"
 	with
 		article "an",
 		number 0,
-		parse_name [ w1 w2 i sw1 sw2 len;
-			w1 = NextWordStopped();
-			w2 = NextWordStopped();
-			i = 0;
-			len = location.#cheap_scenery / 2;
+		parse_name [ _w1 _w2 _i _sw1 _sw2 _len;
+			_w1 = NextWordStopped();
+			_w2 = NextWordStopped();
+			_i = 0;
+			_len = location.#cheap_scenery / 2;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-			if(len % 3 > 0)
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+			if(_len % 3 > 0)
 				"ERROR: cheap_scenery property of current location has incorrect # of values!^";
 #IfNot;
+			if(_len % 3 > 0)
 				"cheap_scenery error 1!^";
 #EndIf;
-			while(i < len) {
-				sw1 = location.&cheap_scenery-->(i+2);
-				if(~~(sw1 ofclass String or Routine))
+			while(_i < _len) {
+				_sw1 = location.&cheap_scenery-->(_i+2);
+				if(~~(_sw1 ofclass String or Routine))
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
-					"ERROR: Element ",i+2," in cheap_scenery property of current location is not a string or routine!^",
-						"Element: ", (name) sw1, "^";
+					"ERROR: Element ", _i+2, " in cheap_scenery property of current location is not a string or routine!^",
+						"Element: ", (name) _sw1, "^";
 #IfNot;
 					"cheap_scenery error 2!^";
 #EndIf;
 
-				i = i + 3;
+				_i = _i + 3;
 			}
-			i = 0;
+			_i = 0;
 #endif;
-			while(i < len) {
-				sw1 = location.&cheap_scenery-->i;
-				sw2 = location.&cheap_scenery-->(i+1);
-				if(w1 == sw1 && w2 == sw2) {
-					self.number = i;
+			while(_i < _len) {
+				_sw1 = location.&cheap_scenery-->_i;
+				_sw2 = location.&cheap_scenery-->(_i+1);
+				if(_w1 == _sw1 && _w2 == _sw2) {
+					self.number = _i;
 					return 2;
 				}
-				if(w1 == sw1 or sw2) {
-					self.number = i;
+				if(_w1 == _sw1 or _sw2) {
+					self.number = _i;
 					return 1;
 				}
-				i = i + 3;
+				_i = _i + 3;
 			}
 			! It would make sense to return 0 here, but property
 			! routines return 0 by default anyway.
 		],
-		description [k;
-			k = location.&cheap_scenery-->(self.number + 2);
-			if(k ofclass Routine) {
-				k();
+		description [ _k;
+			_k = location.&cheap_scenery-->(self.number + 2);
+			if(_k ofclass Routine) {
+				_k();
 				rtrue;
 			}
-			print_ret (string) k;
+			print_ret (string) _k;
 		],
 		before [;
 			Examine, Search:

@@ -1160,6 +1160,9 @@ Verb meta 'scope'
     *                                           -> Scope
     * noun                                      -> Scope;
 
+Verb meta 'purloin'
+	* noun										-> Purloin;
+
 Global scope_cnt;
 [ PronounsSub;
 	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
@@ -1187,6 +1190,11 @@ Global scope_cnt;
 	scope_cnt = 1;
 	LoopOverScope(_ScopeSubHelper, noun);
 	if(scope_cnt == 0) "Nothing in scope.^";
+];
+
+[ PurloinSub;
+	move noun to player;
+	"Purloined.";
 ];
 
 #EndIf;

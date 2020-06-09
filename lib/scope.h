@@ -185,6 +185,25 @@
 	rfalse;
 ];
 
+[ _ObjectScopedBySomething p_item _i _j _k _l _m;
+	_i = p_item;
+	objectloop (_j .& add_to_scope) {
+		_l = _j.&add_to_scope;
+		if (_l-->0 ofclass Routine) continue;
+		_k = (_j.#add_to_scope)/WORDSIZE;
+#IfV5;
+		@scan_table _i _l _k -> _m ?~failed;
+		return _j;
+.failed;
+#IfNot;
+		for (_m=0 : _m<_k : _m++) if (_l-->_m == _i) return _j;
+#EndIf;
+	}
+	rfalse;
+];
+
+
+
 [ ObjectIsInvisible p_item p_flag;
 	return ObjectIsUntouchable(p_item, p_flag, true);
 ];
@@ -200,7 +219,7 @@
 	_ancestor = CommonAncestor(player, p_item);
 	if(_ancestor == 0) {
 		_ancestor = p_item;
-		while (_ancestor && (_i = ObjectScopedBySomething(_ancestor)) == 0)
+		while (_ancestor && (_i = _ObjectScopedBySomething(_ancestor)) == 0)
 			_ancestor = parent(_ancestor);
 		if(_i ~= 0) {
 			if(ObjectIsUntouchable(_i, p_flag)) return; ! An item immediately added to scope
