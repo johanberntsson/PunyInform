@@ -57,6 +57,15 @@
 
 System_file;
 
+#IfnDef RUNTIME_ERRORS;
+Constant RUNTIME_ERRORS = 2;
+#EndIf;
+#IfnDef RTE_MINIMUM;
+Constant RTE_MINIMUM = 0;
+Constant RTE_NORMAL = 1;
+Constant RTE_VERBOSE = 2;
+#EndIf;
+
 Object CheapScenery "object"
 	with
 		article "an",

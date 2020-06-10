@@ -1167,6 +1167,9 @@ Verb meta 'tree'
 	*											-> Tree
 	* noun										-> Tree;
 
+Verb meta 'gonear'
+	* noun										-> GoNear;
+
 Global scope_cnt;
 [ PronounsSub;
 	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
@@ -1225,6 +1228,14 @@ Global scope_cnt;
 		if(child(_x)) TreeSubHelper(_x, p_indent + 1);
 	}
 ];
+
+[ GoNearSub _obj;
+	_obj = noun;
+	while(parent(_obj) ~= 0) _obj = parent(_obj);
+	PlayerTo(_obj);
+	<Look>;
+];
+
 
 #EndIf;
 

@@ -1078,7 +1078,7 @@ Array guess_num_objects->5;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 #IfDef OPTIONAL_DEBUG_VERBS;
-	action_debug = (action == ##Scope or ##Purloin or ##Tree);
+	action_debug = (action == ##Scope or ##Purloin or ##Tree or ##GoNear);
 #EndIf;
 
 	while(true) {
