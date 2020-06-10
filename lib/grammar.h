@@ -1163,6 +1163,10 @@ Verb meta 'scope'
 Verb meta 'purloin'
 	* noun										-> Purloin;
 
+Verb meta 'tree'
+	*											-> Tree
+	* noun										-> Tree;
+
 Global scope_cnt;
 [ PronounsSub;
 	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
@@ -1195,6 +1199,31 @@ Global scope_cnt;
 [ PurloinSub;
 	move noun to player;
 	"Purloined.";
+];
+
+[ TreeSub _obj _p;
+	_obj = noun;
+	if(_obj==0) _obj = location;
+	print (name) _obj;
+	_p = parent(_obj);
+	if(_p) {
+		print " (";
+		if(_p has supporter)
+			@print_char 'o';
+		else 
+			@print_char 'i';
+		print "n ", (name) _p, ")";
+	}
+	@new_line;
+	TreeSubHelper(_obj, 1);
+];
+
+[TreeSubHelper p_parent p_indent _x _i;
+	objectloop(_x in p_parent) {
+		for(_i = 0 : _i < p_indent : _i++) print "  ";
+		print (name) _x, "^";
+		if(child(_x)) TreeSubHelper(_x, p_indent + 1);
+	}
 ];
 
 #EndIf;
