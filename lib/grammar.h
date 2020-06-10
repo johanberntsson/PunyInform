@@ -1170,6 +1170,22 @@ Verb meta 'tree'
 Verb meta 'gonear'
 	* noun										-> GoNear;
 
+Verb meta 'routines' 'messages'
+    *                                           -> RoutinesOn
+    * 'on'                                      -> RoutinesOn
+    * 'off'                                     -> RoutinesOff;
+
+Verb meta 'actions'
+    *                                           -> ActionsOn
+    * 'on'                                      -> ActionsOn
+    * 'off'                                     -> ActionsOff;
+
+Verb meta 'timers' 'daemons'
+    *                                           -> TimersOn
+    * 'on'                                      -> TimersOn
+    * 'off'                                     -> TimersOff;
+
+
 Global scope_cnt;
 [ PronounsSub;
 	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
@@ -1235,6 +1251,18 @@ Global scope_cnt;
 	PlayerTo(_obj);
 	<Look>;
 ];
+
+[ RoutinesOnSub;  debug_flag = debug_flag | 1;  "[Message listing on.]"; ];
+
+[ RoutinesOffSub; debug_flag = debug_flag & 14; "[Message listing off.]"; ];
+
+[ ActionsOnSub;   debug_flag = debug_flag | 2;  "[Action listing on.]"; ];
+
+[ ActionsOffSub;  debug_flag = debug_flag & 13; "[Action listing off.]"; ];
+
+[ TimersOnSub;    debug_flag = debug_flag | 4;  "[Timers listing on.]"; ];
+
+[ TimersOffSub;   debug_flag = debug_flag & 11; "[Timers listing off.]"; ];
 
 
 #EndIf;

@@ -202,9 +202,11 @@ Object CarPark "Car Park"
 		description "You are in a car park in front of the library. You can enter to the north. There is a river off to the east.",
 		n_to Library,
 		e_to RiverBank,
-! 		exits [;
-! 			N_TO: return Library;
-! 		],
+		each_turn [; 
+			print (string) random("An owl is howling nearby.", "A terrible scream is heard from the library.", 
+				"The sound of many birds comes from the east.");
+			"";
+		],
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** CarPark.after^"; ],
 		before [; print "*** CarPark.before^"; ],
@@ -439,7 +441,8 @@ Object -> -> Ladder "ladder"
 
 Object -> -> -> Sticker "sticker"
 	with
-		name 'sticker';
+		name 'sticker',
+		each_turn [; "The sticker looks oh so sticky."; ];
 
 Book -> -> RedBook "red book"
 	with

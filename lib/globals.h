@@ -366,6 +366,14 @@ Global himobj = 0;       ! The object which is currently "him"
 Global herobj = 0;       ! The object which is currently "her"
 Global top_object;
 Global also_flag;
+Global debug_flag = 0;
+
+#IfDef OPTIONAL_DEBUG_VERBS;
+Global dict_start;
+Global dict_entry_size;
+Global dict_end;
+#EndIf;
+
 #IfDef DEBUG_TIMER;
 Global timer1_start = 0;
 Global timer1_stop = 0;
@@ -475,8 +483,9 @@ Object Directions
 			selected_direction = 0;
 			return 0;
 .success;
-			selected_direction_index = (_i - _arr)/2;
-			selected_direction = direction_properties_array --> (selected_direction_index + 1);
+			selected_direction_index = _i - _arr + 2;
+			@log_shift selected_direction_index (-1) -> selected_direction_index; ! Divide by 2
+			selected_direction = direction_properties_array --> selected_direction_index;
 			return 1;
 #IfNot;
 			_i = 1;
@@ -488,7 +497,7 @@ Object Directions
 				
 !				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
 					selected_direction_index = _i;
-					selected_direction = direction_properties_array --> _i;
+					selected_direction = direction_properties_array --> selected_direction_index;
 					return 1;
 !				}
 !			}

@@ -388,7 +388,7 @@
 				! Assembler equivalent of _name_array_len = _obj.#name / 2  
 				@get_prop_len _name_array -> _name_array_len;
 #IfV5;
-				@log_shift _name_array_len 1 -> _name_array_len;
+				@log_shift _name_array_len (-1) -> _name_array_len;
 #IfNot;
 				@div _name_array_len 2 -> _name_array_len;
 #EndIf;

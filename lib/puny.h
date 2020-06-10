@@ -514,6 +514,9 @@ Include "parser.h";
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
 [ PerformPreparedAction;
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if(debug_flag & 2) TraceAction(action, noun, second);
+#EndIf;
 	if ((BeforeRoutines() == false) && action < 4096) {
 		ActionPrimitive();
 	}
@@ -522,34 +525,56 @@ Include "parser.h";
 [ RunEachTurn _i _obj;
 	! Loop over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
-#IfDef GamePreRoutine;
-	if(GamePreRoutine()) rtrue;
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if(debug_flag & 1 && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
 #EndIf;
 	RunRoutines(location, each_turn);
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
-		RunRoutines(_obj, each_turn);
+#IfDef OPTIONAL_DEBUG_VERBS;
+		if(debug_flag & 1 && _obj.&each_turn ~= 0) print "(", (name) _obj, ").each_turn()^";
+#EndIf;
+		if(_obj.&each_turn ~= 0) RunRoutines(_obj, each_turn);
 	}
 ];
 
 [ BeforeRoutines _i _obj;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
+#IfDef GamePreRoutine;
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if(debug_flag & 1) print "GamePreRoutine()^";
+#EndIf;
 	if(GamePreRoutine()) rtrue;
+#EndIf;
+
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if(debug_flag & 1) print "player.orders()^";
+#EndIf;
 	if(RunRoutines(player, orders)) rtrue;
+
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 		if (_obj provides react_before) {
+#IfDef OPTIONAL_DEBUG_VERBS;
+			if(debug_flag & 1) print "(", (name) _obj, ").react_before()^";
+#EndIf;
 			if(RunRoutines(_obj, react_before)) {
 				rtrue;
 			}
 		}
 	}
-	if(location provides before && RunRoutines(location, before)) {
-		rtrue;
+	if(location provides before) {
+#IfDef OPTIONAL_DEBUG_VERBS;
+		if(debug_flag & 1) print "(", (name) location, ").before()^";
+#EndIf;
+		if(RunRoutines(location, before)) rtrue;
 	}
-	if(inp1 > 1 && inp1 provides before && RunRoutines(inp1, before)) {
-		rtrue;
+	if(inp1 > 1 && inp1 provides before) {
+#IfDef OPTIONAL_DEBUG_VERBS;
+		if(debug_flag & 1) print "(", (name) inp1, ").before()^";
+#EndIf;
+		if(RunRoutines(inp1, before)) rtrue;
 	}
 	rfalse;
 ];
@@ -560,18 +585,41 @@ Include "parser.h";
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 		if (_obj provides react_after) {
+#IfDef OPTIONAL_DEBUG_VERBS;
+			if(debug_flag & 1) print "(", (name) _obj, ").react_after()^";
+#EndIf;
 			if(RunRoutines(_obj, react_after)) {
 				rtrue;
 			}
 		}
 	}
-	if(location provides after && RunRoutines(location, after)) rtrue;
-	if(inp1 provides after && RunRoutines(inp1, after)) rtrue;
+	if(location provides after) {
+#IfDef OPTIONAL_DEBUG_VERBS;
+		if(debug_flag & 1) print "(", (name) location, ").after()^";
+#EndIf;
+		if(RunRoutines(location, after)) rtrue;
+	}
+	if(inp1 > 1 && inp1 provides after) {
+#IfDef OPTIONAL_DEBUG_VERBS;
+		if(debug_flag & 1) print "(", (name) inp1, ").after()^";
+#EndIf;
+		if(RunRoutines(inp1, after)) rtrue;
+	}
+#IfDef GamePostRoutine;
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if(debug_flag & 1) print "GamePostRoutine()^";
+#EndIf;
 	return GamePostRoutine();
+#IfNot;
+	rfalse;
+#EndIf;
 ];
 
 [ RunLife p_actor p_reason;
-    return RunRoutines(p_actor,life, p_reason);
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if(debug_flag & 1 && p_actor provides life) print "(", (name) p_actor, ").life()^";
+#EndIf;
+    return RunRoutines(p_actor, life, p_reason);
 ];
 
 [ _SetDirectionIfIsFakeDir p_obj p_noun_no _idx;
@@ -585,6 +633,32 @@ Include "parser.h";
 			second = Directions;
 	}
 ];
+
+#IfDef OPTIONAL_DEBUG_VERBS;
+[ DebugParameter _w;
+    print _w;
+    if (_w >= 1 && _w <= top_object) print " (", (name) _w, ")";
+    if (UnsignedCompare(_w, dict_start) >= 0 &&
+            UnsignedCompare(_w, dict_end) < 0 &&
+            (_w - dict_start) % dict_entry_size == 0)
+        print " ('", (address) _w, "')";
+];
+
+[ DebugAction a anames;
+    if (a >= 4096) { print "<fake action ", a-4096, ">"; return; }
+    anames = #identifiers_table;
+    anames = anames + 2*(anames-->0) + 2*48;
+    print (string) anames-->a;
+];
+
+[ TraceAction p_action p_noun p_second;
+	print "[ Action ", (DebugAction) p_action;
+    if (p_noun ~= 0)   print " with noun ", (DebugParameter) p_noun;
+    if (p_second ~= 0) print " and second ", (DebugParameter) p_second;
+    print "]^";
+];
+
+#EndIf;
 
 [ PerformAction p_action p_noun p_second _sa _sn _ss _sdi _sd;
 	_sa = action; _sn = noun; _ss = second; _sdi = selected_direction_index; _sd = selected_direction;
@@ -636,6 +710,16 @@ Include "parser.h";
 #EndIf;
 			p_obj.time_left = p_timer;
 	}
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if(debug_flag & 4) {
+		print "[ Starting ";
+		if(p_array_val > 0)
+			print "timer ", (DebugParameter) p_obj, " with time_left = ", p_timer;
+		else
+			print "daemon ", (DebugParameter) p_obj;
+		print "]^";
+	}
+#EndIf;
 	the_timers-->_i = p_array_val;
 ];
 
@@ -650,6 +734,16 @@ Include "parser.h";
 		if (the_timers-->_i == p_array_val) jump FoundTSlot4;
 	rfalse;
 .FoundTSlot4;
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if(debug_flag & 4) {
+		print "[ Stopping ";
+		if(p_array_val > 0)
+			print "timer ";
+		else
+			print "daemon ";
+		print (DebugParameter) p_obj, "]^";
+	}
+#EndIf;
 	if (p_obj == p_array_val) { ! This is a timer, not a daemon
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) { 
@@ -669,6 +763,21 @@ Include "parser.h";
 	for (current_timer=0 : current_timer<active_timers : current_timer++) {
 		if (deadflag >= GS_DEAD) return;
 		_j = the_timers-->current_timer;
+#IfDef OPTIONAL_DEBUG_VERBS;
+		if(debug_flag & 4) {
+			print "[ Running ";
+			if(_j > 0) {
+				print "timer ", (DebugParameter) _j;
+				if(_j.time_left > 0)
+					print " with time_left = ", _j.time_left;
+				else
+					print ": time_out";
+			} else
+				print "daemon ", (DebugParameter) (_j & ~WORD_HIGHBIT);
+			print "]^";
+		}
+#EndIf;
+		
 		if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
 		else {
 			_t = _j.time_left;
@@ -896,6 +1005,14 @@ Object DefaultPlayer "you"
 Object _TheDark "Darkness";
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
+
+#IfDef OPTION_DEBUG_VERBS;
+	dict_start = HDR_DICTIONARY-->0;
+	dict_entry_size = dict_start->(dict_start->0 + 1);
+	dict_start = dict_start + dict_start->0 + 4;
+	dict_end = dict_start + (dict_start - 2)-->0 * dict_entry_size;
+#EndIf;
+
 	parse_array->0 = MAX_INPUT_WORDS;
 #IfV5;
     player_input_array->0 = MAX_INPUT_CHARS;
