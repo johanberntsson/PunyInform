@@ -316,6 +316,13 @@
 	}
 	nouncache_wn = wn;
 
+	! this is needed after a which question, so that we 
+	! can answer 'the pink book' and similar
+	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an') {
+		wn = wn + 1;
+		p_parse_pointer = p_parse_pointer + 4;
+	}
+
 	if((((p_parse_pointer-->0) -> #dict_par1) & 128) == 0) {
 		! this word doesn't have the noun flag set,
 		! so it can't be part of a noun phrase
@@ -574,7 +581,6 @@
 			!wn = wn + which_object->1;
 			return 0;
 		}
-!		_AskWhichNoun(p_parse_pointer --> 0, -_noun);
 		_AskWhichNoun(-_noun);
 		! read a new line of input
 		! I need to use parse_array since NextWord
@@ -593,6 +599,7 @@
 			! entry into parse_array, then retry
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 			wn = 1;
+			nouncache_wn = -1; ! clear noun cache
 			_noun = _CheckNoun(parse_array+2);
 			wn = _oldwn; ! and restore it after the call
 			if(_noun > 0) {
