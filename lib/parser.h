@@ -354,8 +354,8 @@
 			if(_result == -1) jump try_name_match;
 			_n = _n + _result; ! number of words consumed
 			wn = _j;
-			if(_n > wn && ObjectIsInvisible(_obj, true) == false) {
-				if(_obj has concealed or scenery) {
+			if(_n > wn && (ObjectIsInvisible(_obj, true) == false || action_debug == true)) {
+				if(action_debug == false && _obj has concealed or scenery) {
 					! don't consider for which, but remember
 					! as last resort if nothing else matches
 					if(_last_match == 0) {
@@ -413,8 +413,8 @@
 					_n++;
 					_p = _p + 4;
 					_current_word = _p-->0;
-					if(_n >= _best_score && ObjectIsInvisible(_obj, true) == false) {
-						if(_obj has concealed or scenery) {
+					if(_n >= _best_score && (ObjectIsInvisible(_obj, true) == false || action_debug == true)) {
+						if(action_debug == false && _obj has concealed or scenery) {
 							! don't consider for which, but remember
 							! as last resort if nothing else matches
 							if(_last_match == 0) {
@@ -1445,6 +1445,7 @@ Array guess_num_objects->5;
 				if(noun notin second) continue; ! eg get all from X
 			}
 			if(action == ##Take && noun == parent(player)) continue; ! don' pick up the box when you are in it
+			if(action == ##Take && noun in player) continue; ! don' pick up held objects
 			if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
 			++_score;
 			PerformPreparedAction();
