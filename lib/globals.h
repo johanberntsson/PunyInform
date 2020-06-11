@@ -366,12 +366,19 @@ Global himobj = 0;       ! The object which is currently "him"
 Global herobj = 0;       ! The object which is currently "her"
 Global top_object;
 Global also_flag;
-Global debug_flag = 0;
+
+! add debug verbs if in debug mode
+#IfDef DEBUG;
+    #IfnDef OPTIONAL_DEBUG_VERBS;
+        Constant OPTIONAL_DEBUG_VERBS;
+    #EndIf;
+#Endif;
 
 #IfDef OPTIONAL_DEBUG_VERBS;
 Global dict_start;
 Global dict_entry_size;
 Global dict_end;
+Global debug_flag = 0; ! if DEBUG or OPTIONAL_DEBUG_VERBS
 #EndIf;
 
 #IfDef DEBUG_TIMER;
@@ -393,9 +400,6 @@ Global clr_bgstatus          = 2;
 Global clr_fgstatus          = 8;
 #endif;
 
-#ifdef DEBUG;
-Global debug_flag            = 0;
-#endif;
 
 Default MAX_WHICH_OBJECTS     10;
 Default MAX_MULTIPLE_OBJECTS  32;

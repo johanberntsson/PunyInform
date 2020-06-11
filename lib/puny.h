@@ -51,13 +51,6 @@
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSEANDPERFORM;
 
-! add debug verbs if in debug mode
-#IfDef DEBUG;
-	#IfnDef OPTIONAL_DEBUG_VERBS;
-		Constant OPTIONAL_DEBUG_VERBS;
-	#EndIf;
-#Endif;
-
 Include "messages.h";
 
 
