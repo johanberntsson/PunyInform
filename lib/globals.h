@@ -357,6 +357,7 @@ Global parser_check_multiple;    ! parser should check if multiheld/multiinside
 Global parser_unknown_noun_found;! parser should report unknown word
 Global parser_all_found;! parser encountered 'all'
 Global deadflag;
+Global scope_modified;   ! true if daemons, each_turn etc has invalidated scope
 Global scope_objects;
 Global scope_routine;    ! for scope=Routine grammar
 Global scope_stage;      ! for scope=Routine grammar: 1, 2 then 3

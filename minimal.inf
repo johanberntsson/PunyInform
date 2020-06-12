@@ -13,6 +13,7 @@
 !Constant OPTIONAL_FULL_SCORE;
 !Constant OPTIONAL_FULL_DIRECTIONS;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
 
 Include "globals.h";
  

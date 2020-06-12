@@ -382,6 +382,15 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 [ RunRoutines p_obj p_prop p_switch;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	! it is up to the timer etc to let the scope routines
+	! know if the scope needs to be updated
+	scope_modified = false;
+#IfNot;
+	! default case: always assume that every timer etc
+	! could have modified the scope
+	scope_modified = true;
+#EndIf;
 	if(p_switch == 0) sw__var = action; else sw__var = p_switch;
 	if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
 	return p_obj.p_prop();
@@ -961,34 +970,6 @@ Include "parser.h";
 [ Cl__Ms;
 	rfalse;
 ];
-
-! RT__ChT:  Check at run-time that a proposed object move is legal.
-!           Cause error and do nothing if not; otherwise move
-[ RT__ChT obj1 obj2 ix;
-print "calling RT__ChT^";
-	if (obj1==0 || Z__Region(obj1)~=1
-		|| (obj1 == Class or String or Routine or Object) || obj1 in Class)
-		return RT__Err(16, obj1, obj2);
-	if (obj2==0 || Z__Region(obj2)~=1
-		|| (obj2 == Class or String or Routine or Object) || obj2 in Class)
-		return RT__Err(17, obj1, obj2);
-	ix = obj2;
-	while (ix ~= 0) {
-		if (ix==obj1) return RT__Err(18, obj1, obj2);
-		ix = parent(ix);
-	}
-!	#ifdef INFIX;
-!	if (obj1 has infix__watching
-!		|| obj2 has infix__watching || (debug_flag & 15))
-!		print \"[Moving \", (name) obj1, \" to \", (name) obj2, \"]^\";
-!	#ifnot; #ifdef DEBUG;
-#IfDef OPTIONAL_DEBUG_VERBS;
-	if (debug_flag & 15) print "[Moving ", (name) obj1, " to ", (name) obj2, "]^";
-#EndIf;
-!	#endif; #endif;
-	OB__Move(obj1, obj2);
-];
-
 #EndIf;
 
 #IfTrue RUNTIME_ERRORS < RTE_VERBOSE;
@@ -1111,6 +1092,7 @@ Object _TheDark "Darkness";
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
 		if(action >= 0 && meta == false) {
+
 			RunTimersAndDaemons();
 			RunEachTurn();
 			TimePasses();
