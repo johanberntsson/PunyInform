@@ -382,11 +382,7 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 [ RunRoutines p_obj p_prop p_switch;
-#IfDef OPTIONAL_MANUAL_SCOPE;
-	! it is up to the timer etc to let the scope routines
-	! know if the scope needs to be updated
-	scope_modified = false;
-#IfNot;
+#IfnDef OPTIONAL_MANUAL_SCOPE;
 	! default case: always assume that every timer etc
 	! could have modified the scope
 	scope_modified = true;
@@ -1042,6 +1038,8 @@ Object _TheDark "Darkness";
 	<Look>;
 
 	while(deadflag == GS_PLAYING) {
+		scope_modified = false; ! avoid automatic scope updates during parsing
+
 		if (sys_statusline_flag == 0) {
 			status_field_1 = score;
 			status_field_2 = turns;
@@ -1092,7 +1090,6 @@ Object _TheDark "Darkness";
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse_array->1;
 		if(action >= 0 && meta == false) {
-
 			RunTimersAndDaemons();
 			RunEachTurn();
 			TimePasses();
