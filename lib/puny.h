@@ -962,6 +962,33 @@ Include "parser.h";
 	rfalse;
 ];
 
+! RT__ChT:  Check at run-time that a proposed object move is legal.
+!           Cause error and do nothing if not; otherwise move
+[ RT__ChT obj1 obj2 ix;
+print "calling RT__ChT^";
+	if (obj1==0 || Z__Region(obj1)~=1
+		|| (obj1 == Class or String or Routine or Object) || obj1 in Class)
+		return RT__Err(16, obj1, obj2);
+	if (obj2==0 || Z__Region(obj2)~=1
+		|| (obj2 == Class or String or Routine or Object) || obj2 in Class)
+		return RT__Err(17, obj1, obj2);
+	ix = obj2;
+	while (ix ~= 0) {
+		if (ix==obj1) return RT__Err(18, obj1, obj2);
+		ix = parent(ix);
+	}
+!	#ifdef INFIX;
+!	if (obj1 has infix__watching
+!		|| obj2 has infix__watching || (debug_flag & 15))
+!		print \"[Moving \", (name) obj1, \" to \", (name) obj2, \"]^\";
+!	#ifnot; #ifdef DEBUG;
+#IfDef OPTIONAL_DEBUG_VERBS;
+	if (debug_flag & 15) print "[Moving ", (name) obj1, " to ", (name) obj2, "]^";
+#EndIf;
+!	#endif; #endif;
+	OB__Move(obj1, obj2);
+];
+
 #EndIf;
 
 #IfTrue RUNTIME_ERRORS < RTE_VERBOSE;

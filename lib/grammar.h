@@ -1157,8 +1157,8 @@ Verb meta 'random'
 	* 'seed' number                             -> RandomSeed;
 
 Verb meta 'scope'
-    *                                           -> Scope
-    * noun                                      -> Scope;
+	*                                           -> Scope
+	* noun                                      -> Scope;
 
 Verb meta 'purloin'
 	* noun										-> Purloin;
@@ -1171,19 +1171,24 @@ Verb meta 'gonear'
 	* noun										-> GoNear;
 
 Verb meta 'routines' 'messages'
-    *                                           -> RoutinesOn
-    * 'on'                                      -> RoutinesOn
-    * 'off'                                     -> RoutinesOff;
+	*                                           -> RoutinesOn
+	* 'on'                                      -> RoutinesOn
+	* 'off'                                     -> RoutinesOff;
 
 Verb meta 'actions'
-    *                                           -> ActionsOn
-    * 'on'                                      -> ActionsOn
-    * 'off'                                     -> ActionsOff;
+	*                                           -> ActionsOn
+	* 'on'                                      -> ActionsOn
+	* 'off'                                     -> ActionsOff;
+
+Verb meta 'changes'
+	*                                           -> ChangesOn
+	* 'on'                                      -> ChangesOn
+	* 'off'                                     -> ChangesOff;
 
 Verb meta 'timers' 'daemons'
-    *                                           -> TimersOn
-    * 'on'                                      -> TimersOn
-    * 'off'                                     -> TimersOff;
+	*                                           -> TimersOn
+	* 'on'                                      -> TimersOn
+	* 'off'                                     -> TimersOff;
 
 
 Global scope_cnt;
@@ -1259,6 +1264,10 @@ Global scope_cnt;
 [ ActionsOnSub;   debug_flag = debug_flag | 2;  "[Action listing on.]"; ];
 
 [ ActionsOffSub;  debug_flag = debug_flag & 13; "[Action listing off.]"; ];
+
+[ ChangesOnSub;   debug_flag = debug_flag | 8;  "[Changes listing on.]"; ];
+
+[ ChangesOffSub;  debug_flag = debug_flag & 7;  "[Changes listing off.]"; ];
 
 [ TimersOnSub;    debug_flag = debug_flag | 4;  "[Timers listing on.]"; ];
 
