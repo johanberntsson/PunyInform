@@ -81,16 +81,17 @@ Object CheapScenery "object"
 				"ERROR: cheap_scenery property of current location has incorrect # of values!^";
 #IfNot;
 			if(_len % 3 > 0)
-				"cheap_scenery error 1!^";
+				"ERROR: cheap_scenery #1!^";
 #EndIf;
 			while(_i < _len) {
 				_sw1 = location.&cheap_scenery-->(_i+2);
-				if(~~(_sw1 ofclass String or Routine))
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+				if(~~(_sw1 ofclass String or Routine))
 					"ERROR: Element ", _i+2, " in cheap_scenery property of current location is not a string or routine!^",
 						"Element: ", (name) _sw1, "^";
 #IfNot;
-					"cheap_scenery error 2!^";
+				if(~~(_sw1 ofclass String or Routine))
+					"ERROR: cheap_scenery #2!^";
 #EndIf;
 
 				_i = _i + 3;
