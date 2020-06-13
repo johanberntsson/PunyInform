@@ -232,6 +232,9 @@ Verb 'wear'
 	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT); rtrue; }
 	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN); rtrue; }
 	give noun ~open;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	PrintMsg(MSG_CLOSE_SUCCESS);
@@ -268,6 +271,9 @@ Verb 'wear'
 	if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
 	give noun moved;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
 	if(AfterRoutines() == 1) rtrue;
     if(keep_silent) return;
 	PrintMsg(MSG_DROP_DROPPED);
@@ -277,6 +283,9 @@ Verb 'wear'
     if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
     if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
 	remove noun;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
 	if (AfterRoutines() == 1) rtrue;
 	if (keep_silent == 1) rtrue;
     PrintMsg(MSG_EAT_SUCCESS);
@@ -368,6 +377,9 @@ Verb 'wear'
 
     move noun to second;
 	give noun moved;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
 
 	! run after on object
 	if(AfterRoutines() == 1) rtrue;
@@ -413,6 +425,9 @@ Verb 'wear'
 	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
 	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
 	give noun open;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
 	PrintMsg(MSG_OPEN_SUCCESS);
@@ -448,6 +463,9 @@ Verb 'wear'
 
     move noun to second;
 	give noun moved;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
     if (keep_silent) return;
     PrintMsg(MSG_PUTON_SUCCESS);
 ];
@@ -1217,6 +1235,9 @@ Global scope_cnt;
 
 [ PurloinSub;
 	move noun to player;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
 	"Purloined.";
 ];
 
@@ -1552,6 +1573,9 @@ Global scope_cnt;
 #EndIf;
 	move noun to player;
 	give noun moved;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
 	rfalse;
 ];
 

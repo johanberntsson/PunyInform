@@ -421,17 +421,19 @@ Constant ONE_SPACE_STRING = " ";
 
 [ MoveFloatingObjects _i _j _len _obj _present;
 	while((_obj = floating_objects-->_i) ~= 0 && _obj hasnt absent) {
-		_len = _obj.#found_in / WORDSIZE;
-		if(_len == 1 && _obj.found_in > top_object) {
+		_len = _obj.#found_in;
+		if(_len == 2 && _obj.found_in > top_object) {
 			_present = RunRoutines(_obj, found_in);
 		} else {
 			_present = 0;
 			_j = _obj.&found_in;
 #IfV5;
+			@log_shift _len (-1) -> _len;
 			@scan_table location _j _len -> _present ?~no_success; ! The position is only a throw-away value here.
 			_present = 1;
 .no_success;
 #IfNot;
+			_len = _len / 2;
 			_len = _len - 1;
 .next_value;
 				if(_j-->_len == location) {
@@ -456,6 +458,9 @@ Constant ONE_SPACE_STRING = " ";
 	_old_darkness = darkness;
 	move Player to p_loc;
 	location = p_loc;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
 	while(true) {
 		_p = parent(location);
 		if(_p == 0) break;
