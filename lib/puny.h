@@ -178,7 +178,7 @@ Constant ONE_SPACE_STRING = " ";
 	! * Room names up to 21 characters are never truncated. On a 40 column screen, room names up to 24 characters are never truncated.
 
 	! If there is no player location, we shouldn't try to draw status window
-	if (location == nothing || parent(player) == nothing)
+	if (fake_location == nothing || parent(player) == nothing)
 		return;
 
 	_width = HDR_SCREENWCHARS->0;
@@ -196,7 +196,9 @@ Constant ONE_SPACE_STRING = " ";
 !         if (visibility_ceiling == location)
 	_visibility_ceiling = ScopeCeiling(player);
 ! print (object) _visibility_ceiling;
-	if (_visibility_ceiling == location) {
+	if (darkness)
+		_PrintObjName(fake_location);
+	else if (_visibility_ceiling == location) {
 		_PrintObjName(location);
 !   print (name) _visibility_ceiling;
 	} else {
