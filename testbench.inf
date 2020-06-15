@@ -272,7 +272,11 @@ Object Toilet "The toilet"
 			}
 			rtrue;
 		],
+#IfDef USEINFORM;
+		w_to Library,
+#IfNot;
 		w_to ToiletDoor,
+#EndIf;
 		add_to_scope [;
 			PlaceInScope(ToiletDoor);
 		];
@@ -359,7 +363,11 @@ Object Library "The Library"
 		short_name [; print "Huge library"; rtrue; ],
 		description "You are in an old and deserted library. There is an exit leading south and a toilet to the east.",
 		s_to CarPark,
+#IfDef USEINFORM;
+		e_to Toilet,
+#IfNot;
 		e_to ToiletDoor,
+#EndIf;
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** Library.after^"; ],
 		before [; print "*** Library.before^"; ],
@@ -596,12 +604,27 @@ Book -> PinkBook "pink book"
 	    ],
 		description "The book is nice and tidy.";
 
-[TestSub;
-	print_ret "Noun is ", noun;
-];
-
-Verb 'test'
-	* special	-> Test;
+Object -> Torch "electric torch"
+	with
+		name 'torch' 'electric' 'flashlight',
+		article "an",
+		description "A simple battery powered electric torch.",
+		before [;
+			Push:
+				if(self has on)
+					<<SwitchOff self>>;
+				else
+					<<SwitchOn self>>;
+		],
+		after[;
+			SwitchOn:
+				give self light;
+				"The torch is now providing light.";
+			SwitchOff:	
+				give self ~light;
+				"The torch is dark again.";
+		],
+	has switchable;
 
 ! -- testing scope grammar token
 ! See: https://www.inform-fiction.org/manual/html/s32.html 
