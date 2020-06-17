@@ -46,14 +46,10 @@
 	}
 ];
 
-[ _ResetScope;
-	scope_pov = -1;
-];
-
-[ _UpdateScope p_actor _start_pos;
+[ _UpdateScope p_actor p_force _start_pos;
 	! scope is already calculated
 	if(p_actor == 0) p_actor = player;
-	if(scope_pov == p_actor) return;
+	if(scope_pov == p_actor && scope_modified == false && p_force == false) return;
 
 	! give entry routine a chance to override
 	if(InScope(p_actor)) rtrue;
@@ -84,6 +80,7 @@
 		! Add all in player location (which may be inside an object)
 		_SearchScope(child(_start_pos));
 	}
+	scope_modified = false;
 ];
 
 [ ScopeCeiling p_actor p_stop_before _parent;
@@ -115,13 +112,11 @@
 	! Calls routine p_routine(obj) for each object obj in scope for the
 	! given actor. If no actor is given, the actor defaults to be the player.
 	! No return value
-	if(scope_modified) {
-		scope_pov = -1;
-		_UpdateScope(actor);
-		scope_modified = false;
-	}
+	if(p_actor == 0)
+		p_actor = player;
 
 	_UpdateScope(p_actor);
+
 	for(_i = 0: _i < scope_objects: _i++) p_routine(scope-->_i);
 ];
 
@@ -179,11 +174,10 @@
 	! actor is given, the actor is assumed to be the player.
 	! The routine returns true or false.
 	!print "TestScope ", (object) p_obj, "^";
-	if(scope_modified) {
-		scope_pov = -1;
-		_UpdateScope(actor);
-		scope_modified = false;
-	}
+	if(p_actor == 0)
+		p_actor = player;
+
+	_UpdateScope(p_actor);
 
 	! special case for debugging verbs; everything is in scope
 	if(action_debug) rtrue;
@@ -226,11 +220,7 @@
 	! “You can't, because ! … is in the way.” if any barrier is found.
 	! The routine returns true if a barrier is found, false if not.
 
-	if(scope_modified) {
-		scope_pov = -1;
-		_UpdateScope(actor);
-		scope_modified = false;
-	}
+	_UpdateScope(player);
 
 	_ancestor = CommonAncestor(player, p_item);
 	if(_ancestor == 0) {

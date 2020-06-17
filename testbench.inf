@@ -619,9 +619,15 @@ Object -> Torch "electric torch"
 		after[;
 			SwitchOn:
 				give self light;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+				scope_modified = true;
+#EndIf;
 				"The torch is now providing light.";
 			SwitchOff:	
 				give self ~light;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+				scope_modified = true;
+#EndIf;
 				"The torch is dark again.";
 		],
 	has switchable;

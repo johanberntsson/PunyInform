@@ -1342,10 +1342,8 @@ Array guess_num_objects->5;
 		scope_stage = 0;
 		_score = _ParsePattern(_pattern, PHASE1);
 		! reset scope if _ParsePattern messed with it
-		if(scope_stage > 0) {
-			_ResetScope();
-			_UpdateScope(player);
-		}
+		if(scope_stage > 0)
+			_UpdateScope(player, true);
 
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: result ", _score, "^";

@@ -456,18 +456,15 @@ Constant ONE_SPACE_STRING = " ";
 	_old_darkness = darkness;
 	move Player to p_loc;
 	location = p_loc;
-#IfDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 	while(true) {
 		_p = parent(location);
 		if(_p == 0) break;
 		location = _p;
 	}
-	_UpdateDarkness();
 	if(_old_loc ~= location) {
-		_ResetScope();
-		_UpdateScope(player);
+		scope_modified = true;
+		_UpdateDarkness();
+!		_UpdateScope(player, true);
 		NewRoom();
 		MoveFloatingObjects();
 		if(darkness) {
@@ -524,6 +521,10 @@ Include "parser.h";
 #IfDef OPTIONAL_DEBUG_VERBS;
 	if(debug_flag & 1 && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
 #EndIf;
+#IfnDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
+	_UpdateScope(player);
 	RunRoutines(location, each_turn);
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
@@ -537,6 +538,10 @@ Include "parser.h";
 [ BeforeRoutines _i _obj;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
+#IfnDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;	
+	_UpdateScope(player);
 #IfDef GamePreRoutine;
 #IfDef OPTIONAL_DEBUG_VERBS;
 	if(debug_flag & 1) print "GamePreRoutine()^";
@@ -578,6 +583,10 @@ Include "parser.h";
 [ AfterRoutines _i _obj;
 	! react_after - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
+#IfnDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;	
+	_UpdateScope(player);
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 		if (_obj provides react_after) {
@@ -756,6 +765,9 @@ Include "parser.h";
 ];
 
 [ RunTimersAndDaemons _j _t;
+#IfnDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;	
 	for (current_timer=0 : current_timer<active_timers : current_timer++) {
 		if (deadflag >= GS_DEAD) return;
 		_j = the_timers-->current_timer;
@@ -1047,8 +1059,7 @@ Object _TheDark "Darkness";
 		}
 		@new_line;
 
-		_ResetScope();
-		_UpdateScope();
+		_UpdateScope(player, true);
 		_score = score;
 		_UpdateDarkness();
 		if(parse_array->1 == 0) {
