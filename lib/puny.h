@@ -196,14 +196,10 @@ Constant ONE_SPACE_STRING = " ";
 !         if (visibility_ceiling == location)
 	_visibility_ceiling = ScopeCeiling(player);
 ! print (object) _visibility_ceiling;
-	if (darkness)
-		_PrintObjName(fake_location);
-	else if (_visibility_ceiling == location) {
-		_PrintObjName(location);
-!   print (name) _visibility_ceiling;
-	} else {
+	if (darkness || _visibility_ceiling == fake_location)
+		_PrintObjName(fake_location); ! If it's light, fake_location == location
+	else
 		print (The) _visibility_ceiling;
-	}
 
 	if (sys_statusline_flag) {
 		! Statusline should show time rather than score
@@ -486,18 +482,23 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 [ _UpdateDarkness _ceil;
-	darkness = ~~_LookForLightInObj(ScopeCeiling(player));
+	_ceil = ScopeCeiling(player);
+!	print "_UpdateDarkness, fake_location is: ", (the) fake_location, "^";
+!	print "_UpdateDarkness, ScopeCeiling is: ", (the) _ceil, "^";
+	darkness = ~~_LookForLightInObj(_ceil, _ceil);
 	if(darkness) {
 		fake_location = _TheDark;
 	} else {
 		fake_location = location;
 	}
-	!print "_UpdateDarkness: ", (name) location, " ", darkness, "^";
+!	print "_UpdateDarkness 2, fake_location is: ", (the) fake_location, "^";
+!	print "_UpdateDarkness 2, ScopeCeiling is: ", (the) _ceil, "^";
 ];
 
-[ _LookForLightInObj p_obj _o;
+[ _LookForLightInObj p_obj p_ceiling _o;
+!	print "_LookForLightInObj, Examining: ", (the) p_obj, "^";
 	if(p_obj has light) rtrue;
-	if(parent(p_obj) == 0 || p_obj has transparent || p_obj has supporter || (p_obj has container && p_obj has open))
+	if(p_obj == p_ceiling || p_obj has transparent || p_obj has supporter || (p_obj has container && p_obj has open))
 		objectloop(_o in p_obj)
 			if(_LookForLightInObj(_o))
 				rtrue;
