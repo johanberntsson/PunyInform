@@ -468,21 +468,13 @@ Constant ONE_SPACE_STRING = " ";
 		if(_p == 0) break;
 		location = _p;
 	}
+	_UpdateDarkness();
 	if(_old_loc ~= location) {
-		! new location, update scope (assuming light)
-		! (we need to assume light first so that we
-		! UpdateDarkness can find light sources that
-		! are in the room, but not carried by the player)
-		darkness = false;
 		_ResetScope();
 		_UpdateScope(player);
 		NewRoom();
 		MoveFloatingObjects();
-		_UpdateDarkness();
 		if(darkness) {
-			! no lights found, so update scope again
-			_ResetScope();
-			_UpdateScope(player);
 			if(_old_darkness) {
 				! we have moved between dark rooms
 				! give entry point a chance to react
@@ -493,18 +485,8 @@ Constant ONE_SPACE_STRING = " ";
 	rtrue;
 ];
 
-[ _UpdateDarkness _i _j;
-	darkness = location hasnt light;
-	if(darkness) {
-		! check if we have a light source
-		for(_i = 0: _i < scope_objects: _i++) {
-			_j = scope-->_i;
-			if(_j has light && ObjectIsInvisible(_j) == false) {
-				darkness = false;
-				break;
-			}
-		}
-	}
+[ _UpdateDarkness _ceil;
+	darkness = ~~_LookForLightInObj(ScopeCeiling(player));
 	if(darkness) {
 		fake_location = _TheDark;
 	} else {
@@ -513,6 +495,14 @@ Constant ONE_SPACE_STRING = " ";
 	!print "_UpdateDarkness: ", (name) location, " ", darkness, "^";
 ];
 
+[ _LookForLightInObj p_obj _o;
+	if(p_obj has light) rtrue;
+	if(parent(p_obj) == 0 || p_obj has transparent || p_obj has supporter || (p_obj has container && p_obj has open))
+		objectloop(_o in p_obj)
+			if(_LookForLightInObj(_o))
+				rtrue;
+	rfalse;
+];
 
 Include "parser.h";
 
