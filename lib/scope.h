@@ -49,17 +49,18 @@
 [ _UpdateScope p_actor p_force _start_pos;
 	! scope is already calculated
 	if(p_actor == 0) p_actor = player;
+#IfDef DEBUG_SCOPE;
+	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
+#EndIf;
 	if(scope_pov == p_actor && scope_modified == false && p_force == false) return;
+
+	scope_pov = p_actor;
 
 	! give entry routine a chance to override
 	if(InScope(p_actor)) rtrue;
 
-	scope_pov = p_actor;
 	_start_pos = ScopeCeiling(p_actor);
 
-#IfDef DEBUG_SCOPE;
-	print "updating scope for ",(object) _start_pos,"^";
-#EndIf;
 
 	! the directions are always in scope
 	scope-->0 = Directions;
@@ -73,7 +74,7 @@
 	! give the starting pos a chance to add objects to scope
 	if(_start_pos.add_to_scope) _start_pos.add_to_scope();
 
-	if(darkness) {
+	if(darkness && p_actor == player) {
 		! only the player's possessions are in scope
 		_SearchScope(child(player));
 	} else {
@@ -81,6 +82,9 @@
 		_SearchScope(child(_start_pos));
 	}
 	scope_modified = false;
+#IfDef DEBUG_SCOPE;
+	print "*** Updated scope from ", (the) _start_pos, ". Found ", scope_objects, " objects.^";
+#EndIf;
 ];
 
 [ ScopeCeiling p_actor p_stop_before _parent;

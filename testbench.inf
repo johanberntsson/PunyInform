@@ -3,11 +3,17 @@
 
 ! Testbench - a platform for trying things out in PunyInform
 
+! compile as z8 to use Inform stdlib instead of puny (for debugging)
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
 ! uncomment to show time instead of score/turns
 Statusline time;
 
 Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 
+#IfnDef USEINFORM;
 ! Uncomment to add optional features to PunyLib
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_DEBUG_VERBS;
@@ -24,6 +30,7 @@ Constant OPTIONAL_MANUAL_SCOPE;
 !Constant DEBUG_CHECKNOUN;
 !Constant DEBUG_GETNEXTNOUN;
 !Constant DEBUG_SCOPE;
+#EndIf;
 
 !Constant TEST_BEFOREAFTER;
 
@@ -34,10 +41,6 @@ Constant Headline   "^A sandbox for PunyInform development^";
 Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0 
 #EndIf;
 
-! compile as z8 to use Inform stdlib instead of puny (for debugging)
-#Iftrue (#version_number == 8);
-Constant USEINFORM;
-#Endif;
 
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
@@ -451,7 +454,7 @@ Object -> -> Ladder "ladder"
 Object -> -> -> Sticker "sticker"
 	with
 		name 'sticker',
-		each_turn [; "The sticker looks oh so sticky."; ];
+		each_turn [; if(~~darkness) "The sticker looks oh so sticky."; ];
 
 Book -> -> RedBook "red book"
 	with
@@ -680,6 +683,7 @@ Array quote_1 --> 5 35
 "               -- Jack Handey";
 
 [Initialise;
+	thedark.short_name = "Yucky darkness";
 	SetTime(9*60+30, 5); ! 9:30 am, each turn 5 minutes
 	location = Library;
 !	PlayerTo(LargeBox);

@@ -484,7 +484,7 @@ Constant ONE_SPACE_STRING = " ";
 !	print "_UpdateDarkness, ScopeCeiling is: ", (the) _ceil, "^";
 	darkness = ~~_LookForLightInObj(_ceil, _ceil);
 	if(darkness) {
-		fake_location = _TheDark;
+		fake_location = thedark;
 	} else {
 		fake_location = location;
 	}
@@ -1009,7 +1009,11 @@ Object DefaultPlayer "you"
 		before_implicit NULL,
 	has concealed animate proper transparent;
 
-Object _TheDark "Darkness";
+Object thedark "Darkness"
+	with
+		initial 0,
+		description 0,
+		short_name 0;
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
 
@@ -1061,7 +1065,6 @@ Object _TheDark "Darkness";
 
 		_UpdateScope(player, true);
 		_score = score;
-		_UpdateDarkness();
 		if(parse_array->1 == 0) {
 			_ReadPlayerInput();
 		}
@@ -1152,6 +1155,7 @@ Object _TheDark "Darkness";
 			! the input was just one sentence
 			parse_array->1 = 0;
 		}
+		_UpdateDarkness();
 	}
 	print "^^  *** ";
 	if(deadflag == GS_QUIT) @quit;
