@@ -203,6 +203,7 @@ Class Book
 Object CarPark "Car Park"
 	with
 		!short_name [; print "In front of the library!"; rtrue; ],
+		initial "Wow, this is a huge car park! The library lies to the north, while the river can be seen to the east.",
 		description "You are in a car park in front of the library. You can enter to the north. There is a river off to the east.",
 		n_to Library,
 		e_to RiverBank,
@@ -684,6 +685,8 @@ Array quote_1 --> 5 35
 
 [Initialise;
 	thedark.short_name = "Yucky darkness";
+	thedark.initial = "Oh, so scary.";
+	thedark.description = "Now you are really scared.";
 	SetTime(9*60+30, 5); ! 9:30 am, each turn 5 minutes
 	location = Library;
 !	PlayerTo(LargeBox);

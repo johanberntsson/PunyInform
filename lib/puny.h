@@ -1012,7 +1012,7 @@ Object DefaultPlayer "you"
 Object thedark "Darkness"
 	with
 		initial 0,
-		description 0,
+		description "It is pitch dark here!",
 		short_name 0;
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;

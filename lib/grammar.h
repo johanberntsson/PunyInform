@@ -1423,7 +1423,8 @@ Global scope_cnt;
 	print "see ";
 ];
 
-[ Look _obj _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level;
+[ Look _obj _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level _visited;
+	if(fake_location has visited) _visited = true;
 	@new_line;
 	_player_parent = parent(player);
 	_describe_room = ((lookmode == 1 && location hasnt visited) || lookmode == 2);
@@ -1437,12 +1438,12 @@ Global scope_cnt;
 		_ceil = ScopeCeiling(player, _last_level);
 	if(_ceil == fake_location) {
 #IfDef OPTIONAL_FULL_SCORE;
-		if(location has scored && location hasnt visited) {
+		if(fake_location has scored && _visited == 0) {
 			score = score + OBJECT_SCORE;
 			places_score = places_score + OBJECT_SCORE;
 		}
 #EndIf;
-		give location visited;
+		give fake_location visited;
 		_PrintObjName(fake_location);
 	} else {
 		print (The) _ceil;
@@ -1450,9 +1451,14 @@ Global scope_cnt;
 #IfV5;
 	style roman;
 #EndIf;
-	if(darkness) 
-		print "^It is pitch dark here!^";
-	else {
+	if(darkness) {
+		@new_line;
+		if(_visited == 0 && fake_location.initial ~= 0 or null)
+			PrintOrRun(fake_location, initial, 1);
+		else
+			PrintOrRun(fake_location, description, 1);
+		@new_line;
+	} else {
 		_obj = _player_parent;
 		while(_obj ~= _ceil or 0) {
 			if(_obj has supporter)
@@ -1467,7 +1473,10 @@ Global scope_cnt;
 			@new_line;
 			if(_describe_room) {
 				if(_ceil == location) {
-					PrintOrRun(_ceil, description, 1);
+					if(_visited == 0 && location.initial ~= 0 or null)
+						PrintOrRun(location, initial, 1);
+					else
+						PrintOrRun(_ceil, description, 1);
 					@new_line;
 				} else if(_ceil.&inside_description) {
 					PrintOrRun(_ceil, inside_description, 1);
