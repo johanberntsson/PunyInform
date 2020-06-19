@@ -478,7 +478,8 @@ Constant ONE_SPACE_STRING = " ";
 	rtrue;
 ];
 
-[ _UpdateDarkness _ceil;
+[ _UpdateDarkness p_look _ceil _old_darkness;
+	_old_darkness = darkness;
 	_ceil = ScopeCeiling(player);
 !	print "_UpdateDarkness, fake_location is: ", (the) fake_location, "^";
 !	print "_UpdateDarkness, ScopeCeiling is: ", (the) _ceil, "^";
@@ -487,6 +488,8 @@ Constant ONE_SPACE_STRING = " ";
 		fake_location = thedark;
 	} else {
 		fake_location = location;
+		if(_old_darkness == true && p_look == true)
+			<Look>;
 	}
 !	print "_UpdateDarkness 2, fake_location is: ", (the) fake_location, "^";
 !	print "_UpdateDarkness 2, ScopeCeiling is: ", (the) _ceil, "^";
@@ -1155,7 +1158,7 @@ Object thedark "Darkness"
 			! the input was just one sentence
 			parse_array->1 = 0;
 		}
-		_UpdateDarkness();
+		_UpdateDarkness(true);
 	}
 	print "^^  *** ";
 	if(deadflag == GS_QUIT) @quit;
