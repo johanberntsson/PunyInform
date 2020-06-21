@@ -589,22 +589,14 @@ Book -> GreenBook "green book"
 Book -> PinkBook "pink book"
 	with
 	    parse_name [ first_word;
-!			print "Pink word 1: ", (address) NextWord(), "^";
-!			print "Pink word 2: ", (address) NextWord(), "^";
 			first_word = NextWord();
 			if(first_word == 'pink') {
 				if(NextWord() == 'book') return 2;
 				return 1;
-			} else if (first_word == 'book') {
-				return 1;
-			} else if (first_word == 'books') {
+			} else if (first_word == 'book' or 'books') {
 				return 1;
 			}
 			return 0;
-!			if((parse_array+2+4*wn)-->0 == 'pink' &&
-!			   (parse_array+2+4*(wn+1))-->0 == 'book') return 2;
-!			if((parse_array+2+4*wn)-->0 == 'pink') return 1;
-!			return 0;
 	    ],
 		description "The book is nice and tidy.";
 
@@ -647,17 +639,83 @@ Object -> Torch "electric torch"
 ];
 
 [ QuerySub; noun.description();];
+
 Verb 'what' * 'is'/'was' scope=QueryTopic -> Query;
 
+Class MultiTopic
+	with
+		number 0,
+		parse_name [ _w1 _w2 _i _sw1 _sw2 _len;
+			_w1 = NextWordStopped();
+			_w2 = NextWordStopped();
+			_i = 0;
+			_len = self.#topics / 2;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+			if(_len % 3 > 0)
+				"ERROR: multi_topic topics property of ", (the) self," has incorrect # of values!^";
+#IfNot;
+			if(_len % 3 > 0)
+				"ERROR: multi_topic #1!^";
+#EndIf;
+			while(_i < _len) {
+				_sw1 = self.&topics-->(_i+2);
+#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+				if(~~(_sw1 ofclass String or Routine))
+					"ERROR: Element ", _i+2, " in multi_topic topics property of ", (the) self," is not a string or routine!^",
+						"Element: ", (name) _sw1, "^";
+#IfNot;
+				if(~~(_sw1 ofclass String or Routine))
+					"ERROR: multi_topic #2!^";
+#EndIf;
+
+				_i = _i + 3;
+			}
+			_i = 0;
+#endif;
+			while(_i < _len) {
+				_sw1 = self.&topics-->_i;
+				_sw2 = self.&topics-->(_i+1);
+				if(_w1 == _sw1 && _w2 == _sw2) {
+					self.number = _i;
+					return 2;
+				}
+				if(_w1 == _sw1 or _sw2) {
+					self.number = _i;
+					return 1;
+				}
+				_i = _i + 3;
+			}
+			! It would make sense to return 0 here, but property
+			! routines return 0 by default anyway.
+		],
+		description [ _k;
+			_k = self.&topics-->(self.number + 2);
+			if(_k ofclass Routine) {
+				_k();
+				rtrue;
+			}
+			print_ret (string) _k;
+		];
+
 Object questions "questions";
-Object -> "long count"
-  with name 'long' 'count',
-       description "The Long Count is the great Mayan cycle of
-           time, which began in 3114 BC and will finish with
-           the world's end in 2012 AD.";
-Object -> "samarkand"
-  with name 'samarkand',
-       description "Samarkand is a city in south-eastern Uzbekistan.";
+
+MultiTopic -> MultiQuestion_1 "MultiQuestion_1"
+	with
+		topics
+			'long' 'count' "The Long Count is the Great Mayan cycle of
+			time, which began in 3114 BC and will finish with
+			the world's end in 2012 AD."
+			1 'samarkand' "Samarkand is a nice city in south-eastern Uzbekistan.";
+
+! Object -> "long count"
+  ! with name 'long' 'count',
+       ! description "The Long Count is the great Mayan cycle of
+           ! time, which began in 3114 BC and will finish with
+           ! the world's end in 2012 AD.";
+! Object -> "samarkand"
+  ! with name 'samarkand',
+       ! description "Samarkand is a city in south-eastern Uzbekistan.";
 
 Object  Hair "John's hair"
   with  name 'hair' 'head',
