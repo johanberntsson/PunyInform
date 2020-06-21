@@ -588,6 +588,7 @@ Book -> GreenBook "green book"
 
 Book -> PinkBook "pink book"
 	with
+		invent "that stupid old pink book",
 	    parse_name [ first_word;
 			first_word = NextWord();
 			if(first_word == 'pink') {
@@ -604,6 +605,12 @@ Object -> Torch "electric torch"
 	with
 		name 'torch' 'electric' 'flashlight',
 		article "an",
+		invent [;
+			if(inventory_stage == 2) {
+				print " (Ugly as sin)";
+				rfalse;
+			}
+		],
 		description "A simple battery powered electric torch.",
 		before [;
 			Push:

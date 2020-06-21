@@ -1,4 +1,5 @@
-! ext_flags.h by Fredrik Ramsberg, adapted from flags.h by Adam Cadre.
+! ext_flags.h, a library extension for PunyInform by Fredrik Ramsberg, adapted 
+! from flags.h by Adam Cadre.
 
 ! This is a simple system to provide on/off flags that only take up one bit of
 ! memory; thus, there's no need to waste memory (and global variables) by

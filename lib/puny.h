@@ -363,8 +363,7 @@ Constant ONE_SPACE_STRING = " ";
 			! Push obj onto queue, printing the object that is shifted out, if any
 			if(_last_obj) {
 				if(_printed_any_objects) print ", ";
-				_PrintObjName(_last_obj, FORM_INDEF);
-				_PrintAfterEntry(_last_obj);
+				_PrintContentsPrintAnObj(_last_obj);
 				_printed_any_objects = 1;
 			}
 			_last_obj = _obj;
@@ -372,13 +371,28 @@ Constant ONE_SPACE_STRING = " ";
 	}
 	if(_last_obj) {
 		if(_printed_any_objects) print " and ";
-		_PrintObjName(_last_obj, FORM_INDEF);
-		_PrintAfterEntry(_last_obj);
+		_PrintContentsPrintAnObj(_last_obj);
 	}
 
 	return _printed_first_text;
 ];
 
+[ _PrintContentsPrintAnObj p_obj _inv _skip;
+	_inv = (action == ##Inv && p_obj provides invent);
+	if(_inv) {
+		inventory_stage = 1;
+		_skip = PrintOrRun(p_obj, invent, true);
+	}
+	if(_skip == false) {
+		_PrintObjName(p_obj, FORM_INDEF);
+		if(_inv) {
+			inventory_stage = 2;
+			_skip = PrintOrRun(p_obj, invent, true);
+		}
+		if(_skip == false)
+			_PrintAfterEntry(p_obj);
+	}
+];
 [ RunRoutines p_obj p_prop p_switch;
 #IfnDef OPTIONAL_MANUAL_SCOPE;
 	! default case: always assume that every timer etc
@@ -643,7 +657,7 @@ Include "parser.h";
 	if(p_fake_obj < FAKE_N_OBJ || p_fake_obj > FAKE_OUT_OBJ)
 		RunTimeError(ERR_NOT_FAKE_OBJ);
 #EndIf;
-	return p_dir - FAKE_N_OBJ + n_to;
+	return p_fake_obj - FAKE_N_OBJ + n_to;
 ];
 
 [ _SetDirectionIfIsFakeDir p_obj p_noun_no _idx;
