@@ -298,7 +298,7 @@ Verb 'wear'
 			_door_dir = noun.door_dir();
 		}
 		! Convert to fake object
-		_door_dir = _door_dir - n_to + FAKE_N_OBJ;
+		_door_dir = DirPropToFakeObj(_door_dir);
 		<<Go _door_dir>>; 
 	}
 	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }

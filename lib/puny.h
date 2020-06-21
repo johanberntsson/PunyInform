@@ -630,6 +630,22 @@ Include "parser.h";
     return RunRoutines(p_actor, life, p_reason);
 ];
 
+[ DirPropToFakeObj p_dir_prop;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(p_dir_prop < n_to || p_dir_prop > out_to)
+		RunTimeError(ERR_NOT_DIR_PROP);
+#EndIf;
+	return p_dir_prop - n_to + FAKE_N_OBJ;
+];
+
+[ FakeObjToDirProp p_fake_obj;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(p_fake_obj < FAKE_N_OBJ || p_fake_obj > FAKE_OUT_OBJ)
+		RunTimeError(ERR_NOT_FAKE_OBJ);
+#EndIf;
+	return p_dir - FAKE_N_OBJ + n_to;
+];
+
 [ _SetDirectionIfIsFakeDir p_obj p_noun_no _idx;
 	if(p_obj >= FAKE_N_OBJ && p_obj <= FAKE_OUT_OBJ) {
 		_idx = p_obj - FAKE_N_OBJ;

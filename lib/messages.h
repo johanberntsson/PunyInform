@@ -536,6 +536,8 @@ Constant ERR_SCOPE_FULL 3;
 Constant ERR_UNKNOWN_MSGNO 4;
 Constant ERR_INVALID_DIR_PROP 5;
 Constant ERR_TOO_MANY_FLOATING 6;
+Constant ERR_NOT_DIR_PROP 7;
+Constant ERR_NOT_FAKE_OBJ 8;
 
 [RunTimeError p_err;
 	print "[Puny error: ";
@@ -556,6 +558,10 @@ Constant ERR_TOO_MANY_FLOATING 6;
 			print "Invalid direction prop in GoSub";
 		ERR_TOO_MANY_FLOATING:
 			print "Too many floating objects";
+		ERR_NOT_DIR_PROP:
+			print "DirPropToFakeObj called with non-dirprop";
+		ERR_NOT_FAKE_OBJ:
+			print "FakeObjToDirProp called with non-fakeobj";
 		default:
 			print "Unknown error (", p_err, ")";
 		}
