@@ -31,6 +31,89 @@ Include "ext_quote_box.h";
 
 Include "puny.h";
 
+!===================== Classes, verbs etc for game
+
+! -- testing scope grammar token
+! See: https://www.inform-fiction.org/manual/html/s32.html 
+
+[ QueryTopic;
+  switch (scope_stage) {
+      1: rfalse;
+      2: ScopeWithin(WhatIsTopics); rtrue;
+      3: "You haven't the faintest.";
+  }
+];
+
+[ QuerySub; noun.description();];
+
+Verb 'what' * 'is'/'was' scope=QueryTopic -> Query;
+
+Class MultiTopic
+	with
+		number 0,
+		parse_name [ _w1 _w2 _i _sw1 _sw2 _len;
+			_w1 = NextWordStopped();
+			_w2 = NextWordStopped();
+			_i = 0;
+			_len = self.#topics / 2;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+			if(_len % 3 > 0)
+				"ERROR: multi_topic topics property of ", (the) self," has incorrect # of values!^";
+#IfNot;
+			if(_len % 3 > 0)
+				"ERROR: multi_topic #1!^";
+#EndIf;
+			while(_i < _len) {
+				_sw1 = self.&topics-->(_i+2);
+#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+				if(~~(_sw1 ofclass String or Routine))
+					"ERROR: Element ", _i+2, " in multi_topic topics property of ", (the) self," is not a string or routine!^",
+						"Element: ", (name) _sw1, "^";
+#IfNot;
+				if(~~(_sw1 ofclass String or Routine))
+					"ERROR: multi_topic #2!^";
+#EndIf;
+
+				_i = _i + 3;
+			}
+			_i = 0;
+#endif;
+			while(_i < _len) {
+				_sw1 = self.&topics-->_i;
+				_sw2 = self.&topics-->(_i+1);
+				if(_w1 == _sw1 && _w2 == _sw2) {
+					self.number = _i;
+					return 2;
+				}
+				if(_w1 == _sw1 or _sw2) {
+					self.number = _i;
+					return 1;
+				}
+				_i = _i + 3;
+			}
+			! It would make sense to return 0 here, but property
+			! routines return 0 by default anyway.
+		],
+		description [ _k;
+			_k = self.&topics-->(self.number + 2);
+			if(_k ofclass Routine) {
+				_k();
+				rtrue;
+			}
+			print_ret (string) _k;
+		];
+
+Object WhatIsTopics "WhatIsTopics";
+
+MultiTopic -> MultiQuestion_1 "MultiQuestion_1"
+	with
+		topics
+			1 'library' "A library is venue where books are kept and people can borrow said books."
+			1 'grue' "A grue is a sinister creature lurking in the dark. If anyone has actually seen a grue,
+				they have not lived long enough to tell the tale."
+			'library' 'manager' "Library managers oversee the daily activities and functions of a library.";  
+
 Array quote_1 --> 5 35
 "When I die, I want to go peacefully"
 "in my sleep like my grandfather."
@@ -45,6 +128,16 @@ Object Library "The Library"
 			1 'library' "It's a beautiful old library.",
 		e_to TopOfStairs,
 	has light;
+
+Object -> Manager "library manager"
+	with
+		article "the",
+		parse_name [ _w1;
+			_w1 = NextWordStopped();
+			if(_w1 == 'manager') return 1;
+			if(_w1 == 'library' && NextWordStopped() == 'manager') return 2;
+		],
+	has animate;
 
 Object TopOfStairs "Staircase Leading Down"
 	with
