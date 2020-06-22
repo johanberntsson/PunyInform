@@ -1165,7 +1165,7 @@ Verb meta 'verify'
 ! Debug verbs
 ! ---------------------
 
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 Verb meta 'pronoun' 'pronouns'
     *                                           -> Pronouns;
 

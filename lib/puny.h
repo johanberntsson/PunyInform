@@ -378,8 +378,8 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 [ _PrintContentsPrintAnObj p_obj _inv _skip;
-	_inv = (action == ##Inv && p_obj provides invent);
-	if(_inv) {
+	if(action == ##Inv && p_obj.invent ~= 0) {
+		_inv = true;
 		inventory_stage = 1;
 		_skip = PrintOrRun(p_obj, invent, true);
 	}
@@ -387,10 +387,9 @@ Constant ONE_SPACE_STRING = " ";
 		_PrintObjName(p_obj, FORM_INDEF);
 		if(_inv) {
 			inventory_stage = 2;
-			_skip = PrintOrRun(p_obj, invent, true);
+			if(PrintOrRun(p_obj, invent, true)) rtrue;
 		}
-		if(_skip == false)
-			_PrintAfterEntry(p_obj);
+		_PrintAfterEntry(p_obj);
 	}
 ];
 [ RunRoutines p_obj p_prop p_switch;
@@ -524,7 +523,7 @@ Include "parser.h";
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
 [ PerformPreparedAction;
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(debug_flag & 2) TraceAction(action, noun, second);
 #EndIf;
 	if ((BeforeRoutines() == false) && action < 4096) {
@@ -535,7 +534,7 @@ Include "parser.h";
 [ RunEachTurn _i _obj;
 	! Loop over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(debug_flag & 1 && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
 #EndIf;
 #IfnDef OPTIONAL_MANUAL_SCOPE;
@@ -545,7 +544,7 @@ Include "parser.h";
 	RunRoutines(location, each_turn);
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 		if(debug_flag & 1 && _obj.&each_turn ~= 0) print "(", (name) _obj, ").each_turn()^";
 #EndIf;
 		if(_obj.&each_turn ~= 0) RunRoutines(_obj, each_turn);
@@ -560,13 +559,13 @@ Include "parser.h";
 #EndIf;	
 	_UpdateScope(player);
 #IfDef GamePreRoutine;
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(debug_flag & 1) print "GamePreRoutine()^";
 #EndIf;
 	if(GamePreRoutine()) rtrue;
 #EndIf;
 
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(debug_flag & 1) print "player.orders()^";
 #EndIf;
 	if(RunRoutines(player, orders)) rtrue;
@@ -574,7 +573,7 @@ Include "parser.h";
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 		if (_obj provides react_before) {
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_before()^";
 #EndIf;
 			if(RunRoutines(_obj, react_before)) {
@@ -583,13 +582,13 @@ Include "parser.h";
 		}
 	}
 	if(location provides before) {
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) location, ").before()^";
 #EndIf;
 		if(RunRoutines(location, before)) rtrue;
 	}
 	if(inp1 > 1 && inp1 provides before) {
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) inp1, ").before()^";
 #EndIf;
 		if(RunRoutines(inp1, before)) rtrue;
@@ -607,7 +606,7 @@ Include "parser.h";
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 		if (_obj provides react_after) {
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_after()^";
 #EndIf;
 			if(RunRoutines(_obj, react_after)) {
@@ -616,19 +615,19 @@ Include "parser.h";
 		}
 	}
 	if(location provides after) {
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) location, ").after()^";
 #EndIf;
 		if(RunRoutines(location, after)) rtrue;
 	}
 	if(inp1 > 1 && inp1 provides after) {
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) inp1, ").after()^";
 #EndIf;
 		if(RunRoutines(inp1, after)) rtrue;
 	}
 #IfDef GamePostRoutine;
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(debug_flag & 1) print "GamePostRoutine()^";
 #EndIf;
 	return GamePostRoutine();
@@ -638,7 +637,7 @@ Include "parser.h";
 ];
 
 [ RunLife p_actor p_reason;
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(debug_flag & 1 && p_actor provides life) print "(", (name) p_actor, ").life()^";
 #EndIf;
     return RunRoutines(p_actor, life, p_reason);
@@ -672,7 +671,7 @@ Include "parser.h";
 	}
 ];
 
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 [ DebugParameter _w;
     print _w;
     if (_w >= 1 && _w <= top_object) print " (", (name) _w, ")";
@@ -748,7 +747,7 @@ Include "parser.h";
 #EndIf;
 			p_obj.time_left = p_timer;
 	}
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(debug_flag & 4) {
 		print "[ Starting ";
 		if(p_array_val > 0)
@@ -772,7 +771,7 @@ Include "parser.h";
 		if (the_timers-->_i == p_array_val) jump FoundTSlot4;
 	rfalse;
 .FoundTSlot4;
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(debug_flag & 4) {
 		print "[ Stopping ";
 		if(p_array_val > 0)
@@ -804,7 +803,7 @@ Include "parser.h";
 	for (current_timer=0 : current_timer<active_timers : current_timer++) {
 		if (deadflag >= GS_DEAD) return;
 		_j = the_timers-->current_timer;
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 		if(debug_flag & 4) {
 			print "[ Running ";
 			if(_j > 0) {

@@ -330,7 +330,7 @@
 		return 0;
 	}
 
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	if(action_debug) {
 		_name_array_len = Directions; _stop = top_object + 1;
 	} else {
@@ -1084,7 +1084,7 @@ Array guess_num_objects->5;
 	parser_all_found = false;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
-#IfDef OPTIONAL_DEBUG_VERBS;
+#IfDef DEBUG;
 	action_debug = (action == ##Scope or ##Purloin or ##Tree or ##GoNear);
 #EndIf;
 
@@ -1241,8 +1241,6 @@ Array guess_num_objects->5;
 		! if true, then scope=Routine was executed
 		! in the previous _ParseAndPerformAction,
 		! which can have added stuff to the scope
-		! Calling _ResetScope to force  a scope refresh
-		!_ResetScope();
 	}
 	scope_routine = 0; ! prepare for a new scope=Routine
 

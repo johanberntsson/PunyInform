@@ -3,6 +3,8 @@
 
 ! Testbench - a platform for trying things out in PunyInform
 
+!Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
+
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
@@ -16,7 +18,6 @@ Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error cod
 #IfnDef USEINFORM;
 ! Uncomment to add optional features to PunyLib
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-Constant OPTIONAL_DEBUG_VERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
@@ -573,6 +574,7 @@ Object -> John "John"
 
 Object -> infiniteBag "infinite bag"
 	with
+		invent 0,
 		name 'infinite' 'bag',
 		article "an",
 		description "An infinitely deep bag.",

@@ -371,18 +371,11 @@ Global top_object;
 Global also_flag;
 Global inventory_stage;
 
-! add debug verbs if in debug mode
 #IfDef DEBUG;
-    #IfnDef OPTIONAL_DEBUG_VERBS;
-        Constant OPTIONAL_DEBUG_VERBS;
-    #EndIf;
-#Endif;
-
-#IfDef OPTIONAL_DEBUG_VERBS;
 Global dict_start;
 Global dict_entry_size;
 Global dict_end;
-Global debug_flag = 0; ! if DEBUG or OPTIONAL_DEBUG_VERBS
+Global debug_flag = 0;
 #EndIf;
 
 #IfDef DEBUG_TIMER;

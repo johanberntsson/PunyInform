@@ -6,9 +6,9 @@
 !Statusline time;
 
 ! Uncomment to add optional features to PunyLib
+!Constant DEBUG;
 !Constant CUSTOM_ABBREVIATIONS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-!Constant OPTIONAL_DEBUG_VERBS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_FULL_SCORE;
 !Constant OPTIONAL_FULL_DIRECTIONS;
@@ -33,5 +33,4 @@ Object Library "L"
 
 [Initialise;
 	location = Library;
-!	print "^^And so the story begins...^^";
 ];
