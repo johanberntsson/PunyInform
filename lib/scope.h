@@ -198,12 +198,14 @@
 	objectloop (_j .& add_to_scope) {
 		_l = _j.&add_to_scope;
 		if (_l-->0 ofclass Routine) continue;
-		_k = (_j.#add_to_scope)/WORDSIZE;
 #IfV5;
+		_k = _j.#add_to_scope;
+		@log_shift _k (-1) -> _k;
 		@scan_table _i _l _k -> _m ?~failed;
 		return _j;
 .failed;
 #IfNot;
+		_k = (_j.#add_to_scope)/WORDSIZE;
 		for (_m=0 : _m<_k : _m++) if (_l-->_m == _i) return _j;
 #EndIf;
 	}
