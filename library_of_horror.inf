@@ -220,6 +220,7 @@ Object -> Frank "Frank the Robot"
 						"But the box isn't empty!";
 					SetFlag(F_FRANK_BLOCKED_BY_BOX);
 					move Box to self;
+					scope_modified = true;
 					self.number = 6; ! Make the box stay in place this many moves minus one.
 					"Frank's head, where most of his sensors are located, is now covered by the box.";
 				}
@@ -252,6 +253,7 @@ Object -> Frank "Frank the Robot"
 						_dir_prop = direction_properties_array-->_i;
 						if(_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
 							move self to location;
+							scope_modified = true;
 							print "^Frank enters from the ", (string) opposite_directions-->_i, ".^";
 							if(location == DarkChamber) {
 								print "^Frank gently pushes you out of the room. ~Nothing to see here, now is there?~^";
