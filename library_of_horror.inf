@@ -24,8 +24,9 @@ Include "globals.h";
 ];
 
 ! Setup flags
-Constant FLAG_COUNT = 1;
+Constant FLAG_COUNT = 2;
 Constant F_TALKED_TO_MANAGER = 0;
+Constant F_FRANK_BLOCKED_BY_BOX = 1;
 Include "ext_flags.h";
 
 ! Setup cheap scenery
@@ -45,6 +46,13 @@ Include "puny.h";
 
 ! -- testing scope grammar token
 ! See: https://www.inform-fiction.org/manual/html/s32.html 
+
+[ CoverSub;
+	"That seems pointless.";
+];
+
+Extend only 'cover' first
+	* noun 'with'/'using'/'utilizing' held	-> Cover;
 
 [ TalkToSub;
 	print_ret (The) noun, " doesn't seem interested.";
@@ -195,6 +203,7 @@ Array opposite_directions table "south" "north" "west" "east" "down" "up" "out" 
 
 Object -> Frank "Frank the Robot"
 	with
+		number 0,
 		name 'frank' 'the' 'robot',
 		when_off [; ! The first time the player spots Frank, he turns on automatically and his daemon is started.
 			give self on;
@@ -205,28 +214,58 @@ Object -> Frank "Frank the Robot"
 		before [;
 			SwitchOff:
 				"A bright light arc juts out from near the button and the electric shock makes you jump back.";
+			Cover:
+				if(second==Box) {
+					if(child(Box))
+						"But the box isn't empty!";
+					SetFlag(F_FRANK_BLOCKED_BY_BOX);
+					move Box to self;
+					self.number = 6; ! Make the box stay in place this many moves minus one.
+					"Frank's head, where most of his sensors are located, is now covered by the box.";
+				}
+				"It doesn't look like it would fit.";
 		],
 		react_before [;
 			Go:
-				if(location == StorageRoom && selected_direction == e_to)
+				if(location == StorageRoom && selected_direction == e_to && FlagIsClear(F_FRANK_BLOCKED_BY_BOX))
 					"Frank rolls up in front of you, blocking your path. ~That part of the basement is not safe. There is nothing of interest there anyway.~";
 		],
 		daemon [ _my_loc _i _dir_prop _dir_count;
 			! Frank wants to follow the player around, but can't go up/down/in/out
-			_my_loc = parent(self);
-			if(location ~= _my_loc){
-				_dir_count = direction_properties_array-->0 - 4; ! Skip the last 4 directions (u_to, d_to, in_to, out_to)
-				for(_i=1 : _i <= _dir_count : _i++) {
-					_dir_prop = direction_properties_array-->_i;
-					if(_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
-						move self to location;
-						"^Frank enters from the ", (string) opposite_directions-->_i, ".";
+			if(FlagIsSet(F_FRANK_BLOCKED_BY_BOX)) {
+				if(--self.number == 0) {
+					ClearFlag(F_FRANK_BLOCKED_BY_BOX);
+					remove Box;
+					scope_modified = true;
+					if(Frank in location)
+						"^Frank manages to break out of the cardboard box. He goes on to incinerate the box.";
+					else
+						"^From some other room, you hear the sound of the cardboard box falling to the floor and then
+							what sounds like a quick burst of fire.";
+				}
+			}
+			if(FlagIsClear(F_FRANK_BLOCKED_BY_BOX)) {
+				_my_loc = parent(self);
+				if(location ~= _my_loc){
+					_dir_count = direction_properties_array-->0 - 4; ! Skip the last 4 directions (u_to, d_to, in_to, out_to)
+					for(_i=1 : _i <= _dir_count : _i++) {
+						_dir_prop = direction_properties_array-->_i;
+						if(_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
+							move self to location;
+							print "^Frank enters from the ", (string) opposite_directions-->_i, ".^";
+							if(location == DarkChamber) {
+								print "^Frank gently pushes you out of the room. ~Nothing to see here, now is there?~^";
+								PlayerTo(StorageRoom);
+								<Look>;
+							}
+							rtrue;
+						}
 					}
 				}
 			}
 		],
 		description "Frank has a rather dreary look.",
-	has animate proper switchable;
+	has animate proper switchable transparent;
 
 Object Hallway "Hallway"
 	with
@@ -260,6 +299,21 @@ Object RepairShop "Repair Shop"
 		e_to StorageRoom,
 	has light;
 
+Object -> Box "cardboard box"
+	with
+		name 'cardboard' 'box',
+		description "It's an old and worn box, albeit in reasonably good shape.",
+	has container open;
+
+Object -> -> WildThingsBook "small book"
+	with
+		name 'small' 'book' 'books//p',
+		description "Where the Wild Things Are, by Maurice Sendak.",
+		before [;
+			Open, Close:
+				"The manager just asked you to get the book, not read it.";
+		];
+
 Object DarkChamber "Dark chamber"
 	with 
 		description "As you enter, two candles on a table suddenly light up. The large table stands 
@@ -280,7 +334,7 @@ Object -> Book "red book"
 			if(self has open)
 				"^The large red book lies open on the table.";
 			else 
-				"^A large red book lies on the table, closed.";
+				"^A large red book lies between the candles, closed.";
 		],
 		description [;
 			print "The book is covered in red leather. ";
