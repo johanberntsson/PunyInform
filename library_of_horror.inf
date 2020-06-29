@@ -10,19 +10,29 @@
 !Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_FULL_SCORE;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
-!Constant OPTIONAL_MANUAL_SCOPE;
-!Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
+Constant OPTIONAL_MANUAL_SCOPE;
+Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 
 Constant Story      "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game^";
 
 Include "globals.h";
 
+[ DeathMessage;
+	if(deadflag == 3)
+		print "You have summoned demons set to destroy the world";
+];
+
 ! Setup flags
-Constant FLAG_COUNT = 8;
+Constant FLAG_COUNT = 1;
+Constant F_TALKED_TO_MANAGER = 0;
 Include "ext_flags.h";
 
 ! Setup cheap scenery
+[SceneryReply;
+	default:
+		"Better just leave it alone and get on with the task at hand.";
+];
 Include "ext_cheap_scenery.h";
 
 ! Setup quote box
@@ -35,6 +45,13 @@ Include "puny.h";
 
 ! -- testing scope grammar token
 ! See: https://www.inform-fiction.org/manual/html/s32.html 
+
+[ TalkToSub;
+	print_ret (The) noun, " doesn't seem interested.";
+];
+
+Verb 'talk'
+	* 'to' creature -> TalkTo;
 
 [ QueryTopic;
   switch (scope_stage) {
@@ -137,11 +154,19 @@ Object -> Manager "library manager"
 			if(_w1 == 'manager') return 1;
 			if(_w1 == 'library' && NextWordStopped() == 'manager') return 2;
 		],
+		before [;
+			TalkTo:
+				if(FlagIsClear(F_TALKED_TO_MANAGER)) {
+					SetFlag(F_TALKED_TO_MANAGER);
+					"He looks up at you: ~Oh, there you are! Listen, I really need you to go get a book for me - Where the Wild Things Are by Maurice Sendak. I must have left it in the repair shop in the basement. Frank the Robot is down there. He'll help you find it.~";
+				} else
+					"~We're done talking.~";
+		],
 	has animate;
 
 Object TopOfStairs "Staircase Leading Down"
 	with
-		description "The stairs descend into a forboding darkness. The main hall of the library is off to the west.",
+		description "The stairs descend into a foreboding darkness. The main hall of the library is off to the west.",
 		w_to Library,
 		d_to BottomOfStairs,
 		after [;
@@ -158,7 +183,7 @@ Object BottomOfStairs "Basement, Near Staircase"
 			However, there's enough light coming in from the stairs and nearby rooms to make
 			out your surroundings. There is more light to the east.",
 		u_to TopOfStairs,
-		e_to StorageRoom,
+		e_to Hallway,
 	has light;
 
 ! Data that Frank needs to print where he came from.	
@@ -171,7 +196,7 @@ Array opposite_directions table "south" "north" "west" "east" "down" "up" "out" 
 Object -> Frank "Frank the Robot"
 	with
 		name 'frank' 'the' 'robot',
-		when_off [;
+		when_off [; ! The first time the player spots Frank, he turns on automatically and his daemon is started.
 			give self on;
 			give self moved;
 			StartDaemon(self);
@@ -181,15 +206,19 @@ Object -> Frank "Frank the Robot"
 			SwitchOff:
 				"A bright light arc juts out from near the button and the electric shock makes you jump back.";
 		],
-		daemon [ _my_loc _i _dir_prop _dirs ;
+		react_before [;
+			Go:
+				if(location == StorageRoom && selected_direction == e_to)
+					"Frank rolls up in front of you, blocking your path. ~That part of the basement is not safe. There is nothing of interest there anyway.~";
+		],
+		daemon [ _my_loc _i _dir_prop _dir_count;
 			! Frank wants to follow the player around, but can't go up/down/in/out
 			_my_loc = parent(self);
 			if(location ~= _my_loc){
-				_dirs = direction_properties_array-->0;
-				for(_i=1 : _i <= _dirs : _i++) {
+				_dir_count = direction_properties_array-->0 - 4; ! Skip the last 4 directions (u_to, d_to, in_to, out_to)
+				for(_i=1 : _i <= _dir_count : _i++) {
 					_dir_prop = direction_properties_array-->_i;
-					if(_dir_prop ~= u_to or d_to or in_to or out_to &&
-						_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
+					if(_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
 						move self to location;
 						"^Frank enters from the ", (string) opposite_directions-->_i, ".";
 					}
@@ -198,15 +227,85 @@ Object -> Frank "Frank the Robot"
 		],
 		description "Frank has a rather dreary look.",
 	has animate proper switchable;
+
+Object Hallway "Hallway"
+	with
+		description "A wide hallway leads from the stairs to the west to another room to the south. There are some
+			dusty doors along the walls, but they have all been nailed shut a long time ago.",
+		cheap_scenery 'door' 'doors' "Regular doors, but old and worn, with some cobweb on them.",
+		w_to BottomOfStairs,
+		s_to StorageRoom,
+	has light;
 	
 Object StorageRoom "Storage Room"
 	with 
-		description "A small storage room.",
-		w_to BottomOfStairs,
+		description "A large storage room, which is now empty except for cobweb and dust. 
+			Some light is coming from the north and west. A smaller, dark passage leads east. There's a
+			yellow sign above the dark passage.",
+		cheap_scenery 
+			'dust' 'cobweb' "Doesn't look like this part of the basement is ever cleaned."
+			'yellow' 'sign' "~Dangerous area! Keep out!~",		
+		n_to Hallway,
+		w_to RepairShop,
+		e_to DarkChamber,
 	has light;
-	
 
+Object RepairShop "Repair Shop"
+	with
+		description "This is a smaller room, with a workbench and various specialized tools. The whole room 
+			is quite clean.",
+		cheap_scenery 
+			'bench' 'workbench' "It's an old and worn workbench."
+			'specialized' 'tools' "The tools are for repairing books, you can tell that much.",
+		e_to StorageRoom,
+	has light;
+
+Object DarkChamber "Dark chamber"
+	with 
+		description "As you enter, two candles on a table suddenly light up. The large table stands 
+			in the middle of the otherwise empty room.",
+		w_to StorageRoom,
+	has light;
+
+Object -> Table "table"
+	with
+		name 'large' 'table',
+		description "It's a very sturds wooden table. Looks like oak to you.",
+	has static scenery;
 	
+Object -> Book "red book"
+	with
+		name 'red' 'leather' 'book' 'books//p',
+		describe [;
+			if(self has open)
+				"^The large red book lies open on the table.";
+			else 
+				"^A large red book lies on the table, closed.";
+		],
+		description [;
+			print "The book is covered in red leather. ";
+			if(self has open)
+				"Some words are written across the page, in creepy letters.";
+			else
+				"Somehow, you get a feeling that the book is evil and dangerous.";
+		],
+		add_to_scope [;
+			if(self has open)
+				PlaceInScope(Words);
+		],
+	has openable transparent;
+
+Object Words "words"
+	with
+		name 'creepy' 'letters' 'word' 'words',
+		before [;
+			Examine:
+				deadflag = 3;
+				"After a few seconds of struggling with the ancient letters, you can make out the
+					words and read them out loud: ~KLAATU BARADA NIKTO~^^
+					Several holes open in the floor and fiery beings rise from them. The earth trembles and the walls and ceiling fall over you.";
+		];
+		
 [Initialise;
 	location = Library;
 	print "^^And so the story begins...^^";
