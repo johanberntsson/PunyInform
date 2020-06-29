@@ -8,7 +8,6 @@
 !Constant OPTIONAL_FULL_DIRECTIONS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
-!Constant OPTIONAL_FULL_SCORE;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
@@ -16,7 +15,38 @@ Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error cod
 Constant Story      "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game^";
 
+Constant OPTIONAL_FULL_SCORE;
+Constant MAX_SCORE = 100;
+Constant TASKS_PROVIDED;
+Constant NUMBER_TASKS = 5;
+Array task_scores -> 10 20 20 70 20;
+Constant TASK_TALK_MANAGER = 0;
+Constant TASK_GIVE_BOOK = 1;
+Constant TASK_BLOCK_ROBOT = 2;
+Constant TASK_BURN_BOOK = 3;
+Constant TASK_LEAVE = 4;
+
 Include "globals.h";
+
+[ PrintRank;
+	print ", earning you the rank of ";
+	if (score >= 100) "Hero.";
+	if (score >= 70) "Brave.";
+	if (score >= 50) "Trustworthy.";
+	if (score >= 30) "Promising.";
+	if (score >= 10) "Well-meaning.";
+	"Novice.";
+];
+[ PrintTaskName task_number;
+	switch (task_number) {
+		TASK_TALK_MANAGER: 	"talking to the manager";
+		TASK_GIVE_BOOK: 	"giving the manager the book";
+		TASK_BLOCK_ROBOT: 	"obstructing the robot";
+		TASK_BURN_BOOK: 	"burning the evil book";
+		TASK_LEAVE: 		"leaving the library";
+	}
+];
+
 
 [ DeathMessage;
 	if(deadflag == 3)
@@ -166,6 +196,7 @@ Object -> Manager "library manager"
 			TalkTo:
 				if(FlagIsClear(F_TALKED_TO_MANAGER)) {
 					SetFlag(F_TALKED_TO_MANAGER);
+					Achieved(TASK_TALK_MANAGER);
 					"He looks up at you: ~Oh, there you are! Listen, I really need you to go get a book for me - Where the Wild Things Are by Maurice Sendak. I must have left it in the repair shop in the basement. Frank the Robot is down there. He'll help you find it.~";
 				} else
 					"~We're done talking.~";
@@ -221,6 +252,7 @@ Object -> Frank "Frank the Robot"
 					SetFlag(F_FRANK_BLOCKED_BY_BOX);
 					move Box to self;
 					scope_modified = true;
+					Achieved(TASK_BLOCK_ROBOT);
 					self.number = 6; ! Make the box stay in place this many moves minus one.
 					"Frank's head, where most of his sensors are located, is now covered by the box.";
 				}
