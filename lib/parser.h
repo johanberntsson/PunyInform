@@ -1141,11 +1141,11 @@ Array guess_num_objects->5;
 			}
 
 			! write error messages if PHASE2 as needed
-			if(p_phase == PHASE2) {
-				if(_pattern_pointer->0 == TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
-					! bad preposition
-					print "I didn't understand that sentence.^";
-				} else if(parser_unknown_noun_found > 0) {
+			if(_pattern_pointer->0 == TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
+				! bad preposition
+				if(p_phase == PHASE2) print "I didn't understand that sentence.^";
+			} else if(parser_unknown_noun_found > 0) {
+				if(p_phase == PHASE2) {
 					if(scope_routine ~= 0) {
 						scope_stage = 3;
 						indirect(scope_routine);
@@ -1174,6 +1174,11 @@ Array guess_num_objects->5;
 						_PrintUknownWord();
 						print "~ means.^";
 					}
+				} else {
+					! give higher score to unknown words matches
+					! so that for examine 'get goblin' and 'take goblin'
+					! works the same when goblin isn't in scope.
+					wn = wn + 1;
 				}
 			}
 			return wn - verb_wordnum; ! pattern didn't match
