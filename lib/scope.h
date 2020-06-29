@@ -47,8 +47,18 @@
 ];
 
 [ _UpdateScope p_actor p_force _start_pos;
-	! scope is already calculated
 	if(p_actor == 0) p_actor = player;
+
+	if(scope_stage == 2) {
+		! call scope_routine to add objects, then abort if it returns true
+		scope_objects = 0;
+		if(indirect(scope_routine)) rtrue;
+
+		! keep going, but set modified to force update of the normal scope
+		scope_modified = true;
+	}
+
+	! check if scope is already calculated
 #IfDef DEBUG_SCOPE;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
 #EndIf;
@@ -62,9 +72,14 @@
 	_start_pos = ScopeCeiling(p_actor);
 
 
+	if(scope_stage ~= 2) {
+		! if scope_stage == 2, then scope_routine has already added
+		! some objects that we don't want to overwrite
+		scope_objects = 0;
+	}
+
 	! the directions are always in scope
-	scope-->0 = Directions;
-	scope_objects = 1;
+	scope-->(scope_objects++) = Directions;
 
 	! if we are in a container, add it to scope
 	if(_start_pos ~= location) {

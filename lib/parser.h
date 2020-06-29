@@ -710,7 +710,8 @@
 			_token_data = NOUN_OBJECT;
 		! trigger add to scope
 		scope_stage = 2;
-		indirect(scope_routine);
+		_UpdateScope();
+		scope_stage = 0;
 	} else if(_token_type == TT_PARSE_ROUTINE) {
 		return  indirect(_token_data);
 	}
