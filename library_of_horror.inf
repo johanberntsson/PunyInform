@@ -82,7 +82,14 @@ Include "puny.h";
 ];
 
 Extend only 'cover' first
-	* noun 'with'/'using'/'utilizing' held	-> Cover;
+	* noun 'with'/'using' held	-> Cover;
+
+Verb 'blindfold'
+	* noun 'with'/'using' held	-> Cover;
+
+Extend 'put'
+	* held 'over' noun -> Cover reverse;
+
 
 [ TalkToSub;
 	print_ret (The) noun, " doesn't seem interested.";
