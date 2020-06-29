@@ -51,6 +51,8 @@
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSEANDPERFORM;
 
+System_file;
+
 Include "messages.h";
 
 
@@ -645,10 +647,10 @@ Include "parser.h";
 
 [ DirPropToFakeObj p_dir_prop;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if(p_dir_prop < n_to || p_dir_prop > out_to)
+	if(p_dir_prop < N_TO_CONST || p_dir_prop > OUT_TO_CONST)
 		RunTimeError(ERR_NOT_DIR_PROP);
 #EndIf;
-	return p_dir_prop - n_to + FAKE_N_OBJ;
+	return p_dir_prop - N_TO_CONST + FAKE_N_OBJ;
 ];
 
 [ FakeObjToDirProp p_fake_obj;
@@ -656,14 +658,14 @@ Include "parser.h";
 	if(p_fake_obj < FAKE_N_OBJ || p_fake_obj > FAKE_OUT_OBJ)
 		RunTimeError(ERR_NOT_FAKE_OBJ);
 #EndIf;
-	return p_fake_obj - FAKE_N_OBJ + n_to;
+	return p_fake_obj - FAKE_N_OBJ + N_TO_CONST;
 ];
 
 [ _SetDirectionIfIsFakeDir p_obj p_noun_no _idx;
 	if(p_obj >= FAKE_N_OBJ && p_obj <= FAKE_OUT_OBJ) {
 		_idx = p_obj - FAKE_N_OBJ;
 		selected_direction_index = _idx + 1;
-		selected_direction = _idx + n_to;
+		selected_direction = _idx + N_TO_CONST;
 		if(p_noun_no == 1)
 			noun = Directions;
 		else

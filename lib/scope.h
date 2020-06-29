@@ -1,6 +1,12 @@
+! Part of PunyInform: A small stdlib and parser for interactive fiction
+! suitable for old-school computers such as the Commodore 64.
+! Designed to be similar, but not identical, to the Inform 6 library.
+
 ! Routines to update what is in scope
 ! http://www.inform-fiction.org/manual/html/s32.html#p244
 !
+
+System_file;
 
 [ _SearchScope p_obj _child _add_this _i _len _addr;
 	while(p_obj) {

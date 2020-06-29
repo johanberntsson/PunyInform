@@ -1,5 +1,11 @@
+! Part of PunyInform: A small stdlib and parser for interactive fiction
+! suitable for old-school computers such as the Commodore 64.
+! Designed to be similar, but not identical, to the Inform 6 library.
+
 ! ######################### Parser
 ! PunyInform uses grammar version 2 which is easier to parse and economical
+
+System_file;
 
 [ _ReadPlayerInput p_no_prompt _result;
 ! #IfV5;
@@ -210,7 +216,7 @@
 
 [ _PrintParseArray p_parse_array _i;
 	print "PARSE_ARRAY: ", p_parse_array->1, " entries^";
-	for(_i = 0; _i < p_parse_array -> 1; _i++) {
+	for(_i = 0 : _i < p_parse_array -> 1 : _i++) {
 		print "Word " ,_i,
 		" dict ",((p_parse_array + 2 + _i * 4) --> 0),
  		" len ",(p_parse_array + 2 + _i * 4) -> 2,
@@ -339,7 +345,8 @@
 	for(_i = _name_array_len: _i < _stop: _i++) {
 		if(action_debug) _obj = _i; else _obj = scope-->_i;
 #IfNot;
-	for(_i = 0: _i < scope_objects: _i++) {
+	_stop = scope_objects;
+	for(_i = 0: _i < _stop: _i++) {
 		_obj = scope-->_i;
 #Endif;
 		_n = wn;

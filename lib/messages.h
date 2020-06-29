@@ -1,3 +1,9 @@
+! Part of PunyInform: A small stdlib and parser for interactive fiction
+! suitable for old-school computers such as the Commodore 64.
+! Designed to be similar, but not identical, to the Inform 6 library.
+!
+System_file;
+
 !
 ! Simple string messages
 !

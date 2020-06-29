@@ -1,5 +1,7 @@
 ! Part of PunyInform, a standard library for writing interactive fiction using Inform 6.
 !
+System_file;
+
 #IfnDef CUSTOM_ABBREVIATIONS;
 Abbreviate ". ";
 Abbreviate ", ";
@@ -133,6 +135,9 @@ Property nw_to; Property sw_to;
 #EndIf;
 Property u_to;  Property d_to;
 Property in_to; Property out_to;
+
+Constant N_TO_CONST = n_to;
+Constant OUT_TO_CONST = out_to;
 
 Property door_to     alias n_to;     !  For economy: these properties are
 Property when_closed alias s_to;     !  used only by objects which

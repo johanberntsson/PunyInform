@@ -30,6 +30,8 @@
 ! enclose it in an "if (FlagIsSet(F_FED_PARROT)) { ... }" statement.
 ! Naturally, you can test if a flag is clear by calling FlagIsClear instead.
 
+System_file;
+
 Array flag_powers ->
 	$$00000001
 	$$00000010
