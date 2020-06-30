@@ -1173,18 +1173,11 @@ Object thedark "Darkness"
 			! the first sentence in the input  has been parsed
 			! and executed. Now remove it from parse_array so that
 			! the next sentence can be parsed
-#IfDef DEBUG;
-			_PrintParseArray(parse_array);
-#Endif;
 			_copylength = 2 * _parsearraylength + 1;
 			for(_i = 1, _j = 2 * _sentencelength + 1: _j < _copylength: _i++, _j++)
 				parse_array-->_i = parse_array-->_j;
 
 			parse_array->1 = _parsearraylength - _sentencelength;
-#IfDef DEBUG;
-			_PrintParseArray(parse_array);
-			@new_line;
-#Endif;
 		} else {
 			! the input was just one sentence
 			parse_array->1 = 0;
