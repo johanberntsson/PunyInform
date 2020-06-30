@@ -213,14 +213,20 @@ Object -> Manager "library manager"
 Object TopOfStairs "Staircase Leading Down"
 	with
 		description "The stairs descend into a foreboding darkness. The main hall of the library is off to the west.",
-		w_to Library,
-		d_to BottomOfStairs,
-		after [;
-			if(self hasnt general) {
-				give self general;
-				QuoteBox(quote_1);
+		before [;
+			Go:
+			if(selected_direction==d_to) {
+				if(FlagIsClear(F_TALKED_TO_MANAGER))
+					"You have no business running around in the basement. Better go talk to the library manager instead,
+						to find out where you're needed.";
+				if(self hasnt general) {
+					give self general;
+					QuoteBox(quote_1);
+				}
 			}
 		],
+		w_to Library,
+		d_to BottomOfStairs,
 	has light;
 		
 Object BottomOfStairs "Basement, Near Staircase"
