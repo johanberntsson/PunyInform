@@ -174,7 +174,7 @@ MultiTopic -> MultiQuestion_1 "MultiQuestion_1"
 			1 'library' "A library is venue where books are kept and people can borrow said books."
 			1 'grue' "A grue is a sinister creature lurking in the dark. If anyone has actually seen a grue,
 				they have not lived long enough to tell the tale."
-			'library' 'manager' "Library managers oversee the daily activities and functions of a library.";  
+			1 'manager' "Library managers oversee the daily activities and functions of a library.";  
 
 Array quote_1 --> 5 35
 "When I die, I want to go peacefully"
@@ -207,6 +207,10 @@ Object -> Manager "library manager"
 					"He looks up at you: ~Oh, there you are! Listen, I really need you to go get a book for me - Where the Wild Things Are by Maurice Sendak. I must have left it in the repair shop in the basement. Frank the Robot is down there. He'll help you find it.~";
 				} else
 					"~We're done talking.~";
+		],
+		life [;
+			Ask, Tell, Show:
+				<<TalkTo self>>;
 		],
 	has animate;
 
@@ -302,8 +306,8 @@ Object -> Frank "Frank the Robot"
 							print "^Frank enters from the ", (string) opposite_directions-->_i, ".^";
 							if(location == DarkChamber) {
 								print "^Frank gently pushes you out of the room. ~Nothing to see here, now is there?~^";
+								move self to StorageRoom;
 								PlayerTo(StorageRoom);
-!								<Look>;
 							}
 							rtrue;
 						}
