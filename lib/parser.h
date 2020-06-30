@@ -1243,6 +1243,7 @@ Array guess_num_objects->5;
 	if(_IsSentenceDivider(parse_array + 2))
 		return -1;
 
+	multiple_objects-->0 = 0;
 	selected_direction_index = 0;
 	selected_direction = 0;
 	action = -1;
