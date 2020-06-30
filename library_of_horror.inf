@@ -54,9 +54,11 @@ Include "globals.h";
 ];
 
 ! Setup flags
-Constant FLAG_COUNT = 2;
+
+Constant FLAG_COUNT = 3;
 Constant F_TALKED_TO_MANAGER = 0;
 Constant F_FRANK_BLOCKED_BY_BOX = 1;
+Constant F_BOOK_DELIVERED = 2;
 Include "ext_flags.h";
 
 ! Setup cheap scenery
@@ -183,11 +185,29 @@ Array quote_1 --> 5 35
 "passengers in his car."
 "               -- Jack Handey";
 
+Object Square "Town Square"
+	with
+		description "You are in the town square. The public library is to the south.",
+		cheap_scenery
+			1 'library' "It's a beautiful building. Looks like 19th century architecture to you.",
+		s_to Library,
+		after [;
+			Go:
+				if(FlagIsSet(F_BOOK_DELIVERED)) {
+					Achieved(TASK_LEAVE);
+					deadflag = 2;
+					"As you stroll out into the afternoon sun, you feel reasonably happy with yourself, having managed
+						to complete the task you were given.";
+				}
+		],
+	has light;
+	
 Object Library "The Library"
 	with
 		description "You are in a library. The stairs leading down to the basement are to the east.",
 		cheap_scenery
 			1 'library' "It's a beautiful old library.",
+		n_to Square,
 		e_to TopOfStairs,
 	has light;
 
@@ -210,7 +230,17 @@ Object -> Manager "library manager"
 		],
 		life [;
 			Ask, Tell, Show:
+				if(noun==WildThingsBook)
+					<<Give noun self>>;
 				<<TalkTo self>>;
+			Give:
+				if(noun==WildThingsBook) {
+					remove noun;
+					scope_modified = true;
+					SetFlag(F_BOOK_DELIVERED);
+					Achieved(TASK_GIVE_BOOK);
+					"~Excellent, that's the book I was looking for! That would be all for today. Thank you.~";
+				}
 		],
 	has animate;
 
