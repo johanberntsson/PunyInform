@@ -195,8 +195,9 @@ Object Square "Town Square"
 			Go:
 				if(FlagIsSet(F_BOOK_DELIVERED)) {
 					Achieved(TASK_LEAVE);
+					<Look>;
 					deadflag = 2;
-					"As you stroll out into the afternoon sun, you feel reasonably happy with yourself, having managed
+					"^As you stroll out into the afternoon sun, you feel reasonably happy with yourself, having managed
 						to complete the task you were given.";
 				}
 		],
@@ -442,6 +443,7 @@ Object Words "words"
 		];
 		
 [Initialise;
-	location = Library;
-	print "^^And so the story begins...^^";
+	location = Square;
+	print "^^Your first day of work. You've arrived well on time, so now you just need to enter the library and report 
+		to the manager ...^^";
 ];
