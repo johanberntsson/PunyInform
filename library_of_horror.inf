@@ -87,9 +87,9 @@ Extend only 'cover' first
 Verb 'blindfold'
 	* noun 'with'/'using' held	-> Cover;
 
-Extend 'put'
-	* held 'over' noun -> Cover reverse;
-
+Extend 'put' first
+	* held 'on' creature		-> Cover reverse
+	* held 'over' noun 			-> Cover reverse;
 
 [ TalkToSub;
 	print_ret (The) noun, " doesn't seem interested.";
