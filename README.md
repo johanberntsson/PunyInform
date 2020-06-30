@@ -23,3 +23,9 @@ You can see the manual on our [wiki](https://github.com/johanberntsson/PunyInfor
 
 
 You can see what tasks we're currently working on, tasks we've done and tasks coming up on our Trello board: https://trello.com/b/mfGVsB4H/punyinform
+
+## Credits
+
+PunyInform was conceived and designed by Johan Berntsson and Fredrik Ramsberg. Coding by Johan Berntsson, Fredrik Ramsberg, Pablo Martinez and Tomas Öberg. Thanks to Stefan Vogt and Jason Compton for advice, testing and promotion. Thanks to David Kinder and Andrew Plotkin for helping out with compiler issues and sharing their deep knowledge of the compiler. Huge thanks to Graham Nelson for creating the Inform 6 compiler and library in the first place.
+ 
+ 
