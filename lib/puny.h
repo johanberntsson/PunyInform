@@ -466,7 +466,7 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
-[ PlayerTo p_loc _p _old_loc _old_darkness;
+[ PlayerTo p_loc p_flag _p _old_loc _old_darkness;
 	_old_loc = location;
 	_old_darkness = darkness;
 	move Player to p_loc;
@@ -490,7 +490,10 @@ Constant ONE_SPACE_STRING = " ";
 			}
 		}
 	}
-	rtrue;
+	if(p_flag==false)
+		give location ~visited;
+	if(p_flag==false or 2)
+		<Look>;
 ];
 
 [ _UpdateDarkness p_look _ceil _old_darkness;
@@ -1083,7 +1086,7 @@ Object thedark "Darkness"
 	Initialise();
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
-	<Look>;
+!	<Look>;
 
 	while(deadflag == GS_PLAYING) {
 		scope_modified = false; ! avoid automatic scope updates during parsing

@@ -305,7 +305,7 @@ Verb 'wear'
 	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
 	if(parent(noun) ~= parent(player)) { PrintMsg(MSG_ENTER_BAD_LOCATION); rtrue; }
-	PlayerTo(noun);
+	PlayerTo(noun, true);
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
     PrintMsg(MSG_ENTER_SUCCESS);
@@ -329,7 +329,7 @@ Verb 'wear'
 		rtrue;
 	}
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN, noun); rtrue; }
-	PlayerTo(parent(noun));
+	PlayerTo(parent(noun), true);
 	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
     PrintMsg(MSG_EXIT_SUCCESS);
@@ -1270,7 +1270,6 @@ Global scope_cnt;
 	_obj = noun;
 	while(parent(_obj) ~= 0) _obj = parent(_obj);
 	PlayerTo(_obj);
-	<Look>;
 ];
 
 [ RoutinesOnSub;  debug_flag = debug_flag | 1;  "[Message listing on.]"; ];
@@ -1641,7 +1640,7 @@ Global scope_cnt;
 		move _vehicle to _new_location;
 		_new_location = _vehicle;
 	}
-	PlayerTo(_new_location);
+	PlayerTo(_new_location, true);
 	if (AfterRoutines() == 1) rtrue;
 	if (keep_silent == 1) rtrue;
 	Look();
