@@ -1052,6 +1052,16 @@ Object thedark "Darkness"
 		description "It is pitch dark here!",
 		short_name 0;
 
+[ _UpdateScoreOrTime;
+	if (sys_statusline_flag == 0) {
+		status_field_1 = score;
+		status_field_2 = turns;
+	} else {
+		status_field_1 = the_time/60;
+		status_field_2 = the_time%60;
+	}
+];
+
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
 
 #IfDef OPTION_DEBUG_VERBS;
@@ -1091,13 +1101,7 @@ Object thedark "Darkness"
 	while(deadflag == GS_PLAYING) {
 		scope_modified = false; ! avoid automatic scope updates during parsing
 
-		if (sys_statusline_flag == 0) {
-			status_field_1 = score;
-			status_field_2 = turns;
-		} else {
-			status_field_1 = the_time/60;
-			status_field_2 = the_time%60;
-		}
+		_UpdateScoreOrTime();
 		@new_line;
 
 		_UpdateScope(player, true);
@@ -1187,6 +1191,7 @@ Object thedark "Darkness"
 		}
 		_UpdateDarkness(true);
 	}
+	_UpdateScoreOrTime();
 	print "^^  *** ";
 	if(deadflag == GS_QUIT) @quit;
 	if(deadflag == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
