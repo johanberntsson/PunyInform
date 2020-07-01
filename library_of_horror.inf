@@ -1,4 +1,5 @@
 !% -~S
+!% $OMIT_UNUSED_ROUTINES=1
 
 ! Library_of_horror.inf - a sample game which uses PunyInform
 
@@ -9,17 +10,17 @@
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
+Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 
 Constant Story      "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game^";
 
-Constant OPTIONAL_FULL_SCORE;
 Constant MAX_SCORE = 100;
 Constant TASKS_PROVIDED;
 Constant NUMBER_TASKS = 5;
-Array task_scores -> 10 20 20 70 20;
+Array task_scores -> 10 20 20 50 20;
 Constant TASK_TALK_MANAGER = 0;
 Constant TASK_GIVE_BOOK = 1;
 Constant TASK_BLOCK_ROBOT = 2;
@@ -49,16 +50,19 @@ Include "globals.h";
 
 
 [ DeathMessage;
-	if(deadflag == 3)
-		print "You have summoned demons set to destroy the world";
+	switch(deadflag) {
+		3: print "You have summoned demons set to destroy the world";
+		4: print "You have been incinerated";
+	}
 ];
 
 ! Setup flags
 
-Constant FLAG_COUNT = 3;
+Constant FLAG_COUNT = 4;
 Constant F_TALKED_TO_MANAGER = 0;
 Constant F_FRANK_BLOCKED_BY_BOX = 1;
 Constant F_BOOK_DELIVERED = 2;
+Constant F_STARTED_FIRE = 3;
 Include "ext_flags.h";
 
 ! Setup cheap scenery
@@ -79,9 +83,18 @@ Include "puny.h";
 ! -- testing scope grammar token
 ! See: https://www.inform-fiction.org/manual/html/s32.html 
 
+[ BurnSub;
+	"That seems dangerous and pointless.";
+];
+
+Verb 'burn' 'light'
+	* noun						-> Burn
+	* noun 'with' noun			-> Burn;
+
 [ CoverSub;
 	"That seems pointless.";
 ];
+
 
 Extend only 'cover' first
 	* noun 'with'/'using' held	-> Cover;
@@ -193,12 +206,18 @@ Object Square "Town Square"
 		s_to Library,
 		after [;
 			Go:
-				if(FlagIsSet(F_BOOK_DELIVERED)) {
+				if(FlagIsSet(F_STARTED_FIRE))
+					StopDaemon(EvilBook);
+				if(FlagIsSet(F_BOOK_DELIVERED) || FlagIsSet(F_STARTED_FIRE)) {
 					Achieved(TASK_LEAVE);
 					<Look>;
 					deadflag = 2;
-					"^As you stroll out into the afternoon sun, you feel reasonably happy with yourself, having managed
-						to complete the task you were given.";
+					if(FlagIsSet(F_BOOK_DELIVERED))
+						"^As you stroll out into the afternoon sun, you feel reasonably happy with yourself, having managed
+							to complete the task you were given.";
+					else
+						"^As you run for your life out of the burning building, you hear the crazy laughter of the
+							library manager behind you. You know you have done the right thing.";
 				}
 		],
 	has light;
@@ -259,6 +278,10 @@ Object TopOfStairs "Staircase Leading Down"
 					QuoteBox(quote_1);
 				}
 			}
+		],
+		after [;
+			Go:
+				StopDaemon(Frank);
 		],
 		w_to Library,
 		d_to BottomOfStairs,
@@ -398,8 +421,9 @@ Object -> -> WildThingsBook "small book"
 
 Object DarkChamber "Dark chamber"
 	with 
-		description "As you enter, two candles on a table suddenly light up. The large table stands 
+		initial "As you enter, two candles on a table suddenly light up. The large table stands 
 			in the middle of the otherwise empty room.",
+		description "A heavy-looking table with two candles on it stands in the middle of the room.",
 		w_to StorageRoom,
 	has light;
 
@@ -409,8 +433,9 @@ Object -> Table "table"
 		description "It's a very sturds wooden table. Looks like oak to you.",
 	has static scenery;
 	
-Object -> Book "red book"
+Object -> EvilBook "red book"
 	with
+		number 0,
 		name 'red' 'leather' 'book' 'books//p',
 		describe [;
 			if(self has open)
@@ -425,12 +450,66 @@ Object -> Book "red book"
 			else
 				"Somehow, you get a feeling that the book is evil and dangerous.";
 		],
+		before [;
+			Take:
+				"The book is very heavy, and maybe it's been fixed to the table. In any case, you can't lift it.";
+			Burn:
+				if(second==Candles or 0) {
+					if(FlagIsSet(F_STARTED_FIRE)) {
+						"But it's already burning! You need to get out of the building immediately.";
+					} else {
+						SetFlag(F_STARTED_FIRE);
+						Achieved(TASK_BURN_BOOK);
+						StartDaemon(self);
+						remove Manager;
+						scope_modified = true;
+						"You rip out a page, set fire to it and use it to set fire to the entire book.";
+					}
+				}
+		],
+		daemon [;
+			switch(++self.number) {
+				2:
+					if(location==DarkChamber)
+						"^As the flames rise higher, the wooden ceiling catches fire too.";
+					else
+						"^The sound of the fire in the dark chamber suddenly gets more intense.";
+				6: 
+					if(location==Library or TopOfStairs)
+						"^Flames emerge from the floor in one corner and quickly start to spread along the walls.";
+					else
+						"It is now getting unbearably hot down here.";
+				8: 
+					if(location==Library or TopOfStairs)
+						"^Flames are all around you now. You should still be able to reach the exit though.";
+				11:
+					deadflag=4;
+					"The flames are now covering all exits. There is no hope for escape.";						
+			}
+			if(self.number > 7 && location ~= Library or TopOfStairs) {
+				deadflag = 4;
+				"The heat is too much for you, and you collapse on the floor.";
+			}
+		],
 		add_to_scope [;
 			if(self has open)
 				PlaceInScope(Words);
 		],
 	has openable transparent;
 
+Object -> Candles "candles"
+	with
+		describe [; rtrue; ],
+		article "a pair of",
+		name 'candle' 'candles',
+		before [;
+			Take:
+				"The candles won't budge.";
+			Burn:
+				"The candles are already burning.";
+		],
+	has pluralname static;
+	
 Object Words "words"
 	with
 		name 'creepy' 'letters' 'word' 'words',

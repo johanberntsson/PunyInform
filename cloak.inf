@@ -1,8 +1,10 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
 ! ============================================================================ !
 !   Cloak of Darkness - a simple demonstration of Interactive Fiction
 !       This version for INFORM written by Roger Firth on 17Sep99
 ! ============================================================================ !
-#Iffalse (#version_number == 3);
+#Iftrue (#version_number == 8);
 Constant USEINFORM;
 #Endif;
 
@@ -69,7 +71,7 @@ Object  bar "Foyer bar"
                 _test = self hasnt light && selected_direction ~= n_to;
 #EndIf;
                 if (_test) {
-                    message.number = message.number + 2;
+					message.number = message.number + 2;
                     "Blundering around in the dark isn't a good idea!";
 				}
             default:
@@ -133,7 +135,7 @@ Object  message "scrawled message" bar
    "^^Hurrying through the rainswept November night, you're glad to see the
     bright lights of the Opera House. It's surprising that there aren't more
     people about but, hey, what do you expect in a cheap demo game...?^^";
-    ];
+];
 
 
 ! ============================================================================ !
