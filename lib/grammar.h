@@ -1025,7 +1025,7 @@ Verb meta 'quit' 'q//'
     }
 	print "Release ", (0-->1) & $03ff, " / Serial number ";
 	for (_i = 18:_i < 24: _i++) print (char) 0->_i;
-	print "  / PunyInform 1.0 (beta 1)";
+	print "  / PunyInform v1.0";
 #IfDef DEBUG;
 	print " D";
 #EndIf;
