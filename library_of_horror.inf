@@ -110,7 +110,7 @@ Extend 'put' first
 	print_ret (The) noun, " doesn't seem interested.";
 ];
 
-Verb 'talk'
+Verb 'talk' 'report'
 	* 'to' creature -> TalkTo;
 
 [ QueryTopic;
