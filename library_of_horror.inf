@@ -247,7 +247,9 @@ Object -> Manager "library manager"
 				if(FlagIsClear(F_TALKED_TO_MANAGER)) {
 					SetFlag(F_TALKED_TO_MANAGER);
 					Achieved(TASK_TALK_MANAGER);
-					"He looks up at you: ~Oh, there you are! Listen, I really need you to go get a book for me - Where the Wild Things Are by Maurice Sendak. I must have left it in the repair shop in the basement. Frank the Robot is down there. He'll help you find it.~";
+					"He looks up at you: ~Oh, there you are! Listen, I really need you to go get a book for me - 
+						Where the Wild Things Are by Maurice Sendak. I must have left it in the repair shop in 
+						the basement. Frank the Robot is down there. He'll help you find it.~";
 				} else
 					"~We're done talking.~";
 		],
@@ -301,7 +303,8 @@ Object BottomOfStairs "Basement, Near Staircase"
 
 ! Data that Frank needs to print where he came from.	
 #IfDef OPTION_FULL_DIRECTIONS;
-Array opposite_directions table "south" "north" "west" "east" "southwest" "southeast" "northwest" "northeast" "down" "up" "out" "in";
+Array opposite_directions table "south" "north" "west" "east" "southwest" "southeast" "northwest" "northeast" 
+	"down" "up" "out" "in";
 #IfNot;
 Array opposite_directions table "south" "north" "west" "east" "down" "up" "out" "in";
 #EndIf;
