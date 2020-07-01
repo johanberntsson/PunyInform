@@ -83,6 +83,10 @@ Include "puny.h";
 ! -- testing scope grammar token
 ! See: https://www.inform-fiction.org/manual/html/s32.html 
 
+! Burn is available in the extended verb set, but we'll define it here instead of adding the weight of all those new verbs.
+! Also, we want it to work a little differently from the way it works in the library - the player shouldn't have to
+! carry the candles to burn the book.
+
 [ BurnSub;
 	"That seems dangerous and pointless.";
 ];
@@ -99,8 +103,7 @@ Verb 'burn' 'light'
 Extend only 'cover' first
 	* noun 'with'/'using' held	-> Cover;
 
-Verb 'blindfold'
-	* noun 'with'/'using' held	-> Cover;
+Verb 'blindfold' = 'cover';
 
 Extend 'put' first
 	* held 'on' creature		-> Cover reverse
