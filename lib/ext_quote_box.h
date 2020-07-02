@@ -137,7 +137,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 	@new_line;
 !	print "[ENTER]";
 	quote_buffer -> 0 = 0;
-	read quote_buffer 0;
+	read quote_buffer quote_buffer;
 #EndIf;
 !	" Ok.";
 ];
