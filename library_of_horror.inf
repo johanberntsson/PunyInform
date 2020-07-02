@@ -201,12 +201,16 @@ Array quote_1 --> 5 35
 "passengers in his car."
 "               -- Jack Handey";
 
-Object Square "Town Square"
+Object GloomyStreet "Gloomy Street"
 	with
-		description "You are in the town square. The public library is to the south.",
+		description "The houses in this area seem hastily abandoned as if a mysterious tragedy had sown panic among its former inhabitants. All you see are shattered windows and ripped doors.
+            In front of you, to the south, is the strangely well preserved and beautiful library building where you have to work.",
 		cheap_scenery
-			1 'library' "It's a beautiful building. Looks like 19th century architecture to you.",
+            'windows' 'doors' "Remains of a distant and mysterious tragedy!"
+            'houses' 'street' "Creepy and abandoned."
+			1 'library' "It's a beautiful building. Looks like 19th century Art Nouveau architecture to you.",
 		s_to Library,
+        cant_go "Your work is to the south, though you are tempted to go home and forget all about it.",
 		after [;
 			Go:
 				if(FlagIsSet(F_STARTED_FIRE))
@@ -216,27 +220,43 @@ Object Square "Town Square"
 					<Look>;
 					deadflag = 2;
 					if(FlagIsSet(F_BOOK_DELIVERED))
-						"^As you stroll out into the afternoon sun, you feel reasonably happy with yourself, having managed
-							to complete the task you were given.";
+						"^You leave the library with mixed feelings. On the one hand, you're glad to be done with your modest task and to get out of this gloomy neighbourhood.
+                        On the other hand, there's something about that store that makes your hair stand on end.
+                        ^Oh well. Maybe it's better to forget about it and enjoy a quiet afternoon in your flat.";
 					else
-						"^As you run for your life out of the burning building, you hear the crazy laughter of the
-							library manager behind you. You know you have done the right thing.";
+						"^You managed to escape the burning building just in time! As you catch your breath on the street slabs, you watch the walls blackened by the flames,
+                        the door falling to pieces on the floor and the windows bursting in the heat.
+                        ^A sound reaches you, distant but discernible, beyond the crackling of the flames. It is a sinister laugh, echoing through the lonely streets —the
+                        laughter of the library manager.
+                        ^Terrified, you walk away from that place, never to return. In the future, you'll be more careful about the jobs you choose.";
 				}
 		],
 	has light;
 	
 Object Library "The Library"
 	with
-		description "You are in a library. The stairs leading down to the basement are to the east.",
+		description "The library seems surprisingly large inside. Tens of thousands of valuable antique volumes lie on the high shelves.
+            The air feels charged with dust and the smell of antiquity.
+            ^To the east, it is possible to go deeper into the building. To the north is the exit to the outside.",
 		cheap_scenery
+            'volumes' 'books' "One could spend a lifetime reading only a fraction of the books in this room."
+            'shelf' 'shelves' "Full of every conceivable book in this world."
 			1 'library' "It's a beautiful old library.",
-		n_to Square,
+		n_to GloomyStreet,
 		e_to TopOfStairs,
 	has light;
 
 Object -> Manager "library manager"
 	with
 		article "the",
+        description "Although at first glance he looks like a normal middle-aged man, something is unsettling about this person.
+            Perhaps it is the fact that he wears black or the constant movement of his eyes and his whispers to himself. Or maybe it is
+            the mysterious and arcane looking symbols hanging over his whole body.",
+        describe [;
+            print "The manager of the library is here, deeply concentrated on the arrangement of one of the shelves";
+            if(FlagIsClear(F_TALKED_TO_MANAGER)) ". Perhaps you should talk to him and ask him about the job.";
+            ".";
+        ],
 		parse_name [ _w1;
 			_w1 = NextWordStopped();
 			if(_w1 == 'manager') return 1;
@@ -247,11 +267,17 @@ Object -> Manager "library manager"
 				if(FlagIsClear(F_TALKED_TO_MANAGER)) {
 					SetFlag(F_TALKED_TO_MANAGER);
 					Achieved(TASK_TALK_MANAGER);
-					"He looks up at you: ~Oh, there you are! Listen, I really need you to go get a book for me - 
-						Where the Wild Things Are by Maurice Sendak. I must have left it in the repair shop in 
-						the basement. Frank the Robot is down there. He'll help you find it.~";
+					"He looks up from the shelf in surprise. When he sees you, he smiles (something is unsettling in his smile) and says:
+                    ~Wow! I didn't remember you were coming today. You're the new assistant, right? I imagined you taller. Never mind! I
+                    won't be able to spend much time with you today. You'd better come tomorrow.~
+                    ^When you're about to leave the bookstore upset, you hear his voice again. ~Wait! Maybe I do need you. There's a book
+                    I need, Where the Wild Things Are by Maurice Sendak. I must have left it in the repair shop in the basement. Frank the
+                    Robot is down there. He'll help you find it.~
+                    ^After saying this, he turns his back on you and continues to arrange the shelf.
+                    ^(Did he mention... a robot?)";
 				} else
-					"~We're done talking.~";
+					"~Can't you see I'm busy? I can't waste my time with nonsense! Ask Frank for help!~
+                    ^Once again, he directs his attention to the fascinating shelf.";
 		],
 		life [;
 			Ask, Tell, Show:
@@ -264,7 +290,13 @@ Object -> Manager "library manager"
 					scope_modified = true;
 					SetFlag(F_BOOK_DELIVERED);
 					Achieved(TASK_GIVE_BOOK);
-					"~Excellent, that's the book I was looking for! That would be all for today. Thank you.~";
+					"When you approach the manager, for a moment, he seems ready to get angry about the interruption, but his face lights
+                    up when he sees the book in your hand.
+                    ^~Great! You've done exactly what I asked!~
+                    ^In confidence, he adds: ~I'm glad you didn't waste your time with things that are none of your business. It makes me
+                    trust you more.~
+                    ^He pats you on the back twice and says: ~Come first thing tomorrow. We'll start working for real.~ And again he turns
+                    towards the shelf.";
 				}
 		],
 	has animate;
@@ -528,7 +560,7 @@ Object Words "words"
 		];
 		
 [Initialise;
-	location = Square;
-	print "^^Your first day of work. You've arrived well on time, so now you just need to enter the library and report 
-		to the manager ...^^";
+	location = GloomyStreet;
+	print "^^The search for a job can be arduous for a young person like you, with no experience or contacts and a newcomer to the city. That's why when you had that newspaper in your hands yesterday and read the ad (~young, inexperienced bookstore assistant needed~) you didn't hesitate for a second.
+        ^However, now that you are walking down the gloomy streets of the neighbourhood where your future job resides, you wonder if you were not too quick to accept...^^";
 ];
