@@ -103,7 +103,8 @@ Verb 'lock'
 
 Verb 'look' 'l//'
 	*                                           -> Look
-	* 'at' noun                                 -> Examine;
+	* 'at' noun                                 -> Examine
+	* 'in'/'inside' noun						-> Search;
 
 Verb 'open' 'uncover' 'unwrap'
 	* noun                                      -> Open
@@ -1425,11 +1426,11 @@ Global scope_cnt;
 	print "see ";
 ];
 
-[ Look _obj _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level _visited;
+[ Look _obj _top_ceil _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level _visited;
 	if(fake_location has visited) _visited = true;
 	@new_line;
 	_player_parent = parent(player);
-	_describe_room = ((lookmode == 1 && location hasnt visited) || lookmode == 2);
+	_describe_room = ((lookmode == 1 && _visited == false) || lookmode == 2);
 #IfV5;
 	style bold;
 #EndIf;
@@ -1438,14 +1439,15 @@ Global scope_cnt;
 		_ceil = fake_location;
 	else
 		_ceil = ScopeCeiling(player, _last_level);
+	_top_ceil = _ceil;
+
 	if(_ceil == fake_location) {
 #IfDef OPTIONAL_FULL_SCORE;
 		if(fake_location has scored && _visited == 0) {
-			score = score + OBJECT_SCORE;
-			places_score = places_score + OBJECT_SCORE;
+			score = score + ROOM_SCORE;
+			places_score = places_score + ROOM_SCORE;
 		}
 #EndIf;
-		give fake_location visited;
 		_PrintObjName(fake_location);
 	} else {
 		print (The) _ceil;
@@ -1476,10 +1478,10 @@ Global scope_cnt;
 			if(_describe_room) {
 				if(_ceil == location) {
 					if(_visited == 0 && location.initial ~= 0 or null)
-						PrintOrRun(location, initial, 1);
+						PrintOrRun(location, initial);
 					else
-						PrintOrRun(_ceil, description, 1);
-					@new_line;
+						PrintOrRun(_ceil, description);
+!					@new_line;
 				} else if(_ceil.&inside_description) {
 					PrintOrRun(_ceil, inside_description, 1);
 					@new_line;
@@ -1539,6 +1541,9 @@ Global scope_cnt;
 	LookRoutine();
 
 	AfterRoutines();
+
+	if(_top_ceil == fake_location)
+		give fake_location visited;
 ];
 
 #IfnDef PrintRank;

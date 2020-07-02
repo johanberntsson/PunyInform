@@ -455,6 +455,7 @@ Global places_score;
 Default NUMBER_TASKS        1;
 Default TASKS_PROVIDED      1;
 Default OBJECT_SCORE        4;
+Default ROOM_SCORE          5;
 
 Array  task_done -> NUMBER_TASKS;
 #Ifndef task_scores;
@@ -464,6 +465,7 @@ Array task_scores -> 0 0; ! Inform breaks if only one entry
 
 Object Directions
 	with
+		description "A look in that direction reveals nothing new.",
 		short_name [; 
 			if(selected_direction_index)
 				print (string) direction_name_array-->selected_direction_index;
@@ -477,6 +479,16 @@ Object Directions
 		parse_name [_len _i _w _w1 _w2;
 #EndIf;
 			_w = (parse_array+4*wn-2)-->0;
+			if(_w == 'floor' or 'ground') {
+#IfDef OPTIONAL_FULL_DIRECTIONS;
+				selected_direction_index = 10;
+#IfNot;
+				selected_direction_index = 6;
+#EndIf;
+				selected_direction = direction_properties_array --> selected_direction_index;
+				return 1;
+			}
+
 			_len = abbr_direction_array-->0;
 #IfV5;
 			_arr = abbr_direction_array + 2;

@@ -1081,9 +1081,6 @@ Object thedark "Darkness"
 	top_object = #largest_object-255;
 	sys_statusline_flag = ( ($1->0) & 2 ) / 2;
 
-	print "^^";
-	VersionSub();
-
 	player = DefaultPlayer;
 	deadflag = GS_PLAYING;
 	score = 0;
@@ -1094,6 +1091,9 @@ Object thedark "Darkness"
 #EndIf;
 
 	Initialise();
+
+	VersionSub();
+
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
 !	<Look>;

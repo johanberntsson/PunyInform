@@ -132,7 +132,7 @@ Object CheapScenery "object"
 				if(SceneryReply())
 					rtrue;
 				#endif;
-				"Get a grip on yourself.";
+				"No need to concern yourself with that.";
 		],
 		found_in [;
 			if(location provides cheap_scenery) rtrue;
