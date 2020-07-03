@@ -108,6 +108,13 @@ System_file;
 #EndIf;
 ];
 
+[GetPlayerScopeCopy _i;
+	_UpdateScope(player);
+	for(_i = 0: _i < scope_objects: _i++)
+		scope_copy-->_i = scope-->_i;
+	return scope_objects;
+];
+
 [ ScopeCeiling p_actor p_stop_before _parent;
 	! this routine is in I6 stdlib, but not in DM
 	!

@@ -411,6 +411,7 @@ Default MAX_SCOPE             32;
 
 Global scope_pov;        ! Whose POV the scope is from (usually the player)
 Array scope-->MAX_SCOPE; ! objects visible from the current POV
+Array scope_copy-->MAX_SCOPE; ! Used to hold a copy of a scope list, for iteration
 
 Constant WORD_HIGHBIT = $8000;
 #Ifndef MAX_TIMERS;

@@ -536,7 +536,7 @@ Include "parser.h";
 	}
 ];
 
-[ RunEachTurn _i _obj;
+[ RunEachTurn _i _obj _scope_count;
 	! Loop over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
 #IfDef DEBUG;
@@ -545,10 +545,10 @@ Include "parser.h";
 #IfnDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
-	_UpdateScope(player);
+	_scope_count = GetPlayerScopeCopy();
 	RunRoutines(location, each_turn);
-	for(_i = 0: _i < scope_objects: _i++) {
-		_obj = scope-->_i;
+	for(_i = 0: _i < _scope_count: _i++) {
+		_obj = scope_copy-->_i;
 #IfDef DEBUG;
 		if(debug_flag & 1 && _obj.&each_turn ~= 0) print "(", (name) _obj, ").each_turn()^";
 #EndIf;
@@ -556,13 +556,13 @@ Include "parser.h";
 	}
 ];
 
-[ BeforeRoutines _i _obj;
+[ BeforeRoutines _i _obj _scope_count;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
 #IfnDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;	
-	_UpdateScope(player);
+	_scope_count = GetPlayerScopeCopy();
 #IfDef GamePreRoutine;
 #IfDef DEBUG;
 	if(debug_flag & 1) print "GamePreRoutine()^";
@@ -575,8 +575,8 @@ Include "parser.h";
 #EndIf;
 	if(RunRoutines(player, orders)) rtrue;
 
-	for(_i = 0: _i < scope_objects: _i++) {
-		_obj = scope-->_i;
+	for(_i = 0: _i < _scope_count: _i++) {
+		_obj = scope_copy-->_i;
 		if (_obj provides react_before) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_before()^";
@@ -601,15 +601,16 @@ Include "parser.h";
 	rfalse;
 ];
 
-[ AfterRoutines _i _obj;
+[ AfterRoutines _i _obj _scope_count;
 	! react_after - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
 #IfnDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
-#EndIf;	
-	_UpdateScope(player);
-	for(_i = 0: _i < scope_objects: _i++) {
-		_obj = scope-->_i;
+#EndIf;
+	_scope_count = GetPlayerScopeCopy();
+
+	for(_i = 0: _i < _scope_count: _i++) {
+		_obj = scope_copy-->_i;
 		if (_obj provides react_after) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_after()^";
