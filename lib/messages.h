@@ -247,8 +247,8 @@ Default MSG_UNLOCK_NOT_A_LOCK 89;
 Default MSG_UNLOCK_ALREADY_LOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
 Default MSG_UNLOCK_SUCCESS 92;
-Default MSG_ENTER_BAD_LOCATION 101;
-Default MSG_PROMPT 102;
+Default MSG_ENTER_BAD_LOCATION 100;
+Default MSG_PROMPT 101;
 
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
@@ -318,13 +318,13 @@ Constant MSG_STRONG_DEFAULT "Real adventurers do not use such language.";
 #EndIf;
 
 Default MSG_BLOW_DEFAULT 70;
-Default MSG_EMPTY_CANT_CONTAIN 94;
-Default MSG_EMPTY_IS_CLOSED 95;
-Default MSG_EMPTY_ALREADY_EMPTY 96;
-Default MSG_SET_DEFAULT 97;
-Default MSG_SET_TO_DEFAULT 98;
-Default MSG_WAVE_NOTHOLDING 99;
-Default MSG_WAVE_DEFAULT 100;
+Default MSG_EMPTY_CANT_CONTAIN 93;
+Default MSG_EMPTY_IS_CLOSED 94;
+Default MSG_EMPTY_ALREADY_EMPTY 95;
+Default MSG_SET_DEFAULT 96;
+Default MSG_SET_TO_DEFAULT 97;
+Default MSG_WAVE_NOTHOLDING 98;
+Default MSG_WAVE_DEFAULT 99;
 #EndIf;
 
 Default LibraryMessages 0;
@@ -339,18 +339,24 @@ Default LibraryMessages 0;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
+	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
+		"Nothing obvious happens.";
+#IfTrue MSG_PROMPT < 1000;
 	MSG_PROMPT:
 		print "> ";
 		rtrue;
+#EndIf;
+#IfTrue MSG_INVENTORY_SUCCESS < 1000;
 	MSG_INVENTORY_SUCCESS:
 		if(_PrintContents("You are holding ", player)) print ".^";
 		rtrue;
+#EndIf;
+#IfTrue MSG_EXAMINE_NOTHING_SPECIAL < 1000;
 	MSG_EXAMINE_NOTHING_SPECIAL:
 		"There is nothing special about ", (the) noun, ".";
+#EndIf;
 	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
 		print_ret (CTheyreorThats) noun, " fixed in place.";
-	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
-		"Nothing obvious happens.";
 	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE:
 		"That would be less than courteous.";
 	MSG_TURN_STATIC, MSG_PUSH_STATIC, MSG_PULL_STATIC:
@@ -360,115 +366,178 @@ Default LibraryMessages 0;
 	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, 
 		MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK:
 		"That doesn't seem to be something you can ", (verbname) verb_word, ".";
+#IfTrue MSG_WEAR_NOT_CLOTHING < 1000;
 	MSG_WEAR_NOT_CLOTHING:
 		"That's not something you can wear.";
+#EndIf;
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg_1, ".";
 	MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS, MSG_UNLOCK_SUCCESS:
 		"You ", (verbname) verb_word, " ", (the) noun, ".";
+#IfTrue MSG_THROW_FIRST_TAKING < 1000;
 	MSG_THROW_FIRST_TAKING:
 		"(first taking ", (the) noun, " off)";
+#EndIf;
 	MSG_GIVE_SUCCESS, MSG_SHOW_SUCCESS:
 		print_ret (The) second, " doesn't seem interested.";
 	MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
 		print_ret (The) noun, " has better things to do.";
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
 		"You can't, since ",(the) p_arg_1, " is closed.";
+#IfTrue MSG_EXIT_SUCCESS < 1000;
 	MSG_EXIT_SUCCESS:
 		"You leave ", (the) noun, ".";
+#EndIf;
+#IfTrue MSG_GIVE_PLAYER < 1000;
 	MSG_GIVE_PLAYER:
 		"You already have ", (ItorThem) noun, ".";
+#EndIf;
 	MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
 		"Failed ", (verbname) verb_word, ".";
 	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY:
 		"Already there.";
 	MSG_INSERT_NO_ROOM, MSG_PUTON_NO_ROOM:
 		"There is no more room.";
+#IfTrue MSG_INSERT_SUCCESS < 1000;
 	MSG_INSERT_SUCCESS:
 		"You put ", (the) noun, " into ", (the) second, ".";
+#EndIf;
+#IfTrue MSG_PUTON_SUCCESS < 1000;
 	MSG_PUTON_SUCCESS:
 		"You put ", (the) noun, " on ", (the) second, ".";
+#EndIf;
 	MSG_ASK_SUCCESS, MSG_ANSWER_SUCCESS: 
 		"There is no reply.";
+#IfTrue MSG_WEAR_ALREADY_WORN < 1000;
 	MSG_WEAR_ALREADY_WORN:	
 		"You are already wearing ", (ItorThem) noun, ".";
+#EndIf;
+#IfTrue MSG_WEAR_SUCCESS < 1000;
 	MSG_WEAR_SUCCESS:
 		"You are now wearing ", (the) noun, ".";
+#EndIf;
+#IfTrue MSG_DISROBE_NOT_WEARING < 1000;
 	MSG_DISROBE_NOT_WEARING:
 		"You're not wearing ", (the) noun, ".";
+#EndIf;
+#IfTrue MSG_DISROBE_SUCCESS < 1000;
 	MSG_DISROBE_SUCCESS:
 		"You take off ", (the) noun, ".";
+#EndIf;
 	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
 		print_ret (CTheyreorThats) noun, " not something you can switch.";
 	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
 		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ". ";
 	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
 		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
+#IfTrue MSG_INSERT_NOT_HELD < 1000;
 	MSG_INSERT_NOT_HELD:
 		"You are not holding ", (the) noun, ".";
+#EndIf;
+#IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;
 	MSG_PARSER_NOTHING_TO_VERB:
 		"There is nothing to ",  (verbname) verb_word,".";
+#EndIf;
+#IfTrue MSG_TOUCHABLE_FOUND_CLOSED < 1000;
 	MSG_TOUCHABLE_FOUND_CLOSED:
 		print_ret (The) p_arg_1, " isn't open.";
+#EndIf;
+#IfTrue MSG_CONSULT_NOTHING_INTERESTING < 1000;
 	MSG_CONSULT_NOTHING_INTERESTING:
 		"You discover nothing of interest in ", (the) second, ".";
+#EndIf;
+#IfTrue MSG_CUT_NO_USE < 1000;
 	MSG_CUT_NO_USE:
 		"Cutting ", (the) noun, " up would achieve little.";
+#EndIf;
 	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_LOCKED:
 		print_ret (The) noun, " is already ", (verbname) verb_word, "ed.";
+#IfTrue MSG_LOCK_CLOSE_FIRST < 1000;
 	MSG_LOCK_CLOSE_FIRST:
 		"First you have to close ", (the) noun, ".";
+#EndIf;
 	MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT:
 		print_ret (The) second, " doesn't seem to fit the lock.";
+#IfTrue MSG_REMOVE_CLOSED < 1000;
 	MSG_REMOVE_CLOSED:
 		print_ret (The) p_arg_1, " is unfortunately closed.";
+#EndIf;
+#IfTrue MSG_REMOVE_NOT_HERE < 1000;
 	MSG_REMOVE_NOT_HERE:
 		"But ", (the) noun, " isn't there now.";
+#EndIf;
+#IfTrue MSG_SEARCH_IN_IT_ISARE < 1000;
 	MSG_SEARCH_IN_IT_ISARE:
 		print "In ", (the) noun, " ", (isorare) noun;
 		if(_PrintContents(" ", noun)) print ".^";
+#EndIf;
+#IfTrue MSG_SEARCH_ON_IT_ISARE < 1000;
 	MSG_SEARCH_ON_IT_ISARE:
 		print "On ", (the) noun, " ", (isorare) noun;
 		if(_PrintContents(" ", noun)) print ".^";
+#EndIf;
+#IfTrue MSG_SEARCH_EMPTY < 1000;
 	MSG_SEARCH_EMPTY:
 		print_ret (The) noun, " is empty.";
+#EndIf;
+#IfTrue MSG_SEARCH_NOTHING_ON < 1000;
 	MSG_SEARCH_NOTHING_ON:
 		"There is nothing on ", (the) noun, ".";
+#EndIf;
+#IfTrue MSG_SEARCH_CANT_SEE_CLOSED < 1000;
 	MSG_SEARCH_CANT_SEE_CLOSED:
 		"You can't see inside, since ", (the) noun, " is closed.";
+#EndIf;
+#IfTrue MSG_EAT_SUCCESS < 1000;
 	MSG_EAT_SUCCESS:
 		"You eat ", (the) noun, ". Not bad.";
+#EndIf;
+#IfTrue MSG_SCORE_SUCCESS < 1000;
 	MSG_SCORE_SUCCESS:
 		if (deadflag) print "In that game you"; else print "You have so far";
 		print " scored ", score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
 		if(turns ~= 1) print "s";
+#EndIf;
 #IfDef OPTIONAL_FULL_SCORE;
+#IfTrue MSG_FULLSCORE_START < 1000;
 	MSG_FULLSCORE_START:
 		print "The score ";
 		if(deadflag) print "wa"; else print "i";
 		"s made up as follows:";
+#EndIf;
+#IfTrue MSG_FULLSCORE_END < 1000;
 	MSG_FULLSCORE_END:
 		"total (out of ", MAX_SCORE, ")";	
 #EndIf;
+#EndIf;
+#IfTrue MSG_RESTART_RESTORE_OR_QUIT < 1000;
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE";
+#EndIf;
 #IfDef OPTIONAL_FULL_SCORE;
 		if(TASKS_PROVIDED == 0) print ", give the FULL score for that game";
 #EndIf;
 		if(deadflag == 2 && AMUSING_PROVIDED == 0) print ", see some suggestions for AMUSING things to do";
 		print " or QUIT? ";
 		rtrue;
+#IfTrue MSG_AREYOUSUREQUIT < 1000;
 	MSG_AREYOUSUREQUIT: ! print and rtrue to avoid newline
 		print "Are you sure you want to quit? ";
 		rtrue;
- 	MSG_YOU_HAVE_WON: ! print and rtrue to avoid newline
+#EndIf;
+#IfTrue MSG_YOU_HAVE_WON < 1000;
+	MSG_YOU_HAVE_WON: ! print and rtrue to avoid newline
  		print "You have won.";
  		rtrue;
+#EndIf;
+#IfTrue MSG_YOU_HAVE_DIED < 1000;
 	MSG_YOU_HAVE_DIED: ! print and rtrue to avoid newline
 		print "You have died.";
 		rtrue;
+#EndIf;
+#IfTrue MSG_ENTER_BAD_LOCATION < 1000;
 	MSG_ENTER_BAD_LOCATION:
 		print "You have to ";
 		if(player notin location && player notin parent(noun))
@@ -476,26 +545,42 @@ Default LibraryMessages 0;
 		else
 			print "enter ", (the) parent(noun);
 		" first.";
+#EndIf;
 
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
+#IfTrue MSG_BLOW_DEFAULT < 1000;
 	MSG_BLOW_DEFAULT:
 		"You can't usefully blow ", (the) noun, ".";
-	MSG_EMPTY_WOULDNT_ACHIEVE:
+#EndIf;
+#IfTrue MSG_EMPTY_CANT_CONTAIN < 1000;
 	MSG_EMPTY_CANT_CONTAIN:
 		print_ret (The) p_arg_1, " can't contain things.";
+#EndIf;
+#IfTrue MSG_EMPTY_IS_CLOSED < 1000;
 	MSG_EMPTY_IS_CLOSED:
 		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " closed.";
+#EndIf;
+#IfTrue MSG_EMPTY_ALREADY_EMPTY < 1000;
 	MSG_EMPTY_ALREADY_EMPTY:
 		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " empty already.";
+#EndIf;
+#IfTrue MSG_SET_DEFAULT < 1000;
 	MSG_SET_DEFAULT:
 		"No, you can't set ", (thatorthose) noun, ".";
+#EndIf;
+#IfTrue MSG_SET_TO_DEFAULT < 1000;
 	MSG_SET_TO_DEFAULT:
 		"No, you can't set ", (thatorthose) noun, " to anything.";
+#EndIf;
+#IfTrue MSG_WAVE_NOTHOLDING < 1000;
 	MSG_WAVE_NOTHOLDING:
 		"But you aren't holding ", (thatorthose) noun, ".";
+#EndIf;
+#IfTrue MSG_WAVE_DEFAULT < 1000;
 	MSG_WAVE_DEFAULT:
 		"You look ridiculous waving ", (the) noun, ".";
+#EndIf;
 #EndIf;
 
 default:
