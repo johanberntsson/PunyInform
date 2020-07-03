@@ -15,7 +15,7 @@ System_file;
 	style roman;
 	@buffer_mode 0;
 #EndIf;
-	if(p_no_prompt == false) print "> ";
+	if(p_no_prompt == false) PrintMsg(MSG_PROMPT);
 	! library entry routine
 	AfterPrompt();
 #IfV5;

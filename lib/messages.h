@@ -7,6 +7,7 @@ System_file;
 !
 ! Simple string messages
 !
+
 #Ifndef MSG_TAKE_YOURSELF;
 Constant MSG_TAKE_YOURSELF "You are always self-possessed.";
 #EndIf;
@@ -247,6 +248,8 @@ Default MSG_UNLOCK_ALREADY_LOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
 Default MSG_UNLOCK_SUCCESS 92;
 Default MSG_ENTER_BAD_LOCATION 101;
+Default MSG_PROMPT 102;
+
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -336,6 +339,9 @@ Default LibraryMessages 0;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
+	MSG_PROMPT:
+		print "> ";
+		rtrue;
     MSG_INVENTORY_SUCCESS:
 	    if(_PrintContents("You are holding ", player)) print ".^";
 		rtrue;
