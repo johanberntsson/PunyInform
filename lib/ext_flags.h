@@ -32,7 +32,7 @@
 
 System_file;
 
-Array flag_powers ->
+Array flag_powers static ->
 	$$00000001
 	$$00000010
 	$$00000100
