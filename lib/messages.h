@@ -342,8 +342,8 @@ Default LibraryMessages 0;
 	MSG_PROMPT:
 		print "> ";
 		rtrue;
-    MSG_INVENTORY_SUCCESS:
-	    if(_PrintContents("You are holding ", player)) print ".^";
+	MSG_INVENTORY_SUCCESS:
+		if(_PrintContents("You are holding ", player)) print ".^";
 		rtrue;
 	MSG_EXAMINE_NOTHING_SPECIAL:
 		"There is nothing special about ", (the) noun, ".";
@@ -366,36 +366,36 @@ Default LibraryMessages 0;
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg_1, ".";
-    MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS, MSG_UNLOCK_SUCCESS:
-	    "You ", (verbname) verb_word, " ", (the) noun, ".";
-    MSG_THROW_FIRST_TAKING:
+	MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS, MSG_UNLOCK_SUCCESS:
+		"You ", (verbname) verb_word, " ", (the) noun, ".";
+	MSG_THROW_FIRST_TAKING:
 		"(first taking ", (the) noun, " off)";
-    MSG_GIVE_SUCCESS, MSG_SHOW_SUCCESS:
-        print_ret (The) second, " doesn't seem interested.";
-    MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
-        print_ret (The) noun, " has better things to do.";
-    MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
-        "You can't, since ",(the) p_arg_1, " is closed.";
-    MSG_EXIT_SUCCESS:
-	    "You leave ", (the) noun, ".";
-    MSG_GIVE_PLAYER:
-        "You already have ", (ItorThem) noun, ".";
-    MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
-        "Failed ", (verbname) verb_word, ".";
+	MSG_GIVE_SUCCESS, MSG_SHOW_SUCCESS:
+		print_ret (The) second, " doesn't seem interested.";
+	MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
+		print_ret (The) noun, " has better things to do.";
+	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
+		"You can't, since ",(the) p_arg_1, " is closed.";
+	MSG_EXIT_SUCCESS:
+		"You leave ", (the) noun, ".";
+	MSG_GIVE_PLAYER:
+		"You already have ", (ItorThem) noun, ".";
+	MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
+		"Failed ", (verbname) verb_word, ".";
 	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY:
 		"Already there.";
 	MSG_INSERT_NO_ROOM, MSG_PUTON_NO_ROOM:
 		"There is no more room.";
-    MSG_INSERT_SUCCESS:
-        "You put ", (the) noun, " into ", (the) second, ".";
-    MSG_PUTON_SUCCESS:
-        "You put ", (the) noun, " on ", (the) second, ".";
+	MSG_INSERT_SUCCESS:
+		"You put ", (the) noun, " into ", (the) second, ".";
+	MSG_PUTON_SUCCESS:
+		"You put ", (the) noun, " on ", (the) second, ".";
 	MSG_ASK_SUCCESS, MSG_ANSWER_SUCCESS: 
 		"There is no reply.";
 	MSG_WEAR_ALREADY_WORN:	
 		"You are already wearing ", (ItorThem) noun, ".";
-    MSG_WEAR_SUCCESS:
-	    "You are now wearing ", (the) noun, ".";
+	MSG_WEAR_SUCCESS:
+		"You are now wearing ", (the) noun, ".";
 	MSG_DISROBE_NOT_WEARING:
 		"You're not wearing ", (the) noun, ".";
 	MSG_DISROBE_SUCCESS:
@@ -428,10 +428,10 @@ Default LibraryMessages 0;
 		"But ", (the) noun, " isn't there now.";
 	MSG_SEARCH_IN_IT_ISARE:
 		print "In ", (the) noun, " ", (isorare) noun;
-        if(_PrintContents(" ", noun)) print ".^";
+		if(_PrintContents(" ", noun)) print ".^";
 	MSG_SEARCH_ON_IT_ISARE:
 		print "On ", (the) noun, " ", (isorare) noun;
-        if(_PrintContents(" ", noun)) print ".^";
+		if(_PrintContents(" ", noun)) print ".^";
 	MSG_SEARCH_EMPTY:
 		print_ret (The) noun, " is empty.";
 	MSG_SEARCH_NOTHING_ON:
@@ -511,31 +511,31 @@ default:
 ];
 
 [ CTheyreorThats obj;
-    if (obj == player)             { print "You're"; return; }
-    if (obj has pluralname)        { print "They're"; return; }
-    if (obj has animate) {
-        if (obj has female)        { print "She's"; return; }
-        else if (obj hasnt neuter) { print "He's"; return; }
-    }
-    print "That's";
+	if (obj == player)			 { print "You're"; return; }
+	if (obj has pluralname)		{ print "They're"; return; }
+	if (obj has animate) {
+		if (obj has female)		{ print "She's"; return; }
+		else if (obj hasnt neuter) { print "He's"; return; }
+	}
+	print "That's";
 ];
 
 [ IsorAre obj;
-    if (obj has pluralname || obj == player) print "are"; else print "is";
+	if (obj has pluralname || obj == player) print "are"; else print "is";
 ];
 
 [ ThatorThose obj;
-    if (obj has pluralname || obj == player) print "those"; else print "that";
+	if (obj has pluralname || obj == player) print "those"; else print "that";
 ];
 
 [ ItorThem obj;
-    if (obj == player) { print "yourself"; rtrue; } 
-    if (obj has pluralname) { print "them"; rtrue; }
-    if (obj has animate) {
-        if (obj has female) { print "her"; rtrue; }
-        else if (obj hasnt neuter) { print "him"; rtrue; }
-    }
-    print "it";
+	if (obj == player) { print "yourself"; rtrue; } 
+	if (obj has pluralname) { print "them"; rtrue; }
+	if (obj has animate) {
+		if (obj has female) { print "her"; rtrue; }
+		else if (obj hasnt neuter) { print "him"; rtrue; }
+	}
+	print "it";
 ];
 
 
