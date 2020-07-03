@@ -1,6 +1,7 @@
 !% -~S
+!% $OMIT_UNUSED_ROUTINES=1
 
-! Minimal.inf - a sample game which uses PunyInform
+! Nada.inf - a game of minimal size which uses PunyInform
 
 ! Uncomment to show time instead of score/turns
 !Statusline time;
