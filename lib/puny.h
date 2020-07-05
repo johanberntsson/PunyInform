@@ -1160,7 +1160,7 @@ Object thedark "Darkness"
 				the_time = the_time % 1440;
 			}
         }
-
+		
         if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {
         	! we died somehow, use entry routine to give
         	! a chance of resurrection

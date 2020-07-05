@@ -21,7 +21,7 @@
 ! number of characters in the longest line, and then a string per line, and call
 ! QuoteBox with the array name as the argument.
 
-! Array quote_1 --> 5 35
+! Array quote_1 static --> 5 35
 ! "When I die, I want to go peacefully"
 ! "in my sleep like my grandfather."
 ! "Not screaming in terror, like the" 

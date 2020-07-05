@@ -1247,6 +1247,7 @@ Array guess_num_objects->5;
 	selected_direction_index = 0;
 	selected_direction = 0;
 	action = -1;
+	meta = false;
 	which_object->1 = 0;
 	actor = player;
 	nouncache_wn = -1; ! clear noun cache
