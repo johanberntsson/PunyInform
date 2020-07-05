@@ -347,7 +347,7 @@ Object -> Manager "library manager"
 					Achieved(TASK_TALK_MANAGER);
 					"He looks up from the shelf in surprise. When he sees you, he smiles (something 
 						is unsettling in his smile) and says: ~Wow! I didn't remember you were coming 
-                        today. You're the new assistant, right? I imagined you taller. Never mind! I
+						today. You're the new assistant, right? I imagined you taller. Never mind! I
 						won't be able to spend much time with you today. You'd better come tomorrow.~
 						^^Just as you're about to leave the library upset, you hear his voice again. 
 						~Wait! Maybe I do need you. There's a book I need, Where the Wild Things Are 
