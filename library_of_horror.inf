@@ -638,6 +638,7 @@ Object Words "words"
 		
 [Initialise;
 	location = GloomyStreet;
+    lookmode = 2; ! Verbose by default
 	print "^^The search for a job can be arduous for a young person like you, with no experience or contacts and a newcomer to the city. That's why when you had that newspaper in your hands yesterday and read the ad (~young, inexperienced bookstore assistant needed~) you didn't hesitate for a second.
         ^^However, now that you are walking down the gloomy streets of the neighbourhood where your future job resides, you wonder if you were not too quick to accept...^^";
 ];
