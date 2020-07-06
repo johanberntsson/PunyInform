@@ -517,7 +517,7 @@ Default LibraryMessages 0;
 		print "^Would you like to RESTART, RESTORE";
 #EndIf;
 #IfDef OPTIONAL_FULL_SCORE;
-		if(TASKS_PROVIDED == 0) print ", give the FULL score for that game";
+		print ", give the FULL score for that game";
 #EndIf;
 		if(deadflag == 2 && AMUSING_PROVIDED == 0) print ", see some suggestions for AMUSING things to do";
 		print " or QUIT? ";

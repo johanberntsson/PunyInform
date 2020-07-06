@@ -1088,7 +1088,9 @@ Object thedark "Darkness"
 #IfDef OPTIONAL_FULL_SCORE;
 	places_score = 0;
 	things_score = 0;
+#IfDef TASKS_PROVIDED;
 	for(_i = 0 : _i < NUMBER_TASKS : _i++) task_done->_i = 0;
+#EndIf;
 #EndIf;
 
 	Initialise();

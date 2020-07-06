@@ -452,15 +452,15 @@ Constant RUNTIME_ERRORS RTE_NORMAL;
 Attribute scored;
 Global things_score;
 Global places_score;
-
-Default NUMBER_TASKS        1;
-Default TASKS_PROVIDED      1;
 Default OBJECT_SCORE        4;
 Default ROOM_SCORE          5;
 
+#IfDef TASKS_PROVIDED;
+Default NUMBER_TASKS        1;
 Array  task_done -> NUMBER_TASKS;
 #Ifndef task_scores;
-Array task_scores -> 0 0; ! Inform breaks if only one entry
+Array task_scores -> 1;
+#Endif;
 #Endif;
 #Endif;
 

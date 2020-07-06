@@ -925,11 +925,13 @@ Verb meta 'quit' 'q//'
 	ScoreSub();
 	new_line;
 	PrintMsg(MSG_FULLSCORE_START);
+#IfDef TASKS_PROVIDED;
 	for(_i=0 : _i<NUMBER_TASKS : _i++)
 		if (task_done->_i == 1) {
 		PANum(task_scores->(_i));
 		PrintTaskName(_i);
 	}
+#EndIf;
 	if(things_score ~= 0) {
 		PANum(things_score);
 		print "finding sundry items^";
@@ -1551,13 +1553,14 @@ Global scope_cnt;
 #EndIf;
 
 #IfDef OPTIONAL_FULL_SCORE;
+#IfDef TASKS_PROVIDED;
 [ Achieved num;
     if (task_done->num == 0) {
         task_done->num = 1;
         score = score + task_scores->num;
     }
 ];
-
+#EndIf;
 [ PANum p_m _n;
 	print "  ";
 	_n = p_m;
