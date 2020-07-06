@@ -931,6 +931,8 @@ Verb meta 'quit' 'q//'
 		PANum(task_scores->(_i));
 		PrintTaskName(_i);
 	}
+#IfNot;
+	_i = 0; ! Avoid warning
 #EndIf;
 	if(things_score ~= 0) {
 		PANum(things_score);
