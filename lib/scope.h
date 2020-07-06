@@ -8,7 +8,31 @@
 
 System_file;
 
-[ _SearchScope p_obj _child _add_this _i _len _addr;
+[ _PerformAddToScope p_obj _child _i _len _addr;
+	_addr = p_obj.&add_to_scope;
+	if(_addr) {
+		! routine or a list of objects
+		if(UnsignedCompare(_addr-->0, top_object) > 0) {
+			RunRoutines(p_obj, add_to_scope);
+		} else {
+#IfDef DEBUG_SCOPE;
+			print "add_to_scope for ", (name) p_obj, " is list of objects:^";
+#EndIf;
+			_len = p_obj.#add_to_scope / WORDSIZE;
+			for(_i = 0: _i  < _len: _i++) {
+				_child =  _addr --> _i;
+				if(_child) {
+					_SearchScope(_child);
+#IfDef DEBUG_SCOPE;
+					print _i, ": ", _child, "^";
+#EndIf;
+				}
+			}
+		}
+	}
+];
+
+[ _SearchScope p_obj p_risk_duplicate p_no_add _child _add_contents;
 	while(p_obj) {
 #IfDef DEBUG_SCOPE;
 		print "Adding ",(object) p_obj," (", p_obj,") to scope. Action = ", action, "^";
@@ -20,39 +44,45 @@ System_file;
 			return;
 		}			
 
-		scope-->(scope_objects++) = p_obj;
+		_PutInScope(p_obj, p_risk_duplicate);
+!		scope-->(scope_objects++) = p_obj;
+		
+		! Add_to_scope
+		if(p_no_add == 0) _PerformAddToScope(p_obj);
 
-		_addr = p_obj.&add_to_scope;
-		if(_addr) {
-			! routine or a list of objects
-			if(UnsignedCompare(_addr-->0, top_object) > 0) {
-				RunRoutines(p_obj, add_to_scope);
-			} else {
-#IfDef DEBUG_SCOPE;
-				print "add_to_scope for ", (name) p_obj, " is list of objects:^";
-#EndIf;
-				_len = p_obj.#add_to_scope / WORDSIZE;
-				for(_i = 0: _i  < _len: _i++) {
-					_child =  _addr --> _i;
-					if(_child) {
-						_SearchScope(_child);
-#IfDef DEBUG_SCOPE;
-						print _i, ": ", _child, "^";
-#EndIf;
-					}
-				}
-			}
-		}
 		_child = child(p_obj);
-		_add_this = _child ~= 0 && (p_obj has supporter || p_obj has transparent || (p_obj has container && p_obj has open));
-		if(_add_this) {
-			_SearchScope(_child);
+		_add_contents = _child ~= 0 && (p_obj has supporter || p_obj has transparent || (p_obj has container && p_obj has open));
+		if(_add_contents) {
+			_SearchScope(_child, p_risk_duplicate, p_no_add);
 		}
 		p_obj = sibling(p_obj);
 	}
 ];
 
-[ _UpdateScope p_actor p_force _start_pos;
+[_PutInScope p_obj p_risk_duplicate _i;
+	if(p_risk_duplicate == 0) {
+#IfV5;
+		@scan_table p_obj scope scope_objects -> _i ?~not_found;
+		return;
+.not_found;
+#IfNot;
+		for(_i = 0: _i < scope_objects: _i++) {
+			if(scope-->_i == p_obj) return;
+		}
+#EndIf;
+	}
+	! Check if there is room
+	if(scope_objects >= MAX_SCOPE) {
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+		RunTimeError(ERR_SCOPE_FULL);
+#EndIf;
+		return;
+	}
+	! Add it
+	scope-->(scope_objects++) = p_obj;
+];
+
+[ _UpdateScope p_actor p_force _start_pos _i _initial_scope_objects _current_scope_objects;
 	if(p_actor == 0) p_actor = player;
 
 	if(scope_stage == 2) {
@@ -78,30 +108,39 @@ System_file;
 	_start_pos = ScopeCeiling(p_actor);
 
 
-	if(scope_stage ~= 2) {
+	if(scope_stage == 2) {	
 		! if scope_stage == 2, then scope_routine has already added
 		! some objects that we don't want to overwrite
+		_initial_scope_objects = scope_objects;
+	} else {
 		scope_objects = 0;
 	}
 
 	! the directions are always in scope
-	scope-->(scope_objects++) = Directions;
+	_PutInScope(Directions);
 
 	! if we are in a container, add it to scope
 	if(_start_pos ~= location) {
-		scope-->(scope_objects++) = _start_pos;
+		_PutInScope(_start_pos);
+!		scope-->(scope_objects++) = _start_pos;
 	}
-
-	! give the starting pos a chance to add objects to scope
-	if(_start_pos.add_to_scope) _start_pos.add_to_scope();
 
 	if(darkness && p_actor == player) {
 		! only the player's possessions are in scope
-		_SearchScope(child(player));
+		_SearchScope(child(player), true, true);
 	} else {
 		! Add all in player location (which may be inside an object)
-		_SearchScope(child(_start_pos));
+		_SearchScope(child(_start_pos), true, true);
 	}
+
+	! give the starting pos a chance to add objects to scope
+	if(_start_pos == location)
+		_PerformAddToScope(_start_pos);
+
+	_current_scope_objects = scope_objects;
+	for(_i = _initial_scope_objects : _i < _current_scope_objects : _i++)
+		_PerformAddToScope(scope-->_i);
+	
 	scope_modified = false;
 #IfDef DEBUG_SCOPE;
 	print "*** Updated scope from ", (the) _start_pos, ". Found ", scope_objects, " objects.^";
@@ -152,32 +191,34 @@ System_file;
 	for(_i = 0: _i < scope_objects: _i++) p_routine(scope-->_i);
 ];
 
-[ PlaceInScope p_obj _i;
-	! DM: PlaceInScope(obj)
-	! Used in “scope routines” (only) when scope_stage is set to 2 (only).
-	! Places obj in scope for the token currently being parsed. No other
-	! objects are placed in scope as a result of this, unlike the case of
-	! ScopeWithin. No return value
+Constant PlaceInScope = _PutInScope;
 
-	! skip if already added
-#IfV5;
-	@scan_table p_obj scope scope_objects -> _i ?~not_found;
-	return;
-.not_found;
-#IfNot;
-	for(_i = 0: _i < scope_objects: _i++) {
-		if(scope-->_i == p_obj) return;
-	}
-#EndIf;
-	! add it
-	if(scope_objects >= MAX_SCOPE) {
-#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-		RunTimeError(ERR_SCOPE_FULL);
-#EndIf;
-		return;
-	}			
-	scope-->(scope_objects++) = p_obj;
-];
+! [ PlaceInScope p_obj _i;
+	! ! DM: PlaceInScope(obj)
+	! ! Used in “scope routines” (only) when scope_stage is set to 2 (only).
+	! ! Places obj in scope for the token currently being parsed. No other
+	! ! objects are placed in scope as a result of this, unlike the case of
+	! ! ScopeWithin. No return value
+
+	! ! skip if already added
+! #IfV5;
+	! @scan_table p_obj scope scope_objects -> _i ?~not_found;
+	! return;
+! .not_found;
+! #IfNot;
+	! for(_i = 0: _i < scope_objects: _i++) {
+		! if(scope-->_i == p_obj) return;
+	! }
+! #EndIf;
+	! ! add it
+	! if(scope_objects >= MAX_SCOPE) {
+! #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+		! RunTimeError(ERR_SCOPE_FULL);
+! #EndIf;
+		! return;
+	! }			
+	! scope-->(scope_objects++) = p_obj;
+! ];
 
 [ ScopeWithin p_obj _i;
 	! DM: ScopeWithin(obj)

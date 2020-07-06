@@ -1,3 +1,5 @@
+System_file;
+
 Global menu_item;
 Global item_width;
 Global item_name;
@@ -5,6 +7,7 @@ Global menu_nesting;
 
 #IfV3;
 [ DoMenu menu_choices EntryR ChoiceR lines main_title i j;
+	menu_choices = 0; ! Avoid warning
 	menu_nesting++;
 .LKRD;
 	menu_item = 0;

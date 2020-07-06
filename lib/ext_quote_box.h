@@ -102,7 +102,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #IfDef QUOTE_INDENT_STRING;
 		print (string) QUOTE_INDENT_STRING;
 #IfNot;
-		for(_j = (_screen_width - _quote_width - 2) / 2 : _j >= 0: _j--) @print_char ' ';
+		for(_j = (_screen_width - _quote_width - 2) / 2 : _j > 0: _j--) @print_char ' ';
 #EndIf;
 		_k =  p_quote_data-->_i;
 		if(_i == 1 or _last_index) {

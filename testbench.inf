@@ -62,6 +62,7 @@ Constant MAX_SCORE = 2;
 	"^Did you try?^^1. Pushing John many times.^2. Going outside and looking at the sun";
 ];
 
+
 ! Setup cheap scenery
 [SceneryReply;
 	Push:
@@ -278,7 +279,7 @@ Object Toilet "The toilet"
 			if(Faucet has on) {
 				"Water is streaming from the faucet into the sink. ";
 			}
-			rtrue;
+			"";
 		],
 #IfDef USEINFORM;
 		w_to Library,
@@ -292,6 +293,7 @@ Object Toilet "The toilet"
 Object -> ToiletDoor "toilet door"
 	with 
 		name 'toilet' 'door',
+		describe [; rtrue; ],
 !		parse_name [ _w; 
 !			_w = NextWord();
 !			if(_w == 'toilet') {
@@ -320,7 +322,7 @@ Object -> ToiletDoor "toilet door"
 		after [; print "*** ToiletDoor.after^"; ],
 		before [; print "*** ToiletDoor.before^"; ],
 #EndIf;
-	has door openable concealed static lockable;
+	has door openable static lockable;
 
 Object -> Goblin "Goblin"
 	with 

@@ -1618,25 +1618,29 @@ Global scope_cnt;
 	if(_new_location ofclass String)
 		print_ret (string) _new_location;
 	if(_new_location > top_object) {
-		_new_location = PrintOrRun(location, p_property);
+		_new_location = location.p_property();
 		if(_new_location == 1)
 			rtrue;
 	}
-	
+
 	! Check for a door
-	if(_new_location) {
-		if(_new_location has door) {
-			_door_to = _new_location.door_to;
-			! The destination is in fact a door
+	if(_new_location ~= 0 && _new_location has door) {
+		! The destination is in fact a door
+		if(_new_location has concealed)
+			_new_location = 0;
+		else {
 			if(_new_location hasnt open) { PrintMsg(MSG_GO_DOOR_CLOSED, _new_location); rtrue; }
+			_door_to = _new_location.door_to;
 			if(_door_to > top_object) {
-				_new_location = PrintOrRun(_new_location, door_to);
+				_new_location = _new_location.door_to();
 				if(_new_location == 1)
 					rtrue;
 			} else
 				_new_location = _door_to;
 		}
 	}
+
+	! If _new_location is 0, we tell the player they can't go there and exit
 	if(_new_location == 0) {
 		if(location provides cant_go) {
 			print_ret (string) location.cant_go;
@@ -1644,6 +1648,7 @@ Global scope_cnt;
         PrintMsg(MSG_GO_CANT_GO); 
 		rtrue;
 	}
+
 	if(_vehicle_mode == 1) {
 		move _vehicle to _new_location;
 		_new_location = _vehicle;
