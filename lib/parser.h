@@ -663,7 +663,7 @@ System_file;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
-	return _ParseToken(-p_token_type, -p_token_data, PHASE1);
+	return _ParseToken(p_token_type, p_token_data, -PHASE1);
 ];
 
 [ _GrabIfNotHeld p_noun;
@@ -684,10 +684,11 @@ System_file;
 	! (this is mostly to avoid recalculating the values from wn
 	! when the calling routine already has them at hand)
 
-	if(p_pattern_pointer < 0) {
+	if(p_phase < 0) {
 		! called from ParseToken (DM library API)
-		_token = -p_pattern_pointer;
-		_token_data = -p_parse_pointer;
+		p_phase = -p_phase;
+		_token = p_pattern_pointer;
+		_token_data = p_parse_pointer;
 		p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
 		p_pattern_pointer = 0;
 	} else {
