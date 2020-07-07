@@ -773,7 +773,10 @@ System_file;
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				if(p_phase == PHASE2) {
 					_GrabIfNotHeld(_noun);
-					if(_noun notin player) return GPR_FAIL;
+					if(_noun notin player) {
+						print "You are not holding ", (the) _noun, ".^";
+						return GPR_FAIL;
+					}
 				}
 			}
 			return _noun;
