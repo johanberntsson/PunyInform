@@ -1271,7 +1271,7 @@ Array guess_num_objects->5;
 
 .reparse;
 	verb_word = (parse_array - 2) --> (2 * verb_wordnum) ;
-	if(verb_word < (0-->HEADER_DICTIONARY)) {
+	if(UnsignedCompare(verb_word, (0-->HEADER_DICTIONARY)) == -1) {
 		! Not a verb. Try the entry point routine before giving up
 		verb_word = UnknownVerb(verb_word);
 		if(verb_word == 0) {
