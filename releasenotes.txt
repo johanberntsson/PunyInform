@@ -1,0 +1,10 @@
+1.0: first public release (5 July 2020)
+
+1.1: bug fixes (9 July 2020)
+Bugs fixed:
+- parsing failed for big story files because of bad pointer comparisons
+- a programming error lead to bad parsing results on older interpreters
+New features:
+- none
+
+
