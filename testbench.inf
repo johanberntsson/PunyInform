@@ -100,9 +100,6 @@ Include "ext_flags.h";
 Include "globals.h";
 #EndIf;
 
-Array Oopsie -> 20000;
-Array Oopsie2 -> 10000;
-
 [ DarkToDark;
 	deadflag = 2;
 	"You are eaten by a grue.";
