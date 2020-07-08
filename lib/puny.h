@@ -395,25 +395,18 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 [ RunRoutines p_obj p_prop p_switch;
-#IfnDef OPTIONAL_MANUAL_SCOPE;
-	! default case: always assume that every timer etc
-	! could have modified the scope
-	scope_modified = true;
-#EndIf;
 	if(p_switch == 0) sw__var = action; else sw__var = p_switch;
 	if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
 	return p_obj.p_prop();
 ];
 
 
-[ PrintOrRun p_obj p_prop p_no_string_newline;
-	if (p_obj.#p_prop > WORDSIZE) return RunRoutines(p_obj,p_prop);
-	if(p_obj.p_prop ofclass String) {
+[ PrintOrRun p_obj p_prop p_no_string_newline _val;
+	_val = p_obj.p_prop;
+	if (p_obj.#p_prop > WORDSIZE || _val ofclass Routine) return RunRoutines(p_obj, p_prop);
+	if(_val ofclass String) {
 		print (string) p_obj.p_prop;
 		if(p_no_string_newline == 0) @new_line;
-		rtrue;
-	} else if(p_obj.p_prop ofclass Routine) {
-		return RunRoutines(p_obj, p_prop);
 	}
 ];
 
@@ -542,7 +535,7 @@ Include "parser.h";
 #IfDef DEBUG;
 	if(debug_flag & 1 && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
 #EndIf;
-#IfnDef OPTIONAL_MANUAL_SCOPE;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
 	_scope_count = GetPlayerScopeCopy();
@@ -552,7 +545,13 @@ Include "parser.h";
 #IfDef DEBUG;
 		if(debug_flag & 1 && _obj.&each_turn ~= 0) print "(", (name) _obj, ").each_turn()^";
 #EndIf;
-		if(_obj.&each_turn ~= 0) RunRoutines(_obj, each_turn);
+		if(_obj.&each_turn ~= 0) {
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+			! Assume that every each_turn routine may have modified the scope
+			scope_modified = true;
+#EndIf;
+			RunRoutines(_obj, each_turn);
+		}
 	}
 ];
 
@@ -573,6 +572,10 @@ Include "parser.h";
 #IfDef DEBUG;
 	if(debug_flag & 1) print "player.orders()^";
 #EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+	! Assume that every routine may modify the scope
+	scope_modified = true;
+#EndIf;
 	if(RunRoutines(player, orders)) rtrue;
 
 	for(_i = 0: _i < _scope_count: _i++) {
@@ -580,6 +583,10 @@ Include "parser.h";
 		if (_obj provides react_before) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_before()^";
+#EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+			! Assume that every routine may modify the scope
+			scope_modified = true;
 #EndIf;
 			if(RunRoutines(_obj, react_before)) {
 				rtrue;
@@ -590,11 +597,19 @@ Include "parser.h";
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) location, ").before()^";
 #EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+		! Assume that every routine may modify the scope
+		scope_modified = true;
+#EndIf;
 		if(RunRoutines(location, before)) rtrue;
 	}
 	if(inp1 > 1 && inp1 provides before) {
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) inp1, ").before()^";
+#EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+		! Assume that every routine may modify the scope
+		scope_modified = true;
 #EndIf;
 		if(RunRoutines(inp1, before)) rtrue;
 	}
@@ -615,6 +630,10 @@ Include "parser.h";
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_after()^";
 #EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+			! Assume that every routine may modify the scope
+			scope_modified = true;
+#EndIf;
 			if(RunRoutines(_obj, react_after)) {
 				rtrue;
 			}
@@ -624,17 +643,29 @@ Include "parser.h";
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) location, ").after()^";
 #EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+		! Assume that every routine may modify the scope
+		scope_modified = true;
+#EndIf;
 		if(RunRoutines(location, after)) rtrue;
 	}
 	if(inp1 > 1 && inp1 provides after) {
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) inp1, ").after()^";
 #EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+		! Assume that every routine may modify the scope
+		scope_modified = true;
+#EndIf;
 		if(RunRoutines(inp1, after)) rtrue;
 	}
 #IfDef GamePostRoutine;
 #IfDef DEBUG;
 	if(debug_flag & 1) print "GamePostRoutine()^";
+#EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+	! Assume that every routine may modify the scope
+	scope_modified = true;
 #EndIf;
 	return GamePostRoutine();
 #IfNot;
@@ -645,6 +676,10 @@ Include "parser.h";
 [ RunLife p_actor p_reason;
 #IfDef DEBUG;
 	if(debug_flag & 1 && p_actor provides life) print "(", (name) p_actor, ").life()^";
+#EndIf;
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+	! Assume that every routine may modify the scope
+	scope_modified = true;
 #EndIf;
     return RunRoutines(p_actor, life, p_reason);
 ];
@@ -824,6 +859,10 @@ Include "parser.h";
 		}
 #EndIf;
 		
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+		! Assume that every routine may modify the scope
+		scope_modified = true;
+#EndIf;
 		if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
 		else {
 			_t = _j.time_left;
