@@ -639,13 +639,11 @@ System_file;
 	}
 ];
 
-[ _UpdateNounSecond p_noun p_inp; ! p_id;
+[ _UpdateNounSecond p_noun p_inp;
 	if(num_noun_groups == 0) {
-		!print p_id, ": setting noun: ", p_noun, " inp1 ", p_inp, "^";
 		noun = p_noun;
 		inp1 = p_inp;
 	} else if(num_noun_groups == 1){
-		!print p_id, ": setting second: ", p_noun, " inp2 ", p_inp, "^";
 		second = p_noun;
 		inp2 = p_inp;
 	}
@@ -1207,9 +1205,9 @@ Array guess_num_objects->5;
 		GPR_MULTIPLE:
 			! multiple_objects contains the objects
 			if(multiple_objects-->0 == 0) {
-				_UpdateNounSecond(0, 0, 1);
+				_UpdateNounSecond(0, 0);
 			} else {
-				_UpdateNounSecond(multiple_objects-->1, multiple_objects-->1, 1);
+				_UpdateNounSecond(multiple_objects-->1, multiple_objects-->1);
 			}
 		GPR_NUMBER:
 			! parsed_number contains the new number
@@ -1217,12 +1215,12 @@ Array guess_num_objects->5;
 				print "I didn't understand that number.^";
 				return wn - verb_wordnum; ! bad match
 			}
-			_UpdateNounSecond(parsed_number, 1, 2);
+			_UpdateNounSecond(parsed_number, 1);
 		GPR_REPARSE:
 			return -1; ! the player_input and parse_array have changed
 		default:
 			! _noun was a valid noun
-			_UpdateNounSecond(_noun, _noun, 3);
+			_UpdateNounSecond(_noun, _noun);
 		}
 	}
 	! we should never reach this line
