@@ -52,7 +52,7 @@ Verb 'enter'
 Verb 'examine' 'x//'
 	* noun -> Examine;
 
-Verb 'exit'
+Verb 'exit' 'leave'
 	*                                           -> Exit
 	* noun                                      -> Exit;
 
@@ -89,10 +89,6 @@ Verb 'jump'
 	* 'into'/'onto' noun                        -> Enter
 	* 'out' 'of'/'from' noun                    -> Exit
 	* 'off' noun                                -> Exit;
-
-Verb 'leave'
-	* noun=ADirection                           -> Go
-	* noun                                      -> Exit;
 
 Verb 'listen'
 	*                                           -> Listen
