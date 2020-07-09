@@ -1111,11 +1111,11 @@ Object thedark "Darkness"
 	dict_end = dict_start + (dict_start - 2)-->0 * dict_entry_size;
 #EndIf;
 
-	parse_array->0 = MAX_INPUT_WORDS;
+	parse->0 = MAX_INPUT_WORDS;
 #IfV5;
-    player_input_array->0 = MAX_INPUT_CHARS;
+    buffer->0 = MAX_INPUT_CHARS;
 #IfNot;
-    player_input_array->0 = MAX_INPUT_CHARS - 1;
+    buffer->0 = MAX_INPUT_CHARS - 1;
 #EndIf;
 
 	top_object = #largest_object-255;
@@ -1148,7 +1148,7 @@ Object thedark "Darkness"
 
 		_UpdateScope(player, true);
 		_score = score;
-		if(parse_array->1 == 0) {
+		if(parse->1 == 0) {
 			_ReadPlayerInput();
 		}
 		_parser_oops = parser_unknown_noun_found;
@@ -1157,8 +1157,8 @@ Object thedark "Darkness"
 		if(action == ##OopsCorrection) {
 			if(_again_saved && _parser_oops > 0) {
 				!print "Oops not implemented^";
-				_CopyInputArray(temp_player_input_array, player_input_array);
-				_CopyParseArray(temp_parse_array, parse_array);
+				_CopyInputArray(buffer2, buffer);
+				_CopyParseArray(parse2, parse);
 				_parser_oops-->0 = special_word;
 				_again_saved = false;
 				jump do_it_again;
@@ -1169,8 +1169,8 @@ Object thedark "Darkness"
 		if(action == ##Again) {
 			! restore from the 'again' buffers and reparse
 			if(_again_saved) {
-				_CopyInputArray(temp_player_input_array, player_input_array);
-				_CopyParseArray(temp_parse_array, parse_array);
+				_CopyInputArray(buffer2, buffer);
+				_CopyParseArray(parse2, parse);
 				jump do_it_again;
 			} else {
 				print "You can hardly repeat that.^";
@@ -1178,12 +1178,12 @@ Object thedark "Darkness"
 		} else {
 			! store the current buffer to 'again'
 			_again_saved = true;
-			_CopyInputArray(player_input_array, temp_player_input_array);
-			_CopyParseArray(parse_array, temp_parse_array);
+			_CopyInputArray(buffer, buffer2);
+			_CopyParseArray(parse, parse2);
 		}
 
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
-		else _sentencelength = parse_array->1;
+		else _sentencelength = parse->1;
 		if(action >= 0 && meta == false) {
 			RunTimersAndDaemons();
 			RunEachTurn();
@@ -1217,19 +1217,19 @@ Object thedark "Darkness"
 			}
 		}
 
-		_parsearraylength = parse_array->1;
+		_parsearraylength = parse->1;
 		if(_parsearraylength > _sentencelength) {
 			! the first sentence in the input  has been parsed
-			! and executed. Now remove it from parse_array so that
+			! and executed. Now remove it from parse so that
 			! the next sentence can be parsed
 			_copylength = 2 * _parsearraylength + 1;
 			for(_i = 1, _j = 2 * _sentencelength + 1: _j < _copylength: _i++, _j++)
-				parse_array-->_i = parse_array-->_j;
+				parse-->_i = parse-->_j;
 
-			parse_array->1 = _parsearraylength - _sentencelength;
+			parse->1 = _parsearraylength - _sentencelength;
 		} else {
 			! the input was just one sentence
-			parse_array->1 = 0;
+			parse->1 = 0;
 		}
 		_UpdateDarkness(true);
 	}
@@ -1243,7 +1243,7 @@ Object thedark "Darkness"
 	for (::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		_ReadPlayerInput(true);
-		switch(parse_array-->1) {
+		switch(parse-->1) {
 		'restart': @restart;
 		'restore': RestoreSub();
 #IfDef OPTIONAL_FULL_SCORE;

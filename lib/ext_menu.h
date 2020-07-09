@@ -36,9 +36,9 @@ Global menu_nesting;
 		print "> ";
 
        _ReadPlayerInput(true);
-		j = parse_array->1; ! number of words
+		j = parse->1; ! number of words
 		if (j == 0) jump LKRD;
-		i = parse_array-->1;
+		i = parse-->1;
 		if(i == 'q//') {
 			menu_nesting--; if (menu_nesting > 0) rfalse;
 			if (deadflag == 0) <<Look>>;

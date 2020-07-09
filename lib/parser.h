@@ -20,23 +20,23 @@ System_file;
 	AfterPrompt();
 #IfV5;
 	DrawStatusLine();
-	player_input_array->1 = 0;
-	@aread player_input_array parse_array -> _result;
+	buffer->1 = 0;
+	@aread buffer parse -> _result;
 	@buffer_mode 1;
 #IfNot;
 	if(player in location) {
-		@sread player_input_array parse_array;
+		@sread buffer parse;
 	} else {
 		! need to adjust location to make the status line correct
 		_result = location; location = ScopeCeiling(player);
-		@sread player_input_array parse_array;
+		@sread buffer parse;
 		location = _result;
 	}
 #EndIf;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
-	_result = 2 * (parse_array -> 1) + 1;
-	parse_array-->_result = 0;
-	parse_array-->(_result + 1) = 0;
+	_result = 2 * (parse -> 1) + 1;
+	parse-->_result = 0;
+	parse-->(_result + 1) = 0;
 
 	! call library entry routine
 	BeforeParsing();
@@ -45,10 +45,10 @@ System_file;
 [ YesOrNo;
     for (::) {
         _ReadPlayerInput(true);
-        if(parse_array -> 1 == 1) {
+        if(parse -> 1 == 1) {
         	! one word reply
-            if(parse_array --> 1 == 'yes' or 'y//') rtrue;
-            if(parse_array --> 1 == 'no' or 'n//') rfalse;
+            if(parse --> 1 == 'yes' or 'y//') rtrue;
+            if(parse --> 1 == 'no' or 'n//') rfalse;
         }
         PrintMsg(MSG_YES_OR_NO, true);
     }
@@ -76,7 +76,7 @@ System_file;
     _j = NumberWord(_j); if (_j >= 1) return _j;
 #Endif;
 
-    _i = p_wordnum*4+1; _j = parse_array->_i; _num = _j+player_input_array; _len = parse_array->(_i-1);
+    _i = p_wordnum*4+1; _j = parse->_i; _num = _j+buffer; _len = parse->(_i-1);
 
     ! allow for a entry point routine to override normal parsing
     _tot = ParseNumber(_num, _len); if(_tot ~= 0) return _tot;
@@ -253,11 +253,11 @@ System_file;
 ! since they will typically be called from parse_name routines, which are called from _CheckNoun
 
 [ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
-	return player_input_array + parse_array->(p_wordnum*4+1);
+	return buffer + parse->(p_wordnum*4+1);
 ];
 
 [ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
-	return parse_array->(p_wordnum*4);	
+	return parse->(p_wordnum*4);	
 ];
 
 [ _PeekAtNextWord _i;
@@ -267,16 +267,16 @@ System_file;
 ];
 
 [ NextWord _i _j;
-	if (wn <= 0 || wn > parse_array->1) { wn++; rfalse; }
+	if (wn <= 0 || wn > parse->1) { wn++; rfalse; }
 	_i = wn*2-1; wn++;
-	_j = parse_array-->_i;
+	_j = parse-->_i;
 	if (_j == ',//') _j = comma_word;
 	if (_j == './/') _j = THEN_WORD;
 	return _j;
 ];
 
 [ NextWordStopped;
-	if (wn > parse_array->1) { wn++; return -1; }
+	if (wn > parse->1) { wn++; return -1; }
 	return NextWord();
 ];
 
@@ -506,7 +506,7 @@ System_file;
 ];
 
 [ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword;
-	! try getting a noun from the <p_parse_pointer> entry in parse_array
+	! try getting a noun from the <p_parse_pointer> entry in parse
 	! return:
 	!   <noun number> if found
 	!   0  if no noun found (but we didn't write an error message)
@@ -590,24 +590,24 @@ System_file;
 		}
 		_AskWhichNoun(-_noun);
 		! read a new line of input
-		! I need to use parse_array since NextWord
+		! I need to use parse since NextWord
 		! for parse_name and others hardcode this
 		! usage, so I first store the old input into
 		! temp arrays that I will restore if I can
 		! disambiguate successfully.
-		_CopyInputArray(player_input_array, temp_player_input_array);
-		_CopyParseArray(parse_array, temp_parse_array);
+		_CopyInputArray(buffer, buffer2);
+		_CopyParseArray(parse, parse2);
 		_ReadPlayerInput();
 		! is this a reply to the question?
-		!if((parse_array->1 == 1) &&  
-		if((((parse_array + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
+		!if((parse->1 == 1) &&  
+		if((((parse + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
 			! the first word is not a verb. Assume
 			! a valid reply and add the other 
-			! entry into parse_array, then retry
+			! entry into parse, then retry
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 			wn = 1;
 			nouncache_wn = -1; ! clear noun cache
-			_noun = _CheckNoun(parse_array+2);
+			_noun = _CheckNoun(parse+2);
 			wn = _oldwn; ! and restore it after the call
 			if(_noun > 0) {
 				! we have successfully disambiguated the noun phrase.
@@ -616,8 +616,8 @@ System_file;
 				! return from the routine.
 				which_object->1 = _num_words_in_nounphrase;
 				! don't forget to restore the old arrays
-				_CopyInputArray(temp_player_input_array, player_input_array);
-				_CopyParseArray(temp_parse_array, parse_array);
+				_CopyInputArray(buffer2, buffer);
+				_CopyParseArray(parse2, parse);
 				@new_line;
 				jump recheck_noun;
 			}
@@ -651,7 +651,7 @@ System_file;
 ];
 
 [ _IsSentenceDivider p_parse_pointer;
-	! check if current parse_array block, indicated by p_parse_pointer,
+	! check if current parse block, indicated by p_parse_pointer,
 	! is a period or other sentence divider
 	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
 ];
@@ -687,7 +687,7 @@ System_file;
 		p_phase = -p_phase;
 		_token = p_pattern_pointer;
 		_token_data = p_parse_pointer;
-		p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+		p_parse_pointer = parse + 2 + 4 * (wn - 1);
 		p_pattern_pointer = 0;
 	} else {
 		_token = (p_pattern_pointer -> 0);
@@ -762,7 +762,7 @@ System_file;
 				parser_unknown_noun_found = p_parse_pointer;
 				return GPR_FAIL;
 			}
-			p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+			p_parse_pointer = parse + 2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _noun hasnt animate) {
 				if(p_phase == PHASE2) {
 					print "You can only do that to something animate.^";
@@ -820,7 +820,7 @@ System_file;
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
 				}
-				p_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+				p_parse_pointer = parse + 2 + 4 * (wn - 1);
 				multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 				multiple_objects --> (multiple_objects --> 0) = _noun;
 				! check if we should continue: and or comma
@@ -852,7 +852,7 @@ System_file;
 				++wn;
 				++consult_words;
 				p_parse_pointer = p_parse_pointer + 4;
-				if(wn > parse_array->1 || p_parse_pointer --> 0 == _i) {
+				if(wn > parse->1 || p_parse_pointer --> 0 == _i) {
 					! found the stop token, or end of line
 					break;
 				}
@@ -891,23 +891,23 @@ System_file;
 ];
 
 [ _PrintPartialMatch p_start p_stop _start _stop _i;
-	_i = (parse_array-2+(4*p_start));
+	_i = (parse-2+(4*p_start));
 	_start = _i->3; ! index to input line for first word
-	if(p_stop > parse_array -> 1) {
-		_stop = player_input_array->0; ! until the end of the input
+	if(p_stop > parse -> 1) {
+		_stop = buffer->0; ! until the end of the input
 	} else {
-		_i = (parse_array-2+(4*p_stop));
+		_i = (parse-2+(4*p_stop));
 		_stop = _i->2 + _i->3; ! until the index of the stop word + its length
 	}
 	for(_i = _start: _i < _stop: _i ++) {
-		if(player_input_array -> _i == 0) break;
-		print (char) player_input_array -> _i;
+		if(buffer -> _i == 0) break;
+		print (char) buffer -> _i;
 	}
 ];
 
 [ _PrintUknownWord _i;
 	for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
-		print (char) player_input_array->(_i + parser_unknown_noun_found->3);
+		print (char) buffer->(_i + parser_unknown_noun_found->3);
 	}
 ];
 
@@ -1001,7 +1001,7 @@ Array guess_num_objects->5;
 
 [ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second _num_preps;
 	! Called because sentence shorter than the pattern
-	! Available data: wn, parse_array and p_pattern_token (last matched token)
+	! Available data: wn, parse and p_pattern_token (last matched token)
 	!
 	! Either guess missing parts in the pattern and return true,
 	! or print a suitable error message and return false
@@ -1078,7 +1078,7 @@ Array guess_num_objects->5;
 	!   0..99 how many words were matched before the match failed
 	!   100 if perfect match
 	wn = verb_wordnum + 1;
-	_parse_pointer = parse_array + 2 + 4*(verb_wordnum);
+	_parse_pointer = parse + 2 + 4*(verb_wordnum);
 	_pattern_pointer = p_pattern - 1;
 	num_noun_groups = 0;
 	noun = 0;
@@ -1109,7 +1109,7 @@ Array guess_num_objects->5;
 				wn++;
 				return 100; ! pattern matched
 			}
-			if(wn == 1 + parse_array->1) {
+			if(wn == 1 + parse->1) {
 				return 100; ! pattern matched
 			}
 			if(p_phase == PHASE2) {
@@ -1119,7 +1119,7 @@ Array guess_num_objects->5;
 			}
 			return wn - verb_wordnum; ! Fail because the grammar line ends here but not the input
 		}
-		if(wn >= 1 + parse_array->1) {
+		if(wn >= 1 + parse->1) {
 #IfDef DEBUG_PARSEPATTERN;
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
@@ -1137,7 +1137,7 @@ Array guess_num_objects->5;
 #EndIf;
 		_noun = _ParseToken(_pattern_pointer, _parse_pointer, p_phase);
 		! the parse routine can change wn, so update _parse_pointer
-		_parse_pointer = parse_array + 2 + 4 * (wn - 1);
+		_parse_pointer = parse + 2 + 4 * (wn - 1);
 
 		switch(_noun) {
 		GPR_FAIL:
@@ -1217,7 +1217,7 @@ Array guess_num_objects->5;
 			}
 			_UpdateNounSecond(parsed_number, 1);
 		GPR_REPARSE:
-			return -1; ! the player_input and parse_array have changed
+			return -1; ! the player_input and parse have changed
 		default:
 			! _noun was a valid noun
 			_UpdateNounSecond(_noun, _noun);
@@ -1242,7 +1242,7 @@ Array guess_num_objects->5;
 #IfDef DEBUG_TIMER;
 	timer1_start = $1c-->0;
 #Endif;
-	if(_IsSentenceDivider(parse_array + 2))
+	if(_IsSentenceDivider(parse + 2))
 		return -1;
 
 	multiple_objects-->0 = 0;
@@ -1261,14 +1261,14 @@ Array guess_num_objects->5;
 	}
 	scope_routine = 0; ! prepare for a new scope=Routine
 
-	if(parse_array->1 < 1) {
+	if(parse->1 < 1) {
 		"Come again?";
 	}
 
 	verb_wordnum = 1;
 
 .reparse;
-	verb_word = (parse_array - 2) --> (2 * verb_wordnum) ;
+	verb_word = (parse - 2) --> (2 * verb_wordnum) ;
 	if(UnsignedCompare(verb_word, (0-->HEADER_DICTIONARY)) == -1) {
 		! Not a verb. Try the entry point routine before giving up
 		verb_word = UnknownVerb(verb_word);
@@ -1296,7 +1296,7 @@ Array guess_num_objects->5;
 			jump parse_success;
 		}
 		! not a direction, check if beginning of a command
-		_noun = _CheckNoun(parse_array+2);
+		_noun = _CheckNoun(parse+2);
 		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now 
 			! check if comma afterwards
@@ -1324,11 +1324,11 @@ Array guess_num_objects->5;
 	! Now it is known word, and it is not a direction, in the first position
 	meta = (_word_data->0) & 2;
 
-!   print "Parse array: ", parse_array, "^";
-!   print "Word count: ", parse_array->0, "^";
-!   print "Word 1: ", (parse_array + 2)-->0, "^";
-!   print "Word 2: ", (parse_array + 6)-->0, "^";
-!   print "Word 3: ", (parse_array + 10)-->0, "^";
+!   print "Parse array: ", parse, "^";
+!   print "Word count: ", parse->0, "^";
+!   print "Word 1: ", (parse + 2)-->0, "^";
+!   print "Word 2: ", (parse + 6)-->0, "^";
+!   print "Word 3: ", (parse + 10)-->0, "^";
 	_i = 255 - (_word_data->1); ! was _verb_num
 	_verb_grammar = (0-->HEADER_STATIC_MEM)-->_i;
 
@@ -1403,7 +1403,7 @@ Array guess_num_objects->5;
 	! this is used when not understood and the actor is an NPC
 	action = ##NotUnderstood;
 	consult_from = wn;
-	consult_words = parse_array->1 - wn + 1;
+	consult_words = parse->1 - wn + 1;
 	special_number = TryNumber(wn);
 	special_word = NextWord();
 	! fall through to jump parse_success;

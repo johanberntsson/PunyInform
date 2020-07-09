@@ -429,12 +429,12 @@ Array floating_objects --> MAX_FLOATING_OBJECTS + 1;
 Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
 Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used
 
-Array player_input_array->(MAX_INPUT_CHARS + 3);
-Array parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
+Array buffer->(MAX_INPUT_CHARS + 3);
+Array parse->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
 
 ! extra arrays to be able to ask for additional info (do you mean X or Y?)
-Array temp_player_input_array->(MAX_INPUT_CHARS + 3);
-Array temp_parse_array->(2 + 4 * (MAX_INPUT_WORDS + 1)); 
+Array buffer2->(MAX_INPUT_CHARS + 3);
+Array parse2->(2 + 4 * (MAX_INPUT_WORDS + 1)); 
 
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL  = 1;
@@ -479,7 +479,7 @@ Object Directions
 #IfNot;
 		parse_name [_len _i _w _w1 _w2;
 #EndIf;
-			_w = (parse_array+4*wn-2)-->0;
+			_w = (parse+4*wn-2)-->0;
 			if(_w == 'floor' or 'ground') {
 #IfDef OPTIONAL_FULL_DIRECTIONS;
 				selected_direction_index = 10;
