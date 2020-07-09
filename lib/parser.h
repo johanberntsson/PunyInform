@@ -1437,12 +1437,28 @@ Array guess_num_objects->5;
 		if(RunRoutines(player, orders)) rtrue;
 		if(RunRoutines(actor, orders)) rtrue;
 		if(action == ##NotUnderstood) {
-			actor = player; action = ##Answer;
+			second = actor; inp2=second; actor = player; action = ##Answer;
 			jump parse_success;
 		}
 		if(RunLife(actor, ##Order)) rtrue;
 		print (The) actor, " has better things to do.^";
 		return num_words_parsed;
+	}
+
+	if(consult_from) { ! && action ~= ##Answer) {
+		if(0 == noun or second) {
+			for(_i=0 : _i < consult_words : _i++) {
+				_noun = (parse-->(2 * (consult_from + _i) - 1));
+				if(_noun ~= 'a' or 'an' or 'the') {
+!					print "*",(address) _noun,",";
+					if(noun==0)
+						noun = _noun;
+					else
+						second = _noun;
+					break;
+				}
+			}
+		}
 	}
 
 	if(multiple_objects --> 0 == 0) {
@@ -1472,7 +1488,7 @@ Array guess_num_objects->5;
 		}
 		if(_score == 0) PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
 	}
-	if(inp1 ~= 1) PronounNotice(noun);
+	if(inp1 > 1) PronounNotice(noun);
 	return num_words_parsed;
 ];
 

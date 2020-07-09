@@ -205,7 +205,7 @@ Verb 'wear'
 	* held										-> Wear;
 
 [ AnswerSub;
-    if (second ~= 0 && RunLife(second,##Answer) ~= 0) rfalse;
+    if (second > 1 && RunLife(second,##Answer) ~= 0) rfalse;
     PrintMsg(MSG_ANSWER_SUCCESS);
 ];
 
