@@ -1660,6 +1660,7 @@ Global scope_cnt;
 		_new_location = _vehicle;
 	}
 	PlayerTo(_new_location, true);
+	if(deadflag ~= GS_PLAYING) rtrue;
 	if (AfterRoutines() == 1) rtrue;
 	if (keep_silent == 1) rtrue;
 	Look();

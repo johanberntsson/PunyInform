@@ -481,7 +481,7 @@ Constant ONE_SPACE_STRING = " ";
 	}
 	if(p_flag==false)
 		give location ~visited;
-	if(p_flag==false or 2)
+	if(p_flag==false or 2 && deadflag == GS_PLAYING)
 		<Look>;
 ];
 
