@@ -127,6 +127,7 @@ System_file;
 
 	if(darkness && p_actor == player) {
 		! only the player's possessions are in scope
+		_PutInScope(player);
 		_SearchScope(child(player), true, true);
 	} else {
 		! Add all in player location (which may be inside an object)
