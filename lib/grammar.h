@@ -1251,7 +1251,7 @@ Global scope_cnt;
 
 [ TreeSub _obj _p;
 	_obj = noun;
-	if(_obj==0) _obj = location;
+	if(_obj==0) _obj = real_location;
 	print (name) _obj;
 	_p = parent(_obj);
 	if(_p) {
@@ -1431,7 +1431,7 @@ Global scope_cnt;
 ];
 
 [ Look _obj _top_ceil _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level _visited;
-	if(fake_location has visited) _visited = true;
+	if(location has visited) _visited = true;
 	@new_line;
 	_player_parent = parent(player);
 	_describe_room = ((lookmode == 1 && _visited == false) || lookmode == 2);
@@ -1440,19 +1440,19 @@ Global scope_cnt;
 #EndIf;
 	! write the room name
 	if(darkness)
-		_ceil = fake_location;
+		_ceil = location;
 	else
 		_ceil = ScopeCeiling(player, _last_level);
 	_top_ceil = _ceil;
 
-	if(_ceil == fake_location) {
+	if(_ceil == location) {
 #IfDef OPTIONAL_FULL_SCORE;
-		if(fake_location has scored && _visited == 0) {
+		if(location has scored && _visited == 0) {
 			score = score + ROOM_SCORE;
 			places_score = places_score + ROOM_SCORE;
 		}
 #EndIf;
-		_PrintObjName(fake_location);
+		_PrintObjName(location);
 	} else {
 		print (The) _ceil;
 	}
@@ -1461,10 +1461,10 @@ Global scope_cnt;
 #EndIf;
 	if(darkness) {
 		@new_line;
-		if(_visited == 0 && fake_location.initial ~= 0 or null)
-			PrintOrRun(fake_location, initial, 1);
+		if(_visited == 0 && location.initial ~= 0 or null)
+			PrintOrRun(location, initial, 1);
 		else
-			PrintOrRun(fake_location, description, 1);
+			PrintOrRun(location, description, 1);
 		@new_line;
 	} else {
 		_obj = _player_parent;
@@ -1546,8 +1546,8 @@ Global scope_cnt;
 
 	AfterRoutines();
 
-	if(_top_ceil == fake_location)
-		give fake_location visited;
+	if(_top_ceil == location)
+		give location visited;
 ];
 
 #IfnDef PrintRank;
@@ -1604,7 +1604,7 @@ Global scope_cnt;
 ];
 
 [ GoDir p_property _new_location _door_to _vehicle _vehicle_mode;
-	if(parent(player) ~= location) {
+	if(parent(player) ~= real_location) {
 		! special rule when in enterable (veichles)
 		! before routine for the object is called with Go dir, and returns
 		! 0   to disallow the movement, printing a refusal;
@@ -1617,13 +1617,13 @@ Global scope_cnt;
 		if(_vehicle_mode == 2 or 3) rtrue;
 	}
 	!if(player notin location) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
-	if(location provides p_property) {
-		@get_prop location p_property -> _new_location; ! works in z3 and z5
+	if(real_location provides p_property) {
+		@get_prop real_location p_property -> _new_location; ! works in z3 and z5
 	}
 	if(_new_location ofclass String)
 		print_ret (string) _new_location;
-	if(_new_location > top_object) {
-		_new_location = location.p_property();
+	if(UnsignedCompare(_new_location, top_object) > 0) {
+		_new_location = real_location.p_property();
 		if(_new_location == 1)
 			rtrue;
 	}
@@ -1636,8 +1636,9 @@ Global scope_cnt;
 		else {
 			if(_new_location hasnt open) { PrintMsg(MSG_GO_DOOR_CLOSED, _new_location); rtrue; }
 			_door_to = _new_location.door_to;
-			if(_door_to > top_object) {
+			if(UnsignedCompare(_door_to, top_object) > 0) {
 				_new_location = _new_location.door_to();
+!				print "GoDir, door leads to ", (the) _new_location, "^";
 				if(_new_location == 1)
 					rtrue;
 			} else
@@ -1647,8 +1648,8 @@ Global scope_cnt;
 
 	! If _new_location is 0, we tell the player they can't go there and exit
 	if(_new_location == 0) {
-		if(location provides cant_go) {
-			print_ret (string) location.cant_go;
+		if(real_location provides cant_go) {
+			print_ret (string) real_location.cant_go;
 		}
         PrintMsg(MSG_GO_CANT_GO); 
 		rtrue;

@@ -321,10 +321,10 @@ Default SACK_OBJECT         0;
 
 !#Endif;
 
-Global fake_location;      ! Must be the first global to show location name
+Global location;      ! Must be the first global to show location name
 Global status_field_1 = 0; ! Must be the second global to show score or hours
 Global status_field_2 = 0; ! Must be the third global to show turns or minutes
-Global location;
+Global real_location;
 Global score;
 Global notify_mode = true;          ! Score notification
 #Ifndef sys_statusline_flag;

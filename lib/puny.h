@@ -180,7 +180,7 @@ Constant ONE_SPACE_STRING = " ";
 	! * Room names up to 21 characters are never truncated. On a 40 column screen, room names up to 24 characters are never truncated.
 
 	! If there is no player location, we shouldn't try to draw status window
-	if (fake_location == nothing || parent(player) == nothing)
+	if (location == nothing || parent(player) == nothing)
 		return;
 
 	_width = HDR_SCREENWCHARS->0;
@@ -198,8 +198,8 @@ Constant ONE_SPACE_STRING = " ";
 !         if (visibility_ceiling == location)
 	_visibility_ceiling = ScopeCeiling(player);
 ! print (object) _visibility_ceiling;
-	if (darkness || _visibility_ceiling == fake_location)
-		_PrintObjName(fake_location); ! If it's light, fake_location == location
+	if (darkness || _visibility_ceiling == location)
+		_PrintObjName(location); ! If it's light, location == real_location
 	else
 		print (The) _visibility_ceiling;
 
@@ -435,14 +435,14 @@ Constant ONE_SPACE_STRING = " ";
 			_j = _obj.&found_in;
 #IfV5;
 			@log_shift _len (-1) -> _len;
-			@scan_table location _j _len -> _present ?~no_success; ! The position is only a throw-away value here.
+			@scan_table real_location _j _len -> _present ?~no_success; ! The position is only a throw-away value here.
 			_present = 1;
 .no_success;
 #IfNot;
 			_len = _len / 2;
 			_len = _len - 1;
 .next_value;
-				if(_j-->_len == location) {
+				if(_j-->_len == real_location) {
 					_present = 1;
 					jump after_loop;
 				}
@@ -452,26 +452,22 @@ Constant ONE_SPACE_STRING = " ";
 
 		}
 		if(_present)
-			move _obj to location;
+			move _obj to real_location;
 		else
 			remove _obj;
 		_i++;
 	}
 ];
 
-[ PlayerTo p_loc p_flag _p _old_loc _old_darkness;
-	_old_loc = location;
+[ PlayerTo p_loc p_flag _old_loc _old_darkness;
+!	print "PlayerTo, moving player to ", (the) p_loc, ".^";
+	_old_loc = real_location;
 	_old_darkness = darkness;
 	move Player to p_loc;
-	location = p_loc;
-	while(true) {
-		_p = parent(location);
-		if(_p == 0) break;
-		location = _p;
-	}
+	real_location = superparent(p_loc);
+	scope_modified = true;
+	_UpdateDarkness();
 	if(_old_loc ~= location) {
-		scope_modified = true;
-		_UpdateDarkness();
 !		_UpdateScope(player, true);
 		NewRoom();
 		MoveFloatingObjects();
@@ -489,16 +485,27 @@ Constant ONE_SPACE_STRING = " ";
 		<Look>;
 ];
 
+[ Superparent p_obj _parent;
+	while(true) {
+		_parent = parent(p_obj);
+		if(_parent == 0)
+			return p_obj;
+		p_obj = _parent;
+	}
+];
+
 [ _UpdateDarkness p_look _ceil _old_darkness;
 	_old_darkness = darkness;
 	_ceil = ScopeCeiling(player);
-!	print "_UpdateDarkness, fake_location is: ", (the) fake_location, "^";
+!	print "_UpdateDarkness, location is: ", (the) location, "^";
+!	print "_UpdateDarkness, real_location is: ", (the) real_location, "^";
 !	print "_UpdateDarkness, ScopeCeiling is: ", (the) _ceil, "^";
+!	real_location = superparent(player);
 	darkness = ~~_LookForLightInObj(_ceil, _ceil);
 	if(darkness) {
-		fake_location = thedark;
+		location = TheDark;
 	} else {
-		fake_location = location;
+		location = real_location;
 		if(_old_darkness == true && p_look == true)
 			<Look>;
 	}
@@ -1086,7 +1093,7 @@ Object DefaultPlayer "you"
 		before_implicit NULL,
 	has concealed animate proper transparent;
 
-Object thedark "Darkness"
+Object TheDark "Darkness"
 	with
 		initial 0,
 		description "It is pitch dark here!",

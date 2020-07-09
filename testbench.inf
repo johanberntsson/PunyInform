@@ -213,8 +213,8 @@ Object CarPark "Car Park"
 		n_to Library,
 		e_to RiverBank,
 		each_turn [; 
-			print (string) random("An owl is howling nearby.", "A terrible scream is heard from the library.", 
-				"The sound of many birds comes from the east.");
+			print (string) random("^An owl is howling nearby.", "A terrible scream is heard from the library.", 
+				"^The sound of many birds comes from the east.");
 			"";
 		],
 #IfDef TEST_BEFOREAFTER;
@@ -307,11 +307,11 @@ Object -> ToiletDoor "toilet door"
 !		],
 		description "Surprisingly clean.",
 		door_to [; 
-			if(location == Toilet) return Library;
+			if(self in Toilet) return Library;
 			return Toilet;
 		],
 		door_dir [;
-			if(location == Toilet) return w_to;
+			if(self in Toilet) return w_to;
 			return e_to;
 		],
 		when_open "The toilet door stands slightly ajar.",
