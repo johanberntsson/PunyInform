@@ -295,7 +295,7 @@ Verb 'wear'
 [ EnterSub _door_dir;
 	if(noun has door) {
 		_door_dir = noun.door_dir;
-		if(_door_dir > top_object) {
+		if(UnsignedCompare(_door_dir, top_object) > 0) {
 			_door_dir = noun.door_dir();
 		}
 		! Convert to fake object
