@@ -1,0 +1,121 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+! Testlights - a platform for testing scopes and lights
+
+Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
+
+! compile as z8 to use Inform stdlib instead of puny (for debugging)
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+! uncomment to show time instead of score/turns
+Statusline time;
+
+Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
+
+#IfnDef USEINFORM;
+! Uncomment to add optional features to PunyLib
+Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FULL_SCORE;
+Constant OPTIONAL_GUESS_MISSING_NOUN;
+Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_MANUAL_SCOPE;
+
+!Constant DEBUG_TIMER; ! requires special Ozmoo
+!Constant DEBUG_SCOPE;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+#EndIf;
+
+!Constant TEST_BEFOREAFTER;
+
+Constant Story      "Testlights";
+Constant Headline   "^A sandbox for testing scopes and lights in PunyInform^";
+
+#IfDef DEBUG_TIMER;
+Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0 
+#EndIf;
+
+
+Constant MAX_CARRIED 6;
+
+Constant MAX_SCORE = 2;
+
+Include "globals.h";
+
+[ DarkToDark;
+	deadflag = 2;
+	"You are eaten by a grue.";
+];
+
+Include "puny.h";
+
+
+Object DarkRoom1 "Dark room 1"
+	with
+		description "You are in a dark room. There's another dark room to the east, and a light room to the south.",
+		e_to DarkRoom2,
+        s_to LightRoom;
+        
+Object -> OpaqueBox "opaque box"
+    with
+        name 'box' 'opaque',
+        description "It is an opaque box big enough to enter.",
+        has container openable open enterable;
+        
+Object -> OpaqueChest "opaque chest"
+    with
+        name 'chest' 'opaque',
+        description "It is an opaque chest big enough to enter.",
+        has container openable open enterable;
+        
+Object -> TransparentBox "transparent box"
+    with
+        name 'box' 'transparent',
+        description "It is an opaque box big enough to enter.",
+        has container openable open enterable transparent;
+        
+Object -> TransparentChest "transparent chest"
+    with
+        name 'chest' 'transparent',
+        description "It is an opaque chest big enough to enter.",
+        has container openable open enterable transparent;
+        
+Object DarkRoom2 "Dark room 2"
+	with
+		description "You are in a dark room. There's another dark room to the west, and a light room to the southwest.",
+		w_to DarkRoom1,
+        sw_to LightRoom;
+    
+Object LightRoom "Light room"
+	with
+		description "You are in a light room. There are dark rooms to the north and northeast.",
+		n_to DarkRoom1,
+        ne_to DarkRoom2
+	has light;
+    
+Object -> Candle "candle"
+    with
+        name 'candle',
+        description "Just a candle, giving light.",
+    has light;
+    
+Object -> Lamp "lamp"
+    with
+        name 'lamp',
+        description "Just a lamp, giving light.",
+    has light;
+
+
+[Initialise;
+	location = LightRoom;
+
+	print "^^Welcome to the Testlights.^^";
+];
+
