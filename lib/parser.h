@@ -1083,10 +1083,10 @@ Array guess_num_objects->5;
 	num_noun_groups = 0;
 	noun = 0;
 	second = 0;
+	consult_from = 0;
 	inp1 = 0;
 	inp2 = 0;
 	special_number = 0;
-	consult_from = 0;
 	special_word = 0;
 	parsed_number = 0;
 	multiple_objects --> 0 = 0;
@@ -1253,6 +1253,8 @@ Array guess_num_objects->5;
 	meta = false;
 	which_object->1 = 0;
 	actor = player;
+	noun = 0; ! needed since _ParsePattern not always called
+	second = 0;
 	nouncache_wn = -1; ! clear noun cache
 
 	if(scope_routine ~= 0) {
@@ -1467,6 +1469,7 @@ Array guess_num_objects->5;
 		if(RunRoutines(actor, orders)) rtrue;
 		if(action == ##NotUnderstood) {
 			second = actor; inp2=second; 
+			action = ##Answer;
 		}
 		if(RunLife(actor, ##Order)) rtrue;
 		print (The) actor, " has better things to do.^";
