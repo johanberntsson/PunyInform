@@ -131,9 +131,6 @@ Constant MSG_JUMP_OVER "You would achieve nothing by this.";
 #Ifndef MSG_REMOVE_SUCCESS;
 Constant MSG_REMOVE_SUCCESS "Removed.";
 #EndIf;
-#Ifndef MSG_SEARCH_DARK;
-Constant MSG_SEARCH_DARK "But it's dark.";
-#EndIf;
 #Ifndef MSG_SEARCH_NOTHING_SPECIAL;
 Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
 #EndIf;
@@ -148,6 +145,9 @@ Constant MSG_LOOKMODE_SHORT "This game is now in its ~superbrief~ mode, which al
 #EndIf;
 #Ifndef MSG_TIE_DEFAULT;
 Constant MSG_TIE_DEFAULT "You would achieve nothing by this.";
+#EndIf;
+#Ifndef MSG_EXAMINE_CLOSED;
+Constant MSG_EXAMINE_CLOSED "It is closed.";
 #EndIf;
 
 !
@@ -247,9 +247,11 @@ Default MSG_UNLOCK_NOT_A_LOCK 89;
 Default MSG_UNLOCK_ALREADY_LOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
 Default MSG_UNLOCK_SUCCESS 92;
-Default MSG_ENTER_BAD_LOCATION 100;
-Default MSG_PROMPT 101;
-
+Default MSG_ENTER_BAD_LOCATION 93;
+Default MSG_PROMPT 94;
+Default MSG_EXAMINE_DARK 95;
+Default MSG_SEARCH_DARK 96;
+Default MSG_EXAMINE_ONOFF 97;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -317,14 +319,14 @@ Constant MSG_MILD_DEFAULT "Quite.";
 Constant MSG_STRONG_DEFAULT "Real adventurers do not use such language.";
 #EndIf;
 
-Default MSG_BLOW_DEFAULT 70;
-Default MSG_EMPTY_CANT_CONTAIN 93;
-Default MSG_EMPTY_IS_CLOSED 94;
-Default MSG_EMPTY_ALREADY_EMPTY 95;
-Default MSG_SET_DEFAULT 96;
-Default MSG_SET_TO_DEFAULT 97;
-Default MSG_WAVE_NOTHOLDING 98;
-Default MSG_WAVE_DEFAULT 99;
+Default MSG_BLOW_DEFAULT 300;
+Default MSG_EMPTY_CANT_CONTAIN 301;
+Default MSG_EMPTY_IS_CLOSED 302;
+Default MSG_EMPTY_ALREADY_EMPTY 303;
+Default MSG_SET_DEFAULT 304;
+Default MSG_SET_TO_DEFAULT 305;
+Default MSG_WAVE_NOTHOLDING 306;
+Default MSG_WAVE_DEFAULT 307;
 #EndIf;
 
 Default LibraryMessages 0;
@@ -490,10 +492,16 @@ Default LibraryMessages 0;
 	MSG_SEARCH_CANT_SEE_CLOSED:
 		"You can't see inside, since ", (the) noun, " is closed.";
 #EndIf;
+#IfTrue MSG_EXAMINE_ONOFF < 1000;
+	MSG_EXAMINE_ONOFF:
+		"It is currently ", (onoff) noun, ".";
+#EndIf;
 #IfTrue MSG_EAT_SUCCESS < 1000;
 	MSG_EAT_SUCCESS:
 		"You eat ", (the) noun, ". Not bad.";
 #EndIf;
+	MSG_EXAMINE_DARK, MSG_SEARCH_DARK:
+		"But it's dark.";
 #IfTrue MSG_SCORE_SUCCESS < 1000;
 	MSG_SCORE_SUCCESS:
 		if (deadflag) print "In that game you"; else print "You have so far";

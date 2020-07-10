@@ -125,7 +125,7 @@ System_file;
 !		scope-->(scope_objects++) = _start_pos;
 	}
 
-	if(darkness && p_actor == player) {
+	if(location == thedark && p_actor == player) {
 		! only the player's possessions are in scope
 		_PutInScope(player);
 		_SearchScope(child(player), true, true);

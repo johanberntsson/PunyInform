@@ -463,7 +463,7 @@ Object -> -> -> Sticker "sticker"
 		name 'sticker',
 		each_turn [;
 #IfnDef USEINFORM;
-		if(~~darkness) "The sticker looks oh so sticky.";
+		if(location ~= thedark) "The sticker looks oh so sticky.";
 #Endif;
 		];
 
@@ -652,7 +652,7 @@ Object -> Torch "electric torch"
 				rfalse;
 			}
 		],
-		description "A simple battery powered electric torch.",
+!		description "A simple battery powered electric torch.",
 		before [;
 			Push:
 				if(self has on)

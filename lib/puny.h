@@ -198,7 +198,7 @@ Constant ONE_SPACE_STRING = " ";
 !         if (visibility_ceiling == location)
 	_visibility_ceiling = ScopeCeiling(player);
 ! print (object) _visibility_ceiling;
-	if (darkness || _visibility_ceiling == location)
+	if (location == thedark || _visibility_ceiling == location)
 		_PrintObjName(location); ! If it's light, location == real_location
 	else
 		print (The) _visibility_ceiling;
@@ -306,7 +306,7 @@ Constant ONE_SPACE_STRING = " ";
       String:   print "<string ~", (string) o, "~>"; rtrue;
       nothing:  print "<illegal object number ", o, ">"; rtrue;
     }
-    if (o.&short_name ~= 0 && PrintOrRun(o, short_name, true) ~= 0) rtrue;
+    if (o.short_name ~= 0 && PrintOrRun(o, short_name, true) ~= 0) rtrue;
     print (object) o;
 ];
 
@@ -333,7 +333,7 @@ Constant ONE_SPACE_STRING = " ";
 
 [ _PrintAfterEntry p_obj;
 	if(p_obj has container && P_obj hasnt open) print " (which is closed)";
-	else if(p_obj has container && (p_obj has open || p_obj has transparent)) {
+	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
 		if(child(p_obj) == nothing) 
 			print " (which is empty)";
 		else
@@ -342,7 +342,8 @@ Constant ONE_SPACE_STRING = " ";
 	if(p_obj has supporter && child(p_obj) ~= nothing) {
 		if(_PrintContents(" (on which is ", p_obj)) print ")";
 	}
-	if(p_obj has light && action == ##Inv) print " (providing light)";
+!	if(p_obj has light && action == ##Inv) print " (providing light)";
+	if(p_obj has light) print " (providing light)";
 ];
 
 [ _PrintContents p_first_text p_obj p_check_workflag _obj _printed_first_text _printed_any_objects _last_obj;
@@ -462,7 +463,7 @@ Constant ONE_SPACE_STRING = " ";
 [ PlayerTo p_loc p_flag _old_loc _old_darkness;
 !	print "PlayerTo, moving player to ", (the) p_loc, ".^";
 	_old_loc = real_location;
-	_old_darkness = darkness;
+	if(location == thedark) _old_darkness = true;
 	move Player to p_loc;
 	real_location = superparent(p_loc);
 	scope_modified = true;
@@ -471,7 +472,7 @@ Constant ONE_SPACE_STRING = " ";
 !		_UpdateScope(player, true);
 		NewRoom();
 		MoveFloatingObjects();
-		if(darkness) {
+		if(location == thedark) {
 			if(_old_darkness) {
 				! we have moved between dark rooms
 				! give entry point a chance to react
@@ -494,16 +495,16 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
-[ _UpdateDarkness p_look _ceil _old_darkness;
-	_old_darkness = darkness;
+[ _UpdateDarkness p_look _ceil _old_darkness _darkness;
+	if(location == thedark) _old_darkness = true;
 	_ceil = ScopeCeiling(player);
 !	print "_UpdateDarkness, location is: ", (the) location, "^";
 !	print "_UpdateDarkness, real_location is: ", (the) real_location, "^";
 !	print "_UpdateDarkness, ScopeCeiling is: ", (the) _ceil, "^";
 !	real_location = superparent(player);
-	darkness = ~~_LookForLightInObj(_ceil, _ceil);
-	if(darkness) {
-		location = TheDark;
+	_darkness = ~~_LookForLightInObj(_ceil, _ceil);
+	if(_darkness) {
+		location = thedark;
 	} else {
 		location = real_location;
 		if(_old_darkness == true && p_look == true)
@@ -1093,11 +1094,11 @@ Object DefaultPlayer "you"
 		before_implicit NULL,
 	has concealed animate proper transparent;
 
-Object TheDark "Darkness"
+Object thedark "Darkness"
 	with
 		initial 0,
 		description "It is pitch dark here!",
-		short_name 0;
+ 		short_name 0;
 
 [ _UpdateScoreOrTime;
 	if (sys_statusline_flag == 0) {

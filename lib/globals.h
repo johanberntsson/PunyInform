@@ -334,7 +334,6 @@ Global turns;                       ! Number of turns of play so far
 Global the_time = NULL;             ! Current time (in minutes since midnight)
 Global time_rate = 1;               ! How often time is updated
 Global time_step;                   ! By how much
-Global darkness;
 Global lookmode = 1;
 Global player;
 Global actor;

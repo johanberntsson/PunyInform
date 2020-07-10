@@ -309,11 +309,20 @@ Verb 'wear'
 ];
 
 [ ExamineSub;
-	if(noun provides description) {
-		PrintOrRun(noun, description);
-	} else {
-		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
+	if(location == thedark) {
+		PrintMsg(MSG_EXAMINE_DARK);
+		rtrue;
 	}
+    if (noun.description == 0) {
+        if (noun has container) {
+            if (noun has open or transparent) <<Search noun>>;
+            else { PrintMsg(MSG_EXAMINE_CLOSED); rtrue;	}
+		}
+        if (noun has switchable) { PrintMsg(MSG_EXAMINE_ONOFF); rtrue; }
+		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
+    }
+	PrintOrRun(noun, description);
+	AfterRoutines();
 ];
 
 [ ExitSub;
@@ -484,7 +493,7 @@ Verb 'wear'
 ];
 
 [ SearchSub _f _i;
-	if(darkness) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
+	if(location == thedark) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
 	if (ObjectIsUntouchable(noun)) return;
 	objectloop(_i in noun) if(_i hasnt concealed && _i hasnt scenery) _f++;
 	if(noun has supporter) {
@@ -1295,124 +1304,6 @@ Global scope_cnt;
 ! HELP ROUTINES
 ! ---------------------
 
-! [ Look _obj _ceil _container_1 _container_2 _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop;
-	! @new_line;
-	! if(darkness) 
-		! print "It is pitch dark here!^";
-	! else {
-		! _ceil = ScopeCeiling(player);
-		! _player_parent = parent(player);
-		! if(_ceil ~= _player_parent) {
-			! _container_1 = _player_parent;
-			! _player_parent = parent(_container_1);
-			! if(_ceil ~= _player_parent) {
-				! _container_2 = _player_parent;
-			! }
-		! }
-		! _describe_room = ((lookmode == 1 && location hasnt visited) || lookmode == 2);
-! #IfDef OPTIONAL_FULL_SCORE;
-		! if(location has scored && location hasnt visited) {
-			! score = score + OBJECT_SCORE;
-			! places_score = places_score + OBJECT_SCORE;
-		! }
-! #EndIf;
-		! give location visited;
-
-! #IfV5;
-		! style bold;
-! #EndIf;
-		! ! write the room name
-		! if(_ceil == location) {
-			! _PrintObjName(location);
-		! } else {
-			! print (The) _ceil;
-		! }
-! #IfV5;
-		! style roman;
-! #EndIf;
-		! if(_container_1) {
-			! if(_container_1 has supporter)
-				! print " (on ";
-			! else
-				! print " (in ";
-			! print (the) _container_1, ")";
-			! if(_container_2) {
-				! if(_container_2 has supporter)
-					! print " (on ";
-				! else
-					! print " (in ";
-				! print (the) _container_2, ")";
-			! }
-		! }
-		! @new_line;
-
-		! ! write room description and normal objects in a new paragraph
-		! if(_player_parent ~= _ceil) {
-			! if(_player_parent.inside_description && _describe_room) {
-				! PrintOrRun(_player_parent, inside_description, 1);
-				! @new_line;
-			! } else if(_ceil.description && _describe_room) {
-				! PrintOrRun(_ceil, description, 1);
-				! @new_line;
-			! }
-			! ! the contents of the container you are inside
-			! objectloop(_obj in _player_parent) {
-				! give _obj ~workflag;
-				! if(_obj.&describe) give _obj workflag;
-				! if(_obj hasnt moved && _obj.&initial) give _obj workflag;
-			! }
-			! if(_PrintContents("^There is ", _player_parent, true)) print " here.^";
-			! ! all other objects
-			! _you_can_see_1 = "^Outside you can see ";
-			! _you_can_see_2 = ".^";
-		! } else {
-			! if(_ceil.description && _describe_room) {
-				! PrintOrRun(_ceil, description, 1);
-				! @new_line;
-			! }
-			! ! all other objects
-			! _you_can_see_1 = "^You can see ";
-			! _you_can_see_2 = " here.^";
-		! }
-
-		! ! write intial and describe messages in a new paragraph
-		! objectloop(_obj in _player_parent) {
-			! give _obj ~workflag;
-			! if(_obj.&describe) {
-				! if(PrintOrRun(_obj, describe, 0)) {
-					! _initial_found = true;
-					! give _obj workflag;
-					! continue;
-				! }
-			! }
-			! if(_obj has container or door)
-				! if(_obj has open)
-					! _desc_prop = when_open;
-				! else
-					! _desc_prop = when_closed;
-			! else if(_obj has switchable)
-				! if(_obj has on)
-					! _desc_prop = when_on;
-				! else
-					! _desc_prop = when_off;
-			! else
-				! _desc_prop = initial;
-			! if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
-				! _initial_found = true;
-				! give _obj workflag;
-				! @new_line;
-				! PrintOrRun(_obj, _desc_prop);
-			! }
-		! }
-
-		! if(_PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
-	! }
-	! ! finally, call the optional library entry routine
-	! LookRoutine();
-
-	! AfterRoutines();
-! ];
-
 [ _ListObjsMsg; 
 	print "^You can ";
 	if(also_flag) print "also ";
@@ -1435,7 +1326,7 @@ Global scope_cnt;
 	style bold;
 #EndIf;
 	! write the room name
-	if(darkness)
+	if(location == thedark)
 		_ceil = location;
 	else
 		_ceil = ScopeCeiling(player, _last_level);
@@ -1455,7 +1346,7 @@ Global scope_cnt;
 #IfV5;
 	style roman;
 #EndIf;
-	if(darkness) {
+	if(location == thedark) {
 		@new_line;
 		if(_visited == 0 && location.initial ~= 0 or null)
 			PrintOrRun(location, initial, 1);
