@@ -8,5 +8,12 @@
 - changed to 'buffer' and 'parse' for the player input and parsing
   arrays, since DM4 is describing them and renaming them breaks some
   existing Inform code and extensions needlessly.
+- Examine now works as in the standard library: containers without a 
+  description get a Search action, switchable objects show a message to
+  say if they're on or off, after and react_after are run afterwards.
+  Examining in darkness shows a message that it's dark.
+- The contents of a closed transparent container are now printed in Look.
+- Objects providing light now get "(providing light)" appended in Look.
 
+  
 

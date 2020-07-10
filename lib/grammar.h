@@ -308,7 +308,7 @@ Verb 'wear'
     PrintMsg(MSG_ENTER_SUCCESS);
 ];
 
-[ ExamineSub;
+[ ExamineSub x;
 	if(location == thedark) {
 		PrintMsg(MSG_EXAMINE_DARK);
 		rtrue;
@@ -321,7 +321,8 @@ Verb 'wear'
         if (noun has switchable) { PrintMsg(MSG_EXAMINE_ONOFF); rtrue; }
 		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
     }
-	PrintOrRun(noun, description);
+	x = PrintOrRun(noun, description);
+	if (x < 2 && noun has switchable) PrintMsg(MSG_EXAMINE_ONOFF);
 	AfterRoutines();
 ];
 
