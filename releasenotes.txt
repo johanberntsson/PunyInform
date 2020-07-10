@@ -1,7 +1,12 @@
 1.0: first public release (5 July 2020)
 
-1.1: bug fix release (9 July 2020)
+1.1: bug fix release (10 July 2020)
 - parsing failed for big story files because of bad pointer comparisons
 - a programming error lead to bad parsing results on older interpreters
+- reimplemented darkness handling as described in DM4
+- fixed various bugs in conversation code (ask X about Y etc)
+- changed to 'buffer' and 'parse' for the player input and parsing
+  arrays, since DM4 is describing them and renaming them breaks some
+  existing Inform code and extensions needlessly.
 
 
