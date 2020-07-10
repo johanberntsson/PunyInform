@@ -1468,10 +1468,13 @@ Array guess_num_objects->5;
 		if(RunRoutines(player, orders)) rtrue;
 		if(RunRoutines(actor, orders)) rtrue;
 		if(action == ##NotUnderstood) {
-			second = actor; inp2=second; 
+			second = actor;
+			inp2=second; 
 			action = ##Answer;
+			if(RunLife(actor, action)) rtrue;
+		} else {
+			if(RunLife(actor, ##Order)) rtrue;
 		}
-		if(RunLife(actor, ##Order)) rtrue;
 		print (The) actor, " has better things to do.^";
 		return num_words_parsed;
 	}
