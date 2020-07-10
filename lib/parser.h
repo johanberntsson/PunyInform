@@ -1086,6 +1086,7 @@ Array guess_num_objects->5;
 	inp1 = 0;
 	inp2 = 0;
 	special_number = 0;
+	consult_from = 0;
 	special_word = 0;
 	parsed_number = 0;
 	multiple_objects --> 0 = 0;
@@ -1415,6 +1416,7 @@ Array guess_num_objects->5;
 	timer1_stop = $1c-->0 - timer1_start;
 	print "[parsing took ",timer1_stop," jiffies]^";
 #Endif;
+
 	num_words_parsed = -(wn - 1);
 	if(action_reverse) {
 		_i = second;
@@ -1422,6 +1424,33 @@ Array guess_num_objects->5;
 		noun = _i;
 		inp1 = noun;
 		inp2 = second;
+	}
+
+	! do some special transformations
+	if(action == ##Tell && noun == player && actor ~= player) {
+		! Convert "P, tell me about X" to "ask P about X"
+		noun = actor; actor = player; action = ##Ask;
+	}
+	if(action == ##AskFor && noun ~= player && actor == player) {
+		! Convert "ask P for X" to "P, give X to me"
+		actor = noun; noun = second; second = player; action = ##Give;
+	}
+
+	! prepare noun and second to point at dictionary words
+	! from the consult topic, if possible
+	if(consult_from) {
+		if(0 == noun or second) {
+			for(_i=0 : _i < consult_words : _i++) {
+				_noun = (parse-->(2 * (consult_from + _i) - 1));
+				if(_noun ~= 'a' or 'an' or 'the') {
+					if(noun==0)
+						noun = _noun;
+					else
+						second = _noun;
+					break;
+				}
+			}
+		}
 	}
 
 	if(actor ~= player) {
@@ -1437,28 +1466,11 @@ Array guess_num_objects->5;
 		if(RunRoutines(player, orders)) rtrue;
 		if(RunRoutines(actor, orders)) rtrue;
 		if(action == ##NotUnderstood) {
-			second = actor; inp2=second; actor = player; action = ##Answer;
-			jump parse_success;
+			second = actor; inp2=second; 
 		}
 		if(RunLife(actor, ##Order)) rtrue;
 		print (The) actor, " has better things to do.^";
 		return num_words_parsed;
-	}
-
-	if(consult_from) { ! && action ~= ##Answer) {
-		if(0 == noun or second) {
-			for(_i=0 : _i < consult_words : _i++) {
-				_noun = (parse-->(2 * (consult_from + _i) - 1));
-				if(_noun ~= 'a' or 'an' or 'the') {
-!					print "*",(address) _noun,",";
-					if(noun==0)
-						noun = _noun;
-					else
-						second = _noun;
-					break;
-				}
-			}
-		}
 	}
 
 	if(multiple_objects --> 0 == 0) {
