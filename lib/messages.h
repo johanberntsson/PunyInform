@@ -252,6 +252,7 @@ Default MSG_PROMPT 94;
 Default MSG_EXAMINE_DARK 95;
 Default MSG_SEARCH_DARK 96;
 Default MSG_EXAMINE_ONOFF 97;
+Default MSG_ORDERS_WONT 98;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -499,6 +500,10 @@ Default LibraryMessages 0;
 #IfTrue MSG_EAT_SUCCESS < 1000;
 	MSG_EAT_SUCCESS:
 		"You eat ", (the) noun, ". Not bad.";
+#EndIf;
+#IfTrue MSG_ORDERS_WONT < 1000;
+	MSG_ORDERS_WONT:
+		print_ret (The) actor, " has better things to do.";
 #EndIf;
 	MSG_EXAMINE_DARK, MSG_SEARCH_DARK:
 		"But it's dark.";

@@ -1475,7 +1475,7 @@ Array guess_num_objects->5;
 		} else {
 			if(RunLife(actor, ##Order)) rtrue;
 		}
-		print (The) actor, " has better things to do.^";
+		PrintMsg(MSG_ORDERS_WONT);
 		return num_words_parsed;
 	}
 
