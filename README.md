@@ -15,7 +15,7 @@ The main goal of PunyInform is to allow for games which are fast and have a smal
 
 ## Status
 
-We have released version 1.0.
+We have released version 1.0.  We are about to release version 1.1 which fixes a number of bugs from release 1.0. Please check releasenotes.txt for more details.
 
 If you are interested in our progress, please star or follow the project here on Github.
 
