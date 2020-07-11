@@ -550,10 +550,10 @@ Include "parser.h";
 	RunRoutines(location, each_turn);
 	for(_i = 0: _i < _scope_count: _i++) {
 		_obj = scope_copy-->_i;
-#IfDef DEBUG;
-		if(debug_flag & 1 && _obj.&each_turn ~= 0) print "(", (name) _obj, ").each_turn()^";
-#EndIf;
 		if(_obj.&each_turn ~= 0) {
+#IfDef DEBUG;
+			if(debug_flag & 1) print "(", (name) _obj, ").each_turn()^";
+#EndIf;
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 			! Assume that every each_turn routine may have modified the scope
 			scope_modified = true;
