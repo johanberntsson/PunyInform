@@ -495,7 +495,7 @@ Default LibraryMessages 0;
 #EndIf;
 #IfTrue MSG_EXAMINE_ONOFF < 1000;
 	MSG_EXAMINE_ONOFF:
-		"It is currently switched ", (onoff) noun, ".";
+		print_ret (The) noun, " ", (IsOrAre) noun, " currently switched ", (onoff) noun, ".";
 #EndIf;
 #IfTrue MSG_EAT_SUCCESS < 1000;
 	MSG_EAT_SUCCESS:
