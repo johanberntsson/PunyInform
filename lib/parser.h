@@ -861,7 +861,7 @@ System_file;
 			! defined in the next pattern
 			!print (p_pattern_pointer + 3) -> 0, "^"; ! token
 			!print (p_pattern_pointer + 4) --> 0, "^"; ! token_data 
-			if(p_pattern_pointer > 0) {
+			if(p_pattern_pointer ~= 0) {
 				_i = (p_pattern_pointer + 4) --> 0; ! word to stop at
 			} else {
 				_i = NULL;
