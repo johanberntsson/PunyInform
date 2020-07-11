@@ -1089,7 +1089,7 @@ Array guess_num_objects->5;
 	rfalse;
 ];
 
-[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i;
+[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i _j _word;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1174,16 +1174,17 @@ Array guess_num_objects->5;
 				if(p_phase == PHASE2) print "I didn't understand that sentence.^";
 			} else if(parser_unknown_noun_found > 0) {
 				if(p_phase == PHASE2) {
+					_word = parser_unknown_noun_found --> 0;
 					if(scope_routine ~= 0) {
 						scope_stage = 3;
 						indirect(scope_routine);
-					} else if(parser_unknown_noun_found --> 0 > 0) {
+					} else if(_word ~= 0) {
 						! is it one of the location.name words?
 						inp1 = -1;
 						if(location.name ~= 0) {
-							for(_i = 0: _i < location.#name / 2: _i++) {
-								if(parser_unknown_noun_found --> 0 ==
-									location.&name --> _i) {
+							_j = location.#name / 2;
+							for(_i = 0: _i < _j: _i++) {
+								if(_word == location.&name --> _i) {
 									inp1 = _i;
 								}
 							}
