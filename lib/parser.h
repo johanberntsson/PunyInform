@@ -923,7 +923,7 @@ System_file;
 	}
 ];
 
-[ _PrintUknownWord _i;
+[ _PrintUnknownWord _i;
 	for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
 		print (char) buffer->(_i + parser_unknown_noun_found->3);
 	}
@@ -1172,7 +1172,7 @@ Array guess_num_objects->5;
 			if(_pattern_pointer->0 == TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
 				! bad preposition
 				if(p_phase == PHASE2) print "I didn't understand that sentence.^";
-			} else if(parser_unknown_noun_found > 0) {
+			} else if(parser_unknown_noun_found ~= 0) {
 				if(p_phase == PHASE2) {
 					_word = parser_unknown_noun_found --> 0;
 					if(scope_routine ~= 0) {
@@ -1191,16 +1191,16 @@ Array guess_num_objects->5;
 						}
 						if(inp1 > -1) {
 							print "You don't need to refer to ~";
-							_PrintUknownWord();
+							_PrintUnknownWord();
 							print "~ in this game.^";
-						} else if(parser_unknown_noun_found-->0 == ALL_WORD) {
+						} else if(_word == ALL_WORD) {
 							print "You can't use multiple objects with that verb.^";
 						} else {
 							print "You can't see any such thing.^";
 						}
 					} else {
 						print "Sorry, I don't understand what ~";
-						_PrintUknownWord();
+						_PrintUnknownWord();
 						print "~ means.^";
 					}
 				} else {
