@@ -25,6 +25,7 @@ Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error cod
 
 Constant Story	  "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game, by Pablo Martinez and Fredrik Ramsberg.^";
+Release 2;
 
 Constant MAX_SCORE = 100;
 Constant TASKS_PROVIDED;
@@ -542,10 +543,12 @@ Object -> Frank "Frank the Robot"
 			Ask, Tell, Show:
 				<<TalkTo self>>;
 		],
-		description
-			"Frank looks like a cross between a bunch of stacked toasters and a phlegmatic 
+		description [;
+			print "Frank looks like a cross between a bunch of stacked toasters and a phlegmatic 
 				English butler. Something tells you it's better not to anger it: Some parts of its
-				anatomy look very much like weapons.",
+				anatomy look very much like weapons.^";
+			return 2;
+		],
 	has animate proper switchable transparent;
 
 Object Hallway "Hallway"
@@ -627,7 +630,7 @@ Object DarkChamber "Dark chamber"
 					run down the black-painted walls. The only way out is to the west.";
 			print "This is a very unsettling room. All the walls are painted black, with strange golden 
 				symbols. In the middle of the room there is a large round table covered with a black 
-				velvet tablecloth. On it rests an immense ";
+				velvet tablecloth. On it rests an immense red ";
 			if (EvilBook has open) print "open";
 			else print "closed";
 			" book. On both sides of the book, two red candles flood the room with the smell of 
@@ -649,8 +652,14 @@ Object -> Table "table"
 Object -> EvilBook "red book"
 	with
 		number 0,
-		parse_name [ _i;
-			while(NextWordStopped() == 'thick' or 'heavy' or 'red' or 'leather' or 'book' or 'books//p') _i++;
+		parse_name [ _w _i;
+			while(true) {
+				_w = NextWordStopped();
+				if(_w == 'immense' or 'thick' or 'heavy' or 'red' or 'leather' or 'book' or 'books//p' ||
+					(_w == 'open' && self has open) || (_w == 'closed' && self hasnt open)) _i++;
+				else
+					break;
+			}
 			return _i;
 		],
 		describe [; rtrue; ],
@@ -746,7 +755,7 @@ Object Words "words"
 					Suddenly, a tremor starts to be felt from the ground, spreading through the walls. 
 					You feel a chill on your back and turn around. You can't believe what you see...^^
 					The floor of the room has been transformed into an infinitely deep sinkhole with 
-					black stone walls. Climbing up through the walls, you can see dozens... No, hundreds! 
+					black stone walls. Scaling the walls, you can see dozens... No, hundreds! 
 					of bluish-skinned, red-eyed creatures, staring at you with predatory hunger.^^
 					They're going to come out. And you have set them free.";
 		];
