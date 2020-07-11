@@ -550,7 +550,7 @@ Object -> BlueBook "blue book" class Book
     else if(second < top_object) print (the) second;
     else print "'",(address) second,"'";
     if(consult_from > 0) print ", consult ", consult_from, " ", consult_words;
-    print "^";
+    print ", special_number ", special_number, "^";
 ];
 
 Object -> John "John"
@@ -580,7 +580,9 @@ Object -> John "John"
 		],
 		orders [;
 			Go: "~I must not leave this room.~";
-!			NotUnderstood: 
+			NotUnderstood: 
+				DebugLife("trying john.orders.NotUnderstood");
+				rfalse;
 				!print special_number, " ", special_word, " ", 'pink', " ", consult_from;
 				!if(special_word == 0) "~You speak in riddles.~";
 		],

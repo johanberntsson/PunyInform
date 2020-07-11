@@ -412,7 +412,7 @@ System_file;
 					@scan_table _current_word _name_array _name_array_len -> _result ?success;
 #IfNot;
 					_j = 0;
-					@dec _name_array_len; ! This is needed for the loop. Do we need to undo it after?
+					@dec _name_array_len; ! This is needed for the loop.
 .next_word_in_name_prop;
 					@loadw _name_array _j -> _result;
 					@je _result _current_word ?success;
@@ -421,6 +421,10 @@ System_file;
 #EndIf;
 					jump not_matched;
 .success;
+#IfV5;
+#IfNot;
+					@inc _name_array_len; ! restore after loop
+#EndIf;
 #IfDef DEBUG_CHECKNOUN;
 					print " - matched ", (address) _current_word,"^";
 #EndIf;
@@ -604,6 +608,20 @@ System_file;
 			! the first word is not a verb. Assume
 			! a valid reply and add the other 
 			! entry into parse, then retry
+
+			! add the word we got stuck at to the temp parse buffer
+			! this is to be able to handle a room with a transparent
+			! box, a opaque box and a transparent chest, while
+			! processing "take transparent". If the player responds
+			! 'box' then we don't know if it is the transparent or
+			! opqaue box unless we also add the 'transparent' word
+			! before calling _CheckNoun
+			!_PrintParseArray(parse);
+			!print (parse2 + 6)-->0, " ", (address) (parse2 + 6)-->0, "^";
+			(parse+2+4*(parse->1))-->0 = (parse2 + 6)-->0;
+			++(parse->1);
+			!_PrintParseArray(parse);
+
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 			wn = 1;
 			nouncache_wn = -1; ! clear noun cache

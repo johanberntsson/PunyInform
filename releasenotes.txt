@@ -1,6 +1,6 @@
 1.0: first public release (5 July 2020)
 
-1.1: bug fix release (10 July 2020)
+1.1: bug fix release (12 July 2020)
 - parsing failed for big story files because of bad pointer comparisons
 - a programming error lead to bad parsing results on older interpreters
 - reimplemented darkness handling as described in DM4
@@ -16,6 +16,7 @@
 - Objects providing light now get "(providing light)" appended in Look.
 - The message "[Actor] has better things to do." is now a regular library
   message, so it can be customized.
+- disambiguation bug fixed (only appeared in complex situations)
   
   
 
