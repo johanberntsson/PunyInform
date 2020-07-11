@@ -87,7 +87,7 @@ System_file;
         _digit = _num->_len;
         if(_digit < '0' || _digit > '9') jump baddigit;
 		_d = _digit - '0';
-        _tot = _tot + _mul * _d; _mul = _mul * 10;
+        if(_i <= 4) _tot = _tot + _mul * _d; _mul = _mul * 10;
     }
    	if (_i > 4) return 10000;
     return _tot;
