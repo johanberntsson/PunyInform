@@ -1036,11 +1036,11 @@ Verb meta 'quit' 'q//'
     }
 	print "Release ", (0-->1) & $03ff, " / Serial number ";
 	for (_i = 18:_i < 24: _i++) print (char) 0->_i;
-	print "  / PunyInform v1.1";
+	print " / Inform v"; inversion, " PunyInform v1.1";
 #IfDef DEBUG;
 	print " D";
 #EndIf;
-	print " / Inform v"; inversion; @new_line;
+	@new_line;
 ];
 
 [ QuitSub;
