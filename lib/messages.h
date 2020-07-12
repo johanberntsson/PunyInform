@@ -253,6 +253,9 @@ Default MSG_EXAMINE_DARK 95;
 Default MSG_SEARCH_DARK 96;
 Default MSG_EXAMINE_ONOFF 97;
 Default MSG_ORDERS_WONT 98;
+Default MSG_DROP_WORN 99;
+Default MSG_INSERT_WORN 100;
+Default MSG_PUTON_WORN 101;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -360,6 +363,8 @@ Default LibraryMessages 0;
 #EndIf;
 	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
 		print_ret (CTheyreorThats) noun, " fixed in place.";
+	MSG_TURN_SCENERY, MSG_PUSH_SCENERY, MSG_PULL_SCENERY:
+		"What a concept!";
 	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE:
 		"That would be less than courteous.";
 	MSG_TURN_STATIC, MSG_PUSH_STATIC, MSG_PULL_STATIC:
@@ -435,6 +440,8 @@ Default LibraryMessages 0;
 		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ". ";
 	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
 		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
+	MSG_DROP_WORN, MSG_INSERT_WORN, MSG_PUTON_WORN:
+		"First you'd have to take off ", (the) noun, ".";
 #IfTrue MSG_INSERT_NOT_HELD < 1000;
 	MSG_INSERT_NOT_HELD:
 		"You are not holding ", (the) noun, ".";

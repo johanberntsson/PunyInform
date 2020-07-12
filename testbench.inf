@@ -1004,14 +1004,6 @@ Array dummy3 --> DummyRoutine 1;
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 ];
 
 [ DarkToDark;
@@ -1328,6 +1320,11 @@ Object -> LightSwitch "LightSwitch"
 		],
 	has switchable static;
 
+
+Object -> Sweater "sweater"
+	with
+		name 'sweater',
+	has clothing;
 
 Object -> Aquarium "aquarium"
 	with

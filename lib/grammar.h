@@ -264,6 +264,7 @@ Verb 'wear'
 
 [ DropSub _p;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
+	if(noun has worn) { PrintMsg(MSG_DROP_WORN); rtrue; }
 	_p = parent(player);
 	if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
@@ -379,6 +380,7 @@ Verb 'wear'
 
     _GrabIfNotHeld(noun);
     if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
+	if(noun has worn) { PrintMsg(MSG_INSERT_WORN); rtrue; }
 
     if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
@@ -465,6 +467,7 @@ Verb 'wear'
     if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
     _ancestor = CommonAncestor(noun, second);
     if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
+	if(noun has worn) { PrintMsg(MSG_PUTON_WORN); rtrue; }
 
     if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
 
@@ -586,7 +589,7 @@ Verb 'wear'
 [ TransferSub;
     _GrabIfNotHeld(noun);
     if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
-    if (second has supporter) { PutOnSub(); rtrue; }
+    if (second has supporter) <<PutOn noun second>>;
     !if (second == d_obj) <<Drop noun>>;
 	<Insert noun second>;
 ];
