@@ -545,6 +545,11 @@ System_file;
 		p_parse_pointer = p_parse_pointer + 4;
 	}
 
+	if(p_parse_pointer --> 0 == 'but') {
+		if(p_phase == 2) print "I'm just a simple parser and 'but' confuses me.^";
+		return -2;
+	}
+
 	! check for pronouns
 	if(p_parse_pointer --> 0 == 'it' or 'him' or 'her') {
 		switch(p_parse_pointer --> 0) {
