@@ -545,8 +545,12 @@ System_file;
 		p_parse_pointer = p_parse_pointer + 4;
 	}
 
-	if(p_parse_pointer --> 0 == 'but') {
-		if(p_phase == 2) print "I'm just a simple parser and 'but' confuses me.^";
+	if(p_parse_pointer --> 0 == 'but' or 'except') {
+		! this is cheating, should be replaced with
+		! code that can handle "take all but torch" etc.
+		if(p_phase == 2) {
+			print "I don't know the word ~",(address)p_parse_pointer-->0, "~.^";
+		}
 		return -2;
 	}
 
