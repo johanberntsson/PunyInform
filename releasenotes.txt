@@ -25,6 +25,8 @@ v1.2: bug fix release
 - Messages for pushing, pulling and turning scenery objects were missing.
 - You could use action Drop/Insert/PutOn with something worn without taking 
   it off first.
+- "(worn)" was never shown in inventory.
+- Library message for inventory slightly changed.
   
   
 

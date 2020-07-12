@@ -344,6 +344,7 @@ Constant ONE_SPACE_STRING = " ";
 	}
 !	if(p_obj has light && action == ##Inv) print " (providing light)";
 	if(p_obj has light) print " (providing light)";
+	if(p_obj has worn && action == ##Inv) print " (worn)";
 ];
 
 [ _PrintContents p_first_text p_obj p_check_workflag _obj _printed_first_text _printed_any_objects _last_obj;

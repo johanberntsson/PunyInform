@@ -354,7 +354,7 @@ Default LibraryMessages 0;
 #EndIf;
 #IfTrue MSG_INVENTORY_SUCCESS < 1000;
 	MSG_INVENTORY_SUCCESS:
-		if(_PrintContents("You are holding ", player)) print ".^";
+		if(_PrintContents("You're carrying ", player)) print ".^";
 		rtrue;
 #EndIf;
 #IfTrue MSG_EXAMINE_NOTHING_SPECIAL < 1000;
