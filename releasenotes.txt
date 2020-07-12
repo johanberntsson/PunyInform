@@ -17,6 +17,10 @@
 - The message "[Actor] has better things to do." is now a regular library
   message, so it can be customized.
 - disambiguation bug fixed (only appeared in complex situations)
+- "drop all but x" should now give a reasonable error message. ("but" is
+  not supported.)
+- Reordered the version info to mimic the standard library.
+
   
   
 

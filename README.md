@@ -6,7 +6,7 @@ PunyInform is based on the Inform 6 library, developed by Graham Nelson. We are 
 
 Games using PunyInform can be compiled to z3, z5 and z8 format. Compared to the Inform 6 library, this means we lack support for Glulx, but we have support for z3 (which the Inform 6 library lacks).
 
-To compile games using PunyInform, we recommend the official Inform 6 compiler maintained by David Kinder, at https://github.com/DavidKinder/Inform6 . Binaries can be found at [if-archive](http://www.ifarchive.org/indexes/if-archiveXinfocomXcompilersXinform6Xexecutables.html) . PunyInform requires Inform 6.34 or newer.
+To compile games using PunyInform, we recommend the official Inform 6 compiler maintained by David Kinder, at https://github.com/DavidKinder/Inform6 . Binaries can be found at [if-archive](http://www.ifarchive.org/indexes/if-archiveXinfocomXcompilersXinform6Xexecutables.html) . PunyInform requires Inform v6.34 or newer.
 
 ## Motivation
 
@@ -15,9 +15,9 @@ The main goal of PunyInform is to allow for games which are fast and have a smal
 
 ## Status
 
-We have released version 1.0.  We are about to release version 1.1 which fixes a number of bugs from release 1.0. Please check releasenotes.txt for more details.
+We have released version 1.1 which fixes a number of bugs from release 1.0. Please check releasenotes.txt for more details.
 
-If you are interested in our progress, please star or follow the project here on Github.
+If you are interested in our progress, please star or follow the project here on Github. Announcements are made on https://twitter.com/FRamsberg and on https://intfiction.org/c/authoring/inform-6-and-7/19
 
 You can see the manual on our [wiki](https://github.com/johanberntsson/PunyInform/wiki/Manual).
 
