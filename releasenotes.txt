@@ -27,7 +27,8 @@ v1.2: bug fix release
   it off first.
 - "(worn)" was never shown in inventory.
 - Library message for inventory slightly changed.
-- improved handling of low priority concealed objects in disambiguation
+- Fixed bugs in handling of low priority scenery/concealed objects in 
+  disambiguation
   
   
 
