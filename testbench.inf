@@ -998,12 +998,6 @@ Array dummy3 --> DummyRoutine 1;
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 ];
 
 [ DarkToDark;
@@ -1324,6 +1318,14 @@ Object -> LightSwitch "LightSwitch"
 Object -> Sweater "sweater"
 	with
 		name 'sweater',
+	with before [;
+		Wear:
+			if(PinkBook in player)
+				"You don't put things on while holding the pink book. It might bring bad luck.";
+			if(self has worn) rfalse;
+			give self worn;
+			"You put it on. The fit is perfect!";
+	],
 	has clothing;
 
 Object -> Aquarium "aquarium"
@@ -1359,9 +1361,14 @@ Object -> -> Gun "gun"
 	with
 		name 'gun',
 		before [;
-			Examine: rtrue;
-			default: "It's very dangerous, better just leave it alone!";
-		];
+			Examine: rfalse;
+!			default: "It's very dangerous, better just leave it alone!";
+		],
+	has transparent;
+
+Object -> -> -> Trigger "trigger"
+	with
+		name 'trigger';
 
 Object -> -> Ladder "ladder"
 	with
@@ -1437,6 +1444,12 @@ Object -> BlueBook "blue book" class Book
 		hello 13,
 		pants (-1000) (-1001) (-1002) (-1003) (-1004) (-1005) (-1006) (-1007) (-1008) (-1009) (-1010) (-1011) (-1012) (-1013) (-1014) (-1015) (-1016) (-1017) (-1018) (-1019) (-1020) (-1021) (-1022) (-1023) (-1024) (-1025) (-1026) (-1027) (-1028) (-1029) (-1030) (-1031),
 	has light; ! well, it is glowing
+
+Object -> -> BlueBookTitle "title"
+	with
+		name 'title',
+		description "The title of the blue book is ~War and peace~";
+
 
 [ DebugLife rule;
 	! same output as the table in
@@ -1522,7 +1535,7 @@ Object -> John "John"
 			if(second == 'pink') "~That is a nice pink book.~";
 			"John ignores your question.";
 		],
-	has proper animate;
+	has proper animate transparent;
 
 Object -> infiniteBag "infinite bag"
 	with
@@ -1553,6 +1566,10 @@ Book -> PinkBook "pink book"
 			}
 			return 0;
 	    ],
+		after [;
+			Take:
+				"You dared taking the pink book. Bravo!";
+		],
 		description "The book is nice and tidy.";
 
 Object -> Torch "electric torch"
@@ -1722,6 +1739,7 @@ Array quote_1 --> 5 35
 !	BlueBook.description();
 !	print "BlueBook.party is ", BlueBook.party, "^";
 !	BlueBook.party(5);
+	move Gun to John;
 	print "^^Welcome to the Testbench. This is where all sorts of PunyInform features are tried out. Don't expect much of a game here. Currently, you can win by putting stuff in the box, or lose by checking out the sun by the river or by pushing John around.^^";
 ];
 #Ifdef USEINFORM;

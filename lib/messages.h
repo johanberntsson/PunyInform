@@ -223,6 +223,7 @@ Default MSG_PARSER_NOTHING_TO_VERB 66;
 Default MSG_TOUCHABLE_FOUND_CLOSED 67;
 Default MSG_CONSULT_NOTHING_INTERESTING 68;
 Default MSG_CUT_NO_USE 69;
+Default MSG_SACK_PUTTING 70;
 Default MSG_LOCK_NOT_A_LOCK 71;
 Default MSG_LOCK_ALREADY_LOCKED 72;
 Default MSG_LOCK_CLOSE_FIRST 73;
@@ -256,6 +257,8 @@ Default MSG_ORDERS_WONT 98;
 Default MSG_DROP_WORN 99;
 Default MSG_INSERT_WORN 100;
 Default MSG_PUTON_WORN 101;
+Default MSG_TAKE_BELONGS 102;
+Default MSG_TAKE_PART_OF 103;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -347,6 +350,10 @@ Default LibraryMessages 0;
 	switch(p_msg) {
 	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
 		"Nothing obvious happens.";
+#IfTrue MSG_SACK_PUTTING < 1000;
+	MSG_SACK_PUTTING:	
+		"(putting ", (the) p_arg_1, " into ", (the) SACK_OBJECT, " to make room)";
+#EndIf;
 #IfTrue MSG_PROMPT < 1000;
 	MSG_PROMPT:
 		print "> ";
@@ -511,6 +518,14 @@ Default LibraryMessages 0;
 #IfTrue MSG_ORDERS_WONT < 1000;
 	MSG_ORDERS_WONT:
 		print_ret (The) actor, " has better things to do.";
+#EndIf;
+#IfTrue MSG_TAKE_BELONGS < 1000;
+	MSG_TAKE_BELONGS:
+		print_ret (The) noun, " seems to belong to ", (the) parent(noun), ".";
+#EndIf;
+#IfTrue MSG_TAKE_PART_OF < 1000;
+	MSG_TAKE_PART_OF:
+		print_ret (The) noun, " seems to be part of ", (the) parent(noun), ".";
 #EndIf;
 	MSG_EXAMINE_DARK, MSG_SEARCH_DARK:
 		"But it's dark.";

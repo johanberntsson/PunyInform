@@ -29,6 +29,11 @@ v1.2: bug fix release
 - Library message for inventory slightly changed.
 - Fixed bugs in handling of low priority scenery/concealed objects in 
   disambiguation
-  
+- Take improved so it's not possible to take things which are part of other 
+  things or held by an NPC.
+- TAKE ALL doesn't try to take other people's belonings or things that are
+  part of other things anymore.
+- "(putting x into [sack_object])" now has a newline at the end, and is
+  printed by PrintMsg, so it can be modified by game.
   
 

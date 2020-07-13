@@ -1468,7 +1468,7 @@ Global scope_cnt;
 ];
 #EndIf;
 
-[ TryToTakeNoun;
+[ TryToTakeNoun _p;
     ! Try to transfer the given item to the player: return false
     ! if successful, true if unsuccessful, printing a suitable message
     ! in the latter case.
@@ -1478,6 +1478,9 @@ Global scope_cnt;
     if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
     if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
 	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
+	_p = parent(noun);
+	if(_p has animate) { PrintMsg(MSG_TAKE_BELONGS); rtrue; }
+	if(parent(_p) ~= 0 && _p hasnt container && _p hasnt supporter)  { PrintMsg(MSG_TAKE_PART_OF); rtrue; }
 	if(ObjectIsUntouchable(noun, false)) rtrue;
 	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
     if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }

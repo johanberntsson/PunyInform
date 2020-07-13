@@ -291,7 +291,7 @@ Constant ONE_SPACE_STRING = " ";
                 keep_silent = _ks;
                 if (keep_silent) return;
                 if (_obj in SACK_OBJECT) {
-                    print "(putting ", (the) _obj, " into ", (the) SACK_OBJECT, " to make room) ";
+					PrintMsg(MSG_SACK_PUTTING, _obj);
                     rtrue;
                 }
             }
