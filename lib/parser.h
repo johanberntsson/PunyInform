@@ -303,12 +303,10 @@ System_file;
     return indirect(noun_filter);
 ];
 
-Global _last_match_obj;
-[ _CheckNoun p_parse_pointer _i _j _n _p _obj _matches _last_match _last_match_len _current_word _name_array _name_array_len _best_score _result _stop;
+[ _CheckNoun p_parse_pointer _i _j _n _p _obj _matches _low_priority_match_obj _low_priority_match_len _current_word _name_array _name_array_len _best_score _result _stop;
 #IfDef DEBUG_CHECKNOUN;
 	print "Entering _CheckNoun!^";
 #EndIf;
-	_last_match_obj = 0;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
 	! else return object number
@@ -374,12 +372,11 @@ Global _last_match_obj;
 				if(action_debug == false && _obj has concealed or scenery) {
 					! don't consider for which, but remember
 					! as last resort if nothing else matches
-					if(_last_match_len < _n) {
-						_last_match = _obj;
-						_last_match_obj = _obj;
-						_last_match_len = _n;
+					if(_low_priority_match_len < _n) {
+						_low_priority_match_obj = _obj;
+						_low_priority_match_len = _n;
 #IfDef DEBUG_CHECKNOUN;
-					print "concealed best score ", _last_match_len, "^";
+					print "concealed best score ", _low_priority_match_len, "^";
 #EndIf;
 					}
 				} else if(_n == _best_score) {
@@ -392,7 +389,6 @@ Global _last_match_obj;
 #IfDef DEBUG_CHECKNOUN;
 					print "New best score - matched with parse_name ", _n,"^";
 #EndIf;
-					_last_match = _obj;
 					_best_score = _n;
 					_matches = 1;
 					which_object-->1 = _obj;
@@ -438,12 +434,11 @@ Global _last_match_obj;
 						if(action_debug == false && _obj has concealed or scenery) {
 							! don't consider for which, but remember
 							! as last resort if nothing else matches
-							if(_last_match_len < _n) {
-								_last_match = _obj;
-								_last_match_obj = _obj;
-								_last_match_len = _n;
+							if(_low_priority_match_len < _n) {
+								_low_priority_match_obj = _obj;
+								_low_priority_match_len = _n;
 #IfDef DEBUG_CHECKNOUN;
-					print "concealed best score ", _last_match_len, "^";
+					print "concealed best score ", _low_priority_match_len, "^";
 #EndIf;
 							}
 						} else if(_n == _best_score) {
@@ -457,7 +452,6 @@ Global _last_match_obj;
 #IfDef DEBUG_CHECKNOUN;
 							print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
 #EndIf;
-							_last_match = _obj;
 							_best_score = _n;
 							which_object-->1 = _obj;
 						}
@@ -466,31 +460,28 @@ Global _last_match_obj;
 			}
 		}
 .not_matched;
-
-!   print "checking ", _obj.&name-->0, " ", _current_word, "^";
 	}
 
-	if((_matches == 0 && _last_match > 0) ||
-	   (_last_match_len > _best_score)) {
+	if((_matches == 0 && _low_priority_match_len > 0) ||
+	   (_low_priority_match_len > _best_score)) {
 		! only scenery or concealed objects matched.
 		! or concealed was better match than visible objects
-		print "hello ", (the) _last_match_obj, "^";
 		_matches = 1;
-		_best_score = _last_match_len;
-		which_object-->1 = _last_match_obj;
-		_last_match = _last_match_obj;
+		_best_score = _low_priority_match_len;
+		which_object-->1 = _low_priority_match_obj;
 	}
 
 	which_object->0 = _matches;
 	which_object->1 = _best_score - wn;
 
 	if(_matches == 1) {
+		_result = which_object-->1;
 #IfDef DEBUG_CHECKNOUN;
-		print "Matched a single object: ", (the) _last_match,
+		print "Matched a single object: ", (the) _result,
 			", num words ", which_object->1, "^";
 #EndIf;
-		nouncache_result = _last_match;
-		return _last_match;
+		nouncache_result = _result;
+		return _result;
 	}
 #IfDef DEBUG_CHECKNOUN;
 				print "Matches: ", _matches,", num words ", which_object->1, "^";
