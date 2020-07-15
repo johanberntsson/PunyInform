@@ -259,6 +259,7 @@ Default MSG_INSERT_WORN 100;
 Default MSG_PUTON_WORN 101;
 Default MSG_TAKE_BELONGS 102;
 Default MSG_TAKE_PART_OF 103;
+Default MSG_TAKE_NOT_AVAILABLE 104;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -339,7 +340,7 @@ Default MSG_WAVE_DEFAULT 307;
 Default LibraryMessages 0;
 
 
-[ PrintMsg p_msg p_arg_1;
+[ PrintMsg p_msg p_arg_1 p_arg_2;
 	if(p_msg ofclass String)
 		print_ret (string) p_msg;
 
@@ -459,7 +460,8 @@ Default LibraryMessages 0;
 #EndIf;
 #IfTrue MSG_TOUCHABLE_FOUND_CLOSED < 1000;
 	MSG_TOUCHABLE_FOUND_CLOSED:
-		print_ret (The) p_arg_1, " isn't open.";
+!		print_ret (The) p_arg_1, " isn't open.";
+		print_ret (CObjIs) p_arg_1, "n't open.";
 #EndIf;
 #IfTrue MSG_CONSULT_NOTHING_INTERESTING < 1000;
 	MSG_CONSULT_NOTHING_INTERESTING:
@@ -470,7 +472,7 @@ Default LibraryMessages 0;
 		"Cutting ", (the) noun, " up would achieve little.";
 #EndIf;
 	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_LOCKED:
-		print_ret (The) noun, " is already ", (verbname) verb_word, "ed.";
+		print_ret (CObjIs) noun, " already ", (verbname) verb_word, "ed.";
 #IfTrue MSG_LOCK_CLOSE_FIRST < 1000;
 	MSG_LOCK_CLOSE_FIRST:
 		"First you have to close ", (the) noun, ".";
@@ -497,7 +499,8 @@ Default LibraryMessages 0;
 #EndIf;
 #IfTrue MSG_SEARCH_EMPTY < 1000;
 	MSG_SEARCH_EMPTY:
-		print_ret (The) noun, " is empty.";
+		print_ret (CObjIs) noun, " empty.";
+!		print_ret (The) noun, " is empty.";
 #EndIf;
 #IfTrue MSG_SEARCH_NOTHING_ON < 1000;
 	MSG_SEARCH_NOTHING_ON:
@@ -519,13 +522,17 @@ Default LibraryMessages 0;
 	MSG_ORDERS_WONT:
 		print_ret (The) actor, " has better things to do.";
 #EndIf;
+#IfTrue MSG_TAKE_NOT_AVAILABLE < 1000;
+	MSG_TAKE_NOT_AVAILABLE:
+		print_ret (CObjIs) noun, " not available.";
+#EndIf;
 #IfTrue MSG_TAKE_BELONGS < 1000;
 	MSG_TAKE_BELONGS:
-		print_ret (The) noun, " seems to belong to ", (the) parent(noun), ".";
+		print_ret (The) p_arg_1, " seems to belong to ", (the) p_arg_2, ".";
 #EndIf;
 #IfTrue MSG_TAKE_PART_OF < 1000;
 	MSG_TAKE_PART_OF:
-		print_ret (The) noun, " seems to be part of ", (the) parent(noun), ".";
+		print_ret (The) p_arg_1, " seems to be part of ", (the) p_arg_2, ".";
 #EndIf;
 	MSG_EXAMINE_DARK, MSG_SEARCH_DARK:
 		"But it's dark.";
@@ -658,6 +665,9 @@ default:
 	print "it";
 ];
 
+[ CObjIs p_obj;
+	print (The) p_obj, " ", (isorare) p_obj;
+];
 
 !
 ! Error messages

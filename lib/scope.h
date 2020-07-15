@@ -284,17 +284,41 @@ Constant PlaceInScope = _PutInScope;
 
 
 
-[ ObjectIsInvisible p_item p_flag;
-	return ObjectIsUntouchable(p_item, p_flag, true);
+[ _FindBarrier p_ancestor p_obj p_dontprint;
+	while (p_obj ~= p_ancestor) {
+		if (_g_check_take && p_obj hasnt container && p_obj hasnt supporter) {
+			if (p_obj has animate) {
+				if(p_dontprint == false) PrintMsg(MSG_TAKE_BELONGS, _g_item, p_obj);
+				rtrue;
+			}
+			if (p_obj has transparent) {
+				if(p_dontprint == false) PrintMsg(MSG_TAKE_PART_OF, _g_item, p_obj);
+				rtrue;
+			}
+			if(p_dontprint == false) PrintMsg(MSG_TAKE_NOT_AVAILABLE);
+			rtrue;
+		}
+		if(p_obj has container && p_obj hasnt open &&
+			(_g_check_visible == false || p_obj hasnt transparent)) {
+			if(p_dontprint == false) PrintMsg(MSG_TOUCHABLE_FOUND_CLOSED, p_obj);
+			_g_check_visible = false;
+			rtrue;
+		}
+		p_obj = parent(p_obj);
+	}
+	rfalse;
 ];
 
-[ ObjectIsUntouchable p_item p_flag p_checkvisible _ancestor _i;
+[ ObjectIsUntouchable p_item p_dontprint p_checktake _ancestor _i;
 	! DM: ObjectIsUntouchable(obj,flag)
 	! Determines whether any solid barrier, that is, any container that is
 	! not open, lies between the player and obj. If flag is true, this
 	! routine never prints anything; otherwise it prints a message like
 	! “You can't, because ! … is in the way.” if any barrier is found.
 	! The routine returns true if a barrier is found, false if not.
+	
+	_g_item = p_item;
+	_g_check_take = p_checktake;
 
 	_UpdateScope(player);
 
@@ -304,37 +328,38 @@ Constant PlaceInScope = _PutInScope;
 		while (_ancestor && (_i = _ObjectScopedBySomething(_ancestor)) == 0)
 			_ancestor = parent(_ancestor);
 		if(_i ~= 0) {
-			if(ObjectIsUntouchable(_i, p_flag)) return; ! An item immediately added to scope
+			if(ObjectIsUntouchable(_i, p_dontprint, p_checktake)) { 
+				! Item immediately added to scope
+				_g_check_visible = false;
+				rtrue; 
+			}
 		}
 	} else if(player ~= _ancestor) {
-		! First, a barrier between the player and the ancestor.  The player
-		! can only be in a sequence of enterable objects, and only closed
-		! containers form a barrier.
-		_i = parent(player);
-		while (_i ~= _ancestor) {
-			if(_i has container && _i hasnt open &&
-				(p_checkvisible == false || _i hasnt transparent)) {
-				if(p_flag == false) PrintMsg(MSG_TOUCHABLE_FOUND_CLOSED, _i);
-				rtrue;
-			}
-			_i = parent(_i);
+		_g_check_take = 0;
+		if(_FindBarrier(_ancestor, parent(player), p_dontprint)) {
+			! First, a barrier between the player and the ancestor.  The player
+			! can only be in a sequence of enterable objects, and only closed
+			! containers form a barrier.
+			_g_check_visible = false;
+			rtrue;
 		}
+		_g_check_take = p_checktake;
     }
 
 	! Second, a barrier between the item and the ancestor.  The item can
 	! be carried by someone, part of a piece of machinery, in or on top
 	! of something and so on.
-	if (p_item ~= _ancestor) {
-		_i = parent(p_item);
-		while (_i ~= _ancestor) {
-			if(_i has container && _i hasnt open &&
-				(p_checkvisible == false || _i hasnt transparent)) {
-				if(p_flag == false) PrintMsg(MSG_TOUCHABLE_FOUND_CLOSED, _i);
-				rtrue;
-			}
-			_i = parent(_i);
-		}
+	if (p_item ~= _ancestor && _FindBarrier(_ancestor, parent(p_item), p_dontprint)) {
+		_g_check_visible = false;
+		rtrue;
 	}
+	_g_check_visible = false;
     rfalse;
 ];
+
+[ ObjectIsInvisible p_item p_dontprint;
+	_g_check_visible = true;
+	return ObjectIsUntouchable(p_item, p_dontprint);
+];
+
 

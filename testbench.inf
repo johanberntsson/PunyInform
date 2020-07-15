@@ -1570,7 +1570,8 @@ Book -> PinkBook "pink book"
 			Take:
 				"You dared taking the pink book. Bravo!";
 		],
-		description "The book is nice and tidy.";
+		description "The book is nice and tidy.",
+	has clothing;
 
 Object -> Torch "electric torch"
 	with
