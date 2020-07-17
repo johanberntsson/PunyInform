@@ -31,9 +31,15 @@ v1.2: bug fix release
   disambiguation
 - Take improved so it's not possible to take things which are part of other 
   things or held by an NPC.
-- TAKE ALL doesn't try to take other people's belonings or things that are
+- TAKE ALL doesn't try to take other people's belongings or things that are
   part of other things anymore.
 - "(putting x into [sack_object])" now has a newline at the end, and is
   printed by PrintMsg, so it can be modified by game.
+- ObjectIsUntouchable() now has a flag to check if an object is takable too,
+  like in the standard library.
+- Added TouchCeiling() to help TAKE ALL.
+- Changed so TAKE ALL tries to pick up all things in TouchCeiling plus things
+  in/on normal containers/supporters in the touchceiling.
+  
   
 

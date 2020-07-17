@@ -167,17 +167,17 @@ System_file;
     }
 ];
 
-! [ TouchCeiling p_actor _parent;
-	! ! this routine is in I6 stdlib, but not in DM
-	! !
-    ! for(:: p_actor = _parent) {
-        ! _parent = parent(p_actor);
-        ! !   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
-        ! if(_parent == 0 || (p_actor has container && p_actor hasnt open)) {
-            ! return p_actor;
-        ! }
-    ! }
-! ];
+[ TouchCeiling p_actor _parent;
+	! this routine is in I6 stdlib, but not in DM
+	!
+    for(:: p_actor = _parent) {
+        _parent = parent(p_actor);
+        !   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
+        if(_parent == 0 || (p_actor has container && p_actor hasnt open)) {
+            return p_actor;
+        }
+    }
+];
 
 [ LoopOverScope p_routine p_actor _i;
 	! DM: LoopOverScope(R,actor)
