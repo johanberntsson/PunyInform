@@ -1034,7 +1034,13 @@ Verb meta 'quit' 'q//'
 
 [ VersionSub _i;
 	if(Story ~= 0) {
+#IfV5;
+	style bold;
+#EndIf;
 		print (string) Story;
+#IfV5;
+	style roman;
+#EndIf;
 		if(Headline ~= 0) print (string) Headline;
     }
 	print "Release ", (0-->1) & $03ff, " / Serial number ";

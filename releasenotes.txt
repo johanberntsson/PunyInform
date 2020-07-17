@@ -40,6 +40,7 @@ v1.2: bug fix release
 - Added TouchCeiling() to help TAKE ALL.
 - Changed so TAKE ALL tries to pick up all things in TouchCeiling plus things
   in/on normal containers/supporters in the touchceiling.
+- Made game name bold in z5 games.
   
   
 
