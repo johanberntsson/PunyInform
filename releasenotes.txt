@@ -21,7 +21,7 @@
   not supported.)
 - Reordered the version info to mimic the standard library.
 
-v1.2: bug fix release
+v1.2: bug fix release (18 July 2020)
 - Messages for pushing, pulling and turning scenery objects were missing.
 - You could use action Drop/Insert/PutOn with something worn without taking 
   it off first.
