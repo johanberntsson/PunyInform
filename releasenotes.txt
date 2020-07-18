@@ -45,6 +45,7 @@ v1.2: bug fix release
 - Added 'get all from/off X' to grammar.  
 - Added a second parameter to LibraryMessages routine, to allow for messages
   requiring two parameters.
+- Made LoopOverScope safer by having it loop over a copy of the scope array.
   
   
 

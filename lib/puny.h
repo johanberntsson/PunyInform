@@ -547,7 +547,7 @@ Include "parser.h";
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
-	_scope_count = GetPlayerScopeCopy();
+	_scope_count = GetScopeCopy();
 	RunRoutines(location, each_turn);
 	for(_i = 0: _i < _scope_count: _i++) {
 		_obj = scope_copy-->_i;
@@ -570,7 +570,7 @@ Include "parser.h";
 #IfnDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;	
-	_scope_count = GetPlayerScopeCopy();
+	_scope_count = GetScopeCopy();
 #IfDef GamePreRoutine;
 #IfDef DEBUG;
 	if(debug_flag & 1) print "GamePreRoutine()^";
@@ -631,7 +631,7 @@ Include "parser.h";
 #IfnDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
-	_scope_count = GetPlayerScopeCopy();
+	_scope_count = GetScopeCopy();
 
 	for(_i = 0: _i < _scope_count: _i++) {
 		_obj = scope_copy-->_i;

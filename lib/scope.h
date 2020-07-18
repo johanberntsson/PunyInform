@@ -148,8 +148,11 @@ System_file;
 #EndIf;
 ];
 
-[GetPlayerScopeCopy _i;
-	_UpdateScope(player);
+[GetScopeCopy p_actor _i;
+	if(p_actor == 0)
+		p_actor = player;
+
+	_UpdateScope(p_actor);
 	for(_i = 0: _i < scope_objects: _i++)
 		scope_copy-->_i = scope-->_i;
 	return scope_objects;
@@ -179,7 +182,7 @@ System_file;
     }
 ];
 
-[ LoopOverScope p_routine p_actor _i;
+[ LoopOverScope p_routine p_actor _i _scope_count;
 	! DM: LoopOverScope(R,actor)
 	! Calls routine p_routine(obj) for each object obj in scope for the
 	! given actor. If no actor is given, the actor defaults to be the player.
@@ -188,8 +191,9 @@ System_file;
 		p_actor = player;
 
 	_UpdateScope(p_actor);
+	_scope_count = GetScopeCopy(p_actor);
 
-	for(_i = 0: _i < scope_objects: _i++) p_routine(scope-->_i);
+	for(_i = 0: _i < _scope_count: _i++) p_routine(scope_copy-->_i);
 ];
 
 Constant PlaceInScope = _PutInScope;
