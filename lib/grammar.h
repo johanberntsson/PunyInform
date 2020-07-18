@@ -62,7 +62,8 @@ Verb 'fill'
 Verb 'get'
 	* 'up'                                      -> Exit
 	* 'out'                                     -> Exit
-	* multi                                     -> Take;
+	* multi                                     -> Take
+	* multiinside 'from'/'off' noun             -> Remove;
 
 Verb 'give' 'feed' 'offer' 'pay'
 	* held 'to' creature                        -> Give
@@ -169,8 +170,7 @@ Verb 'switch'
 Verb 'take' 'carry' 'hold'
 	* multi                                     -> Take
 	* 'off' worn                                -> Disrobe
-	* multiinside 'from' noun                   -> Remove
-	* multiinside 'off' noun                    -> Remove
+	* multiinside 'from'/'off' noun             -> Remove
 	* 'inventory'                               -> Inv;
 
 Verb 'tell'

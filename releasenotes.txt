@@ -41,7 +41,7 @@ v1.2: bug fix release
 - Changed so TAKE ALL tries to pick up all things in TouchCeiling plus things
   in/on normal containers/supporters in the touchceiling.
 - Made game name bold in z5 games.
-- Improved 'all' so that 'take all from X' and 'take all except X' work
-  
+- Improved 'all' so that 'take all from X' and 'take all except X' work.
+- Added 'get all from/off X' to grammar.  
   
 
