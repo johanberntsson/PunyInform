@@ -1057,7 +1057,7 @@ Verb 'help' * -> Help;
 Constant MSG_OPEN_YOU_CANT 1000;
 Constant MSG_AREYOUSUREQUIT 1001;
 Constant MSG_DISROBE_NOT_WEARING 1002;
-[LibraryMessages p_msg p_arg_1;
+[LibraryMessages p_msg p_arg_1 p_arg_2;
 	switch(p_msg) {
 	MSG_OPEN_YOU_CANT:
 		"How would you go about opening ", (a) noun, "?";
@@ -1067,6 +1067,7 @@ Constant MSG_DISROBE_NOT_WEARING 1002;
 	MSG_DISROBE_NOT_WEARING:
 		"Not worn!";
 	}
+	p_arg_1 = 0; p_arg_2 = 0; ! To avoid warnings
 	rfalse;
 ];
 

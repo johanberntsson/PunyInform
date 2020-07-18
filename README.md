@@ -15,7 +15,7 @@ The main goal of PunyInform is to allow for games which are fast and have a smal
 
 ## Status
 
-We have released version 1.1 which fixes a number of bugs from release 1.0. Please check releasenotes.txt for more details.
+We consider PunyInform ready for real-world use. Please check releasenotes.txt for more details on the latest version, what bugs have been fixed, what features have been added etc.
 
 If you are interested in our progress, please star or follow the project here on Github. Announcements are made on https://twitter.com/FRamsberg and on https://intfiction.org/c/authoring/inform-6-and-7/19
 
