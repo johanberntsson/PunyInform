@@ -903,8 +903,12 @@ System_file;
 		_obj = scope-->_i;
 		_addobj = false;
 		switch(p_multiple_objects_type) {
-		MULTIHELD_OBJECT, MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
+		MULTIHELD_OBJECT:
 			_addobj = _obj in player;
+		MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
+			! we don't know yet know what 'second' is, so we
+			! add all reasonable objects and filter later
+ 			_addobj = _obj hasnt scenery or concealed or static or animate;
 		MULTI_OBJECT:
 			_p = parent(_obj);
 			_ceil = TouchCeiling(player);
@@ -1523,23 +1527,27 @@ Array guess_num_objects->5;
 		! (b) warn the player if it has been cut short because too long;
 		! (c) generate a sequence of actions from the list
 		!     (stopping in the event of death or movement away).
-		_score = 0;
-		for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
-			inp1 = multiple_objects --> _noun;
-			noun = inp1;
-			switch(parser_check_multiple) {
-			MULTIEXCEPT_OBJECT:
-				if(noun == second) continue; ! eg take all except X
-			MULTIINSIDE_OBJECT:
-				if(noun notin second) continue; ! eg get all from X
+		if(parser_check_multiple == MULTIINSIDE_OBJECT && second hasnt open) {
+			print (The) second, " isn't open.^";
+		} else {
+			_score = 0;
+			for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
+				inp1 = multiple_objects --> _noun;
+				noun = inp1;
+				switch(parser_check_multiple) {
+				MULTIEXCEPT_OBJECT:
+					if(noun == second) continue; ! eg take all except X
+				MULTIINSIDE_OBJECT:
+					if(noun notin second) continue; ! eg get all from X
+				}
+				if(action == ##Take && noun == parent(player)) continue; ! don' pick up the box when you are in it
+				if(action == ##Take && noun in player) continue; ! don' pick up held objects
+				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
+				++_score;
+				PerformPreparedAction();
 			}
-			if(action == ##Take && noun == parent(player)) continue; ! don' pick up the box when you are in it
-			if(action == ##Take && noun in player) continue; ! don' pick up held objects
-			if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
-			++_score;
-			PerformPreparedAction();
+			if(_score == 0) PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
 		}
-		if(_score == 0) PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
 	}
 	if(inp1 > 1) PronounNotice(noun);
 	return num_words_parsed;
