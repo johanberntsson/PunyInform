@@ -1434,6 +1434,7 @@ Array guess_num_objects->5;
 #EndIf;
 	if(_score == -1) rfalse; ! force a complete reparse
 	if(_score == 100) jump parse_success;
+	action = -1; ! to stop each_turn etc.
 	rtrue; ! ParsePattern wrote some error message
 
 .treat_bad_line_as_conversation;
