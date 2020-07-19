@@ -537,7 +537,7 @@ System_file;
 	}
 
 	! skip 'the', 'all' etc
-	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD or 'but' or 'except') {
+	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD) {
 #IfDef DEBUG_GETNEXTNOUN;
 		print "skipping ",(address) p_parse_pointer --> 0,"^";
 #Endif;
@@ -811,11 +811,6 @@ System_file;
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
 				if(_noun == -2) return GPR_FAIL;
 				if(_noun == -1) return GPR_REPARSE;
-				if(_noun > 0 && p_parse_pointer-->0 == ALL_WORD && 
-					(p_parse_pointer + 4)-->0 == 'except' or 'but') {
-					parser_all_except_object = _noun;
-					_noun = 0;
-				}
 				if(_noun == 0) {
 					if(parser_action == ##PluralFound) {
 						! take books or take all books
@@ -908,12 +903,13 @@ System_file;
 		_obj = scope-->_i;
 		_addobj = false;
 		switch(p_multiple_objects_type) {
-		! MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
-		! we don't know yet know what 'second' is, so we
-		! add all reasonable objects and filter later
-		MULTIHELD_OBJECT, MULTIEXCEPT_OBJECT:
+		MULTIHELD_OBJECT:
 			_addobj = _obj in player;
-		MULTI_OBJECT, MULTIINSIDE_OBJECT:
+		MULTIEXCEPT_OBJECT, MULTIINSIDE_OBJECT:
+			! we don't know yet know what 'second' is, so we
+			! add all reasonable objects and filter later
+ 			_addobj = _obj hasnt scenery or concealed or static or animate;
+		MULTI_OBJECT:
 			_p = parent(_obj);
 			_ceil = TouchCeiling(player);
 			_addobj = false;
@@ -1134,7 +1130,6 @@ Array guess_num_objects->5;
 	parser_check_multiple = 0;
 	parser_unknown_noun_found = 0;
 	parser_all_found = false;
-	parser_all_except_object = 0;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 #IfDef DEBUG;
@@ -1539,28 +1534,14 @@ Array guess_num_objects->5;
 			for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
 				inp1 = multiple_objects --> _noun;
 				noun = inp1;
-
-				! disallow objects mentioned in 'all except/but X' patterns
-				if(noun == parser_all_except_object) continue;
-
 				switch(parser_check_multiple) {
 				MULTIEXCEPT_OBJECT:
-					! stop us from putting X in X, for example
-					! > take sack
-					! > put all in sack
-					if(noun == second) continue;
+					if(noun == second) continue; ! eg take all except X
 				MULTIINSIDE_OBJECT:
-					! stop us from trying to take things that are not in
-					! the container
-					if(noun notin second) continue;
+					if(noun notin second) continue; ! eg get all from X
 				}
-
-				! don' pick up the box when you are in it
-				if(action == ##Take && noun == parent(player)) continue;
-
-				! don' pick up held objects
-				if(action == ##Take && noun in player) continue;
-
+				if(action == ##Take && noun == parent(player)) continue; ! don' pick up the box when you are in it
+				if(action == ##Take && noun in player) continue; ! don' pick up held objects
 				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
 				++_score;
 				PerformPreparedAction();
