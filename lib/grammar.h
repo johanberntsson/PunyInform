@@ -1047,7 +1047,7 @@ Verb meta 'quit' 'q//'
 	for (_i = 18:_i < 24: _i++) print (char) 0->_i;
 	print " / Inform v";
 	inversion;
-	print " PunyInform v1.1";
+	print " PunyInform v1.2";
 #IfDef DEBUG;
 	print " D";
 #EndIf;

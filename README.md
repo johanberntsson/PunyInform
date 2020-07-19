@@ -23,6 +23,14 @@ You can see the manual on our [wiki](https://github.com/johanberntsson/PunyInfor
 
 You can see what tasks we're currently working on, tasks we've done and tasks coming up on our Trello board: https://trello.com/b/mfGVsB4H/punyinform
 
+## Publicity
+
+Fredrik Ramsberg has written two articles describing PunyInform for beginners. 
+
+The first is [PunyInform, a new library for writing text adventures for old computers](https://vintageisthenewold.com/punyinform-a-new-library-for-writing-text-adventures-for-old-computers/), which gives a general overview and introduction.
+
+The second is [PunyInform: Installing the tools and compiling a game](https://vintageisthenewold.com/punyinform-installing-the-tools-and-compiling-a-game/) which goes more into detail on how to setup an environment with PunyInform and the inform compiler on Windows, and getting started on a simple game.
+
 ## Credits
 
 PunyInform was conceived and designed by Johan Berntsson and Fredrik Ramsberg. Coding by Johan Berntsson, Fredrik Ramsberg, Pablo Martinez and Tomas Öberg. Includes code from the Inform 6 standard library, by Graham Nelson. Thanks to Stefan Vogt, Jason Compton and John Wilson for advice, testing and promotion. Thanks to David Kinder and Andrew Plotkin for helping out with compiler issues and sharing their deep knowledge of the compiler. Huge thanks to Graham Nelson for creating the Inform 6 compiler and library in the first place.
