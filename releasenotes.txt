@@ -52,6 +52,6 @@ v1.2.1: bug fix release (19 July 2020)
   enters VERSION.
 
 v1.3: new feature (and bug fix?) release
-- Extended 'all' so that 'take all except/but X [one]' works.
+- Extended 'all' so that 'take all Xs except/but Y [one]' works.
   
 
