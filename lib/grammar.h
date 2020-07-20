@@ -476,6 +476,7 @@ Verb 'wear'
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
+	if(AfterRoutines() == 1) rtrue;
     if (keep_silent) return;
     PrintMsg(MSG_PUTON_SUCCESS);
 ];

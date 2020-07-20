@@ -51,7 +51,12 @@ v1.2.1: bug fix release (19 July 2020)
 - The library version is now printed correctly at start of game and when player
   enters VERSION.
 
-v1.3: new feature (and bug fix?) release
+v1.3: new feature (and bug fix) release
 - Extended 'all' so that 'take all except/but X [one]' works.
-  
+- Fixed bug in cloak.inf which gave a point even if "hang cloak on hook" 
+  failed.
+- Added call to AfterRoutines in PutOnSub.
+- Made parser a little quicker ny not checking if an object is visible once
+  per word in player input.
+
 
