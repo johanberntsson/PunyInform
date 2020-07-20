@@ -115,9 +115,9 @@ Array dummy3 --> DummyRoutine 1;
 
 
 [ DummyRoutine x;
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
-	objectloop(x provides description && x has light) { give x transparent; x.number++; }
+!	objectloop(x provides description && x has light) { give x transparent; x.number++; }
+!	objectloop(x provides description && x has light) { give x transparent; x.number++; }
+!	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }
 	objectloop(x provides description && x has light) { give x transparent; x.number++; }

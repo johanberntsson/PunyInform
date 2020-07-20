@@ -792,6 +792,7 @@ System_file;
 			p_parse_pointer = parse + 2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _noun hasnt animate) {
 				if(p_phase == PHASE2) {
+					PrintMsg(MSG_PARSER_NOT_HOLDING);
 					print "You can only do that to something animate.^";
 					return GPR_FAIL;
 				}
@@ -800,7 +801,7 @@ System_file;
 				if(p_phase == PHASE2) {
 					_GrabIfNotHeld(_noun);
 					if(_noun notin player) {
-						print "You are not holding ", (the) _noun, ".^";
+						PrintMsg(MSG_PARSER_NOT_HOLDING);
 						return GPR_FAIL;
 					}
 				}
@@ -979,27 +980,22 @@ Array guess_num_objects->5;
 		if(_noun has door && _noun ~= _exclude) {
 			guess_object-->GUESS_DOOR = _noun;
 			guess_num_objects->GUESS_DOOR = 1 + guess_num_objects->GUESS_DOOR;
-			!print "found door ", (the) _door, "^";
 		}
 		if(_noun has container && _noun ~= _exclude) {
 			guess_object-->GUESS_CONTAINER = _noun;
 			guess_num_objects->GUESS_CONTAINER = 1 + guess_num_objects->GUESS_CONTAINER;
-			!print "found container ", (the) _container, "^";
 		}
 		if(_noun has animate && _noun ~= _exclude) {
 			guess_object-->GUESS_CREATURE = _noun;
 			guess_num_objects->GUESS_CREATURE = 1 + guess_num_objects->GUESS_CREATURE;
-			!print "found creature ", (the) _creature, "^";
 		} 
 		if(_noun in player && _noun ~= _exclude) {
 			guess_object-->GUESS_HELD = _noun;
 			guess_num_objects->GUESS_HELD = 1 + guess_num_objects->GUESS_HELD;
-			!print "found held ", (the) _held, "^";
 		}
 		if(_noun hasnt scenery or concealed && _noun ~= _exclude) {
 			guess_object-->GUESS_THING = _noun;
 			guess_num_objects->GUESS_THING = 1 + guess_num_objects->GUESS_THING;
-			!print "found thing ", (the) _thing, "^";
 		}
 	}
 
@@ -1025,7 +1021,6 @@ Array guess_num_objects->5;
 		}
 	}
 
-	!print p_nounphrase_num, " ",_noun, " ", noun, " ", second, "^";
 	if(_noun == _assumed) _noun = 0;
 	if(_noun) {
 		print "(assuming ";
@@ -1195,7 +1190,7 @@ Array guess_num_objects->5;
 			! write error messages if PHASE2 as needed
 			if(_pattern_pointer->0 == TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
 				! bad preposition
-				if(p_phase == PHASE2) print "I didn't understand that sentence.^";
+				if(p_phase == PHASE2) PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 			} else if(parser_unknown_noun_found ~= 0) {
 				if(p_phase == PHASE2) {
 					_word = parser_unknown_noun_found --> 0;
@@ -1218,9 +1213,9 @@ Array guess_num_objects->5;
 							_PrintUnknownWord();
 							print "~ in this game.^";
 						} else if(_word == ALL_WORD) {
-							print "You can't use multiple objects with that verb.^";
+							PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 						} else {
-							print "You can't see any such thing.^";
+							PrintMsg(MSG_PARSER_CANT_SEE_SUCH_THING);
 						}
 					} else {
 						print "Sorry, I don't understand what ~";
@@ -1256,7 +1251,7 @@ Array guess_num_objects->5;
 		GPR_NUMBER:
 			! parsed_number contains the new number
 			if(p_phase == PHASE2 && parsed_number == -1000)  {
-				print "I didn't understand that number.^";
+				PrintMsg(MSG_PARSER_BAD_NUMBER);
 				return wn - verb_wordnum; ! bad match
 			}
 			_UpdateNounSecond(parsed_number, 1);
@@ -1308,7 +1303,7 @@ Array guess_num_objects->5;
 	scope_routine = 0; ! prepare for a new scope=Routine
 
 	if(parse->1 < 1) {
-		"Come again?";
+		return PrintMsg(MSG_PARSER_NO_INPUT);
 	}
 
 	verb_wordnum = 1;
@@ -1324,7 +1319,7 @@ Array guess_num_objects->5;
 			print "Case 1, Word ", verb_word, "^";
 #EndIf;
 			if(actor ~= player) jump treat_bad_line_as_conversation;
-			"I don't understand that word.";
+			return PrintMsg(MSG_PARSER_UNKNOWN_WORD);
 		}
 	}
 
@@ -1353,11 +1348,11 @@ Array guess_num_objects->5;
 			}
 		}
 		if(actor ~= player) jump treat_bad_line_as_conversation;
-		"That is not a verb I recognize.";
+		return PrintMsg(MSG_PARSER_UNKNOWN_VERB);
 
 .conversation;
 		if(_noun hasnt animate && _noun hasnt talkable) {
-			"You can't talk to ", (the) _noun, ".";
+			return PrintMsg(MSG_PARSER_CANT_TALK, _noun);
 		}
 		! See http://www.inform-fiction.org/manual/html/s18.html
 		! set actor
@@ -1533,7 +1528,7 @@ Array guess_num_objects->5;
 		! (c) generate a sequence of actions from the list
 		!     (stopping in the event of death or movement away).
 		if(parser_check_multiple == MULTIINSIDE_OBJECT && second hasnt open) {
-			print (The) second, " isn't open.^";
+        	PrintMsg(MSG_PARSER_CONTAINER_ISNT_OPEN, second);
 		} else {
 			_score = 0;
 			for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {

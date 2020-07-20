@@ -149,6 +149,33 @@ Constant MSG_TIE_DEFAULT "You would achieve nothing by this.";
 #Ifndef MSG_EXAMINE_CLOSED;
 Constant MSG_EXAMINE_CLOSED "It is closed.";
 #EndIf;
+#Ifndef MSG_PARSER_ONLY_TO_ANIMATE;
+Constant MSG_PARSER_ONLY_TO_ANIMATE "You can only do that to something animate.";
+#EndIf;
+#Ifndef MSG_PARSER_NOT_MULTIPLE_VERB;
+Constant MSG_PARSER_NOT_MULTIPLE_VERB "You can't use multiple objects with that verb.";
+#EndIf;
+#Ifndef MSG_PARSER_CANT_SEE_SUCH_THING;
+Constant MSG_PARSER_CANT_SEE_SUCH_THING "You can't see any such thing.";
+#EndIf;
+#Ifndef MSG_PARSER_BAD_NUMBER;
+Constant MSG_PARSER_BAD_NUMBER "I didn't understand that number.";
+#EndIf;
+#Ifndef MSG_PARSER_NO_INPUT;
+Constant MSG_PARSER_NO_INPUT "Come again?";
+#EndIf;
+#Ifndef MSG_PARSER_UNKNOWN_WORD;
+Constant MSG_PARSER_UNKNOWN_WORD "I don't understand that word.";
+#EndIf;
+#Ifndef MSG_PARSER_UNKNOWN_SENTENCE;
+Constant MSG_PARSER_UNKNOWN_SENTENCE "I don't understand that sentence";
+#EndIf;
+#Ifndef MSG_PARSER_UNKNOWN_VERB;
+Constant MSG_PARSER_UNKNOWN_VERB "That is not a verb I recognize.";
+#EndIf;
+#Ifndef MSG_PARSER_UNKNOWN_WORD;
+Constant MSG_PARSER_UNKNOWN_WORD "I don't understand that word.";
+#EndIf;
 
 !
 ! complex messages (enumerated)
@@ -260,6 +287,9 @@ Default MSG_PUTON_WORN 101;
 Default MSG_TAKE_BELONGS 102;
 Default MSG_TAKE_PART_OF 103;
 Default MSG_TAKE_NOT_AVAILABLE 104;
+Default MSG_PARSER_CONTAINER_ISNT_OPEN 105;
+Default MSG_PARSER_NOT_HOLDING 106;
+Default MSG_PARSER_CANT_TALK 107;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -457,6 +487,18 @@ Default LibraryMessages 0;
 #IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;
 	MSG_PARSER_NOTHING_TO_VERB:
 		"There is nothing to ",  (verbname) verb_word,".";
+#EndIf;
+#IfTrue MSG_PARSER_CONTAINER_ISNT_OPEN < 1000;
+	MSG_PARSER_CONTAINER_ISNT_OPEN:
+		print_ret (The) p_arg_1, " isn't open.";
+#EndIf;
+#IfTrue MSG_PARSER_NOT_HOLDING < 1000;
+	MSG_PARSER_NOT_HOLDING:
+		print_ret "You are not holding ", (the) p_arg_1, ".";
+#EndIf;
+#IfTrue MSG_PARSER_CANT_TALK < 1000;
+	MSG_PARSER_CANT_TALK:
+		print_ret "You can't talk to ", (the) p_arg_1, ".";
 #EndIf;
 #IfTrue MSG_TOUCHABLE_FOUND_CLOSED < 1000;
 	MSG_TOUCHABLE_FOUND_CLOSED:
