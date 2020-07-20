@@ -80,6 +80,8 @@ Constant PHASE2 = 2; ! parse the given pattern with side effects
 !Constant WORDSIZE 2; ! set by the compiler from Inform 6.30
 
 Constant ALL_WORD     = 'all';
+Constant EXCEPT_WORD1 = 'but';
+Constant EXCEPT_WORD2 = 'except';
 Constant AND_WORD     = 'and';
 Constant THEN_WORD    = 'then';
 Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute

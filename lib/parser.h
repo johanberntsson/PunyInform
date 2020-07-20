@@ -530,28 +530,19 @@ System_file;
 	! special rule to avoid "all in"
 	! (since 'in' in this combination is usually
 	! a preposition but also matches a direction noun)
-	if(p_parse_pointer-->0 == 'all' && 
+	if(p_parse_pointer-->0 == ALL_WORD && 
 		(p_parse_pointer + 4)-->0 == 'in') {
 		++wn;
 		return 0;
 	}
 
 	! skip 'the', 'all' etc
-	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD or 'but' or 'except') {
+	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
 #IfDef DEBUG_GETNEXTNOUN;
 		print "skipping ",(address) p_parse_pointer --> 0,"^";
 #Endif;
 		++wn;
 		p_parse_pointer = p_parse_pointer + 4;
-	}
-
-	if(p_parse_pointer --> 0 == 'but' or 'except') {
-		! this is cheating, should be replaced with
-		! code that can handle "take all but torch" etc.
-		if(p_phase == 2) {
-			print "I don't know the word ~",(address)p_parse_pointer-->0, "~.^";
-		}
-		return -2;
 	}
 
 	! check for pronouns
@@ -792,8 +783,7 @@ System_file;
 			p_parse_pointer = parse + 2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _noun hasnt animate) {
 				if(p_phase == PHASE2) {
-					PrintMsg(MSG_PARSER_NOT_HOLDING);
-					print "You can only do that to something animate.^";
+					PrintMsg(MSG_PARSER_ONLY_TO_ANIMATE);
 					return GPR_FAIL;
 				}
 			}
@@ -813,7 +803,9 @@ System_file;
 				if(_noun == -2) return GPR_FAIL;
 				if(_noun == -1) return GPR_REPARSE;
 				if(_noun > 0 && p_parse_pointer-->0 == ALL_WORD && 
-					(p_parse_pointer + 4)-->0 == 'except' or 'but') {
+					(p_parse_pointer + 4)-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
+					! remember noun as the filter word, and then reset
+					! noun so that it will be treated like a normal 'take all'
 					parser_all_except_object = _noun;
 					_noun = 0;
 				}
@@ -829,6 +821,23 @@ System_file;
 						print "adding plural ", which_object->0, " ", which_object->1, " ", multiple_objects --> 0, "^";
 #Endif;
 						wn = wn + which_object->1;
+						! check if 'take all Xs but Y'
+						p_parse_pointer = parse + 2 + 4 * (wn - 1);
+						if(_PeekAtNextWord() == EXCEPT_WORD1 or EXCEPT_WORD2) {
+							wn = wn + 1; 
+							_noun = _GetNextNoun(p_parse_pointer + 4, p_phase);
+							if(_noun <= 0) {
+								if(p_phase == PHASE2)
+									PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
+								return GPR_FAIL;
+							}
+							parser_all_except_object = _noun;
+							! allow 'take all Xs but Y one'
+							p_parse_pointer = parse + 2 + 4 * (wn - 1);
+							if(_PeekAtNextWord() == 'one') {
+								wn = wn + 1;
+							}
+						}
 						return GPR_MULTIPLE;
 					}
 					if(p_parse_pointer-->0 == ALL_WORD) {
