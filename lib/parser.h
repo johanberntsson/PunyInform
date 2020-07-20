@@ -355,105 +355,101 @@ System_file;
 #IfDef DEBUG_CHECKNOUN;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
-		if(noun_filter ~= 0 && _UserFilter(_obj) == 0) {
-			!print "noun_filter rejected ", (the) _obj,"^";
-			jump not_matched;
-		}
-		if(parser_check_multiple == MULTIHELD_OBJECT && _obj notin player) {
-			jump not_matched;
-		}
-		if(_obj provides parse_name) {
-			_j = wn;
-			_result = PrintOrRun(_obj, parse_name);
-			if(_result == -1) jump try_name_match;
-			_n = _n + _result; ! number of words consumed
-			wn = _j;
-			if(_n > wn && (ObjectIsInvisible(_obj, true) == false || action_debug == true)) {
-				if(action_debug == false && _obj has concealed or scenery) {
-					! don't consider for which, but remember
-					! as last resort if nothing else matches
-					if(_low_priority_match_len < _n) {
-						_low_priority_match_obj = _obj;
-						_low_priority_match_len = _n;
+		if((noun_filter == 0 || _UserFilter(_obj) ~= 0) && 
+				(parser_check_multiple ~= MULTIHELD_OBJECT || _obj in player) &&
+				(ObjectIsInvisible(_obj, true) == false || action_debug == true)) {
+			if(_obj provides parse_name) {
+				_j = wn;
+				_result = PrintOrRun(_obj, parse_name);
+				if(_result == -1) jump try_name_match;
+				_n = _n + _result; ! number of words consumed
+				wn = _j;
+				if(_n > wn) {
+					if(action_debug == false && _obj has concealed or scenery) {
+						! don't consider for which, but remember
+						! as last resort if nothing else matches
+						if(_low_priority_match_len < _n) {
+							_low_priority_match_obj = _obj;
+							_low_priority_match_len = _n;
 #IfDef DEBUG_CHECKNOUN;
-					print "concealed best score ", _low_priority_match_len, "^";
+						print "concealed best score ", _low_priority_match_len, "^";
 #EndIf;
+						}
+					} else if(_n == _best_score) {
+						_matches++;
+						which_object-->_matches = _obj;
+#IfDef DEBUG_CHECKNOUN;
+						print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+#EndIf;
+					} else if(_n > _best_score) {
+#IfDef DEBUG_CHECKNOUN;
+						print "New best score - matched with parse_name ", _n,"^";
+#EndIf;
+						_best_score = _n;
+						_matches = 1;
+						which_object-->1 = _obj;
 					}
-				} else if(_n == _best_score) {
-					_matches++;
-					which_object-->_matches = _obj;
-#IfDef DEBUG_CHECKNOUN;
-					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
-#EndIf;
-				} else if(_n > _best_score) {
-#IfDef DEBUG_CHECKNOUN;
-					print "New best score - matched with parse_name ", _n,"^";
-#EndIf;
-					_best_score = _n;
-					_matches = 1;
-					which_object-->1 = _obj;
 				}
-			}
-		} else {
+			} else {
 .try_name_match;
-			@get_prop_addr _obj name -> _name_array;
-			if(_name_array) {
-				! Assembler equivalent of _name_array_len = _obj.#name / 2  
-				@get_prop_len _name_array -> _name_array_len;
+				@get_prop_addr _obj name -> _name_array;
+				if(_name_array) {
+					! Assembler equivalent of _name_array_len = _obj.#name / 2  
+					@get_prop_len _name_array -> _name_array_len;
 #IfV5;
-				@log_shift _name_array_len (-1) -> _name_array_len;
+					@log_shift _name_array_len (-1) -> _name_array_len;
 #IfNot;
-				@div _name_array_len 2 -> _name_array_len;
+					@div _name_array_len 2 -> _name_array_len;
 #EndIf;
 
-				while(_IsSentenceDivider(_p) == false) {
+					while(_IsSentenceDivider(_p) == false) {
 #IfV5;
-					@scan_table _current_word _name_array _name_array_len -> _result ?success;
+						@scan_table _current_word _name_array _name_array_len -> _result ?success;
 #IfNot;
-					_j = 0;
-					@dec _name_array_len; ! This is needed for the loop.
+						_j = 0;
+						@dec _name_array_len; ! This is needed for the loop.
 .next_word_in_name_prop;
-					@loadw _name_array _j -> _result;
-					@je _result _current_word ?success;
-!					if(_name_array-->_j == _current_word) jump success;
-					@inc_chk _j _name_array_len ?~next_word_in_name_prop;
+						@loadw _name_array _j -> _result;
+						@je _result _current_word ?success;
+	!					if(_name_array-->_j == _current_word) jump success;
+						@inc_chk _j _name_array_len ?~next_word_in_name_prop;
 #EndIf;
-					jump not_matched;
+						jump not_matched;
 .success;
-#IfV5;
-#IfNot;
-					@inc _name_array_len; ! restore after loop
+#IfV3;
+						@inc _name_array_len; ! restore after loop
 #EndIf;
 #IfDef DEBUG_CHECKNOUN;
-					print " - matched ", (address) _current_word,"^";
+						print " - matched ", (address) _current_word,"^";
 #EndIf;
-					_n++;
-					_p = _p + 4;
-					_current_word = _p-->0;
-					if(_n >= _best_score && (ObjectIsInvisible(_obj, true) == false || action_debug == true)) {
-						if(action_debug == false && _obj has concealed or scenery) {
-							! don't consider for which, but remember
-							! as last resort if nothing else matches
-							if(_low_priority_match_len < _n) {
-								_low_priority_match_obj = _obj;
-								_low_priority_match_len = _n;
+						_n++;
+						_p = _p + 4;
+						_current_word = _p-->0;
+						if(_n >= _best_score) {
+							if(action_debug == false && _obj has concealed or scenery) {
+								! don't consider for which, but remember
+								! as last resort if nothing else matches
+								if(_low_priority_match_len < _n) {
+									_low_priority_match_obj = _obj;
+									_low_priority_match_len = _n;
 #IfDef DEBUG_CHECKNOUN;
-					print "concealed best score ", _low_priority_match_len, "^";
+						print "concealed best score ", _low_priority_match_len, "^";
 #EndIf;
+								}
+							} else if(_n == _best_score) {
+								_matches++;
+								which_object-->_matches = _obj;
+#IfDef DEBUG_CHECKNOUN;
+								print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+#EndIf;
+							} else if(_n > _best_score) {
+								_matches = 1;
+#IfDef DEBUG_CHECKNOUN;
+								print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
+#EndIf;
+								_best_score = _n;
+								which_object-->1 = _obj;
 							}
-						} else if(_n == _best_score) {
-							_matches++;
-							which_object-->_matches = _obj;
-#IfDef DEBUG_CHECKNOUN;
-							print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
-#EndIf;
-						} else if(_n > _best_score) {
-							_matches = 1;
-#IfDef DEBUG_CHECKNOUN;
-							print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
-#EndIf;
-							_best_score = _n;
-							which_object-->1 = _obj;
 						}
 					}
 				}
