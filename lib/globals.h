@@ -131,9 +131,13 @@ Property additive life   $ffff;
 
 Property n_to;  Property s_to; !  Slightly wastefully, these are
 Property e_to;  Property w_to; !  (they might be routines)
-Property ne_to; Property se_to;
+Property ne_to;
 #IfDef OPTIONAL_FULL_DIRECTIONS;
-Property nw_to; Property sw_to;
+Property nw_to;
+#EndIf;
+Property se_to;
+#IfDef OPTIONAL_FULL_DIRECTIONS;
+Property sw_to;
 #EndIf;
 Property u_to;  Property d_to;
 Property in_to; Property out_to;

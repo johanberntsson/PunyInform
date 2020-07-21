@@ -60,3 +60,6 @@ v1.3: new feature (and bug fix) release
 - Made parser a little quicker ny not checking if an object is visible once
   per word in player input.
 - Unified some messages, to save space.
+- Fixed error in order of directions. (ne, nw, se, sw came in the wrong order,
+  causing errors when some of these directions were translated to/from FAKE_E_OBJ
+  direction objects.)
