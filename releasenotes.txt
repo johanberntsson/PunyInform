@@ -8,7 +8,7 @@
 - Changed to 'buffer' and 'parse' for the player input and parsing
   arrays, since DM4 is describing them and renaming them breaks some
   existing Inform code and extensions needlessly.
-- Examine now works as in the standard library: containers without a 
+- Examine now works as in the standard library: containers without a
   description get a Search action, switchable objects show a message to
   say if they're on or off, after and react_after are run afterwards.
   Examining in darkness shows a message that it's dark.
@@ -23,13 +23,13 @@
 
 v1.2: bug fix release (18 July 2020)
 - Messages for pushing, pulling and turning scenery objects were missing.
-- You could use action Drop/Insert/PutOn with something worn without taking 
+- You could use action Drop/Insert/PutOn with something worn without taking
   it off first.
 - "(worn)" was never shown in inventory.
 - Library message for inventory slightly changed.
-- Fixed bugs in handling of low priority scenery/concealed objects in 
+- Fixed bugs in handling of low priority scenery/concealed objects in
   disambiguation
-- Take improved so it's not possible to take things which are part of other 
+- Take improved so it's not possible to take things which are part of other
   things or held by an NPC.
 - TAKE ALL doesn't try to take other people's belongings or things that are
   part of other things anymore.
@@ -42,11 +42,11 @@ v1.2: bug fix release (18 July 2020)
   in/on normal containers/supporters in the touchceiling.
 - Made game name bold in z5 games.
 - Improved 'all' so that 'take all from/off X' works.
-- Added 'get all from/off X' to grammar.  
+- Added 'get all from/off X' to grammar.
 - Added a second parameter to LibraryMessages routine, to allow for messages
   requiring two parameters.
 - Made LoopOverScope safer by having it loop over a copy of the scope array.
-  
+
 v1.2.1: bug fix release (19 July 2020)
 - The library version is now printed correctly at start of game and when player
   enters VERSION.
@@ -54,10 +54,9 @@ v1.2.1: bug fix release (19 July 2020)
 =======
 v1.3: new feature (and bug fix) release
 - Extended 'all' so that 'take all Xs except/but Y [one]' works.
-- Fixed bug in cloak.inf which gave a point even if "hang cloak on hook" 
+- Fixed bug in cloak.inf which gave a point even if "hang cloak on hook"
   failed.
 - Added call to AfterRoutines in PutOnSub.
 - Made parser a little quicker ny not checking if an object is visible once
   per word in player input.
-  
-
+- Unified some messages, to save space.
