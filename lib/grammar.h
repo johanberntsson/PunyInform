@@ -70,7 +70,7 @@ Verb 'give' 'feed' 'offer' 'pay'
 	* creature held                             -> Give reverse
 	* 'over' held 'to' creature                 -> Give;
 
-[ ADirection; 
+[ ADirection;
 	return (noun == Directions);
 ];
 
@@ -107,7 +107,7 @@ Verb 'open' 'uncover' 'unwrap'
 	* noun                                      -> Open
 	* noun 'with' held                          -> Unlock;
 
-Verb 'pick' 
+Verb 'pick'
 	* 'up' multi                                -> Take
 	* multi 'up'                                -> Take;
 
@@ -215,7 +215,7 @@ Verb 'wear'
 ];
 
 [ AskForSub;
-    if (noun == player) <<Inv>>; 
+    if (noun == player) <<Inv>>;
     PrintMsg(MSG_ASKFOR_SUCCESS);
 ];
 
@@ -227,7 +227,7 @@ Verb 'wear'
 
 [ CloseSub;
 	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT); rtrue; }
-	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN); rtrue; }
+	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN, noun); rtrue; }
 	give noun ~open;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
@@ -297,7 +297,7 @@ Verb 'wear'
 		}
 		! Convert to fake object
 		_door_dir = DirPropToFakeObj(_door_dir);
-		<<Go _door_dir>>; 
+		<<Go _door_dir>>;
 	}
 	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
 	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
@@ -317,7 +317,7 @@ Verb 'wear'
     if (noun.description == 0) {
         if (noun has container) {
             if (noun has open or transparent) <<Search noun>>;
-            else { PrintMsg(MSG_EXAMINE_CLOSED); rtrue;	}
+            else { PrintMsg(MSG_EXAMINE_CLOSED, noun); rtrue;	}
 		}
         if (noun has switchable) { PrintMsg(MSG_EXAMINE_ONOFF); rtrue; }
 		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
@@ -379,7 +379,7 @@ Verb 'wear'
     }
 
     _GrabIfNotHeld(noun);
-    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
+    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD, noun); rtrue; }
 	if(noun has worn) { PrintMsg(MSG_INSERT_WORN); rtrue; }
 
     if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
@@ -393,7 +393,7 @@ Verb 'wear'
 	! run after on object
 	if(AfterRoutines() == 1) rtrue;
 
-	! run after on receiver 
+	! run after on receiver
 	action = ##Receive;
 	if(RunRoutines(second, after) ~= 0) { action = ##Insert; rtrue; }
 	action = ##Insert;
@@ -502,20 +502,20 @@ Verb 'wear'
 	if (ObjectIsUntouchable(noun)) return;
 	objectloop(_i in noun) if(_i hasnt concealed && _i hasnt scenery) _f++;
 	if(noun has supporter) {
-		if(_f == 0) 
+		if(_f == 0)
 			PrintMsg(MSG_SEARCH_NOTHING_ON);
-		else 
+		else
 			PrintMsg(MSG_SEARCH_ON_IT_ISARE);
 		rtrue;
 	}
 	if(noun hasnt container) { PrintMsg(MSG_SEARCH_NOTHING_SPECIAL); rtrue; }
-	if(noun hasnt transparent && noun hasnt open) { 
-		PrintMsg(MSG_SEARCH_CANT_SEE_CLOSED); rtrue; 
+	if(noun hasnt transparent && noun hasnt open) {
+		PrintMsg(MSG_SEARCH_CANT_SEE_CLOSED); rtrue;
 	}
 	if(AfterRoutines() == 1) rtrue;
-	if(_f == 0) 
+	if(_f == 0)
 		PrintMsg(MSG_SEARCH_EMPTY);
-	else 
+	else
 		PrintMsg(MSG_SEARCH_IN_IT_ISARE);
 ];
 
@@ -543,7 +543,7 @@ Verb 'wear'
 [ SwitchOnSub;
     if (ObjectIsUntouchable(noun)) return;
     if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
-    if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; } 
+    if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; }
     give noun on;
     if (AfterRoutines() == 1) rtrue;
     if (keep_silent == 1) rtrue;
@@ -575,8 +575,8 @@ Verb 'wear'
 		action = ##ThrowAt;
 	}
 	if(noun has worn) {
-        PrintMsg(MSG_THROW_FIRST_TAKING);
-		if (noun has worn && noun in player) rtrue;
+        PrintMsg(MSG_THROW_WORN);
+        rtrue;
 	}
 	if(second hasnt animate) { PrintMsg(MSG_THROW_ANIMATE); rtrue; }
 	if(RunLife(second,##ThrowAt) ~= 0) rfalse;
@@ -589,7 +589,7 @@ Verb 'wear'
 
 [ TransferSub;
     _GrabIfNotHeld(noun);
-    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD); rtrue; }
+    if (noun notin player) { PrintMsg(MSG_INSERT_NOT_HELD, noun); rtrue; }
     if (second has supporter) <<PutOn noun second>>;
     !if (second == d_obj) <<Drop noun>>;
 	<Insert noun second>;
@@ -606,7 +606,7 @@ Verb 'wear'
 [ UnlockSub;
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK); rtrue; }
-	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_LOCKED); rtrue; }
+	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED); rtrue; }
 	if (noun.with_key ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun ~locked;
 	if (AfterRoutines() == 1) rtrue;
@@ -625,7 +625,7 @@ Verb 'wear'
 	give noun worn;
 	PrintMsg(MSG_WEAR_SUCCESS);
 ];
-	
+
 
 ! ---------------------
 ! Extended verbs
@@ -651,32 +651,32 @@ Verb 'consult'
 	* noun 'about' topic                        -> Consult
 	* noun 'on' topic                           -> Consult;
 
-Verb 'empty' 
-	* noun                                      -> Empty 
-	* 'out' noun                                -> Empty 
-	* noun 'out'                                -> Empty 
-	* noun 'to'/'into'/'on'/'onto' noun         -> EmptyT; 
+Verb 'empty'
+	* noun                                      -> Empty
+	* 'out' noun                                -> Empty
+	* noun 'out'                                -> Empty
+	* noun 'to'/'into'/'on'/'onto' noun         -> EmptyT;
 
-Verb 'in' 'inside' 
-	*                                           -> GoIn; 
+Verb 'in' 'inside'
+	*                                           -> GoIn;
 
 Verb 'kiss' 'embrace' 'hug'
     * creature                                  -> Kiss;
 
-Verb 'no' 
+Verb 'no'
 	*                                           -> No;
 
-Verb 'peel' 
+Verb 'peel'
 	* noun                                      -> Take
 	* 'off' noun                                -> Take;
 
-Verb 'pray' 
-    *                                           -> Pray; 
+Verb 'pray'
+    *                                           -> Pray;
 
-Verb 'pry' 'prise' 'prize' 'lever' 'jemmy' 'force' 
-	* noun 'with' held                          -> Unlock 
-	* 'apart'/'open' noun 'with' held           -> Unlock 
-	* noun 'apart'/'open' 'with' held           -> Unlock; 
+Verb 'pry' 'prise' 'prize' 'lever' 'jemmy' 'force'
+	* noun 'with' held                          -> Unlock
+	* 'apart'/'open' noun 'with' held           -> Unlock
+	* noun 'apart'/'open' 'with' held           -> Unlock;
 
 Verb 'set' 'adjust'
 	* noun                                      -> Set
@@ -863,7 +863,7 @@ Verb 'yes' 'y//'
 ];
 
 [ WaveSub;
-    if(parent(noun) ~= player) { PrintMsg(MSG_WAVE_NOTHOLDING); rtrue; }
+    if(parent(noun) ~= player) { PrintMsg(MSG_WAVE_NOTHOLDING, noun); rtrue; }
     PrintMsg(MSG_WAVE_DEFAULT);
 ];
 
@@ -952,7 +952,7 @@ Verb meta 'quit' 'q//'
 		PANum(places_score);
 		print "visiting various places^";
 	}
-	@new_line; 
+	@new_line;
 	PANum(score);
 	PrintMsg(MSG_FULLSCORE_END);
 ];
@@ -963,12 +963,12 @@ Verb meta 'quit' 'q//'
 	PrintMsg(MSG_LOOKMODE_NORMAL);
 ];
 
-[ LookModeLongSub; 
+[ LookModeLongSub;
 	lookmode=2;
 	PrintMsg(MSG_LOOKMODE_LONG);
 ];
 
-[ LookModeShortSub; 
+[ LookModeShortSub;
 	lookmode=3;
 	PrintMsg(MSG_LOOKMODE_SHORT);
 ];
@@ -1016,7 +1016,7 @@ Verb meta 'quit' 'q//'
 #IfV3;
 [ SaveSub;
 	@save ?save_success;
-	PrintMsg(MSG_SAVE_FAILED); 
+	PrintMsg(MSG_SAVE_FAILED);
 	rtrue;
 .save_success;
     PrintMsg(MSG_SAVE_SUCCESS);
@@ -1135,7 +1135,7 @@ Verb meta 'verify'
 		j = parent(i);
 		if(j) {
 			if(f == 0) @new_line;
-			f = 1; 
+			f = 1;
 			print "- ", (the) i, "   ";
 			if (j == player) {
 				if (i has worn) {
@@ -1143,7 +1143,7 @@ Verb meta 'verify'
 				} else {
 					print "(held)";
 				}
-			} else if(j has animate) print "(given away)"; 
+			} else if(j has animate) print "(given away)";
 			else if(j has visited) print "(in ", (name) j, ")";
 			else if(j has container) print "(inside ", (the) j, ")";
 			else if(j has supporter) print "(on ", (the) j, ")";
@@ -1235,7 +1235,7 @@ Global scope_cnt;
 	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
 ];
 
-[ RandomSeedSub _i; 
+[ RandomSeedSub _i;
 	! sets the random seed, making randomness predictable
 	! also a test of special and number, thus the fancy grammar
 	!print special_word, " ", special_number," ",parsed_number,"^";
@@ -1276,7 +1276,7 @@ Global scope_cnt;
 		print " (";
 		if(_p has supporter)
 			@print_char 'o';
-		else 
+		else
 			@print_char 'i';
 		print "n ", (name) _p, ")";
 	}
@@ -1317,14 +1317,14 @@ Global scope_cnt;
 ! HELP ROUTINES
 ! ---------------------
 
-[ _ListObjsMsg; 
+[ _ListObjsMsg;
 	print "^You can ";
 	if(also_flag) print "also ";
 	print "see ";
 ];
 
-[ _ListObjsInOnMsg p_parent; 
-	if(p_parent has supporter) print "^On "; else print "^In "; 
+[ _ListObjsInOnMsg p_parent;
+	if(p_parent has supporter) print "^On "; else print "^In ";
 	print (the) p_parent, " you can ";
 	if(also_flag) print "also ";
 	print "see ";
@@ -1377,7 +1377,7 @@ Global scope_cnt;
 			_obj = parent(_obj);
 		}
 		while(_ceil ~= player or 0) {
-		
+
 			@new_line;
 			if(_describe_room) {
 				if(_ceil == location) {
@@ -1551,7 +1551,7 @@ Global scope_cnt;
 		if(real_location provides cant_go) {
 			print_ret (string) real_location.cant_go;
 		}
-        PrintMsg(MSG_GO_CANT_GO); 
+        PrintMsg(MSG_GO_CANT_GO);
 		rtrue;
 	}
 
@@ -1596,4 +1596,3 @@ Global scope_cnt;
 	else
 		print (address) p_v;
 ];
-

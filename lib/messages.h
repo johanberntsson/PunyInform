@@ -47,9 +47,6 @@ Constant MSG_THROW_ANIMATE "Futile.";
 #Ifndef MSG_THROW_SUCCESS;
 Constant MSG_THROW_SUCCESS "You lack the nerve when it comes to the crucial moment.";
 #Endif;
-#Ifndef MSG_CLOSE_NOT_OPEN;
-Constant MSG_CLOSE_NOT_OPEN "It isn't open.";
-#Endif;
 #Ifndef MSG_SMELL_SUCCESS;
 Constant MSG_SMELL_SUCCESS "You smell nothing unexpected.";
 #Endif;
@@ -110,9 +107,6 @@ Constant MSG_FILL_NO_WATER "But there's no water here to carry.";
 #Ifndef MSG_DIG_NO_USE;
 Constant MSG_DIG_NO_USE "Digging would achieve nothing here.";
 #EndIf;
-#Ifndef MSG_RUB_DEFAULT;
-Constant MSG_RUB_DEFAULT "You achieve nothing by this.";
-#EndIf;
 #Ifndef MSG_WAIT_SUCCESS;
 Constant MSG_WAIT_SUCCESS "Nothing happens.";
 #EndIf;
@@ -125,9 +119,6 @@ Constant MSG_PUSHDIR_DEFAULT "Is that the best you can think of?";
 #Ifndef MSG_JUMP;
 Constant MSG_JUMP "You jump on the spot, fruitlessly.";
 #EndIf;
-#Ifndef MSG_JUMP_OVER;
-Constant MSG_JUMP_OVER "You would achieve nothing by this.";
-#EndIf;
 #Ifndef MSG_REMOVE_SUCCESS;
 Constant MSG_REMOVE_SUCCESS "Removed.";
 #EndIf;
@@ -135,19 +126,13 @@ Constant MSG_REMOVE_SUCCESS "Removed.";
 Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
 #EndIf;
 #Ifndef MSG_LOOKMODE_NORMAL;
-Constant MSG_LOOKMODE_NORMAL "This game is now in its normal ~brief~ printing mode, which gives long descriptions of places never before visited and short descriptions otherwise.";
+Constant MSG_LOOKMODE_NORMAL "This game is now in its normal ~brief~ mode, which gives long descriptions of locations never before visited and short descriptions otherwise.";
 #EndIf;
 #Ifndef MSG_LOOKMODE_LONG;
 Constant MSG_LOOKMODE_LONG "This game is now in its ~verbose~ mode, which always gives long descriptions of locations (even if you've been there before).";
 #EndIf;
 #Ifndef MSG_LOOKMODE_SHORT;
 Constant MSG_LOOKMODE_SHORT "This game is now in its ~superbrief~ mode, which always gives short descriptions of locations (even if you haven't been there before).";
-#EndIf;
-#Ifndef MSG_TIE_DEFAULT;
-Constant MSG_TIE_DEFAULT "You would achieve nothing by this.";
-#EndIf;
-#Ifndef MSG_EXAMINE_CLOSED;
-Constant MSG_EXAMINE_CLOSED "It is closed.";
 #EndIf;
 #Ifndef MSG_PARSER_ONLY_TO_ANIMATE;
 Constant MSG_PARSER_ONLY_TO_ANIMATE "You can only do that to something animate.";
@@ -163,9 +148,6 @@ Constant MSG_PARSER_BAD_NUMBER "I didn't understand that number.";
 #EndIf;
 #Ifndef MSG_PARSER_NO_INPUT;
 Constant MSG_PARSER_NO_INPUT "Come again?";
-#EndIf;
-#Ifndef MSG_PARSER_UNKNOWN_WORD;
-Constant MSG_PARSER_UNKNOWN_WORD "I don't understand that word.";
 #EndIf;
 #Ifndef MSG_PARSER_UNKNOWN_SENTENCE;
 Constant MSG_PARSER_UNKNOWN_SENTENCE "I don't understand that sentence";
@@ -191,7 +173,7 @@ Default MSG_EAT_ANIMATE = 7;
 Default MSG_DROP_NOT_HOLDING = 8;
 Default MSG_OPEN_SUCCESS = 9;
 Default MSG_CLOSE_SUCCESS = 10;
-Default MSG_THROW_FIRST_TAKING = 11;
+Default MSG_THROW_WORN = 11;
 Default MSG_SHOW_NOT_HOLDING = 12;
 Default MSG_SHOW_SUCCESS = 13;
 Default MSG_GIVE_NOT_HOLDING = 14;
@@ -272,7 +254,7 @@ Default MSG_FULLSCORE_END 87;
 #EndIf;
 Default MSG_SCORE_SUCCESS 88;
 Default MSG_UNLOCK_NOT_A_LOCK 89;
-Default MSG_UNLOCK_ALREADY_LOCKED 90;
+Default MSG_UNLOCK_ALREADY_UNLOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
 Default MSG_UNLOCK_SUCCESS 92;
 Default MSG_ENTER_BAD_LOCATION 93;
@@ -290,6 +272,15 @@ Default MSG_TAKE_NOT_AVAILABLE 104;
 Default MSG_PARSER_CONTAINER_ISNT_OPEN 105;
 Default MSG_PARSER_NOT_HOLDING 106;
 Default MSG_PARSER_CANT_TALK 107;
+Default MSG_WAVE_NOTHOLDING 108;
+Default MSG_JUMP_OVER 109;
+Default MSG_TIE_DEFAULT 110;
+Default MSG_CLOSE_NOT_OPEN 111;
+Default MSG_RUB_DEFAULT 112;
+Default MSG_SQUEEZE_DEFAULT 113;
+Default MSG_EXAMINE_CLOSED 114;
+Default MSG_EMPTY_IS_CLOSED 115;
+
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
@@ -318,9 +309,6 @@ Constant MSG_SORRY_DEFAULT "Oh, don't apologize.";
 #EndIf;
 #Ifndef MSG_SQUEEZE_YOURSELF;
 Constant MSG_SQUEEZE_YOURSELF "Keep your hands to yourself.";
-#EndIf;
-#Ifndef MSG_SQUEEZE_DEFAULT;
-Constant MSG_SQUEEZE_DEFAULT "You achieve nothing by this.";
 #EndIf;
 
 #Ifndef MSG_SWIM_DEFAULT;
@@ -359,13 +347,13 @@ Constant MSG_STRONG_DEFAULT "Real adventurers do not use such language.";
 
 Default MSG_BLOW_DEFAULT 300;
 Default MSG_EMPTY_CANT_CONTAIN 301;
-Default MSG_EMPTY_IS_CLOSED 302;
+Default MSG_WAVE_DEFAULT 302;
 Default MSG_EMPTY_ALREADY_EMPTY 303;
 Default MSG_SET_DEFAULT 304;
 Default MSG_SET_TO_DEFAULT 305;
-Default MSG_WAVE_NOTHOLDING 306;
-Default MSG_WAVE_DEFAULT 307;
 #EndIf;
+
+
 
 Default LibraryMessages 0;
 
@@ -382,7 +370,7 @@ Default LibraryMessages 0;
 	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
 		"Nothing obvious happens.";
 #IfTrue MSG_SACK_PUTTING < 1000;
-	MSG_SACK_PUTTING:	
+	MSG_SACK_PUTTING:
 		"(putting ", (the) p_arg_1, " into ", (the) SACK_OBJECT, " to make room)";
 #EndIf;
 #IfTrue MSG_PROMPT < 1000;
@@ -409,11 +397,12 @@ Default LibraryMessages 0;
 		"You are unable to.";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItorThem) noun, ".";
-	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT, 
+	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT,
 		MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK:
 		"That doesn't seem to be something you can ", (verbname) verb_word, ".";
 #IfTrue MSG_WEAR_NOT_CLOTHING < 1000;
 	MSG_WEAR_NOT_CLOTHING:
+		! Can't use the same message as MSG_OPEN_YOU_CANT etc, since verb might be PUT
 		"That's not something you can wear.";
 #EndIf;
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
@@ -422,10 +411,6 @@ Default LibraryMessages 0;
 		"First, you'd have to leave ", (the) p_arg_1, ".";
 	MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS, MSG_UNLOCK_SUCCESS:
 		"You ", (verbname) verb_word, " ", (the) noun, ".";
-#IfTrue MSG_THROW_FIRST_TAKING < 1000;
-	MSG_THROW_FIRST_TAKING:
-		"(first taking ", (the) noun, " off)";
-#EndIf;
 	MSG_GIVE_SUCCESS, MSG_SHOW_SUCCESS:
 		print_ret (The) second, " doesn't seem interested.";
 	MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
@@ -454,10 +439,10 @@ Default LibraryMessages 0;
 	MSG_PUTON_SUCCESS:
 		"You put ", (the) noun, " on ", (the) second, ".";
 #EndIf;
-	MSG_ASK_SUCCESS, MSG_ANSWER_SUCCESS: 
+	MSG_ASK_SUCCESS, MSG_ANSWER_SUCCESS:
 		"There is no reply.";
 #IfTrue MSG_WEAR_ALREADY_WORN < 1000;
-	MSG_WEAR_ALREADY_WORN:	
+	MSG_WEAR_ALREADY_WORN:
 		"You are already wearing ", (ItorThem) noun, ".";
 #EndIf;
 #IfTrue MSG_WEAR_SUCCESS < 1000;
@@ -477,72 +462,56 @@ Default LibraryMessages 0;
 	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
 		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ". ";
 	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
-		"You switch ", (the) noun, " ", (OnOff) noun, ". "; 	
-	MSG_DROP_WORN, MSG_INSERT_WORN, MSG_PUTON_WORN:
+		"You switch ", (the) noun, " ", (OnOff) noun, ". ";
+	MSG_DROP_WORN, MSG_INSERT_WORN, MSG_PUTON_WORN, MSG_THROW_WORN:
 		"First you'd have to take off ", (the) noun, ".";
-#IfTrue MSG_INSERT_NOT_HELD < 1000;
-	MSG_INSERT_NOT_HELD:
-		"You are not holding ", (the) noun, ".";
-#EndIf;
 #IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;
 	MSG_PARSER_NOTHING_TO_VERB:
 		"There is nothing to ",  (verbname) verb_word,".";
 #EndIf;
-#IfTrue MSG_PARSER_CONTAINER_ISNT_OPEN < 1000;
-	MSG_PARSER_CONTAINER_ISNT_OPEN:
-		print_ret (The) p_arg_1, " isn't open.";
-#EndIf;
-#IfTrue MSG_PARSER_NOT_HOLDING < 1000;
-	MSG_PARSER_NOT_HOLDING:
-		print_ret "You are not holding ", (the) p_arg_1, ".";
-#EndIf;
+	MSG_PARSER_NOT_HOLDING, MSG_WAVE_NOTHOLDING, MSG_INSERT_NOT_HELD:
+		print_ret "But you are not holding ", (the) p_arg_1, ".";
 #IfTrue MSG_PARSER_CANT_TALK < 1000;
 	MSG_PARSER_CANT_TALK:
 		print_ret "You can't talk to ", (the) p_arg_1, ".";
 #EndIf;
-#IfTrue MSG_TOUCHABLE_FOUND_CLOSED < 1000;
-	MSG_TOUCHABLE_FOUND_CLOSED:
-!		print_ret (The) p_arg_1, " isn't open.";
+	MSG_TOUCHABLE_FOUND_CLOSED, MSG_PARSER_CONTAINER_ISNT_OPEN, MSG_CLOSE_NOT_OPEN:
 		print_ret (CObjIs) p_arg_1, "n't open.";
-#EndIf;
 #IfTrue MSG_CONSULT_NOTHING_INTERESTING < 1000;
 	MSG_CONSULT_NOTHING_INTERESTING:
 		"You discover nothing of interest in ", (the) second, ".";
 #EndIf;
-#IfTrue MSG_CUT_NO_USE < 1000;
-	MSG_CUT_NO_USE:
-		"Cutting ", (the) noun, " up would achieve little.";
-#EndIf;
-	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_LOCKED:
+	MSG_CUT_NO_USE, MSG_JUMP_OVER, MSG_TIE_DEFAULT:
+		"You would achieve nothing by this.";
+	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_UNLOCKED:
 		print_ret (CObjIs) noun, " already ", (verbname) verb_word, "ed.";
 #IfTrue MSG_LOCK_CLOSE_FIRST < 1000;
 	MSG_LOCK_CLOSE_FIRST:
-		"First you have to close ", (the) noun, ".";
+		"First you'd have to close ", (the) noun, ".";
 #EndIf;
 	MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT:
 		print_ret (The) second, " doesn't seem to fit the lock.";
-#IfTrue MSG_REMOVE_CLOSED < 1000;
-	MSG_REMOVE_CLOSED:
-		print_ret (The) p_arg_1, " is unfortunately closed.";
-#EndIf;
+	MSG_EXAMINE_CLOSED, MSG_REMOVE_CLOSED, MSG_EMPTY_IS_CLOSED:
+		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " closed.";
 #IfTrue MSG_REMOVE_NOT_HERE < 1000;
 	MSG_REMOVE_NOT_HERE:
 		"But ", (the) noun, " isn't there now.";
 #EndIf;
 #IfTrue MSG_SEARCH_IN_IT_ISARE < 1000;
 	MSG_SEARCH_IN_IT_ISARE:
-		print "In ", (the) noun, " ", (isorare) noun;
-		if(_PrintContents(" ", noun)) print ".^";
+		print "In ";
+		SearchInOnNoun();
+		rtrue;
 #EndIf;
 #IfTrue MSG_SEARCH_ON_IT_ISARE < 1000;
 	MSG_SEARCH_ON_IT_ISARE:
-		print "On ", (the) noun, " ", (isorare) noun;
-		if(_PrintContents(" ", noun)) print ".^";
+		print "On ";
+		SearchInOnNoun();
+		rtrue;
 #EndIf;
 #IfTrue MSG_SEARCH_EMPTY < 1000;
 	MSG_SEARCH_EMPTY:
 		print_ret (CObjIs) noun, " empty.";
-!		print_ret (The) noun, " is empty.";
 #EndIf;
 #IfTrue MSG_SEARCH_NOTHING_ON < 1000;
 	MSG_SEARCH_NOTHING_ON:
@@ -560,6 +529,8 @@ Default LibraryMessages 0;
 	MSG_EAT_SUCCESS:
 		"You eat ", (the) noun, ". Not bad.";
 #EndIf;
+MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
+	"You achieve nothing by this.";
 #IfTrue MSG_ORDERS_WONT < 1000;
 	MSG_ORDERS_WONT:
 		print_ret (The) actor, " has better things to do.";
@@ -583,6 +554,7 @@ Default LibraryMessages 0;
 		if (deadflag) print "In that game you"; else print "You have so far";
 		print " scored ", score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
 		if(turns ~= 1) print "s";
+		rtrue;
 #EndIf;
 #IfDef OPTIONAL_FULL_SCORE;
 #IfTrue MSG_FULLSCORE_START < 1000;
@@ -593,7 +565,7 @@ Default LibraryMessages 0;
 #EndIf;
 #IfTrue MSG_FULLSCORE_END < 1000;
 	MSG_FULLSCORE_END:
-		"total (out of ", MAX_SCORE, ")";	
+		"total (out of ", MAX_SCORE, ")";
 #EndIf;
 #EndIf;
 #IfTrue MSG_RESTART_RESTORE_OR_QUIT < 1000;
@@ -641,10 +613,6 @@ Default LibraryMessages 0;
 	MSG_EMPTY_CANT_CONTAIN:
 		print_ret (The) p_arg_1, " can't contain things.";
 #EndIf;
-#IfTrue MSG_EMPTY_IS_CLOSED < 1000;
-	MSG_EMPTY_IS_CLOSED:
-		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " closed.";
-#EndIf;
 #IfTrue MSG_EMPTY_ALREADY_EMPTY < 1000;
 	MSG_EMPTY_ALREADY_EMPTY:
 		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " empty already.";
@@ -657,10 +625,6 @@ Default LibraryMessages 0;
 	MSG_SET_TO_DEFAULT:
 		"No, you can't set ", (thatorthose) noun, " to anything.";
 #EndIf;
-#IfTrue MSG_WAVE_NOTHOLDING < 1000;
-	MSG_WAVE_NOTHOLDING:
-		"But you aren't holding ", (thatorthose) noun, ".";
-#EndIf;
 #IfTrue MSG_WAVE_DEFAULT < 1000;
 	MSG_WAVE_DEFAULT:
 		"You look ridiculous waving ", (the) noun, ".";
@@ -671,6 +635,11 @@ default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
 	}
+];
+
+[ SearchInOnNoun;
+	print (the) noun, " ", (isorare) noun;
+	if(_PrintContents(" ", noun)) print ".^";
 ];
 
 [OnOff obj;
@@ -698,7 +667,7 @@ default:
 ];
 
 [ ItorThem obj;
-	if (obj == player) { print "yourself"; rtrue; } 
+	if (obj == player) { print "yourself"; rtrue; }
 	if (obj has pluralname) { print "them"; rtrue; }
 	if (obj has animate) {
 		if (obj has female) { print "her"; rtrue; }

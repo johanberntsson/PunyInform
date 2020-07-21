@@ -8,65 +8,65 @@ Abbreviate ", ";
 Abbreviate "You ";
 Abbreviate "'t ";
 Abbreviate "thing";
-Abbreviate "_array";
 Abbreviate "There is no";
 Abbreviate "_to/";
 Abbreviate "tion";
-Abbreviate "This game is now in its ";
+Abbreviate "you ";
 Abbreviate "hat ";
-Abbreviate "already";
 Abbreviate "to ";
-Abbreviate "which ";
+Abbreviate "This game is now in its ";
+Abbreviate "lready ";
+Abbreviate "I don";
 Abbreviate "That's";
+Abbreviate "which ";
+Abbreviate "ave ";
+Abbreviate "But ";
 Abbreviate "ing ";
 Abbreviate "is ";
-Abbreviate "ou ";
-Abbreviate "rea";
 Abbreviate "nderstand ";
+Abbreviate "you";
 Abbreviate "re ";
+Abbreviate "rea";
 Abbreviate "t some";
 Abbreviate "hat.";
 Abbreviate "the";
 Abbreviate "descrip";
-Abbreviate "have ";
-Abbreviate "would ";
+Abbreviate "_arra";
 Abbreviate "can ";
 Abbreviate "hink ";
-Abbreviate "y this.";
-Abbreviate "chieve ";
-Abbreviate "close";
-Abbreviate "objects";
-Abbreviate "'s ";
+Abbreviate "You'";
 Abbreviate "ble";
-Abbreviate "ope";
+Abbreviate "ve no";
+Abbreviate "see";
+Abbreviate "/when_o";
+Abbreviate "LookMo";
 Abbreviate "in ";
-Abbreviate "/when_";
+Abbreviate "self";
+Abbreviate "befo";
 Abbreviate "some";
-Abbreviate " in";
 Abbreviate "can";
+Abbreviate " in";
 Abbreviate "her";
 Abbreviate " on";
-Abbreviate " do";
-Abbreviate "before";
-Abbreviate "LookMode";
-Abbreviate "ave";
-Abbreviate " mo";
-Abbreviate "ter";
-Abbreviate " isn";
+Abbreviate "bject";
 Abbreviate " no";
-Abbreviate "see";
+Abbreviate "close";
 Abbreviate " of";
+Abbreviate "Not";
 Abbreviate "dire";
-Abbreviate " re";
 Abbreviate "aren";
-Abbreviate "self";
-Abbreviate "ain";
-Abbreviate " an";
-Abbreviate "ame";
+Abbreviate "der";
 Abbreviate " lo";
-Abbreviate "ted.";
-Abbreviate "you";
+Abbreviate "ain";
 Abbreviate "pen";
+Abbreviate " an";
+Abbreviate " do";
+Abbreviate "ame";
+Abbreviate "wit";
+Abbreviate " be";
+Abbreviate " mo";
+Abbreviate "ver";
+Abbreviate "irst";
 #EndIf;
 
 Constant Grammar__Version = 2;
@@ -119,11 +119,11 @@ Attribute workflag;
 
 ! when you order a NPC, but the command isn't understood
 ! See: http://www.inform-fiction.org/manual/html/s18.html
-Fake_Action Order; 
+Fake_Action Order;
 Fake_Action Receive;
 Fake_Action ThrownAt;
-Fake_Action NotUnderstood; 
-Fake_Action PluralFound; 
+Fake_Action NotUnderstood;
+Fake_Action PluralFound;
 
 Property additive before $ffff;
 Property additive after  $ffff;
@@ -296,7 +296,7 @@ Constant GS_QUIT             = -1;
 Constant GS_PLAYING          = 0;
 Constant GS_DEAD             = 1;
 Constant GS_WIN              = 2;
-Constant GS_DEATHMESSAGE     = 3; 
+Constant GS_DEATHMESSAGE     = 3;
 
 Constant FORM_CDEF           = 1;
 Constant FORM_DEF            = 2;
@@ -439,7 +439,7 @@ Array parse->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra wo
 
 ! extra arrays to be able to ask for additional info (do you mean X or Y?)
 Array buffer2->(MAX_INPUT_CHARS + 3);
-Array parse2->(2 + 4 * (MAX_INPUT_WORDS + 1)); 
+Array parse2->(2 + 4 * (MAX_INPUT_WORDS + 1));
 
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL  = 1;
@@ -472,12 +472,12 @@ Array task_scores -> 1;
 Object Directions
 	with
 		description "A look in that direction reveals nothing new.",
-		short_name [; 
+		short_name [;
 			if(selected_direction_index)
 				print (string) direction_name_array-->selected_direction_index;
 			else
-				print "unknown direction"; 
-			rtrue; 
+				print "unknown direction";
+			rtrue;
 		],
 #IfV5;
 		parse_name [_len _i _w _arr;
@@ -518,7 +518,7 @@ Object Directions
 				@loadw abbr_direction_array _i -> _w1;
 				@loadw full_direction_array _i -> _w2;
 				@je _w _w1 _w2 ?~doesnt_match;
-				
+
 !				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
 					selected_direction_index = _i;
 					selected_direction = direction_properties_array --> selected_direction_index;
@@ -527,7 +527,7 @@ Object Directions
 !			}
 .doesnt_match;
 				@inc_chk _i _len ?~checkNextDir;
-			
+
 			! failure
 			selected_direction_index = 0;
 			selected_direction = 0;
@@ -535,4 +535,3 @@ Object Directions
 #EndIf;
 		]
 has scenery proper;
-
