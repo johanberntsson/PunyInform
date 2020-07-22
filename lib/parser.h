@@ -317,11 +317,6 @@ System_file;
 	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
 
-	if(wn == nouncache_wn) {
-		return nouncache_result;
-	}
-	nouncache_wn = wn;
-
 	! this is needed after a which question, so that we 
 	! can answer 'the pink book' and similar
 	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an') {
@@ -332,7 +327,6 @@ System_file;
 	if((((p_parse_pointer-->0) -> #dict_par1) & 128) == 0) {
 		! this word doesn't have the noun flag set,
 		! so it can't be part of a noun phrase
-		nouncache_result = 0;
 		return 0;
 	}
 
@@ -476,17 +470,14 @@ System_file;
 		print "Matched a single object: ", (the) _result,
 			", num words ", which_object->1, "^";
 #EndIf;
-		nouncache_result = _result;
 		return _result;
 	}
 #IfDef DEBUG_CHECKNOUN;
 				print "Matches: ", _matches,", num words ", which_object->1, "^";
 #EndIf;
 	if(_matches > 1) {
-		nouncache_result = -_matches;
 		return -_matches;
 	}
-	nouncache_result = 0;
 	return 0;
 ];
 
@@ -620,7 +611,6 @@ System_file;
 
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 			wn = 1;
-			nouncache_wn = -1; ! clear noun cache
 			_noun = _CheckNoun(parse+2);
 			wn = _oldwn; ! and restore it after the call
 			if(_noun > 0) {
@@ -1298,7 +1288,6 @@ Array guess_num_objects->5;
 	actor = player;
 	noun = 0; ! needed since _ParsePattern not always called
 	second = 0;
-	nouncache_wn = -1; ! clear noun cache
 
 	if(scope_routine ~= 0) {
 		! if true, then scope=Routine was executed
