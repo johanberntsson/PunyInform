@@ -481,7 +481,7 @@ Object Directions
 			if(selected_direction_index)
 				print (string) direction_name_array-->selected_direction_index;
 			else
-				print "unknown direction";
+				print "direction";
 			rtrue;
 		],
 #IfV5;

@@ -73,3 +73,9 @@ v1.3: new feature (and bug fix) release
 - added num_words as described in DM4
 - Split up extra verbs in normal verbs and metaverbs. New constant:
   OPTIONAL_EXTENDED_METAVERBS
+- Fixed so "it" can not refer to Directions.
+- Changed default name of Directions object from "unknown direction" to
+  "direction", since it looks more sensible in most situations.
+- Fixed so PutOn requires the noun to be held.
+- Removed extra error message if the player fails to auto-take noun in
+  InsertSub.

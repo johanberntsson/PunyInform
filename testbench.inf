@@ -1370,6 +1370,24 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 		time_left 0,
 	has container openable enterable static;
 
+Book -> -> RedBook "red book"
+		with
+			name 'red' 'book',
+			initial "On the bottom of the box, there is a red book.",
+			description "The book is old and worn.",
+			before [;
+	 			Take:
+	 				if(player in LargeBox) {
+	 					"It's too hard to pick it up while inside the box.";
+	 				}
+					if(BlueBook in player) {
+						print "The blue book does not want to be near the red book and jumps out of your grasp and lands on the floor.^^";
+						move BlueBook to location;
+					}
+
+
+			];
+
 Object -> -> Gun "gun"
 	with
 		name 'gun',
@@ -1383,37 +1401,19 @@ Object -> -> -> Trigger "trigger"
 	with
 		name 'trigger';
 
-Object -> -> Ladder "ladder"
+Object -> Ladder "ladder"
 	with
 		name 'ladder',
 		inside_description "It's a really good ladder for standing on.",
 	has supporter enterable;
 
-Object -> -> -> Sticker "sticker"
+Object -> -> Sticker "sticker"
 	with
 		name 'sticker',
 		each_turn [;
 #IfnDef USEINFORM;
-		if(location ~= thedark) "The sticker looks oh so sticky.";
+!		if(location ~= thedark) "The sticker looks oh so sticky.";
 #Endif;
-		];
-
-Book -> -> RedBook "red book"
-	with
-		name 'red' 'book',
-		initial "On the bottom of the box, there is a red book.",
-		description "The book is old and worn.",
-		before [;
- 			Take:
- 				if(player in LargeBox) {
- 					"It's too hard to pick it up while inside the box.";
- 				}
-				if(BlueBook in player) {
-					print "The blue book does not want to be near the red book and jumps out of your grasp and lands on the floor.^^";
-					move BlueBook to location;
-				}
-
-
 		];
 
 Object -> BlueBook "blue book" class Book
