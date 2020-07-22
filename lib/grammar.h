@@ -1072,7 +1072,7 @@ Verb meta 'quit' 'q//'
 ! Extended meta verbs
 ! ---------------------
 
-#IfDef OPTIONAL_EXTENDED_VERBSET;
+#IfDef OPTIONAL_EXTENDED_METAVERBS;
 Constant HDR_GAMEFLAGS     $10;
 Global transcript_mode = false;        ! true when game scripting is on
 Global xcommsdir = false;              ! true if command recording is on

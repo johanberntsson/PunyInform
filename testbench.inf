@@ -1,7 +1,7 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
 !% $MAX_STATIC_DATA=60000
-!% $MAX_LABELS=5000 
+!% $MAX_LABELS=5000
 !% $MAX_ZCODE_SIZE=50000
 
 
@@ -27,6 +27,7 @@ Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error cod
 #IfnDef USEINFORM;
 ! Uncomment to add optional features to PunyLib
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
@@ -48,7 +49,7 @@ Constant Story      "Testbench";
 Constant Headline   "^A sandbox for PunyInform development^";
 
 #IfDef DEBUG_TIMER;
-Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0 
+Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0
 #EndIf;
 
 
@@ -89,7 +90,7 @@ Constant F_BOUGHT_TICKETS 2;
 #IfDef TEST_BEFOREAFTER;
 [LookRoutine;
 	"***** LookRoutine, yay!";
-];	
+];
 #EndIf;
 
 
@@ -107,6 +108,10 @@ Include "ext_flags.h";
 #IfNot;
 Include "globals.h";
 #EndIf;
+
+![ NewRoom;
+!	print "New room, yay!^";
+!];
 
 [ BeforeParsing;
 	!print "num_words ", num_words, "^";
@@ -1079,11 +1084,11 @@ Include "puny.h";
 #Endif;
 
 Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
-[SCN_SUN; 
+[SCN_SUN;
   deadflag = 1;
-  "As you stare right into the sun, you feel a burning sensation in your eyes. 
+  "As you stare right into the sun, you feel a burning sensation in your eyes.
     After a while, all goes black. With no eyesight, you have little hope of
-    completing your investigations."; 
+    completing your investigations.";
 ];
 
 Class Book
@@ -1109,16 +1114,20 @@ Class Book
 		],
 	has openable;
 
+
 Object CarPark "Car Park"
 	with
 		!short_name [; print "In front of the library!"; rtrue; ],
-		initial "Wow, this is a huge car park! The library lies to the north, while the river can be seen to the east.",
-		description "You are in a car park in front of the library. You can enter to the north. There is a river off to the east.",
+		initial "Wow, this is a huge car park!",
+		description [; "You are in a car park in front of the library.
+			You can enter to the north. There is a river off to the east.";],
 		n_to Library,
 		e_to RiverBank,
-		each_turn [; 
-			print (string) random("^An owl is howling nearby.", "A terrible scream is heard from the library.", 
-				"^The sound of many birds comes from the east.");
+		each_turn [;
+			print (string) random(
+					"^An owl is howling nearby.",
+					"^A terrible scream is heard from the library.",
+					"^The sound of many birds comes from the east.");
 			"";
 		],
 #IfDef TEST_BEFOREAFTER;
@@ -1166,7 +1175,7 @@ Object car "little red car" CarPark
 
 Object RiverBank "River Bank"
   with
-		description "The river is quite wide here. The sun reflects in the blue water, the birds are 
+		description "The river is quite wide here. The sun reflects in the blue water, the birds are
       flying high up above.",
 		w_to CarPark,
 		cheap_scenery
@@ -1195,10 +1204,10 @@ Object Toilet "The toilet"
 		];
 
 Object -> ToiletDoor "toilet door"
-	with 
+	with
 		name 'toilet' 'door',
 		describe [; rtrue; ],
-!		parse_name [ _w; 
+!		parse_name [ _w;
 !			_w = NextWord();
 !			if(_w == 'toilet') {
 !				_w = NextWord();
@@ -1210,7 +1219,7 @@ Object -> ToiletDoor "toilet door"
 !				return 1;
 !		],
 		description "Surprisingly clean.",
-		door_to [; 
+		door_to [;
 			if(self in Toilet) return Library;
 			return Toilet;
 		],
@@ -1229,12 +1238,12 @@ Object -> ToiletDoor "toilet door"
 	has door openable static lockable;
 
 Object -> Goblin "Goblin"
-	with 
+	with
 		short_name "Goblin",
 		description "He is a mean looking creature, not to be messed around with. ",
 		name 'goblin' 'creature',
 		before[;
-			Attack: 
+			Attack:
 				print "But he has a grim looking scimitar, and you are defenceless. Are you sure that's a good idea? ";
 				if(YesOrNo()) {
 					deadflag = 2;
@@ -1245,7 +1254,7 @@ Object -> Goblin "Goblin"
 
 				rtrue;
 		],
-	has animate;	
+	has animate;
 
 
 Object -> Sink "Sink"
@@ -1312,7 +1321,7 @@ Object -> LightSwitch "LightSwitch"
 			SwitchOn:
 				give toilet light;
 				"You flip the light switch next to the toilet upwards ";
-			SwitchOff:	
+			SwitchOff:
 				give toilet ~light;
 				"You flip the light switch next to the toilet downwards";
 		],
@@ -1353,7 +1362,7 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 #IfDef OPTIONAL_FULL_SCORE;
         	Achieved(0); ! opening the box is an achievement
 #EndIf;
-        Receive: 
+        Receive:
         	++score;
         	! win if you put two things in the box
         	if(score >= MAX_SCORE) deadflag = 2;
@@ -1397,7 +1406,7 @@ Book -> -> RedBook "red book"
 		before [;
  			Take:
  				if(player in LargeBox) {
- 					"It's too hard to pick it up while inside the box.";	
+ 					"It's too hard to pick it up while inside the box.";
  				}
 				if(BlueBook in player) {
 					print "The blue book does not want to be near the red book and jumps out of your grasp and lands on the floor.^^";
@@ -1429,7 +1438,7 @@ Object -> BlueBook "blue book" class Book
 		],
 		after [;
 
-			Take: 
+			Take:
 				if(RedBook in player) {
 					print "The red book does not want to be near the blue book and jumps out of your grasp and lands on the floor.^^";
 					move RedBook to location;
@@ -1494,21 +1503,21 @@ Object -> John "John"
 					print_ret (The) John, " says, ~Oh no! That's mine!~";
 				}
 		],
-		before[; 
-			Pull, Push: 
+		before[;
+			Pull, Push:
 			switch(++self.messed_with) {
 				1: "~I'm gonna make you regret that!~, John mutters. ";
 				2: "~This is your final warning!~, John says. ";
 				3: deadflag=2;
 					"Oh dear, who would have guessed John was carrying a double barrelled gun with him to the library. ";
-				
+
 			}
-			
+
 
 		],
 		orders [;
 			Go: "~I must not leave this room.~";
-			NotUnderstood: 
+			NotUnderstood:
 				DebugLife("trying john.orders.NotUnderstood");
 				rfalse;
 				!print special_number, " ", special_word, " ", 'pink', " ", consult_from;
@@ -1602,7 +1611,7 @@ Object -> Torch "electric torch"
 				scope_modified = true;
 #EndIf;
 				"The torch is now providing light.";
-			SwitchOff:	
+			SwitchOff:
 				give self ~light;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 				scope_modified = true;
@@ -1612,7 +1621,7 @@ Object -> Torch "electric torch"
 	has switchable;
 
 ! -- testing scope grammar token
-! See: https://www.inform-fiction.org/manual/html/s32.html 
+! See: https://www.inform-fiction.org/manual/html/s32.html
 [ QueryTopic;
   switch (scope_stage) {
       1: rfalse;
@@ -1720,7 +1729,7 @@ Object  Beard "John's beard"
 Array quote_1 --> 5 35
 "When I die, I want to go peacefully"
 "in my sleep like my grandfather."
-"Not screaming in terror, like the" 
+"Not screaming in terror, like the"
 "passengers in his car."
 "               -- Jack Handey";
 
@@ -1750,4 +1759,3 @@ Array quote_1 --> 5 35
 #Ifdef USEINFORM;
 Include "Grammar";
 #Endif;
-
