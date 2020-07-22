@@ -407,6 +407,8 @@ Global clr_bgstatus          = 2;
 Global clr_fgstatus          = 8;
 #endif;
 
+Global visibility_ceiling;
+
 Global _g_check_visible = 0;
 Global _g_check_take = 0;
 Global _g_item = 0;

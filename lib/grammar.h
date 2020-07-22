@@ -1361,11 +1361,7 @@ Global scope_cnt;
 #EndIf;
 	if(location == thedark) {
 		@new_line;
-		if(_visited == 0 && location.initial ~= 0 or null)
-			PrintOrRun(location, initial, 1);
-		else
-			PrintOrRun(location, description, 1);
-		@new_line;
+		PrintOrRun(location, description);
 	} else {
 		_obj = _player_parent;
 		while(_obj ~= _ceil or 0) {
@@ -1381,14 +1377,9 @@ Global scope_cnt;
 			@new_line;
 			if(_describe_room) {
 				if(_ceil == location) {
-					if(_visited == 0 && location.initial ~= 0 or null)
-						PrintOrRun(location, initial);
-					else
-						PrintOrRun(_ceil, description);
-!					@new_line;
+					PrintOrRun(_ceil, description);
 				} else if(_ceil.&inside_description) {
-					PrintOrRun(_ceil, inside_description, 1);
-					@new_line;
+					PrintOrRun(_ceil, inside_description);
 				}
 			}
 

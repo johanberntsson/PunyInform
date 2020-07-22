@@ -97,8 +97,8 @@ Include "grammar.h";
 ];
 
 [ SetTime p_time p_step;
-	the_time = p_time; 
-	time_rate = p_step; 
+	the_time = p_time;
+	time_rate = p_step;
 	time_step = 0;
 	if(p_step < 0) time_step = -p_step;
 ];
@@ -164,7 +164,7 @@ Array TenSpaces -> "          ";
 		p_col = p_col - 10;
 	}
 	@print_table TenSpaces p_col;
-	if(p_string) 
+	if(p_string)
 		print (string) p_string;
 ];
 
@@ -205,7 +205,7 @@ Constant ONE_SPACE_STRING = " ";
 
 	if (sys_statusline_flag) {
 		! Statusline should show time rather than score
-		if (_width > 29) {	
+		if (_width > 29) {
 			if (_width > 39) {
 				if (_width > 66) {
 					! Width is 67-, print "Time: 12:34 pm" with some space to the right
@@ -334,11 +334,11 @@ Constant ONE_SPACE_STRING = " ";
 [ _PrintAfterEntry p_obj;
 	if(p_obj has container && P_obj hasnt open) print " (which is closed)";
 	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
-		if(child(p_obj) == nothing) 
+		if(child(p_obj) == nothing)
 			print " (which is empty)";
 		else
 			if(_PrintContents(" (which contains ", p_obj)) print ")";
-	} 
+	}
 	if(p_obj has supporter && child(p_obj) ~= nothing) {
 		if(_PrintContents(" (on which is ", p_obj)) print ")";
 	}
@@ -355,7 +355,7 @@ Constant ONE_SPACE_STRING = " ";
 		if(_obj hasnt concealed && _obj hasnt scenery &&
 			_obj ~= parent(player) &&  ! don't print container when player in it
 			(p_check_workflag == false || _obj hasnt workflag)) {
-!			(_obj.&describe == 0 || _obj notin parent(player)) && 
+!			(_obj.&describe == 0 || _obj notin parent(player)) &&
 !			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
 			if(_printed_first_text == 0) {
 				if(p_first_text ofclass String)
@@ -461,30 +461,48 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
-[ PlayerTo p_loc p_flag _old_loc _old_darkness;
+[ PlayerTo p_loc p_flag _old_loc _old_real_loc _old_lookmode _old_parent _vc _old_vc;
 !	print "PlayerTo, moving player to ", (the) p_loc, ".^";
-	_old_loc = real_location;
-	if(location == thedark) _old_darkness = true;
+	_old_loc = location;
+	_old_real_loc = real_location;
 	move Player to p_loc;
 	real_location = superparent(p_loc);
+	location = real_location;
 	scope_modified = true;
+	MoveFloatingObjects();
 	_UpdateDarkness();
-	if(_old_loc ~= location) {
-!		_UpdateScope(player, true);
-		NewRoom();
-		MoveFloatingObjects();
-		if(location == thedark) {
-			if(_old_darkness) {
-				! we have moved between dark rooms
-				! give entry point a chance to react
-				DarkToDark();
-			}
-		}
+.recheck_vc;
+	_old_vc = visibility_ceiling;
+	if(location == thedark)
+		_vc = thedark;
+	else {
+		_vc = ScopeCeiling(player);
 	}
+	if(_vc == location)
+		visibility_ceiling = _vc;
+
+	if(visibility_ceiling == location && visibility_ceiling ~= _old_vc) {
+		if(location provides initial) {
+			_old_parent = parent(player);
+			location.initial();
+			if(parent(player) ~= _old_parent)
+				jump recheck_vc;
+		}
+		if(location ~= thedark)
+			NewRoom();
+	}
+
+	if(_old_real_loc ~= real_location && location == thedark && _old_loc == thedark) {
+		! we have moved between dark rooms
+		! give entry point a chance to react
+		DarkToDark();
+	}
+	_old_lookmode = lookmode;
 	if(p_flag==false)
-		give location ~visited;
+		lookmode = 2;
 	if(p_flag==false or 2 && deadflag == GS_PLAYING)
 		<Look>;
+	lookmode = _old_lookmode;
 ];
 
 [ Superparent p_obj _parent;
@@ -569,7 +587,7 @@ Include "parser.h";
 	! to run in each object, if it's found stop the action by returning true
 #IfnDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
-#EndIf;	
+#EndIf;
 	_scope_count = GetScopeCopy();
 #IfDef GamePreRoutine;
 #IfDef DEBUG;
@@ -791,8 +809,8 @@ Include "parser.h";
 #EndIf;
 	if (p_timer > 0) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if (p_obj.&time_left == 0) { 
-			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; 
+		if (p_obj.&time_left == 0) {
+			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return;
 		} else
 #EndIf;
 			p_obj.time_left = p_timer;
@@ -833,9 +851,9 @@ Include "parser.h";
 #EndIf;
 	if (p_obj == p_array_val) { ! This is a timer, not a daemon
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if (p_obj.&time_left == 0) { 
-			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return; 
-		} else 
+		if (p_obj.&time_left == 0) {
+			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return;
+		} else
 #EndIf;
 			p_obj.time_left = 0;
 	}
@@ -849,7 +867,7 @@ Include "parser.h";
 [ RunTimersAndDaemons _j _t;
 #IfnDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
-#EndIf;	
+#EndIf;
 	for (current_timer=0 : current_timer<active_timers : current_timer++) {
 		if (deadflag >= GS_DEAD) return;
 		_j = the_timers-->current_timer;
@@ -867,7 +885,7 @@ Include "parser.h";
 			print "]^";
 		}
 #EndIf;
-		
+
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 		! Assume that every routine may modify the scope
 		scope_modified = true;
@@ -1074,7 +1092,7 @@ Include "parser.h";
 	print_ret " (", par1, ", ", par2, ")";
 ];
 #EndIf;
-	
+
 
 Object DefaultPlayer "you"
 	with
@@ -1143,6 +1161,8 @@ Object thedark "Darkness"
 
 	Initialise();
 
+	objectloop (_i in player) give _i moved ~concealed;
+
 	VersionSub();
 
 	_InitFloatingObjects(); ! after initialise since location set there
@@ -1210,7 +1230,7 @@ Object thedark "Darkness"
 				the_time = the_time % 1440;
 			}
         }
-		
+
         if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {
         	! we died somehow, use entry routine to give
         	! a chance of resurrection
