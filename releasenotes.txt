@@ -69,3 +69,6 @@ v1.3: new feature (and bug fix) release
 - Marked all objects held by the player as moved and not concealed when game
   starts.
 - Added GetOff action ("get off X").
+- Fixed a noun caching bug that made 'throw X at Y' go wrong
+- added num_words as described in DM4
+
