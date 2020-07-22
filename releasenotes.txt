@@ -57,9 +57,15 @@ v1.3: new feature (and bug fix) release
 - Fixed bug in cloak.inf which gave a point even if "hang cloak on hook"
   failed.
 - Added call to AfterRoutines in PutOnSub.
-- Made parser a little quicker ny not checking if an object is visible once
+- Made parser a little quicker by not checking if an object is visible once
   per word in player input.
 - Unified some messages, to save space.
 - Fixed error in order of directions. (ne, nw, se, sw came in the wrong order,
-  causing errors when some of these directions were translated to/from FAKE_E_OBJ
+  causing errors when some of these directions were translated to/from fake
   direction objects.)
+- Changed the role of initial for rooms to match I6 lib.
+- Fixed a bug where an already scored room would be scored again if moved into
+  using PlayerTo().
+- Marked all objects held by the player as moved and not concealed when game
+  starts.
+- Added GetOff action ("get off X").

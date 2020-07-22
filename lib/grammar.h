@@ -60,8 +60,8 @@ Verb 'fill'
 	* noun                                      -> Fill;
 
 Verb 'get'
-	* 'up'                                      -> Exit
-	* 'out'                                     -> Exit
+	* 'up'/'out'                                -> Exit
+	* 'off' noun                                -> GetOff
 	* multi                                     -> Take
 	* multiinside 'from'/'off' noun             -> Remove;
 
@@ -346,6 +346,12 @@ Verb 'wear'
 [ FillSub;
 	PrintMsg(MSG_FILL_NO_WATER);
 ];
+
+[ GetOffSub;
+    if (parent(player) == noun) <<Exit>>;
+    PrintMsg(MSG_EXIT_NOT_ON); rtrue;
+];
+
 
 [ GiveSub;
     if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
