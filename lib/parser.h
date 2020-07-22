@@ -33,6 +33,7 @@ System_file;
 		location = _result;
 	}
 #EndIf;
+	num_words = parse -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
 	_result = 2 * (parse -> 1) + 1;
 	parse-->_result = 0;

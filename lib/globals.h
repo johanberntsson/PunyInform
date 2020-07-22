@@ -344,6 +344,7 @@ Global lookmode = 1;
 Global player;
 Global actor;
 Global wn;               ! word number within parse
+Global num_words;        ! number of words typed
 Global action;           ! the current action
 Global action_debug;     ! action is one of the debugging verbs
 Global action_reverse;   ! if parameters are in reversed order

@@ -71,7 +71,6 @@ Constant MAX_SCORE = 2;
 	"^Did you try?^^1. Pushing John many times.^2. Going outside and looking at the sun";
 ];
 
-
 ! Setup cheap scenery
 [SceneryReply;
 	Push:
@@ -108,6 +107,10 @@ Include "ext_flags.h";
 #IfNot;
 Include "globals.h";
 #EndIf;
+
+[ BeforeParsing;
+	!print "num_words ", num_words, "^";
+];
 
 Array dummy1 -> 30000;
 Array dummy2 -> 20000;
