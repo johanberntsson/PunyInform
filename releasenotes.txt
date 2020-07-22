@@ -79,3 +79,6 @@ v1.3: new feature (and bug fix) release
 - Fixed so PutOn requires the noun to be held.
 - Removed extra error message if the player fails to auto-take noun in
   InsertSub.
+- Changed so the location's add_to_scope property isn't checked, since this
+  causes aliasing problems, and isn't supported by I6 lib either.
+  

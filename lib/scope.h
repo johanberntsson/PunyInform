@@ -42,11 +42,11 @@ System_file;
 			RunTimeError(ERR_SCOPE_FULL);
 #EndIf;
 			return;
-		}			
+		}
 
 		_PutInScope(p_obj, p_risk_duplicate);
 !		scope-->(scope_objects++) = p_obj;
-		
+
 		! Add_to_scope
 		if(p_no_add == 0) _PerformAddToScope(p_obj);
 
@@ -108,7 +108,7 @@ System_file;
 	_start_pos = ScopeCeiling(p_actor);
 
 
-	if(scope_stage == 2) {	
+	if(scope_stage == 2) {
 		! if scope_stage == 2, then scope_routine has already added
 		! some objects that we don't want to overwrite
 		_initial_scope_objects = scope_objects;
@@ -134,14 +134,10 @@ System_file;
 		_SearchScope(child(_start_pos), true, true);
 	}
 
-	! give the starting pos a chance to add objects to scope
-	if(_start_pos == location)
-		_PerformAddToScope(_start_pos);
-
 	_current_scope_objects = scope_objects;
 	for(_i = _initial_scope_objects : _i < _current_scope_objects : _i++)
 		_PerformAddToScope(scope-->_i);
-	
+
 	scope_modified = false;
 #IfDef DEBUG_SCOPE;
 	print "*** Updated scope from ", (the) _start_pos, ". Found ", scope_objects, " objects.^";
@@ -221,7 +217,7 @@ Constant PlaceInScope = _PutInScope;
 		! RunTimeError(ERR_SCOPE_FULL);
 ! #EndIf;
 		! return;
-	! }			
+	! }
 	! scope-->(scope_objects++) = p_obj;
 ! ];
 
@@ -320,7 +316,7 @@ Constant PlaceInScope = _PutInScope;
 	! routine never prints anything; otherwise it prints a message like
 	! “You can't, because ! … is in the way.” if any barrier is found.
 	! The routine returns true if a barrier is found, false if not.
-	
+
 	_g_item = p_item;
 	_g_check_take = p_checktake;
 
@@ -332,10 +328,10 @@ Constant PlaceInScope = _PutInScope;
 		while (_ancestor && (_i = _ObjectScopedBySomething(_ancestor)) == 0)
 			_ancestor = parent(_ancestor);
 		if(_i ~= 0) {
-			if(ObjectIsUntouchable(_i, p_dontprint, p_checktake)) { 
+			if(ObjectIsUntouchable(_i, p_dontprint, p_checktake)) {
 				! Item immediately added to scope
 				_g_check_visible = false;
-				rtrue; 
+				rtrue;
 			}
 		}
 	} else if(player ~= _ancestor) {
@@ -365,5 +361,3 @@ Constant PlaceInScope = _PutInScope;
 	_g_check_visible = true;
 	return ObjectIsUntouchable(p_item, p_dontprint);
 ];
-
-
