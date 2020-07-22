@@ -117,9 +117,9 @@ Include "globals.h";
 	!print "num_words ", num_words, "^";
 ];
 
-Array dummy1 -> 30000;
-Array dummy2 -> 20000;
-Array dummy3 --> DummyRoutine 1;
+!Array dummy1 -> 30000;
+!Array dummy2 -> 20000;
+!Array dummy3 --> DummyRoutine 1;
 
 
 [ DummyRoutine x;
@@ -1152,6 +1152,21 @@ Object -> Key "key"
 	has scored
 #EndIf;
 	;
+
+Object -> LeadWeight "lead weight"
+	with 
+		name 'weight' 'lead',
+		before [;
+		Drop:
+			remove self;
+			move pencil to parent(player);
+			PronounNotice(pencil);
+			"When the lead weight hits the ground it sounds different.";
+		]
+	;
+
+Object Pencil "pencil"
+	with name 'pencil';
 
 Object car "little red car" CarPark
 	with name 'little' 'red' 'car',

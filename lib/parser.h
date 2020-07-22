@@ -1514,6 +1514,7 @@ Array guess_num_objects->5;
 
 	if(multiple_objects --> 0 == 0) {
 		! single action
+		if(inp1 > 1) PronounNotice(noun);
 		PerformPreparedAction();
 	} else {
 		! multiple action
@@ -1551,12 +1552,12 @@ Array guess_num_objects->5;
 				if(action == ##Take && noun in player) continue;
 
 				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
-				++_score;
+				if(inp1 > 1) PronounNotice(noun);
 				PerformPreparedAction();
+				++_score;
 			}
 			if(_score == 0) PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
 		}
 	}
-	if(inp1 > Directions) PronounNotice(noun);
 	return num_words_parsed;
 ];
