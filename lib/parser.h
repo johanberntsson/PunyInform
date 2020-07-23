@@ -282,8 +282,7 @@ System_file;
 ];
 
 [ PronounNotice p_object;
-	if(p_object == 0) return;
-	if(p_object == player) return;
+	if(p_object == 0 or player or Directions) return;
 	if(p_object has pluralname) return;
 	if(p_object has animate) {
 		if(p_object has female) herobj = p_object;
