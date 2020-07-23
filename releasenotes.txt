@@ -82,4 +82,6 @@ v1.3: new feature (and bug fix) release
 - Changed so the location's add_to_scope property isn't checked, since this
   causes aliasing problems, and isn't supported by I6 lib either.
 - Fixed a bug that made PronounNotice calls in before rules go unnoticed.
-  
+- Fixed bug where direction properties came in the wrong order unless
+  OPTIONAL_FULL_DIRECTIONS was defined.
+   

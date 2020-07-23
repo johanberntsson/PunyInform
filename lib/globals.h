@@ -131,16 +131,23 @@ Property additive life   $ffff;
 
 Property n_to;  Property s_to; !  Slightly wastefully, these are
 Property e_to;  Property w_to; !  (they might be routines)
+#IfDef OPTIONAL_FULL_DIRECTIONS;
+! These have to come in this position and order if we HAVE full directions
 Property ne_to;
-#IfDef OPTIONAL_FULL_DIRECTIONS;
 Property nw_to;
-#EndIf;
 Property se_to;
-#IfDef OPTIONAL_FULL_DIRECTIONS;
 Property sw_to;
 #EndIf;
 Property u_to;  Property d_to;
 Property in_to; Property out_to;
+
+#Ifndef OPTIONAL_FULL_DIRECTIONS;
+! These have to come outside the other direction props if we DON'T HAVE full directions
+Property ne_to;
+Property se_to;
+Property sw_to;
+#EndIf;
+
 
 Constant N_TO_CONST = n_to;
 Constant OUT_TO_CONST = out_to;
@@ -179,7 +186,7 @@ Property additive each_turn $ffff;
 Property capacity 100;
 
 Property short_name 0;
-Property parse_name 0;
+Property parse_name   alias sw_to;
 
 
 ! ! directions
