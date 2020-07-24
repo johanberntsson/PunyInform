@@ -1094,9 +1094,9 @@ Include "parser.h";
 #EndIf;
 
 
-Object DefaultPlayer "you"
+Object selfobj "you"
 	with
-		name 'me',
+		name 'me' 'myself' 'yourself',
 		short_name  "yourself",
 		description "As good-looking as ever.",
 		before NULL,
@@ -1107,7 +1107,7 @@ Object DefaultPlayer "you"
 		! describe NULL, ! TODO: uncommenting causes erorr LookSub
 		add_to_scope 0,
 		capacity MAX_CARRIED,
-		!parse_name 0, ! TODO: uncommenting causes error (open box)
+		parse_name 0,
 		orders 0,
 		number 0,
 		before_implicit NULL,
@@ -1148,7 +1148,7 @@ Object thedark "Darkness"
 	top_object = #largest_object-255;
 	sys_statusline_flag = ( ($1->0) & 2 ) / 2;
 
-	player = DefaultPlayer;
+	player = selfobj;
 	deadflag = GS_PLAYING;
 	score = 0;
 #IfDef OPTIONAL_FULL_SCORE;
