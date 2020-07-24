@@ -85,6 +85,6 @@ v1.3: new feature (and bug fix) release
 - Fixed bug where direction properties came in the wrong order unless
   OPTIONAL_FULL_DIRECTIONS was defined.
 - The player object was renamed to selfobj to mimic I6 lib, and it got an
-  empty parse_name property, and it got extra synonyms - not it has 'me',
+  empty parse_name property, and it got extra synonyms - now it has 'me',
   'myself' and 'yourself'.
    
