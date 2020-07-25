@@ -352,9 +352,9 @@ System_file;
 		if((noun_filter == 0 || _UserFilter(_obj) ~= 0) &&
 				(parser_check_multiple ~= MULTIHELD_OBJECT || _obj in player) &&
 				(ObjectIsInvisible(_obj, true) == false || action_debug == true)) {
-			if(_obj provides parse_name) {
+			if(_obj.parse_name) {
 				_j = wn;
-				_result = PrintOrRun(_obj, parse_name);
+				_result = _obj.parse_name();
 				if(_result == -1) jump try_name_match;
 				_n = _n + _result; ! number of words consumed
 				wn = _j;
