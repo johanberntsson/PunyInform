@@ -223,19 +223,21 @@ Constant FAKE_U_OBJ = 10009;
 Constant FAKE_D_OBJ = 10010;
 Constant FAKE_IN_OBJ = 10011;
 Constant FAKE_OUT_OBJ = 10012;
-Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' ',,' ',,';
+Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' 0 0;
 Array full_direction_array static table 'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
 Array direction_properties_array static table n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
 Array direction_name_array static table "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
+Constant DIRECTION_COUNT = 12;
 #IfNot;
 Constant FAKE_U_OBJ = 10005;
 Constant FAKE_D_OBJ = 10006;
 Constant FAKE_IN_OBJ = 10007;
 Constant FAKE_OUT_OBJ = 10008;
-Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' ',,' ',,';
+Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' 0 0;
 Array full_direction_array static table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
 Array direction_properties_array static table n_to s_to e_to w_to u_to d_to in_to out_to;
 Array direction_name_array static table "north" "south" "east" "west" "up" "down" "in" "out";
+Constant DIRECTION_COUNT = 8;
 #EndIf;
 
 ! ! Property name; ! 'name' seems to be hardcoded in the Inform compiler
@@ -481,6 +483,40 @@ Array task_scores -> 1;
 #Endif;
 #Endif;
 
+#IfV3;
+Array _dir_start -> 7;
+Array _dir_end -> 7;
+
+[_InitDirections _start _w1 _w2 _i;
+  ! Init shortcut table
+  _w2 = abbr_direction_array;
+  do {
+    for(_i = 1: _i <= DIRECTION_COUNT : _i++ ) {
+      _w1 = _w2-->_i;
+      if(_w1) {
+        @output_stream 3 buffer2;
+        print (address) _w1;
+        @output_stream -3;
+        _w1 = buffer2-->0; ! # of chars in dict word
+        _start = _dir_start->_w1;
+        if(_start == 0 || _i < _start)
+          _dir_start->_w1 = _i;
+        if(_start == 0 || _i > _dir_end->_w1)
+          _dir_end->_w1 = _i;
+      }
+    }
+    if(_w2 == abbr_direction_array)
+      _w2 = full_direction_array;
+    else
+      _w2 = 0;
+  } until (_w2 == 0);
+!        for(_i = 1: _i < 7 : _i++ ) {
+!          print "Start ", _i, " = ", _dir_start->_i;
+!          print ", End ", _i, " = ", _dir_end->_i, "^";
+!        }
+];
+#Endif;
+
 Object Directions
 	with
 		description "A look in that direction reveals nothing new.",
@@ -492,23 +528,25 @@ Object Directions
 			rtrue;
 		],
 #IfV5;
-		parse_name [_len _i _w _arr;
+		parse_name [_parse _len _i _w _arr;
 #IfNot;
-		parse_name [_len _i _w _w1 _w2;
+		parse_name [_parse _len _i _w _w1 _w2;
 #EndIf;
-			_w = (parse+4*wn-2)-->0;
+      _parse = parse+4*wn-2;
+			_w = _parse-->0;
 			if(_w == 'floor' or 'ground') {
 #IfDef OPTIONAL_FULL_DIRECTIONS;
 				selected_direction_index = 10;
 #IfNot;
 				selected_direction_index = 6;
 #EndIf;
-				selected_direction = direction_properties_array --> selected_direction_index;
-				return 1;
+        jump match2;
+!				selected_direction = direction_properties_array --> selected_direction_index;
+!				return 1;
 			}
 
-			_len = abbr_direction_array-->0;
 #IfV5;
+      _len = DIRECTION_COUNT;
 			_arr = abbr_direction_array + 2;
 			@scan_table _w _arr _len -> _i ?success;
 			! not found in abbr, try full
@@ -521,29 +559,38 @@ Object Directions
 .success;
 			selected_direction_index = _i - _arr + 2;
 			@log_shift selected_direction_index (-1) -> selected_direction_index; ! Divide by 2
+.match2;
 			selected_direction = direction_properties_array --> selected_direction_index;
 			return 1;
 #IfNot;
-			_i = 1;
-!			for(_i = 1 : _i <= _len : _i++) {
-.checkNextDir;
-				@loadw abbr_direction_array _i -> _w1;
-				@loadw full_direction_array _i -> _w2;
-				@je _w _w1 _w2 ?~doesnt_match;
+      _w1 = _parse->2; ! length of typed word
+      if(_w1 > 6)
+        _w1 = 6;
+			_i = _dir_start->_w1;
+      if(_i > 0) {
+        _len = _dir_end->_w1;
+!        print "Testing from ", _i, " to ", _len, "^";
+        !			for(_i = 1 : _i <= _len : _i++) {
+        .checkNextDir;
+        				@loadw abbr_direction_array _i -> _w1;
+        				@loadw full_direction_array _i -> _w2;
+        !				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
+        				@je _w _w1 _w2 ?match;
+        				@inc_chk _i _len ?~checkNextDir;
+                jump fail;
 
-!				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
-					selected_direction_index = _i;
-					selected_direction = direction_properties_array --> selected_direction_index;
-					return 1;
-!				}
-!			}
-.doesnt_match;
-				@inc_chk _i _len ?~checkNextDir;
-
-			! failure
+.match;
+        			selected_direction_index = _i;
+.match2;
+        			selected_direction = direction_properties_array --> selected_direction_index;
+        			return 1;
+      }
+.fail;
+      ! failure
 			selected_direction_index = 0;
 			selected_direction = 0;
 			return 0;
+
 #EndIf;
 		]
 has scenery proper;

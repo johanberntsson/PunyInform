@@ -995,6 +995,13 @@ Verb meta 'quit' 'q//'
 	! nothing here - this is taken care of in the main game loop instead
 ];
 
+[ QuitSub;
+	PrintMsg(MSG_AREYOUSUREQUIT);
+	if(YesOrNo()) {
+		deadflag = GS_QUIT;
+	}
+];
+
 [ RestartSub;
     PrintMsg(MSG_RESTART_CONFIRM);
 	if(YesOrNo()) {
@@ -1052,18 +1059,11 @@ Verb meta 'quit' 'q//'
 	for (_i = 18:_i < 24: _i++) print (char) 0->_i;
 	print " / Inform v";
 	inversion;
-	print " PunyInform v1.2";
+	print " PunyInform v1.3";
 #IfDef DEBUG;
 	print " D";
 #EndIf;
 	@new_line;
-];
-
-[ QuitSub;
-	PrintMsg(MSG_AREYOUSUREQUIT);
-	if(YesOrNo()) {
-		deadflag = GS_QUIT;
-	}
 ];
 
 ! ---------------------
@@ -1235,8 +1235,23 @@ Verb meta 'timers' 'daemons'
 
 
 Global scope_cnt;
+
+[ GoNearSub _obj;
+	_obj = noun;
+	while(parent(_obj) ~= 0) _obj = parent(_obj);
+	PlayerTo(_obj);
+];
+
 [ PronounsSub;
 	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
+];
+
+[ PurloinSub;
+	move noun to player;
+#IfDef OPTIONAL_MANUAL_SCOPE;
+	scope_modified = true;
+#EndIf;
+	"Purloined.";
 ];
 
 [ RandomSeedSub _i;
@@ -1263,14 +1278,6 @@ Global scope_cnt;
 	if(scope_cnt == 0) "Nothing in scope.^";
 ];
 
-[ PurloinSub;
-	move noun to player;
-#IfDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
-	"Purloined.";
-];
-
 [ TreeSub _obj _p;
 	_obj = noun;
 	if(_obj==0) _obj = real_location;
@@ -1294,12 +1301,6 @@ Global scope_cnt;
 		print (name) _x, "^";
 		if(child(_x)) TreeSubHelper(_x, p_indent + 1);
 	}
-];
-
-[ GoNearSub _obj;
-	_obj = noun;
-	while(parent(_obj) ~= 0) _obj = parent(_obj);
-	PlayerTo(_obj);
 ];
 
 [ RoutinesOnSub;  debug_flag = debug_flag | 1;  "[Message listing on.]"; ];

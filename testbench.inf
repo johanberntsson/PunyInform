@@ -1154,7 +1154,7 @@ Object -> Key "key"
 	;
 
 Object -> LeadWeight "lead weight"
-	with 
+	with
 		name 'weight' 'lead',
 		before [;
 		Drop:
@@ -1193,6 +1193,7 @@ Object RiverBank "River Bank"
 		description "The river is quite wide here. The sun reflects in the blue water, the birds are
       flying high up above.",
 		w_to CarPark,
+		nw_to Library,
 		cheap_scenery
 			'blue' 'water' SCN_WATER
 			'bird' 'birds' "They seem so careless."
@@ -1301,6 +1302,7 @@ Object Library "The Library"
 		short_name [; print "Huge library"; rtrue; ],
 		description "You are in an old and deserted library. There is an exit leading south and a toilet to the east.",
 		s_to CarPark,
+		se_to RiverBank,
 #IfDef USEINFORM;
 		e_to Toilet,
 #IfNot;

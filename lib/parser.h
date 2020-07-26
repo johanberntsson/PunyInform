@@ -351,7 +351,7 @@ System_file;
 #EndIf;
 		if((noun_filter == 0 || _UserFilter(_obj) ~= 0) &&
 				(parser_check_multiple ~= MULTIHELD_OBJECT || _obj in player) &&
-				(ObjectIsInvisible(_obj, true) == false || action_debug == true)) {
+				((_obj == Directions || ObjectIsInvisible(_obj, true) == false) || action_debug == true)) {
 			if(_obj.parse_name) {
 				_j = wn;
 				_result = _obj.parse_name();

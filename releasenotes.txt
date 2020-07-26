@@ -88,3 +88,8 @@ v1.3: new feature (and bug fix) release
   empty parse_name property, and it got extra synonyms - now it has 'me',
   'myself' and 'yourself'.
 - Fixed bug with words in "name" property of location.
+- New constant DIRECTION_COUNT holding # of directions (8 or 12).
+- Avoid checking if Directions is visible, since it always should be. Good for
+  parser speed.
+- Check direction matches faster in z3.
+- Moved some action subs in grammar.h to put them in alphabetic order.

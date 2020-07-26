@@ -1158,6 +1158,9 @@ Object thedark "Darkness"
 	for(_i = 0 : _i < NUMBER_TASKS : _i++) task_done->_i = 0;
 #EndIf;
 #EndIf;
+#IfV3;
+	_InitDirections();
+#EndIf;
 
 	Initialise();
 
