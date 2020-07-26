@@ -1101,7 +1101,7 @@ Array guess_num_objects->5;
 	rfalse;
 ];
 
-[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i _j _word;
+[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i _j _k _word;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1194,10 +1194,16 @@ Array guess_num_objects->5;
 					} else if(_word ~= 0) {
 						! is it one of the location.name words?
 						inp1 = -1;
-						if(location.name ~= 0) {
-							_j = location.#name / 2;
+						@get_prop_addr location name -> _k;
+						if(_k) {
+							@get_prop_len _k -> _j;
+		#IfV5;
+							@log_shift _j (-1) -> _j;
+		#IfNot;
+							@div _j 2 -> _j;
+		#EndIf;
 							for(_i = 0: _i < _j: _i++) {
-								if(_word == location.&name --> _i) {
+								if(_word == (_k-->_i)) {
 									inp1 = _i;
 								}
 							}
