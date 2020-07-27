@@ -96,4 +96,4 @@ v1.3: new feature (and bug fix) release (26 July 2020)
 =======
 v1.4: new feature (and bug fix) release
 - optimized to skip parser phase 2 when possible for speed gains
-
+- Updated Library of Horror to use the new constant DIRECTION_COUNT.

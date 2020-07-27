@@ -513,7 +513,7 @@ Object -> Frank "Frank the Robot"
 			if(FlagIsClear(F_FRANK_BLOCKED_BY_BOX)) {
 				_my_loc = parent(self);
 				if(location ~= _my_loc){
-					_dir_count = direction_properties_array-->0 - 4; ! Skip the last 4 directions (u_to, d_to, in_to, out_to)
+					_dir_count = DIRECTION_COUNT - 4; ! Skip the last 4 directions (u_to, d_to, in_to, out_to)
 					for(_i=1 : _i <= _dir_count : _i++) {
 						_dir_prop = direction_properties_array-->_i;
 						if(_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
