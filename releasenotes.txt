@@ -101,4 +101,6 @@ v1.4: new feature (and bug fix) release
   slow and shouldn't be necessary.
 - Fixed bug when it/him/her was not in sight, introduced when we started to
   skip phase 2.
+- Changed synonym 'yourself' for player to 'self', to harmonize with I6 lib,
+  and because it makes sense.
  

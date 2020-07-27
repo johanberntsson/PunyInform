@@ -1096,7 +1096,7 @@ Include "parser.h";
 
 Object selfobj "you"
 	with
-		name 'me' 'myself' 'yourself',
+		name 'me' 'myself' 'self',
 		short_name  "yourself",
 		description "As good-looking as ever.",
 		before NULL,
