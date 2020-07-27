@@ -1412,7 +1412,6 @@ Array guess_num_objects->5;
 		} else if(_score > _best_score) {
 			_best_score = _score;
 			_best_pattern = _pattern;
-			!continue;
 		}
 
 		! check if pefect match found
@@ -1426,8 +1425,19 @@ Array guess_num_objects->5;
 		_pattern = _pattern_pointer + 1;
 	}
 
+	! skip phase 2 if last pattern matched perfectly
+	! (since all data is then already setup and there
+	! are no side effects to consider)
+	if(_best_score == 100 && _i == (_verb_grammar->0 - 1)) {
+#IfDef DEBUG_PARSEANDPERFORM;
+		print "### Skipping phase 2^";
+#EndIf;
+		jump parse_success;
+	}
 	! Phase 2: reparse best pattern and ask for additional info if
 	! needed (which book? etc)
+
+
 #IfDef DEBUG_PARSEANDPERFORM;
 	print "### PHASE 2: Pattern address ", _best_pattern, "^";
 #EndIf;
