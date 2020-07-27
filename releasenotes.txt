@@ -51,8 +51,7 @@ v1.2.1: bug fix release (19 July 2020)
 - The library version is now printed correctly at start of game and when player
   enters VERSION.
 
-=======
-v1.3: new feature (and bug fix) release
+v1.3: new feature (and bug fix) release (26 July 2020)
 - Extended 'all' so that 'take all Xs except/but Y [one]' works.
 - Fixed bug in cloak.inf which gave a point even if "hang cloak on hook"
   failed.
@@ -93,3 +92,8 @@ v1.3: new feature (and bug fix) release
   parser speed.
 - Check direction matches faster in z3.
 - Moved some action subs in grammar.h to put them in alphabetic order.
+
+=======
+v1.4: new feature (and bug fix) release
+- optimized to skip parser phase 2 when possible for speed gains
+
