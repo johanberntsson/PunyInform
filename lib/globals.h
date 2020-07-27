@@ -391,6 +391,7 @@ Global herobj = 0;       ! The object which is currently "her"
 Global top_object;
 Global also_flag;
 Global inventory_stage;
+Global phase2_necessary;
 
 #IfDef DEBUG;
 Global dict_start;

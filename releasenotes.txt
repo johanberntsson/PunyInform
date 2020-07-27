@@ -95,7 +95,10 @@ v1.3: new feature (and bug fix) release (26 July 2020)
 
 =======
 v1.4: new feature (and bug fix) release
-- optimized to skip parser phase 2 when possible for speed gains
+- Optimized to skip parser phase 2 when possible for speed gains
 - Updated Library of Horror to use the new constant DIRECTION_COUNT.
 - Stop checking ObjectIsInvisible() for every object during parsing, since it's
   slow and shouldn't be necessary.
+- Fixed bug when it/him/her was not in sight, introduced when we started to
+  skip phase 2.
+ 

@@ -1009,7 +1009,7 @@ Include "globals.h";
 ];
 
 [ DarkToDark;
-	deadflag = 2;
+	deadflag = 1;
 	"You are eaten by a grue.";
 ];
 
@@ -1262,7 +1262,7 @@ Object -> Goblin "Goblin"
 			Attack:
 				print "But he has a grim looking scimitar, and you are defenceless. Are you sure that's a good idea? ";
 				if(YesOrNo()) {
-					deadflag = 2;
+					deadflag = 1;
 					"You'd never believe that so much blood was possible to be contained within this body. ";
 				} else {
 					"Wise call.";
@@ -1525,7 +1525,7 @@ Object -> John "John"
 			switch(++self.messed_with) {
 				1: "~I'm gonna make you regret that!~, John mutters. ";
 				2: "~This is your final warning!~, John says. ";
-				3: deadflag=2;
+				3: deadflag=1;
 					"Oh dear, who would have guessed John was carrying a double barrelled gun with him to the library. ";
 
 			}

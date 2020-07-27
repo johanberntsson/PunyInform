@@ -538,13 +538,19 @@ System_file;
 		'him': _noun = himobj;
 		'her': _noun = herobj;
 		}
-		if(_noun == 0 && p_phase == PHASE2) {
-			print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
-			return -2;
-		} else if(TestScope(_noun) == false && p_phase == PHASE2) {
-			print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^";
-			return -2;
-		}
+		if(_noun == 0) {
+			phase2_necessary = true;
+			if(p_phase == PHASE2) {
+				print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
+				return -2;
+			}
+		} else if(TestScope(_noun) == false) {
+			phase2_necessary = true;
+			if(p_phase == PHASE2) {
+				print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^";
+				return -2;
+			}
+	 	}
 		++wn;
 		return _noun;
 	}
@@ -1125,6 +1131,7 @@ Array guess_num_objects->5;
 	parser_all_except_object = 0;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
+	phase2_necessary = false;
 #IfDef DEBUG;
 	action_debug = (action == ##Scope or ##Purloin or ##Tree or ##GoNear);
 #EndIf;
@@ -1411,10 +1418,9 @@ Array guess_num_objects->5;
 		} else if(_score > _best_score) {
 			_best_score = _score;
 			_best_pattern = _pattern;
+			! check if pefect match found
+			if(_best_score == 100) break;
 		}
-
-		! check if pefect match found
-		if(_best_score == 100) break;
 
 		! Scan to the end of this pattern
 		_pattern_pointer = _pattern + 2;
@@ -1427,12 +1433,16 @@ Array guess_num_objects->5;
 	! skip phase 2 if last pattern matched perfectly
 	! (since all data is then already setup and there
 	! are no side effects to consider)
-	if(_best_score == 100 && _i == (_verb_grammar->0 - 1)) {
+#IfDef DEBUG_PARSEANDPERFORM;
+	print "### After phase 1, _best_score = ", _best_score, ", phase2_necessary = ", phase2_necessary, "^";
+#EndIf;
+	if(_best_score == 100 && phase2_necessary == false) {
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### Skipping phase 2^";
 #EndIf;
 		jump parse_success;
 	}
+
 	! Phase 2: reparse best pattern and ask for additional info if
 	! needed (which book? etc)
 
