@@ -946,6 +946,13 @@ System_file;
 	}
 ];
 
+[ _PrintPartialMatchMessage _num_words;
+	print "I only understood you as far as ~";
+	_PrintPartialMatch(verb_wordnum, _num_words);
+	"~ but then you lost me.";
+];
+
+
 [ _PrintUnknownWord _i;
 	for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
 		print (char) buffer->(_i + parser_unknown_noun_found->3);
@@ -1151,9 +1158,7 @@ Array guess_num_objects->5;
 				return 100; ! pattern matched
 			}
 			if(p_phase == PHASE2) {
-				print "I only understood you as far as ~";
-				_PrintPartialMatch(verb_wordnum, wn - 1);
-				print "~ but then you lost me.^";
+				_PrintPartialMatchMessage(wn -1);
 			}
 			return wn - verb_wordnum; ! Fail because the grammar line ends here but not the input
 		}
@@ -1336,10 +1341,16 @@ Array guess_num_objects->5;
 		_i = Directions.parse_name();
 		if(_i) {
 			wn = wn + _i; ! number of words in direction command
-			action = ##Go;
-			noun = Directions;
-			inp1 = Directions;
-			jump parse_success;
+			! check if separator or end of line
+			_i = wn - 1; ! keep for error message since wn changed by NextWord
+			_pattern = NextWord();
+			if(_pattern == 0 or comma_word or THEN_WORD) {
+				action = ##Go;
+				noun = Directions;
+				inp1 = Directions;
+				jump parse_success;
+			}
+			return _PrintPartialMatchMessage(_i);
 		}
 		! not a direction, check if beginning of a command
 		_noun = _CheckNoun(parse+2);

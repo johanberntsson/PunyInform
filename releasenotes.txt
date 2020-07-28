@@ -103,4 +103,7 @@ v1.4: new feature (and bug fix) release
   skip phase 2.
 - Changed synonym 'yourself' for player to 'self', to harmonize with I6 lib,
   and because it makes sense.
+- Improved parsing of delimiters between direction commands.
+- "take obj" bug when already held has been fixed.
+
  
