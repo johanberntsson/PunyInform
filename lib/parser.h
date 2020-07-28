@@ -856,11 +856,19 @@ System_file;
 				multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 				multiple_objects --> (multiple_objects --> 0) = _noun;
 				! check if we should continue: and or comma
-				if(_PeekAtNextWord() == comma_word or AND_WORD) {
-					++wn;
-					p_parse_pointer = p_parse_pointer + 4;
-					continue;
-				} else break;
+				! not followed by a verb
+				if(_PeekAtNextWord() == comma_word or AND_WORD or THEN_WORD) {
+					if((((parse + 2 ) --> (2 * wn)) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
+						! this is not a verb so we assume it is a list
+						! of nouns instead. Continue to parse
+						++wn;
+						p_parse_pointer = p_parse_pointer + 4;
+						!print "and followed by a noun^";
+						continue;
+					}
+					!print "and followed by a verb^";
+				}
+				break;
 			}
 			if(multiple_objects --> 0 == 0) {
 				! no nouns found, so this pattern didn't match
