@@ -105,5 +105,8 @@ v1.4: new feature (and bug fix) release
   and because it makes sense.
 - Improved parsing of delimiters between direction commands.
 - "take obj" bug when already held has been fixed.
-
+- Faster direction matches which appeared in v1.3 breaks old Infocom
+  interpreters, due to lack of support for printing to memory. Changed
+  implementation to not break. It is also smaller, but it gets less easy to
+  change direction words.
  

@@ -227,6 +227,11 @@ Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' '
 Array full_direction_array static table 'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
 Array direction_properties_array static table n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
 Array direction_name_array static table "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
+#IfV3;
+! These arrays say the position of the first and last direction which has 1, 2, 3, 4, 5 and 6+ letters respectively
+Array _dir_start static -> 0  1  5 12  3 1 5;
+Array _dir_end static ->   0 10 11 12 10 2 8;
+#EndIf; ! V3
 Constant DIRECTION_COUNT = 12;
 #IfNot;
 Constant FAKE_U_OBJ = 10005;
@@ -237,6 +242,11 @@ Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' 0 0;
 Array full_direction_array static table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
 Array direction_properties_array static table n_to s_to e_to w_to u_to d_to in_to out_to;
 Array direction_name_array static table "north" "south" "east" "west" "up" "down" "in" "out";
+#IfV3;
+! These arrays say the position of the first and last direction which has 1, 2, 3, 4, 5 and 6+ letters respectively
+Array _dir_start static -> 0 1 5 8 3 1 0;
+Array _dir_end static ->   0 6 7 8 6 2 0;
+#EndIf; ! V3
 Constant DIRECTION_COUNT = 8;
 #EndIf;
 
@@ -484,40 +494,6 @@ Array task_scores -> 1;
 #Endif;
 #Endif;
 
-#IfV3;
-Array _dir_start -> 7;
-Array _dir_end -> 7;
-
-[_InitDirections _start _w1 _w2 _i;
-  ! Init shortcut table
-  _w2 = abbr_direction_array;
-  do {
-    for(_i = 1: _i <= DIRECTION_COUNT : _i++ ) {
-      _w1 = _w2-->_i;
-      if(_w1) {
-        @output_stream 3 buffer2;
-        print (address) _w1;
-        @output_stream -3;
-        _w1 = buffer2-->0; ! # of chars in dict word
-        _start = _dir_start->_w1;
-        if(_start == 0 || _i < _start)
-          _dir_start->_w1 = _i;
-        if(_start == 0 || _i > _dir_end->_w1)
-          _dir_end->_w1 = _i;
-      }
-    }
-    if(_w2 == abbr_direction_array)
-      _w2 = full_direction_array;
-    else
-      _w2 = 0;
-  } until (_w2 == 0);
-!        for(_i = 1: _i < 7 : _i++ ) {
-!          print "Start ", _i, " = ", _dir_start->_i;
-!          print ", End ", _i, " = ", _dir_end->_i, "^";
-!        }
-];
-#Endif;
-
 Object Directions
 	with
 		description "A look in that direction reveals nothing new.",
@@ -572,7 +548,7 @@ Object Directions
         _len = _dir_end->_w1;
 !        print "Testing from ", _i, " to ", _len, "^";
         !			for(_i = 1 : _i <= _len : _i++) {
-        .checkNextDir;
+.checkNextDir;
         				@loadw abbr_direction_array _i -> _w1;
         				@loadw full_direction_array _i -> _w2;
         !				if(_w == abbr_direction_array --> _i or full_direction_array --> _i) {
