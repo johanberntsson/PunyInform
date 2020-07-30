@@ -60,10 +60,12 @@ Verb 'fill'
 	* noun                                      -> Fill;
 
 Verb 'get'
-	* 'up'/'out'                                -> Exit
-	* 'off' noun                                -> GetOff
-	* multi                                     -> Take
-	* multiinside 'from'/'off' noun             -> Remove;
+  * 'out'/'off'/'up' 'of'/'from' noun         -> Exit
+  * 'up'/'out'                                -> Exit
+  * multi                                     -> Take
+  * 'in'/'into'/'on'/'onto' noun              -> Enter
+  * 'off' noun                                -> GetOff
+  * multiinside 'from'/'off' noun             -> Remove;
 
 Verb 'give' 'feed' 'offer' 'pay'
 	* held 'to' creature                        -> Give

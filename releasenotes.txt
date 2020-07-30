@@ -110,4 +110,6 @@ v1.4: new feature (and bug fix) release
   implementation to not break. It is also smaller, but it gets less easy to
   change direction words.
 - the pattern score was wrong when 'all' was used to match a multi token.
- 
+- Changed grammar of 'get' to match I6 lib. "get on object" and
+  "get out of object" now work.
+   
