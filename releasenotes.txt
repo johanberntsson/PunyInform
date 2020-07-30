@@ -110,6 +110,8 @@ v1.4: new feature (and bug fix) release
   implementation to not break. It is also smaller, but it gets less easy to
   change direction words.
 - the pattern score was wrong when 'all' was used to match a multi token.
+- Smaller, faster code in PrintVerb.
+- _FindBarrier() was made shorter, and faster when set not to print.
 - Changed grammar of 'get' to match I6 lib. "get on object" and
   "get out of object" now work.
-   
+- Remove 'embrace' from PrintVerb when optional verbset is not enabled.
