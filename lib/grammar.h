@@ -1563,32 +1563,37 @@ Global scope_cnt;
 ];
 
 
-[ VerbName p_v _string_name;
+[ VerbName p_v ;
 	! first give entry routine a chance to override
 	if(PrintVerb(p_v)) return;
 
 #IfV3;
 	switch(p_v) {
-		'restart': _string_name = "restart";
-		'restore': _string_name = "restore";
-		'display': _string_name = "display";
-		'present': _string_name = "present";
-		'embrace': _string_name = "embrace";
-		'destroy': _string_name = "destroy";
-		'torture': _string_name = "torture";
-		'unscrew': _string_name = "unscrew";
+		'restart': print "restart"; return;
+		'restore': print "restore"; return;
+		'display': print "display"; return;
+		'present': print "present"; return;
+		'embrace': print "embrace"; return;
+		'destroy': print "destroy"; return;
+		'torture': print "torture"; return;
+		'unscrew': print "unscrew"; return;
+		'x//', 'examine': print "examine"; return;
+		'i//', 'inventory': print "inventory"; return;
+		'l//': print "look"; return;
+		'z//': print "wait"; return;
+		'q//': print "quit"; return;
+		'g//': print "again"; return;
+	}
+#IfNot;
+	switch(p_v) {
+		'x//': print "examine"; return;
+		'i//': print "inventory"; return;
+		'l//': print "look"; return;
+		'z//': print "wait"; return;
+		'q//': print "quit"; return;
+		'g//': print "again"; return;
 	}
 #EndIf;
-	switch(p_v) {
-		'x//', 'examine': _string_name = "examine";		! 'examine' is really only needed for z3, but this creates smaller code in z3
-		'i//', 'inventory': _string_name = "inventory";	! 'inventory' is really only needed for z3, but this creates smaller code in z3
-		'l//': _string_name = "look";
-		'z//': _string_name = "wait";
-		'q//': _string_name = "quit";
-		'g//': _string_name = "again";
-	}
-	if(_string_name)
-		print (string) _string_name;
-	else
-		print (address) p_v;
+
+	print (address) p_v;
 ];
