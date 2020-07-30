@@ -1421,6 +1421,14 @@ Object -> -> -> Trigger "trigger"
 Object -> Ladder "ladder"
 	with
 		name 'ladder',
+		description [;
+			print "It's very sturdy. ";
+			<Search self>;
+!			if(_PrintContents(" (which contains ", p_obj)) print ")";
+		],
+		after [;
+			Receive: "Wow, you put ",(a) noun," on ", (the) self, "...";
+		],
 		inside_description "It's a really good ladder for standing on.",
 	has supporter enterable;
 

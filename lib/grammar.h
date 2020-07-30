@@ -378,18 +378,25 @@ Verb 'wear'
 ];
 
 [ InsertSub _ancestor;
-  if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
+  receive_action = ##Insert;
   if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
   _ancestor = CommonAncestor(noun, second);
   if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
-  if (second ~= _ancestor) {
-    if (second has container && second hasnt open) { PrintMsg(MSG_INSERT_NOT_OPEN, second); rtrue; }
+  if (second ~= _ancestor && second has container && second hasnt open) {
+    PrintMsg(MSG_INSERT_NOT_OPEN, second);
+    rtrue;
   }
 
   _GrabIfNotHeld(noun);
   if (noun notin player) rtrue;
   if(noun has worn) { PrintMsg(MSG_INSERT_WORN); rtrue; }
 
+  ! run before on receiver
+  action = ##Receive;
+  if(RunRoutines(second, before) ~= 0) { action = ##Insert; rtrue; }
+  action = ##Insert;
+
+  if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
   if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
   move noun to second;
@@ -470,18 +477,33 @@ Verb 'wear'
 ];
 
 [ PutOnSub _ancestor;
-  if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
+  receive_action = ##PutOn;
+
   if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
   _ancestor = CommonAncestor(noun, second);
   if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
-  if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
   _GrabIfNotHeld(noun);
   if(noun notin player) rtrue;
   if(noun has worn) { PrintMsg(MSG_PUTON_WORN); rtrue; }
+
+  ! run before on receiver
+  action = ##Receive;
+  if(RunRoutines(second, before) ~= 0) { action = ##PutOn; rtrue; }
+  action = ##PutOn;
+
+  if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
+  if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
+
   move noun to second;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
+
+  ! run after on receiver
+  action = ##Receive;
+  if(RunRoutines(second, after) ~= 0) { action = ##PutOn; rtrue; }
+  action = ##PutOn;
+
 	if(AfterRoutines() == 1) rtrue;
   if (keep_silent) return;
   PrintMsg(MSG_PUTON_SUCCESS);

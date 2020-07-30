@@ -402,6 +402,7 @@ Global top_object;
 Global also_flag;
 Global inventory_stage;
 Global phase2_necessary;
+Global receive_action;
 
 #IfDef DEBUG;
 Global dict_start;

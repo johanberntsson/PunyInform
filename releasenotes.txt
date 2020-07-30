@@ -115,3 +115,8 @@ v1.4: new feature (and bug fix) release
 - Changed grammar of 'get' to match I6 lib. "get on object" and
   "get out of object" now work.
 - Remove 'embrace' from PrintVerb when optional verbset is not enabled.
+- Fixed that PutOnSub didn't call before- or after-rules for Receiver, and
+  that InsertSub didn't call before-rule for receiver.
+- Added global receive_action to let receiving object know which action is
+  happening.
+  
