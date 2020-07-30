@@ -109,4 +109,5 @@ v1.4: new feature (and bug fix) release
   interpreters, due to lack of support for printing to memory. Changed
   implementation to not break. It is also smaller, but it gets less easy to
   change direction words.
+- the pattern score was wrong when 'all' was used to match a multi token.
  

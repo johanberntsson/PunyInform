@@ -837,9 +837,11 @@ System_file;
 						_AddMultipleNouns(_token_data);
 						parser_all_found = true;
 						if(multiple_objects --> 0 == 0) {
-							if(p_phase == PHASE2)
+							if(p_phase == PHASE2) {
 								PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
-							return GPR_FAIL;
+								return GPR_FAIL;
+							} 
+							return GPR_MULTIPLE;
 						} else if(multiple_objects --> 0 == 1) {
 							! single object
 							_noun = multiple_objects --> 1;
@@ -1264,6 +1266,11 @@ Array guess_num_objects->5;
 			! multiple_objects contains the objects
 			if(multiple_objects-->0 == 0) {
 				_UpdateNounSecond(0, 0);
+				! 'all' matched zero objects in scope. It is still a perfect
+				! match of course but we need to force phase2 to write
+				! a suitable message.
+				phase2_necessary = true;
+				return 100;
 			} else {
 				_UpdateNounSecond(multiple_objects-->1, multiple_objects-->1);
 			}
