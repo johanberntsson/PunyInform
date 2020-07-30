@@ -287,16 +287,17 @@ Constant PlaceInScope = _PutInScope;
 [ _FindBarrier p_ancestor p_obj p_dontprint;
 	while (p_obj ~= p_ancestor) {
 		if (_g_check_take && p_obj hasnt container && p_obj hasnt supporter) {
+                        ! We're going to return true here, we just need to write the correct message
+                        ! But if we don't need to print anything, just return now
+                        if (p_dontprint) rtrue;
+                        
 			if (p_obj has animate) {
-				if(p_dontprint == false) PrintMsg(MSG_TAKE_BELONGS, _g_item, p_obj);
-				rtrue;
+				PrintMsg(MSG_TAKE_BELONGS, _g_item, p_obj); rtrue;
 			}
 			if (p_obj has transparent) {
-				if(p_dontprint == false) PrintMsg(MSG_TAKE_PART_OF, _g_item, p_obj);
-				rtrue;
+				PrintMsg(MSG_TAKE_PART_OF, _g_item, p_obj); rtrue;
 			}
-			if(p_dontprint == false) PrintMsg(MSG_TAKE_NOT_AVAILABLE);
-			rtrue;
+			PrintMsg(MSG_TAKE_NOT_AVAILABLE); rtrue;
 		}
 		if(p_obj has container && p_obj hasnt open &&
 			(_g_check_visible == false || p_obj hasnt transparent)) {
