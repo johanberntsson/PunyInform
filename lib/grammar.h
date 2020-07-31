@@ -1415,11 +1415,11 @@ Global scope_cnt;
 			also_flag = false;
 			! write intial and describe messages in a new paragraph
 			objectloop(_obj in _ceil) {
-				give _obj ~workflag;
+				give _obj workflag;
 				if(_obj.&describe) {
 					if(PrintOrRun(_obj, describe, 0)) {
 						_initial_found = true;
-						give _obj workflag;
+						give _obj ~workflag;
 						also_flag = true;
 						continue;
 					}
@@ -1441,7 +1441,7 @@ Global scope_cnt;
 				}
 				if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
 					_initial_found = true;
-					give _obj workflag;
+					give _obj ~workflag;
 					@new_line;
 					PrintOrRun(_obj, _desc_prop);
 					also_flag = true;
@@ -1457,7 +1457,7 @@ Global scope_cnt;
 				_you_can_see_2 = ".^";
 			}
 
-			if(_PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
+			if(PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
 			_ceil = ScopeCeiling(player, _ceil);
 		} ! for(::)
 	}

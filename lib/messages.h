@@ -379,7 +379,7 @@ Default LibraryMessages 0;
 #EndIf;
 #IfTrue MSG_INVENTORY_SUCCESS < 1000;
 	MSG_INVENTORY_SUCCESS:
-		if(_PrintContents("You're carrying ", player)) print ".^";
+		if(PrintContents("You're carrying ", player)) print ".^";
 		rtrue;
 #EndIf;
 #IfTrue MSG_EXAMINE_NOTHING_SPECIAL < 1000;
@@ -637,8 +637,8 @@ default:
 ];
 
 [ SearchInOnNoun;
-	print (the) noun, " ", (isorare) noun;
-	if(_PrintContents(" ", noun)) print ".^";
+	print (the) noun, " is ";
+	if(PrintContents(0, noun)) print ".^";
 ];
 
 [OnOff obj;

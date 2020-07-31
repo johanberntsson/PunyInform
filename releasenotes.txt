@@ -119,4 +119,7 @@ v1.4: new feature (and bug fix) release
   that InsertSub didn't call before-rule for receiver.
 - Added global receive_action to let receiving object know which action is
   happening.
-  
+- Made _PrintContents() public, thus changing the name to PrintContents().
+  Changed the use of workflag to only print objects which have workflag set,
+  just like WriteListFrom in I6 lib. Changed so initial string can be set to 0.
+- Fixed bug in Search message.

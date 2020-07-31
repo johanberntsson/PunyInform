@@ -337,30 +337,30 @@ Constant ONE_SPACE_STRING = " ";
 		if(child(p_obj) == nothing)
 			print " (which is empty)";
 		else
-			if(_PrintContents(" (which contains ", p_obj)) print ")";
+			if(PrintContents(" (which contains ", p_obj)) print ")";
 	}
 	if(p_obj has supporter && child(p_obj) ~= nothing) {
-		if(_PrintContents(" (on which is ", p_obj)) print ")";
+		if(PrintContents(" (on which is ", p_obj)) print ")";
 	}
 !	if(p_obj has light && action == ##Inv) print " (providing light)";
 	if(p_obj has light) print " (providing light)";
 	if(p_obj has worn && action == ##Inv) print " (worn)";
 ];
 
-[ _PrintContents p_first_text p_obj p_check_workflag _obj _printed_first_text _printed_any_objects _last_obj;
+[ PrintContents p_first_text p_obj p_check_workflag _obj _printed_first_text _printed_any_objects _last_obj;
 !   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
 !   print "Considering ", (object) _obj, "...^";
 !   if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
 		if(_obj hasnt concealed && _obj hasnt scenery &&
 			_obj ~= parent(player) &&  ! don't print container when player in it
-			(p_check_workflag == false || _obj hasnt workflag)) {
+			(p_check_workflag == false || _obj has workflag)) {
 !			(_obj.&describe == 0 || _obj notin parent(player)) &&
 !			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
 			if(_printed_first_text == 0) {
 				if(p_first_text ofclass String)
 					print (string) p_first_text;
-				else
+				else if(p_first_text ~= 0)
 					p_first_text(p_obj);
 				_printed_first_text = 1;
 			}
