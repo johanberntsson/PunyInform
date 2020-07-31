@@ -1363,7 +1363,7 @@ Object -> Aquarium "aquarium"
 		name 'aquarium',
 		article "an",
 		description "A big glass aquarium with a lid.",
-	has container open openable transparent static;
+	has container open openable transparent static enterable;
 
 Object -> LargeBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
 	with

@@ -203,31 +203,32 @@ Verb 'wear'
 	* held										-> Wear;
 
 [ AnswerSub;
-    if (second > 1 && RunLife(second,##Answer) ~= 0) rfalse;
-    PrintMsg(MSG_ANSWER_SUCCESS);
+  if (second > 1 && RunLife(second,##Answer) ~= 0) rfalse;
+  PrintMsg(MSG_ANSWER_SUCCESS);
 ];
 
 [ AskSub;
-    if (RunLife(noun,##Ask) ~= 0) rfalse;
-    PrintMsg(MSG_ASK_SUCCESS);
+  if (RunLife(noun,##Ask) ~= 0) rfalse;
+  PrintMsg(MSG_ASK_SUCCESS);
 ];
 
 [ AskToSub;
-    PrintMsg(MSG_ASKTO_SUCCESS);
+  PrintMsg(MSG_ASKTO_SUCCESS);
 ];
 
 [ AskForSub;
-    if (noun == player) <<Inv>>;
-    PrintMsg(MSG_ASKFOR_SUCCESS);
+  if (noun == player) <<Inv>>;
+  PrintMsg(MSG_ASKFOR_SUCCESS);
 ];
 
 [ AttackSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
+  if (ObjectIsUntouchable(noun)) return;
+  if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
 	PrintMsg(MSG_ATTACK_SUCCESS);
 ];
 
 [ CloseSub;
+  if(ObjectIsUntouchable(noun)) return;
 	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT); rtrue; }
 	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN, noun); rtrue; }
 	give noun ~open;
@@ -252,8 +253,7 @@ Verb 'wear'
 ];
 
 [ DisrobeSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
+    if (noun notin player || noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
     give noun ~worn;
     if (AfterRoutines() == 1) rtrue;
     if (keep_silent == 1) rtrue;
@@ -280,15 +280,16 @@ Verb 'wear'
 ];
 
 [ EatSub;
-    if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
-    if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
+  if(ObjectIsUntouchable(noun)) return;
+  if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
+  if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
 	remove noun;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
 	if (AfterRoutines() == 1) rtrue;
 	if (keep_silent == 1) rtrue;
-    PrintMsg(MSG_EAT_SUCCESS);
+  PrintMsg(MSG_EAT_SUCCESS);
 ];
 
 [ EnterSub _door_dir;
@@ -350,16 +351,17 @@ Verb 'wear'
 ];
 
 [ GetOffSub;
-    if (parent(player) == noun) <<Exit>>;
-    PrintMsg(MSG_EXIT_NOT_ON); rtrue;
+  if (parent(player) == noun) <<Exit>>;
+  PrintMsg(MSG_EXIT_NOT_ON); rtrue;
 ];
 
 
 [ GiveSub;
-    if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
-    if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
-    if (RunLife(second, ##Give) ~= 0) rfalse;
-    PrintMsg(MSG_GIVE_SUCCESS);
+  if(ObjectIsUntouchable(second)) return;
+  if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
+  if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
+  if (RunLife(second, ##Give) ~= 0) rfalse;
+  PrintMsg(MSG_GIVE_SUCCESS);
 ];
 
 [ GoSub _prop;
@@ -379,6 +381,7 @@ Verb 'wear'
 
 [ InsertSub _ancestor;
   receive_action = ##Insert;
+  if(ObjectIsUntouchable(second)) return;
   if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
   _ancestor = CommonAncestor(noun, second);
   if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
@@ -444,16 +447,17 @@ Verb 'wear'
 ];
 
 [ OpenSub;
-	if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT); rtrue; }
-	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
-	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
-	give noun open;
+  if(ObjectIsUntouchable(noun)) return;
+  if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT); rtrue; }
+  if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
+  if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
+  give noun open;
 #IfDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
+  scope_modified = true;
 #EndIf;
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
-	PrintMsg(MSG_OPEN_SUCCESS);
+  if(AfterRoutines() == 1) rtrue;
+  if (keep_silent) return;
+  PrintMsg(MSG_OPEN_SUCCESS);
 ];
 
 [ PullSub;
@@ -465,7 +469,7 @@ Verb 'wear'
 ];
 
 [ PushSub;
-  !if (ObjectIsUntouchable(noun)) return;
+  if (ObjectIsUntouchable(noun)) return;
   if (noun has static)   { PrintMsg(MSG_PUSH_STATIC); rtrue; }
   if (noun has scenery)  { PrintMsg(MSG_PUSH_SCENERY); rtrue; }
   if (noun has animate)  { PrintMsg(MSG_PUSH_ANIMATE); rtrue; }
@@ -479,6 +483,7 @@ Verb 'wear'
 [ PutOnSub _ancestor;
   receive_action = ##PutOn;
 
+  if (ObjectIsUntouchable(second)) return;
   if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
   _ancestor = CommonAncestor(noun, second);
   if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
@@ -555,6 +560,7 @@ Verb 'wear'
 ];
 
 [ SmellSub;
+  if(ObjectIsUntouchable(noun)) return;
   PrintMsg(MSG_SMELL_SUCCESS);
 ];
 
@@ -596,15 +602,14 @@ Verb 'wear'
 ];
 
 [ ThrowAtSub;
-	if(ObjectIsUntouchable(noun)) return;
+  _GrabIfNotHeld(noun);
+  if(noun notin player) rtrue;
+  if(ObjectIsUntouchable(second)) return;
+  if(noun has worn) { PrintMsg(MSG_THROW_WORN); rtrue; }
 	if(second > 1) {
 		action = ##ThrownAt;
 		if (RunRoutines(second, before) ~= 0) { action = ##ThrowAt; rtrue; }
 		action = ##ThrowAt;
-	}
-	if(noun has worn) {
-    PrintMsg(MSG_THROW_WORN);
-    rtrue;
 	}
 	if(second hasnt animate) { PrintMsg(MSG_THROW_ANIMATE); rtrue; }
 	if(RunLife(second,##ThrowAt) ~= 0) rfalse;
@@ -612,6 +617,7 @@ Verb 'wear'
 ];
 
 [ TouchSub;
+  if(ObjectIsUntouchable(noun)) return;
   PrintMsg(MSG_TOUCH_SUCCESS);
 ];
 
@@ -647,10 +653,12 @@ Verb 'wear'
 ];
 
 [ WearSub;
+  if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
   if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
   if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING); rtrue; }
-  if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
   give noun worn;
+  if (AfterRoutines() == 1) rtrue;
+  if (keep_silent == 1) rtrue;
   PrintMsg(MSG_WEAR_SUCCESS);
 ];
 
@@ -774,14 +782,14 @@ Verb 'yes' 'y//'
 
 [ EmptyTSub _i _j _k _flag _recipient;
 	if(noun == second) { PrintMsg(MSG_EMPTY_WOULDNT_ACHIEVE); rtrue; }
-	if(ObjectIsUntouchable(noun)) return;
+	if(ObjectIsUntouchable(noun) || ObjectIsUntouchable(second)) return;
 !		_recipient = TouchCeiling(player);
 	if(selected_direction ~= d_to) {
 !	else {
 		_recipient = second;
 		if(second hasnt supporter) {
-		if(second hasnt container) { PrintMsg(MSG_EMPTY_CANT_CONTAIN, second); rtrue; }
-		if(second hasnt open) { PrintMsg(MSG_EMPTY_IS_CLOSED, second); rtrue; }
+  		if(second hasnt container) { PrintMsg(MSG_EMPTY_CANT_CONTAIN, second); rtrue; }
+  		if(second hasnt open) { PrintMsg(MSG_EMPTY_IS_CLOSED, second); rtrue; }
 		}
 	}
 	_i = child(noun); _k = children(noun);
@@ -873,6 +881,7 @@ Verb 'yes' 'y//'
 ];
 
 [ TasteSub;
+  if (ObjectIsUntouchable(noun)) return;
 	PrintMsg(MSG_TASTE_DEFAULT);
 ];
 

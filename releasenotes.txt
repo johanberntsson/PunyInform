@@ -123,3 +123,5 @@ v1.4: new feature (and bug fix) release
   Changed the use of workflag to only print objects which have workflag set,
   just like WriteListFrom in I6 lib. Changed so initial string can be set to 0.
 - Fixed bug in Search message.
+- Added checks to see if objects can be touched to many action routines.
+- Added call to AfterRoutines in WearSub.
