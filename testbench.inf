@@ -1374,7 +1374,13 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
         time_out [;
             print "^The box goes BOOM.^";
         ],
+		before [;
+!			LetGo:
+!				"No can do!";
+		],
         after [;
+			LetGo:
+				"Yay, got rid of ", (the) noun, "!";
 			Open:
 #IfDef OPTIONAL_FULL_SCORE;
         	Achieved(0); ! opening the box is an achievement

@@ -395,6 +395,9 @@ Verb 'wear'
 	if(noun has worn) { PrintMsg(MSG_INSERT_WORN); rtrue; }
 
 	! run before on receiver
+#IfDef DEBUG;
+	if(debug_flag & 1) print "(", (name) second, ").before()^";
+#EndIf;
 	action = ##Receive;
 	if(RunRoutines(second, before) ~= 0) { action = ##Insert; rtrue; }
 	action = ##Insert;
@@ -411,6 +414,9 @@ Verb 'wear'
 	if(AfterRoutines()) rtrue;
 
 	! run after on receiver
+#IfDef DEBUG;
+	if(debug_flag & 1) print "(", (name) second, ").after()^";
+#EndIf;
 	action = ##Receive;
 	if(RunRoutines(second, after) ~= 0) { action = ##Insert; rtrue; }
 	action = ##Insert;
@@ -497,6 +503,9 @@ Verb 'wear'
 	if(noun has worn) { PrintMsg(MSG_PUTON_WORN); rtrue; }
 
 	! run before on receiver
+#IfDef DEBUG;
+	if(debug_flag & 1) print "(", (name) second, ").before()^";
+#EndIf;
 	action = ##Receive;
 	if(RunRoutines(second, before) ~= 0) { action = ##PutOn; rtrue; }
 	action = ##PutOn;
@@ -510,6 +519,9 @@ Verb 'wear'
 #EndIf;
 
 	! run after on receiver
+#IfDef DEBUG;
+	if(debug_flag & 1) print "(", (name) second, ").after()^";
+#EndIf;
 	action = ##Receive;
 	if(RunRoutines(second, after) ~= 0) { action = ##PutOn; rtrue; }
 	action = ##PutOn;
@@ -612,6 +624,9 @@ Verb 'wear'
 	if(ObjectIsUntouchable(second)) return;
 	if(noun has worn) { PrintMsg(MSG_THROW_WORN); rtrue; }
 	if(second > 1) {
+#IfDef DEBUG;
+		if(debug_flag & 1) print "(", (name) second, ").before()^";
+#EndIf;
 		action = ##ThrownAt;
 		if (RunRoutines(second, before) ~= 0) { action = ##ThrowAt; rtrue; }
 		action = ##ThrowAt;
@@ -1509,18 +1524,44 @@ Global scope_cnt;
 ];
 #EndIf;
 
-[ TryToTakeNoun;
+[ TryToTakeNoun _i _k _ancestor _after_recipient;
     ! Try to transfer the given item to the player: return false
     ! if successful, true if unsuccessful, printing a suitable message
     ! in the latter case.
     ! People cannot ordinarily be taken.
     if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
     if(noun has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
-    if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
-    if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
+
+	_ancestor = CommonAncestor(player, noun);
+
+    if (_ancestor == 0) {
+        _i = _ObjectScopedBySomething(noun);
+        if (_i) _ancestor = CommonAncestor(player, _i);
+    }
+
 	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
 	if(ObjectIsUntouchable(noun, false, true)) rtrue;
 	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
+
+	! The item is now known to be accessible.
+
+    ! Consult the immediate possessor of the item, if it's in a container
+    ! which the actor is not in.
+
+    _i = parent(noun);
+    if (_i && _i ~= _ancestor && (_i has container or supporter)) {
+        _after_recipient = _i;
+#IfDef DEBUG;
+		if(debug_flag & 1) print "(", (name) _i, ").before()^";
+#EndIf;
+        _k = action; action = ##LetGo;
+        if (RunRoutines(_i, before)) { action = _k; rtrue; }
+        action = _k;
+    }
+
+	if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
+    if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
+
     if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
 #IfDef OPTIONAL_FULL_SCORE;
@@ -1534,6 +1575,18 @@ Global scope_cnt;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
+
+	! Send "after" message to the object letting go of the item, if any.
+
+	if (_after_recipient) {
+#IfDef DEBUG;
+		if(debug_flag & 1) print "(", (name) _after_recipient, ").after()^";
+#EndIf;
+		_k = action; action = ##LetGo;
+		if (RunRoutines(_after_recipient, after)) { action = _k; rtrue; }
+		action = _k;
+	}
+
 	rfalse;
 ];
 
@@ -1546,6 +1599,9 @@ Global scope_cnt;
 		! 2   to disallow but print and do nothing; or
 		! 3   to allow but print and do nothing.
 		_vehicle = parent(player);
+#IfDef DEBUG;
+		if(debug_flag & 1) print "(", (name) _vehicle, ").before()^";
+#EndIf;
 		_vehicle_mode = RunRoutines(_vehicle, before);
 		if(_vehicle_mode == 0) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
 		if(_vehicle_mode == 2 or 3) rtrue;

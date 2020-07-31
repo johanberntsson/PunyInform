@@ -620,25 +620,27 @@ Include "parser.h";
 			}
 		}
 	}
-	if(location provides before) {
 #IfDef DEBUG;
-		if(debug_flag & 1) print "(", (name) location, ").before()^";
+	if(debug_flag & 1) print "(", (name) location, ").before()^";
 #EndIf;
+	if(location provides before) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 		! Assume that every routine may modify the scope
 		scope_modified = true;
 #EndIf;
 		if(RunRoutines(location, before)) rtrue;
 	}
-	if(inp1 > 1 && inp1 provides before) {
+	if(inp1 > 1) {
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) inp1, ").before()^";
 #EndIf;
+		if(inp1 provides before) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
-		! Assume that every routine may modify the scope
-		scope_modified = true;
+			! Assume that every routine may modify the scope
+			scope_modified = true;
 #EndIf;
-		if(RunRoutines(inp1, before)) rtrue;
+			if(RunRoutines(inp1, before)) rtrue;
+		}
 	}
 	rfalse;
 ];
@@ -676,15 +678,17 @@ Include "parser.h";
 #EndIf;
 		if(RunRoutines(location, after)) rtrue;
 	}
-	if(inp1 > 1 && inp1 provides after) {
+	if(inp1 > 1) {
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) inp1, ").after()^";
 #EndIf;
+		if(inp1 provides after) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
-		! Assume that every routine may modify the scope
-		scope_modified = true;
+			! Assume that every routine may modify the scope
+			scope_modified = true;
 #EndIf;
-		if(RunRoutines(inp1, after)) rtrue;
+			if(RunRoutines(inp1, after)) rtrue;
+		}
 	}
 #IfDef GamePostRoutine;
 #IfDef DEBUG;

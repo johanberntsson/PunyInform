@@ -121,6 +121,7 @@ Attribute workflag;
 ! See: http://www.inform-fiction.org/manual/html/s18.html
 Fake_Action Order;
 Fake_Action Receive;
+Fake_Action LetGo;
 Fake_Action ThrownAt;
 Fake_Action NotUnderstood;
 Fake_Action PluralFound;

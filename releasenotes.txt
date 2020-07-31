@@ -133,3 +133,10 @@ v1.4: new feature (and bug fix) release
 - Changed so the invent property is consulted whenever a list of objects is
   presented by PrintContents, most notably also affecting object listings in
   room descriptions.
+- Added calls to object parent's before and after rules (if container or
+  supporter) with LetGo action when taking object.
+- Changed so debug verb 'routines' prints calls to before routines and
+  after routines even if object doesn't provide them.
+- Added printing to calls to before and after rules for fake actions Receiver
+  and LetGo for when debug verb 'routines' has been entered.
+  
