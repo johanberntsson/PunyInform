@@ -125,3 +125,6 @@ v1.4: new feature (and bug fix) release
 - Fixed bug in Search message.
 - Added checks to see if objects can be touched to many action routines.
 - Added call to AfterRoutines in WearSub.
+- Changed a lot of checks in action routines from if(AfterRoutines() == 1) to
+  just if(AfterRoutines()) and from if(keep_silent == 1) to if(keep_silent) to
+  save 30 bytes.

@@ -203,40 +203,40 @@ Verb 'wear'
 	* held										-> Wear;
 
 [ AnswerSub;
-  if (second > 1 && RunLife(second,##Answer) ~= 0) rfalse;
-  PrintMsg(MSG_ANSWER_SUCCESS);
+	if (second > 1 && RunLife(second,##Answer) ~= 0) rfalse;
+	PrintMsg(MSG_ANSWER_SUCCESS);
 ];
 
 [ AskSub;
-  if (RunLife(noun,##Ask) ~= 0) rfalse;
-  PrintMsg(MSG_ASK_SUCCESS);
+	if (RunLife(noun,##Ask) ~= 0) rfalse;
+	PrintMsg(MSG_ASK_SUCCESS);
 ];
 
 [ AskToSub;
-  PrintMsg(MSG_ASKTO_SUCCESS);
+	PrintMsg(MSG_ASKTO_SUCCESS);
 ];
 
 [ AskForSub;
-  if (noun == player) <<Inv>>;
-  PrintMsg(MSG_ASKFOR_SUCCESS);
+	if (noun == player) <<Inv>>;
+	PrintMsg(MSG_ASKFOR_SUCCESS);
 ];
 
 [ AttackSub;
-  if (ObjectIsUntouchable(noun)) return;
-  if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
 	PrintMsg(MSG_ATTACK_SUCCESS);
 ];
 
 [ CloseSub;
-  if(ObjectIsUntouchable(noun)) return;
+	if(ObjectIsUntouchable(noun)) return;
 	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT); rtrue; }
 	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN, noun); rtrue; }
 	give noun ~open;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
+	if(AfterRoutines()) rtrue;
+	if (keep_silent) return;
 	PrintMsg(MSG_CLOSE_SUCCESS);
 ];
 
@@ -255,8 +255,8 @@ Verb 'wear'
 [ DisrobeSub;
     if (noun notin player || noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
     give noun ~worn;
-    if (AfterRoutines() == 1) rtrue;
-    if (keep_silent == 1) rtrue;
+    if (AfterRoutines()) rtrue;
+    if (keep_silent) rtrue;
     PrintMsg(MSG_DISROBE_SUCCESS);
 ];
 
@@ -274,22 +274,22 @@ Verb 'wear'
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
-	if(AfterRoutines() == 1) rtrue;
-    if(keep_silent) return;
+	if(AfterRoutines()) rtrue;
+	if(keep_silent) return;
 	PrintMsg(MSG_DROP_DROPPED);
 ];
 
 [ EatSub;
-  if(ObjectIsUntouchable(noun)) return;
-  if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
-  if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
+	if(ObjectIsUntouchable(noun)) return;
+	if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
+	if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
 	remove noun;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
-	if (AfterRoutines() == 1) rtrue;
-	if (keep_silent == 1) rtrue;
-  PrintMsg(MSG_EAT_SUCCESS);
+	if (AfterRoutines()) rtrue;
+	if (keep_silent) rtrue;
+	PrintMsg(MSG_EAT_SUCCESS);
 ];
 
 [ EnterSub _door_dir;
@@ -307,9 +307,9 @@ Verb 'wear'
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
 	if(parent(noun) ~= parent(player)) { PrintMsg(MSG_ENTER_BAD_LOCATION); rtrue; }
 	PlayerTo(noun, true);
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
-    PrintMsg(MSG_ENTER_SUCCESS);
+	if(AfterRoutines()) rtrue;
+	if (keep_silent) return;
+	PrintMsg(MSG_ENTER_SUCCESS);
 ];
 
 [ ExamineSub x;
@@ -341,9 +341,9 @@ Verb 'wear'
 	}
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN, noun); rtrue; }
 	PlayerTo(parent(noun), true);
-	if(AfterRoutines() == 1) rtrue;
-    if (keep_silent) return;
-    PrintMsg(MSG_EXIT_SUCCESS);
+	if(AfterRoutines()) rtrue;
+	if (keep_silent) return;
+	PrintMsg(MSG_EXIT_SUCCESS);
 ];
 
 [ FillSub;
@@ -351,17 +351,17 @@ Verb 'wear'
 ];
 
 [ GetOffSub;
-  if (parent(player) == noun) <<Exit>>;
-  PrintMsg(MSG_EXIT_NOT_ON); rtrue;
+	if (parent(player) == noun) <<Exit>>;
+	PrintMsg(MSG_EXIT_NOT_ON); rtrue;
 ];
 
 
 [ GiveSub;
-  if(ObjectIsUntouchable(second)) return;
-  if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
-  if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
-  if (RunLife(second, ##Give) ~= 0) rfalse;
-  PrintMsg(MSG_GIVE_SUCCESS);
+	if(ObjectIsUntouchable(second)) return;
+	if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
+	if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
+	if (RunLife(second, ##Give) ~= 0) rfalse;
+	PrintMsg(MSG_GIVE_SUCCESS);
 ];
 
 [ GoSub _prop;
@@ -380,48 +380,52 @@ Verb 'wear'
 ];
 
 [ InsertSub _ancestor;
-  receive_action = ##Insert;
-  if(ObjectIsUntouchable(second)) return;
-  if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
-  _ancestor = CommonAncestor(noun, second);
-  if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
-  if (second ~= _ancestor && second has container && second hasnt open) {
-    PrintMsg(MSG_INSERT_NOT_OPEN, second);
-    rtrue;
-  }
+	receive_action = ##Insert;
+	if(ObjectIsUntouchable(second)) return;
+	if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
+	_ancestor = CommonAncestor(noun, second);
+	if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
+	if (second ~= _ancestor && second has container && second hasnt open) {
+		PrintMsg(MSG_INSERT_NOT_OPEN, second);
+		rtrue;
+	}
 
-  _GrabIfNotHeld(noun);
-  if (noun notin player) rtrue;
-  if(noun has worn) { PrintMsg(MSG_INSERT_WORN); rtrue; }
+	_GrabIfNotHeld(noun);
+	if (noun notin player) rtrue;
+	if(noun has worn) { PrintMsg(MSG_INSERT_WORN); rtrue; }
 
-  ! run before on receiver
-  action = ##Receive;
-  if(RunRoutines(second, before) ~= 0) { action = ##Insert; rtrue; }
-  action = ##Insert;
+	! run before on receiver
+	action = ##Receive;
+	if(RunRoutines(second, before) ~= 0) { action = ##Insert; rtrue; }
+	action = ##Insert;
 
-  if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
-  if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
+	if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
+	if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
-  move noun to second;
+	move noun to second;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
 
 	! run after on object
-	if(AfterRoutines() == 1) rtrue;
+	if(AfterRoutines()) rtrue;
 
 	! run after on receiver
 	action = ##Receive;
 	if(RunRoutines(second, after) ~= 0) { action = ##Insert; rtrue; }
 	action = ##Insert;
 
-  if (keep_silent) return;
-  PrintMsg(MSG_INSERT_SUCCESS);
+	if (keep_silent) return;
+	PrintMsg(MSG_INSERT_SUCCESS);
 ];
 
-[ JumpSub; PrintMsg(MSG_JUMP); ];
+[ JumpSub;
+	PrintMsg(MSG_JUMP);
+];
 
-[ JumpOverSub; PrintMsg(MSG_JUMP_OVER); ];
+[ JumpOverSub;
+	PrintMsg(MSG_JUMP_OVER);
+];
 
 [ ListenSub;
     PrintMsg(MSG_LISTEN_SUCCESS);
@@ -429,13 +433,14 @@ Verb 'wear'
 
 [ LockSub;
 	if (ObjectIsUntouchable(noun)) return;
+	if (ObjectIsUntouchable(second)) return;
 	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK); rtrue; }
 	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED); rtrue; }
 	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
 	if (noun.with_key ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun locked;
-	if (AfterRoutines() == 1) rtrue;
-	if (keep_silent == 1) rtrue;
+	if (AfterRoutines()) rtrue;
+	if (keep_silent) rtrue;
 	PrintMsg(MSG_LOCK_SUCCESS);
 ];
 
@@ -447,83 +452,83 @@ Verb 'wear'
 ];
 
 [ OpenSub;
-  if(ObjectIsUntouchable(noun)) return;
-  if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT); rtrue; }
-  if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
-  if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
-  give noun open;
+	if(ObjectIsUntouchable(noun)) return;
+	if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT); rtrue; }
+	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
+	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
+	give noun open;
 #IfDef OPTIONAL_MANUAL_SCOPE;
-  scope_modified = true;
+	scope_modified = true;
 #EndIf;
-  if(AfterRoutines() == 1) rtrue;
-  if (keep_silent) return;
-  PrintMsg(MSG_OPEN_SUCCESS);
+	if(AfterRoutines()) rtrue;
+	if (keep_silent) return;
+	PrintMsg(MSG_OPEN_SUCCESS);
 ];
 
 [ PullSub;
-  if (ObjectIsUntouchable(noun)) return;
+	if (ObjectIsUntouchable(noun)) return;
 	if (noun has static)   { PrintMsg(MSG_PULL_STATIC); rtrue; }
-  if (noun has scenery)  { PrintMsg(MSG_PULL_SCENERY); rtrue; }
-  if (noun has animate)  { PrintMsg(MSG_PULL_ANIMATE); rtrue; }
-  PrintMsg(MSG_PULL_SUCCESS); !Nothing obvious happens
+	if (noun has scenery)  { PrintMsg(MSG_PULL_SCENERY); rtrue; }
+	if (noun has animate)  { PrintMsg(MSG_PULL_ANIMATE); rtrue; }
+	PrintMsg(MSG_PULL_SUCCESS); !Nothing obvious happens
 ];
 
 [ PushSub;
-  if (ObjectIsUntouchable(noun)) return;
-  if (noun has static)   { PrintMsg(MSG_PUSH_STATIC); rtrue; }
-  if (noun has scenery)  { PrintMsg(MSG_PUSH_SCENERY); rtrue; }
-  if (noun has animate)  { PrintMsg(MSG_PUSH_ANIMATE); rtrue; }
-  PrintMsg(MSG_PUSH_SUCCESS);
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun has static)   { PrintMsg(MSG_PUSH_STATIC); rtrue; }
+	if (noun has scenery)  { PrintMsg(MSG_PUSH_SCENERY); rtrue; }
+	if (noun has animate)  { PrintMsg(MSG_PUSH_ANIMATE); rtrue; }
+	PrintMsg(MSG_PUSH_SUCCESS);
 ];
 
 [ PushDirSub;
-  PrintMsg(MSG_PUSHDIR_DEFAULT);
+	PrintMsg(MSG_PUSHDIR_DEFAULT);
 ];
 
 [ PutOnSub _ancestor;
-  receive_action = ##PutOn;
+	receive_action = ##PutOn;
 
-  if (ObjectIsUntouchable(second)) return;
-  if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
-  _ancestor = CommonAncestor(noun, second);
-  if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
-  _GrabIfNotHeld(noun);
-  if(noun notin player) rtrue;
-  if(noun has worn) { PrintMsg(MSG_PUTON_WORN); rtrue; }
+	if (ObjectIsUntouchable(second)) return;
+	if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
+	_ancestor = CommonAncestor(noun, second);
+	if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
+	_GrabIfNotHeld(noun);
+	if(noun notin player) rtrue;
+	if(noun has worn) { PrintMsg(MSG_PUTON_WORN); rtrue; }
 
-  ! run before on receiver
-  action = ##Receive;
-  if(RunRoutines(second, before) ~= 0) { action = ##PutOn; rtrue; }
-  action = ##PutOn;
+	! run before on receiver
+	action = ##Receive;
+	if(RunRoutines(second, before) ~= 0) { action = ##PutOn; rtrue; }
+	action = ##PutOn;
 
-  if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
-  if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
+	if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
+	if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
 
-  move noun to second;
+	move noun to second;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;
 
-  ! run after on receiver
-  action = ##Receive;
-  if(RunRoutines(second, after) ~= 0) { action = ##PutOn; rtrue; }
-  action = ##PutOn;
+	! run after on receiver
+	action = ##Receive;
+	if(RunRoutines(second, after) ~= 0) { action = ##PutOn; rtrue; }
+	action = ##PutOn;
 
-	if(AfterRoutines() == 1) rtrue;
-  if (keep_silent) return;
-  PrintMsg(MSG_PUTON_SUCCESS);
+	if(AfterRoutines()) rtrue;
+	if (keep_silent) return;
+	PrintMsg(MSG_PUTON_SUCCESS);
 ];
 
 [ RemoveSub i;
-  i = parent(noun);
-  if (i has container && i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED); rtrue; }
-  if (i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
-  if (i has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
-  if(TryToTakeNoun() == 1) rtrue;
-  action = ##Remove; if (AfterRoutines() == 1) rtrue;
-  action = ##Take;   if (AfterRoutines() == 1) rtrue;
-  if (keep_silent == 1) rtrue;
-  PrintMsg(MSG_REMOVE_SUCCESS);
+	i = parent(noun);
+	if (i has container && i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED); rtrue; }
+	if (i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
+	if (i has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
+	if(TryToTakeNoun() == 1) rtrue;
+	action = ##Remove; if (AfterRoutines()) rtrue;
+	action = ##Take;   if (AfterRoutines()) rtrue;
+	if (keep_silent) rtrue;
+	PrintMsg(MSG_REMOVE_SUCCESS);
 ];
 
 [ RubSub;
@@ -545,7 +550,7 @@ Verb 'wear'
 	if(noun hasnt transparent && noun hasnt open) {
 		PrintMsg(MSG_SEARCH_CANT_SEE_CLOSED); rtrue;
 	}
-	if(AfterRoutines() == 1) rtrue;
+	if(AfterRoutines()) rtrue;
 	if(_f == 0)
 		PrintMsg(MSG_SEARCH_EMPTY);
 	else
@@ -553,42 +558,42 @@ Verb 'wear'
 ];
 
 [ ShowSub;
-  if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
-  if (second == player) <<Examine noun>>;
-  if (RunLife(second, ##Show) ~= 0) rfalse;
-  PrintMsg(MSG_SHOW_SUCCESS);
+	if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
+	if (second == player) <<Examine noun>>;
+	if (RunLife(second, ##Show) ~= 0) rfalse;
+	PrintMsg(MSG_SHOW_SUCCESS);
 ];
 
 [ SmellSub;
-  if(ObjectIsUntouchable(noun)) return;
-  PrintMsg(MSG_SMELL_SUCCESS);
+	if(ObjectIsUntouchable(noun)) return;
+	PrintMsg(MSG_SMELL_SUCCESS);
 ];
 
 [ SwitchOffSub;
-  if (ObjectIsUntouchable(noun)) return;
-  if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_OFF_NOT_SWITCHABLE); rtrue; }
-  if (noun hasnt on)         { PrintMsg(MSG_SWITCH_OFF_NOT_ON); rtrue; }
-  give noun ~on;
-  if (AfterRoutines() == 1) rtrue;
-  if (keep_silent == 1) rtrue;
-  PrintMsg(MSG_SWITCH_OFF_SUCCESS);
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_OFF_NOT_SWITCHABLE); rtrue; }
+	if (noun hasnt on)         { PrintMsg(MSG_SWITCH_OFF_NOT_ON); rtrue; }
+	give noun ~on;
+	if (AfterRoutines()) rtrue;
+	if (keep_silent) rtrue;
+	PrintMsg(MSG_SWITCH_OFF_SUCCESS);
 ];
 
 [ SwitchOnSub;
-  if (ObjectIsUntouchable(noun)) return;
-  if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
-  if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; }
-  give noun on;
-  if (AfterRoutines() == 1) rtrue;
-  if (keep_silent == 1) rtrue;
-  PrintMsg(MSG_SWITCH_ON_SUCCESS);
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
+	if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; }
+	give noun on;
+	if (AfterRoutines()) rtrue;
+	if (keep_silent) rtrue;
+	PrintMsg(MSG_SWITCH_ON_SUCCESS);
 ];
 
 [ TakeSub;
-  if(TryToTakeNoun() == 1) rtrue;
-  if(AfterRoutines() == 1) rtrue;
-  if (keep_silent) return;
-  PrintMsg(MSG_TAKE_SUCCESS);
+	if(TryToTakeNoun() == 1) rtrue;
+	if(AfterRoutines()) rtrue;
+	if (keep_silent) return;
+	PrintMsg(MSG_TAKE_SUCCESS);
 ];
 
 [ TieSub;
@@ -596,16 +601,16 @@ Verb 'wear'
 ];
 
 [ TellSub;
-  if (noun == player) { PrintMsg(MSG_TELL_PLAYER); rtrue; }
-  if (RunLife(noun, ##Tell) ~= 0) rfalse;
-  PrintMsg(MSG_TELL_SUCCESS);
+	if (noun == player) { PrintMsg(MSG_TELL_PLAYER); rtrue; }
+	if (RunLife(noun, ##Tell) ~= 0) rfalse;
+	PrintMsg(MSG_TELL_SUCCESS);
 ];
 
 [ ThrowAtSub;
-  _GrabIfNotHeld(noun);
-  if(noun notin player) rtrue;
-  if(ObjectIsUntouchable(second)) return;
-  if(noun has worn) { PrintMsg(MSG_THROW_WORN); rtrue; }
+	_GrabIfNotHeld(noun);
+	if(noun notin player) rtrue;
+	if(ObjectIsUntouchable(second)) return;
+	if(noun has worn) { PrintMsg(MSG_THROW_WORN); rtrue; }
 	if(second > 1) {
 		action = ##ThrownAt;
 		if (RunRoutines(second, before) ~= 0) { action = ##ThrowAt; rtrue; }
@@ -617,24 +622,24 @@ Verb 'wear'
 ];
 
 [ TouchSub;
-  if(ObjectIsUntouchable(noun)) return;
-  PrintMsg(MSG_TOUCH_SUCCESS);
+	if(ObjectIsUntouchable(noun)) return;
+	PrintMsg(MSG_TOUCH_SUCCESS);
 ];
 
 [ TransferSub;
-  _GrabIfNotHeld(noun);
-  if (noun notin player) rtrue;
-  if (second has supporter) <<PutOn noun second>>;
-  !if (second == d_obj) <<Drop noun>>;
+	_GrabIfNotHeld(noun);
+	if (noun notin player) rtrue;
+	if (second has supporter) <<PutOn noun second>>;
+	!if (second == d_obj) <<Drop noun>>;
 	<Insert noun second>;
 ];
 
 [ TurnSub;
-  if (ObjectIsUntouchable(noun)) return;
-  if (noun has static)   { PrintMsg(MSG_TURN_STATIC); rtrue; }
-  if (noun has scenery)  { PrintMsg(MSG_TURN_SCENERY); rtrue; }
-  if (noun has animate)  { PrintMsg(MSG_TURN_ANIMATE); rtrue; }
-  PrintMsg(MSG_TURN_SUCCESS);
+	if (ObjectIsUntouchable(noun)) return;
+	if (noun has static)   { PrintMsg(MSG_TURN_STATIC); rtrue; }
+	if (noun has scenery)  { PrintMsg(MSG_TURN_SCENERY); rtrue; }
+	if (noun has animate)  { PrintMsg(MSG_TURN_ANIMATE); rtrue; }
+	PrintMsg(MSG_TURN_SUCCESS);
 ];
 
 [ UnlockSub;
@@ -643,8 +648,8 @@ Verb 'wear'
 	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED); rtrue; }
 	if (noun.with_key ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun ~locked;
-	if (AfterRoutines() == 1) rtrue;
-	if (keep_silent == 1) rtrue;
+	if (AfterRoutines()) rtrue;
+	if (keep_silent) rtrue;
 	PrintMsg(MSG_UNLOCK_SUCCESS);
 ];
 
@@ -653,13 +658,13 @@ Verb 'wear'
 ];
 
 [ WearSub;
-  if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
-  if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
-  if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING); rtrue; }
-  give noun worn;
-  if (AfterRoutines() == 1) rtrue;
-  if (keep_silent == 1) rtrue;
-  PrintMsg(MSG_WEAR_SUCCESS);
+	if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
+	if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
+	if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING); rtrue; }
+	give noun worn;
+	if (AfterRoutines()) rtrue;
+	if (keep_silent) rtrue;
+	PrintMsg(MSG_WEAR_SUCCESS);
 ];
 
 
@@ -881,7 +886,7 @@ Verb 'yes' 'y//'
 ];
 
 [ TasteSub;
-  if (ObjectIsUntouchable(noun)) return;
+	if (ObjectIsUntouchable(noun)) return;
 	PrintMsg(MSG_TASTE_DEFAULT);
 ];
 
@@ -1590,8 +1595,8 @@ Global scope_cnt;
 	}
 	PlayerTo(_new_location, true);
 	if(deadflag ~= GS_PLAYING) rtrue;
-	if (AfterRoutines() == 1) rtrue;
-	if (keep_silent == 1) rtrue;
+	if (AfterRoutines()) rtrue;
+	if (keep_silent) rtrue;
 	Look();
 ];
 
