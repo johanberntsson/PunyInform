@@ -130,4 +130,6 @@ v1.4: new feature (and bug fix) release
   save 30 bytes.
 - Fixed TryToTakeNoun() so it clears concealed attribute when an object is
   picked up.
-  
+- Changed so the invent property is consulted whenever a list of objects is
+  presented by PrintContents, most notably also affecting object listings in
+  room descriptions.

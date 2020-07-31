@@ -382,7 +382,7 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 [ _PrintContentsPrintAnObj p_obj _inv _skip;
-	if(action == ##Inv && p_obj.invent ~= 0) {
+	if(p_obj.invent ~= 0) {
 		_inv = true;
 		inventory_stage = 1;
 		_skip = PrintOrRun(p_obj, invent, true);
