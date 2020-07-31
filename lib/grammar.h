@@ -1530,7 +1530,7 @@ Global scope_cnt;
 	}
 #EndIf;
 	move noun to player;
-	give noun moved;
+	give noun moved ~concealed;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
 #EndIf;

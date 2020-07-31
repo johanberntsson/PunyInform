@@ -128,3 +128,6 @@ v1.4: new feature (and bug fix) release
 - Changed a lot of checks in action routines from if(AfterRoutines() == 1) to
   just if(AfterRoutines()) and from if(keep_silent == 1) to if(keep_silent) to
   save 30 bytes.
+- Fixed TryToTakeNoun() so it clears concealed attribute when an object is
+  picked up.
+  
