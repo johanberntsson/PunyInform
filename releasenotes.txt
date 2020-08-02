@@ -139,4 +139,6 @@ v1.4: new feature (and bug fix) release
   after routines even if object doesn't provide them.
 - Added printing to calls to before and after rules for fake actions Receiver
   and LetGo for when debug verb 'routines' has been entered.
-  
+- A game programmer can check the version of PunyInform being used by looking
+  at the values of constants PUNYINFORM_MAJOR_VERSION and
+  PUNYINFORM_MINOR_VERSION.
