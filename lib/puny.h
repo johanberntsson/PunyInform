@@ -1163,15 +1163,14 @@ Object thedark "Darkness"
 #EndIf;
 #EndIf;
 
-	Initialise();
+	_j = Initialise();
 
 	objectloop (_i in player) give _i moved ~concealed;
 
-	VersionSub();
+	if(_j ~= 2) Banner();
 
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
-!	<Look>;
 
 	while(deadflag == GS_PLAYING) {
 		scope_modified = false; ! avoid automatic scope updates during parsing

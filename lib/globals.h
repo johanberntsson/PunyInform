@@ -350,7 +350,12 @@ Default SACK_OBJECT         0;
 
 !#Endif;
 
-Global location;      ! Must be the first global to show location name
+#IfDef INITIAL_LOCATION_VALUE;
+Global location = INITIAL_LOCATION_VALUE;		! Must be the first global to show location name
+#IfNot;
+Global location = thedark;						! Must be the first global to show location name
+#EndIf;
+
 Global status_field_1 = 0; ! Must be the second global to show score or hours
 Global status_field_2 = 0; ! Must be the third global to show turns or minutes
 Global real_location;

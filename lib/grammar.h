@@ -1097,14 +1097,14 @@ Verb meta 'quit' 'q//'
 	PrintRank();
 ];
 
-[ VersionSub _i;
+[ Banner _i;
 	if(Story ~= 0) {
 #IfV5;
-	style bold;
+		style bold;
 #EndIf;
 		print (string) Story;
 #IfV5;
-	style roman;
+		style roman;
 #EndIf;
 		if(Headline ~= 0) print (string) Headline;
     }
@@ -1117,6 +1117,10 @@ Verb meta 'quit' 'q//'
 	print " D";
 #EndIf;
 	@new_line;
+];
+
+[ VersionSub;
+	Banner();
 ];
 
 ! ---------------------
@@ -1219,7 +1223,7 @@ Verb meta 'verify'
 	@output_stream 2;
 	if (((HDR_GAMEFLAGS-->0) & 1) == 0) "Attempt to begin transcript failed.";
 	print "Start of a transcript of^";
-	VersionSub();
+	Banner();
 	transcript_mode = true;
 ];
 

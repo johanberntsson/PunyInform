@@ -142,3 +142,17 @@ v1.4: new feature (and bug fix) release
 - A game programmer can check the version of PunyInform being used by looking
   at the values of constants PUNYINFORM_MAJOR_VERSION and
   PUNYINFORM_MINOR_VERSION.
+
+=======
+v1.5: new feature, optimization and bugfix release
+
+- Before including globals.h, the game can now define the constant
+  INITIAL_LOCATION_VALUE and set it to the object where the player should
+  start. This makes sure location is set right when the game starts, so
+  interpreters that display a statusline immediately (like the Gameboy
+  interpreter) don't run into problems. If the game defines this constant,
+  there is no need to set the location in the Initialise routine.
+- Printing the game banner has been moved to a routine named Banner(), just
+  like in I6 lib.
+- A game can now make the library skip the game banner when the game starts, by
+  returning 2 from Initialise(), just like in I6 lib.
