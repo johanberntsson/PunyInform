@@ -44,7 +44,7 @@ Object Library "The Library"
 Object -> Box "box"
 	with
 		name 'box',
-	has container open openable;
+	has container open openable enterable;
 
 [Initialise;
 	print "^^And so the story begins...^^";

@@ -1435,12 +1435,12 @@ Global scope_cnt;
 			_obj = parent(_obj);
 		}
 		while(_ceil ~= player or 0) {
-
-			@new_line;
 			if(_describe_room) {
 				if(_ceil == location) {
+					@new_line;
 					PrintOrRun(_ceil, description);
-				} else if(_ceil.&inside_description) {
+				} else if(_ceil.inside_description ~= 0 or NULL) {
+					@new_line;
 					PrintOrRun(_ceil, inside_description);
 				}
 			}

@@ -156,3 +156,6 @@ v1.5: new feature, optimization and bugfix release
   like in I6 lib.
 - A game can now make the library skip the game banner when the game starts, by
   returning 2 from Initialise(), just like in I6 lib.
+- An extra newline was printed in Look if the player was in/on an object which
+  didn't provide an inside_description.
+ 
