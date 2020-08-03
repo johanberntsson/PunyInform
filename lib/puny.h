@@ -286,12 +286,11 @@ Constant ONE_SPACE_STRING = " ";
         for (_obj=youngest(player) : _obj : _obj=elder(_obj))
             if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
                 _ks = keep_silent;
-                Keep_silent = 1;
+                keep_silent = 1;
                 <Insert _obj SACK_OBJECT>;
                 keep_silent = _ks;
-                if (keep_silent) return;
                 if (_obj in SACK_OBJECT) {
-					PrintMsg(MSG_SACK_PUTTING, _obj);
+                    if (keep_silent == 0) PrintMsg(MSG_SACK_PUTTING, _obj);
                     rtrue;
                 }
             }
