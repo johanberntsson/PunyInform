@@ -18,6 +18,8 @@
 !Constant OPTIONAL_MANUAL_SCOPE;
 Constant RUNTIME_ERRORS = 0;
 
+Constant INITIAL_LOCATION_VALUE = Library;
+
 Include "globals.h";
 
 ! Uncomment to add PunyLib extensions
@@ -34,5 +36,4 @@ Object Library "L"
 	has light;
 
 [Initialise;
-	location = Library;
 ];

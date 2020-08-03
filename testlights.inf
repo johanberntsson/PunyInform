@@ -24,6 +24,8 @@ Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_FULL_DIRECTIONS;
 Constant OPTIONAL_MANUAL_SCOPE;
 
+Constant INITIAL_LOCATION_VALUE = LightRoom;
+
 !Constant DEBUG_TIMER; ! requires special Ozmoo
 !Constant DEBUG_SCOPE;
 !Constant DEBUG_PARSEPATTERN;
@@ -122,7 +124,8 @@ Object -> Lamp "lamp"
 
 
 [Initialise;
+#IfDef USEINFORM;
 	location = LightRoom;
-
+#EndIf;
 	print "^^Welcome to the Testlights.^^";
 ];

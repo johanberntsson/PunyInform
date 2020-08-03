@@ -24,9 +24,11 @@ Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant RUNTIME_ERRORS = 0; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 
+Constant INITIAL_LOCATION_VALUE = GloomyStreet;
+
 Constant Story	  "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game, by Pablo Martinez and Fredrik Ramsberg.^";
-Release 2;
+Release 3;
 
 Constant MAX_SCORE = 100;
 Constant TASKS_PROVIDED;
@@ -766,7 +768,6 @@ Object Words "words"
 ! ====================================
 
 [Initialise;
-	location = GloomyStreet;
 	lookmode = 2; ! Verbose by default
 	"^^The search for a job can be arduous for a young person like you, with no experience or contacts and
 		a newcomer to the city. That's why when you had that newspaper in your hands yesterday and read
