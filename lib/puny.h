@@ -516,10 +516,6 @@ Constant ONE_SPACE_STRING = " ";
 [ _UpdateDarkness p_look _ceil _old_darkness _darkness;
 	if(location == thedark) _old_darkness = true;
 	_ceil = ScopeCeiling(player);
-!	print "_UpdateDarkness, location is: ", (the) location, "^";
-!	print "_UpdateDarkness, real_location is: ", (the) real_location, "^";
-!	print "_UpdateDarkness, ScopeCeiling is: ", (the) _ceil, "^";
-!	real_location = superparent(player);
 	_darkness = ~~_LookForLightInObj(_ceil, _ceil);
 	if(_darkness) {
 		location = thedark;
@@ -528,8 +524,6 @@ Constant ONE_SPACE_STRING = " ";
 		if(_old_darkness == true && p_look == true)
 			<Look>;
 	}
-!	print "_UpdateDarkness 2, fake_location is: ", (the) fake_location, "^";
-!	print "_UpdateDarkness 2, ScopeCeiling is: ", (the) _ceil, "^";
 ];
 
 [ _LookForLightInObj p_obj p_ceiling _o;

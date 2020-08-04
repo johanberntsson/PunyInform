@@ -160,3 +160,6 @@ v1.5: new feature, optimization and bugfix release
   didn't provide an inside_description.
 - A newline was missing in Look when a room description was not printed (when
   brief or superbrief lookmode was enabled).
+- The statusline showed the real location in z3, when the player was in
+  darkness.
+  

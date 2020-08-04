@@ -24,14 +24,7 @@ System_file;
 	@aread buffer parse -> _result;
 	@buffer_mode 1;
 #IfNot;
-	if(player in location) {
-		@sread buffer parse;
-	} else {
-		! need to adjust location to make the status line correct
-		_result = location; location = ScopeCeiling(player);
-		@sread buffer parse;
-		location = _result;
-	}
+	@sread buffer parse;
 #EndIf;
 	num_words = parse -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
@@ -840,7 +833,7 @@ System_file;
 							if(p_phase == PHASE2) {
 								PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
 								return GPR_FAIL;
-							} 
+							}
 							return GPR_MULTIPLE;
 						} else if(multiple_objects --> 0 == 1) {
 							! single object
