@@ -1443,7 +1443,8 @@ Global scope_cnt;
 					@new_line;
 					PrintOrRun(_ceil, inside_description);
 				}
-			}
+			} else if(_ceil == location)
+				@new_line;
 
 			also_flag = false;
 			! write intial and describe messages in a new paragraph

@@ -158,4 +158,5 @@ v1.5: new feature, optimization and bugfix release
   returning 2 from Initialise(), just like in I6 lib.
 - An extra newline was printed in Look if the player was in/on an object which
   didn't provide an inside_description.
- 
+- A newline was missing in Look when a room description was not printed (when
+  brief or superbrief lookmode was enabled).
