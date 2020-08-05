@@ -162,4 +162,8 @@ v1.5: new feature, optimization and bugfix release
   brief or superbrief lookmode was enabled).
 - The statusline showed the real location in z3, when the player was in
   darkness.
+- Run AfterRoutines() after taking inventory and it's not empty, just like
+  I6 lib.
+- Changed so location.after() is printed if debug verb "routines" has been
+  entered, regardless of whether location provides such a routine.
   

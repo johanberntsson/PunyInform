@@ -374,11 +374,6 @@ Verb 'wear'
 	GoDir(_prop);
 ];
 
-[ InvSub;
-	if(child(player) == 0) { PrintMsg(MSG_INVENTORY_EMPTY); rtrue; }
-    PrintMsg(MSG_INVENTORY_SUCCESS);
-];
-
 [ InsertSub _ancestor;
 	receive_action = ##Insert;
 	if(ObjectIsUntouchable(second)) return;
@@ -423,6 +418,12 @@ Verb 'wear'
 
 	if (keep_silent) return;
 	PrintMsg(MSG_INSERT_SUCCESS);
+];
+
+[ InvSub;
+	if(child(player) == 0) { PrintMsg(MSG_INVENTORY_EMPTY); rtrue; }
+    PrintMsg(MSG_INVENTORY_SUCCESS);
+	AfterRoutines();
 ];
 
 [ JumpSub;

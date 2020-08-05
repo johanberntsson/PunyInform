@@ -656,15 +656,14 @@ Include "parser.h";
 			! Assume that every routine may modify the scope
 			scope_modified = true;
 #EndIf;
-			if(RunRoutines(_obj, react_after)) {
+			if(RunRoutines(_obj, react_after))
 				rtrue;
-			}
 		}
 	}
-	if(location provides after) {
 #IfDef DEBUG;
-		if(debug_flag & 1) print "(", (name) location, ").after()^";
+	if(debug_flag & 1) print "(", (name) location, ").after()^";
 #EndIf;
+	if(location provides after) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 		! Assume that every routine may modify the scope
 		scope_modified = true;
