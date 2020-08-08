@@ -1400,11 +1400,9 @@ Global scope_cnt;
 	print "see ";
 ];
 
-[ Look _obj _top_ceil _ceil _player_parent _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level _visited;
-	if(location has visited) _visited = true;
+[ Look _obj _top_ceil _ceil _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level;
 	@new_line;
-	_player_parent = parent(player);
-	_describe_room = ((lookmode == 1 && _visited == false) || lookmode == 2);
+	_describe_room = ((lookmode == 1 && location hasnt visited) || lookmode == 2);
 #IfV5;
 	style bold;
 #EndIf;
@@ -1417,7 +1415,7 @@ Global scope_cnt;
 
 	if(_ceil == location) {
 #IfDef OPTIONAL_FULL_SCORE;
-		if(location has scored && _visited == 0) {
+		if(location has scored && location hasnt visited) {
 			score = score + ROOM_SCORE;
 			places_score = places_score + ROOM_SCORE;
 		}
@@ -1433,7 +1431,7 @@ Global scope_cnt;
 		@new_line;
 		PrintOrRun(location, description);
 	} else {
-		_obj = _player_parent;
+		_obj = parent(player);
 		while(_obj ~= _ceil or 0) {
 			if(_obj has supporter)
 				print " (on ";
