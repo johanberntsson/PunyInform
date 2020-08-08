@@ -166,4 +166,6 @@ v1.5: new feature, optimization and bugfix release
   I6 lib.
 - Changed so location.after() is printed if debug verb "routines" has been
   entered, regardless of whether location provides such a routine.
-  
+- with_key can now be a routine. The object which is currently being tested as
+  key is held in second. with_key returns an object id, or false if nothing
+  fits.

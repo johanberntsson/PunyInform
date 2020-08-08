@@ -79,11 +79,7 @@ Include "globals.h";
 ! The dictionary only holds six characters in z3 games, so we need to help print verbs longer than this.
 [PrintVerb p_verb _s;
 	switch(p_verb) {
-		'blindfold': _s = "blindfold";
-	}
-	if(_s) {
-		print (string) _s;
-		rtrue;
+		'blindfold': print "blindfold"; rtrue;
 	}
 	rfalse;
 ];

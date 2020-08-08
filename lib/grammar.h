@@ -438,13 +438,20 @@ Verb 'wear'
     PrintMsg(MSG_LISTEN_SUCCESS);
 ];
 
+[SecondIsKeyForObject p_obj _k;
+	_k = p_obj.with_key;
+	if(_k > top_object) _k = p_obj.with_key();
+	if(_k ~= second) rfalse;
+	! Named routines return true by default
+];
+
 [ LockSub;
 	if (ObjectIsUntouchable(noun)) return;
 	if (ObjectIsUntouchable(second)) return;
 	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK); rtrue; }
 	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED); rtrue; }
 	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
-	if (noun.with_key ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
+	if (SecondIsKeyForObject(noun) == false) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun locked;
 	if (AfterRoutines()) rtrue;
 	if (keep_silent) rtrue;
@@ -662,7 +669,7 @@ Verb 'wear'
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK); rtrue; }
 	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED); rtrue; }
-	if (noun.with_key ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
+	if (SecondIsKeyForObject(noun) == false) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun ~locked;
 	if (AfterRoutines()) rtrue;
 	if (keep_silent) rtrue;
