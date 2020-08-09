@@ -368,9 +368,11 @@ Default LibraryMessages 0;
 	switch(p_msg) {
 	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
 		"Nothing obvious happens.";
+#IfDef SACK_OBJECT;
 #IfTrue MSG_SACK_PUTTING < 1000;
 	MSG_SACK_PUTTING:
 		"(putting ", (the) p_arg_1, " into ", (the) SACK_OBJECT, " to make room)";
+#EndIf;
 #EndIf;
 #IfTrue MSG_PROMPT < 1000;
 	MSG_PROMPT:
@@ -394,32 +396,25 @@ Default LibraryMessages 0;
 		"That would be less than courteous.";
 	MSG_TURN_STATIC, MSG_PUSH_STATIC, MSG_PULL_STATIC:
 		"You are unable to.";
-	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING, MSG_WEAR_NOT_HOLDING:
+	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING,
+		MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItorThem) noun, ".";
 	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT,
-		MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK:
-		"That doesn't seem to be something you can ", (verbname) verb_word, ".";
-#IfTrue MSG_WEAR_NOT_CLOTHING < 1000;
-	MSG_WEAR_NOT_CLOTHING:
-		! Can't use the same message as MSG_OPEN_YOU_CANT etc, since verb might be PUT
-		"That's not something you can wear.";
-#EndIf;
+		MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK, MSG_WEAR_NOT_CLOTHING:
+		"That doesn't seem to be something you can ", (verbname) p_arg_1, ".";
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg_1, ".";
-	MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS, MSG_UNLOCK_SUCCESS:
-		"You ", (verbname) verb_word, " ", (the) noun, ".";
+	MSG_OPEN_SUCCESS, MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS,
+		MSG_UNLOCK_SUCCESS, MSG_EXIT_SUCCESS:
+		"You ", (verbname) p_arg_1, " ", (the) noun, ".";
 	MSG_GIVE_SUCCESS, MSG_SHOW_SUCCESS:
 		print_ret (The) second, " doesn't seem interested.";
 	MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
 		print_ret (The) noun, " has better things to do.";
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
 		"You can't, since ",(the) p_arg_1, " is closed.";
-#IfTrue MSG_EXIT_SUCCESS < 1000;
-	MSG_EXIT_SUCCESS:
-		"You leave ", (the) noun, ".";
-#EndIf;
 #IfTrue MSG_GIVE_PLAYER < 1000;
 	MSG_GIVE_PLAYER:
 		"You already have ", (ItorThem) noun, ".";
@@ -483,7 +478,7 @@ Default LibraryMessages 0;
 	MSG_CUT_NO_USE, MSG_JUMP_OVER, MSG_TIE_DEFAULT:
 		"You would achieve nothing by this.";
 	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_UNLOCKED:
-		print_ret (CObjIs) noun, " already ", (verbname) verb_word, "ed.";
+		print_ret (CObjIs) noun, " already ", (verbname) p_arg_1, "ed.";
 #IfTrue MSG_LOCK_CLOSE_FIRST < 1000;
 	MSG_LOCK_CLOSE_FIRST:
 		"First you'd have to close ", (the) noun, ".";

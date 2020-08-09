@@ -169,3 +169,11 @@ v1.5: new feature, optimization and bugfix release
 - with_key can now be a routine. The object which is currently being tested as
   key is held in second. with_key returns an object id, or false if nothing
   fits.
+- Fixed bug: Insert and PutOn checked the capacity of the object inserted
+  rather than the container/supporter.
+- Skipped compilation of code to automatically put things in sack object if
+  SACK_OBJECT has not been defined.
+- Made many library messages safer, in that they will work even if adding new
+  grammar which use a different verb word.
+- Optimized check for correct key in Lock and Unlock.
+- Slight optimization in Look.

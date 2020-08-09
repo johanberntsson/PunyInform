@@ -254,27 +254,6 @@ Array _dir_end static ->   0 6 7 8 6 2 0;
 Constant DIRECTION_COUNT = 8;
 #EndIf;
 
-! ! Property name; ! 'name' seems to be hardcoded in the Inform compiler
-! Property initial;
-! Property describe alias e_to;
-! Property description;
-! Property short_name;
-! Property add_to_scope;
-! Property react_after;
-! Property react_before;
-! Property after;
-! Property before;
-! Property parse_name;
-! Property capacity;
-! Property article;
-! Property found_in;
-
-! ! Daemons and timers
-
-! Property additive time_out NULL;
-! Property daemon alias time_out;
-! Property time_left;
-
 #IfDef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Array LanguageNumbers static table
     'one' 1 'two' 2 'three' 3 'four' 4 'five' 5
@@ -346,9 +325,6 @@ Constant TIME__TX = " Time: ";
 Default MAX_SCORE           0;
 Default AMUSING_PROVIDED    1;
 Default MAX_CARRIED        32;
-Default SACK_OBJECT         0;
-
-!#Endif;
 
 #IfDef INITIAL_LOCATION_VALUE;
 Global location = INITIAL_LOCATION_VALUE;		! Must be the first global to show location name

@@ -229,7 +229,7 @@ Verb 'wear'
 
 [ CloseSub;
 	if(ObjectIsUntouchable(noun)) return;
-	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT); rtrue; }
+	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT, 'close'); rtrue; }
 	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN, noun); rtrue; }
 	give noun ~open;
 #IfDef OPTIONAL_MANUAL_SCOPE;
@@ -237,7 +237,7 @@ Verb 'wear'
 #EndIf;
 	if(AfterRoutines()) rtrue;
 	if (keep_silent) return;
-	PrintMsg(MSG_CLOSE_SUCCESS);
+	PrintMsg(MSG_CLOSE_SUCCESS, 'close');
 ];
 
 [ ConsultSub;
@@ -302,14 +302,14 @@ Verb 'wear'
 		_door_dir = DirPropToFakeObj(_door_dir);
 		<<Go _door_dir>>;
 	}
-	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT); rtrue; }
+	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT, 'enter'); rtrue; }
 	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
 	if(parent(noun) ~= parent(player)) { PrintMsg(MSG_ENTER_BAD_LOCATION); rtrue; }
 	PlayerTo(noun, true);
 	if(AfterRoutines()) rtrue;
 	if (keep_silent) return;
-	PrintMsg(MSG_ENTER_SUCCESS);
+	PrintMsg(MSG_ENTER_SUCCESS, 'enter');
 ];
 
 [ ExamineSub x;
@@ -343,7 +343,7 @@ Verb 'wear'
 	PlayerTo(parent(noun), true);
 	if(AfterRoutines()) rtrue;
 	if (keep_silent) return;
-	PrintMsg(MSG_EXIT_SUCCESS);
+	PrintMsg(MSG_EXIT_SUCCESS, 'leave');
 ];
 
 [ FillSub;
@@ -398,7 +398,7 @@ Verb 'wear'
 	action = ##Insert;
 
 	if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
-	if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
+	if (_AtFullCapacity(second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
 	move noun to second;
 #IfDef OPTIONAL_MANUAL_SCOPE;
@@ -438,24 +438,17 @@ Verb 'wear'
     PrintMsg(MSG_LISTEN_SUCCESS);
 ];
 
-[SecondIsKeyForObject p_obj _k;
-	_k = p_obj.with_key;
-	if(_k > top_object) _k = p_obj.with_key();
-	if(_k ~= second) rfalse;
-	! Named routines return true by default
-];
-
 [ LockSub;
 	if (ObjectIsUntouchable(noun)) return;
 	if (ObjectIsUntouchable(second)) return;
-	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK); rtrue; }
-	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED); rtrue; }
+	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK, 'lock'); rtrue; }
+	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED, 'lock'); rtrue; }
 	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
-	if (SecondIsKeyForObject(noun) == false) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
+	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun locked;
 	if (AfterRoutines()) rtrue;
 	if (keep_silent) rtrue;
-	PrintMsg(MSG_LOCK_SUCCESS);
+	PrintMsg(MSG_LOCK_SUCCESS, 'lock');
 ];
 
 [ LookSub _old_lookmode;
@@ -467,7 +460,7 @@ Verb 'wear'
 
 [ OpenSub;
 	if(ObjectIsUntouchable(noun)) return;
-	if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT); rtrue; }
+	if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT, 'open'); rtrue; }
 	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
 	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
 	give noun open;
@@ -476,7 +469,7 @@ Verb 'wear'
 #EndIf;
 	if(AfterRoutines()) rtrue;
 	if (keep_silent) return;
-	PrintMsg(MSG_OPEN_SUCCESS);
+	PrintMsg(MSG_OPEN_SUCCESS, 'open');
 ];
 
 [ PullSub;
@@ -519,7 +512,7 @@ Verb 'wear'
 	action = ##PutOn;
 
 	if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
-	if (_AtFullCapacity(noun, second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
+	if (_AtFullCapacity(second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
 
 	move noun to second;
 #IfDef OPTIONAL_MANUAL_SCOPE;
@@ -667,13 +660,13 @@ Verb 'wear'
 
 [ UnlockSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK); rtrue; }
-	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED); rtrue; }
-	if (SecondIsKeyForObject(noun) == false) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
+	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK, 'unlock'); rtrue; }
+	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED, 'unlock'); rtrue; }
+	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun ~locked;
 	if (AfterRoutines()) rtrue;
 	if (keep_silent) rtrue;
-	PrintMsg(MSG_UNLOCK_SUCCESS);
+	PrintMsg(MSG_UNLOCK_SUCCESS, 'unlock');
 ];
 
 [ WaitSub;
@@ -683,7 +676,7 @@ Verb 'wear'
 [ WearSub;
 	if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
 	if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
-	if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING); rtrue; }
+	if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING, 'wear'); rtrue; }
 	give noun worn;
 	if (AfterRoutines()) rtrue;
 	if (keep_silent) rtrue;
@@ -1402,7 +1395,7 @@ Global scope_cnt;
 
 [ Look _obj _top_ceil _ceil _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level;
 	@new_line;
-	_describe_room = ((lookmode == 1 && location hasnt visited) || lookmode == 2);
+	if((lookmode == 1 && location hasnt visited) || lookmode == 2) _describe_room = true;
 #IfV5;
 	style bold;
 #EndIf;

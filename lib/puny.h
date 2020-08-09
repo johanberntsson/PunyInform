@@ -272,17 +272,21 @@ Constant ONE_SPACE_STRING = " ";
 #EndIf;
 
 [ _AtFullCapacity p_s _obj _k;
-    if (p_s.&capacity == 0) rfalse; ! We will consider that no capacity specified implies infinite capacity.
     if (p_s == player) {
         objectloop (_obj in p_s)
             if (_obj hasnt worn) _k++;
     } else
         _k = children(p_s);
-    if (_k < RunRoutines(p_s, capacity) || (p_s == player && _RoomInSack())) rfalse;
+#IfDef SACK_OBJECT;
+	if (_k < RunRoutines(p_s, capacity) || (p_s == player && _RoomInSack())) rfalse;
+#IfNot;
+	if (_k < RunRoutines(p_s, capacity)) rfalse;
+#EndIf;
 ];
 
+#IfDef SACK_OBJECT;
 [ _RoomInSack _obj _ks;
-    if (SACK_OBJECT && SACK_OBJECT in player) {
+    if (SACK_OBJECT in player) {
         for (_obj=youngest(player) : _obj : _obj=elder(_obj))
             if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
                 _ks = keep_silent;
@@ -297,6 +301,7 @@ Constant ONE_SPACE_STRING = " ";
     }
     rfalse;
 ];
+#EndIf;
 
 [ PrintShortName o;
     if (o == 0) { print "nothing"; rtrue; }

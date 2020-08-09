@@ -1217,9 +1217,7 @@ Object Toilet "The toilet"
 #IfNot;
 		w_to ToiletDoor,
 #EndIf;
-		add_to_scope [;
-			PlaceInScope(ToiletDoor);
-		];
+	has ~light;
 
 Object -> ToiletDoor "toilet door"
 	with
@@ -1248,7 +1246,7 @@ Object -> ToiletDoor "toilet door"
 		when_open "The toilet door stands slightly ajar.",
 		when_closed "The toilet door is closed.",
 		found_in Toilet Library,
-		with_key Key,
+		with_key [; if(second == Key or Sweater) return second;],
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** ToiletDoor.after^"; ],
 		before [; print "*** ToiletDoor.before^"; ],
