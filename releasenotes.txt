@@ -185,3 +185,4 @@ v1.6: bugfix release
   open.
 - GET ALL FROM [object] would not take anything unless the object was a static
   or scenery object.
+- Missing full stop in parser error message "I don't understand that sentence."
