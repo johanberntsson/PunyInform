@@ -916,11 +916,17 @@ System_file;
 		! add all reasonable objects and filter later
 		MULTIHELD_OBJECT, MULTIEXCEPT_OBJECT:
 			_addobj = _obj in player;
-		MULTI_OBJECT, MULTIINSIDE_OBJECT:
+		MULTI_OBJECT:
 			_p = parent(_obj);
 			_ceil = TouchCeiling(player);
 			_addobj = false;
 			if((_p == _ceil || (_p ~= 0 && _p in _ceil && _p has scenery or static && _p hasnt concealed && _p has container or supporter)) && _obj hasnt scenery or concealed or static or animate)
+				_addobj = true;
+		MULTIINSIDE_OBJECT:
+			_p = parent(_obj);
+			_ceil = TouchCeiling(player);
+			_addobj = false;
+			if(_p ~= 0 && _p has container or supporter && _obj hasnt scenery or concealed or static or animate)
 				_addobj = true;
 !			_addobj = _obj hasnt scenery or concealed or static or animate &&
 !				(_p == 0 || parent(_p) == 0 || _p has container or supporter);
@@ -1565,7 +1571,7 @@ Array guess_num_objects->5;
 		! (b) warn the player if it has been cut short because too long;
 		! (c) generate a sequence of actions from the list
 		!     (stopping in the event of death or movement away).
-		if(parser_check_multiple == MULTIINSIDE_OBJECT && second hasnt open) {
+		if(parser_check_multiple == MULTIINSIDE_OBJECT && second has container && second hasnt open) {
         	PrintMsg(MSG_PARSER_CONTAINER_ISNT_OPEN, second);
 		} else {
 			_score = 0;

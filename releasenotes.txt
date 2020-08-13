@@ -177,3 +177,11 @@ v1.5: new feature, optimization and bugfix release
   grammar which use a different verb word.
 - Optimized check for correct key in Lock and Unlock.
 - Slight optimization in Look.
+
+=======
+v1.6: bugfix release
+
+- GET ALL FROM [supporter] could make parser complain that the supporter isn't
+  open.
+- GET ALL FROM [object] would not take anything unless the object was a static
+  or scenery object.

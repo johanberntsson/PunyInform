@@ -532,11 +532,11 @@ Verb 'wear'
 	PrintMsg(MSG_PUTON_SUCCESS);
 ];
 
-[ RemoveSub i;
-	i = parent(noun);
-	if (i has container && i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED); rtrue; }
-	if (i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
-	if (i has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
+[ RemoveSub _i;
+	_i = parent(noun);
+	if (_i has container && _i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED, _i); rtrue; }
+	if (_i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
+	if (_i has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
 	if(TryToTakeNoun() == 1) rtrue;
 	action = ##Remove; if (AfterRoutines()) rtrue;
 	action = ##Take;   if (AfterRoutines()) rtrue;
