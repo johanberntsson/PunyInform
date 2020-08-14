@@ -350,7 +350,6 @@ Global actor;
 Global wn;               ! word number within parse
 Global num_words;        ! number of words typed
 Global action;           ! the current action
-Global action_debug;     ! action is one of the debugging verbs
 Global action_reverse;   ! if parameters are in reversed order
 Global meta;             ! if the verb has the meta attribute or not
 Global verb_word;        ! verb word, eg 'take' in "take all"

@@ -324,13 +324,13 @@ System_file;
 	}
 
 #IfDef DEBUG;
-	if(action_debug) {
+	if(meta) {
 		_name_array_len = Directions; _stop = top_object + 1;
 	} else {
 		_name_array_len = 0; _stop = scope_objects;
 	}
 	for(_i = _name_array_len: _i < _stop: _i++) {
-		if(action_debug) _obj = _i; else _obj = scope-->_i;
+		if(meta) _obj = _i; else _obj = scope-->_i;
 #IfNot;
 	_stop = scope_objects;
 	for(_i = 0: _i < _stop: _i++) {
@@ -351,9 +351,12 @@ System_file;
 				_n = _n + _result; ! number of words consumed
 				wn = _j;
 				if(_n > wn) {
-					if(action_debug == false && _obj has concealed or scenery) {
-						! don't consider for which, but remember
-						! as last resort if nothing else matches
+					if(meta == false && _obj has concealed or scenery) {
+						! this is a non-debug verb and since the object
+						! isn't obvious we don't consider it as an
+						! option for a future "which X?" question. 
+						! However, we still remember it as last resort
+						! if nothing else matches
 						if(_low_priority_match_len < _n) {
 							_low_priority_match_obj = _obj;
 							_low_priority_match_len = _n;
@@ -412,9 +415,12 @@ System_file;
 						_p = _p + 4;
 						_current_word = _p-->0;
 						if(_n >= _best_score) {
-							if(action_debug == false && _obj has concealed or scenery) {
-								! don't consider for which, but remember
-								! as last resort if nothing else matches
+							if(meta == false && _obj has concealed or scenery) {
+								! this is a non-debug verb and since the object
+								! isn't obvious we don't consider it as an
+								! option for a future "which X?" question. 
+								! However, we still remember it as last resort
+								! if nothing else matches
 								if(_low_priority_match_len < _n) {
 									_low_priority_match_obj = _obj;
 									_low_priority_match_len = _n;
@@ -679,7 +685,6 @@ System_file;
     if (actor ~= player) rtrue;
     if (obj has animate) rtrue;
     if (obj hasnt talkable) rfalse;
-    if (action == ##Ask or ##Answer or ##Tell or ##AskFor) rtrue;
     rfalse;
 ];
 
@@ -1157,9 +1162,6 @@ Array guess_num_objects->5;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 	phase2_necessary = false;
-#IfDef DEBUG;
-	action_debug = (action == ##Scope or ##Purloin or ##Tree or ##GoNear);
-#EndIf;
 
 	while(true) {
 		_pattern_pointer = _pattern_pointer + 3;

@@ -254,7 +254,7 @@ Constant PlaceInScope = _PutInScope;
 	_UpdateScope(p_actor);
 
 	! special case for debugging verbs; everything is in scope
-	if(action_debug) rtrue;
+	if(meta) rtrue;
 
 	_UpdateScope(p_actor);
 	for(_i = 0: _i < scope_objects: _i++) {
