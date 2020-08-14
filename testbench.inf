@@ -1028,6 +1028,15 @@ Include "globals.h";
 ];
 
 
+Verb 'talk'
+	*	'to'/'with'	creature	-> Talk;
+
+[TalkSub;
+	if (noun == player) "The conversation is hardly inspiring.";
+	if (RunLife(noun,##Talk) ~= false) return;
+	"You have nothing to say.";
+];
+
 #Ifndef USEINFORM;
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
@@ -1061,7 +1070,6 @@ Include "ext_menu.h";
     DoMenu(HelpItems, HelpMenu, HelpInfo);
 ];
 Verb 'help' * -> Help;
-
 
 ! Setup custom library messages
 Constant MSG_OPEN_YOU_CANT 1000;
@@ -1769,7 +1777,9 @@ Array quote_1 --> 5 35
 	thedark.initial = "Oh, so scary.";
 	thedark.description = "Now you are really scared.";
 	SetTime(9*60+30, 5); ! 9:30 am, each turn 5 minutes
-!	location = Library;
+#Ifdef USEINFORM;
+	location = Library;
+#Endif;
 !	PlayerTo(LargeBox);
 !	print "Parrot fed = ", FlagIsSet(F_PARROT_FED),"^";
 !	SetFlag(F_PARROT_FED);

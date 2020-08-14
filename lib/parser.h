@@ -674,6 +674,15 @@ System_file;
 	keep_silent = false;
 ];
 
+[ _CreatureTest obj;
+	! Will this obj do for a "creature" token?
+    if (actor ~= player) rtrue;
+    if (obj has animate) rtrue;
+    if (obj hasnt talkable) rfalse;
+    if (action == ##Ask or ##Answer or ##Tell or ##AskFor) rtrue;
+    rfalse;
+];
+
 [ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
@@ -764,11 +773,11 @@ System_file;
 				return GPR_FAIL;
 			}
 			p_parse_pointer = parse + 2 + 4 * (wn - 1);
-			if(_token_data == CREATURE_OBJECT && _noun hasnt animate) {
+			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {
 				if(p_phase == PHASE2) {
 					PrintMsg(MSG_PARSER_ONLY_TO_ANIMATE);
-					return GPR_FAIL;
 				}
+				return GPR_FAIL;
 			}
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				if(p_phase == PHASE2) {
