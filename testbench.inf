@@ -1153,7 +1153,8 @@ Object CarPark "Car Park"
 
 Object -> Key "key"
 	with
-		name 'key',
+		description "It's a metal key, with a keyring attached to it."
+		name 'key' 'metal',
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** Key.after^"; ],
 		before [; print "*** Key.before^"; ],
@@ -1161,7 +1162,12 @@ Object -> Key "key"
 #IfDef OPTIONAL_FULL_SCORE;
 	has scored
 #EndIf;
-	;
+	has transparent;
+
+Object -> -> Keyring "keyring"
+	with
+		name 'keyring',
+		description "It's just a plain metal ring really.";
 
 Object -> LeadWeight "lead weight"
 	with
@@ -1453,7 +1459,8 @@ Object -> -> Sticker "sticker"
 #IfnDef USEINFORM;
 !		if(location ~= thedark) "The sticker looks oh so sticky.";
 #Endif;
-		];
+		],
+		add_to_scope Key;
 
 Object -> BlueBook "blue book" class Book
 	with

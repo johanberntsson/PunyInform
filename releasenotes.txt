@@ -188,3 +188,6 @@ v1.6: bugfix release
 - Missing full stop in parser error message "I don't understand that sentence."
 - creature_object wasn't properly handled by the parser.
 - simplifed the parser by making use of the meta attribute of all debug verbs
+- When add_to_scope held a list of objects, each object *and all siblings* were
+  added to scope.
+  

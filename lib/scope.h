@@ -8,7 +8,7 @@
 
 System_file;
 
-[ _PerformAddToScope p_obj _child _i _len _addr;
+[ _PerformAddToScope p_obj _add_obj _i _len _addr;
 	_addr = p_obj.&add_to_scope;
 	if(_addr) {
 		! routine or a list of objects
@@ -20,11 +20,12 @@ System_file;
 #EndIf;
 			_len = p_obj.#add_to_scope / WORDSIZE;
 			for(_i = 0: _i  < _len: _i++) {
-				_child =  _addr --> _i;
-				if(_child) {
-					_SearchScope(_child);
+				_add_obj =  _addr --> _i;
+				if(_add_obj) {
+					_PutInScope(_add_obj);
+					_SearchScope(child(_add_obj));
 #IfDef DEBUG_SCOPE;
-					print _i, ": ", _child, "^";
+					print _i, ": ", _add_obj, "^";
 #EndIf;
 				}
 			}
@@ -33,10 +34,10 @@ System_file;
 ];
 
 [ _SearchScope p_obj p_risk_duplicate p_no_add _child _add_contents;
-	while(p_obj) {
 #IfDef DEBUG_SCOPE;
-		print "Adding ",(object) p_obj," (", p_obj,") to scope. Action = ", action, "^";
+	if(p_obj) print "_SearchScope adding ",(object) p_obj," (", p_obj,") and siblings to scope. Action = ", (DebugAction) action, "^";
 #EndIf;
+	while(p_obj) {
 		if(scope_objects >= MAX_SCOPE) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 			RunTimeError(ERR_SCOPE_FULL);
@@ -60,6 +61,9 @@ System_file;
 ];
 
 [_PutInScope p_obj p_risk_duplicate _i;
+#IfDef DEBUG_SCOPE;
+	print "_PutInScope adding ",(object) p_obj," (", p_obj,") to scope. Action = ", (DebugAction) action, "^";
+#EndIf;
 	if(p_risk_duplicate == 0) {
 #IfV5;
 		@scan_table p_obj scope scope_objects -> _i ?~not_found;
@@ -239,7 +243,7 @@ Constant PlaceInScope = _PutInScope;
 	}
 
 	! add all children
-	_SearchScope(p_obj);
+	_SearchScope(child(p_obj));
 ];
 
 [ TestScope p_obj p_actor _i;
@@ -290,7 +294,7 @@ Constant PlaceInScope = _PutInScope;
                         ! We're going to return true here, we just need to write the correct message
                         ! But if we don't need to print anything, just return now
                         if (p_dontprint) rtrue;
-                        
+
 			if (p_obj has animate) {
 				PrintMsg(MSG_TAKE_BELONGS, _g_item, p_obj); rtrue;
 			}
