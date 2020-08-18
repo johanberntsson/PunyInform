@@ -766,14 +766,14 @@ Include "parser.h";
 
 #EndIf;
 
-[ PerformAction p_action p_noun p_second _sa _sn _ss _sdi _sd;
-	_sa = action; _sn = noun; _ss = second; _sdi = selected_direction_index; _sd = selected_direction;
-	action = p_action; noun = p_noun; second = p_second;
+[ PerformAction p_action p_noun p_second _sa _sn _ss _sdi _sd _sinp1 _sinp2;
+	_sa = action; _sn = noun; _ss = second; _sinp1 = inp1; _sinp2 = inp2; _sdi = selected_direction_index; _sd = selected_direction;
+	action = p_action; noun = p_noun; second = p_second; inp1 = p_noun; inp2 = p_second;
 	selected_direction_index = 0; selected_direction = 0;
 	_SetDirectionIfIsFakeDir(noun, 1);
 	_SetDirectionIfIsFakeDir(second, 2);
 	PerformPreparedAction();
-	action = _sa; noun = _sn; second = _ss; selected_direction_index = _sdi; selected_direction = _sd;
+	action = _sa; noun = _sn; second = _ss; selected_direction_index = _sdi; selected_direction = _sd; inp1 = _sinp1; inp2 = _sinp2;
 ];
 
 [ R_Process p_action p_noun p_second _s1 _s2;
