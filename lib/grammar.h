@@ -13,9 +13,7 @@ Verb 'ask'
 	* creature 'to' topic                       -> AskTo
 	* 'that' creature topic                     -> AskTo;
 
-Verb 'attack' 'break' 'crack' 'destroy'
-     'fight' 'hit' 'kill' 'murder' 'punch'
-     'smash' 'thump' 'torture' 'wreck'
+Verb 'attack' 'break' 'destroy' 'kill' 'punch' 'smash'
     * noun                                      -> Attack
     * noun 'with' held                          -> Attack;
 
@@ -689,6 +687,10 @@ Verb 'wear'
 ! ---------------------
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
+
+
+Verb 'crack' 'fight' 'hit' 'kick' 'murder'
+     'thump' 'torture' 'wreck' = 'attack';
 
 Verb 'blow'
 	* held                                      -> Blow;
@@ -1672,9 +1674,9 @@ Global scope_cnt;
 		'display': print "display"; return;
 		'present': print "present"; return;
 		'destroy': print "destroy"; return;
-		'torture': print "torture"; return;
 		'unscrew': print "unscrew"; return;
 #IfDef OPTIONAL_EXTENDED_VERBSET;
+		'torture': print "torture"; return;
 		'embrace': print "embrace"; return;
 #EndIf;
 		'x//', 'examine': print "examine"; return;
