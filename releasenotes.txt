@@ -191,4 +191,5 @@ v1.6: bugfix release
 - When add_to_scope held a list of objects, each object *and all siblings* were
   added to scope.
 - Now inp1/inp2 are updated in PerformAction
+- Changed unknown verb response to make reply clearer
 
