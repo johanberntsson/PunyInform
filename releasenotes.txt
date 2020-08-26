@@ -192,4 +192,5 @@ v1.6: bugfix release
   added to scope.
 - Now inp1/inp2 are updated in PerformAction
 - Changed unknown verb response to make reply clearer
-
+- Removed testlights.inf and nada.inf since they were more confusing than
+  useful.
