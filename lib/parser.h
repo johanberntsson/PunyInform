@@ -1616,7 +1616,7 @@ Array guess_num_objects->5;
 				! get the 'you already have it' message.
                 if(action == ##Take && noun in player && (multiple_objects --> 0 > 1 || parser_all_found)) continue;
 
-				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
+				if(parser_all_found || multiple_objects --> 0 > 1 || action == ##Drop) print (name) noun, ": ";
 				if(inp1 > 1) PronounNotice(noun);
 				PerformPreparedAction();
 				++_score;
