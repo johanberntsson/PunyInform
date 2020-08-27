@@ -194,3 +194,5 @@ v1.6: bugfix release
 - Changed unknown verb response to make reply clearer
 - Removed testlights.inf and nada.inf since they were more confusing than
   useful.
+- Fixed 'drop X' parsing bug when X present but not held.
+

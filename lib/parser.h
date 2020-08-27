@@ -342,8 +342,7 @@ System_file;
 #IfDef DEBUG_CHECKNOUN;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
-		if((noun_filter == 0 || _UserFilter(_obj) ~= 0) &&
-				(parser_check_multiple ~= MULTIHELD_OBJECT || _obj in player)) {
+		if((noun_filter == 0 || _UserFilter(_obj) ~= 0)) {
 			if(_obj.parse_name) {
 				_j = wn;
 				_result = _obj.parse_name();
@@ -351,7 +350,8 @@ System_file;
 				_n = _n + _result; ! number of words consumed
 				wn = _j;
 				if(_n > wn) {
-					if(meta == false && _obj has concealed or scenery) {
+					if((meta == false && _obj has concealed or scenery) ||
+						(parser_check_multiple == MULTIHELD_OBJECT && _obj notin player)) {
 						! this is a non-debug verb and since the object
 						! isn't obvious we don't consider it as an
 						! option for a future "which X?" question. 
@@ -415,7 +415,8 @@ System_file;
 						_p = _p + 4;
 						_current_word = _p-->0;
 						if(_n >= _best_score) {
-							if(meta == false && _obj has concealed or scenery) {
+							if((meta == false && _obj has concealed or scenery) ||
+								(parser_check_multiple == MULTIHELD_OBJECT && _obj notin player)) {
 								! this is a non-debug verb and since the object
 								! isn't obvious we don't consider it as an
 								! option for a future "which X?" question. 
