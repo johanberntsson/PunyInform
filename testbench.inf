@@ -1153,7 +1153,7 @@ Object CarPark "Car Park"
 
 Object -> Key "key"
 	with
-		description "It's a metal key, with a keyring attached to it."
+		description "It's a metal key, with a keyring attached to it.",
 		name 'key' 'metal',
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** Key.after^"; ],
