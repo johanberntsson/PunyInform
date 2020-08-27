@@ -1614,7 +1614,7 @@ Array guess_num_objects->5;
 				! don' pick up held objects if other objects available
 				! however, if this is the only object then allow it to
 				! get the 'you already have it' message.
-				if(action == ##Take && noun in player && parser_all_found) continue;
+                if(action == ##Take && noun in player && (multiple_objects --> 0 > 1 || parser_all_found)) continue;
 
 				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
 				if(inp1 > 1) PronounNotice(noun);
