@@ -195,4 +195,9 @@ v1.6: bugfix release
 - Removed testlights.inf and nada.inf since they were more confusing than
   useful.
 - Fixed 'drop X' parsing bug when X present but not held.
-
+- Fake action ##Going is now sent to destination room's before routine
+  just before the player enters.
+- Look now sets the action to ##Look when calling AfterRoutines, even if Look
+  was called by the Go action or some other action.
+- There was code in scope.h which would not compile if DEBUG_SCOPE was defined
+  but not DEBUG.

@@ -1393,7 +1393,7 @@ Global scope_cnt;
 	print "see ";
 ];
 
-[ Look _obj _top_ceil _ceil _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level;
+[ Look _obj _top_ceil _ceil _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level _action;
 	@new_line;
 	if((lookmode == 1 && location hasnt visited) || lookmode == 2) _describe_room = true;
 #IfV5;
@@ -1496,8 +1496,9 @@ Global scope_cnt;
 	}
 	! finally, call the optional library entry routine
 	LookRoutine();
-
+	_action = action; action = ##Look;
 	AfterRoutines();
+	action = _action;
 
 	if(_top_ceil == location)
 		give location visited;
@@ -1648,6 +1649,10 @@ Global scope_cnt;
         PrintMsg(MSG_GO_CANT_GO);
 		rtrue;
 	}
+
+	action = ##Going;
+	if (RunRoutines(_new_location, before) ~= 0) { action = ##Go; rtrue; }
+	action = ##Go;
 
 	if(_vehicle_mode == 1) {
 		move _vehicle to _new_location;

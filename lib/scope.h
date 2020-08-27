@@ -35,7 +35,11 @@ System_file;
 
 [ _SearchScope p_obj p_risk_duplicate p_no_add _child _add_contents;
 #IfDef DEBUG_SCOPE;
+#IfDef DEBUG;
 	if(p_obj) print "_SearchScope adding ",(object) p_obj," (", p_obj,") and siblings to scope. Action = ", (DebugAction) action, "^";
+#IfNot;
+	if(p_obj) print "_SearchScope adding ",(object) p_obj," (", p_obj,") and siblings to scope. Action = ", action, "^";
+#EndIf;
 #EndIf;
 	while(p_obj) {
 		if(scope_objects >= MAX_SCOPE) {
@@ -62,7 +66,11 @@ System_file;
 
 [_PutInScope p_obj p_risk_duplicate _i;
 #IfDef DEBUG_SCOPE;
-	print "_PutInScope adding ",(object) p_obj," (", p_obj,") to scope. Action = ", (DebugAction) action, "^";
+#IfDef DEBUG;
+	if(p_obj) print "_PutInScope adding ",(object) p_obj," (", p_obj,") to scope. Action = ", (DebugAction) action, "^";
+#IfNot;
+	if(p_obj) print "_PutInScope adding ",(object) p_obj," (", p_obj,") to scope. Action = ", action, "^";
+#EndIf;
 #EndIf;
 	if(p_risk_duplicate == 0) {
 #IfV5;
