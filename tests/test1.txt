@@ -1,0 +1,22 @@
+Start of a transcript of
+Parser test
+A parser test suite for PunyInform.
+Release 1 / Serial number 200827 / Inform v6.34 PunyInform v1.5 D
+
+> look
+
+Ball Room
+You are in the ball room. The sloping room lies to the east. The white room lies
+to the south. There is air in the room. There may be a black ball in the corner,
+but you're not sure.
+
+There is a blue table in the middle of the room.
+
+You can also see a blue ball, a red ball, a green ball, a black cube and a red
+cube here.
+
+> quit
+Are you sure you want to quit? y
+
+
+  *** [Hit any key to exit.]

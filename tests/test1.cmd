@@ -1,0 +1,6 @@
+transcript
+
+look
+quit
+y
+
