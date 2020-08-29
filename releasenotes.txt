@@ -201,3 +201,7 @@ v1.6: bugfix release
   was called by the Go action or some other action.
 - There was code in scope.h which would not compile if DEBUG_SCOPE was defined
   but not DEBUG.
+- Fixed so DROP with a single object doesn't print the object name first,
+  unless it's a plural or ALL which happens to yield a single object.
+- Made plurals trigger that object names are printed, so "TAKE BALLS" may print
+  "red ball: Taken."

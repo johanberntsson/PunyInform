@@ -354,7 +354,7 @@ System_file;
 						(parser_check_multiple == MULTIHELD_OBJECT && _obj notin player)) {
 						! this is a non-debug verb and since the object
 						! isn't obvious we don't consider it as an
-						! option for a future "which X?" question. 
+						! option for a future "which X?" question.
 						! However, we still remember it as last resort
 						! if nothing else matches
 						if(_low_priority_match_len < _n) {
@@ -419,7 +419,7 @@ System_file;
 								(parser_check_multiple == MULTIHELD_OBJECT && _obj notin player)) {
 								! this is a non-debug verb and since the object
 								! isn't obvious we don't consider it as an
-								! option for a future "which X?" question. 
+								! option for a future "which X?" question.
 								! However, we still remember it as last resort
 								! if nothing else matches
 								if(_low_priority_match_len < _n) {
@@ -524,6 +524,7 @@ System_file;
 
 	! skip 'the', 'all' etc
 	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
+		if(p_parse_pointer --> 0 == ALL_WORD) parser_all_found = true;
 #IfDef DEBUG_GETNEXTNOUN;
 		print "skipping ",(address) p_parse_pointer --> 0,"^";
 #Endif;
@@ -810,6 +811,7 @@ System_file;
 				if(_noun == 0) {
 					if(parser_action == ##PluralFound) {
 						! take books or take all books
+						parser_all_found = true;
 						! copy which_object to multiple_objects
 						for(_i = 0: _i < which_object->0: _i++) {
 							multiple_objects --> 0 = 1 + (multiple_objects --> 0);
@@ -1606,7 +1608,7 @@ Array guess_num_objects->5;
 					if(noun notin second) continue;
 				}
 
-				! don' pick up the box when you are in it
+				! don't pick up the box when you are in it
 				! however, if this is the only object then allow it to
 				! get the 'you have to leave it' message.
 				if(action == ##Take && noun == parent(player) && parser_all_found) continue;
@@ -1616,7 +1618,7 @@ Array guess_num_objects->5;
 				! get the 'you already have it' message.
                 if(action == ##Take && noun in player && (multiple_objects --> 0 > 1 || parser_all_found)) continue;
 
-				if(parser_all_found || multiple_objects --> 0 > 1 || action == ##Drop) print (name) noun, ": ";
+				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
 				if(inp1 > 1) PronounNotice(noun);
 				PerformPreparedAction();
 				++_score;
