@@ -343,9 +343,28 @@ System_file;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
 		if((noun_filter == 0 || _UserFilter(_obj) ~= 0)) {
+#IfDef DEBUG;
+			! Problem: parse_name is an alias of sw_to, and debug verbs can
+			! reference any object in the game, some of which are rooms.
+			! Solution: If the object seems to be a room and the routine returns
+			! a valid object id, or it prints something and then returns true,
+			! don't consider it a match.
+			if(_obj.parse_name ofclass Routine) {
+				_j = wn;
+				@output_stream 3 buffer2;
+				_result = _obj.parse_name();
+				@output_stream -3;
+				if(meta ~= 0 && parent(_obj) == 0
+						&& ~~(_obj provides describe or life or found_in or capacity)
+						&& (_result > Directions || _n + _result > parse->1
+							|| (_result == 1 && buffer2-->0 > 0))) {
+					_result = 0;
+				}
+#IfNot;
 			if(_obj.parse_name) {
 				_j = wn;
 				_result = _obj.parse_name();
+#EndIf;
 				if(_result == -1) jump try_name_match;
 				_n = _n + _result; ! number of words consumed
 				wn = _j;

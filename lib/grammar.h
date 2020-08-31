@@ -1305,6 +1305,9 @@ Global scope_cnt;
 ];
 
 [ PurloinSub;
+	if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
+	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
+
 	move noun to player;
 #IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;

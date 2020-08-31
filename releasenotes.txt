@@ -205,3 +205,8 @@ v1.6: bugfix release
   unless it's a plural or ALL which happens to yield a single object.
 - Made plurals trigger that object names are printed, so "TAKE BALLS" may print
   "red ball: Taken."
+- Fixed a noun parsing bug which typically made purloin not work at all if any
+  room provided a sw_to property.
+- Made purloin safer by not allowing you to pick up yourself or something
+  you're in.
+	  

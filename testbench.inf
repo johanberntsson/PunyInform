@@ -1132,6 +1132,7 @@ Object CarPark "Car Park"
 		description [; "You are in a car park in front of the library.
 			You can enter to the north. There is a river off to the east.";],
 		n_to Library,
+		sw_to Library,
 		e_to RiverBank,
 		each_turn [;
 			print (string) random(
