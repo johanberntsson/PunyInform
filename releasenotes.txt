@@ -209,4 +209,6 @@ v1.6: bugfix release
   room provided a sw_to property.
 - Made purloin safer by not allowing you to pick up yourself or something
   you're in.
-	  
+- GET ALL FROM BOX issued a ##Remove action for the first item and then a
+  ##Take action for each of the remaining objects.
+  	  

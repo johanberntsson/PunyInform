@@ -1324,7 +1324,7 @@ Array guess_num_objects->5;
 	! the while(true) loop is only exited by return statements
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _noun _score _best_score _best_pattern;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _noun _score _best_score _best_pattern _action;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -1608,7 +1608,9 @@ Array guess_num_objects->5;
         	PrintMsg(MSG_PARSER_CONTAINER_ISNT_OPEN, second);
 		} else {
 			_score = 0;
+			_action = action;
 			for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
+				action = _action; ! This may have been altered by a previous interation for multitokens
 				inp1 = multiple_objects --> _noun;
 				noun = inp1;
 
