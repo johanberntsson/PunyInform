@@ -1132,7 +1132,7 @@ Object CarPark "Car Park"
 		description [; "You are in a car park in front of the library.
 			You can enter to the north. There is a river off to the east.";],
 		n_to Library,
-		sw_to Library,
+		sw_to [; "There's an angry dragon blocking the path!"; ],
 		e_to RiverBank,
 		each_turn [;
 			print (string) random(
@@ -1808,3 +1808,10 @@ Array quote_1 --> 5 35
 #Ifdef USEINFORM;
 Include "Grammar";
 #Endif;
+
+[NotHeld;
+	if(noun in player) rfalse;
+];
+
+Extend 'remove' first
+	* noun=NotHeld -> Take;

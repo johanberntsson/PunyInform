@@ -255,13 +255,13 @@ System_file;
 			! don't consider it a match.
 			if(_obj.parse_name ofclass Routine) {
 				_j = wn;
-				@output_stream 3 buffer2body;
+				@output_stream 3 printbuffer;
 				_result = _obj.parse_name();
 				@output_stream -3;
 				if(meta ~= 0 && parent(_obj) == 0
 						&& ~~(_obj provides describe or life or found_in or capacity)
 						&& (_result > Directions || _n + _result > parse->1
-							|| (_result == 1 && buffer2body-->0 > 0))) {
+							|| (_result == 1 && printbuffer-->0 > 0))) {
 					_result = 0;
 				}
 #IfNot;

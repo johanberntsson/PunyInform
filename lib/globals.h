@@ -449,13 +449,12 @@ Array buffer->(MAX_INPUT_CHARS + 3);
 Array parse->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
 
 ! extra arrays to be able to ask for additional info (do you mean X or Y?)
-#IfDef DEBUG;
-Array buffer2->2;
-Array buffer2body->(300); ! Buffer is used to capture printing from sw_to / parse_name in _CheckNoun 
-#IfNot;
 Array buffer2->(MAX_INPUT_CHARS + 3);
-#EndIf;
 Array parse2->(2 + 4 * (MAX_INPUT_WORDS + 1));
+
+#IfDef DEBUG;
+Array printbuffer->300; ! Buffer is used to capture printing from sw_to / parse_name in _CheckNoun
+#EndIf;
 
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL  = 1;
