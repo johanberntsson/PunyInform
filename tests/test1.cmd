@@ -16,3 +16,5 @@ drop red ball
 get it
 get all from red box
 quit
+yes
+

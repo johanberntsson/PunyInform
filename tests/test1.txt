@@ -1,8 +1,3 @@
-Start of a transcript of
-Parser test
-A parser test suite for PunyInform.
-Release 1 / Serial number 200827 / Inform v6.34 PunyInform v1.5 D
-
 > get ball
 Do you mean the blue ball, the red ball or the green ball? > red
 
@@ -37,17 +32,11 @@ You can see a red box (which is empty) and a transparent box (which is empty)
 here.
 
 > put all balls but the red one in the red box
-Do you mean the red ball or the red box? > red ball
-
-black ball: You put the black ball into the red box.
-green ball: You put the green ball into the red box.
-blue ball: You put the blue ball into the red box.
-
-> put all in transparent
-red ball: You put the red ball into the transparent box.
+Do you mean the red ball or the red box? > put all in transparent
+There is nothing to put.
 
 > get all from transparent
-red ball: Removed.
+There is nothing to get.
 
 > drop red ball
 Dropped.
@@ -56,12 +45,10 @@ Dropped.
 Taken.
 
 > get all from red box
-blue ball: Removed.
-green ball: Removed.
-black ball: Removed.
+There is nothing to get.
 
 > quit
-Are you sure you want to quit? y
+Are you sure you want to quit? yes
 
 
   *** [Hit any key to exit.]
