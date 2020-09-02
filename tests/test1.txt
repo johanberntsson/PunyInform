@@ -3,17 +3,62 @@ Parser test
 A parser test suite for PunyInform.
 Release 1 / Serial number 200827 / Inform v6.34 PunyInform v1.5 D
 
-> look
+> get ball
+Do you mean the blue ball, the red ball or the green ball? > red
 
-Ball Room
-You are in the ball room. The sloping room lies to the east. The white room lies
-to the south. There is air in the room. There may be a black ball in the corner,
-but you're not sure.
+Taken.
 
-There is a blue table in the middle of the room.
+> get all balls
+blue ball: Taken.
+green ball: Taken.
 
-You can also see a blue ball, a red ball, a green ball, a black cube and a red
-cube here.
+> get cubes
+black cube: Taken.
+red cube: Taken.
+
+> drop black cube
+Dropped.
+
+> drop cubes
+Dropped.
+
+> drop cubes
+You aren't holding it.
+
+> get black ball
+Taken.
+
+> s
+
+White Room
+It's all white. The ball room lies to the north.
+
+You can see a red box (which is empty) and a transparent box (which is empty)
+here.
+
+> put all balls but the red one in the red box
+Do you mean the red ball or the red box? > red ball
+
+black ball: You put the black ball into the red box.
+green ball: You put the green ball into the red box.
+blue ball: You put the blue ball into the red box.
+
+> put all in transparent
+red ball: You put the red ball into the transparent box.
+
+> get all from transparent
+red ball: Removed.
+
+> drop red ball
+Dropped.
+
+> get it
+Taken.
+
+> get all from red box
+blue ball: Removed.
+green ball: Removed.
+black ball: Removed.
 
 > quit
 Are you sure you want to quit? y

@@ -211,4 +211,4 @@ v1.6: bugfix release
   you're in.
 - GET ALL FROM BOX issued a ##Remove action for the first item and then a
   ##Take action for each of the remaining objects.
-  	  
+- Fixed buffer2 offset bug introduced by sw_to/parse_name fix  	  
