@@ -44,6 +44,6 @@ def runtest(filename, version)
 end
 
 puts "Testing v3"
-Dir["*.inf"].each { |filename| runtest filename, 3 }
+Dir["*.inf"].sort.each { |filename| runtest filename, 3 }
 puts "Testing v5"
-Dir["*.inf"].each { |filename| runtest filename, 5 }
+Dir["*.inf"].sort.each { |filename| runtest filename, 5 }

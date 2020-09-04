@@ -18,7 +18,7 @@ Dropped.
 Dropped.
 
 > drop cubes
-You aren't holding it.
+There is nothing to drop.
 
 > get black ball
 Taken.
