@@ -213,4 +213,5 @@ v1.6: bugfix release
   ##Take action for each of the remaining objects.
 - Changed sw_to / parse_name printing to use a new buffer called printbuffer,
   not to interfere with parser's use of buffer2.
+- held (GrabIfNotHeld) didn't check implicit take status properly.
    

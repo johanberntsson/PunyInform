@@ -1,5 +1,6 @@
 > put weight under table
-You don't see any point in putting the lead weight there.
+(first taking the lead weight)
+The lead weight is too heavy to lift.
 
 > quit
 Are you sure you want to quit? yes

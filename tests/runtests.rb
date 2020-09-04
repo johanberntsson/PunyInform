@@ -24,6 +24,10 @@ def runtest(filename, version)
     print "#{basename}: "
     begin
         result = %x[#{inform_cmd}]
+        if result.include? "(no output)" then
+            puts result
+            raise Errno::ENOENT
+        end
         result = %x[#{frotz_cmd}]
         result = %x[#{prune_cmd}]
         result = %x[#{diff_cmd}]
@@ -34,7 +38,7 @@ def runtest(filename, version)
             puts result
         end
     rescue Errno::ENOENT
-        puts "unable to run test (compilation error?)"
+        puts "unable to run this test (compilation error?)"
         exit
     end
 end

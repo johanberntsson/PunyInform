@@ -601,7 +601,11 @@ System_file;
 	if(p_noun in player) return;
 	print "(first taking ", (the) p_noun, ")^";
 	keep_silent = true;
-	<take p_noun>;
+	if(PerformAction(##Take, p_noun)) {
+		if(p_noun notin player) {
+			PrintMsg(MSG_PARSER_NOT_HOLDING, p_noun);
+		}
+	}
 	keep_silent = false;
 ];
 
@@ -710,10 +714,10 @@ System_file;
 				return GPR_FAIL;
 			}
 			if(_token_data == HELD_OBJECT && _noun notin player) {
+				phase2_necessary = true;
 				if(p_phase == PHASE2) {
 					_GrabIfNotHeld(_noun);
 					if(_noun notin player) {
-						PrintMsg(MSG_PARSER_NOT_HOLDING);
 						return GPR_FAIL;
 					}
 				}
