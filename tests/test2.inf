@@ -1,0 +1,34 @@
+! This test checks issue 21. "held" grammar
+! https://github.com/johanberntsson/PunyInform/issues/21
+
+Constant Story      "Minimal";
+Constant Headline   "^A sample game which uses PunyInform.^";
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Include "globals.h";
+Include "puny.h";
+
+Object example_room "Example Room"
+	with description "You are in an example room, for test purposes.",
+	has light;
+
+Object weight "lead weight" example_room
+	with name 'lead' 'weight',
+		before [;
+			Take: print_ret (The) self, " is too heavy to lift.";
+	];
+
+Object table "table" example_room
+	with name 'table';
+
+[Initialise;
+	location = example_room;
+];
+
+Verb 'place' = 'put';
+
+Extend 'put'
+	*	held 'under' noun		-> PutUnder;
+
+[PutUnderSub;
+	"You don't see any point in putting ", (the) noun, " there.";
+];
