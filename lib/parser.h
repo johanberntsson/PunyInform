@@ -273,8 +273,7 @@ System_file;
 				_n = _n + _result; ! number of words consumed
 				wn = _j;
 				if(_n > wn) {
-					if((meta == false && _obj has concealed or scenery) ||
-						(parser_check_multiple == MULTIHELD_OBJECT && _obj notin player)) {
+					if(meta == false && _obj has concealed or scenery) {
 						! this is a non-debug verb and since the object
 						! isn't obvious we don't consider it as an
 						! option for a future "which X?" question.
@@ -338,8 +337,7 @@ System_file;
 						_p = _p + 4;
 						_current_word = _p-->0;
 						if(_n >= _best_score) {
-							if((meta == false && _obj has concealed or scenery) ||
-								(parser_check_multiple == MULTIHELD_OBJECT && _obj notin player)) {
+							if(meta == false && _obj has concealed or scenery) {
 								! this is a non-debug verb and since the object
 								! isn't obvious we don't consider it as an
 								! option for a future "which X?" question.
@@ -1536,6 +1534,9 @@ Array guess_num_objects->5;
 					! the container
 					if(noun notin second) continue;
 				}
+
+				! don't try to drop things you don't carry
+				if(action == ##Drop && noun notin player && parser_all_found) continue;
 
 				! don't pick up the box when you are in it
 				! however, if this is the only object then allow it to

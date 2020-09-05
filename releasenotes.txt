@@ -214,4 +214,6 @@ v1.6: bugfix release
 - Changed sw_to / parse_name printing to use a new buffer called printbuffer,
   not to interfere with parser's use of buffer2.
 - held (GrabIfNotHeld) didn't check implicit take status properly.
+- Fixed an error where "drop books" when not holding any books still referred
+  to the first book in scope
    

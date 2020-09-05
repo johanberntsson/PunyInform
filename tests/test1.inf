@@ -1,11 +1,21 @@
 ! this is a test of basic manipulation of multiple objects (balls etc)
-
+! Bugs fixed/investigated using this test file
+! - "drop cubes" when carrying no balls
+!
+!
 Constant Story      "Parser test";
 Constant Headline   "^A parser test suite for PunyInform.^";
 Serial "200827";
 
 ! Uncomment to show time instead of score/turns
 !Statusline time;
+
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
 
 ! Uncomment to add optional features to PunyLib
 !Constant DEBUG;

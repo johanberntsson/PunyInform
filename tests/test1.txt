@@ -15,7 +15,7 @@ red cube: Taken.
 Dropped.
 
 > drop cubes
-Dropped.
+red cube: Dropped.
 
 > drop cubes
 There is nothing to drop.
