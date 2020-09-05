@@ -35,6 +35,7 @@ def runtest(filename, version)
             puts "passed"
         else
             puts "failed"
+            $some_tests_failed = true
             puts result
         end
     rescue Errno::ENOENT
@@ -43,7 +44,13 @@ def runtest(filename, version)
     end
 end
 
+$some_tests_failed = false
+
 puts "Testing v3"
 Dir["*.inf"].sort.each { |filename| runtest filename, 3 }
+
+# only test v5 if all tests passed in v3
+exit if $some_tests_failed
+
 puts "Testing v5"
 Dir["*.inf"].sort.each { |filename| runtest filename, 5 }
