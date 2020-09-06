@@ -496,7 +496,8 @@ System_file;
 .recheck_noun;
 	if(p_phase == PHASE1 && _noun < 0) {
 		wn = wn + _num_words_in_nounphrase;
-		_noun = 1; ! a random noun in phase 1 just to avoid which? question
+		phase2_necessary = true;
+		return 1; ! a random noun in phase 1 just to avoid which? question
 	}
 	if(_noun < 0) {
 		if(_pluralword) {

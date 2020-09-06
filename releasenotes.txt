@@ -216,4 +216,5 @@ v1.6: bugfix release
 - held (GrabIfNotHeld) didn't check implicit take status properly.
 - Fixed an error where "drop books" when not holding any books still referred
   to the first book in scope
+- Fixed wn offset error in GetNextNoun which caused problems with plurals
    
