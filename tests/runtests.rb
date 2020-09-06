@@ -2,7 +2,7 @@
 
 $is_windows = (ENV['OS'] == 'Windows_NT')
 
-def runtest(filename, version)
+def runtest(filename, version, inform_args)
     basename = File.basename(filename, ".inf")
     command_file = basename + ".cmd"
     transcript_file = basename + ".scr"
@@ -13,7 +13,7 @@ def runtest(filename, version)
         puts "Someone needs to provide Windows commands"
         exit
     else
-        inform_cmd = "inform +.  +../lib -v#{version} -D #{filename}"
+        inform_cmd = "inform +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz #{basename}.z#{version} < #{command_file}"
         prune_cmd = "tail +6 #{transcript_file} > #{output_file}"
         diff_cmd = "diff #{template_file} #{output_file}"
@@ -46,11 +46,17 @@ end
 
 $some_tests_failed = false
 
-puts "Testing v3"
-Dir["*.inf"].sort.each { |filename| runtest filename, 3 }
-
-# only test v5 if all tests passed in v3
+puts "Testing v3 debug"
+Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
 exit if $some_tests_failed
 
-puts "Testing v5"
-Dir["*.inf"].sort.each { |filename| runtest filename, 5 }
+puts "Testing v3 release"
+Dir["*.inf"].sort.each { |filename| runtest filename, 3, "" }
+exit if $some_tests_failed
+
+puts "Testing v5 debug"
+Dir["*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
+exit if $some_tests_failed
+
+puts "Testing v5 release"
+Dir["*.inf"].sort.each { |filename| runtest filename, 5, "" }
