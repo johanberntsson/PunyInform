@@ -115,8 +115,9 @@ System_file;
 [ _PrintParseArray p_parse_array _i;
 	print "PARSE_ARRAY: ", p_parse_array->1, " entries^";
 	for(_i = 0 : _i < p_parse_array -> 1 : _i++) {
-		print "Word " ,_i,
+		print _i, ": wn ", (_i + 1),
 		" dict ",((p_parse_array + 2 + _i * 4) --> 0),
+		" (",(address) ((p_parse_array + 2 + _i * 4) --> 0),") ", 
  		" len ",(p_parse_array + 2 + _i * 4) -> 2,
 		" index ",(p_parse_array + 2 + _i * 4) -> 3, "^";
 	}
@@ -518,7 +519,6 @@ System_file;
 		_CopyParseArray(parse, parse2);
 		_ReadPlayerInput();
 		! is this a reply to the question?
-		!if((parse->1 == 1) &&
 		if((((parse + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
 			! the first word is not a verb. Assume
 			! a valid reply and add the other
@@ -531,10 +531,15 @@ System_file;
 			! 'box' then we don't know if it is the transparent or
 			! opqaue box unless we also add the 'transparent' word
 			! before calling _CheckNoun
+			!
+			! note that we have to add this is correct order otherwise
+			! parse_name routines may not work
+			!
 			!_PrintParseArray(parse);
-			!print (parse2 + 6)-->0, " ", (address) (parse2 + 6)-->0, "^";
-			(parse+2+4*(parse->1))-->0 = (parse2 + 6)-->0;
-			++(parse->1);
+			(parse + 6)-->0 = (parse + 2)-->0;
+			!(parse + 2)-->0 = (parse2 + 6)-->0;
+			(parse + 2)-->0 = (parse2 + 2 + 4*(wn - 1))-->0;
+			parse->1 = 2;
 			!_PrintParseArray(parse);
 
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it

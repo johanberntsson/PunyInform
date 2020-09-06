@@ -217,4 +217,5 @@ v1.6: bugfix release
 - Fixed an error where "drop books" when not holding any books still referred
   to the first book in scope
 - Fixed wn offset error in GetNextNoun which caused problems with plurals
+- wrong word order in disambiguation caused parse_name to fail
    
