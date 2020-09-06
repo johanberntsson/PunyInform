@@ -804,6 +804,7 @@ System_file;
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
 				}
+				! adding a single object
 				p_parse_pointer = parse + 2 + 4 * (wn - 1);
 				multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 				multiple_objects --> (multiple_objects --> 0) = _noun;
@@ -1547,7 +1548,9 @@ Array guess_num_objects->5;
 				MULTIINSIDE_OBJECT:
 					! stop us from trying to take things that are not in
 					! the container
-					if(noun notin second) continue;
+					if(noun notin second) {
+						if(parser_all_found) continue;
+					}
 				}
 
 				! don't try to drop things you don't carry

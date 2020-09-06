@@ -1,0 +1,100 @@
+! testing 'get red book and ladder from box'
+
+Constant Story      "Minimal";
+Constant Headline   "^A sample game which uses PunyInform.^";
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+Include "globals.h";
+Include "puny.h";
+
+Class Book
+	with
+		name 'books//p',
+		description [;
+			print "Self is ", self, "^";
+			if(self provides hello) {
+				print (The) self, " has a Hello value of ", self.hello, ". ^";
+			}
+			rfalse;
+		],
+		hello 0,
+		party [a;
+			print "Self is ", self, "^";
+			print "a is ", a, "^";
+!			print "b is ", b, "^";
+!			print "c is ", c, "^";
+		],
+		before [;
+			Open:
+				"You've never been much of a reader.";
+		],
+	has openable;
+
+
+Object example_room "Example Room"
+	with description "You are in an example room, for test purposes.",
+	has light;
+
+Object -> LargeBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
+	with
+		short_name "box",
+		name 'box',
+		inside_description "The box looked pretty big from the outside, but you feel really confined in here.",
+		description "It's a large box. You could probably fit several people in there.",
+        time_out [;
+            print "^The box goes BOOM.^";
+        ],
+		before [;
+!			LetGo:
+!				"No can do!";
+		],
+        after [;
+			LetGo:
+				"Yay, got rid of ", (the) noun, "!";
+			Open:
+#IfDef OPTIONAL_FULL_SCORE;
+        	Achieved(0); ! opening the box is an achievement
+#EndIf;
+        Receive:
+        	++score;
+        	! win if you put two things in the box
+        	if(score >= MAX_SCORE) deadflag = 2;
+       	],
+		time_left 0,
+	has container openable enterable static;
+
+Book -> -> RedBook "red book"
+		with
+			name 'red' 'book',
+			initial "On the bottom of the box, there is a red book.",
+			description "The book is old and worn.",
+			before [;
+	 			Take:
+	 				if(player in LargeBox) {
+	 					"It's too hard to pick it up while inside the box.";
+	 				}
+			];
+
+Object -> Ladder "ladder"
+	with
+		name 'ladder',
+		description [;
+			print "It's very sturdy. ";
+			<Search self>;
+!			if(_PrintContents(" (which contains ", p_obj)) print ")";
+		],
+		after [;
+			Receive: "Wow, you put ",(a) noun," on ", (the) self, "...";
+		],
+		inside_description "It's a really good ladder for standing on.",
+	has supporter enterable;
+
+
+[Initialise;
+	location = example_room;
+];
