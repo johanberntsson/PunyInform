@@ -10,6 +10,7 @@ drop cubes
 get black ball
 s
 put all balls but the red one in the red box
+ball
 put all in transparent
 get all balls from transparent
 get all from transparent

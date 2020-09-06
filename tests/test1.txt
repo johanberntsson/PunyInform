@@ -32,14 +32,20 @@ You can see a red box (which is empty) and a transparent box (which is empty)
 here.
 
 > put all balls but the red one in the red box
+Do you mean the red ball or the red box? > ball
+
+black ball: You put the black ball into the red box.
 green ball: You put the green ball into the red box.
 blue ball: You put the blue ball into the red box.
 
 > put all in transparent
 red ball: You put the red ball into the transparent box.
 
-> get all from transparent
+> get all balls from transparent
 red ball: Removed.
+
+> get all from transparent
+There is nothing to get.
 
 > drop red ball
 Dropped.
@@ -48,7 +54,9 @@ Dropped.
 Taken.
 
 > get all from red box
-There is nothing to get.
+blue ball: Removed.
+green ball: Removed.
+black ball: Removed.
 
 > quit
 Are you sure you want to quit? yes

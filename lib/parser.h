@@ -533,19 +533,28 @@ System_file;
 			! before calling _CheckNoun
 			!
 			! note that we have to add this is correct order otherwise
-			! parse_name routines may not work
+			! parse_name routines may not work, so we need to test
+			! both ways.
 			!
+			_oldwn = wn; ! wn is used in _CheckNoun, so save it
+
 			!_PrintParseArray(parse);
-			(parse + 6)-->0 = (parse + 2)-->0;
-			!(parse + 2)-->0 = (parse2 + 6)-->0;
-			(parse + 2)-->0 = (parse2 + 2 + 4*(wn - 1))-->0;
+			(parse + 6)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
 			parse->1 = 2;
 			!_PrintParseArray(parse);
-
-			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 			wn = 1;
 			_noun = _CheckNoun(parse+2);
-			wn = _oldwn; ! and restore it after the call
+			if(_noun <= 0) {
+				! the normal word order didn't work. Try the other way
+				!print "testing other word order^";
+				!_PrintParseArray(parse);
+				(parse + 6)-->0 = (parse + 2)-->0;
+				(parse + 2)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
+				!_PrintParseArray(parse);
+				wn = 1;
+				_noun = _CheckNoun(parse+2);
+			}
+			wn = _oldwn; ! restore wn after the _CheckNoun calls
 			if(_noun > 0) {
 				! we have successfully disambiguated the noun phrase.
 				! now we need to restore the length of the
