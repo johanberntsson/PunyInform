@@ -3,6 +3,9 @@
 
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant INITIAL_LOCATION_VALUE = example_room;
+
 Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant DEBUG_PARSEANDPERFORM;
 !Constant DEBUG_PARSEPATTERN;
@@ -28,7 +31,7 @@ Object table "table" example_room
 	with name 'table';
 
 [Initialise;
-	location = example_room;
+	return 2;
 ];
 
 Verb 'place' = 'put';
@@ -41,4 +44,3 @@ Extend 'put'
         if (AfterRoutines()) return;
 	"You put ", (the) noun, " under ", (the) second, ".^^", (The) noun, " suddenly vanishes!";
 ];
-

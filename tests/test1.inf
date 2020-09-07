@@ -7,6 +7,8 @@ Constant Story      "Parser test";
 Constant Headline   "^A parser test suite for PunyInform.^";
 Serial "200827";
 
+Constant INITIAL_LOCATION_VALUE = BallRoom;
+
 ! Uncomment to show time instead of score/turns
 !Statusline time;
 
@@ -28,7 +30,6 @@ Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
 !Constant OPTIONAL_MANUAL_SCOPE;
 !Constant RUNTIME_ERRORS = 0;
-Constant INITIAL_LOCATION_VALUE = BallRoom;
 
 Include "globals.h";
 
@@ -99,10 +100,11 @@ Object SlopingRoom "Sloping Room"
 		description "The room slopes to the west, where the ball room can also be found.",
 		after [;
 			Drop:
-				if(noun ofclass Ball)
+				if(noun ofclass Ball) {
 					move noun to BallRoom;
 					scope_modified = true;
 					print_ret (The) noun, " rolls away to the west.";
+				}
 		],
 		w_to BallRoom,
 		has light;
@@ -127,4 +129,5 @@ Object -> TransparentBox "transparent box"
 
 [Initialise;
 	print "^^The testsuite is open for business!^^";
+	return 2;
 ];
