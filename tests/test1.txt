@@ -32,8 +32,6 @@ You can see a red box (which is empty) and a transparent box (which is empty)
 here.
 
 > put all balls but the red one in the red box
-Do you mean the red ball or the red box? > ball
-
 black ball: You put the black ball into the red box.
 green ball: You put the green ball into the red box.
 blue ball: You put the blue ball into the red box.

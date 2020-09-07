@@ -765,7 +765,15 @@ System_file;
 						p_parse_pointer = parse + 2 + 4 * (wn - 1);
 						if(_PeekAtNextWord() == EXCEPT_WORD1 or EXCEPT_WORD2) {
 							wn = wn + 1;
+							! here we only want to consider the Xs
+							! so we clear scope and copy Xs into scope
+							! before GetNextNoun. Later we need to restore scope
+							scope_objects = multiple_objects --> 0;
+							for(_noun = 0: _noun < multiple_objects --> 0 : _noun++) {
+								scope-->_noun = multiple_objects-->(_noun + 1);
+							}
 							_noun = _GetNextNoun(p_parse_pointer + 4, p_phase);
+							_UpdateScope(player, true); ! restore scope
 							if(_noun <= 0) {
 								if(p_phase == PHASE2)
 									PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
