@@ -495,18 +495,19 @@ System_file;
 	_num_words_in_nounphrase = which_object -> 1;
 
 .recheck_noun;
-	if(p_phase == PHASE1 && _noun < 0) {
-		wn = wn + _num_words_in_nounphrase;
-		phase2_necessary = true;
-		return 1; ! a random noun in phase 1 just to avoid which? question
-	}
 	if(_noun < 0) {
 		if(_pluralword) {
 			! we don't have to ask here, because the input was
 			! "take books" or "take all books"
+			phase2_necessary = true;
 			parser_action = ##PluralFound;
 			!wn = wn + which_object->1;
 			return 0;
+		}
+		if(p_phase == PHASE1) {
+			phase2_necessary = true;
+			wn = wn + _num_words_in_nounphrase;
+			return 1; ! a random noun in phase 1 just to avoid which? question
 		}
 		_AskWhichNoun(-_noun);
 		! read a new line of input
@@ -1431,9 +1432,13 @@ Array guess_num_objects->5;
 		jump parse_success;
 	}
 
+	if(wn < parse->1) {
+		_PrintPartialMatchMessage(wn);
+		rtrue;
+	}
+
 	! Phase 2: reparse best pattern and ask for additional info if
 	! needed (which book? etc)
-
 
 #IfDef DEBUG_PARSEANDPERFORM;
 	print "### PHASE 2: Pattern address ", _best_pattern, "^";

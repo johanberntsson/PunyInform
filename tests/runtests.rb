@@ -47,7 +47,8 @@ end
 $some_tests_failed = false
 
 puts "Testing v3 debug"
-Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
+runtest "test1.inf", 3, "-D" 
+#Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
 exit if $some_tests_failed
 
 puts "Testing v3 release"

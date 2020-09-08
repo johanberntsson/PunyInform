@@ -1,3 +1,15 @@
+> take blue ball
+Taken.
+
+> take blue cube
+I only understood you as far as "take blue" but then you lost me.
+
+> take blue ball and blue cube
+I only understood you as far as "take blue ball and blue" but then you lost me.
+
+> drop all
+blue ball: Dropped.
+
 > get ball
 Do you mean the blue ball, the red ball or the green ball? > red
 

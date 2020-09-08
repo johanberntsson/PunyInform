@@ -1,5 +1,9 @@
 transcript
 
+take blue ball
+take blue cube
+take blue ball and blue cube
+drop all
 get ball
 red
 get all balls
