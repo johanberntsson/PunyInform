@@ -219,4 +219,4 @@ v1.6: bugfix release
 - Fixed wn offset error in GetNextNoun which caused problems with plurals
 - wrong word order in disambiguation caused parse_name to fail
 - Fixed error where multiinside silently ignored some inputs
-   
+- Fixed: bad combinations of adjectives and nouns messed up disambiguation code

@@ -1130,9 +1130,6 @@ Array guess_num_objects->5;
 			if(wn == 1 + parse->1) {
 				return 100; ! pattern matched
 			}
-			if(p_phase == PHASE2) {
-				_PrintPartialMatchMessage(wn -1);
-			}
 			return wn - verb_wordnum; ! Fail because the grammar line ends here but not the input
 		}
 		if(wn >= 1 + parse->1) {
@@ -1328,6 +1325,7 @@ Array guess_num_objects->5;
 				inp1 = Directions;
 				jump parse_success;
 			}
+			! bad direction command, such as "n n"
 			return _PrintPartialMatchMessage(_i);
 		}
 		! not a direction, check if beginning of a command
@@ -1432,8 +1430,8 @@ Array guess_num_objects->5;
 		jump parse_success;
 	}
 
-	if(wn < parse->1) {
-		_PrintPartialMatchMessage(wn);
+	if(_best_score < parse->1) {
+		_PrintPartialMatchMessage(_best_score);
 		rtrue;
 	}
 
