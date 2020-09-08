@@ -501,7 +501,7 @@ System_file;
 			! "take books" or "take all books"
 			phase2_necessary = true;
 			parser_action = ##PluralFound;
-			!wn = wn + which_object->1;
+			wn = wn + _num_words_in_nounphrase;
 			return 0;
 		}
 		if(p_phase == PHASE1) {
@@ -742,14 +742,9 @@ System_file;
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
 				if(_noun == -2) return GPR_FAIL;
 				if(_noun == -1) return GPR_REPARSE;
-				if(_noun > 0 && p_parse_pointer-->0 == ALL_WORD &&
-					(p_parse_pointer + 4)-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
-					! remember noun as the filter word, and then reset
-					! noun so that it will be treated like a normal 'take all'
-					parser_all_except_object = _noun;
-					_noun = 0;
-				}
 				if(_noun == 0) {
+					! here it is either a plural, 'all' or not understood
+					!
 					if(parser_action == ##PluralFound) {
 						! take books or take all books
 						parser_all_found = true;
@@ -761,7 +756,6 @@ System_file;
 #IfDef DEBUG_PARSETOKEN;
 						print "adding plural ", which_object->0, " ", which_object->1, " ", multiple_objects --> 0, "^";
 #Endif;
-						wn = wn + which_object->1;
 						! check if 'take all Xs but Y'
 						p_parse_pointer = parse + 2 + 4 * (wn - 1);
 						if(_PeekAtNextWord() == EXCEPT_WORD1 or EXCEPT_WORD2) {
@@ -791,6 +785,9 @@ System_file;
 					}
 					if(p_parse_pointer-->0 == ALL_WORD) {
 						! take all etc.
+						! note that 'all' has already updated
+						! wn in GetNextNoun
+						!
 						! Add all reasonable objects in scope
 						! to the multiple_objects array
 						_AddMultipleNouns(_token_data);
