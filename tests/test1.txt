@@ -1,3 +1,7 @@
+> take all red
+red ball: Taken.
+red cube: Taken.
+
 > take blue ball
 Taken.
 
@@ -9,9 +13,11 @@ I only understood you as far as "take blue ball and blue" but then you lost me.
 
 > drop all
 blue ball: Dropped.
+red cube: Dropped.
+red ball: Dropped.
 
 > get ball
-Do you mean the blue ball, the red ball or the green ball? > red
+Do you mean the red ball, the blue ball or the green ball? > red
 
 Taken.
 
@@ -20,8 +26,8 @@ blue ball: Taken.
 green ball: Taken.
 
 > get cubes
-black cube: Taken.
 red cube: Taken.
+black cube: Taken.
 
 > drop black cube
 Dropped.

@@ -1,5 +1,6 @@
 transcript
 
+take all red
 take blue ball
 take blue cube
 take blue ball and blue cube

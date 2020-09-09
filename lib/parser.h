@@ -496,7 +496,7 @@ System_file;
 
 .recheck_noun;
 	if(_noun < 0) {
-		if(_pluralword) {
+		if(_pluralword || parser_all_found) {
 			! we don't have to ask here, because the input was
 			! "take books" or "take all books"
 			phase2_necessary = true;

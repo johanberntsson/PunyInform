@@ -220,3 +220,5 @@ v1.6: bugfix release
 - wrong word order in disambiguation caused parse_name to fail
 - Fixed error where multiinside silently ignored some inputs
 - Fixed: bad combinations of adjectives and nouns messed up disambiguation code
+- Improved disambiguation for plurals to make "get all red" work
+
