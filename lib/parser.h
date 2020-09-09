@@ -541,7 +541,13 @@ System_file;
 
 			!_PrintParseArray(parse);
 			(parse + 6)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
-			parse->1 = 2;
+			if((parse + 6)-->0 == (parse + 2)-->0) {
+				! don't allow repeated words (red red etc)
+				(parse + 6) --> 0 = 0;
+				parse->1 = 1;
+			} else {
+				parse->1 = 2;
+			}
 			!_PrintParseArray(parse);
 			wn = 1;
 			_noun = _CheckNoun(parse+2);
@@ -551,6 +557,13 @@ System_file;
 				!_PrintParseArray(parse);
 				(parse + 6)-->0 = (parse + 2)-->0;
 				(parse + 2)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
+				if((parse + 6)-->0 == (parse + 2)-->0) {
+					! don't allow repeated words (red red etc)
+					(parse + 6) --> 0 = 0;
+					parse->1 = 1;
+				} else {
+					parse->1 = 2;
+				}
 				!_PrintParseArray(parse);
 				wn = 1;
 				_noun = _CheckNoun(parse+2);
@@ -561,13 +574,14 @@ System_file;
 				! now we need to restore the length of the
 				! noun phrase so that it will be absorbed when we
 				! return from the routine.
-				which_object->1 = _num_words_in_nounphrase;
 				! don't forget to restore the old arrays
 				_CopyInputArray(buffer2, buffer);
 				_CopyParseArray(parse2, parse);
 				@new_line;
 				jump recheck_noun;
 			}
+			print "I still don't understand what you are referring to.^";
+			return -2;
 		}
 		! completely new input.
 		return -1; ! start from the beginning

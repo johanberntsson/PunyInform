@@ -1596,6 +1596,9 @@ Object -> John "John"
 			"John ignores your question.";
 		],
 	has proper animate transparent;
+Object -> -> JohnsBall "pink ball"
+  with  name 'pink' 'ball',
+  has   concealed;
 
 Object -> infiniteBag "infinite bag"
 	with

@@ -1,3 +1,15 @@
+> take red
+Do you mean the red ball or the red cube? > red
+I still don't understand what you are referring to.
+
+> take red
+Do you mean the red ball or the red cube? > ball
+
+Taken.
+
+> drop all
+red ball: Dropped.
+
 > take all red
 red ball: Taken.
 red cube: Taken.

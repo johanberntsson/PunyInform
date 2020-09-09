@@ -1,5 +1,10 @@
 transcript
 
+take red
+red
+take red
+ball
+drop all
 take all red
 take blue ball
 take blue cube
