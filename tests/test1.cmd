@@ -1,5 +1,7 @@
 transcript
 
+get small
+ball
 take red
 red
 take red
@@ -28,4 +30,3 @@ get it
 get all from red box
 quit
 yes
-
