@@ -16,7 +16,7 @@ def runtest(filename, version, inform_args)
         inform_cmd = "inform +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz #{basename}.z#{version} < #{command_file}"
         prune_cmd = "tail +6 #{transcript_file} > #{output_file}"
-        diff_cmd = "diff #{template_file} #{output_file}"
+        diff_cmd = "diff -Z #{template_file} #{output_file}"
     end
     # Remove old transcripts
     File.delete transcript_file if File.exist? transcript_file
@@ -47,8 +47,7 @@ end
 $some_tests_failed = false
 
 puts "Testing v3 debug"
-runtest "test1.inf", 3, "-D" 
-#Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
+Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
 exit if $some_tests_failed
 
 puts "Testing v3 release"
