@@ -43,16 +43,12 @@ Include "puny.h";
 
 Class Ball
 	with
-		adj 'ball',
-		short_name [; print (address) self.adj, " ball"; rtrue; ],
-		parse_name [ w1 w2;
-			w1 = NextWord();
-			if(w1 == 'ball' or 'balls//p') return 1;
-			w2 = NextWord();
-			if(w1 == self.adj) {
-				if(w2 == 'ball') return 2;
-				return 1;
-			}
+		adj1 'ball',
+		adj2 'ball',
+		short_name [; print (address) self.adj1, " ", (address) self.adj2, " ball"; rtrue; ],
+		parse_name [ i;
+			while(NextWord() == 'ball' or 'balls//p' or self.adj1 or self.adj2) i++;
+			return i;
 		];
 
 Object BallRoom "Ball Room"
@@ -79,13 +75,13 @@ Object -> Table "table"
 		initial "There is a blue table in the middle of the room.",
 	has static supporter enterable;
 
-Ball -> BlueBall with adj 'blue';
+Ball -> BlueBall with adj1 'small', adj2 'blue';
 
-Ball -> RedBall with adj 'red';
+Ball -> RedBall with adj1 'small', adj2 'red';
 
-Ball -> GreenBall with adj 'green';
+Ball -> GreenBall with adj1 'small', adj2 'green';
 
-Ball -> BlackBall with adj 'black' has concealed;
+Ball -> BlackBall with adj1 'small', adj2 'black' has concealed;
 
 Object -> BlackCube "black cube"
 	with

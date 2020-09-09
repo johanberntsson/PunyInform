@@ -1,17 +1,17 @@
 > take red
-Do you mean the red ball or the red cube? > red
+Do you mean the small red ball or the red cube? > red
 I still don't understand what you are referring to.
 
 > take red
-Do you mean the red ball or the red cube? > ball
+Do you mean the small red ball or the red cube? > ball
 
 Taken.
 
 > drop all
-red ball: Dropped.
+small red ball: Dropped.
 
 > take all red
-red ball: Taken.
+small red ball: Taken.
 red cube: Taken.
 
 > take blue ball
@@ -24,18 +24,19 @@ I only understood you as far as "take blue" but then you lost me.
 I only understood you as far as "take blue ball and blue" but then you lost me.
 
 > drop all
-blue ball: Dropped.
+small blue ball: Dropped.
 red cube: Dropped.
-red ball: Dropped.
+small red ball: Dropped.
 
 > get ball
-Do you mean the red ball, the blue ball or the green ball? > red
+Do you mean the small red ball, the small blue ball or the small green ball? >
+red
 
 Taken.
 
 > get all balls
-blue ball: Taken.
-green ball: Taken.
+small blue ball: Taken.
+small green ball: Taken.
 
 > get cubes
 red cube: Taken.
@@ -62,15 +63,15 @@ You can see a red box (which is empty) and a transparent box (which is empty)
 here.
 
 > put all balls but the red one in the red box
-black ball: You put the black ball into the red box.
-green ball: You put the green ball into the red box.
-blue ball: You put the blue ball into the red box.
+small black ball: You put the small black ball into the red box.
+small green ball: You put the small green ball into the red box.
+small blue ball: You put the small blue ball into the red box.
 
 > put all in transparent
-red ball: You put the red ball into the transparent box.
+small red ball: You put the small red ball into the transparent box.
 
 > get all balls from transparent
-red ball: Removed.
+small red ball: Removed.
 
 > get all from transparent
 There is nothing to get.
@@ -82,9 +83,9 @@ Dropped.
 Taken.
 
 > get all from red box
-blue ball: Removed.
-green ball: Removed.
-black ball: Removed.
+small blue ball: Removed.
+small green ball: Removed.
+small black ball: Removed.
 
 > quit
 Are you sure you want to quit? yes
