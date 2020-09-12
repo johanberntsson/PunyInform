@@ -18,10 +18,10 @@ red cube: Taken.
 Taken.
 
 > take blue cube
-I only understood you as far as "take blue" but then you lost me.
+You can't see any such thing.
 
 > take blue ball and blue cube
-I only understood you as far as "take blue ball and blue" but then you lost me.
+You can't see any such thing.
 
 > drop all
 small blue ball: Dropped.

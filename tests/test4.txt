@@ -50,7 +50,7 @@ You put the transparent box into the red box.
 > close red box then get transparent box
 You close the red box.
 
-You can't see the transparent box
+You can't see any such thing.
 
 > open red box
 You open the red box.
@@ -66,8 +66,13 @@ There is a blue table in the middle of the room.
 
 You can also see a black cube here.
 
+> put green into box
+Do you mean the red box or the transparent box? > red
+
+Already there.
+
 > put all cubes in box
-You put the black cube into the transparent box.
+You put the black cube into the red box.
 
 > i
 You're carrying a red box (which contains a transparent box (which contains a

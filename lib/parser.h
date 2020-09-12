@@ -1458,7 +1458,8 @@ Array guess_num_objects->5;
 	}
 
 	if(_best_score < parse->1) {
-		_PrintPartialMatchMessage(_best_score);
+		!_PrintPartialMatchMessage(_best_score);
+		PrintMsg(MSG_PARSER_NOSUCHTHING);
 		rtrue;
 	}
 

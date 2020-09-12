@@ -17,6 +17,8 @@ close red box then get transparent box
 open red box
 take red box
 n
+put green into box
+red
 put all cubes in box
 i
 quit
