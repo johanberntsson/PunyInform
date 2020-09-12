@@ -417,7 +417,7 @@ System_file;
 	print "? ";
 ];
 
-[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword;
+[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i;
 	! try getting a noun from the <p_parse_pointer> entry in parse
 	! return:
 	!   <noun number> if found
@@ -532,31 +532,24 @@ System_file;
 			! 'box' then we don't know if it is the transparent or
 			! opqaue box unless we also add the 'transparent' word
 			! before calling _CheckNoun
-			!
-			! note that we have to add this is correct order otherwise
-			! parse_name routines may not work, so we need to test
-			! both ways.
-			!
+
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 
-			!_PrintParseArray(parse);
-			(parse + 6)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
-			if((parse + 6)-->0 == (parse + 2)-->0) {
-				! don't allow repeated words (red red etc)
-				(parse + 6) --> 0 = 0;
-				parse->1 = 1;
-			} else {
-				parse->1 = 2;
-			}
-			!_PrintParseArray(parse);
-			wn = 1;
-			_noun = _CheckNoun(parse+2);
-			if(_noun <= 0) {
-				! the normal word order didn't work. Try the other way
-				!print "testing other word order^";
+			! since more than one word may be given we need to loop
+			! over and test each word
+			_CopyParseArray(parse, parse3);
+			for(_i = 0 : _i < parse3 -> 1 : _i++) {
+				!print "Testing ", (address) (parse3 + 2 + _i * 4) --> 0, "^";
+				(parse + 2) --> 0 = (parse3 + 2 + _i * 4) --> 0;
+
+				! note that we have to add this is correct order otherwise
+				! parse_name routines may not work, so we need to test
+				! both ways.
+
+#IfDef DEBUG;
 				!_PrintParseArray(parse);
-				(parse + 6)-->0 = (parse + 2)-->0;
-				(parse + 2)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
+#Endif;
+				(parse + 6)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
 				if((parse + 6)-->0 == (parse + 2)-->0) {
 					! don't allow repeated words (red red etc)
 					(parse + 6) --> 0 = 0;
@@ -564,23 +557,46 @@ System_file;
 				} else {
 					parse->1 = 2;
 				}
+#IfDef DEBUG;
 				!_PrintParseArray(parse);
+#Endif;
 				wn = 1;
 				_noun = _CheckNoun(parse+2);
+				if(_noun <= 0) {
+					! the normal word order didn't work. Try the other way
+					!print "testing other word order^";
+#IfDef DEBUG;
+					!_PrintParseArray(parse);
+#Endif;
+					(parse + 6)-->0 = (parse + 2)-->0;
+					(parse + 2)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
+					if((parse + 6)-->0 == (parse + 2)-->0) {
+						! don't allow repeated words (red red etc)
+						(parse + 6) --> 0 = 0;
+						parse->1 = 1;
+					} else {
+						parse->1 = 2;
+					}
+#IfDef DEBUG;
+					!_PrintParseArray(parse);
+#Endif;
+					wn = 1;
+					_noun = _CheckNoun(parse+2);
+				}
+				wn = _oldwn; ! restore wn after the _CheckNoun calls
+				if(_noun > 0) {
+					! we have successfully disambiguated the noun phrase.
+					! now we need to restore the length of the
+					! noun phrase so that it will be absorbed when we
+					! return from the routine.
+					! don't forget to restore the old arrays
+					_CopyInputArray(buffer2, buffer);
+					_CopyParseArray(parse2, parse);
+					@new_line;
+					jump recheck_noun;
+				}
 			}
-			wn = _oldwn; ! restore wn after the _CheckNoun calls
-			if(_noun > 0) {
-				! we have successfully disambiguated the noun phrase.
-				! now we need to restore the length of the
-				! noun phrase so that it will be absorbed when we
-				! return from the routine.
-				! don't forget to restore the old arrays
-				_CopyInputArray(buffer2, buffer);
-				_CopyParseArray(parse2, parse);
-				@new_line;
-				jump recheck_noun;
-			}
-			print "I still don't understand what you are referring to.^";
+			PrintMsg(MSG_PARSER_CANT_DISAMBIGUATE);
 			return -2;
 		}
 		! completely new input.

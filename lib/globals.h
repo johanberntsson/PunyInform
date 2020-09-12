@@ -451,6 +451,7 @@ Array parse->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra wo
 ! extra arrays to be able to ask for additional info (do you mean X or Y?)
 Array buffer2->(MAX_INPUT_CHARS + 3);
 Array parse2->(2 + 4 * (MAX_INPUT_WORDS + 1));
+Array parse3->(2 + 4 * (MAX_INPUT_WORDS + 1));
 
 #IfDef DEBUG;
 Array printbuffer->300; ! Buffer is used to capture printing from sw_to / parse_name in _CheckNoun

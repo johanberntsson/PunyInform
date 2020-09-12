@@ -9,7 +9,7 @@ small red
 Futile.
 
 > throw ball at air
-Do you mean the small blue ball, the small red ball or the small green ball? > 
+Do you mean the small red ball, the small blue ball or the small green ball? > 
 red
 
 Futile.

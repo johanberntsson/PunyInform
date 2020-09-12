@@ -158,6 +158,9 @@ Constant MSG_PARSER_UNKNOWN_VERB "That is not a verb I recognize.";
 #Ifndef MSG_NOTHOLDINGTHAT;
 Constant MSG_NOTHOLDINGTHAT "You are not holding that!";
 #EndIf;
+#Ifndef MSG_PARSER_CANT_DISAMBIGUATE;
+Constant MSG_PARSER_CANT_DISAMBIGUATE "I still don't understand what you are referring to.^";
+#EndIf;
 
 !
 ! complex messages (enumerated)
