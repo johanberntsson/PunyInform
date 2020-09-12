@@ -1,0 +1,129 @@
+! this is a test of basic manipulation of multiple objects (balls etc)
+! Bugs fixed/investigated using this test file
+! - "drop cubes" when carrying no balls
+!
+!
+Constant Story      "Parser test";
+Constant Headline   "^A parser test suite for PunyInform.^";
+Serial "200827";
+
+Constant INITIAL_LOCATION_VALUE = BallRoom;
+
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+!Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+
+Include "globals.h";
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+Include "puny.h";
+
+Class Ball
+	with
+		adj1 'ball',
+		adj2 'ball',
+		short_name [; print (address) self.adj1, " ", (address) self.adj2, " ball"; rtrue; ],
+		parse_name [ i;
+			while(NextWord() == 'ball' or 'balls//p' or self.adj1 or self.adj2) i++;
+			return i;
+		];
+
+Object BallRoom "Ball Room"
+	with
+		description [;
+			print "You are in the ball room. The sloping room lies to the east.
+				The white room lies to the south.
+				There is air in the room.";
+			if(BlackBall in self && BlackBall has concealed)
+				print " There may be a black ball in the corner, but you're not sure.";
+			"";
+		],
+		e_to SlopingRoom,
+		s_to WhiteRoom,
+	has light;
+
+Object -> Air "air"
+	with name 'air'
+	has scenery;
+
+Object -> Table "table"
+	with
+		name 'blue' 'table',
+		initial "There is a blue table in the middle of the room.",
+	has static supporter enterable;
+
+Ball -> BlueBall with adj1 'small', adj2 'blue';
+
+Ball -> RedBall with adj1 'small', adj2 'red';
+
+Ball -> GreenBall with adj1 'small', adj2 'green';
+
+Ball -> BlackBall with adj1 'small', adj2 'black' has concealed;
+
+Object -> BlackCube "black cube"
+	with
+		name 'black' 'cube' 'cubes//p';
+
+Object -> RedCube "red cube"
+	with
+		name 'red' 'cube' 'cubes//p';
+
+Object SlopingRoom "Sloping Room"
+	with
+		description "The room slopes to the west, where the ball room can also be found.",
+		after [;
+			Drop:
+				if(noun ofclass Ball) {
+					move noun to BallRoom;
+					scope_modified = true;
+					print_ret (The) noun, " rolls away to the west.";
+				}
+		],
+		w_to BallRoom,
+		has light;
+
+Object WhiteRoom "White Room"
+	with
+		description "It's all white. The ball room lies to the north.",
+		n_to BallRoom,
+	has light;
+
+Object -> RedBox "red box"
+	with
+		inside_description "You notice that the box is red on the inside too.",
+		name 'red' 'box'
+	has container open openable enterable;
+
+Object -> TransparentBox "transparent box"
+	with
+		inside_description "The transparent box feels cozy.",
+		name 'transparent' 'box'
+	has container open openable transparent enterable;
+
+[Initialise;
+	print "^^The testsuite is open for business!^^";
+	return 2;
+];

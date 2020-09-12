@@ -1,0 +1,88 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+Constant Story      "Get All From";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant INITIAL_LOCATION_VALUE = Library;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+
+Include "globals.h";
+
+Include "puny.h";
+
+Object Library "The Library"
+	with
+		number 0,
+		description "You are in a library.",
+	has light;
+
+Object -> Box "box"
+	with
+		initial [;
+			print "There's a box here. ";
+			if(PrintContents("In the box is ", self)) print ".";
+			"";
+		],
+		name 'box',
+	has open container;
+
+Object -> -> Bag "bag"
+	with
+		name 'bag',
+	has open container;
+
+Object -> -> -> Rock "rock"
+	with
+		name 'rock';
+
+Object -> SBox "sbox"
+	with
+		initial [;
+			print "There's a sbox here. ";
+			if(PrintContents("In the sbox is ", self)) print ".";
+			"";
+		],
+		name 'sbox',
+	has open container static;
+
+Object -> -> SBag2 "sbag2"
+	with
+		name 'sbag2',
+	has open container static;
+
+Object -> -> -> Rock2A "rock2a"
+	with
+		name 'rock2a';
+
+Object -> -> CBag2 "cbag2"
+	with
+		name 'cbag2',
+	has open container concealed;
+
+Object -> -> -> Rock2B "rock2b"
+	with
+		name 'rock2b';
+
+Object -> CBox "cbox"
+	with
+		initial [;
+			print "There's a cbox here. ";
+			if(PrintContents("In the cbox is ", self)) print ".";
+			"";
+		],
+		name 'cbox',
+	has open container concealed;
+
+Object -> -> Bag3 "bag3"
+	with
+		name 'bag3',
+	has open container;
+
+Object -> -> -> Rock3 "rock3"
+	with
+		name 'rock3';
+
+[Initialise;
+	print "^^And so the story begins...^^";
+];

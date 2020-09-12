@@ -1,0 +1,17 @@
+> get all from bag
+rock: Removed.
+
+> get all from sbag2
+rock2a: Removed.
+
+> get all from cbag2
+rock2b: Removed.
+
+> get all from bag3 
+rock3: Removed.
+
+> quit
+Are you sure you want to quit? yes
+
+
+  *** [Hit any key to exit.]

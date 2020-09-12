@@ -1,7 +1,3 @@
-> get small
-Do you mean the small blue ball, the small red ball or the small green ball? > ball
-I still don't understand what you are referring to.
-
 > take red
 Do you mean the small red ball or the red cube? > red
 I still don't understand what you are referring to.
@@ -33,7 +29,7 @@ red cube: Dropped.
 small red ball: Dropped.
 
 > get ball
-Do you mean the small red ball, the small blue ball or the small green ball? >
+Do you mean the small red ball, the small blue ball or the small green ball? > 
 red
 
 Taken.

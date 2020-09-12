@@ -1,0 +1,59 @@
+> take all balls
+small blue ball: Taken.
+small red ball: Taken.
+small green ball: Taken.
+
+> take red cube
+Taken.
+
+> s
+
+White Room
+It's all white. The ball room lies to the north.
+
+You can see a red box (which is empty) and a transparent box (which is empty)
+here.
+
+> put balls in red box
+small green ball: You put the small green ball into the red box.
+small red ball: You put the small red ball into the red box.
+small blue ball: You put the small blue ball into the red box.
+
+> put red cube in transparent
+You put the red cube into the transparent box.
+
+> put transparent box in red box
+(first taking the transparent box)
+You put the transparent box into the red box.
+
+> close red box then get transparent box
+You close the red box.
+
+You can't see the transparent box
+
+> open red box
+You open the red box.
+
+> take red box
+Taken.
+
+> n
+
+Ball Room
+
+There is a blue table in the middle of the room.
+
+You can also see a black cube here.
+
+> put all cubes in box
+You put the black cube into the transparent box.
+
+> i
+You're carrying a red box (which contains a transparent box (which contains a
+red cube), a black cube, a small blue ball, a small red ball and a small green ball).
+
+> quit
+Are you sure you want to quit? yes
+
+
+  *** [Hit any key to exit.]
