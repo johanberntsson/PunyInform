@@ -1,15 +1,24 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
 
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
 Constant Story      "Get All From";
 Constant Headline   "^A sample game which uses PunyInform.^";
 
+#IfnDef USEINFORM;
 Constant INITIAL_LOCATION_VALUE = Room1;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 
 Include "globals.h";
 
 Include "puny.h";
+#IfNot;
+Include "Parser";
+Include "VerbLib";
+#EndIf;
 
 Object Room2 "Concealed box"
 	with
@@ -21,7 +30,9 @@ Object -> Box2 "box"
 	with
 		initial [;
 			print "There's a box here. ";
+#Ifndef USEINFORM;
 			if(PrintContents("In the box is ", self)) print ".";
+#EndIf;
 			"";
 		],
 		name 'box',
@@ -46,7 +57,9 @@ Object -> Box3 "box"
 	with
 		initial [;
 			print "There's a box here. ";
+#Ifndef USEINFORM;
 			if(PrintContents("In the box is ", self)) print ".";
+#EndIf;
 			"";
 		],
 		name 'box',
@@ -73,7 +86,9 @@ Object -> Box1 "box"
 	with
 		initial [;
 			print "There's a box here. ";
+#Ifndef USEINFORM;
 			if(PrintContents("In the box is ", self)) print ".";
+#EndIf;
 			"";
 		],
 		name 'box',
@@ -89,5 +104,11 @@ Object -> -> -> Rock1 "rock"
 		name 'rock';
 
 [Initialise;
-	print "^^And so the story begins...^^";
+    location = Room1;
+	print "^^try 'get all from bag'^^";
 ];
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+
