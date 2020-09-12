@@ -417,7 +417,7 @@ System_file;
 	print "? ";
 ];
 
-[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i;
+[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i _all_found;
 	! try getting a noun from the <p_parse_pointer> entry in parse
 	! return:
 	!   <noun number> if found
@@ -446,7 +446,10 @@ System_file;
 
 	! skip 'the', 'all' etc
 	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
-		if(p_parse_pointer --> 0 == ALL_WORD) parser_all_found = true;
+		if(p_parse_pointer --> 0 == ALL_WORD) {
+			parser_all_found = true; !TODO: do we really need the global?
+			_all_found = true;
+		}
 #IfDef DEBUG_GETNEXTNOUN;
 		print "skipping ",(address) p_parse_pointer --> 0,"^";
 #Endif;
@@ -496,7 +499,7 @@ System_file;
 
 .recheck_noun;
 	if(_noun < 0) {
-		if(_pluralword || parser_all_found) {
+		if(_pluralword || _all_found) {
 			! we don't have to ask here, because the input was
 			! "take books" or "take all books"
 			phase2_necessary = true;

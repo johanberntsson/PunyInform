@@ -20,6 +20,7 @@ n
 put green into box
 red
 put all cubes in box
+red
 i
 quit
 yes
