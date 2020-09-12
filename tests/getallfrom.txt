@@ -1,14 +1,39 @@
 > get all from bag
 rock: Removed.
 
-> get all from sbag2
-rock2a: Removed.
+> drop all
+rock: Dropped.
 
-> get all from cbag2
-rock2b: Removed.
+> s
 
-> get all from bag3 
-rock3: Removed.
+Static box
+The room with the static box and static bag. Exits n
+
+There's a box here. In the box is a bag (which contains a rock).
+
+> get all from bag
+rock: Removed.
+
+> drop all
+rock: Dropped.
+
+> n
+
+Normal box
+
+There's a box here. In the box is a bag (which is empty).
+
+You can also see a rock here.
+
+> n
+
+Concealed box
+The room with the concealed box. Exits s
+
+There's a box here. In the box is a bag (which contains a rock).
+
+> get all from bag
+rock: Removed.
 
 > quit
 Are you sure you want to quit? yes

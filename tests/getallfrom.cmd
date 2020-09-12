@@ -1,9 +1,13 @@
 transcript
 
 get all from bag
-get all from sbag2
-get all from cbag2
-get all from bag3 
+drop all
+s
+get all from bag
+drop all
+n
+n
+get all from bag
 quit
 yes
 
