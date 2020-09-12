@@ -1,5 +1,12 @@
 transcript
 
+put me on table then kill it
+throw ball at air
+small red
+throw ball at air
+red
+throw ball at air
+small red ball
 take all balls
 take red cube
 s

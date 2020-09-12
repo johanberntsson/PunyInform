@@ -1,6 +1,29 @@
+> put me on table then kill it
+But you are not holding yourself.
+
+I don't know what "it" refers to.
+
+> throw ball at air
+Do you mean the small blue ball, the small red ball or the small green ball? > 
+small red
+
+(first taking the small red ball)
+Futile.
+
+> throw ball at air
+Do you mean the small blue ball, the small red ball or the small green ball? > 
+red
+
+Futile.
+
+> throw ball at air
+Do you mean the small red ball, the small blue ball or the small green ball? > 
+small red ball
+
+Futile.
+
 > take all balls
 small blue ball: Taken.
-small red ball: Taken.
 small green ball: Taken.
 
 > take red cube
@@ -16,8 +39,8 @@ here.
 
 > put balls in red box
 small green ball: You put the small green ball into the red box.
-small red ball: You put the small red ball into the red box.
 small blue ball: You put the small blue ball into the red box.
+small red ball: You put the small red ball into the red box.
 
 > put red cube in transparent
 You put the red cube into the transparent box.
