@@ -26,6 +26,20 @@ get all from transparent
 drop red ball
 get it
 get all from red box
+drop all
+get all boxes
+n
+put all on the table
+put transparent box in red box
+enter transparent box
+enter red box
+enter table
+enter transparent box
+enter red box
+enter transparent box
+enter table
+exit
+exit
+exit
 quit
 yes
-

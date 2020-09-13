@@ -1,11 +1,11 @@
 > take red
-Do you mean the small red ball or the red cube? 
+Do you mean the small red ball or the red cube?
 
 > red
 I still don't understand what you are referring to.
 
 > take red
-Do you mean the small red ball or the red cube? 
+Do you mean the small red ball or the red cube?
 
 > ball
 Taken.
@@ -32,7 +32,7 @@ red cube: Dropped.
 small red ball: Dropped.
 
 > get ball
-Do you mean the small red ball, the small blue ball or the small green ball? 
+Do you mean the small red ball, the small blue ball or the small green ball?
 
 > red
 Taken.
@@ -89,6 +89,62 @@ Taken.
 small blue ball: Removed.
 small green ball: Removed.
 small black ball: Removed.
+
+> drop all
+small black ball: Dropped.
+small green ball: Dropped.
+small blue ball: Dropped.
+small red ball: Dropped.
+
+> get all boxes
+red box: Taken.
+transparent box: Taken.
+
+> n
+
+Ball Room
+
+There is a blue table in the middle of the room.
+
+You can also see a red cube and a black cube here.
+
+> put all on the table
+transparent box: You put the transparent box on the table.
+red box: You put the red box on the table.
+
+> put transparent box in red box
+(first taking the transparent box)
+You put the transparent box into the red box.
+
+> enter transparent box
+You have to enter the red box first.
+
+> enter red box
+You have to enter the table first.
+
+> enter table
+You enter the table.
+
+> enter transparent box
+You have to enter the red box first.
+
+> enter red box
+You enter the red box.
+
+> enter transparent box
+You enter the transparent box.
+
+> enter table
+You have to leave the transparent box first.
+
+> exit
+You leave the transparent box.
+
+> exit
+You leave the red box.
+
+> exit
+You leave the table.
 
 > quit
 Are you sure you want to quit? yes

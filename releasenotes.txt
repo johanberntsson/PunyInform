@@ -222,5 +222,7 @@ v1.6: bugfix release
 - Fixed: bad combinations of adjectives and nouns messed up disambiguation code
 - Improved disambiguation for plurals to make "get all red" work
 - Now allowing more than one word inputs in disambiguation
-- changed disambiguation prompt
-
+- Changed disambiguation prompt
+- If bag is in box which is on table, and player is on table and types
+  ENTER BAG, (s)he now gets "You have to enter the box first." instead of
+  "You have to leave the table first."

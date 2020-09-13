@@ -5,7 +5,7 @@
 !
 Constant Story      "Parser test";
 Constant Headline   "^A parser test suite for PunyInform.^";
-Serial "200827";
+Serial "200913";
 
 Constant INITIAL_LOCATION_VALUE = BallRoom;
 
@@ -72,7 +72,19 @@ Object -> Air "air"
 Object -> Table "table"
 	with
 		name 'blue' 'table',
-		initial "There is a blue table in the middle of the room.",
+		description [;
+			print "It's a nice sturdy table, all painted in blue.";
+			self.show_contents();
+			@new_line;
+		],
+		initial [;
+			print "There is a blue table in the middle of the room.";
+			if(~~IndirectlyContains(self, player)) self.show_contents();
+			@new_line;
+		],
+		show_contents [;
+			if(PrintContents(" On the table you can see ", self)) print ".";
+		],
 	has static supporter enterable;
 
 Ball -> BlueBall with adj1 'small', adj2 'blue';
@@ -114,13 +126,13 @@ Object WhiteRoom "White Room"
 Object -> RedBox "red box"
 	with
 		inside_description "You notice that the box is red on the inside too.",
-		name 'red' 'box'
+		name 'red' 'box' 'boxes//p',
 	has container open openable enterable;
 
 Object -> TransparentBox "transparent box"
 	with
 		inside_description "The transparent box feels cozy.",
-		name 'transparent' 'box'
+		name 'transparent' 'box' 'boxes//p',
 	has container open openable transparent enterable;
 
 [Initialise;

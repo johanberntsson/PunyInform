@@ -596,7 +596,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_ENTER_BAD_LOCATION < 1000;
 	MSG_ENTER_BAD_LOCATION:
 		print "You have to ";
-		if(player notin location && player notin parent(noun))
+		if(player notin location && ~~IndirectlyContains(parent(player), noun))
 			print "leave ", (the) parent(player);
 		else
 			print "enter ", (the) parent(noun);
