@@ -1260,7 +1260,6 @@ Array guess_num_objects->5;
 				! match of course but we need to force phase2 to write
 				! a suitable message.
 				phase2_necessary = true;
-				return 100;
 			} else {
 				_UpdateNounSecond(multiple_objects-->1, multiple_objects-->1);
 			}
