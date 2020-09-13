@@ -1172,11 +1172,12 @@ Object thedark "Darkness"
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
 
+	@new_line;
 	while(deadflag == GS_PLAYING) {
 		scope_modified = false; ! avoid automatic scope updates during parsing
 
 		_UpdateScoreOrTime();
-		@new_line;
+		if(_sentencelength > 0) @new_line;
 
 		_UpdateScope(player, true);
 		_score = score;

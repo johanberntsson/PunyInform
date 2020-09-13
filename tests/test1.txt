@@ -1,13 +1,13 @@
 > take red
 Do you mean the small red ball or the red cube? 
-> red
 
+> red
 I still don't understand what you are referring to.
 
 > take red
 Do you mean the small red ball or the red cube? 
-> ball
 
+> ball
 Taken.
 
 > drop all
@@ -33,8 +33,8 @@ small red ball: Dropped.
 
 > get ball
 Do you mean the small red ball, the small blue ball or the small green ball? 
-> red
 
+> red
 Taken.
 
 > get all balls

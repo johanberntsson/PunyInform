@@ -3,21 +3,21 @@ You are not holding that!
 
 > throw ball at air
 Do you mean the small blue ball, the small red ball or the small green ball? 
-> small red
 
+> small red
 (first taking the small red ball)
 Futile.
 
 > throw ball at air
 Do you mean the small red ball, the small blue ball or the small green ball? 
-> red
 
+> red
 Futile.
 
 > throw ball at air
 Do you mean the small red ball, the small blue ball or the small green ball? 
-> small red ball
 
+> small red ball
 Futile.
 
 > take all balls
@@ -68,14 +68,14 @@ You can also see a black cube here.
 
 > put green into box
 Do you mean the red box or the transparent box? 
-> red
 
+> red
 Already there.
 
 > put all cubes in box
 Do you mean the red box or the transparent box? 
-> red
 
+> red
 red cube: (first taking the red cube)
 You put the red cube into the red box.
 black cube: (first taking the black cube)
