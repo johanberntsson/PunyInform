@@ -2,21 +2,21 @@
 You are not holding that!
 
 > throw ball at air
-Do you mean the small blue ball, the small red ball or the small green ball? > 
-small red
+Do you mean the small blue ball, the small red ball or the small green ball? 
+> small red
 
 (first taking the small red ball)
 Futile.
 
 > throw ball at air
-Do you mean the small red ball, the small blue ball or the small green ball? > 
-red
+Do you mean the small red ball, the small blue ball or the small green ball? 
+> red
 
 Futile.
 
 > throw ball at air
-Do you mean the small red ball, the small blue ball or the small green ball? > 
-small red ball
+Do you mean the small red ball, the small blue ball or the small green ball? 
+> small red ball
 
 Futile.
 
@@ -67,12 +67,14 @@ There is a blue table in the middle of the room.
 You can also see a black cube here.
 
 > put green into box
-Do you mean the red box or the transparent box? > red
+Do you mean the red box or the transparent box? 
+> red
 
 Already there.
 
 > put all cubes in box
-Do you mean the red box or the transparent box? > red
+Do you mean the red box or the transparent box? 
+> red
 
 red cube: (first taking the red cube)
 You put the red cube into the red box.

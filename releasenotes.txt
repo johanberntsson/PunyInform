@@ -222,4 +222,5 @@ v1.6: bugfix release
 - Fixed: bad combinations of adjectives and nouns messed up disambiguation code
 - Improved disambiguation for plurals to make "get all red" work
 - Now allowing more than one word inputs in disambiguation
+- changed disambiguation prompt
 

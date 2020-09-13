@@ -1,9 +1,12 @@
 > take red
-Do you mean the small red ball or the red cube? > red
+Do you mean the small red ball or the red cube? 
+> red
+
 I still don't understand what you are referring to.
 
 > take red
-Do you mean the small red ball or the red cube? > ball
+Do you mean the small red ball or the red cube? 
+> ball
 
 Taken.
 
@@ -29,8 +32,8 @@ red cube: Dropped.
 small red ball: Dropped.
 
 > get ball
-Do you mean the small red ball, the small blue ball or the small green ball? > 
-red
+Do you mean the small red ball, the small blue ball or the small green ball? 
+> red
 
 Taken.
 

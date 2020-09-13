@@ -521,6 +521,7 @@ System_file;
 		! disambiguate successfully.
 		_CopyInputArray(buffer, buffer2);
 		_CopyParseArray(parse, parse2);
+		@new_line;
 		_ReadPlayerInput();
 		! is this a reply to the question?
 		if((((parse + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
@@ -599,6 +600,7 @@ System_file;
 					jump recheck_noun;
 				}
 			}
+			@new_line;
 			PrintMsg(MSG_PARSER_CANT_DISAMBIGUATE);
 			return -2;
 		}
