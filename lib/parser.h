@@ -414,7 +414,7 @@ System_file;
 		}
 		print (the) which_object --> _i;
 	}
-	print "? ";
+	print "?";
 ];
 
 [ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i _all_found;

@@ -1,5 +1,8 @@
 transcript
 
+i.i
+take red
+i
 take red
 red
 take red
@@ -43,3 +46,4 @@ exit
 exit
 quit
 yes
+

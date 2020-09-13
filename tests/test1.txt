@@ -1,3 +1,14 @@
+> i.i
+You are empty handed.
+
+You are empty handed.
+
+> take red
+Do you mean the small red ball or the red cube?
+
+> i
+You are empty handed.
+
 > take red
 Do you mean the small red ball or the red cube?
 
