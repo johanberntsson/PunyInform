@@ -226,3 +226,7 @@ v1.6: bugfix release
 - If bag is in box which is on table, and player is on table and types
   ENTER BAG, (s)he now gets "You have to enter the box first." instead of
   "You have to leave the table first."
+- Added a "howto" directory, for small games demonstrating how to do implement
+  various clever objects and behaviours.
+- Added a howto-game with an object which has an initial description and shows
+  its own contents both in room descriptions and when begin examined.
