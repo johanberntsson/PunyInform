@@ -229,4 +229,10 @@ v1.6: bugfix release
 - Added a "howto" directory, for small games demonstrating how to do implement
   various clever objects and behaviours.
 - Added a howto-game with an object which has an initial description and shows
-  its own contents both in room descriptions and when begin examined.
+  its own contents both in room descriptions and when being examined.
+- Fixed double error messages when auto-taking objects.
+- Fixed bug in Library of Horror which could give player more than max score.
+- Changed so LibraryMessages can only replace messages which the game has
+  declared constants for, and it *has to* replace them. This also means
+  it doesn't matter what LibraryMessages returns.
+  

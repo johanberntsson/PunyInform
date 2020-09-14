@@ -117,7 +117,7 @@ System_file;
 	for(_i = 0 : _i < p_parse_array -> 1 : _i++) {
 		print _i, ": wn ", (_i + 1),
 		" dict ",((p_parse_array + 2 + _i * 4) --> 0),
-		" (",(address) ((p_parse_array + 2 + _i * 4) --> 0),") ", 
+		" (",(address) ((p_parse_array + 2 + _i * 4) --> 0),") ",
  		" len ",(p_parse_array + 2 + _i * 4) -> 2,
 		" index ",(p_parse_array + 2 + _i * 4) -> 3, "^";
 	}
@@ -649,12 +649,9 @@ System_file;
 	if(p_noun in player) return;
 	print "(first taking ", (the) p_noun, ")^";
 	keep_silent = true;
-	if(PerformAction(##Take, p_noun)) {
-		if(p_noun notin player) {
-			PrintMsg(MSG_PARSER_NOT_HOLDING, p_noun);
-		}
-	}
+	PerformAction(##Take, p_noun);
 	keep_silent = false;
+	if(p_noun notin player) rtrue;
 ];
 
 [ _CreatureTest obj;

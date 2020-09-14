@@ -1086,7 +1086,6 @@ Constant MSG_DISROBE_NOT_WEARING 1002;
 		"Not worn!";
 	}
 	p_arg_1 = 0; p_arg_2 = 0; ! To avoid warnings
-	rfalse;
 ];
 
 Include "puny.h";
@@ -1129,7 +1128,8 @@ Object CarPark "Car Park"
 	with
 		!short_name [; print "In front of the library!"; rtrue; ],
 		initial "Wow, this is a huge car park!",
-		description [; "You are in a car park in front of the library.
+		description [;
+			"You are in a car park in front of the library.
 			You can enter to the north. There is a river off to the east.";],
 		n_to Library,
 		sw_to [; "There's an angry dragon blocking the path!"; ],

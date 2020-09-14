@@ -28,7 +28,7 @@ Constant INITIAL_LOCATION_VALUE = GloomyStreet;
 
 Constant Story	  "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game, by Pablo Martinez and Fredrik Ramsberg.^";
-Release 3;
+Release 4;
 
 Constant MAX_SCORE = 100;
 Constant TASKS_PROVIDED;
@@ -345,8 +345,8 @@ Object -> Manager "library manager"
 				if(FlagIsClear(F_TALKED_TO_MANAGER)) {
 					SetFlag(F_TALKED_TO_MANAGER);
 					Achieved(TASK_TALK_MANAGER);
-					"He looks up from the shelf in surprise. When he sees you, he smiles (something
-						is unsettling in his smile) and says: ~Wow! I didn't remember you were coming
+					"He looks up from the shelf in surprise. When he sees you, he smiles (there is
+						something unsettling about his smile) and says: ~Wow! I forgot you were coming
 						today. You're the new assistant, right? I imagined you taller. Never mind! I
 						won't be able to spend much time with you today. You'd better come tomorrow.~
 						^^Just as you're about to leave the library upset, you hear his voice again.
@@ -402,6 +402,9 @@ Object TopOfStairs "Staircase Leading Down"
 					if(FlagIsClear(F_TALKED_TO_MANAGER))
 						"You have no business running around in the basement. Better go talk to the library manager instead,
 							to find out where you're needed.";
+					if(FlagIsSet(F_BOOK_DELIVERED))
+						"You're done for today, and the library manager told you to go home. Better not go snooping around
+						 	in the basement.";
 					if(self hasnt general) {
 						give self general;
 						QuoteBox(quote_stairs);

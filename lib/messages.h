@@ -367,8 +367,10 @@ Default LibraryMessages 0;
 	if(p_msg ofclass String)
 		print_ret (string) p_msg;
 
-	if(LibraryMessages(p_msg, p_arg_1, p_arg_2))
+	if(p_msg > 999) {
+		LibraryMessages(p_msg, p_arg_1, p_arg_2);
 		rtrue;
+	}
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
