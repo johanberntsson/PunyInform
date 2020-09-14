@@ -1,3 +1,7 @@
+> put john on box
+(first taking John)
+I don't suppose John would care for that.
+
 > open box
 You open the box.
 

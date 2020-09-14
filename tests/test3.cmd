@@ -1,5 +1,6 @@
 transcript
 
+put john on box
 open box
 take ladder
 drop ladder

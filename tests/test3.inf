@@ -1,4 +1,5 @@
 ! testing 'get red book and ladder from box'
+! and 'put john on box' response
 
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";
@@ -96,6 +97,11 @@ Object -> Ladder "ladder"
 		],
 		inside_description "It's a really good ladder for standing on.",
 	has supporter enterable;
+
+Object -> John "John"
+    with
+        name 'john'
+    has proper animate;
 
 
 [Initialise;
