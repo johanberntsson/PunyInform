@@ -1,6 +1,6 @@
 # PunyInform
 
-PunyInform is a library written in Inform 6 which allows people to create text adventures / interactive fiction using the Z-machine virtual machine. It provides a parser, implementations of common verbs, as well as a framework for writing text adventures.
+PunyInform is a library written in Inform 6 which allows people to create text adventure games / interactive fiction using the Z-machine virtual machine, to be played on 8-bit computers as well as newer platforms. It provides a parser, implementations of common verbs, as well as a framework for writing text adventures.
 
 PunyInform is based on the Inform 6 library, developed by Graham Nelson. We are trying to make it easy for authors used to writing in Inform 6 to start using PunyInform. There is a manual describing the differences.
 
@@ -27,12 +27,16 @@ You can see what tasks we're currently working on, tasks we've done and tasks co
 
 ## Publicity
 
-Fredrik Ramsberg has written two articles describing PunyInform for beginners.
+Fredrik Ramsberg has written a few articles describing PunyInform for beginners:
 
-The first is [PunyInform, a new library for writing text adventures for old computers](https://vintageisthenewold.com/punyinform-a-new-library-for-writing-text-adventures-for-old-computers/), which gives a general overview and introduction.
+* [PunyInform, a new library for writing text adventures for old computers](https://vintageisthenewold.com/punyinform-a-new-library-for-writing-text-adventures-for-old-computers/) gives a general overview and introduction.
 
-The second is [PunyInform: Installing the tools and compiling a game](https://vintageisthenewold.com/punyinform-installing-the-tools-and-compiling-a-game/) which goes more into detail on how to setup an environment with PunyInform and the inform compiler on Windows, and getting started on a simple game.
+* [PunyInform: Installing the tools and compiling a game](https://vintageisthenewold.com/punyinform-installing-the-tools-and-compiling-a-game/) goes more into detail on how to setup an environment with PunyInform and the inform compiler on Windows, and getting started on a simple game.
+
+* [PunyInform Coding 1: The Basics](https://vintageisthenewold.com/punyinform-coding-1-the-basics/) covers the fundamentals of developing a game using PunyInform.
+
+Fredrik has also written [a comparison of PunyInform and the standard Inform 6 library](https://intfiction.org/t/punyinform-vs-inform-6-a-comparison/46625).
 
 ## Credits
 
-PunyInform was conceived and designed by Johan Berntsson and Fredrik Ramsberg. Coding by Johan Berntsson, Fredrik Ramsberg, Pablo Martinez and Tomas Öberg. Includes code from the Inform 6 standard library, by Graham Nelson. Thanks to Stefan Vogt, Jason Compton, John Wilson, Hugo Labrande and Richard Fairweather for advice, testing, code contributions and promotion. Thanks to David Kinder and Andrew Plotkin for helping out with compiler issues and sharing their deep knowledge of the compiler. Huge thanks to Graham Nelson for creating the Inform 6 compiler and library in the first place.
+PunyInform was conceived and designed by Johan Berntsson and Fredrik Ramsberg. Coding by Johan Berntsson, Fredrik Ramsberg, Pablo Martinez and Tomas Öberg. Includes code from the Inform 6 standard library, by Graham Nelson. Thanks to Stefan Vogt, Jason Compton, John Wilson, Hugo Labrande, Richard Fairweather and Adam Sommerfield for advice, testing, code contributions and promotion. Thanks to David Kinder and Andrew Plotkin for helping out with compiler issues and sharing their deep knowledge of the compiler. Huge thanks to Graham Nelson for creating the Inform 6 compiler and library in the first place.
