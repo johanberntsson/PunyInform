@@ -8,7 +8,7 @@ Games using PunyInform can be compiled to z3, z5 and z8 format. Compared to the 
 
 To compile games using PunyInform, we recommend the official Inform 6 compiler maintained by David Kinder, at https://github.com/DavidKinder/Inform6 . Binaries can be found at [if-archive](http://www.ifarchive.org/indexes/if-archiveXinfocomXcompilersXinform6Xexecutables.html) . PunyInform requires Inform v6.34 or newer.
 
-![Minimal game in PunyInform](https://vintageisthenewold.com/wp-content/uploads/2020/07/minimini-4.png)
+![A minimal game in PunyInform](https://github.com/johanberntsson/PunyInform/blob/master/documentation/screenshots/simplegame.png?raw=true)
 
 ## Motivation
 
