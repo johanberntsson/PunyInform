@@ -235,4 +235,5 @@ v1.6: bugfix release
 - Changed so LibraryMessages can only replace messages which the game has
   declared constants for, and it *has to* replace them. This also means
   it doesn't matter what LibraryMessages returns.
+- Improved minimal.inf to be clearer on what goes where.
   
