@@ -3,7 +3,7 @@
 System_file;
 
 Constant PUNYINFORM_MAJOR_VERSION = 1;
-Constant PUNYINFORM_MINOR_VERSION = 5;
+Constant PUNYINFORM_MINOR_VERSION = 6;
 
 #IfnDef CUSTOM_ABBREVIATIONS;
 Abbreviate ". ";
