@@ -237,3 +237,5 @@ v1.6: bugfix release
   it doesn't matter what LibraryMessages returns.
 - Improved minimal.inf to be clearer on what goes where.
   
+=======
+v1.7: 
