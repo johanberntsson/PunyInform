@@ -402,8 +402,6 @@ Default LibraryMessages 0;
 		"What a concept!";
 	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE:
 		"That would be less than courteous.";
-	MSG_TURN_STATIC, MSG_PUSH_STATIC, MSG_PULL_STATIC:
-		"You are unable to.";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING,
 		MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItorThem) noun, ".";
