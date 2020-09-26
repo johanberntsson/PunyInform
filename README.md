@@ -25,7 +25,11 @@ You can see the manual on our [wiki](https://github.com/johanberntsson/PunyInfor
 
 You can see what tasks we're currently working on, tasks we've done and tasks coming up on our Trello board: https://trello.com/b/mfGVsB4H/punyinform
 
-## Publicity
+## Games Using PunyInform
+
+[Tristam Island](https://hlabrande.itch.io/tristam-island), written by Hugo Labrande, was developed using PunyInform.
+
+## Articles
 
 Fredrik Ramsberg has written a few articles describing PunyInform for beginners:
 
