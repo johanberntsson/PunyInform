@@ -3,6 +3,7 @@ transcript
 get all from bag
 drop all
 s
+get all but box
 get all from bag
 drop all
 n

@@ -11,6 +11,9 @@ The room with the static box and static bag. Exits n
 
 There's a box here. In the box is a bag (which contains a rock).
 
+> get all but box
+bad response
+
 > get all from bag
 rock: Removed.
 
