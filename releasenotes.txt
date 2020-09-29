@@ -236,6 +236,10 @@ v1.6: bugfix release
   declared constants for, and it *has to* replace them. This also means
   it doesn't matter what LibraryMessages returns.
 - Improved minimal.inf to be clearer on what goes where.
-  
+
 =======
-v1.7: 
+v1.7:
+- selfobj (the default player object) now has describe property, but not the
+  unsupported before_implicit.
+- Objects which have scenery or concealed no longer get the chance to be
+  printed by Look, even if they have initial, when_open, describe etc.

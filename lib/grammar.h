@@ -1450,7 +1450,7 @@ Global scope_cnt;
 
 			also_flag = false;
 			! write intial and describe messages in a new paragraph
-			objectloop(_obj in _ceil) {
+			objectloop(_obj in _ceil && _obj hasnt scenery or concealed && _obj ~= player) {
 				give _obj workflag;
 				if(_obj.&describe) {
 					if(PrintOrRun(_obj, describe, 0)) {

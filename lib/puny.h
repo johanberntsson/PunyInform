@@ -1108,13 +1108,12 @@ Object selfobj "you"
 		life NULL,
 		each_turn NULL,
 		time_out NULL,
-		! describe NULL, ! TODO: uncommenting causes erorr LookSub
+		describe NULL,
 		add_to_scope 0,
 		capacity MAX_CARRIED,
 		parse_name 0,
 		orders 0,
 		number 0,
-		before_implicit NULL,
 	has concealed animate proper transparent;
 
 Object thedark "Darkness"
