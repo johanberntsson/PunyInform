@@ -773,7 +773,7 @@ System_file;
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
 				if(_noun == -2) return GPR_FAIL;
 				if(_noun == -1) return GPR_REPARSE;
-				if(_noun == 0) {
+				if(_noun == 0 || parser_all_found) {
 					! here it is either a plural, 'all' or not understood
 					!
 					if(parser_action == ##PluralFound) {

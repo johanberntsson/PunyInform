@@ -243,3 +243,4 @@ v1.7:
   unsupported before_implicit.
 - Objects which have scenery or concealed no longer get the chance to be
   printed by Look, even if they have initial, when_open, describe etc.
+- Fixed 'get all but X' didn't work like 'get all Xs but Y'
