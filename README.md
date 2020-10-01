@@ -27,7 +27,16 @@ You can see what tasks we're currently working on, tasks we've done and tasks co
 
 ## Games Using PunyInform
 
-[Tristam Island](https://hlabrande.itch.io/tristam-island), written by Hugo Labrande, was developed using PunyInform.
+These games are known to use PunyInform:
+
+* [Tristam Island](https://hlabrande.itch.io/tristam-island), by Hugo Labrande.
+
+* [Calypso](http://microheaven.com/ozmoo/games/calypso/calypso.z3) ([src](https://github.com/dave-f/calypso)), by Dave Footitt
+
+* Behind Closed Doors 9B, by John Wilson (link in [this blog post](http://www.zenobi.co.uk/2020/07/punyinfom-enters-fray.html))
+
+* Alien Research Centre 3, by John Wilson (link in [this blog post](http://www.zenobi.co.uk/2020/08/learn-it-and-love-it.html))
+
 
 ## Articles
 
