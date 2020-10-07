@@ -1,0 +1,140 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+Constant Story      "Change Player";
+Constant Headline   "^A PunyInform code sample.^";
+
+Constant INITIAL_LOCATION_VALUE = WhiteRoom;
+
+Include "globals.h";
+
+Include "puny.h";
+
+[ SwitchFromPlayerCharacter p_old_pc;
+	give p_old_pc ~concealed ~transparent;
+	p_old_pc.&name-->0 = p_old_pc.&name_other-->0;
+	p_old_pc.&name-->1 = p_old_pc.&name_other-->1;
+	p_old_pc.&name-->2 = p_old_pc.&name_other-->2;
+	p_old_pc.short_name = p_old_pc.short_name_other;
+	p_old_pc.description = p_old_pc.description_other;
+];
+
+[ SwitchToPlayerCharacter p_new_pc;
+	give p_new_pc concealed transparent;
+	p_new_pc.&name-->0 = 'me';
+	p_new_pc.&name-->1 = 'myself';
+	p_new_pc.&name-->2 = 'self';
+	p_new_pc.short_name = "yourself";
+	p_new_pc.description = p_new_pc.description_player;
+	player = p_new_pc;
+	location = parent(p_new_pc);
+	real_location = location;
+	_UpdateDarkness();
+];
+
+[ ChangePlayer p_new_pc _character;
+	if(player ofclass PlayableCharacter) {
+		SwitchFromPlayerCharacter(player);
+	} else {
+		! This is the first time ChangePlayer is called. We need to switch to
+		! the non-active mode for all non-active player characters.
+		objectloop(_character ofclass PlayableCharacter && _character ~= p_new_pc) {
+			SwitchFromPlayerCharacter(_character);
+		}
+	}
+	SwitchToPlayerCharacter(p_new_pc);
+];
+
+Class PlayableCharacter
+	with
+		parse_name [ _words;
+			while(NextWordStopped() == self.&name-->0 or self.&name-->1 or
+					self.&name-->2 or self.&name_other-->0 or
+					self.&name_other-->1 or	self.&name_other-->2) _words++;
+			return _words;
+		],
+		name 'me' 'myself' 'self',
+		name_other 0 0 0,
+		short_name  "yourself",
+		short_name_other 0,
+		description 0,
+		description_other 0,
+		description_player "As good-looking as ever.",
+		capacity MAX_CARRIED,
+	has animate proper concealed transparent;
+
+Object WhiteRoom "White Room"
+	with
+		description "You are in a large white room. A blue room lies to the south.",
+		s_to BlueRoom,
+	has light;
+
+Object -> Table "table"
+	with
+		name 'table',
+	has static supporter enterable;
+
+Object -> -> plate "plate"
+	with
+		name 'plate';
+
+Object -> -> "fork"
+	with
+		name 'fork';
+
+Object -> Bob "you" class PlayableCharacter
+	with
+		name_other 'bob' 'bob' 'bob',
+		short_name_other  "Bob",
+		description_player "You're handsome and you know it.",
+		description_other "Bob is good looking, that's for sure.";
+
+Object BlueRoom "Blue Room"
+	with
+		description "You are in a small blue room. A white room lies to the north.",
+		n_to WhiteRoom,
+	has light;
+
+Object -> Sally "you" class PlayableCharacter
+	with
+		name_other 'sally' 'sally' 'sally',
+		short_name_other  "Sally",
+		description_player "You think you look okay.",
+		description_other "Sally looks nice."
+	has female;
+
+[ PlayableCharacterScope _obj;
+	switch(scope_stage) {
+	1:
+		rfalse;
+	2:
+		objectloop(_obj ofclass PlayableCharacter) {
+			PlaceInScope(_obj);
+		}
+		rtrue;
+	3:
+		"You can't become that!";
+	}
+];
+
+[BecomeSub;
+	if(noun == player)
+	 	"You already are!";
+	ChangePlayer(noun);
+	if(AfterRoutines()) rtrue;
+	print "Ok, you are now ";
+	PrintOrRun(noun, short_name_other, true);
+	print ".^";
+	<Look>;
+];
+
+Verb 'become'
+	* scope=PlayableCharacterScope -> Become;
+
+[Initialise;
+	ChangePlayer(Bob);
+	! In the Initialise routine, you must remove the player if you want to
+	! get the initial Look. The library will put the player back into 'location'
+	remove player;
+	print "^^In this demo you can switch player character by typing ~BECOME SALLY~ or ~BECOME BOB~.^^";
+];
