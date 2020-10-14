@@ -245,3 +245,6 @@ v1.7:
   printed by Look, even if they have initial, when_open, describe etc.
 - Fixed 'get all but X' didn't work like 'get all Xs but Y'
 - Added a code example in howto folder for having multiple player characters.
+- Fixed bug in MoveFloatingObjects which caused objects to disappear if one
+  floating object had absent attribute.
+  

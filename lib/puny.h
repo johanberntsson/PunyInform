@@ -432,9 +432,11 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 [ MoveFloatingObjects _i _j _len _obj _present;
-	while((_obj = floating_objects-->_i) ~= 0 && _obj hasnt absent) {
+	while((_obj = floating_objects-->_i) ~= 0) {
 		_len = _obj.#found_in;
-		if(_len == 2 && UnsignedCompare(_obj.found_in, top_object) > 0) {
+		if(_obj has absent)
+			_present = 0;
+		else if(_len == 2 && UnsignedCompare(_obj.found_in, top_object) > 0) {
 			_present = RunRoutines(_obj, found_in);
 		} else {
 			_present = 0;
