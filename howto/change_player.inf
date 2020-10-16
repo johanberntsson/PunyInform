@@ -26,7 +26,7 @@ Include "puny.h";
 	p_new_pc.short_name = "yourself";
 	p_new_pc.description = p_new_pc.description_player;
 	player = p_new_pc;
-	location = parent(p_new_pc);
+	location = superparent(p_new_pc);
 	real_location = location;
 	_UpdateDarkness();
 ];
