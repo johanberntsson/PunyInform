@@ -285,6 +285,8 @@ Default MSG_RUB_DEFAULT 112;
 Default MSG_SQUEEZE_DEFAULT 113;
 Default MSG_EXAMINE_CLOSED 114;
 Default MSG_EMPTY_IS_CLOSED 115;
+Default MSG_PARSER_NO_NEED_REFER_TO 116;
+Default MSG_PARSER_DONT_UNDERSTAND_WORD 117;
 
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
@@ -474,6 +476,18 @@ Default LibraryMessages 0;
 #IfTrue MSG_PARSER_CANT_TALK < 1000;
 	MSG_PARSER_CANT_TALK:
 		print_ret "You can't talk to ", (the) p_arg_1, ".";
+#EndIf;
+#IfTrue MSG_PARSER_NO_NEED_REFER_TO < 1000;
+	MSG_PARSER_NO_NEED_REFER_TO:
+		print "You don't need to refer to ~";
+		_PrintUnknownWord();
+		print_ret "~ in this game.";
+#EndIf;
+#IfTrue MSG_PARSER_DONT_UNDERSTAND_WORD < 1000;
+	MSG_PARSER_DONT_UNDERSTAND_WORD:
+			print "Sorry, I don't understand what ~";
+			_PrintUnknownWord();
+			print_ret "~ means.";
 #EndIf;
 	MSG_TOUCHABLE_FOUND_CLOSED, MSG_PARSER_CONTAINER_ISNT_OPEN, MSG_CLOSE_NOT_OPEN:
 		print_ret (CObjIs) p_arg_1, "n't open.";

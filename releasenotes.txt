@@ -248,3 +248,4 @@ v1.7:
 - Replaced THEN_WORD with THEN1__WD for I6 compatibility
 - Fixed bug in MoveFloatingObjects which caused objects to disappear if one
   floating object had absent attribute.
+- Made 'unknown word' messages customizable

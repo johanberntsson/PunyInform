@@ -1218,18 +1218,14 @@ Array guess_num_objects->5;
 							}
 						}
 						if(inp1 > -1) {
-							print "You don't need to refer to ~";
-							_PrintUnknownWord();
-							print "~ in this game.^";
+							PrintMsg(MSG_PARSER_NO_NEED_REFER_TO);
 						} else if(_word == ALL_WORD) {
 							PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 						} else {
 							PrintMsg(MSG_PARSER_CANT_SEE_SUCH_THING);
 						}
 					} else {
-						print "Sorry, I don't understand what ~";
-						_PrintUnknownWord();
-						print "~ means.^";
+						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
 					}
 				} else {
 					! give higher score to unknown words matches
