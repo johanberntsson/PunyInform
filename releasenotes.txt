@@ -249,3 +249,4 @@ v1.7:
 - Fixed bug in MoveFloatingObjects which caused objects to disappear if one
   floating object had absent attribute.
 - Made 'unknown word' messages customizable
+- Fixed dropping objects from supporters bug

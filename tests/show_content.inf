@@ -1,0 +1,61 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+Constant Story      "Show Contents";
+Constant Headline   "^A PunyInform code sample.^";
+
+Constant INITIAL_LOCATION_VALUE = WhiteRoom;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+
+Include "globals.h";
+
+Include "puny.h";
+
+Object WhiteRoom "White Room"
+	with
+		description "You are in a large white room.",
+	has light;
+
+Object -> Table "table"
+	with
+		name 'table',
+		description [;
+			print "It's a nice sturdy table.";
+			self.show_contents();
+			@new_line;
+		],
+		initial [;
+			print "There is a beautiful table in the middle of the room.";
+			! If the player is on the table, PunyInform will show the contents
+			! automatically. Otherwise, we do it!
+			if(~~IndirectlyContains(self, player)) self.show_contents();
+			@new_line;
+		],
+		! show_contents is an individual property - it could have been called
+		! anything. We just picked a descriptive name.
+		show_contents [;
+			! PrintContents returns true if it printed anything, false if not.
+			if(PrintContents(" On the table you can see ", self)) print ".";
+		],
+	has static supporter enterable;
+
+
+Object -> -> plate "plate"
+	with
+		name 'plate'
+	has supporter;
+
+Object -> -> fork "fork"
+	with
+		name 'fork';
+
+[Initialise;
+	print "^^A supporter or container in PunyInform is normally included in the
+		room description, and if there is something in/on it, this is also
+		printed. However, if you give your supporter or container a paragraph of
+		its own using any of the properties initial, when_open, when_closed
+		or describe, the contents of the object will not be printed. This game
+		shows how to make the object print its contents in the room description.
+		Also, it shows how to make the object print its contents when the
+		player examines the object.^^";
+];

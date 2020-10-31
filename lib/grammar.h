@@ -268,7 +268,7 @@ Verb 'wear'
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
 	if(noun has worn) { PrintMsg(MSG_DROP_WORN); rtrue; }
 	_p = parent(player);
-	if(_p ~= location) <<Insert noun _p>>;
+	!if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
 	give noun moved;
 #IfDef OPTIONAL_MANUAL_SCOPE;
