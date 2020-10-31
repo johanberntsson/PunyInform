@@ -250,3 +250,4 @@ v1.7:
   floating object had absent attribute.
 - Made 'unknown word' messages customizable
 - Fixed dropping objects from supporters bug
+- Improved incomplete switch command replies

@@ -163,11 +163,11 @@ Verb 'stand'
 	* 'on' noun                                 -> Enter;
 
 Verb 'switch'
-	* noun                                      -> SwitchOn
+	* 'on' noun                                 -> SwitchOn
+	* 'off' noun                                -> SwitchOff
 	* noun 'on'                                 -> SwitchOn
 	* noun 'off'                                -> SwitchOff
-	* 'on' noun                                 -> SwitchOn
-	* 'off' noun                                -> SwitchOff;
+	* noun                                      -> SwitchOn;
 
 Verb 'take' 'carry' 'hold'
 	* multi                                     -> Take
