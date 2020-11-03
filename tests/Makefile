@@ -10,4 +10,4 @@ inform:
 	frotz test5.z8
 
 clean:
-	rm -f *z3 *z5 *scr *output
+	rm -f *z3 *z5 *z8 *scr *output
