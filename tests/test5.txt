@@ -1,0 +1,43 @@
+> take ball
+Taken.
+
+> e
+
+Darkness
+It is pitch dark here!
+
+> drop all
+ball: Dropped.
+
+> x ball
+But it's dark.
+
+> x chair
+You can't see any such thing.
+
+> take all
+ball: Taken.
+
+> w
+
+Lit Room
+
+> w
+
+Darkness
+It is pitch dark here!
+
+> take ball
+You can't see any such thing.
+
+> take table
+Taken.
+
+> i
+You're carrying a table and a ball.
+
+> quit
+Are you sure you want to quit? yes
+
+
+  *** [Hit any key to exit.]

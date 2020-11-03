@@ -114,11 +114,7 @@ System_file;
 
 	scope_pov = p_actor;
 
-	! give entry routine a chance to override
-	if(InScope(p_actor)) rtrue;
-
 	_start_pos = ScopeCeiling(p_actor);
-
 
 	if(scope_stage == 2) {
 		! if scope_stage == 2, then scope_routine has already added
@@ -127,6 +123,10 @@ System_file;
 	} else {
 		scope_objects = 0;
 	}
+
+	! give entry routine a chance to override
+	if(InScope(p_actor)) rtrue;
+
 
 	! the directions are always in scope
 	_PutInScope(Directions);
