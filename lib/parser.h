@@ -58,7 +58,7 @@ System_file;
 ];
 #Endif;
 
-[ TryNumber p_wordnum _i _j _num _len _mul _d _tot _digit;
+[ TryNumber p_wordnum _i _j _num _len _d _tot _digit;
 	!  Takes word number p_wordnum and tries to parse it as an
 	! unsigned decimal number, returning
 	!
@@ -75,15 +75,14 @@ System_file;
     ! allow for a entry point routine to override normal parsing
     _tot = ParseNumber(_num, _len); if(_tot ~= 0) return _tot;
 
-	_i = _len;
-	_mul=1; --_len;
-    for (: _len >= 0 : _len--) {
-        _digit = _num->_len;
+    ! this uses Horner's algorithm: 2421 = 10*(10*(10*(2)+4)+2)+1
+    for (_i=0: _i<_len: _i++) {
+        _digit = _num->_i;
         if(_digit < '0' || _digit > '9') jump baddigit;
-		_d = _digit - '0';
-        if(_i <= 4) _tot = _tot + _mul * _d; _mul = _mul * 10;
+        _d = _digit - '0';
+        if(_len <=4) _tot = _tot*10 + _d;
     }
-   	if (_i > 4) return 10000;
+   	if (_len > 4) return 10000;
     return _tot;
 .baddigit;
 	return -1000;
