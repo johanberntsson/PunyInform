@@ -32,6 +32,7 @@ Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_SHIP_DIRECTIONS;
 Constant OPTIONAL_MANUAL_SCOPE;
 
 Constant INITIAL_LOCATION_VALUE = Library;
@@ -1352,10 +1353,14 @@ Object -> LightSwitch "LightSwitch"
 		after[;
 			SwitchOn:
 				give toilet light;
-				"You flip the light switch next to the toilet upwards ";
+				ship_directions_enabled = true;
+				"You flip the light switch next to the toilet upwards. You get
+					a weird feeling that ship directions now work. ";
 			SwitchOff:
 				give toilet ~light;
-				"You flip the light switch next to the toilet downwards";
+				ship_directions_enabled = false;
+				"You flip the light switch next to the toilet downwards. You get
+					a weird feeling that ship directions no longer work.";
 		],
 	has switchable static;
 
@@ -1784,6 +1789,7 @@ Array quote_1 --> 5 35
 "               -- Jack Handey";
 
 [Initialise;
+	ship_directions_enabled = false;
 	thedark.short_name = "Yucky darkness";
 	thedark.initial = "Oh, so scary.";
 	thedark.description = "Now you are really scared.";

@@ -19,6 +19,7 @@ Constant Headline   "^A sample game which uses PunyInform.^";
 !Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_FULL_SCORE;
 !Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_SHIP_DIRECTIONS;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
 !Constant OPTIONAL_MANUAL_SCOPE;
 !Constant RUNTIME_ERRORS = 0;

@@ -251,3 +251,8 @@ v1.7:
 - Made 'unknown word' messages customizable
 - Fixed dropping objects from supporters bug
 - Improved incomplete switch command replies
+- Added OPTIONAL_SHIP_DIRECTIONS which makes PunyInform recognize 'fore', 'f',
+  'aft', 'a', 'port', 'p', 'starboard', 'sb' as synonyms for north, south,
+  west, east.
+- Added globals normal_directions_enabled and ship_directions_enabled to select
+  which directions currently work.
