@@ -238,7 +238,7 @@ v1.6: bugfix release
 - Improved minimal.inf to be clearer on what goes where.
 
 =======
-v1.7:
+v1.7: bug fixes (released 4 November 2020)
 - selfobj (the default player object) now has describe property, but not the
   unsupported before_implicit.
 - Objects which have scenery or concealed no longer get the chance to be
