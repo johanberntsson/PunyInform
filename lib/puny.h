@@ -1243,12 +1243,9 @@ Object thedark "Darkness"
 		}
 
         if(deadflag == GS_PLAYING && _score < score && notify_mode == true) {
-        	print "^[The score has just gone up by ";
-        	if(score - _score == 1) {
-        		print "one point.]^";
-			} else {
-        		print score - _score, " points.]^";
-			}
+        	print "^[The score has just gone up by ", score - _score, " point";
+        	if(score - _score == 1) print "s";
+                print ".]^";
 		}
 
 		_parsearraylength = parse->1;
