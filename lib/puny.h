@@ -1271,18 +1271,17 @@ Object thedark "Darkness"
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
 	print "  ***^";
-	for (::) {
+        for (::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		_ReadPlayerInput(true);
-		switch(parse-->1) {
-		'restart': @restart;
-		'restore': RestoreSub();
+                _i = parse-->1;
+                if (_i == 'restart') @restart;
+                if (_i == 'restore') RestoreSub();
+                if (AMUSING_PROVIDED == 0 && deadflag == 2 && _i == 'amusing') Amusing();
+                if (_i == 'quit') @quit;
 #IfDef OPTIONAL_FULL_SCORE;
-		'full': FullScoreSub();
+                if (_i == 'full') FullScoreSub();
 #EndIf;
-		'amusing': Amusing();
-		'quit': @quit;
-		}
 	}
 ];
 
