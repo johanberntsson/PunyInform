@@ -68,7 +68,7 @@ Array task_scores -> 3 0; ! inform doens't like array of length 1
 Constant TASKS_PROVIDED;
 Constant NUMBER_TASKS = 1;
 #IfNot;
-Constant MAX_SCORE = 2;
+Constant MAX_SCORE = 3;
 #EndIf;
 
 [ Amusing;
@@ -1353,14 +1353,18 @@ Object -> LightSwitch "LightSwitch"
 		after[;
 			SwitchOn:
 				give toilet light;
+#IfnDef USEINFORM;
 				ship_directions_enabled = true;
 				"You flip the light switch next to the toilet upwards. You get
 					a weird feeling that ship directions now work. ";
+#Endif;
 			SwitchOff:
 				give toilet ~light;
+#IfnDef USEINFORM;
 				ship_directions_enabled = false;
 				"You flip the light switch next to the toilet downwards. You get
 					a weird feeling that ship directions no longer work.";
+#Endif;
 		],
 	has switchable static;
 
@@ -1400,6 +1404,7 @@ Object -> LargeBox "The box" ! Set the object name to the name we want on the z3
 		],
         after [;
 			LetGo:
+        		--score;
 				"Yay, got rid of ", (the) noun, "!";
 			Open:
 #IfDef OPTIONAL_FULL_SCORE;
@@ -1789,7 +1794,9 @@ Array quote_1 --> 5 35
 "               -- Jack Handey";
 
 [Initialise;
+#IfnDef USEINFORM;
 	ship_directions_enabled = false;
+#Endif;
 	thedark.short_name = "Yucky darkness";
 	thedark.initial = "Oh, so scary.";
 	thedark.description = "Now you are really scared.";

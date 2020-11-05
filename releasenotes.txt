@@ -259,3 +259,4 @@ v1.7: bug and new feature release (4 November 2020)
 - Fixed InScope bug and added test files to verify that it is working.
 - The parser can now handle input like 'get all but <object>'
   getallfrom.inf test added to check this and similar patterns.
+- PunyInform now inform when the score goes down, and well as up.

@@ -1242,10 +1242,18 @@ Object thedark "Darkness"
         	AfterLife();
 		}
 
-        if(deadflag == GS_PLAYING && _score < score && notify_mode == true) {
-        	print "^[The score has just gone up by ", score - _score, " point";
-        	if(score - _score == 1) print "s";
-                print ".]^";
+		if(deadflag == GS_PLAYING && _score ~= score && notify_mode == true) {
+			print "^[The score has just gone ";
+			if(_score < score) {
+				_j = score - _score;
+				print "up";
+			} else {
+				_j = _score - score;
+				print "down";
+			}
+			print " by ", _j, " point";
+			if(_j > 1) print "s";
+			print ".]^";
 		}
 
 		_parsearraylength = parse->1;
@@ -1271,16 +1279,16 @@ Object thedark "Darkness"
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
 	print "  ***^";
-        for (::) {
+	for (::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		_ReadPlayerInput(true);
-                _i = parse-->1;
-                if (_i == 'restart') @restart;
-                if (_i == 'restore') RestoreSub();
-                if (AMUSING_PROVIDED == 0 && deadflag == 2 && _i == 'amusing') Amusing();
-                if (_i == 'quit') @quit;
+				_i = parse-->1;
+				if (_i == 'restart') @restart;
+				if (_i == 'restore') RestoreSub();
+				if (AMUSING_PROVIDED == 0 && deadflag == 2 && _i == 'amusing') Amusing();
+				if (_i == 'quit') @quit;
 #IfDef OPTIONAL_FULL_SCORE;
-                if (_i == 'full') FullScoreSub();
+				if (_i == 'full') FullScoreSub();
 #EndIf;
 	}
 ];
