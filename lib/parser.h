@@ -820,6 +820,16 @@ System_file;
 						!
 						! Add all reasonable objects in scope
 						! to the multiple_objects array
+						p_parse_pointer = parse + 2 + 4 * (wn - 2);
+						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
+							! this is "take all but" without a noun
+							if(p_phase == PHASE2) {
+								PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+							}
+							return GPR_FAIL;
+						}
+						! _noun == 0 if "take all", and X if "take all but X"
+						parser_all_except_object = _noun;
 						_AddMultipleNouns(_token_data);
 						parser_all_found = true;
 						if(multiple_objects --> 0 == 0) {

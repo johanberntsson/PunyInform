@@ -244,7 +244,6 @@ v1.7: bug and new feature release (4 November 2020)
   unsupported before_implicit.
 - Objects which have scenery or concealed no longer get the chance to be
   printed by Look, even if they have initial, when_open, describe etc.
-- Fixed 'get all but X' didn't work like 'get all Xs but Y'
 - Added a code example in howto folder for having multiple player characters.
 - Replaced THEN_WORD with THEN1__WD for I6 compatibility
 - Fixed bug in MoveFloatingObjects which caused objects to disappear if one
@@ -258,4 +257,5 @@ v1.7: bug and new feature release (4 November 2020)
 - Added globals normal_directions_enabled and ship_directions_enabled to select
   which directions currently work.
 - Fixed InScope bug and added test files to verify that it is working.
-
+- The parser can now handle input like 'get all but <object>'
+  getallfrom.inf test added to check this and similar patterns.

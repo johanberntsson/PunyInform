@@ -6,8 +6,8 @@ test5:
 	frotz test5.z3
 
 inform:
-	inform -v8 test5.inf
-	frotz test5.z8
+	inform -v8 getallfrom.inf
+	frotz getallfrom.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output

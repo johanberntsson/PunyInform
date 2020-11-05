@@ -1,5 +1,6 @@
 transcript
 
+get all but box
 get all from bag
 drop all
 s

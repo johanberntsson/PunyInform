@@ -1,3 +1,6 @@
+> get all but box
+There is nothing to get.
+
 > get all from bag
 rock: Removed.
 
