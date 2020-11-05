@@ -828,8 +828,15 @@ System_file;
 							}
 							return GPR_FAIL;
 						}
-						! _noun == 0 if "take all", and X if "take all but X"
-						parser_all_except_object = _noun;
+						p_parse_pointer = parse + 2 + 4 * (wn - 3);
+						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
+
+							parser_all_except_object = _noun;
+						} else if(_noun > 0) {
+							! this is "take all _noun"
+							return _noun;
+						}
+
 						_AddMultipleNouns(_token_data);
 						parser_all_found = true;
 						if(multiple_objects --> 0 == 0) {

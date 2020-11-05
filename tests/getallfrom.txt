@@ -7,6 +7,12 @@ rock: Removed.
 > drop all
 rock: Dropped.
 
+> get all rock
+Taken.
+
+> drop all
+rock: Dropped.
+
 > s
 
 Static box
