@@ -260,3 +260,8 @@ v1.7: bug and new feature release (4 November 2020)
 - The parser can now handle input like 'get all but <object>'
   getallfrom.inf test added to check this and similar patterns.
 - PunyInform now inform when the score goes down, and well as up.
+
+=======
+v1.8: bug release
+- fixed location test in GoSub for vehicle movements in the dark
+

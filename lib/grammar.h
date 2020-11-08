@@ -1598,7 +1598,7 @@ Global scope_cnt;
 	rfalse;
 ];
 
-[ GoDir p_property _new_location _door_to _vehicle _vehicle_mode;
+[ GoDir p_property _new_location _door_to _vehicle _vehicle_mode _saved_location;
 	if(parent(player) ~= real_location) {
 		! special rule when in enterable (veichles)
 		! before routine for the object is called with Go dir, and returns
@@ -1610,7 +1610,10 @@ Global scope_cnt;
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) _vehicle, ").before()^";
 #EndIf;
+		_saved_location = location;
+		if(location == thedark) location = real_location;
 		_vehicle_mode = RunRoutines(_vehicle, before);
+		if(_vehicle_mode ~= 3) location = _saved_location;
 		if(_vehicle_mode == 0) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
 		if(_vehicle_mode == 2 or 3) rtrue;
 	}
