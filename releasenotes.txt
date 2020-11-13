@@ -238,7 +238,7 @@ v1.6: bugfix release (21 September 2020)
 - Improved minimal.inf to be clearer on what goes where.
 
 =======
-v1.7: bug and new feature release (4 November 2020)
+v1.7: bug fix and new feature release (4 November 2020)
 - added a test suite for regression checks
 - selfobj (the default player object) now has describe property, but not the
   unsupported before_implicit.
@@ -259,9 +259,10 @@ v1.7: bug and new feature release (4 November 2020)
 - Fixed InScope bug and added test files to verify that it is working.
 - The parser can now handle input like 'get all but <object>'
   getallfrom.inf test added to check this and similar patterns.
-- PunyInform now inform when the score goes down, and well as up.
+- PunyInform now informs when the score goes down, and well as up.
 
 =======
-v1.8: bug release
+v1.8: bug fix release
 - fixed location test in GoSub for vehicle movements in the dark
-
+- Fixed that 'a' (character) was used instead of 'a//' (dictionary word) when
+  skipping articles to set noun and second to dictionary words for Ask etc.

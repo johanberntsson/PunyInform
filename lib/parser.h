@@ -1532,7 +1532,7 @@ Array guess_num_objects->5;
 		if(0 == noun or second) {
 			for(_i=0 : _i < consult_words : _i++) {
 				_noun = (parse-->(2 * (consult_from + _i) - 1));
-				if(_noun ~= 'a' or 'an' or 'the') {
+				if(_noun ~= 'a//' or 'an' or 'the') {
 					if(noun==0)
 						noun = _noun;
 					else
