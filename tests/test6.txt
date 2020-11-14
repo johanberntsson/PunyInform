@@ -1,0 +1,18 @@
+> what is samarkand
+Samarkand is a city in south-eastern Uzbekistan.
+
+> what is a grue
+Don't tell me you don't know.
+
+> what is the long count
+The Long Count is the great Mayan cycle of time, which began in 3114 BC and will
+finish with the world's end in 2012 AD.
+
+> what is punyinform
+At the moment, even the simplest questions confuse you.
+
+> quit
+Are you sure you want to quit? yes
+
+
+  *** [Hit any key to exit.]

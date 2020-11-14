@@ -233,25 +233,28 @@ Constant PlaceInScope = _PutInScope;
 	! scope-->(scope_objects++) = p_obj;
 ! ];
 
-[ ScopeWithin p_obj _i;
+[ ScopeWithin p_obj _child _i;
 	! DM: ScopeWithin(obj)
 	! Used in “scope routines” (only) when scope_stage is set to 2 (only).
 	! Places the contents of obj in scope for the token currently being
 	! parsed, and applies the rules of scope recursively so that contents of
 	! see-through objects are also in scope, as is anything added to scope.
+	!
+	! Note that p_obj is NOT added to the scope, only its contents.
+	!
 	! No return value
 
 	! is there a child?
-	p_obj = child(p_obj);
-	if(p_obj == nothing) return;
+	_child = child(p_obj);
+	if(_child == nothing) return;
 
 	! skip if already added
 	for(_i = 0: _i < scope_objects: _i++) {
-		if(scope-->_i == p_obj) return;
+		if(scope-->_i == _child) return;
 	}
 
-	! add all children
-	_SearchScope(child(p_obj));
+	! add the child (will also add all siblings)
+	_SearchScope(_child);
 ];
 
 [ TestScope p_obj p_actor _i;
