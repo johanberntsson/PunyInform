@@ -1,5 +1,6 @@
 transcript
 
+steal
 put me on table then kill it
 throw ball at air
 small red

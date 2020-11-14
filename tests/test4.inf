@@ -3,6 +3,10 @@
 ! - "drop cubes" when carrying no balls
 !
 !
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
 Constant Story      "Parser test";
 Constant Headline   "^A parser test suite for PunyInform.^";
 Serial "200827";
@@ -31,7 +35,12 @@ Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_MANUAL_SCOPE;
 !Constant RUNTIME_ERRORS = 0;
 
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
 Include "globals.h";
+#EndIf;
 
 ! Uncomment to add PunyLib extensions
 !Include "ext_menu.h";
@@ -39,7 +48,22 @@ Include "globals.h";
 !Include "ext_quote_box.h";
 !Include "ext_cheap_scenery.h";
 
+[ NotHeld;
+    if(noun in player || noun == 0) {
+        rfalse;
+    } else {
+        rtrue;
+    }
+];
+
+Verb 'steal'
+  * noun=NotHeld -> Take;
+
+#Ifndef USEINFORM;
 Include "puny.h";
+#EndIf;
+
+
 
 Class Ball
 	with
@@ -98,7 +122,9 @@ Object SlopingRoom "Sloping Room"
 			Drop:
 				if(noun ofclass Ball) {
 					move noun to BallRoom;
+#Ifndef USEINFORM;
 					scope_modified = true;
+#Endif;
 					print_ret (The) noun, " rolls away to the west.";
 				}
 		],
@@ -125,5 +151,12 @@ Object -> TransparentBox "transparent box"
 
 [Initialise;
 	print "^^The testsuite is open for business!^^";
-	return 2;
+#IfDef USEINFORM;
+    location=INITIAL_LOCATION_VALUE;
+#EndIf;
 ];
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+

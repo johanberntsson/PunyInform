@@ -1,3 +1,6 @@
+> steal
+I think you wanted to say "steal something". Please try again.
+
 > put me on table then kill it
 You are not holding that!
 
