@@ -11,6 +11,19 @@ finish with the world's end in 2012 AD.
 > what is punyinform
 At the moment, even the simplest questions confuse you.
 
+> restart
+Are you sure you want to restart? 
+no
+
+> restart me
+You're not something you can switch.
+
+> restart switch
+You switch the light switch on. 
+
+> score
+You have so far scored 0 out of a possible 0, in 5 turns.
+
 > quit
 Are you sure you want to quit? yes
 

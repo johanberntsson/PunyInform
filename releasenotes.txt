@@ -269,3 +269,4 @@ v1.8: bug fix release
 - fixed bad parser message for incomplete sentences in patterns that
   use routine filters
 - fixed bug in ScopeWithin
+- fixed bug in call to TT_PARSER_ROUTINE

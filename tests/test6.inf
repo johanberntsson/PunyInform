@@ -1,4 +1,4 @@
-! Testing what is/SopeWithin
+! Testing what is/SopeWithin and custom meta
 !
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
@@ -12,6 +12,7 @@ Constant INITIAL_LOCATION_VALUE = LitRoom;
 ! Uncomment to show time instead of score/turns
 !Statusline time;
 
+!Constant DEBUG;
 !Constant DEBUG_PARSEANDPERFORM;
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSETOKEN;
@@ -37,6 +38,17 @@ Include "VerbLib";
 #IfNot;
 Include "globals.h";
 #EndIf;
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#EndIf;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
 
 Object questions "questions";
 
@@ -66,15 +78,30 @@ Object -> "samarkand"
 
 Verb 'what' * 'is'/'was' scope=QueryTopic -> Query;
 
-! Uncomment to add PunyLib extensions
-!Include "ext_menu.h";
-!Include "ext_flags.h";
-!Include "ext_quote_box.h";
-!Include "ext_cheap_scenery.h";
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
 
-#Ifndef USEINFORM;
-Include "puny.h";
-#EndIf;
+! http://www.firthworks.com/roger/informfaq/vv.html
+! (meta discussion at the end)
+!
+! but since restart is already orginally defined as meta
+! we have to reinvert the logic here, and add a notMeta
+! (to disable meta) instead.
+[ isMeta; 
+    meta = true;
+    return GPR_PREPOSITION;
+];
+
+[ notMeta; 
+    meta = false;
+    return GPR_PREPOSITION;
+];
+
+Extend 'restart' replace
+    * -> Restart
+    * notMeta noun   -> SwitchOn;
+
 
 Object LitRoom "Lit Room"
 	with
@@ -82,6 +109,13 @@ Object LitRoom "Lit Room"
 			print "You are in a brightly lit room.^";
 		],
 	has light;
+
+Object -> LightSwitch "LightSwitch"
+    with
+        short_name "light switch",
+        description "It's a switch located on the wall.",
+        name 'light' 'switch',
+    has switchable static;
 
 [Initialise;
 	print "^^The testsuite is open for business!^^";
@@ -91,7 +125,4 @@ Object LitRoom "Lit Room"
 #EndIf;
 ];
 
-#Ifdef USEINFORM;
-Include "Grammar";
-#Endif;
 

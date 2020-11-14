@@ -1133,7 +1133,7 @@ Array guess_num_objects->5;
 	rfalse;
 ];
 
-[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i _j _k _word;
+[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i _j _k _word _type;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1166,7 +1166,8 @@ Array guess_num_objects->5;
 		print "TOKEN: ", _pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
-		if(((_pattern_pointer -> 0) & $0f) == TT_END) {
+		_type = ((_pattern_pointer -> 0) & $0f);
+		if(_type == TT_END) {
 			if(_IsSentenceDivider(_parse_pointer)) {
 				wn++;
 				return 100; ! pattern matched
@@ -1176,7 +1177,8 @@ Array guess_num_objects->5;
 			}
 			return wn - verb_wordnum; ! Fail because the grammar line ends here but not the input
 		}
-		if(wn >= 1 + parse->1) {
+		! parse_routine doesn't match anything and is always allowed
+		if(wn >= 1 + parse->1 && _type ~= TT_PARSE_ROUTINE) {
 #IfDef DEBUG_PARSEPATTERN;
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
@@ -1256,11 +1258,14 @@ Array guess_num_objects->5;
 #IfDef DEBUG_PARSEPATTERN;
 			print "-- preposition mached ", _pattern_pointer, " ", _pattern_pointer->0, "^";
 #Endif;
-			while(_pattern_pointer->0 ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
+			_type = ((_pattern_pointer -> 0) & $0f);
+			while(_type ~= TT_END && _type ~= TT_PARSE_ROUTINE && 
+				(_pattern_pointer->0 ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP)) {
 #IfDef DEBUG_PARSEPATTERN;
 			print "-- increasing _pattern_pointer^";
 #Endif;
 				_pattern_pointer = _pattern_pointer + 3;
+				_type = ((_pattern_pointer -> 0) & $0f);
 			}
 		GPR_MULTIPLE:
 			! multiple_objects contains the objects
