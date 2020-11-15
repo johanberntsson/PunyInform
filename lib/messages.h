@@ -147,7 +147,7 @@ Constant MSG_PARSER_CANT_SEE_SUCH_THING "You can't see any such thing.";
 Constant MSG_PARSER_BAD_NUMBER "I didn't understand that number.";
 #EndIf;
 #Ifndef MSG_PARSER_NO_INPUT;
-Constant MSG_PARSER_NO_INPUT "Come again?";
+Constant MSG_PARSER_NO_INPUT "Come again?^";
 #EndIf;
 #Ifndef MSG_PARSER_UNKNOWN_SENTENCE;
 Constant MSG_PARSER_UNKNOWN_SENTENCE "I don't understand that sentence.";
