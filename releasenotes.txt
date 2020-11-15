@@ -270,3 +270,4 @@ v1.8: bug fix release
   use routine filters
 - fixed bug in ScopeWithin
 - fixed bug in call to TT_PARSER_ROUTINE
+- improved _GrabIfNotHeld and related unit tests (issue 40)

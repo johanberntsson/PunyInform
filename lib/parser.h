@@ -645,12 +645,14 @@ System_file;
 ];
 
 [ _GrabIfNotHeld p_noun;
-	if(p_noun in player) return;
+	! return true if p_noun isn't held by the player at the end of the call
+	! (so that you can use it like: if(_GrabIfNotHeld(...)) { }
+	if(p_noun in player) rfalse;
 	print "(first taking ", (the) p_noun, ")^";
 	keep_silent = true;
 	PerformAction(##Take, p_noun);
 	keep_silent = false;
-	if(p_noun notin player) rtrue;
+	return (p_noun notin player);
 ];
 
 [ _CreatureTest obj;
@@ -760,8 +762,7 @@ System_file;
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				phase2_necessary = true;
 				if(p_phase == PHASE2) {
-					_GrabIfNotHeld(_noun);
-					if(_noun notin player) {
+					if(_GrabIfNotHeld(_noun)) {
 						return GPR_FAIL;
 					}
 				}

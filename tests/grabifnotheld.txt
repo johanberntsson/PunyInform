@@ -1,0 +1,69 @@
+> pry molly with max
+(first taking Max)
+That doesn't seem to be something you can unlock.
+
+> i
+You're carrying Max.
+
+> drop all
+Max: Dropped.
+
+> throw max at molly
+(first taking Max)
+Futile.
+
+> i
+You're carrying Max.
+
+> drop all
+Max: Dropped.
+
+> insert max in molly
+(first taking Max)
+You put Max into Molly.
+
+> i
+You are empty handed.
+
+> drop all
+There is nothing to drop.
+
+> transfer max to molly
+(first taking Max)
+You put Max into Molly.
+
+> i
+You are empty handed.
+
+> drop all
+There is nothing to drop.
+
+> put on max
+(first taking Max)
+That doesn't seem to be something you can wear.
+
+> i
+You're carrying Max.
+
+> drop all
+Max: Dropped.
+
+> empty molly
+dust: (first taking the dust)
+Dropped.
+
+> i
+You are empty handed.
+
+> look
+
+Lit Room
+You are in a brightly lit room.
+
+You can see a dust, Max and Molly (which is empty) here.
+
+> quit
+Are you sure you want to quit? yes
+
+
+  *** [Hit any key to exit.]

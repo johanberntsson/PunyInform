@@ -1,7 +1,11 @@
-all: runtests
+all: grabifnotheld
 
 runtests:
 	ruby runtests.rb
+
+grabifnotheld:
+	inform +../lib -v3 grabifnotheld.inf
+	frotz grabifnotheld.z3
 
 test6:
 	inform +../lib -v3 test6.inf

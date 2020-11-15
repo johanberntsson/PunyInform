@@ -385,8 +385,7 @@ Verb 'wear'
 		rtrue;
 	}
 
-	_GrabIfNotHeld(noun);
-	if (noun notin player) rtrue;
+	if(_GrabIfNotHeld(noun)) rtrue;
 	if(noun has worn) { PrintMsg(MSG_INSERT_WORN); rtrue; }
 
 	! run before on receiver
@@ -499,8 +498,7 @@ Verb 'wear'
 	if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
 	_ancestor = CommonAncestor(noun, second);
 	if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
-	_GrabIfNotHeld(noun);
-	if(noun notin player) rtrue;
+	if(_GrabIfNotHeld(noun)) rtrue;
 	if(noun has worn) { PrintMsg(MSG_PUTON_WORN); rtrue; }
 
 	! run before on receiver
@@ -620,8 +618,7 @@ Verb 'wear'
 ];
 
 [ ThrowAtSub;
-	_GrabIfNotHeld(noun);
-	if(noun notin player) rtrue;
+	if(_GrabIfNotHeld(noun)) rtrue;
 	if(ObjectIsUntouchable(second)) return;
 	if(noun has worn) { PrintMsg(MSG_THROW_WORN); rtrue; }
 	if(second > 1) {
@@ -643,8 +640,7 @@ Verb 'wear'
 ];
 
 [ TransferSub;
-	_GrabIfNotHeld(noun);
-	if (noun notin player) rtrue;
+	if(_GrabIfNotHeld(noun)) rtrue;
 	if (second has supporter) <<PutOn noun second>>;
 	!if (second == d_obj) <<Drop noun>>;
 	<Insert noun second>;
@@ -831,7 +827,7 @@ Verb 'yes' 'y//'
 		if(_flag) break;
 		if(keep_silent == 0) print (name) _i, ": ";
 		if(selected_direction == d_to) {
-	    _GrabIfNotHeld(_i);
+			_GrabIfNotHeld(_i);
 			<Drop _i>;
 		} else
 			<Transfer _i _recipient>;

@@ -1,0 +1,132 @@
+! Testing _GrabIfNotHeld
+!
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+Constant Story      "_GrabIfNotHeld test";
+Constant Headline   "^A parser test suite for PunyInform.^";
+Serial "200827";
+Constant INITIAL_LOCATION_VALUE = LitRoom;
+
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
+!Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+!Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#EndIf;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+
+Object questions "questions";
+
+Object -> "long count"
+  with name 'long' 'count',
+       description "The Long Count is the great Mayan cycle of
+           time, which began in 3114 BC and will finish with
+           the world's end in 2012 AD.";
+Object -> "grue"
+  with name 'grue',
+       description "Don't tell me you don't know.";
+Object -> "samarkand"
+  with name 'samarkand',
+       description "Samarkand is a city in south-eastern Uzbekistan.";
+
+! -- testing scope grammar token
+! See: https://www.inform-fiction.org/manual/html/s32.html
+[ QueryTopic;
+  switch (scope_stage) {
+      1: rfalse;
+      2: ScopeWithin(questions); rtrue;
+      3: "At the moment, even the simplest questions confuse you.";
+  }
+];
+
+[ QuerySub; noun.description();];
+
+Verb 'what' * 'is'/'was' scope=QueryTopic -> Query;
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+
+! http://www.firthworks.com/roger/informfaq/vv.html
+! (meta discussion at the end)
+!
+! but since restart is already orginally defined as meta
+! we have to reinvert the logic here, and add a notMeta
+! (to disable meta) instead.
+[ isMeta; 
+    meta = true;
+    return GPR_PREPOSITION;
+];
+
+[ notMeta; 
+    meta = false;
+    return GPR_PREPOSITION;
+];
+
+Extend 'restart' replace
+    * -> Restart
+    * notMeta noun   -> SwitchOn;
+
+
+Object LitRoom "Lit Room"
+	with
+		description [;
+			print "You are in a brightly lit room.^";
+		],
+	has light;
+
+Object -> Thing1 "Max"
+    with
+        name 'max'
+    has proper;
+
+Object -> Thing2 "Molly"
+    with
+        name 'molly'
+    has proper container open;
+
+Object -> -> Dust "dust"
+   with 
+        name 'dust';
+[Initialise;
+#IfDef USEINFORM;
+    location=INITIAL_LOCATION_VALUE;;
+#EndIf;
+];
+
+
