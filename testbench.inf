@@ -8,7 +8,7 @@
 
 Switches e;
 
-Constant DEBUG;
+!Constant DEBUG;
 
 ! Testbench - a platform for trying things out in PunyInform
 
@@ -76,8 +76,9 @@ Constant MAX_SCORE = 3;
 ];
 
 ! Setup cheap scenery
-[SceneryReply;
+[SceneryReply w1 w2;
 	Push:
+		if(w1=='bird' && w2=='birds') "The birds fly away as you try.";
 		"Now how would you do that?";
 	default:
 		rfalse;

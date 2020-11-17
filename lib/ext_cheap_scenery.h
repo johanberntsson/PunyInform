@@ -1,34 +1,40 @@
 ! ext_cheap_scenery.h, a library extension for PunyInform by Fredrik Ramsberg
 !
-! This library extension provides a way to implement simple scenery objects 
+! This library extension provides a way to implement simple scenery objects
 ! which can only be examined, using just a single object for the entire game.
 ! This helps keep both the object count and the dynamic memory usage down.
 !
-! To use it, include this file after globals.h. Then add a property called 
+! To use it, include this file after globals.h. Then add a property called
 ! cheap_scenery to the locations where you want to add cheap scenery objects.
-! You can add up to ten cheap scenery objects to one location in this way. For 
+! You can add up to ten cheap scenery objects to one location in this way. For
 ! each scenery object, specify, in this order, one adjective, one noun, and one
 ! description string or a routine to print one. Instead of an adjective, you
-! may give a synonym to the noun. If no adjective or synonym is needed, 
+! may give a synonym to the noun. If no adjective or synonym is needed,
 ! use the value 1 in that position.
-! 
-! Note: If you want to use this library extension is a Z-code version 3 game, 
-! you must NOT declare cheap_scenery as a common property, or it will only be 
+!
+! Note: If you want to use this library extension is a Z-code version 3 game,
+! you must NOT declare cheap_scenery as a common property, or it will only be
 ! able to hold one scenery object instead of ten.
 !
-! If you want to use the same description for a scenery object in several locations,
-! declare a constant to hold that string, and refer to the constant in each location.
+! If you want to use the same description for a scenery object in several
+! locations, declare a constant to hold that string, and refer to the constant
+! in each location.
 !
-! Before including this extension, you can also define a string or routine called 
-! SceneryReply. If you do, it will be used whenever the player does something to a 
-! scenery object other than examining it. If it's a string, it's printed. If it's a
-! routine it's called. If the routine prints something, it should return true, 
-! otherwise false. 
+! Before including this extension, you can also define a string or routine
+! called SceneryReply. If you do, it will be used whenever the player does
+! something to a scenery object other than examining it. If it's a string, it's
+! printed. If it's a routine it's called. If the routine prints something, it
+! should return true, otherwise false. The routine is called with two
+! parameters - the adjective/synonym and the noun listed in the cheap_scenery
+! property which was matched.
+
 !
 ! Example usage:
 
-! [SceneryReply;
+! [SceneryReply word1 word2 ;
 !   Push:
+!     if(location == RiverBank && word2 == 'water')
+!         "If you mean you want to swim, you should say so."
 !     "Now how would you do that?";
 !   default:
 !     rfalse;
@@ -37,16 +43,16 @@
 ! Include "ext_cheap_scenery.h";
 !
 ! Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
-! [SCN_SUN; 
+! [SCN_SUN;
 !   deadflag = 1;
-!   "As you stare right into the sun, you feel a burning sensation in your eyes. 
+!   "As you stare right into the sun, you feel a burning sensation in your eyes.
 !     After a while, all goes black. With no eyesight, you have little hope of
-!     completing your investigations."; 
+!     completing your investigations.";
 ! ];
 !
 ! Object RiverBank "River Bank"
 !   with
-!	 description "The river is quite wide here. The sun reflects in the blue water, the birds are 
+!	 description "The river is quite wide here. The sun reflects in the blue water, the birds are
 !      flying high up above.",
 !	 cheap_scenery
 !      'blue' 'water' SCN_WATER
@@ -78,7 +84,8 @@ Object CheapScenery "object"
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
 			if(_len % 3 > 0)
-				"ERROR: cheap_scenery property of current location has incorrect # of values!^";
+				"ERROR: cheap_scenery property of current location has
+					incorrect # of values!^";
 #IfNot;
 			if(_len % 3 > 0)
 				"ERROR: cheap_scenery #1!^";
@@ -87,7 +94,8 @@ Object CheapScenery "object"
 				_sw1 = location.&cheap_scenery-->(_i+2);
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
 				if(~~(_sw1 ofclass String or Routine))
-					"ERROR: Element ", _i+2, " in cheap_scenery property of current location is not a string or routine!^",
+					"ERROR: Element ", _i+2, " in cheap_scenery property of
+						current location is not a string or routine!^",
 						"Element: ", (name) _sw1, "^";
 #IfNot;
 				if(~~(_sw1 ofclass String or Routine))
@@ -122,14 +130,16 @@ Object CheapScenery "object"
 			}
 			print_ret (string) _k;
 		],
-		before [;
-			Examine, Search:
+		before [i w1;
+			Examine:
 				rfalse;
 			default:
 				#ifdef SceneryReply;
 				if(SceneryReply ofclass string)
 					print_ret (string) SceneryReply;
-				if(SceneryReply())
+				i = location.&cheap_scenery;
+				w1 = self.number;
+				if(SceneryReply(i-->w1, i-->(w1 + 1)))
 					rtrue;
 				#endif;
 				"No need to concern yourself with that.";
@@ -138,5 +148,3 @@ Object CheapScenery "object"
 			if(location provides cheap_scenery) rtrue;
 		],
 	has concealed scenery;
-
-	
