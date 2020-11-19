@@ -570,6 +570,7 @@ Include "parser.h";
 	_scope_count = GetScopeCopy();
 	RunRoutines(location, each_turn);
 	for(_i = 0: _i < _scope_count: _i++) {
+		if(deadflag >= GS_DEAD) rtrue;
 		_obj = scope_copy-->_i;
 		if(_obj.&each_turn ~= 0) {
 #IfDef DEBUG;
@@ -1135,10 +1136,6 @@ Object thedark "Darkness"
 ];
 
 [ EndTurnSequence;
-	RunTimersAndDaemons(); if(deadflag >= GS_DEAD) rtrue;
-	RunEachTurn(); if(deadflag >= GS_DEAD) rtrue;
-	TimePasses();
-	_UpdateDarkness(true);
 	turns++;
 	if (the_time ~= NULL) {
 		if (time_rate >= 0) the_time=the_time+time_rate;
@@ -1151,6 +1148,10 @@ Object thedark "Darkness"
 		}
 		the_time = the_time % 1440;
 	}
+	RunTimersAndDaemons(); if(deadflag >= GS_DEAD) rtrue;
+	RunEachTurn(); if(deadflag >= GS_DEAD) rtrue;
+	TimePasses();
+	_UpdateDarkness(true);
 ];
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;

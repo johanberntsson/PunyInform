@@ -287,4 +287,8 @@ v1.8: bug fix and new feature release
 - Moved all processing that happens at the end of a turn to a routine called
   EndTurnSequence(). This can be called by a WAIT command to simulate that
   turns happen, should anyone want to implement a WAIT command.
-  
+- Added checks so each_turn processing is stopped if an each_turn routine
+  ends the game, or if a daemon or timer ends the game. Also, TimePasses()
+  isn't called if a timer, daemon or each_turn has ended the game.
+- Changed so turns / clock is advanced before timers, daemons, each_turn
+  and TimePasses() at the end of the turn.
