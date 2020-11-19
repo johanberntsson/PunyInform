@@ -277,4 +277,7 @@ v1.8: bug fix release
 - The cheap scenery extension now allows for the SceneryReply routine to check
   which cheap scenery "object" was matched - it gets the two words specified
   for the "object" as two parameters. See example in ext_cheap_scenery.h
+- If a switchable object has a string for description, or a routine which
+  returns true, "examine [object]" will no longer add a text saying whether the
+  object is currently switched on or off.
   

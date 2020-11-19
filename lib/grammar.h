@@ -326,7 +326,7 @@ Verb 'wear'
 		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
     }
 	x = PrintOrRun(noun, description);
-	if (x < 2 && noun has switchable) PrintMsg(MSG_EXAMINE_ONOFF);
+	if (x == 0 && noun has switchable) PrintMsg(MSG_EXAMINE_ONOFF);
 	AfterRoutines();
 ];
 
