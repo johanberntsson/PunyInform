@@ -1134,6 +1134,25 @@ Object thedark "Darkness"
 	}
 ];
 
+[ EndTurnSequence;
+	RunTimersAndDaemons(); if(deadflag >= GS_DEAD) rtrue;
+	RunEachTurn(); if(deadflag >= GS_DEAD) rtrue;
+	TimePasses();
+	_UpdateDarkness(true);
+	turns++;
+	if (the_time ~= NULL) {
+		if (time_rate >= 0) the_time=the_time+time_rate;
+		else {
+			time_step--;
+			if (time_step == 0) {
+				the_time++;
+				time_step = -time_rate;
+			}
+		}
+		the_time = the_time % 1440;
+	}
+];
+
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
 
 #IfDef OPTION_DEBUG_VERBS;
@@ -1219,21 +1238,7 @@ Object thedark "Darkness"
 		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
 		else _sentencelength = parse->1;
 		if(action >= 0 && meta == false) {
-			RunTimersAndDaemons();
-			RunEachTurn();
-			TimePasses();
-            turns++;
-            if (the_time ~= NULL) {
-				if (time_rate >= 0) the_time=the_time+time_rate;
-				else {
-					time_step--;
-					if (time_step == 0) {
-						the_time++;
-						time_step = -time_rate;
-					}
-				}
-				the_time = the_time % 1440;
-			}
+			EndTurnSequence();
         }
 
         if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {
@@ -1270,7 +1275,6 @@ Object thedark "Darkness"
 			! the input was just one sentence
 			parse->1 = 0;
 		}
-		_UpdateDarkness(true);
 	}
 	_UpdateScoreOrTime();
 	print "^^  *** ";

@@ -283,4 +283,8 @@ v1.8: bug fix and new feature release
 - Fixed broken "restore failed" message when RestoreSub is called after game has ended.
 - Removed extra space after "You have won/died"
 - Added scoring notifications even on the final turn of the game, just before
-  you win/die/lose.  
+  you win/die/lose.
+- Moved all processing that happens at the end of a turn to a routine called
+  EndTurnSequence(). This can be called by a WAIT command to simulate that
+  turns happen, should anyone want to implement a WAIT command.
+  
