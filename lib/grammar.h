@@ -1063,6 +1063,7 @@ Verb meta 'quit' 'q//'
 #IfV3;
 [ RestoreSub;
 	@restore ?restore_success; ! can't use @restore because of compiler test
+	verb_word = 'restore';
 	PrintMsg(MSG_RESTORE_FAILED);
 	rtrue;
 .restore_success; ! This is never reached, since a successful restore continues after save opcode.

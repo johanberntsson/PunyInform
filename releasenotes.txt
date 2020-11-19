@@ -262,7 +262,7 @@ v1.7: bug fix and new feature release (4 November 2020)
 - PunyInform now informs when the score goes down, and well as up.
 
 =======
-v1.8: bug fix release
+v1.8: bug fix and new feature release
 - fixed location test in GoSub for vehicle movements in the dark
 - Fixed that 'a' (character) was used instead of 'a//' (dictionary word) when
   skipping articles to set noun and second to dictionary words for Ask etc.
@@ -280,4 +280,7 @@ v1.8: bug fix release
 - If a switchable object has a string for description, or a routine which
   returns true, "examine [object]" will no longer add a text saying whether the
   object is currently switched on or off.
-  
+- Fixed broken "restore failed" message when RestoreSub is called after game has ended.
+- Removed extra space after "You have won/died"
+- Added scoring notifications even on the final turn of the game, just before
+  you win/die/lose.  

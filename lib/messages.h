@@ -462,9 +462,9 @@ Default LibraryMessages 0;
 	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
 		print_ret (CTheyreorThats) noun, " not something you can switch.";
 	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
-		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ". ";
+		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ".";
 	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
-		"You switch ", (the) noun, " ", (OnOff) noun, ". ";
+		"You switch ", (the) noun, " ", (OnOff) noun, ".";
 	MSG_DROP_WORN, MSG_INSERT_WORN, MSG_PUTON_WORN, MSG_THROW_WORN:
 		"First you'd have to take off ", (the) noun, ".";
 #IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;

@@ -1242,7 +1242,7 @@ Object thedark "Darkness"
         	AfterLife();
 		}
 
-		if(deadflag == GS_PLAYING && _score ~= score && notify_mode == true) {
+		if(_score ~= score && notify_mode == true) {
 			print "^[The score has just gone ";
 			if(_score < score) {
 				_j = score - _score;
@@ -1278,7 +1278,7 @@ Object thedark "Darkness"
 	if(deadflag == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
-	print "  ***^";
+	print " ***^";
 	for (::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		_ReadPlayerInput(true);
