@@ -292,3 +292,4 @@ v1.8: bug fix and new feature release
   isn't called if a timer, daemon or each_turn has ended the game.
 - Changed so turns / clock is advanced before timers, daemons, each_turn
   and TimePasses() at the end of the turn.
+- Now writing the score at the end of the game, tests also added (issue 49).

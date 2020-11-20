@@ -17,6 +17,7 @@ def runtest(filename, version, inform_args)
         frotz_cmd = "frotz #{basename}.z#{version} < #{command_file}"
         prune_cmd = "tail +6 #{transcript_file} > #{output_file}"
         diff_cmd = "diff -Z #{template_file} #{output_file}"
+        diff_cmd_ignore_banner = "diff -Z #{template_file} #{output_file} | grep -v PunyInform | tail +3"
     end
     # Remove old transcripts
     File.delete transcript_file if File.exist? transcript_file
@@ -30,13 +31,13 @@ def runtest(filename, version, inform_args)
         end
         result = %x[#{frotz_cmd}]
         result = %x[#{prune_cmd}]
-        result = %x[#{diff_cmd}]
+        result = %x[#{diff_cmd_ignore_banner}]
         if result.empty? then
             puts "passed"
         else
             puts "failed"
             $some_tests_failed = true
-            puts result
+            puts %x[#{diff_cmd}]
         end
     rescue Errno::ENOENT
         puts "unable to run this test (compilation error?)"
