@@ -1137,7 +1137,7 @@ Object thedark "Darkness"
 
 [ EndTurnSequence;
 	turns++;
-	if (the_time ~= NULL) {
+	if (sys_statusline_flag) {
 		if (time_rate >= 0) the_time=the_time+time_rate;
 		else {
 			time_step--;

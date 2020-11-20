@@ -367,7 +367,7 @@ Global notify_mode = true;          ! Score notification
 Global sys_statusline_flag = 0;     ! non-zero if status line displays time
 #Endif;
 Global turns;                       ! Number of turns of play so far
-Global the_time = NULL;             ! Current time (in minutes since midnight)
+Global the_time = 0;                ! Current time (in minutes since midnight)
 Global time_rate = 1;               ! How often time is updated
 Global time_step;                   ! By how much
 Global lookmode = 1;
