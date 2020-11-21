@@ -155,15 +155,14 @@ Array TenSpaces -> "          ";
 
 	if(_current_col > p_col || cursor_pos --> 0 > 1) {
 		_MoveCursor(1, p_col);
-		rtrue;
+	} else {
+		p_col = p_col - _current_col;
+		while(p_col > 10) {
+			@print_table TenSpaces 10;
+			p_col = p_col - 10;
+		}
+		@print_table TenSpaces p_col;
 	}
-
-	p_col = p_col - _current_col;
-	while(p_col > 10) {
-		@print_table TenSpaces 10;
-		p_col = p_col - 10;
-	}
-	@print_table TenSpaces p_col;
 	if(p_string)
 		print (string) p_string;
 ];
