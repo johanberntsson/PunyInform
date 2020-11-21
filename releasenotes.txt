@@ -292,4 +292,10 @@ v1.8: bug fix and new feature release
   isn't called if a timer, daemon or each_turn has ended the game.
 - Changed so turns / clock is advanced before timers, daemons, each_turn
   and TimePasses() at the end of the turn.
-- Now writing the score at the end of the game, tests also added (issue 49).
+- Now printing the score at the end of the game, tests also added (issue 49).
+- Changed to use sys_statusline_flag to detect that it's a game with time on
+  the statusline.
+- Added that Look will print what is in/on containers/supporters which have
+  either scenery or concealed, if constant OPTIONAL_PRINT_SCENERY_CONTENTS
+  is defined.
+  

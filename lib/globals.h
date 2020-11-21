@@ -409,7 +409,8 @@ Global itobj = 0;        ! The object which is currently "it"
 Global himobj = 0;       ! The object which is currently "him"
 Global herobj = 0;       ! The object which is currently "her"
 Global top_object;
-Global also_flag;
+Global newline_flag;     ! Used by Look
+Global also_flag;        ! Used by Look
 Global inventory_stage;
 Global phase2_necessary;
 Global receive_action;

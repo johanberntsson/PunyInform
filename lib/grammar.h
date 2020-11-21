@@ -1387,13 +1387,16 @@ Global scope_cnt;
 ];
 
 [ _ListObjsInOnMsg p_parent;
-	if(p_parent has supporter) print "^On "; else print "^In ";
+	if(newline_flag)
+		print "^";
+	if(p_parent has supporter) print "On "; else print "In ";
 	print (the) p_parent, " you can ";
 	if(also_flag) print "also ";
 	print "see ";
 ];
 
-[ Look _obj _top_ceil _ceil _initial_found _describe_room _you_can_see_1 _you_can_see_2 _desc_prop _last_level _action;
+[ Look _obj _top_ceil _ceil _initial_found _describe_room
+	_you_can_see_1 _you_can_see_2 _desc_prop _last_level _action;
 	@new_line;
 	if((lookmode == 1 && location hasnt visited) || lookmode == 2) _describe_room = true;
 #IfV5;
@@ -1489,8 +1492,26 @@ Global scope_cnt;
 				_you_can_see_1 = _ListObjsInOnMsg;
 				_you_can_see_2 = ".^";
 			}
-
+			newline_flag = true;
 			if(PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
+
+
+#IfDef OPTIONAL_PRINT_SCENERY_CONTENTS;
+			newline_flag = true;
+			objectloop(_obj in _ceil && (_obj has scenery or concealed) &&
+					(_obj has supporter ||
+						(_obj has container && _obj has transparent or open)) &&
+						IndirectlyContains(_obj, player) == false) {
+				if(PrintContents(_ListObjsInOnMsg, _obj)) {
+					print (string) ". ";
+					newline_flag = false;
+				}
+			}
+			if(newline_flag == false)
+				print "^";
+#EndIf;
+
+			! Descend one level
 			_ceil = ScopeCeiling(player, _ceil);
 		} ! for(::)
 	}
