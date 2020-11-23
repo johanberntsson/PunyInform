@@ -89,9 +89,6 @@ Constant MSG_RESTART_CONFIRM "Are you sure you want to restart? ";
 #Ifndef MSG_INSERT_ITSELF;
 Constant MSG_INSERT_ITSELF "Cannot put something inside itself.";
 #Endif;
-#Ifndef MSG_INSERT_NOT_CONTAINER;
-Constant MSG_INSERT_NOT_CONTAINER "That can't contain things.";
-#Endif;
 #Ifndef MSG_PUTON_NOT_SUPPORTER;
 Constant MSG_PUTON_NOT_SUPPORTER "You can't put things on top of that.";
 #Endif;
@@ -287,6 +284,8 @@ Default MSG_EXAMINE_CLOSED 114;
 Default MSG_EMPTY_IS_CLOSED 115;
 Default MSG_PARSER_NO_NEED_REFER_TO 116;
 Default MSG_PARSER_DONT_UNDERSTAND_WORD 117;
+Default MSG_INSERT_NOT_CONTAINER 118;
+Default MSG_EMPTY_CANT_CONTAIN 119; ! Extended verbset, but uses same msg as INSERT
 
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
@@ -353,11 +352,10 @@ Constant MSG_STRONG_DEFAULT "Real adventurers do not use such language.";
 #EndIf;
 
 Default MSG_BLOW_DEFAULT 300;
-Default MSG_EMPTY_CANT_CONTAIN 301;
-Default MSG_WAVE_DEFAULT 302;
-Default MSG_EMPTY_ALREADY_EMPTY 303;
-Default MSG_SET_DEFAULT 304;
-Default MSG_SET_TO_DEFAULT 305;
+Default MSG_WAVE_DEFAULT 301;
+Default MSG_EMPTY_ALREADY_EMPTY 302;
+Default MSG_SET_DEFAULT 303;
+Default MSG_SET_TO_DEFAULT 304;
 #EndIf;
 
 
@@ -616,16 +614,14 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 			print "enter ", (the) parent(noun);
 		" first.";
 #EndIf;
+	MSG_INSERT_NOT_CONTAINER, MSG_EMPTY_CANT_CONTAIN:
+		print_ret (The) p_arg_1, " can't contain things.";
 
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #IfTrue MSG_BLOW_DEFAULT < 1000;
 	MSG_BLOW_DEFAULT:
 		"You can't usefully blow ", (the) noun, ".";
-#EndIf;
-#IfTrue MSG_EMPTY_CANT_CONTAIN < 1000;
-	MSG_EMPTY_CANT_CONTAIN:
-		print_ret (The) p_arg_1, " can't contain things.";
 #EndIf;
 #IfTrue MSG_EMPTY_ALREADY_EMPTY < 1000;
 	MSG_EMPTY_ALREADY_EMPTY:

@@ -396,7 +396,7 @@ Verb 'wear'
 	if(RunRoutines(second, before) ~= 0) { action = ##Insert; rtrue; }
 	action = ##Insert;
 
-	if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER); rtrue; }
+	if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER, second); rtrue; }
 	if (_AtFullCapacity(second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
 	move noun to second;
