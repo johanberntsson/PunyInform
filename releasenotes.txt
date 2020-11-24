@@ -303,3 +303,5 @@ v1.8: bug fix and new feature release
 - Started using same message for MSG_INSERT_NOT_CONTAINER and
   MSG_EMPTY_CANT_CONTAIN.
 - Fixed bug where numbers and parse routines got a bad pattern score.
+- Fixed bug where 12:xx AM was printed as 0:xx AM on statusline.
+- Added extension ext_waittime.h

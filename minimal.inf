@@ -44,6 +44,9 @@ Include "globals.h";
 
 Include "puny.h";
 
+! Uncomment to add PunyLib extensions
+!Include "ext_waittime.h";
+
 Object Library "The Library"
 	with
 		description "You are in a library.",

@@ -1093,6 +1093,8 @@ Constant MSG_DISROBE_NOT_WEARING 1002;
 
 Include "puny.h";
 
+Include "ext_waittime.h";
+
 #Endif;
 
 Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";

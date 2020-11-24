@@ -224,9 +224,7 @@ Constant ONE_SPACE_STRING = " ";
 			if (_h > 12) {
 				_h = _h - 12;
 			}
-!			if (_h<10)
-!				@print_char ' ';
-			print _h;
+			if(_h < 1) print 12; else print _h;
 			@print_char ':';
 			if (status_field_2<10)
 				@print_char '0';
