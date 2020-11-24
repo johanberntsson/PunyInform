@@ -169,7 +169,68 @@ Array TenSpaces -> "          ";
 
 Constant ONE_SPACE_STRING = " ";
 
-[ DrawStatusLine _width _visibility_ceiling _h _pm;
+[ _PrintStatusLineTime p_width _h _pm;
+	if (p_width > 29) {
+		if (p_width > 39) {
+			if (p_width > 66) {
+				! Width is 67-, print "Time: 12:34 pm" with some space to the right
+				_PrintSpacesOrMoveBack(20, TIME__TX);
+			} else {
+				! Width is 40-66, print "Time: 12:34 pm" at right edge
+				_PrintSpacesOrMoveBack(15, TIME__TX);
+			}
+		} else {
+			! Width is 30-, print "12:34 pm" at right edge
+			_PrintSpacesOrMoveBack(9, ONE_SPACE_STRING);
+		}
+		_h = status_field_1;
+		if (_h > 11) {
+			_pm = true;
+		}
+		if (_h > 12) {
+			_h = _h - 12;
+		}
+		if(_h < 1) print 12; else print _h;
+		@print_char ':';
+		if (status_field_2<10)
+			@print_char '0';
+		print status_field_2;
+		if (_pm)
+			print " pm";
+		else
+			print " am";
+	}
+];
+
+[ _PrintStatusLineScore p_width;
+	if (p_width > 24) {
+		if (p_width < 30) {
+			! Width is 25-29, only print score as "0", no moves
+			_PrintSpacesOrMoveBack(3, ONE_SPACE_STRING);
+			print status_field_1;
+		} else {
+			if (p_width > 66) {
+				! Width is 67-, print "Score: 0 Moves: 0"
+				_PrintSpacesOrMoveBack(28, SCORE__TX);
+				print status_field_1;
+				_PrintSpacesOrMoveBack(14, MOVES__TX);
+			} else {
+				if (p_width > 36) {
+					! Width is 37-66, print "Score: 0/0"
+					_PrintSpacesOrMoveBack(15, SCORE__TX);
+				} else {
+					! Width is 29-35, print "0/0"
+					_PrintSpacesOrMoveBack(9, ONE_SPACE_STRING);
+				}
+				print status_field_1;
+				@print_char '/';
+			}
+			print status_field_2;
+		}
+	}
+];
+
+[ DrawStatusLine _width _visibility_ceiling;
 	! For wide screens (67+ columns):
 	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right.
 	! * Room names up to 39 characters are never truncated.
@@ -202,66 +263,20 @@ Constant ONE_SPACE_STRING = " ";
 	else
 		print (The) _visibility_ceiling;
 
-	if (sys_statusline_flag) {
-		! Statusline should show time rather than score
-		if (_width > 29) {
-			if (_width > 39) {
-				if (_width > 66) {
-					! Width is 67-, print "Time: 12:34 pm" with some space to the right
-					_PrintSpacesOrMoveBack(20, TIME__TX);
-				} else {
-					! Width is 40-66, print "Time: 12:34 pm" at right edge
-					_PrintSpacesOrMoveBack(15, TIME__TX);
-				}
-			} else {
-				! Width is 30-, print "12:34 pm" at right edge
-				_PrintSpacesOrMoveBack(9, ONE_SPACE_STRING);
-			}
-			_h = status_field_1;
-			if (_h > 11) {
-				_pm = true;
-			}
-			if (_h > 12) {
-				_h = _h - 12;
-			}
-			if(_h < 1) print 12; else print _h;
-			@print_char ':';
-			if (status_field_2<10)
-				@print_char '0';
-			print status_field_2;
-			if (_pm)
-				print " pm";
-			else
-				print " am";
+#Ifdef STATUSLINE_TIME;
+	_PrintStatusLineTime();
+#Ifnot;
+	#Ifdef STATUSLINE_SCORE;
+		_PrintStatusLineScore();
+	#Ifnot;
+		if (sys_statusline_flag) {
+			_PrintStatusLineTime();
+		} else {
+			_PrintStatusLineScore();
 		}
-	} else {
-		! Statusline should show score rather than time
-		if (_width > 24) {
-			if (_width < 30) {
-				! Width is 25-29, only print score as "0", no moves
-				_PrintSpacesOrMoveBack(3, ONE_SPACE_STRING);
-				print status_field_1;
-			} else {
-				if (_width > 66) {
-					! Width is 67-, print "Score: 0 Moves: 0"
-					_PrintSpacesOrMoveBack(28, SCORE__TX);
-					print status_field_1;
-					_PrintSpacesOrMoveBack(14, MOVES__TX);
-				} else {
-					if (_width > 36) {
-						! Width is 37-66, print "Score: 0/0"
-						_PrintSpacesOrMoveBack(15, SCORE__TX);
-					} else {
-						! Width is 29-35, print "0/0"
-						_PrintSpacesOrMoveBack(9, ONE_SPACE_STRING);
-					}
-					print status_field_1;
-					@print_char '/';
-				}
-				print status_field_2;
-			}
-		}
-	}
+	#Endif;
+#Endif;
+
 	! Regardless of what kind of status line we have printed, print spaces to the end.
 	_PrintSpacesOrMoveBack(-1);
 	_MainWindow(); ! set_window
@@ -1123,17 +1138,28 @@ Object thedark "Darkness"
  		short_name 0;
 
 [ _UpdateScoreOrTime;
-	if (sys_statusline_flag == 0) {
+#Ifdef STATUSLINE_TIME;
+	status_field_1 = the_time/60;
+	status_field_2 = the_time%60;
+#Ifnot;
+	#Ifdef STATUSLINE_SCORE;
 		status_field_1 = score;
 		status_field_2 = turns;
-	} else {
-		status_field_1 = the_time/60;
-		status_field_2 = the_time%60;
-	}
+	#Ifnot;
+		if (sys_statusline_flag == 0) {
+			status_field_1 = score;
+			status_field_2 = turns;
+		} else {
+			status_field_1 = the_time/60;
+			status_field_2 = the_time%60;
+		}
+	#Endif;
+#Endif;
 ];
 
 [ EndTurnSequence;
 	turns++;
+#Ifndef STATUSLINE_SCORE;
 	if (sys_statusline_flag) {
 		if (time_rate >= 0) the_time=the_time+time_rate;
 		else {
@@ -1145,6 +1171,7 @@ Object thedark "Darkness"
 		}
 		the_time = the_time % 1440;
 	}
+#Endif;
 	RunTimersAndDaemons(); if(deadflag >= GS_DEAD) rtrue;
 	RunEachTurn(); if(deadflag >= GS_DEAD) rtrue;
 	TimePasses();

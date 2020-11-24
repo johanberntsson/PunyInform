@@ -19,8 +19,10 @@ Switches e;
 Constant USEINFORM;
 #Endif;
 
-! uncomment to show time instead of score/turns
-Statusline time;
+! Uncomment ONE of the two following lines, to show either time or score/turns
+! Leaving both commented out makes the library bigger.
+Constant STATUSLINE_TIME; Statusline time;
+!Constant STATUSLINE_SCORE; Statusline score;
 
 Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 

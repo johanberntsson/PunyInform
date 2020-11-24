@@ -72,6 +72,12 @@ Abbreviate "/when_";
 Abbreviate "ent";
 #EndIf;
 
+#IfDef STATUSLINE_TIME;
+#IfDef STATUSLINE_SCORE;
+Message fatalerror "Can't define both STATUSLINE_TIME and STATUSLINE_SCORE."
+#EndIf;
+#EndIf;
+
 Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
 Constant NULL         = $ffff;

@@ -305,3 +305,6 @@ v1.8: bug fix and new feature release
 - Fixed bug where numbers and parse routines got a bad pattern score.
 - Fixed bug where 12:xx AM was printed as 0:xx AM on statusline.
 - Added extension ext_waittime.h
+- Added constants STATUSLINE_TIME and STATUSLINE_SCORE, to include only the
+  code needed for the type of statusline used in the game.
+ 

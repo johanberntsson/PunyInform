@@ -8,8 +8,10 @@
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";
 
-! Uncomment to show time instead of score/turns
-!Statusline time;
+! Uncomment ONE of the two following lines, to show either time or score/turns
+! Leaving both commented out makes the library bigger.
+!Constant STATUSLINE_TIME; Statusline time;
+Constant STATUSLINE_SCORE; Statusline score;
 
 ! Uncomment to add optional features to PunyLib
 !Constant DEBUG;

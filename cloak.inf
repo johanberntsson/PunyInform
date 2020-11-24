@@ -13,6 +13,8 @@ Constant Story	  "Cloak of Darkness";
 Constant Headline   "^A basic IF demonstration.^";
 Constant MAX_SCORE  2;
 
+Constant STATUSLINE_SCORE; Statusline score;
+
 [ DeathMessage; print "You have lost"; ];
 
 

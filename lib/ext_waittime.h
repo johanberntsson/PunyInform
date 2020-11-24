@@ -231,14 +231,26 @@ Constant MAX_WAIT_MINUTES 1440;
 !!extend "set" first
 !    * is_timepiece "to" parsetime -> SetClock;
 
-Extend 'wait'
-    * 'until' parsetime                          -> WaitUntil
-    * 'til' parsetime                            -> WaitUntil
-    * 'till' parsetime                           -> WaitUntil
-	* 'for' number 'move'/'moves'/'turn'/'turns' -> WaitMoves
-	* 'for' number 'minute'/'minutes'            -> WaitMinutes
-	* 'for' number 'hour'/'hours'                -> WaitHours
-    * number 'minute'/'minutes'                  -> WaitMinutes
-    * number 'hour'/'hours'                      -> WaitHours
-	* number 'move'/'moves'/'turn'/'turns'       -> WaitMoves
-	* number                                     -> WaitMoves;
+
+#Ifdef STATUSLINE_SCORE;
+	Extend 'wait'
+		* 'for' number 'move'/'moves'/'turn'/'turns' -> WaitMoves
+		* 'for' number 'minute'/'minutes'            -> WaitMinutes
+		* 'for' number 'hour'/'hours'                -> WaitHours
+	    * number 'minute'/'minutes'                  -> WaitMinutes
+	    * number 'hour'/'hours'                      -> WaitHours
+		* number 'move'/'moves'/'turn'/'turns'       -> WaitMoves
+		* number                                     -> WaitMoves;
+#Ifnot;
+	Extend 'wait'
+	    * 'until' parsetime                          -> WaitUntil
+	    * 'til' parsetime                            -> WaitUntil
+	    * 'till' parsetime                           -> WaitUntil
+		* 'for' number 'move'/'moves'/'turn'/'turns' -> WaitMoves
+		* 'for' number 'minute'/'minutes'            -> WaitMinutes
+		* 'for' number 'hour'/'hours'                -> WaitHours
+	    * number 'minute'/'minutes'                  -> WaitMinutes
+	    * number 'hour'/'hours'                      -> WaitHours
+		* number 'move'/'moves'/'turn'/'turns'       -> WaitMoves
+		* number                                     -> WaitMoves;
+#Endif;
