@@ -302,4 +302,4 @@ v1.8: bug fix and new feature release
   room name was too long.
 - Started using same message for MSG_INSERT_NOT_CONTAINER and
   MSG_EMPTY_CANT_CONTAIN.
-  
+- Fixed bug where numbers and parse routines got a bad pattern score.

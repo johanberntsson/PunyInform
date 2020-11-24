@@ -226,4 +226,12 @@ Constant tw_oclock 'o^clock';
 !    * is_timepiece "to" parsetime -> SetClock;
 
 Extend 'wait'
-    * 'until' parsetime           -> WaitUntil;
+    * 'until' parsetime           -> WaitUntil
+    * 'til' parsetime             -> WaitUntil
+    * 'till' parsetime            -> WaitUntil
+	* 'for' number 'minute'/'minutes' -> WaitMoves
+	* 'for' number 'hour'/'hours' -> WaitHours
+    * number 'minute'/'minutes'   -> WaitMoves
+    * number 'hour'/'hours'       -> WaitHours
+    * number                      -> WaitMoves
+    * parsetime                   -> WaitUntil;

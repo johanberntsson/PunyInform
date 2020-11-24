@@ -12,8 +12,8 @@ containers:
 	frotz containers.z3
 
 inform:
-	inform -v8 test-fullscore.inf
-	frotz test-fullscore.z8
+	inform -v8 containers.inf
+	frotz containers.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output

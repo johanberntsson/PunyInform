@@ -1,3 +1,6 @@
+> wait sasfas
+I didn't understand that number.
+
 > wait until 12:05
 Time passes.
 The time is: 0:0
@@ -11,11 +14,11 @@ You can't see any such thing.
 The time is: 0:5
 
 > wait xyzzy
-You can't see any such thing.
-The time is: 0:6
+I didn't understand that number.
 
 > wait 2
-You can't see any such thing.
+Time passes.
+The time is: 0:6
 The time is: 0:7
 
 > wait

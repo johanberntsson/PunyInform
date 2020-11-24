@@ -1134,7 +1134,7 @@ Array guess_num_objects->5;
 	rfalse;
 ];
 
-[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i _j _k _word _type;
+[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i _j _k _word _type _current_wn;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1195,13 +1195,14 @@ Array guess_num_objects->5;
 #IfDef DEBUG_PARSEPATTERN;
 		print "Calling ParseToken: token ", _pattern_pointer->0," type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
 #EndIf;
+		_current_wn = wn;
 		_noun = _ParseToken(_pattern_pointer, _parse_pointer, p_phase);
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse + 2 + 4 * (wn - 1);
 
 		switch(_noun) {
 		GPR_FAIL:
-			if(_type == TT_PARSE_ROUTINE) return 0;
+			if(_type == TT_PARSE_ROUTINE) return _current_wn - 1;
 			if(_pattern_pointer->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) {
 				! First or in the middle of a list of alternative prepositions
 #IfDef DEBUG_PARSEPATTERN;
@@ -1282,8 +1283,10 @@ Array guess_num_objects->5;
 			}
 		GPR_NUMBER:
 			! parsed_number contains the new number
-			if(p_phase == PHASE2 && parsed_number == -1000)  {
-				PrintMsg(MSG_PARSER_BAD_NUMBER);
+			if(parsed_number == -1000)  {
+				if(p_phase == PHASE2) {
+					PrintMsg(MSG_PARSER_BAD_NUMBER);
+				}
 				return wn - verb_wordnum; ! bad match
 			}
 			_UpdateNounSecond(parsed_number, 1);

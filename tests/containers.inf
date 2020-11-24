@@ -5,6 +5,10 @@
 !   it adds ~10 KB to the story file size and it makes the game slower.
 ! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which aren't used. This can save some space.
 
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";
 
@@ -36,7 +40,13 @@ Constant OPTIONAL_FULL_DIRECTIONS;
 
 Constant INITIAL_LOCATION_VALUE = Library;
 
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
 Include "globals.h";
+#EndIf;
+
 
 ! Define your own global variables here, if any
 
@@ -54,7 +64,12 @@ Include "globals.h";
 !Include "ext_quote_box.h";
 !Include "ext_cheap_scenery.h";
 
+#Ifndef USEINFORM;
 Include "puny.h";
+#EndIf;
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
 
 Include "waittime/waittime.h";
 
@@ -62,7 +77,9 @@ Object Library "The Library"
 	with
 		description "You are in a library.",
 		each_turn [;
+#Ifndef USEINFORM;
 		    print "The time is: ", status_field_1 ,":", status_field_2 ,"^";
+#Endif;
 		    ],
 	has light;
 
@@ -78,4 +95,7 @@ Object -> -> Knife "knife"
 
 [Initialise;
 	print "^^And so the story begins...^^";
+#IfDef USEINFORM;
+    location=INITIAL_LOCATION_VALUE;;
+#EndIf;
 ];
