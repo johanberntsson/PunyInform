@@ -1,0 +1,81 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+! The very first lines of the main source code file for a game can contain compiler options, like the two lines above.
+! -~S disables strict error checking. This is otherwise used in z5 and z8 games by default. While useful for debugging,
+!   it adds ~10 KB to the story file size and it makes the game slower.
+! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which aren't used. This can save some space.
+
+Constant Story      "Minimal";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+! Uncomment to show time instead of score/turns
+Statusline time;
+
+!Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FULL_SCORE;
+Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_SHIP_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+
+! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
+! MAX_CARRIED, SACK_OBJECT,  etc.
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+! Define your own global variables here, if any
+
+! Define the entry point routines you need here, like Amusing, DarkToDark etc.
+
+[GamePostRoutine;
+	"Let's go!";
+	!print "time_rate is ", time_rate, "^";
+];
+
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+Include "puny.h";
+
+Include "waittime/waittime.h";
+
+Object Library "The Library"
+	with
+		description "You are in a library.",
+		each_turn [;
+		    print "The time is: ", status_field_1 ,":", status_field_2 ,"^";
+		    ],
+	has light;
+
+Object -> Box "box"
+	with
+		name 'box',
+		inside_description "It feels so nice, standing in the box.",
+	has container openable enterable transparent;
+
+Object -> -> Knife "knife"
+	with
+		name 'knife';
+
+[Initialise;
+	print "^^And so the story begins...^^";
+];

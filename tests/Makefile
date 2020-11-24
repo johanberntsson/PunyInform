@@ -7,9 +7,9 @@ grabifnotheld:
 	inform +../lib -v3 grabifnotheld.inf
 	frotz grabifnotheld.z3
 
-test-score:
-	inform +../lib -v3 test-score.inf
-	frotz test-score.z3
+containers:
+	inform +../lib -v3 containers.inf
+	frotz containers.z3
 
 inform:
 	inform -v8 test-fullscore.inf

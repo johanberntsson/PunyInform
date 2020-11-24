@@ -1201,6 +1201,7 @@ Array guess_num_objects->5;
 
 		switch(_noun) {
 		GPR_FAIL:
+			if(_type == TT_PARSE_ROUTINE) return 0;
 			if(_pattern_pointer->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) {
 				! First or in the middle of a list of alternative prepositions
 #IfDef DEBUG_PARSEPATTERN;
