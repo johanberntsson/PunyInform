@@ -264,15 +264,15 @@ Constant ONE_SPACE_STRING = " ";
 		print (The) _visibility_ceiling;
 
 #Ifdef STATUSLINE_TIME;
-	_PrintStatusLineTime();
+	_PrintStatusLineTime(_width);
 #Ifnot;
 	#Ifdef STATUSLINE_SCORE;
-		_PrintStatusLineScore();
+		_PrintStatusLineScore(_width);
 	#Ifnot;
 		if (sys_statusline_flag) {
-			_PrintStatusLineTime();
+			_PrintStatusLineTime(_width);
 		} else {
-			_PrintStatusLineScore();
+			_PrintStatusLineScore(_width);
 		}
 	#Endif;
 #Endif;
