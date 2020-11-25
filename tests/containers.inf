@@ -71,7 +71,7 @@ Include "puny.h";
 Include "Grammar";
 #Endif;
 
-Include "waittime/waittime.h";
+Include "ext_waittime.h";
 
 Object Library "The Library"
 	with
