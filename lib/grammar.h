@@ -805,8 +805,8 @@ Verb 'yes' 'y//'
 !	else {
 		_recipient = second;
 		if(second hasnt supporter) {
-  		if(second hasnt container) { PrintMsg(MSG_EMPTY_CANT_CONTAIN, second); rtrue; }
-  		if(second hasnt open) { PrintMsg(MSG_EMPTY_IS_CLOSED, second); rtrue; }
+			if(second hasnt container) { PrintMsg(MSG_EMPTY_CANT_CONTAIN, second); rtrue; }
+			if(second hasnt open) { PrintMsg(MSG_EMPTY_IS_CLOSED, second); rtrue; }
 		}
 	}
 	_i = child(noun); _k = children(noun);

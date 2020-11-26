@@ -307,4 +307,6 @@ v1.8: bug fix and new feature release
 - Added extension ext_waittime.h
 - Added constants STATUSLINE_TIME and STATUSLINE_SCORE, to include only the
   code needed for the type of statusline used in the game.
+- Fixed bug which put location in scope in darkness.
+- Made TheDark object more flexible by adding properties before and after.
  

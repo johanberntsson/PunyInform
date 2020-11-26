@@ -132,9 +132,8 @@ System_file;
 	_PutInScope(Directions);
 
 	! if we are in a container, add it to scope
-	if(_start_pos ~= location) {
+	if(parent(_start_pos)) {
 		_PutInScope(_start_pos);
-!		scope-->(scope_objects++) = _start_pos;
 	}
 
 	if(location == thedark && p_actor == player) {

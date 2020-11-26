@@ -1135,7 +1135,9 @@ Object thedark "Darkness"
 	with
 		initial 0,
 		description "It is pitch dark here!",
- 		short_name 0;
+ 		short_name 0,
+		before 0,
+		after 0;
 
 [ _UpdateScoreOrTime;
 #Ifdef STATUSLINE_TIME;
