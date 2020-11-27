@@ -652,7 +652,7 @@ System_file;
 	keep_silent = true;
 	PerformAction(##Take, p_noun);
 	keep_silent = false;
-	return (p_noun notin player);
+	if (p_noun notin player) { rtrue; } else { rfalse; }
 ];
 
 [ _CreatureTest obj;
