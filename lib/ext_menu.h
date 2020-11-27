@@ -70,7 +70,7 @@ Constant QKEY1__KY      = 'Q';
 Constant QKEY2__KY      = 'q';
 
 [ DoMenu menu_choices EntryR ChoiceR
-         lines main_title main_wid cl i j oldcl pkey ch cw y x;
+         lines main_title main_wid cl i j oldcl pkey ch y x;
 	menu_nesting++;
 	menu_item = 0;
 	lines = indirect(EntryR);
@@ -89,18 +89,16 @@ Constant QKEY2__KY      = 'q';
 	@set_window 1;
 	@set_cursor 1 1;
 
-	cw = 1;
-
 	style reverse;
-	spaces(i); j=1+(i/2-main_wid)*cw;
+	spaces(i); j=1+(i-main_wid)/2;
 	@set_cursor 1 j;
 	print (string) main_title;
 	y=1+ch; @set_cursor y 1; spaces(i);
-	x=1+cw; @set_cursor y x; print (string) NKEY__TX;
-	j=1+(i-13)*cw; @set_cursor y j; print (string) PKEY__TX;
+	x=1+1; @set_cursor y x; print (string) NKEY__TX;
+	j=1+i-13; @set_cursor y j; print (string) PKEY__TX;
 	y=y+ch; @set_cursor y 1; spaces(i);
 	@set_cursor y x; print (string) RKEY__TX;
-	j=1+(i-18)*cw; @set_cursor y j;
+	j=1+i-18; @set_cursor y j;
 
 	if (menu_nesting == 1) print (string) QKEY1__TX;
 	else                   print (string) QKEY2__TX;
@@ -111,7 +109,7 @@ Constant QKEY2__KY      = 'q';
 	if (menu_choices ofclass String) print (string) menu_choices;
 	else                             menu_choices.call();
 
-	x = 1+3*cw;
+	x = 1+3;
 
 
 	for (::) {
@@ -142,7 +140,7 @@ Constant QKEY2__KY      = 'q';
 			@split_window ch;
 			i = HDR_SCREENWCHARS->0; if ( i== 0) i = 80;
 			@set_window 1; @set_cursor 1 1; style reverse; spaces(i);
-			j=1+(i/2-item_width)*cw;
+			j=1+(i-item_width)/2;
 			@set_cursor 1 j;
 			print (string) item_name;
 			style roman; @set_window 0; new_line;
@@ -163,4 +161,3 @@ Constant QKEY2__KY      = 'q';
 ];
 
 #EndIf;
-
