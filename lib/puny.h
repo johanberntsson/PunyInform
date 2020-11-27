@@ -1304,8 +1304,9 @@ Object thedark "Darkness"
 		}
 	}
 	_UpdateScoreOrTime();
-	print "^^  *** ";
+	@new_line;
 	if(deadflag == GS_QUIT) @quit;
+	print "^  *** ";
 	if(deadflag == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
