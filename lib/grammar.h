@@ -73,7 +73,8 @@ Verb 'give' 'feed' 'offer' 'pay'
 	* 'over' held 'to' creature                 -> Give;
 
 [ ADirection;
-	if (noun == Directions) {rtrue;} else {rfalse;}
+	if (noun == Directions) rtrue;
+	rfalse;
 ];
 
 Verb 'go'

@@ -33,7 +33,7 @@ System_file;
 	}
 ];
 
-[ _SearchScope p_obj p_risk_duplicate p_no_add _child _add_contents;
+[ _SearchScope p_obj p_risk_duplicate p_no_add _child;
 #IfDef DEBUG_SCOPE;
 #IfDef DEBUG;
 	if(p_obj) print "_SearchScope adding ",(object) p_obj," (", p_obj,") and siblings to scope. Action = ", (DebugAction) action, "^";
@@ -56,10 +56,9 @@ System_file;
 		if(p_no_add == 0) _PerformAddToScope(p_obj);
 
 		_child = child(p_obj);
-		_add_contents = _child ~= 0 && (p_obj has supporter || p_obj has transparent || (p_obj has container && p_obj has open));
-		if(_add_contents) {
-			_SearchScope(_child, p_risk_duplicate, p_no_add);
-		}
+		if(_child ~= 0 && (p_obj has supporter || p_obj has transparent || (p_obj has container && p_obj has open)))
+			_SearchScope(_child, p_risk_duplicate, p_no_add); ! Add contents
+
 		p_obj = sibling(p_obj);
 	}
 ];
@@ -262,13 +261,12 @@ Constant PlaceInScope = _PutInScope;
 	! actor is given, the actor is assumed to be the player.
 	! The routine returns true or false.
 	!print "TestScope ", (object) p_obj, "^";
-	if(p_actor == 0)
-		p_actor = player;
-
-	_UpdateScope(p_actor);
 
 	! special case for debugging verbs; everything is in scope
 	if(meta) rtrue;
+
+	if(p_actor == 0)
+		p_actor = player;
 
 	_UpdateScope(p_actor);
 	for(_i = 0: _i < scope_objects: _i++) {

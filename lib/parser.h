@@ -633,7 +633,8 @@ System_file;
 [ _IsSentenceDivider p_parse_pointer;
 	! check if current parse block, indicated by p_parse_pointer,
 	! is a period or other sentence divider
-	return p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then';
+	if(p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then') rtrue;
+	rfalse;
 ];
 
 [ ParseToken p_token_type p_token_data;
@@ -652,14 +653,15 @@ System_file;
 	keep_silent = true;
 	PerformAction(##Take, p_noun);
 	keep_silent = false;
-	if (p_noun notin player) { rtrue; } else { rfalse; }
+	if (p_noun notin player) rtrue;
+	rfalse;
 ];
 
 [ _CreatureTest obj;
 	! Will this obj do for a "creature" token?
     if (actor ~= player) rtrue;
     if (obj has animate) rtrue;
-    if (obj hasnt talkable) rfalse;
+!    if (obj hasnt talkable) rfalse;
     rfalse;
 ];
 
@@ -1262,7 +1264,7 @@ Array guess_num_objects->5;
 			print "-- preposition mached ", _pattern_pointer, " ", _pattern_pointer->0, "^";
 #Endif;
 			_type = ((_pattern_pointer -> 0) & $0f);
-			while(_type ~= TT_END && _type ~= TT_PARSE_ROUTINE && 
+			while(_type ~= TT_END && _type ~= TT_PARSE_ROUTINE &&
 				(_pattern_pointer->0 ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP)) {
 #IfDef DEBUG_PARSEPATTERN;
 			print "-- increasing _pattern_pointer^";
