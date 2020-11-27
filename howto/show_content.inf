@@ -4,6 +4,8 @@
 Constant Story      "Show Contents";
 Constant Headline   "^A PunyInform code sample.^";
 
+Constant STATUSLINE_SCORE; Statusline score;
+
 Constant INITIAL_LOCATION_VALUE = WhiteRoom;
 
 Include "globals.h";

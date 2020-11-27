@@ -280,7 +280,8 @@ v1.8: bug fix and new feature release (27 November 2020)
 - If a switchable object has a string for description, or a routine which
   returns true, "examine [object]" will no longer add a text saying whether the
   object is currently switched on or off.
-- Fixed broken "restore failed" message when RestoreSub is called after game has ended.
+- Fixed broken "restore failed" message when RestoreSub is called after game has
+  ended.
 - Removed extra space after "You have won/died"
 - Added scoring notifications even on the final turn of the game, just before
   you win/die/lose.
@@ -310,4 +311,5 @@ v1.8: bug fix and new feature release (27 November 2020)
 - Fixed bug which put location in scope in darkness.
 - Made TheDark object more flexible by adding properties before and after.
 - Fixed bug in centering menus on screen, in ext_menu.h. Issue #55.
- 
+- Added howto/semidark.inf, a demonstration of how one can implement almost dark
+  rooms.

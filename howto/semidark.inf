@@ -1,0 +1,198 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+Constant Story      "Semidark";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+! Uncomment to add optional features to PunyLib
+Constant DEBUG;
+!Constant RUNTIME_ERRORS = 0;
+
+! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
+! MAX_CARRIED, SACK_OBJECT,  etc.
+
+Constant INITIAL_LOCATION_VALUE = Hallway;
+
+Include "globals.h";
+
+! Define your own global variables here, if any
+
+Attribute semidark;
+
+! Define the entry point routines you need here, like Amusing, DarkToDark etc.
+
+[InScope x;
+	if(location == thedark && real_location has semidark)
+		objectloop(x in real_location) {
+			if(x has semidark) {
+				PlaceInScope(x);
+				ScopeWithin(x);
+			}
+		}
+	rfalse;
+];
+
+[LookRoutine x;
+	if(location == thedark && real_location has semidark) {
+		objectloop(x in real_location) {
+			give x ~workflag;
+			if(x has semidark && x hasnt scenery or concealed)
+				give x workflag;
+		}
+		if(PrintContents("^You can barely make out ", real_location, true)) " here.";
+	}
+];
+
+Include "puny.h";
+
+Object Hallway "Hallway"
+	with
+		name 'large' 'window' 'windows',
+		description "Light comes in through the large windows.
+			A dark library lies south from here.",
+		s_to Library,
+	has light;
+
+Object -> LightSwitch
+	with
+		short_name "light switch",
+		describe [;
+			print "^There's a switch on the wall, which	controls the light in
+				the library and the closet. It is currently ";
+			if(self has on) "on.";
+			"off.";
+		],
+		name 'light' 'switch',
+		before [;
+			Push:
+				if(self has on)
+					<<SwitchOff self>>;
+				else
+					<<SwitchOn self>>;
+		],
+		after[;
+			SwitchOn:
+				give Library light;
+				give DarkCloset light;
+			SwitchOff:
+				give Library ~light;
+				give DarkCloset ~light;
+		],
+	has switchable static;
+
+Object -> OrangeStatue "orange statue"
+	with
+		name 'orange' 'statue',
+		description "It's stunningly beautiful.",
+		article "an",
+	has semidark;
+
+Object -> BlackSweater "black sweater"
+	with
+		name 'black' 'sweater',
+		description "It's downright ugly."
+	has clothing;
+
+Object Library "The Library"
+	with
+		description "You are in a library. The hallway lies to the north,
+			while there is an dark foreboding passage to the south.",
+		semidark_description "You are in a library. It's very dark in here.
+			The hallway lies to the north, while there is an even darker
+			place to the south.",
+		n_to Hallway,
+		s_to DarkCloset
+	has semidark;
+
+Object -> Box "box"
+	with
+		name 'box',
+		description "It's a nice large box.",
+		inside_description "It feels so nice, standing in the box.",
+	has container open openable enterable semidark;
+
+Object -> Mat "mat"
+	with
+		name 'mat',
+		inside_description "It's a beautiful mat in dark colours'",
+	has supporter;
+
+Object DarkCloset "Dark Closet"
+	with
+		description "This is a very dark closet. Thank god there's a lamp in
+			the ceiling at least. The library lies to the north.",
+		n_to Library;
+
+Object -> Table "table"
+	with
+		name 'table',
+		description "It's a nice sturdy oak table.",
+	has static supporter;
+
+Object -> -> Spoon "spoon"
+	with
+		name 'spoon';
+
+[TheDarkDescription;
+	if(real_location has semidark) {
+		if(real_location provides semidark_description) {
+			PrintOrRun(real_location, semidark_description);
+			rtrue;
+		} else {
+			PrintOrRun(real_location, description);
+			rtrue;
+		}
+	}
+	"It's too dark to see here.";
+];
+
+[TheDarkBefore;
+	Examine:
+		if(noun provides description) {
+			PrintOrRun(noun, description);
+			rtrue;
+		} else {
+			PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
+			rtrue;
+		}
+	default:
+		rfalse;
+];
+
+[TheDarkShortName;
+	if(real_location has semidark) {
+		print (name) real_location;
+		rtrue;
+	}
+	rfalse;
+];
+
+[Initialise;
+	thedark.description = TheDarkDescription;
+	thedark.before = TheDarkBefore;
+	thedark.short_name = TheDarkShortName;
+
+	print "^^This is a demonstration of ~semidark~ rooms - rooms where it's
+		almost dark, and you can only see certain larger objects and perhaps
+		brightly coloured objects.
+		^^The library is a semidark location, where you should be able to see
+		the box only. If you turn the light on you should be able to see the
+		mat too. If you drop the orange statue in there, you can pick it up
+		again, but if you drop the black sweater, you won't find it again, unless
+		the light is on.
+		^^South of the library is the closet, which is a normal dark location -
+		you can't see a thing in there.
+		^^To use this system, you give the semidark attribute to a room to say
+		that if it's dark in that room, it's only semidark. And you give that
+		same attribute to objects which should be visible in semidark rooms.
+		^^Quirks:
+		^1: The statusline will say Darkness when in a semidark room,
+		in z3 games.
+		^2: If an item is placed in a container or on a supporter which has the
+		semidark attribute, that item will also be visible in semidarkness.
+		^^Note: As usual in DEBUG mode, you can type TREE to see all items in
+		your current location, and SCOPE to see what's currently in scope.
+		^^";
+];
