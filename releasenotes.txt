@@ -262,7 +262,7 @@ v1.7: bug fix and new feature release (4 November 2020)
 - PunyInform now informs when the score goes down, and well as up.
 
 =======
-v1.8: bug fix and new feature release
+v1.8: bug fix and new feature release (27 November 2020)
 - fixed location test in GoSub for vehicle movements in the dark
 - Fixed that 'a' (character) was used instead of 'a//' (dictionary word) when
   skipping articles to set noun and second to dictionary words for Ask etc.
