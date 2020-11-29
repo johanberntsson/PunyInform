@@ -54,6 +54,13 @@ Class PlayableCharacter
 					self.&name_other-->1 or	self.&name_other-->2) _words++;
 			return _words;
 		],
+		life [;
+			Give:
+				move noun to self;
+				print "~Well thank you very much ";
+				PrintOrRun(player, short_name_other, true);
+				"!~";
+		],
 		name 'me' 'myself' 'self',
 		name_other 0 0 0,
 		short_name  "yourself",

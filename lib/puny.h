@@ -1210,6 +1210,9 @@ Object thedark "Darkness"
 #EndIf;
 #EndIf;
 
+#IfV5;
+	new_line; ! So the first line of text isn't covered by the statusline
+#Endif;
 	_j = Initialise();
 
 	objectloop (_i in player) give _i moved ~concealed;
