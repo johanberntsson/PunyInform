@@ -319,3 +319,6 @@ v1.9: bug fix and new feature release
 - fixed bad quit message (issue 56)
 - Print a newline before calling Initialise for v5 games, so first line of
   text isn't covered by statusline.
+- Added code to howto/change_player.inf so all would-be PCs accept gifts from
+  the player.
+  
