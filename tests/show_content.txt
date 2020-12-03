@@ -19,5 +19,4 @@ On the table you can see a fork and a plate.
 > quit
 Are you sure you want to quit? yes
 
-
-  *** [Hit any key to exit.]
+[Hit any key to exit.]

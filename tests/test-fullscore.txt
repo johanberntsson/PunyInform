@@ -38,7 +38,7 @@ The testsuite is open for business!
 
 Parser test
 A parser test suite for PunyInform.
-Release 1 / Serial number 200827 / Inform v6.34 PunyInform v1.7 D
+Release 1 / Serial number 200827 / Inform v6.34 PunyInform v1.8 D
 
 Lit Room
 You are in a brightly lit room.

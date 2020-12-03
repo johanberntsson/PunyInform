@@ -18,5 +18,4 @@ red book: Yay, got rid of the red book!
 > quit
 Are you sure you want to quit? yes
 
-
-  *** [Hit any key to exit.]
+[Hit any key to exit.]
