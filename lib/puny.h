@@ -1224,6 +1224,9 @@ Object thedark "Darkness"
 
 	@new_line;
 	while(deadflag == GS_PLAYING) {
+#Ifdef DEBUG_TIMER;
+	timer1 = 0-->2;
+#Endif;
 		scope_modified = false; ! avoid automatic scope updates during parsing
 
 		_UpdateScoreOrTime();
@@ -1231,12 +1234,24 @@ Object thedark "Darkness"
 
 		_UpdateScope(player, true);
 		_score = score;
+#Ifdef DEBUG_TIMER;
+	timer1 = 0-->2 - timer1;
+	print "[Before ReadPlayerInput took ",timer1," jiffies]^";
+#Endif;
 		if(parse->1 == 0) {
 			_ReadPlayerInput();
 		}
 		_parser_oops = parser_unknown_noun_found;
 .do_it_again;
+#Ifdef DEBUG_TIMER;
+	timer1 = 0-->2;
+#Endif;
 		_sentencelength = _ParseAndPerformAction();
+#Ifdef DEBUG_TIMER;
+	timer1 = 0-->2 - timer1;
+	print "[ParseAndPerformAction took ",timer1," jiffies]^";
+	timer1 = 0-->2;
+#Endif;
 		if(action == ##OopsCorrection) {
 			if(_again_saved && _parser_oops > 0) {
 				!print "Oops not implemented^";
@@ -1305,6 +1320,10 @@ Object thedark "Darkness"
 			! the input was just one sentence
 			parse->1 = 0;
 		}
+#Ifdef DEBUG_TIMER;
+	timer1 = 0-->2 - timer1;
+	print "[After ParseAndPerformAction took ",timer1," jiffies]^";
+#Endif;
 	}
 	_UpdateScoreOrTime();
 	@new_line;

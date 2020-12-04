@@ -486,14 +486,7 @@ System_file;
 	print "Calling _CheckNoun(",p_parse_pointer,");^";
 	if(p_parse_pointer-->0 > 2000) print (address) p_parse_pointer-->0, " ", _pluralword, "^";
 #Endif;
-#IfDef DEBUG_TIMER;
-	timer2_start = $1c-->0;
-#Endif;
 	_noun = _CheckNoun(p_parse_pointer);
-#IfDef DEBUG_TIMER;
-	timer2_stop = $1c-->0 - timer2_start;
-	print "[_CheckNoun took ",timer2_stop," jiffies]^";
-#Endif;
 	_num_words_in_nounphrase = which_object -> 1;
 
 .recheck_noun;
@@ -1315,9 +1308,6 @@ Array guess_num_objects->5;
 	! 1 is returned. If the input is "open box" then
 	! the whole input is matched and 2 returned.
 
-#IfDef DEBUG_TIMER;
-	timer1_start = $1c-->0;
-#Endif;
 	if(_IsSentenceDivider(parse + 2))
 		return -1;
 
@@ -1514,10 +1504,6 @@ Array guess_num_objects->5;
 .parse_success;
 	! we want to return how long the successfully sentence was
 	! but wn can be destroyed by action routines, so store in _i
-#IfDef DEBUG_TIMER;
-	timer1_stop = $1c-->0 - timer1_start;
-	print "[parsing took ",timer1_stop," jiffies]^";
-#Endif;
 
 	num_words_parsed = -(wn - 1);
 	if(action_reverse) {

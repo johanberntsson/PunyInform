@@ -429,10 +429,8 @@ Global debug_flag = 0;
 #EndIf;
 
 #IfDef DEBUG_TIMER;
-Global timer1_start = 0;
-Global timer1_stop = 0;
-Global timer2_start = 0;
-Global timer2_stop = 0;
+Global timer1 = 0;
+Global timer2 = 0;
 #EndIf;
 #IfV5;
 Global statusline_current_height = 0;
