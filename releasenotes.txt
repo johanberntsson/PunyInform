@@ -321,4 +321,4 @@ v1.9: bug fix and new feature release
   text isn't covered by statusline.
 - Added code to howto/change_player.inf so all would-be PCs accept gifts from
   the player.
-  
+- Made scope update at turn start rely on scope_modified_flag.

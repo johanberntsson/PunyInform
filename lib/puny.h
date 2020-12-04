@@ -1227,12 +1227,11 @@ Object thedark "Darkness"
 #Ifdef DEBUG_TIMER;
 	timer1 = 0-->2;
 #Endif;
-		scope_modified = false; ! avoid automatic scope updates during parsing
 
 		_UpdateScoreOrTime();
 		if(_sentencelength > 0) @new_line;
 
-		_UpdateScope(player, true);
+		_UpdateScope(player);
 		_score = score;
 #Ifdef DEBUG_TIMER;
 	timer1 = 0-->2 - timer1;
