@@ -331,9 +331,10 @@ Verb 'wear'
 	AfterRoutines();
 ];
 
-[ ExitSub;
-	if(noun == 0) noun = parent(player);
-	if(player in location) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
+[ ExitSub _p;
+	_p = parent(player)
+	if(parent(_p) == 0) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
+	if(noun == 0) <<Exit _p>>;
 	if(player notin noun) {
 		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE, parent(player)); rtrue; }
 		if(noun has supporter) { PrintMsg(MSG_EXIT_NOT_ON); rtrue; }
