@@ -322,3 +322,5 @@ v1.9: bug fix and new feature release
 - Added code to howto/change_player.inf so all would-be PCs accept gifts from
   the player.
 - Made scope update at turn start rely on scope_modified_flag.
+- Fixed bug where "get off (supporter)" would not let the supporter's after
+  routine react to the Exit action.

@@ -352,7 +352,7 @@ Verb 'wear'
 ];
 
 [ GetOffSub;
-	if (parent(player) == noun) <<Exit>>;
+	if (parent(player) == noun) <<Exit noun>>;
 	PrintMsg(MSG_EXIT_NOT_ON); rtrue;
 ];
 
