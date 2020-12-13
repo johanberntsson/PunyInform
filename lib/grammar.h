@@ -332,7 +332,7 @@ Verb 'wear'
 ];
 
 [ ExitSub _p;
-	_p = parent(player)
+	_p = parent(player);
 	if(parent(_p) == 0) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
 	if(noun == 0) <<Exit _p>>;
 	if(player notin noun) {
