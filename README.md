@@ -37,6 +37,7 @@ These games are known to use PunyInform:
 
 * Alien Research Centre 3, by John Wilson (link in [this blog post](http://www.zenobi.co.uk/2020/08/learn-it-and-love-it.html))
 
+* Return to the Castle, by John Wilson (link in [this blog post](http://www.zenobi.co.uk/2020/12/pack-of-three-updated.html))
 
 ## Articles
 

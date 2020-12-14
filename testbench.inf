@@ -1220,7 +1220,7 @@ Object RiverBank "River Bank"
 		nw_to Library,
 		cheap_scenery
 			'blue' 'water' SCN_WATER
-			'bird' 'birds' "They seem so careless."
+			'bird' 'birds' "They seem so carefree."
 			1 'sun' SCN_SUN,
 	has light;
 
