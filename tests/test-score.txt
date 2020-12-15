@@ -29,11 +29,10 @@ In that game you scored 4 out of a possible 4, in 5 turns.
 Would you like to RESTART, RESTORE or QUIT? restart
 
 
+
 The testsuite is open for business!
 
 Parser test
-A parser test suite for PunyInform.
-Release 1 / Serial number 200827 / Inform v6.34 PunyInform v1.7 D
 
 Lit Room
 You are in a brightly lit room.

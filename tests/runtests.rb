@@ -15,7 +15,7 @@ def runtest(filename, version, inform_args)
     else
         inform_cmd = "inform +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz #{basename}.z#{version} < #{command_file}"
-        prune_cmd = "tail +6 #{transcript_file} > #{output_file}"
+        prune_cmd = "tail +6 #{transcript_file} | grep -v PunyInform > #{output_file}"
         diff_cmd = "diff -Z #{template_file} #{output_file}"
         diff_cmd_ignore_banner = "diff -Z #{template_file} #{output_file} | grep -v PunyInform | tail +3"
     end
