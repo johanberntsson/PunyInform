@@ -33,11 +33,13 @@ These games are known to use PunyInform:
 
 * [Calypso](http://microheaven.com/ozmoo/games/calypso/calypso.z3) ([src](https://github.com/dave-f/calypso)), by Dave Footitt
 
-* Behind Closed Doors 9B, by John Wilson (link in [this blog post](http://www.zenobi.co.uk/2020/07/punyinfom-enters-fray.html))
+* [Behind Closed Doors 9B](http://www.zenobi.co.uk/2020/07/punyinfom-enters-fray.html), by John Wilson.
 
-* Alien Research Centre 3, by John Wilson (link in [this blog post](http://www.zenobi.co.uk/2020/08/learn-it-and-love-it.html))
+* [Alien Research Centre 3](https://ifdb.tads.org/viewgame?id=cf9x7zhfnohedim), by John Wilson.
 
-* Return to the Castle, by John Wilson (link in [this blog post](http://www.zenobi.co.uk/2020/12/pack-of-three-updated.html))
+* [Return to the Castle](https://ifdb.tads.org/viewgame?id=5bo8vhrguyr1d11s), by John Wilson.
+
+* [The Fishing-Trip - Brown Trout and Goblins](https://ifdb.tads.org/viewgame?id=fqhoqlh01ex5wwvo), by John Wilson.
 
 ## Articles
 
