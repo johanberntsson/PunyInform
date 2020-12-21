@@ -1622,7 +1622,7 @@ Object -> infiniteBag "infinite bag"
 		name 'infinite' 'bag',
 		article "an",
 		description "An infinitely deep bag.",
-	has container open;
+	has container open openable;
 
 Book -> GreenBook "green book"
 	with

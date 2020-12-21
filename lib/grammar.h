@@ -470,7 +470,7 @@ Verb 'wear'
 #EndIf;
 	if(AfterRoutines()) rtrue;
 	if (keep_silent) return;
-	PrintMsg(MSG_OPEN_SUCCESS, 'open');
+	PrintMsg(MSG_OPEN_SUCCESS);
 ];
 
 [ PullSub;
