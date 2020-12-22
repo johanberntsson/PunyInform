@@ -41,6 +41,8 @@ These games are known to use PunyInform:
 
 * [The Fishing-Trip - Brown Trout and Goblins](https://ifdb.tads.org/viewgame?id=fqhoqlh01ex5wwvo), by John Wilson.
 
+All of these games can be built for play on Commodore C64, C128 or Plus/4 on [Ozmoo Online](http://microheaven.com/ozmooonline/)
+
 ## Articles
 
 Fredrik Ramsberg has written a few articles describing PunyInform for beginners:
