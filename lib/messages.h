@@ -261,8 +261,10 @@ Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
 Default MSG_UNLOCK_SUCCESS 92;
 Default MSG_ENTER_BAD_LOCATION 93;
 Default MSG_PROMPT 94;
+#Ifndef OPTIONAL_NO_DARKNESS;
 Default MSG_EXAMINE_DARK 95;
 Default MSG_SEARCH_DARK 96;
+#Endif;
 Default MSG_EXAMINE_ONOFF 97;
 Default MSG_ORDERS_WONT 98;
 Default MSG_DROP_WORN 99;
@@ -564,8 +566,10 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 	MSG_TAKE_PART_OF:
 		print_ret (The) p_arg_1, " seems to be part of ", (the) p_arg_2, ".";
 #EndIf;
+#Ifndef OPTIONAL_NO_DARKNESS;
 	MSG_EXAMINE_DARK, MSG_SEARCH_DARK:
 		"But it's dark.";
+#Endif;
 #IfTrue MSG_SCORE_SUCCESS < 1000;
 	MSG_SCORE_SUCCESS:
 		if (deadflag) print "In that game you"; else print "You have so far";

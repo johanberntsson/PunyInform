@@ -135,6 +135,10 @@ System_file;
 		_PutInScope(_start_pos);
 	}
 
+#Ifdef OPTIONAL_NO_DARKNESS;
+	! Add all in player location (which may be inside an object)
+	_SearchScope(child(_start_pos), true, true);
+#Ifnot;
 	if(location == thedark && p_actor == player) {
 		! only the player's possessions are in scope
 		_PutInScope(player);
@@ -143,6 +147,7 @@ System_file;
 		! Add all in player location (which may be inside an object)
 		_SearchScope(child(_start_pos), true, true);
 	}
+#Endif;
 
 	_current_scope_objects = scope_objects;
 	for(_i = _initial_scope_objects : _i < _current_scope_objects : _i++)

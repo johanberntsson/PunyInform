@@ -16,6 +16,7 @@ Constant STATUSLINE_SCORE; Statusline score;
 ! Uncomment to add optional features to PunyLib
 !Constant DEBUG;
 !Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 !Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_EXTENDED_VERBSET;

@@ -28,6 +28,7 @@ Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error cod
 
 #IfnDef USEINFORM;
 ! Uncomment to add optional features to PunyLib
+!Constant OPTIONAL_NO_DARKNESS;
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;

@@ -326,3 +326,7 @@ v1.9: bug fix and new feature release
   routine react to the Exit action.
 - Changed MSG_OPEN_SUCCESS to also reveal the contents of the container being
   opened.
+- Added constant OPTIONAL_NO_DARKNESS which removes handling of light and dark.
+- Fixed bug with scope not being updated when the player is in a dark
+  container and opens it.
+  

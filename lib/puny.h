@@ -258,7 +258,11 @@ Constant ONE_SPACE_STRING = " ";
 !         if (visibility_ceiling == location)
 	_visibility_ceiling = ScopeCeiling(player);
 ! print (object) _visibility_ceiling;
+#Ifdef OPTIONAL_NO_DARKNESS;
+	if (_visibility_ceiling == location)
+#Ifnot;
 	if (location == thedark || _visibility_ceiling == location)
+#Endif;
 		_PrintObjName(location); ! If it's light, location == real_location
 	else
 		print (The) _visibility_ceiling;
@@ -359,7 +363,9 @@ Constant ONE_SPACE_STRING = " ";
 		if(PrintContents(" (on which is ", p_obj)) print ")";
 	}
 !	if(p_obj has light && action == ##Inv) print " (providing light)";
+#Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj has light) print " (providing light)";
+#Endif;
 	if(p_obj has worn && action == ##Inv) print " (worn)";
 ];
 
@@ -488,14 +494,20 @@ Constant ONE_SPACE_STRING = " ";
 	location = real_location;
 	scope_modified = true;
 	MoveFloatingObjects();
+#Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness();
+#Endif;
 .recheck_vc;
 	_old_vc = visibility_ceiling;
+#Ifdef OPTIONAL_NO_DARKNESS;
+	_vc = ScopeCeiling(player);
+#Ifnot;
 	if(location == thedark)
 		_vc = thedark;
 	else {
 		_vc = ScopeCeiling(player);
 	}
+#Endif;
 	if(_vc == location)
 		visibility_ceiling = _vc;
 
@@ -506,15 +518,21 @@ Constant ONE_SPACE_STRING = " ";
 			if(parent(player) ~= _old_parent)
 				jump recheck_vc;
 		}
+#Ifdef OPTIONAL_NO_DARKNESS;
+		NewRoom();
+#Ifnot;
 		if(location ~= thedark)
 			NewRoom();
+#Endif;
 	}
 
+#Ifndef OPTIONAL_NO_DARKNESS;
 	if(_old_real_loc ~= real_location && location == thedark && _old_loc == thedark) {
 		! we have moved between dark rooms
 		! give entry point a chance to react
 		DarkToDark();
 	}
+#Endif;
 	_old_lookmode = lookmode;
 	if(p_flag==false)
 		lookmode = 2;
@@ -532,10 +550,12 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
+#Ifndef OPTIONAL_NO_DARKNESS;
 [ _UpdateDarkness p_look _ceil _old_darkness _darkness;
 	if(location == thedark) _old_darkness = true;
 	_ceil = ScopeCeiling(player);
-	_darkness = ~~_LookForLightInObj(_ceil, _ceil);
+	if(_LookForLightInObj(_ceil, _ceil) == false) _darkness = true;
+	if(_darkness ~= _old_darkness) scope_modified = true;
 	if(_darkness) {
 		location = thedark;
 	} else {
@@ -554,6 +574,7 @@ Constant ONE_SPACE_STRING = " ";
 				rtrue;
 	rfalse;
 ];
+#Endif;
 
 Include "parser.h";
 
@@ -1131,6 +1152,7 @@ Object selfobj "you"
 		number 0,
 	has concealed animate proper transparent;
 
+#Ifndef OPTIONAL_NO_DARKNESS;
 Object thedark "Darkness"
 	with
 		initial 0,
@@ -1138,6 +1160,7 @@ Object thedark "Darkness"
  		short_name 0,
 		before 0,
 		after 0;
+#Endif;
 
 [ _UpdateScoreOrTime;
 #Ifdef STATUSLINE_TIME;
@@ -1177,7 +1200,9 @@ Object thedark "Darkness"
 	RunTimersAndDaemons(); if(deadflag >= GS_DEAD) rtrue;
 	RunEachTurn(); if(deadflag >= GS_DEAD) rtrue;
 	TimePasses();
+#Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness(true);
+#Endif;
 ];
 
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
@@ -1355,7 +1380,6 @@ Object thedark "Darkness"
 #Stub AfterPrompt     0;
 #Stub Amusing         0;
 #Stub BeforeParsing   0;
-#Stub DarkToDark      0;
 #Stub DeathMessage    0;
 #Stub GamePostRoutine 0;
 #Stub GamePreRoutine  0;
@@ -1369,3 +1393,6 @@ Object thedark "Darkness"
 #Stub UnknownVerb     1;
 !NO #Stub ChooseObjects   2;
 !NO #Stub ParserError     1;
+#Ifndef OPTIONAL_NO_DARKNESS;
+#Stub DarkToDark      0;
+#Endif;

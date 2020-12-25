@@ -95,7 +95,9 @@ Constant AND_WORD     = 'and';
 Constant THEN1__WD    = 'then';
 Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
                                    ! for commas in parse buffers
+#Ifndef OPTIONAL_NO_DARKNESS;
 Attribute light;
+#Endif;
 Attribute edible;
 Attribute absent;
 Attribute talkable;
@@ -361,7 +363,11 @@ Default MAX_CARRIED        32;
 #IfDef INITIAL_LOCATION_VALUE;
 Global location = INITIAL_LOCATION_VALUE;		! Must be the first global to show location name
 #IfNot;
-Global location = thedark;						! Must be the first global to show location name
+	#Ifdef OPTIONAL_NO_DARKNESS;
+	Global location = Directions;						! Must be the first global to show location name
+	#IfNot;
+	Global location = thedark;						! Must be the first global to show location name
+	#EndIf;
 #EndIf;
 
 Global status_field_1 = 0; ! Must be the second global to show score or hours

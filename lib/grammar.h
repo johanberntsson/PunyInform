@@ -314,10 +314,12 @@ Verb 'wear'
 ];
 
 [ ExamineSub x;
+#Ifndef OPTIONAL_NO_DARKNESS;
 	if(location == thedark) {
 		PrintMsg(MSG_EXAMINE_DARK);
 		rtrue;
 	}
+#Endif;
     if (noun.description == 0) {
         if (noun has container) {
             if (noun has open or transparent) <<Search noun>>;
@@ -549,7 +551,9 @@ Verb 'wear'
 ];
 
 [ SearchSub _f _i;
+#Ifndef OPTIONAL_NO_DARKNESS;
 	if(location == thedark) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
+#Endif;
 	if (ObjectIsUntouchable(noun)) return;
 	objectloop(_i in noun) if(_i hasnt concealed && _i hasnt scenery) _f++;
 	if(noun has supporter) {
@@ -1404,11 +1408,17 @@ Global scope_cnt;
 #IfV5;
 	style bold;
 #EndIf;
-	! write the room name
+
+	! Print the room name
+#Ifdef OPTIONAL_NO_DARKNESS;
+	_ceil = ScopeCeiling(player, _last_level);
+#Ifnot;
 	if(location == thedark)
 		_ceil = location;
 	else
 		_ceil = ScopeCeiling(player, _last_level);
+#Endif;
+
 	_top_ceil = _ceil;
 
 	if(_ceil == location) {
@@ -1425,98 +1435,101 @@ Global scope_cnt;
 #IfV5;
 	style roman;
 #EndIf;
+#Ifndef OPTIONAL_NO_DARKNESS;
 	if(location == thedark) {
 		@new_line;
 		PrintOrRun(location, description);
-	} else {
-		_obj = parent(player);
-		while(_obj ~= _ceil or 0) {
-			if(_obj has supporter)
-				print " (on ";
-			else
-				print " (in ";
-			print (the) _obj, ")";
-			_obj = parent(_obj);
-		}
-		while(_ceil ~= player or 0) {
-			if(_describe_room) {
-				if(_ceil == location) {
-					@new_line;
-					PrintOrRun(_ceil, description);
-				} else if(_ceil.inside_description ~= 0 or NULL) {
-					@new_line;
-					PrintOrRun(_ceil, inside_description);
-				}
-			} else if(_ceil == location)
+		jump EndOfLook;
+	}
+#Endif;
+	_obj = parent(player);
+	while(_obj ~= _ceil or 0) {
+		if(_obj has supporter)
+			print " (on ";
+		else
+			print " (in ";
+		print (the) _obj, ")";
+		_obj = parent(_obj);
+	}
+	while(_ceil ~= player or 0) {
+		if(_describe_room) {
+			if(_ceil == location) {
 				@new_line;
+				PrintOrRun(_ceil, description);
+			} else if(_ceil.inside_description ~= 0 or NULL) {
+				@new_line;
+				PrintOrRun(_ceil, inside_description);
+			}
+		} else if(_ceil == location)
+			@new_line;
 
-			also_flag = false;
-			! write intial and describe messages in a new paragraph
-			objectloop(_obj in _ceil && _obj hasnt scenery or concealed && _obj ~= player) {
-				give _obj workflag;
-				if(_obj.&describe) {
-					if(PrintOrRun(_obj, describe, 0)) {
-						_initial_found = true;
-						give _obj ~workflag;
-						also_flag = true;
-						continue;
-					}
-				}
-				if(_obj has container or door) {
-					if(_obj has open) {
-						_desc_prop = when_open;
-					} else {
-						_desc_prop = when_closed;
-					}
-				} else if(_obj has switchable) {
-					if(_obj has on) {
-						_desc_prop = when_on;
-					} else {
-						_desc_prop = when_off;
-					}
-				} else {
-					_desc_prop = initial;
-				}
-				if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
+		also_flag = false;
+		! write intial and describe messages in a new paragraph
+		objectloop(_obj in _ceil && _obj hasnt scenery or concealed && _obj ~= player) {
+			give _obj workflag;
+			if(_obj.&describe) {
+				if(PrintOrRun(_obj, describe, 0)) {
 					_initial_found = true;
 					give _obj ~workflag;
-					@new_line;
-					PrintOrRun(_obj, _desc_prop);
 					also_flag = true;
+					continue;
 				}
 			}
-
-			! write any remaining objects in a new paragraph
-			if(parent(_ceil) == 0) {
-				_you_can_see_1 = _ListObjsMsg;
-				_you_can_see_2 = " here.^";
+			if(_obj has container or door) {
+				if(_obj has open) {
+					_desc_prop = when_open;
+				} else {
+					_desc_prop = when_closed;
+				}
+			} else if(_obj has switchable) {
+				if(_obj has on) {
+					_desc_prop = when_on;
+				} else {
+					_desc_prop = when_off;
+				}
 			} else {
-				_you_can_see_1 = _ListObjsInOnMsg;
-				_you_can_see_2 = ".^";
+				_desc_prop = initial;
 			}
-			newline_flag = true;
-			if(PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
+			if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
+				_initial_found = true;
+				give _obj ~workflag;
+				@new_line;
+				PrintOrRun(_obj, _desc_prop);
+				also_flag = true;
+			}
+		}
+
+		! write any remaining objects in a new paragraph
+		if(parent(_ceil) == 0) {
+			_you_can_see_1 = _ListObjsMsg;
+			_you_can_see_2 = " here.^";
+		} else {
+			_you_can_see_1 = _ListObjsInOnMsg;
+			_you_can_see_2 = ".^";
+		}
+		newline_flag = true;
+		if(PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
 
 
 #IfDef OPTIONAL_PRINT_SCENERY_CONTENTS;
-			newline_flag = true;
-			objectloop(_obj in _ceil && (_obj has scenery or concealed) &&
-					(_obj has supporter ||
-						(_obj has container && _obj has transparent or open)) &&
-						IndirectlyContains(_obj, player) == false) {
-				if(PrintContents(_ListObjsInOnMsg, _obj)) {
-					print (string) ". ";
-					newline_flag = false;
-				}
+		newline_flag = true;
+		objectloop(_obj in _ceil && (_obj has scenery or concealed) &&
+				(_obj has supporter ||
+					(_obj has container && _obj has transparent or open)) &&
+					IndirectlyContains(_obj, player) == false) {
+			if(PrintContents(_ListObjsInOnMsg, _obj)) {
+				print (string) ". ";
+				newline_flag = false;
 			}
-			if(newline_flag == false)
-				print "^";
+		}
+		if(newline_flag == false)
+			print "^";
 #EndIf;
 
-			! Descend one level
-			_ceil = ScopeCeiling(player, _ceil);
-		} ! for(::)
-	}
+		! Descend one level
+		_ceil = ScopeCeiling(player, _ceil);
+	} ! while
+.EndOfLook;
 	! finally, call the optional library entry routine
 	LookRoutine();
 	_action = action; action = ##Look;
@@ -1631,7 +1644,9 @@ Global scope_cnt;
 		if(debug_flag & 1) print "(", (name) _vehicle, ").before()^";
 #EndIf;
 		_saved_location = location;
+#Ifndef OPTIONAL_NO_DARKNESS;
 		if(location == thedark) location = real_location;
+#Endif;
 		_vehicle_mode = RunRoutines(_vehicle, before);
 		if(_vehicle_mode ~= 3) location = _saved_location;
 		if(_vehicle_mode == 0) { PrintMsg(MSG_GO_FIRST_LEAVE, parent(player)); rtrue; }
