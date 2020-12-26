@@ -260,12 +260,15 @@ Constant ONE_SPACE_STRING = " ";
 ! print (object) _visibility_ceiling;
 #Ifdef OPTIONAL_NO_DARKNESS;
 	if (_visibility_ceiling == location)
+		_PrintObjName(location); ! If it's light, location == real_location
+else
+	print (The) _visibility_ceiling;
 #Ifnot;
 	if (location == thedark || _visibility_ceiling == location)
-#Endif;
 		_PrintObjName(location); ! If it's light, location == real_location
-	else
-		print (The) _visibility_ceiling;
+else
+	print (The) _visibility_ceiling;
+#Endif;
 
 #Ifdef STATUSLINE_TIME;
 	_PrintStatusLineTime(_width);
