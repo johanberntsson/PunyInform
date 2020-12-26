@@ -13,7 +13,7 @@ toy: Taken.
 torch: Taken.
 
 > open box
-You open the box.
+You open the box, revealing nothing.
 
 [The score has just gone up by 3 points.]
 
@@ -32,7 +32,6 @@ In that game you scored 8 out of a possible 7, in 5 turns.
 
 Would you like to RESTART, RESTORE, give the FULL score for that game or QUIT? 
 restart
-
 
 
 The testsuite is open for business!
@@ -54,7 +53,7 @@ Taken.
 [The score has just gone up by 1 point.]
 
 > open box
-You open the box.
+You open the box, revealing nothing.
 
 [The score has just gone up by 3 points.]
 
