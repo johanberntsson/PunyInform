@@ -3,7 +3,7 @@
 I don't suppose John would care for that.
 
 > open box
-You open the box.
+You open the box, revealing a red book.
 
 > take ladder
 Taken.

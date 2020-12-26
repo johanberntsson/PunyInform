@@ -11,7 +11,7 @@ toy: Taken.
 torch: Taken.
 
 > open box
-You open the box.
+You open the box, revealing nothing.
 
 > put all in box
 torch: You put the torch into the box.
@@ -27,7 +27,6 @@ one point: You put the one point into the box.
 In that game you scored 4 out of a possible 4, in 5 turns.
 
 Would you like to RESTART, RESTORE or QUIT? restart
-
 
 
 The testsuite is open for business!
@@ -47,7 +46,7 @@ That is not a verb I recognize.
 Taken.
 
 > open box
-You open the box.
+You open the box, revealing nothing.
 
 > put point in box
 You put the one point into the box.

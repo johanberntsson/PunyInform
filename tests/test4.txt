@@ -56,7 +56,8 @@ You close the red box.
 You can't see any such thing.
 
 > open red box
-You open the red box.
+You open the red box, revealing a transparent box (which contains a red cube), a
+small red ball, a small blue ball and a small green ball.
 
 > take red box
 Taken.
