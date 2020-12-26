@@ -854,9 +854,9 @@ Include "parser.h";
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
 			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return;
-		} else
+		}
 #EndIf;
-			p_obj.time_left = p_timer;
+		p_obj.time_left = p_timer;
 	}
 #IfDef DEBUG;
 	if(debug_flag & 4) {
@@ -896,9 +896,9 @@ Include "parser.h";
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
 			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return;
-		} else
+		}
 #EndIf;
-			p_obj.time_left = 0;
+		p_obj.time_left = 0;
 	}
 	if(_i <= current_timer)
 		current_timer--;
