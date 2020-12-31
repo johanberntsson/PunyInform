@@ -26,14 +26,15 @@ System_file;
 #IfNot;
 	@sread buffer parse;
 #EndIf;
+
+	! call library entry routine
+	BeforeParsing();
+
 	num_words = parse -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
 	_result = 2 * (parse -> 1) + 1;
 	parse-->_result = 0;
 	parse-->(_result + 1) = 0;
-
-	! call library entry routine
-	BeforeParsing();
 ];
 
 [ YesOrNo;

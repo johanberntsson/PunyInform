@@ -1,0 +1,18 @@
+> i
+You are empty handed.
+
+> take all slowly
+battery: Taken.
+mounting: Taken.
+toolbox: Taken.
+
+> take all
+There is nothing to take.
+
+> slowly i
+You're carrying a toolbox, a mounting and a battery.
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]

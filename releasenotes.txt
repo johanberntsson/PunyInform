@@ -329,4 +329,5 @@ v1.9: bug fix and new feature release
 - Added constant OPTIONAL_NO_DARKNESS which removes handling of light and dark.
 - Fixed bug with scope not being updated when the player is in a dark
   container and opens it.
+- Fixed bug in BeforeParsing call
   

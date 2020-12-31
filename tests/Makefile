@@ -7,9 +7,9 @@ thirdnoun:
 	inform +../lib -v3 thirdnoun.inf
 	frotz thirdnoun.z3
 
-grabifnotheld:
-	inform +../lib -v3 grabifnotheld.inf
-	frotz grabifnotheld.z3
+test-beforeparsing:
+	inform +../lib -v3 test-beforeparsing.inf
+	frotz test-beforeparsing.z3
 
 containers:
 	inform +../lib -v3 containers.inf

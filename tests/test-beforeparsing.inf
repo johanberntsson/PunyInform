@@ -1,0 +1,103 @@
+! Testing what is/SopeWithin and custom meta
+!
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+
+Constant Story      "Parser test";
+Constant Headline   "^A parser test suite for PunyInform.^";
+Serial "200827";
+Constant INITIAL_LOCATION_VALUE = LitRoom;
+
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
+!Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+! -- testing BeforeParsing
+[ BeforeParsing _i _j; 
+    ! remove some adverbs from parse before trying to parse the input
+    !_PrintParseArray(parse);
+    for(_i = 0, _j = 0 : _i < parse -> 1 : _i++) {
+        ! skip (continue) if adverbs such as slowly found
+        if((parse + 2 + _i * 4) --> 0 == 'slowly') {
+            !print "skipped slowly^";
+            continue;
+        }
+        if(_i ~= _j) {
+            (parse + 2 + _j * 4) --> 0  = (parse + 2 + _i * 4) --> 0;
+            (parse + 2 + _j * 4) --> 1  = (parse + 2 + _i * 4) --> 1;
+        }
+        _j = _j + 1;
+    }
+    parse -> 1 = _j;
+    !_PrintParseArray(parse);
+];
+
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#EndIf;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+
+Object LitRoom "Lit Room"
+	with
+		description [;
+			print "You are in a brightly lit room.^";
+		],
+	has light;
+
+Object -> Battery "battery"
+    with
+        name 'battery';
+
+Object -> Mounting "mounting"
+    with
+        name 'mounting';
+
+Object -> Toolbox "toolbox"
+    with
+        name 'toolbox';
+
+[Initialise;
+	print "^^The testsuite is open for business!^^";
+	print "If you drop the ball in the dark room it will still be in scope.^";
+
+#IfDef USEINFORM;
+    location=INITIAL_LOCATION_VALUE;;
+#EndIf;
+];
+
+
