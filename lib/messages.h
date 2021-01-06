@@ -414,11 +414,15 @@ Default LibraryMessages 0;
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg_1, ".";
+#Iftrue MSG_OPEN_SUCCESS < 1000;
 	MSG_OPEN_SUCCESS:
-		print "You open ", (the) noun, ", revealing ";
-		if(noun hasnt transparent && PrintContents(0, noun)==false)
-			print "nothing";
+		print "You open ", (the) noun;
+		if(noun has container && noun hasnt transparent) {
+			print ", revealing ";
+			if(PrintContents(0, noun)==false) print "nothing";
+		}
 		".";
+#Endif;
 	MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS,
 		MSG_UNLOCK_SUCCESS, MSG_EXIT_SUCCESS:
 		"You ", (verbname) p_arg_1, " ", (the) noun, ".";
