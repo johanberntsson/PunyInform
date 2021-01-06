@@ -9,7 +9,7 @@
 ! 2: The game programmer tells the extension to just indent the quote box a
 !      fixed number of characters.
 
-! To use (1), set the constant QUOTE_V3_SCREEN_WIDTH to the desired width, which 
+! To use (1), set the constant QUOTE_V3_SCREEN_WIDTH to the desired width, which
 ! has to be > 6.
 
 ! To use (2), set the constant QUOTE_V3_SCREEN_WIDTH to the desired number of
@@ -24,7 +24,7 @@
 ! Array quote_1 static --> 5 35
 ! "When I die, I want to go peacefully"
 ! "in my sleep like my grandfather."
-! "Not screaming in terror, like the" 
+! "Not screaming in terror, like the"
 ! "passengers in his car."
 ! "               -- Jack Handey";
 !
@@ -78,11 +78,11 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
 	if(_quote_width > QUOTE_MAX_LENGTH) {
-		"ERROR: quote_box: Tried to print quote wider than ", QUOTE_MAX_LENGTH, " characters!^"; 
+		"ERROR: quote_box: Tried to print quote wider than ", QUOTE_MAX_LENGTH, " characters!^";
 	}
 #IfNot;
 	if(_quote_width > QUOTE_MAX_LENGTH) {
-		"ERROR: quote_box #1!^"; 
+		"ERROR: quote_box #1!^";
 	}
 #EndIf;
 #EndIf;
@@ -110,8 +110,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #IfV3;
 			for(_j = -2 : _j < _quote_width: _j++) @print_char '-';
 #EndIf;
-		} else 
-			_k =  p_quote_data-->_i;
+		}
 #IfV5;
 		style reverse;
 #EndIf;
@@ -126,7 +125,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #EndIf;
 		@new_line;
 	}
-	
+
 !	print (string) p_line_1;
 !	@new_line;
 #IfV5;
@@ -143,4 +142,3 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #EndIf;
 !	" Ok.";
 ];
-
