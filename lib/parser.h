@@ -45,7 +45,7 @@ System_file;
             if(parse --> 1 == 'yes' or 'y//') rtrue;
             if(parse --> 1 == 'no' or 'n//') rfalse;
         }
-        PrintMsg(MSG_YES_OR_NO, true);
+        PrintMsg(MSG_YES_OR_NO);
     }
 ];
 

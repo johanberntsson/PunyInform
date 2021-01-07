@@ -330,3 +330,4 @@ v1.9: bug fix and new feature release
 - Fixed bug with scope not being updated when the player is in a dark
   container and opens it.
 - Fixed bug in BeforeParsing call
+- Fixed inconsistent message format (issue 58)

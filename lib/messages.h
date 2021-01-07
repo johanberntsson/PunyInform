@@ -80,12 +80,6 @@ Constant MSG_GO_CANT_GO "You can't go that way.";
 #Ifndef MSG_SAVE_SUCCESS;
 Constant MSG_SAVE_SUCCESS "Ok.";
 #Endif;
-#Ifndef MSG_YES_OR_NO;
-Constant MSG_YES_OR_NO "Please answer yes or no: ";
-#Endif;
-#Ifndef MSG_RESTART_CONFIRM;
-Constant MSG_RESTART_CONFIRM "Are you sure you want to restart? ";
-#Endif;
 #Ifndef MSG_INSERT_ITSELF;
 Constant MSG_INSERT_ITSELF "Cannot put something inside itself.";
 #Endif;
@@ -288,6 +282,8 @@ Default MSG_PARSER_NO_NEED_REFER_TO 116;
 Default MSG_PARSER_DONT_UNDERSTAND_WORD 117;
 Default MSG_INSERT_NOT_CONTAINER 118;
 Default MSG_EMPTY_CANT_CONTAIN 119; ! Extended verbset, but uses same msg as INSERT
+Default MSG_YES_OR_NO 120;
+Default MSG_RESTART_CONFIRM 121;
 
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
@@ -629,6 +625,14 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #EndIf;
 	MSG_INSERT_NOT_CONTAINER, MSG_EMPTY_CANT_CONTAIN:
 		print_ret (The) p_arg_1, " can't contain things.";
+#IfTrue MSG_YES_OR_NO < 1000;
+	MSG_YES_OR_NO:
+		print "Please answer yes or no: ";
+#EndIf;
+#IfTrue MSG_RESTART_CONFIRM < 1000;
+	MSG_RESTART_CONFIRM:
+		print "Are you sure you want to restart? ";
+#Endif;
 
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
