@@ -12,8 +12,7 @@ finish with the world's end in 2012 AD.
 At the moment, even the simplest questions confuse you.
 
 > restart
-Are you sure you want to restart? 
-no
+Are you sure you want to restart? no
 
 > restart me
 You're not something you can switch.

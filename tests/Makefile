@@ -3,9 +3,9 @@ all: runtests
 runtests:
 	ruby runtests.rb
 
-thirdnoun:
-	inform +../lib -v3 thirdnoun.inf
-	frotz thirdnoun.z3
+test-allbut:
+	inform +../lib -v3 test-allbut.inf
+	frotz test-allbut.z3
 
 test-beforeparsing:
 	inform +../lib -v3 test-beforeparsing.inf
