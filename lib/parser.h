@@ -938,7 +938,7 @@ System_file;
 		! we don't know yet know what 'second' is, so we
 		! add all reasonable objects and filter later
 		MULTIHELD_OBJECT, MULTIEXCEPT_OBJECT:
-			_addobj = _obj in player;
+			_addobj = _obj in player && _obj hasnt worn;
 		MULTI_OBJECT:
 			_p = parent(_obj);
 			_ceil = TouchCeiling(player);
