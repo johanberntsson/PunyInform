@@ -595,8 +595,7 @@ Include "parser.h";
 ];
 
 [ RunEachTurn _i _obj _scope_count;
-	! Loop over the scope to find possible react_before routines
-	! to run in each object, if it's found stop the action by returning true
+	! Run all each_turn routines for location and all objects in scope.
 #IfDef DEBUG;
 	if(debug_flag & 1 && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
 #EndIf;

@@ -31,6 +31,8 @@
 ! before including this extension, to say the maximum number of moves or
 ! minutes the player can ask to wait. The default is 1440 for both.
 
+System_file;
+
 Global waittime_waiting = false;
 
 #Ifndef MAX_WAIT_MOVES;
