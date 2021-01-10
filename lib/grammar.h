@@ -267,7 +267,7 @@ Verb 'wear'
 
 [ DropSub _p;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
-	if(noun has worn) { PrintMsg(MSG_DROP_WORN); rtrue; }
+	if(_DisrobeIfWorn(noun)) rtrue;
 	_p = parent(player);
 	!if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
@@ -390,7 +390,7 @@ Verb 'wear'
 	}
 
 	if(_GrabIfNotHeld(noun)) rtrue;
-	if(noun has worn) { PrintMsg(MSG_INSERT_WORN); rtrue; }
+	if(_DisrobeIfWorn(noun)) rtrue;
 
 	! run before on receiver
 #IfDef DEBUG;
@@ -503,7 +503,7 @@ Verb 'wear'
 	_ancestor = CommonAncestor(noun, second);
 	if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
 	if(_GrabIfNotHeld(noun)) rtrue;
-	if(noun has worn) { PrintMsg(MSG_PUTON_WORN); rtrue; }
+	if(_DisrobeIfWorn(noun)) rtrue;
 
 	! run before on receiver
 #IfDef DEBUG;
@@ -626,7 +626,7 @@ Verb 'wear'
 [ ThrowAtSub;
 	if(_GrabIfNotHeld(noun)) rtrue;
 	if(ObjectIsUntouchable(second)) return;
-	if(noun has worn) { PrintMsg(MSG_THROW_WORN); rtrue; }
+	if(_DisrobeIfWorn(noun)) rtrue;
 	if(second > 1) {
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) second, ").before()^";

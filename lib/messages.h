@@ -170,7 +170,7 @@ Default MSG_EAT_ANIMATE = 7;
 Default MSG_DROP_NOT_HOLDING = 8;
 Default MSG_OPEN_SUCCESS = 9;
 Default MSG_CLOSE_SUCCESS = 10;
-Default MSG_THROW_WORN = 11;
+! 11 is currently unused
 Default MSG_SHOW_NOT_HOLDING = 12;
 Default MSG_SHOW_SUCCESS = 13;
 Default MSG_GIVE_NOT_HOLDING = 14;
@@ -261,9 +261,9 @@ Default MSG_SEARCH_DARK 96;
 #Endif;
 Default MSG_EXAMINE_ONOFF 97;
 Default MSG_ORDERS_WONT 98;
-Default MSG_DROP_WORN 99;
-Default MSG_INSERT_WORN 100;
-Default MSG_PUTON_WORN 101;
+Default MSG_AUTO_TAKE 99;
+Default MSG_AUTO_DISROBE = 100;
+! 101 is currently unused
 Default MSG_TAKE_BELONGS 102;
 Default MSG_TAKE_PART_OF 103;
 Default MSG_TAKE_NOT_AVAILABLE 104;
@@ -349,13 +349,12 @@ Constant MSG_MILD_DEFAULT "Quite.";
 Constant MSG_STRONG_DEFAULT "Real adventurers do not use such language.";
 #EndIf;
 
-Default MSG_BLOW_DEFAULT 300;
-Default MSG_WAVE_DEFAULT 301;
-Default MSG_EMPTY_ALREADY_EMPTY 302;
-Default MSG_SET_DEFAULT 303;
-Default MSG_SET_TO_DEFAULT 304;
+Default MSG_BLOW_DEFAULT 200;
+Default MSG_WAVE_DEFAULT 201;
+Default MSG_EMPTY_ALREADY_EMPTY 202;
+Default MSG_SET_DEFAULT 203;
+Default MSG_SET_TO_DEFAULT 204;
 #EndIf;
-
 
 
 Default LibraryMessages 0;
@@ -470,8 +469,14 @@ Default LibraryMessages 0;
 		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ".";
 	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
 		"You switch ", (the) noun, " ", (OnOff) noun, ".";
-	MSG_DROP_WORN, MSG_INSERT_WORN, MSG_PUTON_WORN, MSG_THROW_WORN:
-		"First you'd have to take off ", (the) noun, ".";
+#Iftrue MSG_AUTO_TAKE < 1000;
+	MSG_AUTO_TAKE:
+	print "(first taking ", (the) p_arg_1, ")^";
+#Endif;
+#Iftrue MSG_AUTO_DISROBE < 1000;
+	MSG_AUTO_DISROBE:
+		print "(first taking off ", (the) p_arg_1, ")^";
+#Endif;
 #IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;
 	MSG_PARSER_NOTHING_TO_VERB:
 		"There is nothing to ",  (verbname) verb_word,".";

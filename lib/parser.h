@@ -643,11 +643,26 @@ System_file;
 	! return true if p_noun isn't held by the player at the end of the call
 	! (so that you can use it like: if(_GrabIfNotHeld(...)) { }
 	if(p_noun in player) rfalse;
-	print "(first taking ", (the) p_noun, ")^";
+	PrintMsg(MSG_AUTO_TAKE, p_noun);
 	keep_silent = true;
 	PerformAction(##Take, p_noun);
 	keep_silent = false;
 	if (p_noun notin player) rtrue;
+	rfalse;
+];
+
+[ _DisrobeIfWorn p_noun;
+	! return true if p_noun isn't held by the player at the end of the call
+	! (so that you can use it like: if(_GrabIfNotHeld(...)) { }
+	if(p_noun notin player || p_noun hasnt worn) rfalse;
+!	PrintMsg(MSG_AUTO_DISROBE, p_noun);
+!	indirect(print_msg, MSG_AUTO_DISROBE, p_noun);
+	PrintMsg(MSG_AUTO_DISROBE, p_noun);
+!	print "(first taking off ", (the) p_noun, ")^";
+	keep_silent = true;
+	PerformAction(##Disrobe, p_noun);
+	keep_silent = false;
+	if (p_noun notin player || p_noun has worn) rtrue;
 	rfalse;
 ];
 

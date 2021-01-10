@@ -331,3 +331,5 @@ v1.9: bug fix and new feature release
   container and opens it.
 - Fixed bug in BeforeParsing call
 - Fixed inconsistent message format (issue 58)
+- Added auto-disrobe action for actions Drop, ThrowAt, Insert and PutOn.
+- Put auto-take message in messages.h as MSG_AUTO_TAKE.
