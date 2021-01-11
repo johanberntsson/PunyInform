@@ -879,7 +879,7 @@ System_file;
 				multiple_objects --> (multiple_objects --> 0) = _noun;
 				! check if we should continue: and or comma
 				! not followed by a verb
-				if(_PeekAtNextWord() == comma_word or AND_WORD or THEN1__WD) {
+				if(_PeekAtNextWord() == comma_word or AND_WORD) {
 					if((((parse + 2 ) --> (2 * wn)) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
 						! this is not a verb so we assume it is a list
 						! of nouns instead. Continue to parse
@@ -1380,7 +1380,7 @@ Array guess_num_objects->5;
 			! check if separator or end of line
 			_i = wn - 1; ! keep for error message since wn changed by NextWord
 			_pattern = NextWord();
-			if(_pattern == 0 or comma_word or THEN1__WD) {
+			if(_pattern == 0 or comma_word) {
 				action = ##Go;
 				noun = Directions;
 				inp1 = Directions;

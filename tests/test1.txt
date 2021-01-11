@@ -69,7 +69,6 @@ There is nothing to drop.
 Taken.
 
 > s
-
 White Room
 It's all white. The ball room lies to the north.
 
@@ -112,7 +111,6 @@ red box: Taken.
 transparent box: Taken.
 
 > n
-
 Ball Room
 
 There is a blue table in the middle of the room.

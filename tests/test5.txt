@@ -2,7 +2,6 @@
 Taken.
 
 > e
-
 Darkness
 It is pitch dark here!
 
@@ -19,11 +18,9 @@ You can't see any such thing.
 ball: Taken.
 
 > w
-
 Lit Room
 
 > w
-
 Darkness
 It is pitch dark here!
 

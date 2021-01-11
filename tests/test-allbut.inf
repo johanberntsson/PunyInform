@@ -1,4 +1,6 @@
-! Testing what is/SopeWithin and custom meta
+! Testing that held and creature tokens parse all/all-but correctly
+! Testing issue 60 (sentence splitting)
+! 
 !
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
@@ -57,11 +59,20 @@ Include "puny.h";
 Include "Grammar";
 #Endif;
 
+Object AnotherRoom "Another Room"
+	with
+		description [;
+			print "You are the other room.^";
+		],
+		n_to LitRoom,
+	has light;
+
 Object LitRoom "Lit Room"
 	with
 		description [;
 			print "You are in a brightly lit room.^";
 		],
+		s_to AnotherRoom,
 	has light;
 
 Object -> Battery "battery"

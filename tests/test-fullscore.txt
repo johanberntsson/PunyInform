@@ -34,10 +34,10 @@ Would you like to RESTART, RESTORE, give the FULL score for that game or QUIT?
 restart
 
 
+
 The testsuite is open for business!
 
 Parser test
-
 Lit Room
 You are in a brightly lit room.
 

@@ -7,6 +7,15 @@ You are now wearing the cloak.
 > remove all but cloak
 battery: Taken.
 
+> drop all
+battery: Dropped.
+
+> take battery.s
+Taken.
+
+Another Room
+You are the other room.
+
 > quit
 Are you sure you want to quit? yes
 

@@ -31,7 +31,6 @@ small green ball: Taken.
 Taken.
 
 > s
-
 White Room
 It's all white. The ball room lies to the north.
 
@@ -63,7 +62,6 @@ small red ball, a small blue ball and a small green ball.
 Taken.
 
 > n
-
 Ball Room
 
 There is a blue table in the middle of the room.

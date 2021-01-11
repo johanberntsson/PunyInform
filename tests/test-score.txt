@@ -29,10 +29,10 @@ In that game you scored 4 out of a possible 4, in 5 turns.
 Would you like to RESTART, RESTORE or QUIT? restart
 
 
+
 The testsuite is open for business!
 
 Parser test
-
 Lit Room
 You are in a brightly lit room.
 

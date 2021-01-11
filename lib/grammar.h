@@ -1403,7 +1403,7 @@ Global scope_cnt;
 
 [ Look _obj _top_ceil _ceil _initial_found _describe_room
 	_you_can_see_1 _you_can_see_2 _desc_prop _last_level _action;
-	@new_line;
+	!@new_line;
 	if((lookmode == 1 && location hasnt visited) || lookmode == 2) _describe_room = true;
 #IfV5;
 	style bold;

@@ -14,7 +14,6 @@ Taken.
 rock: Dropped.
 
 > s
-
 Static box
 The room with the static box and static bag. Exits n
 
@@ -30,7 +29,6 @@ rock: Removed.
 rock: Dropped.
 
 > n
-
 Normal box
 
 There's a box here. In the box is a bag (which is empty).
@@ -38,7 +36,6 @@ There's a box here. In the box is a bag (which is empty).
 You can also see a rock here.
 
 > n
-
 Concealed box
 The room with the concealed box. Exits s
 
