@@ -756,6 +756,10 @@ System_file;
 		}
 
 		if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
+			if(_PeekAtNextWord() == ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
+				! we don't accept all/all-but with held or creature
+				return GPR_FAIL;
+			}
 			_noun = _GetNextNoun(p_parse_pointer, p_phase);
 			if(_noun == -2) return GPR_FAIL;
 			if(_noun == -1) return GPR_REPARSE;

@@ -1,12 +1,11 @@
 > remove all but battery
-You're not wearing the battery.
+cloak: Taken.
 
 > wear cloak
-(first taking the cloak)
 You are now wearing the cloak.
 
 > remove all but cloak
-There was nothing to remove.
+battery: Taken.
 
 > quit
 Are you sure you want to quit? yes

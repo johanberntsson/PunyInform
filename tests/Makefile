@@ -16,8 +16,8 @@ containers:
 	frotz containers.z3
 
 inform:
-	inform -v8 thirdnoun.inf
-	frotz thirdnoun.z8
+	inform -v8 test-allbut.inf
+	frotz test-allbut.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output

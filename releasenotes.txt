@@ -334,3 +334,4 @@ v1.9: bug fix and new feature release
 - Added auto-disrobe action for actions Drop, ThrowAt, Insert and PutOn.
 - Put auto-take message in messages.h as MSG_AUTO_TAKE.
 - DROP ALL and PUT ALL IN BOX will no longer include worn objects.
+- Stopped 'held' and 'creature' no match all and all-but sentences.
