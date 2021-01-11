@@ -1258,7 +1258,7 @@ Array guess_num_objects->5;
 						} else if(_word == ALL_WORD) {
 							PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 						} else {
-							PrintMsg(MSG_PARSER_CANT_SEE_SUCH_THING);
+							PrintMsg(MSG_PARSER_NOSUCHTHING);
 						}
 					} else {
 						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
