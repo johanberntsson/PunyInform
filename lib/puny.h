@@ -1244,7 +1244,10 @@ Object thedark "Darkness"
 
 	objectloop (_i in player) give _i moved ~concealed;
 
-	if(_j ~= 2) Banner();
+	if(_j ~= 2) {
+		Banner();
+		@new_line;
+	}
 
 	_InitFloatingObjects(); ! after initialise since location set there
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
