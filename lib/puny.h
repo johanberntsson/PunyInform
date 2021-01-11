@@ -840,7 +840,11 @@ Include "parser.h";
 	StartDaemon(p_obj, p_obj, p_timer);
 ];
 
+#IfDef OPTIONAL_ORDERED_TIMERS;
+[ StartDaemon p_obj p_array_val p_timer _i _order _order2 _obj _pos;
+#IfNot;
 [ StartDaemon p_obj p_array_val p_timer _i;
+#EndIf;
 	if(p_array_val == 0)
 		p_array_val = WORD_HIGHBIT + p_obj;
 	for (_i=0 : _i<active_timers : _i++)
@@ -867,7 +871,27 @@ Include "parser.h";
 		print "]^";
 	}
 #EndIf;
+#IfDef OPTIONAL_ORDERED_TIMERS;
+	_order = 100;
+	if(p_obj provides timer_order)
+		_order = p_obj.timer_order;
+	for(_i=_i-1 : _i>=0 : _i--) {
+		the_timers-->(_i+1) = the_timers-->_i;
+		_obj = the_timers-->_i & ~WORD_HIGHBIT;
+		_order2 = 100;
+		if(_obj provides timer_order)
+			_order2 = _obj.timer_order;
+		if(_order >= _order2) {
+			_pos = _i + 1;
+			break;
+		}
+	}
+	the_timers-->_pos = p_array_val;
+	if(current_timer >= _pos)
+		current_timer++;
+#IfNot;
 	the_timers-->_i = p_array_val;
+#EndIf;
 ];
 
 [ StopTimer p_obj;

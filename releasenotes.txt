@@ -340,3 +340,5 @@ v1.9: bug fix and new feature release
 - Fixed issue 60 (parsing error with multiple sentences containing directions)
 - Removed empty lines before room descriptions to fit more on small screens
 - Fixed bug in matching of 'creature' token.
+- Added OPTIONAL_ORDERED_TIMERS, allowing programmer to decide order of
+  different timers/daemons.
