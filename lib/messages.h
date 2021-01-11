@@ -357,7 +357,7 @@ Default MSG_SET_TO_DEFAULT 204;
 Default LibraryMessages 0;
 
 
-[ PrintMsg p_msg p_arg_1 p_arg_2;
+[ _PrintMsg p_msg p_arg_1 p_arg_2;
 	if(p_msg ofclass String)
 		print_ret (string) p_msg;
 

@@ -335,3 +335,5 @@ v1.9: bug fix and new feature release
 - Put auto-take message in messages.h as MSG_AUTO_TAKE.
 - DROP ALL and PUT ALL IN BOX will no longer include worn objects.
 - Stopped 'held' and 'creature' no match all and all-but sentences.
+- Changed PrintMsg to be a global variable, to save 150+ bytes. Doesn't affect
+  anything from a game programmer's point of view.
