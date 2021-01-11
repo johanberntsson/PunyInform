@@ -1,5 +1,7 @@
 transcript
 
+ask ladder about me
+ask john about me
 put john on box
 open box
 take ladder

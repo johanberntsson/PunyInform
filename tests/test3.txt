@@ -1,3 +1,9 @@
+> ask ladder about me
+You can only do that to something animate.
+
+> ask john about me
+There is no reply.
+
 > put john on box
 (first taking John)
 I don't suppose John would care for that.

@@ -339,3 +339,4 @@ v1.9: bug fix and new feature release
   anything from a game programmer's point of view.
 - Fixed issue 60 (parsing error with multiple sentences containing directions)
 - Removed empty lines before room descriptions to fit more on small screens
+- Fixed bug in matching of 'creature' token.

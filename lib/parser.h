@@ -769,10 +769,11 @@ System_file;
 			}
 			p_parse_pointer = parse + 2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {
+				phase2_necessary = true;
 				if(p_phase == PHASE2) {
 					PrintMsg(MSG_PARSER_ONLY_TO_ANIMATE);
+					return GPR_FAIL;
 				}
-				return GPR_FAIL;
 			}
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				phase2_necessary = true;
