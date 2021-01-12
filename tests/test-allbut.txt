@@ -10,11 +10,21 @@ battery: Taken.
 > drop all
 battery: Dropped.
 
-> take battery.s
+> take battery.s.n
 Taken.
 
 Another Room
 You are the other room.
+
+Lit Room
+
+> drop all
+battery: Dropped.
+
+> take battery.s
+Taken.
+
+Another Room
 
 > quit
 Are you sure you want to quit? yes

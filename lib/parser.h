@@ -1381,7 +1381,7 @@ Array guess_num_objects->5;
 			! check if separator or end of line
 			_i = wn - 1; ! keep for error message since wn changed by NextWord
 			_pattern = NextWord();
-			if(_pattern == 0 or comma_word) {
+			if(_pattern == 0 or comma_word or THEN1__WD) {
 				action = ##Go;
 				noun = Directions;
 				inp1 = Directions;
