@@ -3,6 +3,9 @@ transcript
 put me in box
 take battery
 put all in sack
+take battery
+put me and battery in sack
+take battery
 put me in sack
 look
 get out

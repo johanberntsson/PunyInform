@@ -2,7 +2,7 @@
 I think you wanted to say "steal something". Please try again.
 
 > put me on table then get off
-You put yourself on the table.
+You enter the table.
 
 You leave the table.
 

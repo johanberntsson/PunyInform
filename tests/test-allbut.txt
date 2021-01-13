@@ -7,8 +7,18 @@ Taken.
 > put all in sack
 battery: You put the battery into the sack.
 
+> take battery
+Taken.
+
+> put me and battery in sack
+yourself: You enter the sack.
+battery: You put the battery into the sack.
+
+> take battery
+Taken.
+
 > put me in sack
-You put yourself into the sack.
+But you are already there!
 
 > look
 Lit Room (in the sack)
@@ -16,13 +26,11 @@ You are in a brightly lit room.
 
 You can see a cloak and a box (which is empty) here.
 
-In the sack you can see a battery.
-
 > get out
 You leave the sack.
 
 > take battery
-Taken.
+You already have that.
 
 > drop battery
 Dropped.

@@ -88,14 +88,14 @@ Object -> Box "box"
     with
         name 'box',
         before [;
-        Receive: "Not a good idea";
+        Enter: "Not a good idea";
         ],
-    has open container static;
+    has open container static enterable;
 
 Object -> Sack "sack"
     with
         name 'sack',
-    has open container static;
+    has open container static enterable;
 
 [Initialise;
 	print "^^The testsuite is open for business!^^";
