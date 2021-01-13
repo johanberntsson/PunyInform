@@ -379,6 +379,7 @@ Verb 'wear'
 ];
 
 [ InsertSub _ancestor;
+	if(noun == player) <<Enter second>>;
 	receive_action = ##Insert;
 	if(ObjectIsUntouchable(second)) return;
 	if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
@@ -496,8 +497,8 @@ Verb 'wear'
 ];
 
 [ PutOnSub _ancestor;
+	if(noun == player) <<Enter second>>;
 	receive_action = ##PutOn;
-
 	if (ObjectIsUntouchable(second)) return;
 	if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
 	_ancestor = CommonAncestor(noun, second);

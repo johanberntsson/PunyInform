@@ -343,3 +343,6 @@ v1.9: bug fix and new feature release
 - Added OPTIONAL_ORDERED_TIMERS, allowing programmer to decide order of
   different timers/daemons.
 - Changed multiexcept token to generate before/after calls for all objects
+- "put me in box" is changed to "enter box" (a before routine can capture any of
+  the actions). Same with "put me on chair".
+  
