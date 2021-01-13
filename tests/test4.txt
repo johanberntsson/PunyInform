@@ -1,8 +1,10 @@
 > steal
 I think you wanted to say "steal something". Please try again.
 
-> put me on table then kill it
-You are not holding that!
+> put me on table then get off
+You put yourself on the table.
+
+You leave the table.
 
 > throw ball at air
 Do you mean the small blue ball, the small red ball or the small green ball?

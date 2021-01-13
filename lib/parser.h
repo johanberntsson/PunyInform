@@ -1611,13 +1611,9 @@ Array guess_num_objects->5;
 
 				switch(parser_check_multiple) {
 				MULTIEXCEPT_OBJECT:
-					! stop us from putting X in X, for example
+					! stop us from putting noun in second, for example
 					! > take sack
 					! > put all in sack
-					if(noun == player) {
-						PrintMsg(MSG_NOTHOLDINGTHAT);
-						rtrue;
-					}
 					if(noun == second) continue;
 				MULTIINSIDE_OBJECT:
 					! stop us from trying to take things that are not in

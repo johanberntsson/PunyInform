@@ -1,3 +1,32 @@
+> put me in box
+Not a good idea
+
+> take battery
+Taken.
+
+> put all in sack
+battery: You put the battery into the sack.
+
+> put me in sack
+You put yourself into the sack.
+
+> look
+Lit Room (in the sack)
+You are in a brightly lit room.
+
+You can see a cloak and a box (which is empty) here.
+
+In the sack you can see a battery.
+
+> get out
+You leave the sack.
+
+> take battery
+Taken.
+
+> drop battery
+Dropped.
+
 > remove all but battery
 cloak: Taken.
 
@@ -17,6 +46,8 @@ Another Room
 You are the other room.
 
 Lit Room
+
+You can see a box (which is empty) and a sack (which is empty) here.
 
 > drop all
 battery: Dropped.

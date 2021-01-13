@@ -84,6 +84,19 @@ Object -> Cloak "cloak"
         name 'cloak'
     has clothing;
 
+Object -> Box "box"
+    with
+        name 'box',
+        before [;
+        Receive: "Not a good idea";
+        ],
+    has open container static;
+
+Object -> Sack "sack"
+    with
+        name 'sack',
+    has open container static;
+
 [Initialise;
 	print "^^The testsuite is open for business!^^";
 	print "If you drop the ball in the dark room it will still be in scope.^";

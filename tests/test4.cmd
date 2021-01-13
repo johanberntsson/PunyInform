@@ -1,7 +1,7 @@
 transcript
 
 steal
-put me on table then kill it
+put me on table then get off
 throw ball at air
 small red
 throw ball at air

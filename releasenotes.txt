@@ -342,3 +342,4 @@ v1.9: bug fix and new feature release
 - Fixed bug in matching of 'creature' token.
 - Added OPTIONAL_ORDERED_TIMERS, allowing programmer to decide order of
   different timers/daemons.
+- Changed multiexcept token to generate before/after calls for all objects

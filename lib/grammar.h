@@ -61,7 +61,7 @@ Verb 'fill'
 
 Verb 'get'
   * 'out'/'off'/'up' 'of'/'from' noun         -> Exit
-  * 'up'/'out'                                -> Exit
+  * 'up'/'out'/'off'                          -> Exit
   * multi                                     -> Take
   * 'in'/'into'/'on'/'onto' noun              -> Enter
   * 'off' noun                                -> GetOff
@@ -389,7 +389,7 @@ Verb 'wear'
 		rtrue;
 	}
 
-	if(_GrabIfNotHeld(noun)) rtrue;
+	if(noun ~=player && _GrabIfNotHeld(noun)) rtrue;
 	if(_DisrobeIfWorn(noun)) rtrue;
 
 	! run before on receiver
@@ -502,7 +502,7 @@ Verb 'wear'
 	if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
 	_ancestor = CommonAncestor(noun, second);
 	if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
-	if(_GrabIfNotHeld(noun)) rtrue;
+	if(noun ~= player && _GrabIfNotHeld(noun)) rtrue;
 	if(_DisrobeIfWorn(noun)) rtrue;
 
 	! run before on receiver
