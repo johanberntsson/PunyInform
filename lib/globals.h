@@ -420,6 +420,7 @@ Global keep_silent;
 Global itobj = 0;        ! The object which is currently "it"
 Global himobj = 0;       ! The object which is currently "him"
 Global herobj = 0;       ! The object which is currently "her"
+Global themobj = 0;       ! The object which is currently "them"
 Global top_object;
 Global newline_flag;     ! Used by Look
 Global also_flag;        ! Used by Look

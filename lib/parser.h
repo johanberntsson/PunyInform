@@ -181,8 +181,9 @@ System_file;
 
 [ PronounNotice p_object;
 	if(p_object == 0 or player or Directions) return;
-	if(p_object has pluralname) return;
-	if(p_object has animate) {
+	if(p_object has pluralname) {
+		themobj = p_object;
+	} else if(p_object has animate) {
 		if(p_object has female) herobj = p_object;
 		else if(p_object has neuter) itobj = p_object;
 		else himobj = p_object;
@@ -458,11 +459,12 @@ System_file;
 	}
 
 	! check for pronouns
-	if(p_parse_pointer --> 0 == 'it' or 'him' or 'her') {
+	if(p_parse_pointer --> 0 == 'it' or 'him' or 'her' or 'them') {
 		switch(p_parse_pointer --> 0) {
 		'it': _noun = itobj;
 		'him': _noun = himobj;
 		'her': _noun = herobj;
+		'them': _noun = themobj;
 		}
 		if(_noun == 0) {
 			phase2_necessary = true;

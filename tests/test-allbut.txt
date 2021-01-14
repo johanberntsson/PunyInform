@@ -24,7 +24,7 @@ But you are already there!
 Lit Room (in the sack)
 You are in a brightly lit room.
 
-You can see a cloak and a box (which is empty) here.
+You can see some trousers and a box (which is empty) here.
 
 > get out
 You leave the sack.
@@ -36,12 +36,15 @@ You already have that.
 Dropped.
 
 > remove all but battery
-cloak: Taken.
+trousers: Taken.
 
-> wear cloak
-You are now wearing the cloak.
+> wear trousers
+You are now wearing the trousers.
 
-> remove all but cloak
+> x them
+There is nothing special about the trousers.
+
+> remove all but trousers
 battery: Taken.
 
 > drop all

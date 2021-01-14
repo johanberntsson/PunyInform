@@ -345,4 +345,5 @@ v1.9: bug fix and new feature release
 - Changed multiexcept token to generate before/after calls for all objects
 - "put me in box" is changed to "enter box" (a before routine can capture any of
   the actions). Same with "put me on chair".
+- Added 'them' as a pronoun for pluralname objects
   

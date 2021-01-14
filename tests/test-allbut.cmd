@@ -12,8 +12,9 @@ get out
 take battery
 drop battery
 remove all but battery
-wear cloak
-remove all but cloak
+wear trousers
+x them
+remove all but trousers
 drop all
 take battery.s.n
 drop all

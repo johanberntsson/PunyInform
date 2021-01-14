@@ -1305,7 +1305,7 @@ Global scope_cnt;
 ];
 
 [ PronounsSub;
-	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, "^";
+	print "Pronouns: it ", (name) itobj, ", he ", (name) himobj, ", she ", (name) herobj, ", them ", themobj, "^";
 ];
 
 [ PurloinSub;

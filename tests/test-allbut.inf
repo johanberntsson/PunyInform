@@ -79,10 +79,10 @@ Object -> Battery "battery"
     with
         name 'battery';
 
-Object -> Cloak "cloak"
+Object -> Trousers "trousers"
     with
-        name 'cloak'
-    has clothing;
+        name 'trousers'
+    has clothing pluralname;
 
 Object -> Box "box"
     with
