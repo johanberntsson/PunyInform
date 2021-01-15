@@ -2,6 +2,13 @@
 
 $is_windows = (ENV['OS'] == 'Windows_NT')
 
+def checkforfailures() 
+    if $some_tests_failed then
+        puts "\nSOME TESTS FAILED!"
+        exit
+    end
+end
+
 def runtest(filename, version, inform_args)
     basename = File.basename(filename, ".inf")
     command_file = basename + ".cmd"
@@ -49,15 +56,18 @@ $some_tests_failed = false
 
 puts "Testing v3 debug"
 Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
-exit if $some_tests_failed
+checkforfailures
 
 puts "Testing v3 release"
 Dir["*.inf"].sort.each { |filename| runtest filename, 3, "" }
-exit if $some_tests_failed
+checkforfailures
 
 puts "Testing v5 debug"
 Dir["*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
-exit if $some_tests_failed
+checkforfailures
 
 puts "Testing v5 release"
 Dir["*.inf"].sort.each { |filename| runtest filename, 5, "" }
+checkforfailures
+
+puts "\nALL TESTS PASSED"

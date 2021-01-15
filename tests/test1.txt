@@ -60,7 +60,7 @@ black cube: Taken.
 Dropped.
 
 > drop cubes
-red cube: Dropped.
+Dropped.
 
 > drop cubes
 There is nothing to drop.
