@@ -1,5 +1,8 @@
 transcript
 
+look
+i
+drop coat
 x bench
 stone
 s

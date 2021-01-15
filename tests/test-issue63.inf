@@ -66,6 +66,18 @@ Object Room "Room"
    n_to Park,
 has light;
 
+Object red_coat "red coat" selfobj
+   with
+      name 'red' 'coat',
+      description "a red coat",
+   has clothing;
+
+Object blue_coat "blue coat" Park
+   with
+      name 'blue' 'coat',
+      description "a blue coat",
+   has clothing;
+
 Object wooden_bench "wooden bench" Park
    with
       name 'bench' 'wooden',

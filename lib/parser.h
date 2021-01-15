@@ -202,6 +202,20 @@ System_file;
     return indirect(noun_filter);
 ];
 
+[ _CalculateObjectLevel p_obj;
+	! set priority levels for inclusion in which? 
+	! queries. Low level objects will only be
+	! considered if there are no higher levels in play
+	if(meta == true) {
+		! if meta then add all matching objects
+		return 5;
+	} 
+	if (p_obj has concealed) return 1;
+	if(p_obj has scenery) return 2;
+	if(action == ##Drop && p_obj notin player) return 3;
+	return 4;
+];
+
 [ _CheckNoun p_parse_pointer _i _j _n _p _obj _matches _which_object_level _which_best_level _current_word _name_array _name_array_len _best_score _result _stop;
 #IfDef DEBUG_CHECKNOUN;
 	print "Entering _CheckNoun!^";
@@ -275,18 +289,7 @@ System_file;
 				_n = _n + _result; ! number of words consumed
 				wn = _j;
 				if(_n > wn) {
-					if(meta == false && _obj has concealed) {
-						! this is a non-debug verb and since the object
-						! isn't obvious we don't consider it as an
-						! option for a future "which X?" question.
-						! However, we still remember it as last resort
-						! if nothing else matches
-						_which_object_level = 1;
-					} else if(meta == false && _obj has scenery) {
-						_which_object_level = 2;
-					} else {
-						_which_object_level = 3;
-					}
+					_which_object_level = _CalculateObjectLevel(_obj);
 					if(_n == _best_score) {
 						_matches++;
 						which_object-->_matches = _obj;
@@ -344,18 +347,7 @@ System_file;
 						_p = _p + 4;
 						_current_word = _p-->0;
 						if(_n >= _best_score) {
-							if(meta == false && _obj has concealed) {
-								! this is a non-debug verb and since the object
-								! isn't obvious we don't consider it as an
-								! option for a future "which X?" question.
-								! However, we still remember it as last resort
-								! if nothing else matches
-								_which_object_level = 1;
-							} else if(meta == false && _obj has scenery) {
-								_which_object_level = 2;
-							} else {
-								_which_object_level = 3;
-							}
+							_which_object_level = _CalculateObjectLevel(_obj);
 							if(_n == _best_score) {
 								_matches++;
 								which_object-->_matches = _obj;

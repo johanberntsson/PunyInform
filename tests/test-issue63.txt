@@ -1,3 +1,16 @@
+> look
+Park
+You are in a park. There is a wooden bench and a stone bench here. You can go
+south.
+
+You can see a blue coat here.
+
+> i
+You're carrying a red coat.
+
+> drop coat
+Dropped.
+
 > x bench
 Do you mean the wooden bench or the stone bench?
 
@@ -18,6 +31,8 @@ a wooden bench
 
 > n
 Park
+
+You can see a red coat and a blue coat here.
 
 > sit on bench
 Do you mean the wooden bench or the stone bench?
