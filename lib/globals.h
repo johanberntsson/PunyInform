@@ -498,10 +498,6 @@ Array buffer2->(MAX_INPUT_CHARS + 3);
 Array parse2->(2 + 4 * (MAX_INPUT_WORDS + 1));
 Array parse3->(2 + 4 * (MAX_INPUT_WORDS + 1));
 
-#IfDef DEBUG;
-Array printbuffer->300; ! Buffer is used to capture printing from sw_to / parse_name in _CheckNoun
-#EndIf;
-
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL  = 1;
 Constant RTE_VERBOSE = 2;

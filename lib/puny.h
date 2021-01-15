@@ -322,6 +322,15 @@ else
 ];
 #EndIf;
 
+#IfDef DEBUG;
+#IfnDef DebugParseNameObject;
+[ DebugParseNameObject p_obj;
+	@inc p_obj; ! Just to get rid of warning that p_obj isn't used
+	rfalse;
+];
+#EndIf;
+#EndIf;
+
 [ PrintShortName o;
     if (o == 0) { print "nothing"; rtrue; }
     switch (metaclass(o)) {

@@ -203,13 +203,13 @@ System_file;
 ];
 
 [ _CalculateObjectLevel p_obj;
-	! set priority levels for inclusion in which? 
+	! set priority levels for inclusion in which?
 	! queries. Low level objects will only be
 	! considered if there are no higher levels in play
 	if(meta == true) {
 		! if meta then add all matching objects
 		return 5;
-	} 
+	}
 	if (p_obj has concealed) return 1;
 	if(p_obj has scenery) return 2;
 	if(action == ##Drop && p_obj notin player) return 3;
@@ -266,20 +266,15 @@ System_file;
 #IfDef DEBUG;
 			! Problem: parse_name is an alias of sw_to, and debug verbs can
 			! reference any object in the game, some of which are rooms.
-			! Solution: If the object seems to be a room and the routine returns
-			! a valid object id, or it prints something and then returns true,
-			! don't consider it a match.
+			! Solution: If the object seems to be a room, we will not call
+			! parse_name, unless DebugParseNameObject(object) returns true
 			if(_obj.parse_name ofclass Routine) {
 				_j = wn;
-				@output_stream 3 printbuffer;
-				_result = _obj.parse_name();
-				@output_stream -3;
-				if(meta ~= 0 && parent(_obj) == 0
-						&& ~~(_obj provides describe or life or found_in or capacity)
-						&& (_result > Directions || _n + _result > parse->1
-							|| (_result == 1 && printbuffer-->0 > 0))) {
-					_result = 0;
-				}
+				_result = 0;
+				if(meta == 0 || parent(_obj) ~= 0
+						|| (_obj provides describe or life or found_in or capacity)
+						|| DebugParseNameObject(_obj))
+					_result = _obj.parse_name();
 #IfNot;
 			if(_obj.parse_name) {
 				_j = wn;
