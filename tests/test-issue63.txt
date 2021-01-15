@@ -1,0 +1,31 @@
+> x bench
+Do you mean the wooden bench or the stone bench?
+
+> stone
+a stone bench
+
+> s
+Room
+You are in a room. There is a wooden bench here and a park to the north.
+
+You can see a stone bench here.
+
+> x bench
+a stone bench
+
+> x wooden bench
+a wooden bench
+
+> n
+Park
+
+> sit on bench
+Do you mean the wooden bench or the stone bench?
+
+> wooden
+You enter the wooden bench.
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]
