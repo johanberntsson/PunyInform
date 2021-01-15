@@ -101,7 +101,7 @@ Object -> Sack "sack"
 	print "^^The testsuite is open for business!^^";
 	print "If you drop the ball in the dark room it will still be in scope.^";
 #IfDef USEINFORM;
-    location=INITIAL_LOCATION_VALUE;;
+    location=INITIAL_LOCATION_VALUE;
 #EndIf;
 ];
 

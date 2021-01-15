@@ -487,6 +487,7 @@ Constant MAX_FLOATING_OBJECTS  32;            ! Max number of objects that have 
 Array floating_objects --> MAX_FLOATING_OBJECTS + 1;
 
 Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
+Array which_level-->MAX_WHICH_OBJECTS;        ! type of which_object
 Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used
 
 Array buffer->(MAX_INPUT_CHARS + 3);

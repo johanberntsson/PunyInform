@@ -346,4 +346,6 @@ v1.9: bug fix and new feature release
 - "put me in box" is changed to "enter box" (a before routine can capture any of
   the actions). Same with "put me on chair".
 - Added 'them' as a pronoun for pluralname objects
+- Rewrote CheckNoun to improve Disambiguation (issue 63)
+
   

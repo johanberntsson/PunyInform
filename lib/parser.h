@@ -202,7 +202,7 @@ System_file;
     return indirect(noun_filter);
 ];
 
-[ _CheckNoun p_parse_pointer _i _j _n _p _obj _matches _low_priority_match_obj _low_priority_match_len _current_word _name_array _name_array_len _best_score _result _stop;
+[ _CheckNoun p_parse_pointer _i _j _n _p _obj _matches _which_object_level _which_best_level _current_word _name_array _name_array_len _best_score _result _stop;
 #IfDef DEBUG_CHECKNOUN;
 	print "Entering _CheckNoun!^";
 #EndIf;
@@ -275,22 +275,25 @@ System_file;
 				_n = _n + _result; ! number of words consumed
 				wn = _j;
 				if(_n > wn) {
-					if(meta == false && _obj has concealed or scenery) {
+					if(meta == false && _obj has concealed) {
 						! this is a non-debug verb and since the object
 						! isn't obvious we don't consider it as an
 						! option for a future "which X?" question.
 						! However, we still remember it as last resort
 						! if nothing else matches
-						if(_low_priority_match_len < _n) {
-							_low_priority_match_obj = _obj;
-							_low_priority_match_len = _n;
-#IfDef DEBUG_CHECKNOUN;
-						print "concealed best score ", _low_priority_match_len, "^";
-#EndIf;
-						}
-					} else if(_n == _best_score) {
+						_which_object_level = 1;
+					} else if(meta == false && _obj has scenery) {
+						_which_object_level = 2;
+					} else {
+						_which_object_level = 3;
+					}
+					if(_n == _best_score) {
 						_matches++;
 						which_object-->_matches = _obj;
+						which_level-->_matches = _which_object_level;
+						if(_which_best_level < _which_object_level) {
+							_which_best_level = _which_object_level;
+						}
 #IfDef DEBUG_CHECKNOUN;
 						print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
@@ -301,6 +304,8 @@ System_file;
 						_best_score = _n;
 						_matches = 1;
 						which_object-->1 = _obj;
+						which_level-->1 = _which_object_level;
+						_which_best_level = _which_object_level;
 					}
 				}
 			} else {
@@ -339,22 +344,25 @@ System_file;
 						_p = _p + 4;
 						_current_word = _p-->0;
 						if(_n >= _best_score) {
-							if(meta == false && _obj has concealed or scenery) {
+							if(meta == false && _obj has concealed) {
 								! this is a non-debug verb and since the object
 								! isn't obvious we don't consider it as an
 								! option for a future "which X?" question.
 								! However, we still remember it as last resort
 								! if nothing else matches
-								if(_low_priority_match_len < _n) {
-									_low_priority_match_obj = _obj;
-									_low_priority_match_len = _n;
-#IfDef DEBUG_CHECKNOUN;
-						print "concealed best score ", _low_priority_match_len, "^";
-#EndIf;
-								}
-							} else if(_n == _best_score) {
+								_which_object_level = 1;
+							} else if(meta == false && _obj has scenery) {
+								_which_object_level = 2;
+							} else {
+								_which_object_level = 3;
+							}
+							if(_n == _best_score) {
 								_matches++;
 								which_object-->_matches = _obj;
+								which_level-->_matches = _which_object_level;
+								if(_which_best_level < _which_object_level) {
+									_which_best_level = _which_object_level;
+								}
 #IfDef DEBUG_CHECKNOUN;
 								print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
@@ -365,6 +373,8 @@ System_file;
 #EndIf;
 								_best_score = _n;
 								which_object-->1 = _obj;
+								which_level-->1 = _which_object_level;
+								_which_best_level = _which_object_level;
 							}
 						}
 					}
@@ -374,14 +384,22 @@ System_file;
 .not_matched;
 	}
 
-	if((_matches == 0 && _low_priority_match_len > 0) ||
-	   (_low_priority_match_len > _best_score)) {
-		! only scenery or concealed objects matched.
-		! or concealed was better match than visible objects
-		_matches = 1;
-		_best_score = _low_priority_match_len;
-		which_object-->1 = _low_priority_match_obj;
-	}
+	! remove all objects in which that are less than _which_best_level
+	! (so that concealed/scenery are not considered if there are
+	! better non-concealed options available)
+	!print _matches, "^";
+    for(_i = 1, _j = 1 : _i <= _matches : _i++) {
+        !print which_level --> _i, "^";
+        if(which_level --> _i < _which_best_level) {
+        	continue;
+		}
+        if(_i ~= _j) {
+        	which_object --> _j = which_object --> _i;
+        }
+        _j = _j + 1;
+    }
+    _matches = _j - 1;
+
 
 	which_object->0 = _matches;
 	which_object->1 = _best_score - wn;
