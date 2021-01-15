@@ -102,6 +102,26 @@ Object stone_bench2 "stone bench" Room
       description "a stone bench",
    has enterable;
 
+Object coffre_noir "coffre noir" Park
+with
+   parse_name [;
+      if (NextWord() ~= 'coffre') return 0;
+      if (NextWord() == 'noir') return 2;
+      return 1;
+   ],
+   description "C'est un coffre noir.",
+has container openable ~open;
+
+Object coffre_blanc "coffre blanc" Park
+with
+   parse_name [;
+      if (NextWord() ~= 'coffre') return 0;
+      if (NextWord() == 'blanc') return 2;
+      return 1;
+   ],
+   description "C'est un coffre blanc.",
+has container openable ~open;
+
 [ Initialise;
 #IfDef USEINFORM;
     location=INITIAL_LOCATION_VALUE;
