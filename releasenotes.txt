@@ -347,5 +347,7 @@ v1.9: bug fix and new feature release
   the actions). Same with "put me on chair".
 - Added 'them' as a pronoun for pluralname objects
 - Rewrote CheckNoun to improve Disambiguation (issue 63)
-
-  
+- New feature: To make sure debug verbs like purloin can match an object which
+  has a parse_name routine and may not have a parent, define a routine
+  DebugParseNameObject(object) which returns true if the object is such an
+  object. (See manual, under Debugging)
