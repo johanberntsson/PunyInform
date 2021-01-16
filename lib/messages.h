@@ -164,7 +164,7 @@ Default MSG_EAT_ANIMATE = 7;
 Default MSG_DROP_NOT_HOLDING = 8;
 Default MSG_OPEN_SUCCESS = 9;
 Default MSG_CLOSE_SUCCESS = 10;
-! 11 is currently unused
+Default MSG_LOOK_BEFORE_ROOMNAME  = 11;
 Default MSG_SHOW_NOT_HOLDING = 12;
 Default MSG_SHOW_SUCCESS = 13;
 Default MSG_GIVE_NOT_HOLDING = 14;
@@ -411,6 +411,12 @@ Default LibraryMessages 0;
 			if(PrintContents(0, noun)==false) print "nothing";
 		}
 		".";
+#Endif;
+#Iftrue MSG_LOOK_BEFORE_ROOMNAME < 1000;
+	MSG_LOOK_BEFORE_ROOMNAME:
+		! what to write at first when describing a room. Can be used to
+		! add a newline, but default is to write nothing.
+		!@new_line;
 #Endif;
 	MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS,
 		MSG_UNLOCK_SUCCESS, MSG_EXIT_SUCCESS:

@@ -352,3 +352,4 @@ v1.9: bug fix and new feature release
   DebugParseNameObject(object) which returns true if the object is such an
   object. (See manual, under Debugging)
 - Fixed bad restore failed message (issue 64)
+- Added MSG_LOOK_BEFORE_ROOMNAME to be able to customize look descriptions

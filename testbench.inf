@@ -1082,6 +1082,7 @@ Verb 'help' * -> Help;
 Constant MSG_OPEN_YOU_CANT 1000;
 Constant MSG_AREYOUSUREQUIT 1001;
 Constant MSG_DISROBE_NOT_WEARING 1002;
+Constant MSG_LOOK_BEFORE_ROOMNAME 1003;
 [LibraryMessages p_msg p_arg_1 p_arg_2;
 	switch(p_msg) {
 	MSG_OPEN_YOU_CANT:
@@ -1091,6 +1092,8 @@ Constant MSG_DISROBE_NOT_WEARING 1002;
 		rtrue;
 	MSG_DISROBE_NOT_WEARING:
 		"Not worn!";
+	MSG_LOOK_BEFORE_ROOMNAME:
+		@new_line;
 	}
 	p_arg_1 = 0; p_arg_2 = 0; ! To avoid warnings
 ];
