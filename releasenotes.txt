@@ -351,3 +351,4 @@ v1.9: bug fix and new feature release
   has a parse_name routine and may not have a parent, define a routine
   DebugParseNameObject(object) which returns true if the object is such an
   object. (See manual, under Debugging)
+- Fixed bad restore failed message (issue 64)

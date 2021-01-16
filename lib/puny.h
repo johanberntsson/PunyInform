@@ -1396,16 +1396,16 @@ Object thedark "Darkness"
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
 	print " ***^^";
 	ScoreSub();
-	for (::) {
+	for(::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		_ReadPlayerInput(true);
-				_i = parse-->1;
-				if (_i == 'restart') @restart;
-				if (_i == 'restore') RestoreSub();
-				if (AMUSING_PROVIDED == 0 && deadflag == 2 && _i == 'amusing') Amusing();
-				if (_i == 'quit') @quit;
+		verb_word = parse-->1;
+		if(verb_word == 'restart') @restart;
+		if(verb_word == 'restore') RestoreSub();
+		if(AMUSING_PROVIDED == 0 && deadflag == 2 && verb_word == 'amusing') Amusing();
+		if(verb_word == 'quit') @quit;
 #IfDef OPTIONAL_FULL_SCORE;
-				if (_i == 'full') FullScoreSub();
+		if(verb_word == 'full') FullScoreSub();
 #EndIf;
 	}
 ];

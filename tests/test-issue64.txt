@@ -1,0 +1,21 @@
+> restore
+Enter a file name.
+Default is "test-issue64.qzl": sdsda
+Failed restore.
+
+> eat apple
+(first taking the apple)
+You eat the apple. Not bad.
+
+
+  *** You have won. ***
+
+In that game you scored 0 out of a possible 0, in 1 turn.
+
+Would you like to RESTART, RESTORE or QUIT? restore
+Enter a file name.
+Default is "sdsda": dasdas
+Failed restore.
+
+Would you like to RESTART, RESTORE or QUIT? quit
+[Hit any key to exit.]
