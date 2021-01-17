@@ -790,6 +790,10 @@ Include "parser.h";
 ];
 
 #IfDef DEBUG;
+[DebugAttribute p_attr;
+	print "(attribute ", p_attr, ")";
+];
+
 [ DebugParameter _w;
     print _w;
     if (_w >= 1 && _w <= top_object) print " (", (name) _w, ")";

@@ -353,3 +353,6 @@ v1.9: bug fix and new feature release
   object. (See manual, under Debugging)
 - Fixed bad restore failed message (issue 64)
 - Added MSG_LOOK_BEFORE_ROOMNAME to be able to customize look descriptions
+- Fixed code that was needed for some debug commands but was never compiled.
+- Fixed problem with compiler not finding DebugAttribute when compiling for v5
+  with strict error-checking.
