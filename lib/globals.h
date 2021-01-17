@@ -298,8 +298,8 @@ Array LanguageNumbers static table
 
 
 ! Header constants
-Constant HEADER_DICTIONARY   = 4;    ! 2*4 = $8
-Constant HEADER_STATIC_MEM   = 7;    ! 2*7 = $c
+Constant HDR_DICTIONARY      = $8;   ! Actual address
+Constant HDR_STATIC_MEM      = $e;   ! Actual address
 
 Constant TT_OBJECT           = 1;    ! one or more words referring to an object
                                      ! it is one of NOUN_TOKEN etc. below
