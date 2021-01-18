@@ -315,7 +315,7 @@ v1.8: bug fix and new feature release (27 November 2020)
   rooms.
 
 =======
-v1.9: bug fix and new feature release
+v1.9: bug fix and new feature release (17 January 2021)
 - Fixed bad quit message (issue 56)
 - Print a newline before calling Initialise for v5 games, so first line of
   text isn't covered by statusline.
@@ -356,3 +356,7 @@ v1.9: bug fix and new feature release
 - Fixed code that was needed for some debug commands but was never compiled.
 - Fixed problem with compiler not finding DebugAttribute when compiling for v5
   with strict error-checking.
+
+=======
+v1.10: bug fix and new feature release
+
