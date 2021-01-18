@@ -360,3 +360,6 @@ v1.9: bug fix and new feature release (17 January 2021)
 =======
 v1.10: bug fix and new feature release
 
+- Added OPTIONAL_SIMPLE_DOORS for an easier way to create doors, which also
+  saves space if you have more than six doors.
+  
