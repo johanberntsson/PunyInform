@@ -36,6 +36,7 @@ Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_SIMPLE_DOORS;
 Constant OPTIONAL_SHIP_DIRECTIONS;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant OPTIONAL_ORDERED_TIMERS;
@@ -1272,6 +1273,9 @@ Object -> ToiletDoor "toilet door"
 !				return 1;
 !		],
 		description "Surprisingly clean.",
+		when_open "The toilet door stands slightly ajar.",
+		when_closed "The toilet door is closed.",
+#IfDef USEINFORM;
 		door_to [;
 			if(self in Toilet) return Library;
 			return Toilet;
@@ -1280,8 +1284,9 @@ Object -> ToiletDoor "toilet door"
 			if(self in Toilet) return w_to;
 			return e_to;
 		],
-		when_open "The toilet door stands slightly ajar.",
-		when_closed "The toilet door is closed.",
+#IfNot;
+		door_dir (w_to) (e_to),
+#EndIf;
 		found_in Toilet Library,
 		with_key [; if(second == Key or Sweater) return second;],
 #IfDef TEST_BEFOREAFTER;

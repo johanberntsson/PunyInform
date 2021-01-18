@@ -293,12 +293,29 @@ Verb 'wear'
 	PrintMsg(MSG_EAT_SUCCESS);
 ];
 
+#IfDef OPTIONAL_SIMPLE_DOORS;
+[ EnterSub _door_dir _i _k;
+#IfNot;
 [ EnterSub _door_dir;
+#EndIf;
 	if(noun has door) {
-		_door_dir = noun.door_dir;
-		if(UnsignedCompare(_door_dir, top_object) > 0) {
-			_door_dir = noun.door_dir();
+#IfDef OPTIONAL_SIMPLE_DOORS;
+		_k = (noun.#door_dir) / 2;
+		if(_k > 1) {
+			! This is a PunyDoor
+			for(_i=0 : _i<_k : _i++)
+				if(real_location == noun.&found_in-->_i)
+					_door_dir = noun.&door_dir-->_i;
+		} else {
+#EndIf;
+			! Normal Inform door
+			_door_dir = noun.door_dir;
+			if(UnsignedCompare(_door_dir, top_object) > 0) {
+				_door_dir = noun.door_dir();
+			}
+#IfDef OPTIONAL_SIMPLE_DOORS;
 		}
+#EndIf;
 		! Convert to fake object
 		_door_dir = DirPropToFakeObj(_door_dir);
 		<<Go _door_dir>>;
@@ -1632,7 +1649,11 @@ Global scope_cnt;
 	rfalse;
 ];
 
+#IfDef OPTIONAL_SIMPLE_DOORS;
+[ GoDir p_property _new_location _door_to _vehicle _vehicle_mode _saved_location _i _j _k;
+#IfNot;
 [ GoDir p_property _new_location _door_to _vehicle _vehicle_mode _saved_location;
+#EndIf;
 	if(parent(player) ~= real_location) {
 		! special rule when in enterable (veichles)
 		! before routine for the object is called with Go dir, and returns
@@ -1673,13 +1694,29 @@ Global scope_cnt;
 		else {
 			if(_new_location hasnt open) { PrintMsg(MSG_GO_DOOR_CLOSED, _new_location); rtrue; }
 			_door_to = _new_location.door_to;
-			if(UnsignedCompare(_door_to, top_object) > 0) {
-				_new_location = _new_location.door_to();
-!				print "GoDir, door leads to ", (the) _new_location, "^";
-				if(_new_location == 1)
-					rtrue;
-			} else
-				_new_location = _door_to;
+#IfDef OPTIONAL_SIMPLE_DOORS;
+			if(_door_to == 0) {
+				! PunyDoor
+				_k = (_new_location.#found_in) / 2;
+				for(_i=0 : _i<_k : _i++)
+					if(real_location == _new_location.&found_in-->_i) {
+						_j = _i & $fffe;
+						if(_j == _i) _j++;
+					}
+				_new_location = _new_location.&found_in-->_j;
+			} else {
+#EndIf;
+				! Normal Inform door
+				if(UnsignedCompare(_door_to, top_object) > 0) {
+					_new_location = _new_location.door_to();
+	!				print "GoDir, door leads to ", (the) _new_location, "^";
+					if(_new_location == 1)
+						rtrue;
+				} else
+					_new_location = _door_to;
+#IfDef OPTIONAL_SIMPLE_DOORS;
+			}
+#EndIf;
 		}
 	}
 
