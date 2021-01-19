@@ -293,19 +293,14 @@ Verb 'wear'
 	PrintMsg(MSG_EAT_SUCCESS);
 ];
 
-#IfDef OPTIONAL_SIMPLE_DOORS;
-[ EnterSub _door_dir _i _k;
-#IfNot;
 [ EnterSub _door_dir;
-#EndIf;
 	if(noun has door) {
 #IfDef OPTIONAL_SIMPLE_DOORS;
-		_k = (noun.#door_dir) / 2;
-		if(_k > 1) {
-			! This is a PunyDoor
-			for(_i=0 : _i<_k : _i++)
-				if(real_location == noun.&found_in-->_i)
-					_door_dir = noun.&door_dir-->_i;
+		if(noun.#door_dir > 2) {
+			! This is a Simple Door, where door_dir is an array
+			if(real_location == noun.&found_in-->1)
+				_door_dir = 1;
+			_door_dir = noun.&door_dir-->_door_dir;
 		} else {
 #EndIf;
 			! Normal Inform door
@@ -1649,11 +1644,7 @@ Global scope_cnt;
 	rfalse;
 ];
 
-#IfDef OPTIONAL_SIMPLE_DOORS;
-[ GoDir p_property _new_location _door_to _vehicle _vehicle_mode _saved_location _i _j _k;
-#IfNot;
 [ GoDir p_property _new_location _door_to _vehicle _vehicle_mode _saved_location;
-#EndIf;
 	if(parent(player) ~= real_location) {
 		! special rule when in enterable (veichles)
 		! before routine for the object is called with Go dir, and returns
@@ -1696,14 +1687,10 @@ Global scope_cnt;
 			_door_to = _new_location.door_to;
 #IfDef OPTIONAL_SIMPLE_DOORS;
 			if(_door_to == 0) {
-				! PunyDoor
-				_k = (_new_location.#found_in) / 2;
-				for(_i=0 : _i<_k : _i++)
-					if(real_location == _new_location.&found_in-->_i) {
-						_j = _i & $fffe;
-						if(_j == _i) _j++;
-					}
-				_new_location = _new_location.&found_in-->_j;
+				! This is a Simple Door, where door_to has been left out
+				if(real_location == _new_location.&found_in-->0)
+					_door_to = 1;
+				_new_location = _new_location.&found_in-->_door_to;
 			} else {
 #EndIf;
 				! Normal Inform door
