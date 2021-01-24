@@ -95,6 +95,11 @@ Constant AND_WORD     = 'and';
 Constant THEN1__WD    = 'then';
 Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
                                    ! for commas in parse buffers
+                                   
+! Isolating words and punctuation for reuse and potential translation
+Constant SOMETHING_STR = "something";
+Constant SOMEONE_STR = "someone";
+
 #Ifndef OPTIONAL_NO_DARKNESS;
 Attribute light;
 #Endif;
