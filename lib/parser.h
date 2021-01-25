@@ -646,31 +646,31 @@ System_file;
 	return _ParseToken(p_token_type, p_token_data, -PHASE1);
 ];
 
-[ _GrabIfNotHeld p_noun;
+[ _GrabIfNotHeld p_noun _ks;
 	! return true if p_noun isn't held by the player at the end of the call
 	! (so that you can use it like: if(_GrabIfNotHeld(...)) { }
 	if(p_noun in player) rfalse;
 	PrintMsg(MSG_AUTO_TAKE, p_noun);
 	PronounNotice(p_noun);
+	_ks = keep_silent;
 	keep_silent = true;
 	PerformAction(##Take, p_noun);
-	keep_silent = false;
+	keep_silent = _ks;
 	if (p_noun notin player) rtrue;
 	rfalse;
 ];
 
-[ _DisrobeIfWorn p_noun;
+[ _DisrobeIfWorn p_noun _ks;
 	! return true if p_noun isn't held by the player at the end of the call
 	! (so that you can use it like: if(_GrabIfNotHeld(...)) { }
 	if(p_noun notin player || p_noun hasnt worn) rfalse;
-!	PrintMsg(MSG_AUTO_DISROBE, p_noun);
-!	indirect(print_msg, MSG_AUTO_DISROBE, p_noun);
 	PronounNotice(p_noun);
-	PrintMsg(MSG_AUTO_DISROBE, p_noun);
-!	print "(first taking off ", (the) p_noun, ")^";
+	if(keep_silent == false)
+		PrintMsg(MSG_AUTO_DISROBE, p_noun);
+	_ks = keep_silent;
 	keep_silent = true;
 	PerformAction(##Disrobe, p_noun);
-	keep_silent = false;
+	keep_silent = _ks;
 	if (p_noun notin player || p_noun has worn) rtrue;
 	rfalse;
 ];
