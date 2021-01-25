@@ -1141,9 +1141,15 @@ Array guess_num_objects->5;
 			if(_num_preps == 0) print " ", (address) _data;
 			++_num_preps;
 		} else {
-                        @print_char ' ';
+			@print_char ' ';
 			if(_noun == 0) {
-				if(second == 0) print (string) SOMETHING_STR; else print (name) second;
+				if(second == 0) {
+					if(_token->2 == CREATURE_OBJECT) {
+						print (string) SOMEONE_STR;
+					} else {
+						print (string) SOMETHING_STR;
+					}
+				} else print (name) second;
 			} else {
 				if(noun ~= 0) {
 					_noun = 0; ! avoid repeat (and we don't need _noun anymore)
