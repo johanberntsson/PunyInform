@@ -651,6 +651,7 @@ System_file;
 	! (so that you can use it like: if(_GrabIfNotHeld(...)) { }
 	if(p_noun in player) rfalse;
 	PrintMsg(MSG_AUTO_TAKE, p_noun);
+	PronounNotice(p_noun);
 	keep_silent = true;
 	PerformAction(##Take, p_noun);
 	keep_silent = false;
@@ -664,6 +665,7 @@ System_file;
 	if(p_noun notin player || p_noun hasnt worn) rfalse;
 !	PrintMsg(MSG_AUTO_DISROBE, p_noun);
 !	indirect(print_msg, MSG_AUTO_DISROBE, p_noun);
+	PronounNotice(p_noun);
 	PrintMsg(MSG_AUTO_DISROBE, p_noun);
 !	print "(first taking off ", (the) p_noun, ")^";
 	keep_silent = true;
@@ -1324,7 +1326,7 @@ Array guess_num_objects->5;
 	! the while(true) loop is only exited by return statements
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _noun _score _best_score _best_pattern _action;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _noun _score _best_score _best_pattern _best_phase2 _action;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -1474,6 +1476,7 @@ Array guess_num_objects->5;
 		} else if(_score > _best_score) {
 			_best_score = _score;
 			_best_pattern = _pattern;
+			_best_phase2 = phase2_necessary;
 			! check if pefect match found
 			if(_best_score == 100) break;
 		}
@@ -1490,9 +1493,9 @@ Array guess_num_objects->5;
 	! (since all data is then already setup and there
 	! are no side effects to consider)
 #IfDef DEBUG_PARSEANDPERFORM;
-	print "### After phase 1, _best_score = ", _best_score, ", phase2_necessary = ", phase2_necessary, "^";
+	print "### After phase 1, _best_score = ", _best_score, ", _best_phase2 = ", _best_phase2, "^";
 #EndIf;
-	if(_best_score == 100 && phase2_necessary == false) {
+	if(_best_score == 100 && _best_phase2 == false) {
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### Skipping phase 2^";
 #EndIf;
@@ -1500,8 +1503,12 @@ Array guess_num_objects->5;
 	}
 
 	if(_best_score < parse->1) {
-		!_PrintPartialMatchMessage(_best_score);
-		PrintMsg(MSG_PARSER_NOSUCHTHING);
+		if(_best_phase2 == true) {
+			! call again to generate suitable error message
+			_score = _ParsePattern(_best_pattern, PHASE2);
+		} else {
+			PrintMsg(MSG_PARSER_NOSUCHTHING);
+		}
 		rtrue;
 	}
 

@@ -16,8 +16,8 @@ containers:
 	frotz containers.z3
 
 inform:
-	inform -v8 test-issue63.inf
-	frotz test-issue63.z8
+	inform -v8 test-issue64.inf
+	frotz test-issue64.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output

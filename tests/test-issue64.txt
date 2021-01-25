@@ -1,16 +1,37 @@
+> give it to him
+I don't know what "it" refers to.
+
+> give apple to him
+(first taking the apple)
+I don't know what "him" refers to.
+
+> give it
+I think you wanted to say "give apple to something". Please try again.
+
+> give him
+I don't know what "him" refers to.
+
+> x apple
+There is nothing special about the apple.
+
+> x bob
+There is nothing special about Bob.
+
+> give it to him
+Bob doesn't seem interested.
+
 > restore
 Enter a file name.
 Default is "test-issue64.qzl": sdsda
 Failed restore.
 
 > eat apple
-(first taking the apple)
 You eat the apple. Not bad.
 
 
   *** You have won. ***
 
-In that game you scored 0 out of a possible 0, in 1 turn.
+In that game you scored 0 out of a possible 0, in 5 turns.
 
 Would you like to RESTART, RESTORE or QUIT? restore
 Enter a file name.

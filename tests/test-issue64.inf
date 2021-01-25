@@ -58,12 +58,29 @@ Include "Grammar";
 
 Object Room "Room"
    with description "You are in a room.",
+   s_to Room2,
+   has light;
+
+Object Room2 "Room 2"
+   with description "You are in another room.",
+   n_to Room,
    has light;
 
 Object apple "apple" Room
    with name 'apple',
    Before [; eat: deadflag = 2; ],
    has edible;
+
+Object banana "banana" Room
+   with name 'banana',
+   has edible;
+
+Object orange "orange" Room2
+   with name 'orange',
+   has edible;
+
+Object bob "Bob" Room
+   with name 'bob' has animate proper;
 
 [ Initialise;
 #IfDef USEINFORM;
