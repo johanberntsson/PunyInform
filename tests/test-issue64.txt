@@ -6,7 +6,7 @@ I don't know what "it" refers to.
 I don't know what "him" refers to.
 
 > give it
-I think you wanted to say "give apple to something". Please try again.
+I think you wanted to say "give apple to someone". Please try again.
 
 > give him
 I don't know what "him" refers to.
