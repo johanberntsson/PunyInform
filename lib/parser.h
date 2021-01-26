@@ -508,9 +508,6 @@ System_file;
 			return 0;
 		}
 		if(p_phase == PHASE1) {
-			! TODO: this is called both when valid multi-choice found
-			! and when something unknown included ('blue cube' when
-			! only blue desk and blue ball exists in scope)
 			phase2_necessary = PHASE2_DISAMBIGUATION;
 			wn = wn + _num_words_in_nounphrase;
 			return 1; ! a random noun in phase 1 just to avoid which? question
