@@ -84,6 +84,9 @@ Constant NULL         = $ffff;
 
 Constant PHASE1 = 1; ! just check if pattern matches (no side effects such as which? questions or indirect actions)
 Constant PHASE2 = 2; ! parse the given pattern with side effects
+Constant PHASE2_SUCCESS         = 0;
+Constant PHASE2_ERROR           = 1;
+Constant PHASE2_DISAMBIGUATION  = 2;
 
 
 !Constant WORDSIZE 2; ! set by the compiler from Inform 6.30

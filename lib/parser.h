@@ -472,13 +472,13 @@ System_file;
 		'them': _noun = themobj;
 		}
 		if(_noun == 0) {
-			phase2_necessary = true;
+			phase2_necessary = PHASE2_ERROR;
 			if(p_phase == PHASE2) {
 				print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
 				return -2;
 			}
 		} else if(TestScope(_noun) == false) {
-			phase2_necessary = true;
+			phase2_necessary = PHASE2_ERROR;
 			if(p_phase == PHASE2) {
 				print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^";
 				return -2;
@@ -502,13 +502,16 @@ System_file;
 		if(_pluralword || _all_found) {
 			! we don't have to ask here, because the input was
 			! "take books" or "take all books"
-			phase2_necessary = true;
+			phase2_necessary = PHASE2_ERROR;
 			parser_action = ##PluralFound;
 			wn = wn + _num_words_in_nounphrase;
 			return 0;
 		}
 		if(p_phase == PHASE1) {
-			phase2_necessary = true;
+			! TODO: this is called both when valid multi-choice found
+			! and when something unknown included ('blue cube' when
+			! only blue desk and blue ball exists in scope)
+			phase2_necessary = PHASE2_DISAMBIGUATION;
 			wn = wn + _num_words_in_nounphrase;
 			return 1; ! a random noun in phase 1 just to avoid which? question
 		}
@@ -778,14 +781,14 @@ System_file;
 			}
 			p_parse_pointer = parse + 2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {
-				phase2_necessary = true;
+				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
 					PrintMsg(MSG_PARSER_ONLY_TO_ANIMATE);
 					return GPR_FAIL;
 				}
 			}
 			if(_token_data == HELD_OBJECT && _noun notin player) {
-				phase2_necessary = true;
+				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
 					if(_GrabIfNotHeld(_noun)) {
 						return GPR_FAIL;
@@ -1191,7 +1194,7 @@ Array guess_num_objects->5;
 	parser_all_except_object = 0;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
-	phase2_necessary = false;
+	phase2_necessary = PHASE2_SUCCESS;
 
 	while(true) {
 		_pattern_pointer = _pattern_pointer + 3;
@@ -1309,7 +1312,7 @@ Array guess_num_objects->5;
 				! 'all' matched zero objects in scope. It is still a perfect
 				! match of course but we need to force phase2 to write
 				! a suitable message.
-				phase2_necessary = true;
+				phase2_necessary = PHASE2_ERROR;
 			} else {
 				_UpdateNounSecond(multiple_objects-->1, multiple_objects-->1);
 			}
@@ -1502,15 +1505,14 @@ Array guess_num_objects->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 	print "### After phase 1, _best_score = ", _best_score, ", _best_phase2 = ", _best_phase2, "^";
 #EndIf;
-	if(_best_score == 100 && _best_phase2 == false) {
+	if(_best_score == 100 && _best_phase2 == PHASE2_SUCCESS) {
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### Skipping phase 2^";
 #EndIf;
 		jump parse_success;
 	}
-
 	if(_best_score < parse->1) {
-		if(_best_phase2 == true) {
+		if(_best_phase2 == PHASE2_ERROR) {
 			! call again to generate suitable error message
 			_score = _ParsePattern(_best_pattern, PHASE2);
 		} else {
