@@ -826,8 +826,9 @@ System_file;
 							_noun = _GetNextNoun(p_parse_pointer + 4, p_phase);
 							_UpdateScope(player, true); ! restore scope
 							if(_noun <= 0) {
-								if(p_phase == PHASE2)
+								if(p_phase == PHASE2) {
 									PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
+								}
 								return GPR_FAIL;
 							}
 							parser_all_except_object = _noun;
@@ -1634,11 +1635,15 @@ Array guess_num_objects->5;
 					! stop us from putting noun in second, for example
 					! > take sack
 					! > put all in sack
-					if(noun == second) continue;
+					! however, if this is the only object then allow it to get
+					! messages like 'Cannot put something on itself.'
+					if(noun == second && parser_all_found) continue;
 				MULTIINSIDE_OBJECT:
 					! stop us from trying to take things that are not in
 					! the container
-					if(noun notin second) {
+					! however, if this is the only object then allow it to get
+					! the appropriate messages.
+					if(noun notin second && parser_all_found) {
 						if(parser_all_found) continue;
 					}
 				}

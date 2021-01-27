@@ -20,6 +20,12 @@ There is nothing special about Bob.
 > give it to him
 Bob doesn't seem interested.
 
+> put apple on apple
+Cannot put something on itself.
+
+> put apple in apple
+Cannot put something inside itself.
+
 > restore
 Enter a file name.
 Default is "test-issue64.qzl": sdsda
@@ -31,7 +37,7 @@ You eat the apple. Not bad.
 
   *** You have won. ***
 
-In that game you scored 0 out of a possible 0, in 5 turns.
+In that game you scored 0 out of a possible 0, in 7 turns.
 
 Would you like to RESTART, RESTORE or QUIT? restore
 Enter a file name.
