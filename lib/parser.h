@@ -1637,14 +1637,16 @@ Array guess_num_objects->5;
 					! > put all in sack
 					! however, if this is the only object then allow it to get
 					! messages like 'Cannot put something on itself.'
-					if(noun == second && parser_all_found) continue;
+					if(noun == second && parser_all_found) {
+						continue;
+					}
 				MULTIINSIDE_OBJECT:
 					! stop us from trying to take things that are not in
 					! the container
 					! however, if this is the only object then allow it to get
 					! the appropriate messages.
 					if(noun notin second && parser_all_found) {
-						if(parser_all_found) continue;
+						continue;
 					}
 				}
 
