@@ -380,8 +380,14 @@ Default LibraryMessages 0;
 #EndIf;
 #IfTrue MSG_INVENTORY_SUCCESS < 1000;
 	MSG_INVENTORY_SUCCESS:
-		if(PrintContents("You're carrying ", player)) print ".^";
-		rtrue;
+		! return true if something listed to run afterroutines
+		! or false if MSG_INVENTORY_EMPTY should be displayed
+		if(PrintContents("You're carrying ", player)) {
+			print ".^";
+			rtrue;
+		} else {
+			rfalse;
+		}
 #EndIf;
 #IfTrue MSG_EXAMINE_NOTHING_SPECIAL < 1000;
 	MSG_EXAMINE_NOTHING_SPECIAL:

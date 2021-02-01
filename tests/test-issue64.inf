@@ -82,6 +82,20 @@ Object orange "orange" Room2
 Object bob "Bob" Room
    with name 'bob' has animate proper;
 
+Object bush "bush" Room
+   with
+      name 'bush',
+      Before [;
+         Search: 
+            move pineapple to player;
+            !give apple ~concealed;
+            "You find a pineapple. You take it.";
+      ],
+   has;
+
+Object pineapple "pineapple"
+   with name 'pineapple', has concealed;
+
 [ Initialise;
 #IfDef USEINFORM;
     location=INITIAL_LOCATION_VALUE;

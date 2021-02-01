@@ -381,14 +381,21 @@ else
 	if(p_obj has worn && action == ##Inv) print " (worn)";
 ];
 
-[ PrintContents p_first_text p_obj p_check_workflag _obj _printed_first_text _printed_any_objects _last_obj;
+[ PrintContents p_first_text p_obj p_check_workflag _obj _printed_first_text _printed_any_objects _last_obj _show_obj;
 !   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
-!   print "Considering ", (object) _obj, "...^";
-!   if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
-		if(_obj hasnt concealed && _obj hasnt scenery &&
-			_obj ~= parent(player) &&  ! don't print container when player in it
-			(p_check_workflag == false || _obj has workflag)) {
+!print "Considering ", (object) _obj, "...^";
+!if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
+		_show_obj = 
+			_obj ~= parent(player) && ! don't print container when player in it
+			(p_check_workflag == false || _obj has workflag);
+		if(action ~= ##Inv) {
+			! don't show concealed or scenery in the normal case (look etc.),
+			! but allow it when listing inventory.
+			if(_obj has concealed or scenery) _show_obj = false;
+		}
+
+		if(_show_obj) {
 !			(_obj.&describe == 0 || _obj notin parent(player)) &&
 !			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
 			if(_printed_first_text == 0) {

@@ -365,4 +365,5 @@ v1.10: bug fix and new feature release
 - Referring to undefined pronouns now give better responses (issue 68)
 - Fixed something/someone response when second missing (issue 70)
 - Changed to allow multiexpect to respond without filtering (issue 71)
-  
+- Changed to show concealed/scenery items in inventory lists (issue 72)
+

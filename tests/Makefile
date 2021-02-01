@@ -3,9 +3,9 @@ all: runtests
 runtests:
 	ruby runtests.rb
 
-test-issue63:
-	inform +../lib -v3 test-issue63.inf
-	frotz test-issue63.z3
+test-issue64:
+	inform +../lib -v3 test-issue64.inf
+	frotz test-issue64.z3
 
 test-beforeparsing:
 	inform +../lib -v3 test-beforeparsing.inf

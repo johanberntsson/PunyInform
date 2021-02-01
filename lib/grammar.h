@@ -437,9 +437,11 @@ Verb 'wear'
 ];
 
 [ InvSub;
-	if(child(player) == 0) { PrintMsg(MSG_INVENTORY_EMPTY); rtrue; }
-    PrintMsg(MSG_INVENTORY_SUCCESS);
-	AfterRoutines();
+    if(PrintMsg(MSG_INVENTORY_SUCCESS)) {
+		AfterRoutines();
+	} else {
+		PrintMsg(MSG_INVENTORY_EMPTY);
+	}
 ];
 
 [ JumpSub;

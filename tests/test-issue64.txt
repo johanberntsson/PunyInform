@@ -26,18 +26,61 @@ Cannot put something on itself.
 > put apple in apple
 Cannot put something inside itself.
 
+> search bush
+You find a pineapple. You take it.
+
+> i
+You're carrying a pineapple and a apple.
+
+> drop all
+pineapple: Dropped.
+apple: Dropped.
+
+> look
+Room
+You are in a room.
+
+You can see a apple, a banana, Bob and a bush here.
+
+> i
+You are empty handed.
+
+> take all
+apple: Taken.
+banana: Taken.
+bush: Taken.
+
+> take pineapple
+Taken.
+
+> drop all
+pineapple: Dropped.
+bush: Dropped.
+banana: Dropped.
+apple: Dropped.
+
+> i
+You are empty handed.
+
+> take pineapple
+Taken.
+
+> i
+You're carrying a pineapple.
+
 > restore
 Enter a file name.
 Default is "test-issue64.qzl": sdsda
 Failed restore.
 
 > eat apple
+(first taking the apple)
 You eat the apple. Not bad.
 
 
   *** You have won. ***
 
-In that game you scored 0 out of a possible 0, in 7 turns.
+In that game you scored 0 out of a possible 0, in 18 turns.
 
 Would you like to RESTART, RESTORE or QUIT? restore
 Enter a file name.
