@@ -1,5 +1,6 @@
 ---
 title: Game Author's Guide 
+numbersections: true
 ---
 
 # Introduction
@@ -19,7 +20,9 @@ Here's a list of things you should always check before releasing a game.
 There's a standard for identifying text adventures, and it's part of The Treaty of Babel (See https://babel.ifarchive.org/ ). Each game gets an IFID - a unique identifier which can be used to look up data about the game. It's a good idea to include an IFID in your PunyInform game. Somewhere in your source code, you write a line like this:
 
 ```
-Array UUID_ARRAY string "UUID://XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX//"; #Ifdef UUID_ARRAY; #Endif;
+Array UUID_ARRAY string "UUID://XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX//";
+#Ifdef UUID_ARRAY;
+#Endif;
 ```
 
 Instead of all the Xs you put your unqique identifier consisting of the characters 0-9 and A-F, which you obtain from https://www.tads.org/ifidgen/ifidgen .
@@ -66,7 +69,11 @@ Here are some advice on testing your game.
 
 ### Use the debug commands
 
-PunyInform has a nifty set of commands to be used when debugging. Read the docs on these commands at https://github.com/johanberntsson/PunyInform/wiki/Manual#debugging and make sure you try them out and understand how to use them. They can be used to teleport to other locations, moving objects to your inventory, checking what's in scope and more. Whenever you're having trouble getting your code to run in `before`, `after` etc, you can use _Actions_ and/or _Routines_ to figure out which actions are triggered and which user-supplied routines are executed.
+PunyInform has a nifty set of commands to be used when debugging. Read the docs on these commands at 
+
+https://github.com/johanberntsson/PunyInform/wiki/Manual#debugging
+
+and make sure you try them out and understand how to use them. They can be used to teleport to other locations, moving objects to your inventory, checking what's in scope and more. Whenever you're having trouble getting your code to run in `before`, `after` etc, you can use _Actions_ and/or _Routines_ to figure out which actions are triggered and which user-supplied routines are executed.
 
 ### Command file
 
@@ -86,7 +93,9 @@ And of course, make sure you give credit to your testers, as well as others who 
 
 ### Check limits
 
-PunyInform has a number of limits which have been set to reasonable values, but some games will need to raise certain limits. Read the paragraph on Parameters under Customizing the library at https://github.com/johanberntsson/PunyInform/wiki/Manual#customizing-the-library
+PunyInform has a number of limits which have been set to reasonable values, but some games will need to raise certain limits. Read the paragraph on Parameters under 'Customizing the library' at
+
+https://github.com/johanberntsson/PunyInform/wiki/Manual#customizing-the-library
 
 The limits which you have to be particulary careful with are:
 
@@ -145,7 +154,8 @@ Object Hallway "Moor"
 can be transformed into this:
 
 ```
-Constant REPLY_FOOLISH_WANDER = "It would be foolish to wander off in that direction.";
+Constant REPLY_FOOLISH_WANDER =
+  "It would be foolish to wander off in that direction.";
 
 Object Hallway "Moor"
   with
@@ -170,7 +180,9 @@ Object Hallway "Moor"
 
 ### Simple doors
 
-If you're using more than four doors, you can save space by using OPTIONAL_SIMPLE_DOORS. As a bonus, the code gets shorter and more legible. Read more at https://github.com/johanberntsson/PunyInform/wiki/Manual#doors .
+If you're using more than four doors, you can save space by using OPTIONAL_SIMPLE_DOORS. As a bonus, the code gets shorter and more legible. Read more at
+
+https://github.com/johanberntsson/PunyInform/wiki/Manual#doors .
 
 ### Manual scope
  
@@ -191,8 +203,8 @@ Object Button "button"
         move Puppy to location;
         remove self;
         scope_modified = true;
-        "A loud click is heard, a puppy comes running into the room, and the button 
-          sinks into the table, becoming invisible.";
+        "A loud click is heard, a puppy comes running into the room,
+        and the button sinks into the table, becoming invisible.";
     ],
   has static;	
 ```
