@@ -367,4 +367,5 @@ v1.10: bug fix and new feature release
 - Changed to allow multiexpect to respond without filtering (issue 71)
 - Changed to show concealed/scenery items in inventory lists (issue 72)
 - Added new Game User's Guide
+- Fixed creature testing bug (issue 73)
 

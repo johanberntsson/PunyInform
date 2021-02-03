@@ -781,8 +781,8 @@ System_file;
 				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
 					PrintMsg(MSG_PARSER_ONLY_TO_ANIMATE);
-					return GPR_FAIL;
 				}
+				return GPR_FAIL;
 			}
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				phase2_necessary = PHASE2_ERROR;
