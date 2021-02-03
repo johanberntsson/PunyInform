@@ -1,6 +1,7 @@
 ---
 title: Game Author's Guide 
 numbersections: true
+toc: true
 ---
 
 # Introduction
