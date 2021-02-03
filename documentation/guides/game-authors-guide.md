@@ -1,7 +1,8 @@
 ---
-title: Game Author's Guide 
+title: PunyInform Game Author's Guide
 numbersections: true
 toc: true
+author: Written by Fredrik Ramsberg
 ---
 
 # Introduction
