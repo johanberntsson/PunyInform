@@ -7,8 +7,7 @@ author: Written by Fredrik Ramsberg
 
 # Introduction
 
-This document is intended to provide some guidance for anyone aiming to release a PunyInform game. While you can read it any time, it's probably the most useful when the game is nearing completion.
-
+This document is intended to provide some guidance as well as various tips and tricks for anyone writing a PunyInform game. 
 
 # Testing & Debugging
 
@@ -22,7 +21,7 @@ https://github.com/johanberntsson/PunyInform/wiki/Manual#debugging
 
 and make sure you try them out and understand how to use them. They can be used to teleport to other locations, moving objects to your inventory, checking what's in scope and more. Whenever you're having trouble getting your code to run in `before`, `after` etc, you can use _Actions_ and/or _Routines_ to figure out which actions are triggered and which user-supplied routines are executed.
 
-## Command file
+## Create a command file
 
 Consider saving a list of commands needed to play the game from start to finish. When playing on a modern interpreter for a modern OS, you can type _recording on_ to start saving all commands to a file, and _recording off_ to stop. To read a command file and execute all commands in it, type _replay_.
 
@@ -56,7 +55,7 @@ inform6 +lib mygame.inf -v3u > abbreviations.txt
 
 Then open the produced text file and scroll to the bottom. Copy the last 64 lines of the file, and paste them at the beginning of your source code file, right after the lines at the top with compiler directives. As an alternative, you can put them in a separate file which you `Include` in your main source code file. Also, make sure you have the line `Constant CUSTOM_ABBREVIATIONS;` in your source, before including globals.h, or your new abbreviations won't be used.
 
-To get even better abbreviations, you can use Hugo Labrande's Python script, available at https://github.com/hlabrand/retro-scripts . 
+To get even better abbreviations, you can use Hugo Labrande's Python script, available at https://github.com/hlabrand/retro-scripts . This script isn't very user-friendly at the moment, but the author intends to remedy this situation in the near future.
 
 Using Inform's mechanism to find the best abbreviations can typically make the story file about 10% smaller. Using Labrande's script can increase that by about 1%, so if you managed to save 10% with Inform's abbreviations you can save ~11% with Labrande's abbreviations.
 
@@ -146,7 +145,7 @@ Object Button "button"
 
 
 
-# Before releasing a PunyInform game
+# Before release
 
 These are some tips you may find helpful when your game can be played from beginning to end, and you feel it's soon ready to be released to the public.
 
@@ -184,7 +183,7 @@ The limits which you have to be particulary careful with are:
 
 MAX_TIMERS (default 32): If there is any chance that there could be more than 32 timers or daemons active at the same time, raise this limit. If, on the other hand, you know that you only have say 3 daemons and no timers in your game, you can set MAX_TIMERS to 3 to save a bit of dynamic memory. Also search through any extensions you use to check that they're not using timers or daemons before you start lowering this limit.
 
-MAX_SCOPE (default 32): How many objects can be in scope at the same time. Imagine the player picking up all movable objects and placing them in the location with the most static objects. Add any actors, their possessions, the player's body parts if any, etc. MAX_SCOPE should be higher than this number of objects. If there's a situation in the game where MAX_SCOPE is too low for all objects that should be in scope, some objects will quietly be ignored. If the game has been compiled in debug mode, an error message will instead be printed.
+MAX_SCOPE (default 32): How many objects can be in scope at the same time. Imagine the player picking up all movable objects and placing them in the location with the most static objects. Add any actors, their possessions, the player's body parts if any, etc. MAX_SCOPE should be higher than this number of objects. If there's a situation in the game where MAX_SCOPE is too low for all objects that should be in scope, some objects will quietly be ignored, meaning some objects can't be referenced and if they have an each_turn routine it won't be executed. If the game has been compiled in debug mode, an error message is printed when this happens.
 
 ## Check articles
 
