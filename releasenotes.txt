@@ -358,7 +358,7 @@ v1.9: bug fix and new feature release (17 January 2021)
   with strict error-checking.
 
 =======
-v1.10: bug fix and new feature release
+v2.0: bug fix and new feature release
 
 - Added OPTIONAL_SIMPLE_DOORS for an easier way to create doors, which also
   saves space if you have more than six doors.
@@ -368,4 +368,8 @@ v1.10: bug fix and new feature release
 - Changed to show concealed/scenery items in inventory lists (issue 72)
 - Added new Game User's Guide
 - Fixed creature testing bug (issue 73)
-
+- Changed so the capacity property is an alias of nw_to, to save a common
+  property. This leads to capacity not having a proper default value. To read
+  the capacity property, call ObjectCapacity(object). The default value is the
+  value of the constant DEFAULT_CAPACITY, which is 100 unless the game code
+  defines it.
