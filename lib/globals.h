@@ -103,6 +103,10 @@ Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
 Constant SOMETHING_STR = "something";
 Constant SOMEONE_STR = "someone";
 
+#Ifndef DEFAULT_CAPACITY;
+Constant DEFAULT_CAPACITY = 100;
+#Endif;
+
 #Ifndef OPTIONAL_NO_DARKNESS;
 Attribute light;
 #Endif;
@@ -165,6 +169,7 @@ Property in_to; Property out_to;
 #Ifndef OPTIONAL_FULL_DIRECTIONS;
 ! These have to come outside the other direction props if we DON'T HAVE full directions
 Property ne_to;
+Property nw_to;
 Property se_to;
 Property sw_to;
 #EndIf;
@@ -204,7 +209,7 @@ Property additive time_out $ffff;
 Property daemon alias time_out;
 Property additive each_turn $ffff;
 
-Property capacity 100;
+Property capacity alias nw_to;
 
 Property short_name 0;
 Property parse_name   alias sw_to;

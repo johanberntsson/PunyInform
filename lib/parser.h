@@ -272,7 +272,7 @@ System_file;
 				_j = wn;
 				_result = 0;
 				if(meta == 0 || parent(_obj) ~= 0
-						|| (_obj provides describe or life or found_in or capacity)
+						|| (_obj provides describe or life or found_in)
 						|| DebugParseNameObject(_obj))
 					_result = _obj.parse_name();
 #IfNot;

@@ -290,6 +290,12 @@ else
 ];
 #EndIf;
 
+[ ObjectCapacity p_obj;
+	if(p_obj provides capacity)
+		return RunRoutines(p_obj, capacity);
+	return DEFAULT_CAPACITY;
+];
+
 [ _AtFullCapacity p_s _obj _k;
     if (p_s == player) {
         objectloop (_obj in p_s)
@@ -297,9 +303,9 @@ else
     } else
         _k = children(p_s);
 #IfDef SACK_OBJECT;
-	if (_k < RunRoutines(p_s, capacity) || (p_s == player && _RoomInSack())) rfalse;
+	if (_k < ObjectCapacity(p_s) || (p_s == player && _RoomInSack())) rfalse;
 #IfNot;
-	if (_k < RunRoutines(p_s, capacity)) rfalse;
+	if (_k < ObjectCapacity(p_s)) rfalse;
 #EndIf;
 ];
 
@@ -386,7 +392,7 @@ else
 	objectloop(_obj in p_obj) {
 !print "Considering ", (object) _obj, "...^";
 !if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
-		_show_obj = 
+		_show_obj =
 			_obj ~= parent(player) && ! don't print container when player in it
 			(p_check_workflag == false || _obj has workflag);
 		if(action ~= ##Inv) {
