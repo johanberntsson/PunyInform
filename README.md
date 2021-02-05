@@ -17,11 +17,13 @@ The main goal of PunyInform is to allow for games which are fast and have a smal
 
 ## Status
 
-We consider PunyInform ready for real-world use. Please check releasenotes.txt for more details on the latest version, what bugs have been fixed, what features have been added etc.
+PunyInform is fully working and has already been used for multiple games. We carefully add and change features and fix bugs as they are found. Please check releasenotes.txt for more details.
 
-If you are interested in our progress, please star or follow the project here on Github. Announcements are made on https://twitter.com/FRamsberg and on https://intfiction.org/c/authoring/inform-6-and-7/19
+If you are interested in our progress, please star or follow the project here on Github. Announcements are made on https://twitter.com/FRamsberg and on https://intfiction.org/c/authoring/inform-6/66
 
-You can see the manual on our [wiki](https://github.com/johanberntsson/PunyInform/wiki/Manual).
+You can read the manual on our [wiki](https://github.com/johanberntsson/PunyInform/wiki/Manual). It is also included as a PDF when you download PunyInform.
+
+There is also a Game Author's Guide (under Documentation) with various tips for authors writing a game using PunyInform. It's not intended to teach the entire library, but more to give some tips you may find useful when you have a working knowledge of the library and you've started developing a game which you think you will release.
 
 You can see what tasks we're currently working on, tasks we've done and tasks coming up on our Trello board: https://trello.com/b/mfGVsB4H/punyinform
 
