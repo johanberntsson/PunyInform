@@ -1258,7 +1258,7 @@ Object thedark "Darkness"
 #Endif;
 ];
 
-#Ifdef OPTIONAL_PROVIDE_UNDO;
+#Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
 [ UndoSub _i;
 	if (turns == 0) {
 		PrintMsg(MSG_UNDO_NOTHING_DONE);
@@ -1275,7 +1275,6 @@ Object thedark "Darkness"
 	@restore_undo _i;
 	if (_i == 0) {
 		PrintMsg(MSG_UNDO_FAILED);
-		"~Undo~ failed.";
 		return 0;
 	}
 	return 1;
@@ -1344,7 +1343,7 @@ Object thedark "Darkness"
 #Endif;
 		if(parse->1 == 0) {
 			_ReadPlayerInput();
-#Ifdef OPTIONAL_PROVIDE_UNDO;
+#Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
 			if(parse-->1 == 'undo') {
 				if(UndoSub() == 0) @new_line;
 				parse->1 = 0;

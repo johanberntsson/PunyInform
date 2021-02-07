@@ -5,6 +5,10 @@ System_file;
 Constant PUNYINFORM_MAJOR_VERSION = 1;
 Constant PUNYINFORM_MINOR_VERSION = 9;
 
+#Ifndef VN_1634;
+Message fatalerror "*** The PunyInform library needs Inform v6.34 or later to work ***";
+#Endif; ! VN_
+
 #IfnDef CUSTOM_ABBREVIATIONS;
 Abbreviate "You ";
 Abbreviate "thing";
@@ -106,6 +110,15 @@ Constant SOMEONE_STR = "someone";
 #Ifndef DEFAULT_CAPACITY;
 Constant DEFAULT_CAPACITY = 100;
 #Endif;
+
+#Ifdef OPTIONAL_PROVIDE_UNDO;
+#IfV3;
+Message warning "*** Skipping Undo - not supported in v3 ***";
+#IfNot;
+Constant OPTIONAL_PROVIDE_UNDO_FINAL;
+#Endif;
+#Endif;
+
 
 #Ifndef OPTIONAL_NO_DARKNESS;
 Attribute light;

@@ -279,7 +279,7 @@ Default MSG_EMPTY_CANT_CONTAIN 119; ! Extended verbset, but uses same msg as INS
 Default MSG_YES_OR_NO 120;
 Default MSG_RESTART_CONFIRM 121;
 
-#IfDef OPTIONAL_PROVIDE_UNDO;
+#IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
 Constant MSG_UNDO_NOTHING_DONE "[You can't ~undo~ what hasn't been done!]";
 #EndIf;
