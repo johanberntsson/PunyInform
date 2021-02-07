@@ -1259,7 +1259,7 @@ Object thedark "Darkness"
 ];
 
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
-[ UndoSub _i;
+[ PerformUndo _i;
 	if (turns == 0) {
 		PrintMsg(MSG_UNDO_NOTHING_DONE);
 		return 0;
@@ -1345,7 +1345,7 @@ Object thedark "Darkness"
 			_ReadPlayerInput();
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
 			if(parse-->1 == 'undo') {
-				if(UndoSub() == 0) @new_line;
+				if(PerformUndo() == 0) @new_line;
 				parse->1 = 0;
 				continue;
 			}
@@ -1458,6 +1458,11 @@ Object thedark "Darkness"
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		_ReadPlayerInput(true);
 		verb_word = parse-->1;
+#Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
+		if(verb_word == 'undo') {
+			PerformUndo();
+		}
+#Endif;
 		if(verb_word == 'restart') @restart;
 		if(verb_word == 'restore') RestoreSub();
 		if(AMUSING_PROVIDED == 0 && deadflag == 2 && verb_word == 'amusing') Amusing();
