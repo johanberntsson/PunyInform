@@ -290,7 +290,7 @@ Constant MSG_UNDO_NOT_PROVIDED "[Your interpreter does not provide ~undo~.]";
 Constant MSG_UNDO_FAILED "~Undo~ failed.";
 #EndIf;
 #Ifndef MSG_UNDO_DONE;
-Constant MSG_UNDO_DONE "Previous turn undone.^";
+Constant MSG_UNDO_DONE "Previous turn undone.";
 #EndIf;
 #EndIf;
 
