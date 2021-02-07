@@ -443,6 +443,7 @@ else
 		_PrintAfterEntry(p_obj);
 	}
 ];
+
 [ RunRoutines p_obj p_prop p_switch;
 	if(p_switch == 0) sw__var = action; else sw__var = p_switch;
 	if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
@@ -1257,6 +1258,30 @@ Object thedark "Darkness"
 #Endif;
 ];
 
+#Ifdef OPTIONAL_PROVIDE_UNDO;
+[ UndoSub _i;
+	if (turns == 0) {
+		PrintMsg(MSG_UNDO_NOTHING_DONE);
+		return 0;
+	}
+	if (undo_flag == 0) {
+		PrintMsg(MSG_UNDO_NOT_PROVIDED);
+		return 0;
+	}
+	if (undo_flag == 1) {
+		PrintMsg(MSG_UNDO_FAILED);
+		return 0;
+	}
+	@restore_undo _i;
+	if (_i == 0) {
+		PrintMsg(MSG_UNDO_FAILED);
+		"~Undo~ failed.";
+		return 0;
+	}
+	return 1;
+];
+#Endif;
+
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
 
 #IfDef DEBUG;
@@ -1319,6 +1344,23 @@ Object thedark "Darkness"
 #Endif;
 		if(parse->1 == 0) {
 			_ReadPlayerInput();
+#Ifdef OPTIONAL_PROVIDE_UNDO;
+			if(parse-->1 == 'undo') {
+				if(UndoSub() == 0) @new_line;
+				parse->1 = 0;
+				continue;
+			}
+			@save_undo _i;
+			undo_flag = 2;
+			if(_i == -1) undo_flag = 0;
+			if(_i == 0) undo_flag = 1;
+			if(_i == 2) {
+				! undo has just been issued
+				PrintMsg(MSG_UNDO_DONE);
+				parse->1 = 0;
+				continue;
+			}
+#Endif;
 		}
 		_parser_oops = parser_unknown_noun_found;
 .do_it_again;

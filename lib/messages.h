@@ -279,6 +279,21 @@ Default MSG_EMPTY_CANT_CONTAIN 119; ! Extended verbset, but uses same msg as INS
 Default MSG_YES_OR_NO 120;
 Default MSG_RESTART_CONFIRM 121;
 
+#IfDef OPTIONAL_PROVIDE_UNDO;
+#Ifndef MSG_UNDO_NOTHING_DONE;
+Constant MSG_UNDO_NOTHING_DONE "[You can't ~undo~ what hasn't been done!]";
+#EndIf;
+#Ifndef MSG_UNDO_NOT_PROVIDED;
+Constant MSG_UNDO_NOT_PROVIDED "[Your interpreter does not provide ~undo~.]";
+#EndIf;
+#Ifndef MSG_UNDO_FAILED;
+Constant MSG_UNDO_FAILED "~Undo~ failed.";
+#EndIf;
+#Ifndef MSG_UNDO_DONE;
+Constant MSG_UNDO_DONE "Previous turn undone.^";
+#EndIf;
+#EndIf;
+
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;

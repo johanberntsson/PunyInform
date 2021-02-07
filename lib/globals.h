@@ -313,6 +313,9 @@ Array LanguageNumbers static table
 ! Header constants
 Constant HDR_DICTIONARY      = $8;   ! Actual address
 Constant HDR_STATIC_MEM      = $e;   ! Actual address
+Constant HDR_SCREENHCHARS    = $20;
+Constant HDR_SCREENWCHARS    = $21;
+Constant HDR_FLAGS2          = $10;  ! transcript, undo etc.
 
 Constant TT_OBJECT           = 1;    ! one or more words referring to an object
                                      ! it is one of NOUN_TOKEN etc. below
@@ -359,8 +362,6 @@ Constant FORM_INDEF          = 3;
 Constant DICT_BYTES_FOR_WORD = 4;
 #IfNot;
 Constant DICT_BYTES_FOR_WORD = 6;
-Constant HDR_SCREENHCHARS    = $20;
-Constant HDR_SCREENWCHARS    = $21;
 Constant MOVES__TX = " Moves: ";
 Constant SCORE__TX = " Score: ";
 Constant TIME__TX = " Time: ";
@@ -387,6 +388,7 @@ Global status_field_1 = 0; ! Must be the second global to show score or hours
 Global status_field_2 = 0; ! Must be the third global to show turns or minutes
 Global real_location;
 Global score;
+Global undo_flag;
 Global notify_mode = true;          ! Score notification
 #Ifndef sys_statusline_flag;
 Global sys_statusline_flag = 0;     ! non-zero if status line displays time

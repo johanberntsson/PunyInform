@@ -28,6 +28,7 @@ Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
 !Constant OPTIONAL_MANUAL_SCOPE;
 !Constant OPTIONAL_ORDERED_TIMERS;
+!Constant OPTIONAL_PROVIDE_UNDO;
 !Constant RUNTIME_ERRORS = 0;
 
 ! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,

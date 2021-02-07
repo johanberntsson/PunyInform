@@ -373,3 +373,5 @@ v2.0: bug fix and new feature release
   the capacity property, call ObjectCapacity(object). The default value is the
   value of the constant DEFAULT_CAPACITY, which is 100 unless the game code
   defines it.
+- Added optional undo support
+

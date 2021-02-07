@@ -1147,7 +1147,6 @@ Verb meta 'quit' 'q//'
 ! ---------------------
 
 #IfDef OPTIONAL_EXTENDED_METAVERBS;
-Constant HDR_GAMEFLAGS     $10;
 Global transcript_mode = false;        ! true when game scripting is on
 Global xcommsdir = false;              ! true if command recording is on
 
@@ -1237,21 +1236,21 @@ Verb meta 'verify'
 #Endif; ! NO_PLACES
 
 [ ScriptOnSub;
-	transcript_mode = ((HDR_GAMEFLAGS-->0) & 1);
+	transcript_mode = ((HDR_FLAGS2-->0) & 1);
 	if (transcript_mode) "Transcripting is already on.";
 	@output_stream 2;
-	if (((HDR_GAMEFLAGS-->0) & 1) == 0) "Attempt to begin transcript failed.";
+	if (((HDR_FLAGS2-->0) & 1) == 0) "Attempt to begin transcript failed.";
 	print "Start of a transcript of^";
 	Banner();
 	transcript_mode = true;
 ];
 
 [ ScriptOffSub;
-	transcript_mode = ((HDR_GAMEFLAGS-->0) & 1);
+	transcript_mode = ((HDR_FLAGS2-->0) & 1);
 	if (transcript_mode == false) "Transcripting is already off.";
 	print "^End of transcript.^";
 	@output_stream -2;
-	if ((HDR_GAMEFLAGS-->0) & 1) "Attempt to end transcript failed.";
+	if ((HDR_FLAGS2-->0) & 1) "Attempt to end transcript failed.";
 	transcript_mode = false;
 ];
 
