@@ -1345,9 +1345,9 @@ Object thedark "Darkness"
 			_ReadPlayerInput();
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
 			if(parse-->1 == 'undo') {
-				if(PerformUndo() == 0) @new_line;
-				parse->1 = 0;
-				continue;
+				PerformUndo();
+				@new_line;
+				jump abort_input;
 			}
 			@save_undo _i;
 			undo_flag = 2;
@@ -1356,8 +1356,8 @@ Object thedark "Darkness"
 			if(_i == 2) {
 				! undo has just been issued
 				PrintMsg(MSG_UNDO_DONE);
-				parse->1 = 0;
-				continue;
+				@new_line;
+				jump abort_input;
 			}
 #Endif;
 		}
@@ -1444,6 +1444,11 @@ Object thedark "Darkness"
 	timer1 = 0-->2 - timer1;
 	print "[After ParseAndPerformAction took ",timer1," jiffies]^";
 #Endif;
+		continue;
+.abort_input;
+		! skip all processing and force new input
+		parse->1 = 0;
+		_sentencelength = 0;
 	}
 	_UpdateScoreOrTime();
 	@new_line;
