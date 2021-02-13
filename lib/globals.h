@@ -538,13 +538,17 @@ Constant RUNTIME_ERRORS RTE_NORMAL;
 #EndIf;
 #EndIf;
 
-#IfDef OPTIONAL_FULL_SCORE;
+#IfDef OPTIONAL_SCORED;
 Attribute scored;
-Global things_score;
-Global places_score;
 Default OBJECT_SCORE        4;
 Default ROOM_SCORE          5;
+#IfDef OPTIONAL_FULL_SCORE;
+Global things_score;
+Global places_score;
+#Endif;
+#Endif;
 
+#IfDef OPTIONAL_FULL_SCORE;
 #IfDef TASKS_PROVIDED;
 Default NUMBER_TASKS        1;
 Array  task_done -> NUMBER_TASKS;

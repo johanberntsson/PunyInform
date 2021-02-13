@@ -150,6 +150,20 @@ Constant MSG_PARSER_CANT_DISAMBIGUATE "I still don't understand what you are ref
 Constant MSG_PARSER_NOSUCHTHING "You can't see any such thing.";
 #EndIf;
 
+#IfDef OPTIONAL_FULL_SCORE;
+#IfDef OPTIONAL_SCORED;
+#Ifndef MSG_FULLSCORE_OBJECTS;
+Constant MSG_FULLSCORE_OBJECTS "finding sundry items";
+#EndIf;
+#Ifndef MSG_FULLSCORE_ROOMS;
+Constant MSG_FULLSCORE_ROOMS "visiting various places";
+#EndIf;
+#EndIf;
+#Ifndef MSG_FULLSCORE_ACTIONS;
+Constant MSG_FULLSCORE_ACTIONS "performing noteworthy actions";
+#EndIf;
+#EndIf;
+
 !
 ! complex messages (enumerated)
 !

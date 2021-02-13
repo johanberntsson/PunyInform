@@ -374,4 +374,8 @@ v2.0: bug fix and new feature release
   value of the constant DEFAULT_CAPACITY, which is 100 unless the game code
   defines it.
 - Added optional undo support
-
+- Added OPTIONAL_SCORED to support the 'scored' attribute for places and
+  objects. NOTE: Games that use scored will now need to define this!
+- Added a line to summary in FullScoreSub, for "noteworthy actions". This sums
+  up score added in code, like "score = score + 10;".
+- Moved messages from FullScoreSub to messages.h

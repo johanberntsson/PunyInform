@@ -1006,26 +1006,40 @@ Verb meta 'quit' 'q//'
 ];
 
 #IfDef OPTIONAL_FULL_SCORE;
-[ FullScoreSub _i;
-	ScoreSub();
+#IfDef TASKS_PROVIDED;
+[ FullScoreSub _i _score_sum _sc;
+#IfNot;
+[ FullScoreSub _i _score_sum;
+#EndIf;
 	new_line;
 	PrintMsg(MSG_FULLSCORE_START);
 #IfDef TASKS_PROVIDED;
 	for(_i=0 : _i<NUMBER_TASKS : _i++)
 		if (task_done->_i == 1) {
-		PANum(task_scores->(_i));
-		PrintTaskName(_i);
-	}
+			_sc = task_scores->(_i);
+			PANum(_sc);
+			_score_sum = _score_sum + _sc;
+			PrintTaskName(_i);
+		}
 #IfNot;
 	_i = 0; ! Avoid warning
 #EndIf;
+#IfDef OPTIONAL_SCORED;
 	if(things_score ~= 0) {
 		PANum(things_score);
-		print "finding sundry items^";
+		PrintMsg(MSG_FULLSCORE_OBJECTS);
 	}
 	if(places_score ~= 0) {
 		PANum(places_score);
-		print "visiting various places^";
+		PrintMsg(MSG_FULLSCORE_ROOMS);
+	}
+	_score_sum = score - _score_sum - things_score - places_score;
+#IfNot;
+	_score_sum = score - _score_sum;
+#EndIf;
+	if(_score_sum ~= 0) {
+		PANum(_score_sum);
+		PrintMsg(MSG_FULLSCORE_ACTIONS);
 	}
 	@new_line;
 	PANum(score);
@@ -1436,10 +1450,12 @@ Global scope_cnt;
 	_top_ceil = _ceil;
 
 	if(_ceil == location) {
-#IfDef OPTIONAL_FULL_SCORE;
+#IfDef OPTIONAL_SCORED;
 		if(location has scored && location hasnt visited) {
 			score = score + ROOM_SCORE;
+#IfDef OPTIONAL_FULL_SCORE;
 			places_score = places_score + ROOM_SCORE;
+#EndIf;
 		}
 #EndIf;
 		_PrintObjName(location);
@@ -1619,10 +1635,12 @@ Global scope_cnt;
 
     if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
-#IfDef OPTIONAL_FULL_SCORE;
+#IfDef OPTIONAL_SCORED;
 	if(noun hasnt moved && noun has scored) {
 		score = score + OBJECT_SCORE;
+#IfDef OPTIONAL_FULL_SCORE;
 		things_score = things_score + OBJECT_SCORE;
+#EndIf;
 	}
 #EndIf;
 	move noun to player;

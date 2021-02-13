@@ -1304,8 +1304,10 @@ Object thedark "Darkness"
 	deadflag = GS_PLAYING;
 	score = 0;
 #IfDef OPTIONAL_FULL_SCORE;
+#IfDef OPTIONAL_SCORED;
 	places_score = 0;
 	things_score = 0;
+#EndIf;
 #IfDef TASKS_PROVIDED;
 	for(_i = 0 : _i < NUMBER_TASKS : _i++) task_done->_i = 0;
 #EndIf;
