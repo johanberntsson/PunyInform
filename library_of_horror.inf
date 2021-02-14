@@ -12,7 +12,7 @@
 ! Setup constants to customize PunyInform
 ! ====================================
 
-! Uncomment to add optional features to PunyLib
+! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
 !Constant CUSTOM_ABBREVIATIONS;
 !Constant OPTIONAL_FULL_DIRECTIONS;

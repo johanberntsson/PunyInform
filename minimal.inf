@@ -13,7 +13,7 @@ Constant Headline   "^A sample game which uses PunyInform.^";
 !Constant STATUSLINE_TIME; Statusline time;
 Constant STATUSLINE_SCORE; Statusline score;
 
-! Uncomment to add optional features to PunyLib
+! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
 !Constant CUSTOM_ABBREVIATIONS;
 Constant OPTIONAL_NO_DARKNESS;

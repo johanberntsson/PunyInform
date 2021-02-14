@@ -27,7 +27,7 @@ Constant STATUSLINE_TIME; Statusline time;
 Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 
 #IfnDef USEINFORM;
-! Uncomment to add optional features to PunyLib
+! Uncomment to add optional features to PunyInform
 !Constant OPTIONAL_NO_DARKNESS;
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_EXTENDED_METAVERBS;
