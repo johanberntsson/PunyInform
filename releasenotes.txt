@@ -358,7 +358,7 @@ v1.9: bug fix and new feature release (17 January 2021)
   with strict error-checking.
 
 =======
-v2.0: bug fix and new feature release
+v2.0: bug fix and new feature release (17 February 2021)
 
 - Added OPTIONAL_SIMPLE_DOORS for an easier way to create doors, which also
   saves space if you have more than six doors.
@@ -379,3 +379,7 @@ v2.0: bug fix and new feature release
 - Added a line to summary in FullScoreSub, for "noteworthy actions". This sums
   up score added in code, like "score = score + 10;".
 - Moved messages from FullScoreSub to messages.h
+
+=======
+v2.1: bug fix and new feature release
+
