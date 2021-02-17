@@ -55,6 +55,8 @@ Fredrik Ramsberg has written a few articles describing PunyInform for beginners:
 
 * [PunyInform Coding 1: The Basics](https://vintageisthenewold.com/punyinform-coding-1-the-basics/) covers the fundamentals of developing a game using PunyInform.
 
+* [PunyInform Coding 2: Objects and Actions](https://vintageisthenewold.com/punyinform-coding-2-objects-and-actions/) covers more of verbs, actions and adding code to objects in PunyInform.
+
 Fredrik has also written [a comparison of PunyInform and the standard Inform 6 library](https://intfiction.org/t/punyinform-vs-inform-6-a-comparison/46625).
 
 ## Credits
