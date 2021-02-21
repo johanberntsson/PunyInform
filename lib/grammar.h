@@ -1600,8 +1600,11 @@ Global scope_cnt;
     ! in the latter case.
     ! People cannot ordinarily be taken.
     if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
+#Ifdef DisallowTakeAnimate;
+	if(noun has animate && DisallowTakeAnimate(noun)) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
+#Ifnot;
     if(noun has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
-
+#Endif;
 	_ancestor = CommonAncestor(player, noun);
 
     if (_ancestor == 0) {
