@@ -385,3 +385,5 @@ v2.1: bug fix and new feature release
 
 - New entry point routine: DisallowTakeAnimate. Have it return false if the
   player should be able to pick up noun.
+- Implicit actions only occur when the actor==player, to stop for example
+  "bob, give me knife" from doing unexpected things with the knife.

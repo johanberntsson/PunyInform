@@ -267,7 +267,7 @@ Verb 'wear'
 
 [ DropSub _p;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
-	if(_DisrobeIfWorn(noun)) rtrue;
+	if(_ImplicitDisrobeIfWorn(noun)) rtrue;
 	_p = parent(player);
 	!if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
@@ -402,8 +402,8 @@ Verb 'wear'
 		rtrue;
 	}
 
-	if(noun ~=player && _GrabIfNotHeld(noun)) rtrue;
-	if(_DisrobeIfWorn(noun)) rtrue;
+	if(noun ~=player && _ImplicitGrabIfNotHeld(noun)) rtrue;
+	if(_ImplicitDisrobeIfWorn(noun)) rtrue;
 
 	! run before on receiver
 #IfDef DEBUG;
@@ -517,8 +517,8 @@ Verb 'wear'
 	if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
 	_ancestor = CommonAncestor(noun, second);
 	if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
-	if(noun ~= player && _GrabIfNotHeld(noun)) rtrue;
-	if(_DisrobeIfWorn(noun)) rtrue;
+	if(noun ~= player && _ImplicitGrabIfNotHeld(noun)) rtrue;
+	if(_ImplicitDisrobeIfWorn(noun)) rtrue;
 
 	! run before on receiver
 #IfDef DEBUG;
@@ -638,9 +638,9 @@ Verb 'wear'
 ];
 
 [ ThrowAtSub;
-	if(_GrabIfNotHeld(noun)) rtrue;
+	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
 	if(ObjectIsUntouchable(second)) return;
-	if(_DisrobeIfWorn(noun)) rtrue;
+	if(_ImplicitDisrobeIfWorn(noun)) rtrue;
 	if(second > 1) {
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) second, ").before()^";
@@ -660,7 +660,7 @@ Verb 'wear'
 ];
 
 [ TransferSub;
-	if(_GrabIfNotHeld(noun)) rtrue;
+	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
 	if (second has supporter) <<PutOn noun second>>;
 	!if (second == d_obj) <<Drop noun>>;
 	<Insert noun second>;
@@ -847,7 +847,7 @@ Verb 'yes' 'y//'
 		if(_flag) break;
 		if(keep_silent == 0) print (name) _i, ": ";
 		if(selected_direction == d_to) {
-			_GrabIfNotHeld(_i);
+			_ImplicitGrabIfNotHeld(_i);
 			<Drop _i>;
 		} else
 			<Transfer _i _recipient>;

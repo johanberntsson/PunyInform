@@ -646,9 +646,10 @@ System_file;
 	return _ParseToken(p_token_type, p_token_data, -PHASE1);
 ];
 
-[ _GrabIfNotHeld p_noun _ks;
+[ _ImplicitGrabIfNotHeld p_noun _ks;
 	! return true if p_noun isn't held by the player at the end of the call
-	! (so that you can use it like: if(_GrabIfNotHeld(...)) { }
+	! (so that you can use it like: if(_ImplicitGrabIfNotHeld(...)) { }
+	if(actor ~= player) rfalse;
 	if(p_noun in player) rfalse;
 	PrintMsg(MSG_AUTO_TAKE, p_noun);
 	PronounNotice(p_noun);
@@ -660,9 +661,10 @@ System_file;
 	rfalse;
 ];
 
-[ _DisrobeIfWorn p_noun _ks;
+[ _ImplicitDisrobeIfWorn p_noun _ks;
 	! return true if p_noun isn't held by the player at the end of the call
-	! (so that you can use it like: if(_GrabIfNotHeld(...)) { }
+	! (so that you can use it like: if(_ImplicitDisrobeIfWorn(...)) { }
+	if(actor ~= player) rfalse;
 	if(p_noun notin player || p_noun hasnt worn) rfalse;
 	PronounNotice(p_noun);
 	if(keep_silent == false)
@@ -787,7 +789,7 @@ System_file;
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
-					if(_GrabIfNotHeld(_noun)) {
+					if(_ImplicitGrabIfNotHeld(_noun)) {
 						return GPR_FAIL;
 					}
 				}
