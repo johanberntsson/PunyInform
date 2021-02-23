@@ -630,7 +630,7 @@ Include "parser.h";
 	for(_i = 0: _i < _scope_count: _i++) {
 		if(deadflag >= GS_DEAD) rtrue;
 		_obj = scope_copy-->_i;
-		if(_obj.&each_turn ~= 0) {
+		if(_obj.&each_turn) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").each_turn()^";
 #EndIf;
@@ -668,7 +668,7 @@ Include "parser.h";
 
 	for(_i = 0: _i < _scope_count: _i++) {
 		_obj = scope_copy-->_i;
-		if (_obj provides react_before) {
+		if (_obj.&react_before) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_before()^";
 #EndIf;
@@ -684,7 +684,7 @@ Include "parser.h";
 #IfDef DEBUG;
 	if(debug_flag & 1) print "(", (name) location, ").before()^";
 #EndIf;
-	if(location provides before) {
+	if(location.&before) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 		! Assume that every routine may modify the scope
 		scope_modified = true;
@@ -695,7 +695,7 @@ Include "parser.h";
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) inp1, ").before()^";
 #EndIf;
-		if(inp1 provides before) {
+		if(inp1.&before) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 			! Assume that every routine may modify the scope
 			scope_modified = true;
@@ -716,7 +716,7 @@ Include "parser.h";
 
 	for(_i = 0: _i < _scope_count: _i++) {
 		_obj = scope_copy-->_i;
-		if (_obj provides react_after) {
+		if (_obj.&react_after) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_after()^";
 #EndIf;
@@ -731,7 +731,7 @@ Include "parser.h";
 #IfDef DEBUG;
 	if(debug_flag & 1) print "(", (name) location, ").after()^";
 #EndIf;
-	if(location provides after) {
+	if(location.&after) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 		! Assume that every routine may modify the scope
 		scope_modified = true;
@@ -742,7 +742,7 @@ Include "parser.h";
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) inp1, ").after()^";
 #EndIf;
-		if(inp1 provides after) {
+		if(inp1.&after) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 			! Assume that every routine may modify the scope
 			scope_modified = true;

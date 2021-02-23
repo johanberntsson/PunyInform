@@ -391,3 +391,4 @@ v2.1: bug fix and new feature release
 - Removed unnecessary check for duplicates in ScopeWithin.
 - Made UpdateScope avoid adding duplicates when called after a scope routine
   which has already added objects.
+- Optimized checking of react_before and react_after.
