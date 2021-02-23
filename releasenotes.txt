@@ -387,3 +387,7 @@ v2.1: bug fix and new feature release
   player should be able to pick up noun.
 - Implicit actions only occur when the actor==player, to stop for example
   "bob, give me knife" from doing unexpected things with the knife.
+- Made GetScopeCopy faster.
+- Removed unnecessary check for duplicates in ScopeWithin.
+- Made UpdateScope avoid adding duplicates when called after a scope routine
+  which has already added objects.

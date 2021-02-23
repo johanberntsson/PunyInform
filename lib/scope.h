@@ -93,7 +93,8 @@ System_file;
 	scope-->(scope_objects++) = p_obj;
 ];
 
-[ _UpdateScope p_actor p_force _start_pos _i _initial_scope_objects _current_scope_objects;
+[ _UpdateScope p_actor p_force _start_pos _i _initial_scope_objects
+		_current_scope_objects _risk_duplicates;
 	if(p_actor == 0) p_actor = player;
 
 	if(scope_stage == 2) {
@@ -121,6 +122,7 @@ System_file;
 		_initial_scope_objects = scope_objects;
 	} else {
 		scope_objects = 0;
+		_risk_duplicates = 1;
 	}
 
 	! give entry routine a chance to override
@@ -128,24 +130,24 @@ System_file;
 
 
 	! the directions are always in scope
-	_PutInScope(Directions);
+	_PutInScope(Directions, _risk_duplicates);
 
 	! if we are in a container, add it to scope
 	if(parent(_start_pos)) {
-		_PutInScope(_start_pos);
+		_PutInScope(_start_pos, _risk_duplicates);
 	}
 
 #Ifdef OPTIONAL_NO_DARKNESS;
 	! Add all in player location (which may be inside an object)
-	_SearchScope(child(_start_pos), true, true);
+	_SearchScope(child(_start_pos), _risk_duplicates, true);
 #Ifnot;
 	if(location == thedark && p_actor == player) {
 		! only the player's possessions are in scope
-		_PutInScope(player);
-		_SearchScope(child(player), true, true);
+		_PutInScope(player, _risk_duplicates);
+		_SearchScope(child(player), _risk_duplicates, true);
 	} else {
 		! Add all in player location (which may be inside an object)
-		_SearchScope(child(_start_pos), true, true);
+		_SearchScope(child(_start_pos), _risk_duplicates, true);
 	}
 #Endif;
 
@@ -159,13 +161,31 @@ System_file;
 #EndIf;
 ];
 
+#IfV5;
 [GetScopeCopy p_actor _i;
+#IfNot;
+[GetScopeCopy p_actor _i _max;
+#EndIf;
 	if(p_actor == 0)
 		p_actor = player;
 
 	_UpdateScope(p_actor);
-	for(_i = 0: _i < scope_objects: _i++)
+
+#IfV5;
+	_i = scope_objects * 2;
+	@copy_table scope scope_copy _i;
+#IfNot;
+	if(scope_objects) {
+		_max = scope_objects - 1;
+.copy_next_entry;
 		scope_copy-->_i = scope-->_i;
+		@inc_chk _i _max ?~copy_next_entry;
+	}
+!	for(_i = 0: _i < scope_objects: _i++)
+!		scope_copy-->_i = scope-->_i;
+#EndIf;
+
+
 	return scope_objects;
 ];
 
@@ -236,7 +256,7 @@ Constant PlaceInScope = _PutInScope;
 	! scope-->(scope_objects++) = p_obj;
 ! ];
 
-[ ScopeWithin p_obj _child _i;
+[ ScopeWithin p_obj _child;
 	! DM: ScopeWithin(obj)
 	! Used in “scope routines” (only) when scope_stage is set to 2 (only).
 	! Places the contents of obj in scope for the token currently being
@@ -250,11 +270,6 @@ Constant PlaceInScope = _PutInScope;
 	! is there a child?
 	_child = child(p_obj);
 	if(_child == nothing) return;
-
-	! skip if already added
-	for(_i = 0: _i < scope_objects: _i++) {
-		if(scope-->_i == _child) return;
-	}
 
 	! add the child (will also add all siblings)
 	_SearchScope(_child);
