@@ -111,9 +111,9 @@ System_file;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
 #EndIf;
 	if(scope_pov == p_actor && scope_modified == false && p_force == false) return;
-
+	
+	scope_copy_is_good = false;
 	scope_pov = p_actor;
-
 	_start_pos = ScopeCeiling(p_actor);
 
 	if(scope_stage == 2) {
@@ -171,20 +171,21 @@ System_file;
 
 	_UpdateScope(p_actor);
 
+	if(scope_copy_actor ~= p_actor || scope_copy_is_good == false) {
 #IfV5;
-	_i = scope_objects * 2;
-	@copy_table scope scope_copy _i;
+		_i = scope_objects * 2;
+		@copy_table scope scope_copy _i;
 #IfNot;
-	if(scope_objects) {
-		_max = scope_objects - 1;
+		if(scope_objects) {
+			_max = scope_objects - 1;
 .copy_next_entry;
-		scope_copy-->_i = scope-->_i;
-		@inc_chk _i _max ?~copy_next_entry;
-	}
-!	for(_i = 0: _i < scope_objects: _i++)
-!		scope_copy-->_i = scope-->_i;
+			scope_copy-->_i = scope-->_i;
+			@inc_chk _i _max ?~copy_next_entry;
+		}
 #EndIf;
-
+		scope_copy_actor = p_actor;
+		scope_copy_is_good = true;
+	}
 	return scope_objects;
 ];
 

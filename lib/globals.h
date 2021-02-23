@@ -456,6 +456,8 @@ Global also_flag;        ! Used by Look
 Global inventory_stage;
 Global phase2_necessary;
 Global receive_action;
+Global scope_copy_actor;
+Global scope_copy_is_good = false;
 
 #IfDef DEBUG;
 Global dict_start;
