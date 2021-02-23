@@ -151,6 +151,7 @@ Attribute door;
 Attribute locked;
 Attribute lockable;
 Attribute workflag;
+Attribute reactive;
 
 
 ! when you order a NPC, but the command isn't understood

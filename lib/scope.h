@@ -185,7 +185,6 @@ System_file;
 !		scope_copy-->_i = scope-->_i;
 #EndIf;
 
-
 	return scope_objects;
 ];
 

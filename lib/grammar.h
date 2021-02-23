@@ -1306,6 +1306,10 @@ Verb meta 'tree'
 Verb meta 'gonear'
 	* noun										-> GoNear;
 
+Verb meta 'debug'
+	*                                           -> Debug
+	* 'reactive'                                -> Debug;
+
 Verb meta 'routines' 'messages'
 	*                                           -> RoutinesOn
 	* 'on'                                      -> RoutinesOn
@@ -1320,7 +1324,6 @@ Verb meta 'timers' 'daemons'
 	*                                           -> TimersOn
 	* 'on'                                      -> TimersOn
 	* 'off'                                     -> TimersOff;
-
 
 Global scope_cnt;
 
@@ -1391,6 +1394,32 @@ Global scope_cnt;
 		for(_i = 0 : _i < p_indent : _i++) print "  ";
 		print (name) _x, "^";
 		if(child(_x)) TreeSubHelper(_x, p_indent + 1);
+	}
+];
+
+[DebugSub _w _o;
+	wn = num_words;
+	_w = NextWord();
+	switch(_w) {
+		'reactive':
+#Ifndef OPTIONAL_MANUAL_REACTIVE;
+			_o = 1;
+			"Define OPTIONAL_MANUAL_REACTIVE and recompile.";
+#Ifnot;
+			print "Give reactive to these objects:^";
+			objectloop(_o)
+				if(_o hasnt reactive && (_o.&react_before ~= 0 ||
+						_o.&react_after ~= 0 || _o.&each_turn ~= 0))
+					print "(",_o,") ", (name) _o, "^";
+			print "^Remove reactive from these objects:^";
+			objectloop(_o)
+				if(_o has reactive && _o.&react_before == 0 &&
+						_o.&react_after == 0 && _o.&each_turn == 0)
+					print "(",_o,") ", (name) _o, "^";
+#Endif;
+		default:
+			"Type one of the following:^
+			DEBUG REACTIVE";
 	}
 ];
 

@@ -460,9 +460,13 @@ else
 	}
 ];
 
-[ _InitFloatingObjects _i _k _stop;
+[ _InitObjects _i _k _stop;
 	_stop = top_object + 1;
 	for(_i = Directions : _i < _stop : _i++) {
+#Ifndef OPTIONAL_MANUAL_REACTIVE;
+		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0)
+			give _i reactive;
+#Endif;
 		if(_i.&found_in) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 			if(_k >= MAX_FLOATING_OBJECTS) {
@@ -620,7 +624,7 @@ Include "parser.h";
 [ RunEachTurn _i _obj _scope_count;
 	! Run all each_turn routines for location and all objects in scope.
 #IfDef DEBUG;
-	if(debug_flag & 1 && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
+	if(debug_flag & 1 && location has reactive && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
 #EndIf;
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
@@ -630,7 +634,7 @@ Include "parser.h";
 	for(_i = 0: _i < _scope_count: _i++) {
 		if(deadflag >= GS_DEAD) rtrue;
 		_obj = scope_copy-->_i;
-		if(_obj.&each_turn) {
+		if(_obj has reactive && _obj.&each_turn ~= 0) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").each_turn()^";
 #EndIf;
@@ -668,7 +672,7 @@ Include "parser.h";
 
 	for(_i = 0: _i < _scope_count: _i++) {
 		_obj = scope_copy-->_i;
-		if (_obj.&react_before) {
+		if (_obj has reactive && _obj.&react_before ~= 0) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_before()^";
 #EndIf;
@@ -716,7 +720,7 @@ Include "parser.h";
 
 	for(_i = 0: _i < _scope_count: _i++) {
 		_obj = scope_copy-->_i;
-		if (_obj.&react_after) {
+		if (_obj has reactive && _obj.&react_after ~= 0) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_after()^";
 #EndIf;
@@ -796,10 +800,14 @@ Include "parser.h";
 		_idx = p_obj - FAKE_N_OBJ;
 		selected_direction_index = _idx + 1;
 		selected_direction = _idx + N_TO_CONST;
-		if(p_noun_no == 1)
-			noun = Directions;
-		else
-			second = Directions;
+		if(p_noun_no == 1) {
+			inp1 = Directions;
+			noun = inp1;
+		}
+		else {
+			inp2 = Directions;
+			second = inp2;
+		}
 	}
 ];
 
@@ -1325,7 +1333,7 @@ Object thedark "Darkness"
 		@new_line;
 	}
 
-	_InitFloatingObjects(); ! after initialise since location set there
+	_InitObjects(); ! after initialise since location set there
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
 
 	@new_line;

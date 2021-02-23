@@ -40,6 +40,7 @@ Constant OPTIONAL_FULL_DIRECTIONS;
 Constant OPTIONAL_SIMPLE_DOORS;
 Constant OPTIONAL_SHIP_DIRECTIONS;
 Constant OPTIONAL_MANUAL_SCOPE;
+Constant OPTIONAL_MANUAL_REACTIVE;
 Constant OPTIONAL_ORDERED_TIMERS;
 Constant OPTIONAL_PROVIDE_UNDO;
 
@@ -1162,9 +1163,9 @@ Object CarPark "Car Park"
 #EndIf;
 		cant_go "Without a car the only viable exit is to the north.",
 #IfDef OPTIONAL_FULL_SCORE;
-	has scored light;
+	has scored light reactive;
 #IfNot;
-	has light;
+	has light reactive;
 #EndIf;
 
 Object -> Key "key"
@@ -1500,7 +1501,8 @@ Object -> -> Sticker "sticker"
 !		if(location ~= thedark) "The sticker looks oh so sticky.";
 #Endif;
 		],
-		add_to_scope Key;
+		add_to_scope Key,
+	has reactive;
 
 Object -> BlueBook "blue book" class Book
 	with
@@ -1635,7 +1637,8 @@ Object -> John "John"
 			if(second == 'pink') "~That is a nice pink book.~";
 			"John ignores your question.";
 		],
-	has proper animate transparent;
+	has proper animate transparent reactive;
+
 Object -> -> JohnsBall "pink ball"
   with  name 'pink' 'ball',
   has   concealed;
@@ -1827,6 +1830,7 @@ Array quote_1 --> 5 35
 #IfnDef USEINFORM;
 	ship_directions_enabled = false;
 #Endif;
+	give player reactive;
 	thedark.short_name = "Yucky darkness";
 	thedark.initial = "Oh, so scary.";
 	thedark.description = "Now you are really scared.";
@@ -1849,7 +1853,10 @@ Array quote_1 --> 5 35
 !	print "BlueBook.party is ", BlueBook.party, "^";
 !	BlueBook.party(5);
 	move Gun to John;
-	print "^^Welcome to the Testbench... This is where all sorts of PunyInform features are tried out. Don't expect much of a game here. Currently, you can win by putting stuff in the box, or lose by checking out the sun by the river or by pushing John around.^^";
+	print "^^Welcome to the Testbench... This is where all sorts of PunyInform
+		features are tried out. Don't expect much of a game here. Currently, you
+		can win by putting stuff in the box, or lose by checking out the sun by
+		the river or by pushing John around.";
 ];
 #Ifdef USEINFORM;
 Include "Grammar";
