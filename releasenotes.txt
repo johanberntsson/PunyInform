@@ -400,4 +400,4 @@ v2.1: bug fix and new feature release
   lose attribute reactive.
 - Fixed bug in handling fake directions, which made code like <GO FAKE_N_OBJ>
   break every time.
-    
+- Optimized loops in BeforeRoutine, AfterRoutines and RunEachTurn.

@@ -621,7 +621,7 @@ Include "parser.h";
 	return false; ! failed to run (stopped by BeforeRoutines)
 ];
 
-[ RunEachTurn _i _obj _scope_count;
+[ RunEachTurn _i _obj _scope_count _max;
 	! Run all each_turn routines for location and all objects in scope.
 #IfDef DEBUG;
 	if(debug_flag & 1 && location has reactive && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
@@ -631,7 +631,10 @@ Include "parser.h";
 #EndIf;
 	_scope_count = GetScopeCopy();
 	RunRoutines(location, each_turn);
-	for(_i = 0: _i < _scope_count: _i++) {
+
+	if(_scope_count) {
+		_max = _scope_count - 1;
+.next_entry;
 		if(deadflag >= GS_DEAD) rtrue;
 		_obj = scope_copy-->_i;
 		if(_obj has reactive && _obj.&each_turn ~= 0) {
@@ -644,10 +647,11 @@ Include "parser.h";
 #EndIf;
 			RunRoutines(_obj, each_turn);
 		}
+		@inc_chk _i _max ?~next_entry;
 	}
 ];
 
-[ BeforeRoutines _i _obj _scope_count;
+[ BeforeRoutines _i _obj _scope_count _max;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
 #IfnDef OPTIONAL_MANUAL_SCOPE;
@@ -670,7 +674,9 @@ Include "parser.h";
 #EndIf;
 	if(RunRoutines(player, orders)) rtrue;
 
-	for(_i = 0: _i < _scope_count: _i++) {
+	if(_scope_count) {
+		_max = _scope_count - 1;
+.next_entry;
 		_obj = scope_copy-->_i;
 		if (_obj has reactive && _obj.&react_before ~= 0) {
 #IfDef DEBUG;
@@ -684,6 +690,7 @@ Include "parser.h";
 				rtrue;
 			}
 		}
+		@inc_chk _i _max ?~next_entry;
 	}
 #IfDef DEBUG;
 	if(debug_flag & 1) print "(", (name) location, ").before()^";
@@ -710,7 +717,7 @@ Include "parser.h";
 	rfalse;
 ];
 
-[ AfterRoutines _i _obj _scope_count;
+[ AfterRoutines _i _obj _scope_count _max;
 	! react_after - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
 #IfnDef OPTIONAL_MANUAL_SCOPE;
@@ -718,7 +725,9 @@ Include "parser.h";
 #EndIf;
 	_scope_count = GetScopeCopy();
 
-	for(_i = 0: _i < _scope_count: _i++) {
+	if(_scope_count) {
+		_max = _scope_count - 1;
+.next_entry;
 		_obj = scope_copy-->_i;
 		if (_obj has reactive && _obj.&react_after ~= 0) {
 #IfDef DEBUG;
@@ -731,6 +740,7 @@ Include "parser.h";
 			if(RunRoutines(_obj, react_after))
 				rtrue;
 		}
+		@inc_chk _i _max ?~next_entry;
 	}
 #IfDef DEBUG;
 	if(debug_flag & 1) print "(", (name) location, ").after()^";
