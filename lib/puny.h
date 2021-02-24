@@ -1299,7 +1299,7 @@ Object thedark "Darkness"
 ];
 #Endif;
 
-[ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops;
+[ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops _disallow_complex_again;
 
 #IfDef DEBUG;
 	dict_start = HDR_DICTIONARY-->0;
@@ -1363,6 +1363,7 @@ Object thedark "Darkness"
 #Endif;
 		if(parse->1 == 0) {
 			_ReadPlayerInput();
+			_disallow_complex_again = false;
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
 			if(parse-->1 == 'undo') {
 				PerformUndo();
@@ -1394,24 +1395,27 @@ Object thedark "Darkness"
 #Endif;
 		if(action == ##OopsCorrection) {
 			if(_again_saved && _parser_oops > 0) {
-				!print "Oops not implemented^";
 				_CopyInputArray(buffer2, buffer);
 				_CopyParseArray(parse2, parse);
 				_parser_oops-->0 = special_word;
 				_again_saved = false;
 				jump do_it_again;
 			} else {
-				print "Sorry, that can't be corrected.^";
+				PrintMsg(MSG_PARSER_CANT_OOPS);
 			}
 		}
 		if(action == ##Again) {
 			! restore from the 'again' buffers and reparse
-			if(_again_saved) {
+			if(_disallow_complex_again) {
+				PrintMsg(MSG_PARSER_COMPLEX_AGAIN);
+		        parse->1 = 0;
+		        continue;
+			} else if(_again_saved) {
 				_CopyInputArray(buffer2, buffer);
 				_CopyParseArray(parse2, parse);
 				jump do_it_again;
 			} else {
-				print "You can hardly repeat that.^";
+				PrintMsg(MSG_PARSER_NOTHING_TO_AGAIN);
 			}
 		} else {
 			! store the current buffer to 'again'
@@ -1433,17 +1437,7 @@ Object thedark "Darkness"
 		}
 
 		if(_score ~= score && notify_mode == true) {
-			print "^[The score has just gone ";
-			if(_score < score) {
-				_j = score - _score;
-				print "up";
-			} else {
-				_j = _score - score;
-				print "down";
-			}
-			print " by ", _j, " point";
-			if(_j > 1) print "s";
-			print ".]^";
+			PrintMsg(MSG_PARSER_NEW_SCORE, _score);
 		}
 
 		_parsearraylength = parse->1;
@@ -1456,6 +1450,7 @@ Object thedark "Darkness"
 				parse-->_i = parse-->_j;
 
 			parse->1 = _parsearraylength - _sentencelength;
+			_disallow_complex_again = true; ! cannot parse "x me.g.g.g"
 		} else {
 			! the input was just one sentence
 			parse->1 = 0;

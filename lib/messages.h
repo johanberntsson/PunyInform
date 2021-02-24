@@ -162,6 +162,15 @@ Constant MSG_FULLSCORE_ROOMS "visiting various places";
 #Ifndef MSG_FULLSCORE_ACTIONS;
 Constant MSG_FULLSCORE_ACTIONS "performing noteworthy actions";
 #EndIf;
+#Ifndef MSG_PARSER_CANT_OOPS;
+Constant MSG_PARSER_CANT_OOPS "Sorry, that can't be corrected.";
+#EndIf;
+#Ifndef MSG_PARSER_COMPLEX_AGAIN;
+Constant MSG_PARSER_COMPLEX_AGAIN "The 'again' command must be on a new input line.^";
+#EndIf;
+#Ifndef MSG_PARSER_NOTHING_TO_AGAIN;
+Constant MSG_PARSER_NOTHING_TO_AGAIN "You can hardly repeat that.";
+#EndIf;
 #EndIf;
 
 !
@@ -292,6 +301,7 @@ Default MSG_INSERT_NOT_CONTAINER 118;
 Default MSG_EMPTY_CANT_CONTAIN 119; ! Extended verbset, but uses same msg as INSERT
 Default MSG_YES_OR_NO 120;
 Default MSG_RESTART_CONFIRM 121;
+Default MSG_PARSER_NEW_SCORE 122;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -672,6 +682,20 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_RESTART_CONFIRM < 1000;
 	MSG_RESTART_CONFIRM:
 		print "Are you sure you want to restart? ";
+#Endif;
+#IfTrue MSG_PARSER_NEW_SCORE < 1000;
+	MSG_PARSER_NEW_SCORE:
+		print "^[The score has just gone ";
+		if(p_arg_1 < score) {
+			p_arg_2 = score - p_arg_1;
+			print "up";
+		} else {
+			p_arg_2 = p_arg_1 - score;
+			print "down";
+		}
+		print " by ", p_arg_2, " point";
+		if(p_arg_2 > 1) print "s";
+		print ".]^";
 #Endif;
 
 
