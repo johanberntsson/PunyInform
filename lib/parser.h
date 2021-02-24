@@ -1515,10 +1515,14 @@ Array guess_num_objects->5;
 		if(_best_phase2 == PHASE2_ERROR) {
 			! call again to generate suitable error message
 			_score = _ParsePattern(_best_pattern, PHASE2);
-		} else {
+			rtrue;
+		} else if(_best_phase2 == PHASE2_DISAMBIGUATION) {
 			PrintMsg(MSG_PARSER_NOSUCHTHING);
+			rtrue;
 		}
-		rtrue;
+		! if not ERROR or DISAMBIGUATION, then we are currently
+		! parsning a filter command such as scope=ScopeRoutine,
+		! which we should allow to fall through into PHASE2
 	}
 
 	! Phase 2: reparse best pattern and ask for additional info if

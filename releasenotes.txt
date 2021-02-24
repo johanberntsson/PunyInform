@@ -404,3 +404,4 @@ v2.1: bug fix and new feature release
 - Optimized so scope_copy can often be reused several times.
 - Moved oops, again and score notifications messages to messages.inf
 - Fixed "x me.g.g" bug (disallowing complex again commands)
+- Fixed pattern filter bug that stopped some commands to reach phase 2.
