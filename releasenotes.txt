@@ -406,3 +406,4 @@ v2.1: bug fix and new feature release
 - Fixed "x me.g.g" bug (disallowing complex again commands)
 - Fixed pattern filter bug that stopped some commands to reach phase 2.
 - Fixed bug that didn't restore scope after using a scope=XXX grammar token.
+- Moved messages out of the OPTIONAL_FULL_SCORE block.

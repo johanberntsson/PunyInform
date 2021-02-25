@@ -149,6 +149,15 @@ Constant MSG_PARSER_CANT_DISAMBIGUATE "I still don't understand what you are ref
 #Ifndef MSG_PARSER_NOSUCHTHING;
 Constant MSG_PARSER_NOSUCHTHING "You can't see any such thing.";
 #EndIf;
+#Ifndef MSG_PARSER_CANT_OOPS;
+Constant MSG_PARSER_CANT_OOPS "Sorry, that can't be corrected.";
+#EndIf;
+#Ifndef MSG_PARSER_COMPLEX_AGAIN;
+Constant MSG_PARSER_COMPLEX_AGAIN "The 'again' command must be on a new input line.^";
+#EndIf;
+#Ifndef MSG_PARSER_NOTHING_TO_AGAIN;
+Constant MSG_PARSER_NOTHING_TO_AGAIN "You can hardly repeat that.";
+#EndIf;
 
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;
@@ -161,15 +170,6 @@ Constant MSG_FULLSCORE_ROOMS "visiting various places";
 #EndIf;
 #Ifndef MSG_FULLSCORE_ACTIONS;
 Constant MSG_FULLSCORE_ACTIONS "performing noteworthy actions";
-#EndIf;
-#Ifndef MSG_PARSER_CANT_OOPS;
-Constant MSG_PARSER_CANT_OOPS "Sorry, that can't be corrected.";
-#EndIf;
-#Ifndef MSG_PARSER_COMPLEX_AGAIN;
-Constant MSG_PARSER_COMPLEX_AGAIN "The 'again' command must be on a new input line.^";
-#EndIf;
-#Ifndef MSG_PARSER_NOTHING_TO_AGAIN;
-Constant MSG_PARSER_NOTHING_TO_AGAIN "You can hardly repeat that.";
 #EndIf;
 #EndIf;
 
