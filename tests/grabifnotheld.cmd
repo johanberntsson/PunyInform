@@ -18,6 +18,15 @@ drop all
 empty molly
 i
 look
+s
+what is samarkand
+what is book
+what is green book
+what is green
+what is sdasfafaf
+take green
+what is green
+what is green book
 quit
 yes
 

@@ -730,7 +730,10 @@ System_file;
 		scope_stage = 2;
 		_UpdateScope();
 		scope_stage = 0;
+		phase2_necessary = true;
 	} else if(_token_type == TT_PARSE_ROUTINE) {
+		! allow the 'general parsing routine' to do all instead.
+		! it returns object or GRP_FAIL, ...; just like _ParseToken
 		return  indirect(_token_data);
 	}
 	! then parse objects or prepositions
@@ -1365,6 +1368,7 @@ Array guess_num_objects->5;
 		! if true, then scope=Routine was executed
 		! in the previous _ParseAndPerformAction,
 		! which can have added stuff to the scope
+		scope_modified = true;
 	}
 	scope_routine = 0; ! prepare for a new scope=Routine
 
@@ -1515,14 +1519,10 @@ Array guess_num_objects->5;
 		if(_best_phase2 == PHASE2_ERROR) {
 			! call again to generate suitable error message
 			_score = _ParsePattern(_best_pattern, PHASE2);
-			rtrue;
-		} else if(_best_phase2 == PHASE2_DISAMBIGUATION) {
+		} else {
 			PrintMsg(MSG_PARSER_NOSUCHTHING);
-			rtrue;
-		}
-		! if not ERROR or DISAMBIGUATION, then we are currently
-		! parsning a filter command such as scope=ScopeRoutine,
-		! which we should allow to fall through into PHASE2
+		} 
+		rtrue;
 	}
 
 	! Phase 2: reparse best pattern and ask for additional info if
@@ -1664,7 +1664,7 @@ Array guess_num_objects->5;
 				! get the 'you have to leave it' message.
 				if(action == ##Take && noun == parent(player) && parser_all_found) continue;
 
-				! don' pick up held objects if other objects available
+				! don't pick up held objects if other objects available
 				! however, if this is the only object then allow it to
 				! get the 'you already have it' message.
                 if(action == ##Take && noun in player && (multiple_objects --> 0 > 1 || parser_all_found)) continue;

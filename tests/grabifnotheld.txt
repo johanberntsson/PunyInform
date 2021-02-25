@@ -56,11 +56,40 @@ Dropped.
 You are empty handed.
 
 > look
-
 Lit Room
 You are in a brightly lit room.
 
 You can see a dust, Max and Molly (which is empty) here.
+
+> s
+Another Room
+You are in a brightly lit room.
+
+You can see a green book and a blue book here.
+
+> what is samarkand
+Samarkand is a city in south-eastern Uzbekistan.
+
+> what is book
+At the moment, even the simplest questions confuse you.
+
+> what is green book
+At the moment, even the simplest questions confuse you.
+
+> what is green
+At the moment, even the simplest questions confuse you.
+
+> what is sdasfafaf
+At the moment, even the simplest questions confuse you.
+
+> take green
+Taken.
+
+> what is green
+At the moment, even the simplest questions confuse you.
+
+> what is green book
+At the moment, even the simplest questions confuse you.
 
 > quit
 Are you sure you want to quit? yes

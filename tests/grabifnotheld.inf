@@ -108,6 +108,7 @@ Object LitRoom "Lit Room"
 		description [;
 			print "You are in a brightly lit room.^";
 		],
+		s_to Room2,
 	has light;
 
 Object -> Thing1 "Max"
@@ -123,6 +124,23 @@ Object -> Thing2 "Molly"
 Object -> -> Dust "dust"
    with 
         name 'dust';
+
+Object Room2 "Another Room"
+	with
+		description [;
+			print "You are in a brightly lit room.^";
+		],
+		n_to LitRoom,
+	has light;
+
+Object -> Book1 "green book"
+    with
+        name 'green' 'book';
+
+Object -> Book2 "blue book"
+    with
+        name 'blue' 'book';
+
 [Initialise;
 #IfDef USEINFORM;
     location=INITIAL_LOCATION_VALUE;;
