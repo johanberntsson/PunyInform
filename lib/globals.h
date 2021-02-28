@@ -199,10 +199,10 @@ Property door_dir    alias w_to;
 Property invent      alias u_to;
 Property add_to_scope alias se_to;
 !Property list_together alias sw_to;
-Property react_before alias ne_to;
+Property react_before alias out_to;
 Property react_after  alias in_to;
 !Property grammar     alias nw_to;
-Property orders      alias out_to;
+Property orders      alias ne_to;
 
 Property initial;
 Property when_open   alias initial;

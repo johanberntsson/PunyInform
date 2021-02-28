@@ -1406,11 +1406,12 @@ Global scope_cnt;
 			_o = 1;
 			"Define OPTIONAL_MANUAL_REACTIVE and recompile.";
 #Ifnot;
-			print "Give reactive to these objects:^";
-			objectloop(_o)
+			print "Probably give reactive to these objects (see notes about ~reactive~ in manual) :^";
+			objectloop(_o) {
 				if(_o hasnt reactive && (_o.&react_before ~= 0 ||
 						_o.&react_after ~= 0 || _o.&each_turn ~= 0))
 					print "(",_o,") ", (name) _o, "^";
+			}
 			print "^Remove reactive from these objects:^";
 			objectloop(_o)
 				if(_o has reactive && _o.&react_before == 0 &&
