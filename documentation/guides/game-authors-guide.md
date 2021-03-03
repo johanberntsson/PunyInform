@@ -143,7 +143,22 @@ Object Button "button"
   has static;	
 ```
 
+## Manual setting of reactive attribute
 
+This is an optimization you can perform to make your game start faster. Unless you
+have done this, PunyInform will look through all your objects when the game starts,
+and set the `reactive` attribute on all objects that provide `react_before`, `react_after`
+or `each_turn`. When the game is running, only objects that have this attribute are
+considered when checking for these properties, for reasons of speed. While letting the
+library setting this attributes automatically works well, it means there's an extra 
+pause as the game starts. For a large game, this could take a few seconds on an 
+8-bit computer.
+
+These are the steps you need to take to set the attribute manually instead:
+
+1. Define the constant `OPTIONAL_MANUAL_REACTIVE`
+2. Compile the game in Debug mode, start it and type the command "DEBUG REACTIVE"
+3. For every object which is reported as needing the `reactive` attribute, add the attribute in the source code for that object. Typically, you can skip it for the player object, unless you have added an each_turn routine to it.
 
 # Before release
 
