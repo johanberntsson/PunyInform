@@ -392,10 +392,10 @@ v2.1: bug fix and new feature release
 - Made UpdateScope avoid adding duplicates when called after a scope routine
   which has already added objects.
 - Optimized checking of react_before and react_after.
-- Added attribute reactive which is set automatically by default but an
-  author can define OPTIONAL_MANUAL_REACTIVE to set it manually. Must be set
-  for all objects providing react_before, react_after or each_turn. Speeds
-  up the game.
+- Added attribute reactive which must be set for all objects providing
+  react_before, react_after or each_turn. By default it is set automatically at
+  game start, but an author can define OPTIONAL_MANUAL_REACTIVE to set it
+  manually. The use of this attribute speeds up the game.
 - Added debug verb "debug reactive" which shows objects which need to get or
   lose attribute reactive.
 - Fixed bug in handling fake directions, which made code like <GO FAKE_N_OBJ>
@@ -404,6 +404,5 @@ v2.1: bug fix and new feature release
 - Optimized so scope_copy can often be reused several times.
 - Moved oops, again and score notifications messages to messages.inf
 - Fixed "x me.g.g" bug (disallowing complex again commands)
-- Fixed pattern filter bug that stopped some commands to reach phase 2.
+- Fixed pattern filter bug that stopped some commands from reaching phase 2.
 - Fixed bug that didn't restore scope after using a scope=XXX grammar token.
-- Moved messages out of the OPTIONAL_FULL_SCORE block.
