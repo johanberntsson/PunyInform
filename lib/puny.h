@@ -614,7 +614,7 @@ Include "parser.h";
 #IfDef DEBUG;
 	if(debug_flag & 2) TraceAction(action, noun, second);
 #EndIf;
-	if ((BeforeRoutines() == false) && action < 4096) {
+	if ((meta || (BeforeRoutines() == false)) && action < 4096) {
 		ActionPrimitive();
 		return true; ! could run the command
 	}

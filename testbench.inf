@@ -1102,6 +1102,14 @@ Constant MSG_LOOK_BEFORE_ROOMNAME 1003;
 	p_arg_1 = 0; p_arg_2 = 0; ! To avoid warnings
 ];
 
+
+
+[DisallowTakeAnimate;
+	if(noun == Lizard) rfalse;
+];
+
+
+
 Include "puny.h";
 
 Include "ext_waittime.h";
@@ -1232,6 +1240,20 @@ Object RiverBank "River Bank"
 			'bird' 'birds' "They seem so carefree."
 			1 'sun' SCN_SUN,
 	has light;
+
+Object -> Lizard "cute little lizard"
+	with
+		name 'cute' 'little' 'lizard',
+		description "It looks at you with big eyes.",
+		after [;
+			Take:
+				"It dives into your breast pocket, spins around
+					and peaks out, ready for adventure!";
+			Drop:
+				print "He jumps up and bites your hand. You die.";
+				@quit;
+		],
+	has animate neuter;
 
 Object -> paper "paper"
 	with
