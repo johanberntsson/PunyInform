@@ -1,0 +1,29 @@
+> take torch
+Taken.
+
+> take torch and john
+Torch: You are already carrying that.
+John: I don't suppose John would care for that.
+
+> open box
+You open the box, revealing a red book.
+
+[The score has just gone up by 3 points.]
+
+> get all from box
+red book: Yay, got rid of the red book!
+
+[The score has just gone down by 1 point.]
+
+> put all except red book in box
+You put the torch into the box.
+
+[The score has just gone up by 1 point.]
+
+> i
+You're carrying a red book.
+
+> quit
+You ain't no quitter eh? yes
+
+[Hit any key to exit.]
