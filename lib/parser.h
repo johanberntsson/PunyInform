@@ -685,7 +685,7 @@ System_file;
     rfalse;
 ];
 
-[ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data;
+[ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data _old_wn;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
@@ -800,6 +800,7 @@ System_file;
 			return _noun;
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
+				_old_wn = wn;
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
 				if(_noun == -2) return GPR_FAIL;
 				if(_noun == -1) return GPR_REPARSE;
@@ -854,18 +855,19 @@ System_file;
 						! to the multiple_objects array
 						p_parse_pointer = parse + 2 + 4 * (wn - 2);
 						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
-							! this is "take all but" without a noun
+							!print "take all but^";
 							if(p_phase == PHASE2) {
 								PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 							}
 							return GPR_FAIL;
 						}
-						p_parse_pointer = parse + 2 + 4 * (wn - 3);
+						p_parse_pointer = parse + 2 + 4 * (_old_wn);
 						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
 
+							!print "take all but <noun>^";
 							parser_all_except_object = _noun;
 						} else if(_noun > 0) {
-							! this is "take all _noun"
+							!print "take all <noun>^";
 							return _noun;
 						}
 

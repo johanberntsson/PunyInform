@@ -1853,6 +1853,10 @@ Array quote_1 --> 5 35
 !	print "BlueBook.party is ", BlueBook.party, "^";
 !	BlueBook.party(5);
 	move Gun to John;
+	move BlueBook to CarPark;
+	move PinkBook to CarPark;
+	move GreenBook to CarPark;
+
 	print "^^Welcome to the Testbench... This is where all sorts of PunyInform
 		features are tried out. Don't expect much of a game here. Currently, you
 		can win by putting stuff in the box, or lose by checking out the sun by

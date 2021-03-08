@@ -18,8 +18,27 @@ red book: Yay, got rid of the red book!
 > i
 You're carrying a red book and an electric torch (Ugly as sin).
 
+> put all
+I think you wanted to say "put red book in something". Please try again.
+
+> put all except
+I don't understand that sentence.
+
+> put all except in box
+You can't see any such thing.
+
+> put all except book in box
+electric torch: You put the electric torch into the box.
+
+[The score has just gone up by 1 point.]
+
+> take all from box
+electric torch: Yay, got rid of the electric torch!
+
+[The score has just gone down by 1 point.]
+
 > put all except red book in box
-You put the torch into the box.
+electric torch: You put the electric torch into the box.
 
 [The score has just gone up by 1 point.]
 
