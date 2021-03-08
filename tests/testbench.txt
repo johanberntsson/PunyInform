@@ -2,7 +2,7 @@
 Taken.
 
 > take torch and john
-Torch: You are already carrying that.
+electric torch: You already have that.
 John: I don't suppose John would care for that.
 
 > open box
@@ -14,6 +14,9 @@ You open the box, revealing a red book.
 red book: Yay, got rid of the red book!
 
 [The score has just gone down by 1 point.]
+
+> i
+You're carrying a red book and an electric torch (Ugly as sin).
 
 > put all except red book in box
 You put the torch into the box.
