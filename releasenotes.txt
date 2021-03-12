@@ -411,6 +411,8 @@ v2.1: bug fix and new feature release (5 March 2021)
 v2.2: bug fix (and new feature release?)
 
 - Changed so BeforeRoutines() is not executed for meta verbs (issue 74)
-- Fixed 'take all except X' offset error 
+- Fixed 'take all except X' offset error
 - Fixed take multiple bug (would silently ignore held objects)
-
+- Changed when scope_modified is set, for PutOn, Insert, Take, Drop and Purloin
+- Made ExamineSub return correctly after printing "There's nothing special
+  about (the item)."

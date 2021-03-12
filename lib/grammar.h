@@ -272,9 +272,6 @@ Verb 'wear'
 	!if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
 	give noun moved;
-#IfDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 	if(AfterRoutines()) rtrue;
 	if(keep_silent) return;
 	PrintMsg(MSG_DROP_DROPPED);
@@ -339,6 +336,7 @@ Verb 'wear'
 		}
         if (noun has switchable) { PrintMsg(MSG_EXAMINE_ONOFF); rtrue; }
 		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
+		rtrue;
     }
 	x = PrintOrRun(noun, description);
 	if (x == 0 && noun has switchable) PrintMsg(MSG_EXAMINE_ONOFF);
@@ -370,7 +368,6 @@ Verb 'wear'
 	if (parent(player) == noun) <<Exit noun>>;
 	PrintMsg(MSG_EXIT_NOT_ON); rtrue;
 ];
-
 
 [ GiveSub;
 	if(ObjectIsUntouchable(second)) return;
@@ -417,9 +414,6 @@ Verb 'wear'
 	if (_AtFullCapacity(second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
 
 	move noun to second;
-#IfDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 
 	! run after on object
 	if(AfterRoutines()) rtrue;
@@ -532,9 +526,6 @@ Verb 'wear'
 	if (_AtFullCapacity(second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
 
 	move noun to second;
-#IfDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 
 	! run after on receiver
 #IfDef DEBUG;
@@ -1342,9 +1333,7 @@ Global scope_cnt;
 	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
 
 	move noun to player;
-#IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
-#EndIf;
 	"Purloined.";
 ];
 
@@ -1677,9 +1666,6 @@ Global scope_cnt;
 #EndIf;
 	move noun to player;
 	give noun moved ~concealed;
-#IfDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 
 	! Send "after" message to the object letting go of the item, if any.
 
