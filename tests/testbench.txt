@@ -45,6 +45,18 @@ electric torch: You put the electric torch into the box.
 > i
 You're carrying a red book.
 
+> drop all
+red book: Dropped.
+
+> get red book, xyzzy and torch
+Sorry, I don't understand what "xyzzy" means.
+
+> get xyzzy and torch
+Sorry, I don't understand what "xyzzy" means.
+
+> get xyzzy
+Sorry, I don't understand what "xyzzy" means.
+
 > quit
 You ain't no quitter eh? yes
 

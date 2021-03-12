@@ -13,6 +13,10 @@ put all except book in box
 take all from box
 put all except red book in box
 i
+drop all
+get red book, xyzzy and torch
+get xyzzy and torch
+get xyzzy
 quit
 yes
 
