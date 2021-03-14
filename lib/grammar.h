@@ -1121,6 +1121,7 @@ Verb meta 'quit' 'q//'
 ];
 
 [ Banner _i;
+	new_line;
 	if(Story ~= 0) {
 #IfV5;
 		style bold;
@@ -1561,9 +1562,10 @@ Global scope_cnt;
 
 #IfDef OPTIONAL_PRINT_SCENERY_CONTENTS;
 		newline_flag = true;
-		objectloop(_obj in _ceil && (_obj has scenery or concealed) &&
+		objectloop(_obj in _ceil && _obj has scenery &&
 				(_obj has supporter ||
 					(_obj has container && _obj has transparent or open)) &&
+					child(_obj) ~= 0 &&
 					IndirectlyContains(_obj, player) == false) {
 			if(PrintContents(_ListObjsInOnMsg, _obj)) {
 				print (string) ". ";

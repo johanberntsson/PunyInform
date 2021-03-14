@@ -1320,6 +1320,7 @@ Object thedark "Darkness"
 
 	player = selfobj;
 	deadflag = GS_PLAYING;
+	turns = -1;
 	score = 0;
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;
@@ -1347,6 +1348,7 @@ Object thedark "Darkness"
 	if(parent(player) == 0) { _i = location; location = 0; PlayerTo(_i); }
 
 	@new_line;
+	turns++; ! Change turns from -1 to 0, signaling that game has now started
 	while(deadflag == GS_PLAYING) {
 #Ifdef DEBUG_TIMER;
 	timer1 = 0-->2;

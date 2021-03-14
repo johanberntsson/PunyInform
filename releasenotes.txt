@@ -416,3 +416,8 @@ v2.2: bug fix (and new feature release?)
 - Changed when scope_modified is set, for PutOn, Insert, Take, Drop and Purloin
 - Made ExamineSub return correctly after printing "There's nothing special
   about (the item)."
+- The banner now has an empty line first, just as in I6 lib.
+- OPTIONAL_PRINT_SCENERY_CONTENTS will no longer cause Look to print contents of
+  objects which have concealed attribute, unless they *also* have scenery.
+- The global "turns" now holds -1 until the first turn begins, at which time
+  it's set to 0.
