@@ -1097,7 +1097,7 @@ Constant MSG_LOOK_BEFORE_ROOMNAME 1003;
 	MSG_DISROBE_NOT_WEARING:
 		"Not worn!";
 	MSG_LOOK_BEFORE_ROOMNAME:
-		@new_line;
+		if(turns >= 0) new_line;
 	}
 	p_arg_1 = 0; p_arg_2 = 0; ! To avoid warnings
 ];
@@ -1878,7 +1878,7 @@ Array quote_1 --> 5 35
 	print "^^Welcome to the Testbench... This is where all sorts of PunyInform
 		features are tried out. Don't expect much of a game here. Currently, you
 		can win by putting stuff in the box, or lose by checking out the sun by
-		the river or by pushing John around.";
+		the river or by pushing John around.^";
 ];
 #Ifdef USEINFORM;
 Include "Grammar";
