@@ -1,3 +1,4 @@
+
 > steal
 I think you wanted to say "steal something". Please try again.
 
@@ -26,6 +27,7 @@ Do you mean the small red ball, the small blue ball or the small green ball?
 Futile.
 
 > take all balls
+small red ball: You already have that.
 small blue ball: Taken.
 small green ball: Taken.
 

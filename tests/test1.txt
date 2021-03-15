@@ -1,3 +1,4 @@
+
 > i.i
 You are empty handed.
 
@@ -50,6 +51,7 @@ Taken.
 
 > get all balls
 small blue ball: Taken.
+small red ball: You already have that.
 small green ball: Taken.
 
 > get cubes

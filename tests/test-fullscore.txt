@@ -1,3 +1,4 @@
+
 > take point
 Taken.
 
@@ -35,6 +36,7 @@ restart
 
 
 The testsuite is open for business!
+
 
 Parser test
 
