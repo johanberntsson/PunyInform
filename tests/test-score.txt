@@ -1,3 +1,4 @@
+
 > take point
 Taken.
 
@@ -30,6 +31,7 @@ Would you like to RESTART, RESTORE or QUIT? restart
 
 
 The testsuite is open for business!
+
 
 Parser test
 
