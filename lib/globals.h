@@ -624,6 +624,11 @@ Object Directions
 			selected_direction = direction_properties_array --> selected_direction_index;
 			return 1;
 #IfNot;
+			! This is V3
+#IfnDef OPTIONAL_SHIP_DIRECTIONS;
+			if(normal_directions_enabled == 0)
+				jump fail;
+#EndIf;
 			_w1 = _parse->2; ! length of typed word
 			if(_w1 > 6)
 				_w1 = 6;
@@ -632,18 +637,25 @@ Object Directions
 				_len = _dir_end->_w1;
 !				print "Testing from ", _i, " to ", _len, "^";
 !				for(_i = 1 : _i <= _len : _i++) {
+
+
 .checkNextDir;
+#IfDef OPTIONAL_SHIP_DIRECTIONS;
 				if(normal_directions_enabled) {
 					@loadw abbr_direction_array _i -> _w1;
 					@loadw full_direction_array _i -> _w2;
 					@je _w _w1 _w2 ?match;
 				}
-#IfDef OPTIONAL_SHIP_DIRECTIONS;
 				if(ship_directions_enabled) {
 					@loadw abbr_ship_direction_array _i -> _w1;
 					@loadw full_ship_direction_array _i -> _w2;
 					@je _w _w1 _w2 ?match;
 				}
+#IfNot;
+				! No ship directions, and we know normal_directions_enabled==1
+				@loadw abbr_direction_array _i -> _w1;
+				@loadw full_direction_array _i -> _w2;
+				@je _w _w1 _w2 ?match;
 #EndIf;
 				@inc_chk _i _len ?~checkNextDir;
                 jump fail;
@@ -654,7 +666,7 @@ Object Directions
     			return 1;
 			}
 .fail;
-      		! failure
+      		! No direction was matched
 			selected_direction_index = 0;
 			selected_direction = 0;
 			return 0;
