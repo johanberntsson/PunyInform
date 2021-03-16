@@ -13,6 +13,10 @@ Constant Headline   "^A sample game which uses PunyInform.^";
 !Constant STATUSLINE_TIME; Statusline time;
 Constant STATUSLINE_SCORE; Statusline score;
 
+! Comment out to keep track of score
+! The value is what will be shown as the score on statusline in z3
+Constant NO_SCORE = 0;
+
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
 !Constant CUSTOM_ABBREVIATIONS;
@@ -22,7 +26,7 @@ Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
 !Constant OPTIONAL_SCORED;
-!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
 !Constant OPTIONAL_FULL_DIRECTIONS;
 !Constant OPTIONAL_SIMPLE_DOORS;
 !Constant OPTIONAL_SHIP_DIRECTIONS;
@@ -31,7 +35,7 @@ Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_MANUAL_REACTIVE;
 !Constant OPTIONAL_ORDERED_TIMERS;
 !Constant OPTIONAL_PROVIDE_UNDO;
-!Constant RUNTIME_ERRORS = 0;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
 
 ! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
 ! MAX_CARRIED, SACK_OBJECT,  etc.

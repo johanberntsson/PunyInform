@@ -261,11 +261,13 @@ Default MSG_SEARCH_EMPTY 82;
 Default MSG_SEARCH_NOTHING_ON 83;
 Default MSG_SEARCH_CANT_SEE_CLOSED 84;
 Default MSG_EAT_SUCCESS = 85;
-#IfDef OPTIONAL_FULL_SCORE;
+#Ifdef OPTIONAL_FULL_SCORE;
 Default MSG_FULLSCORE_START 86;
 Default MSG_FULLSCORE_END 87;
-#EndIf;
+#Endif;
+#Ifndef NO_SCORE;
 Default MSG_SCORE_SUCCESS 88;
+#Endif;
 Default MSG_UNLOCK_NOT_A_LOCK 89;
 Default MSG_UNLOCK_ALREADY_UNLOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
@@ -301,7 +303,9 @@ Default MSG_INSERT_NOT_CONTAINER 118;
 Default MSG_EMPTY_CANT_CONTAIN 119; ! Extended verbset, but uses same msg as INSERT
 Default MSG_YES_OR_NO 120;
 Default MSG_RESTART_CONFIRM 121;
+#Ifndef NO_SCORE;
 Default MSG_PARSER_NEW_SCORE 122;
+#Endif;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -620,13 +624,15 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 	MSG_EXAMINE_DARK, MSG_SEARCH_DARK:
 		"But it's dark.";
 #Endif;
-#IfTrue MSG_SCORE_SUCCESS < 1000;
+#Ifndef NO_SCORE;
+#Iftrue MSG_SCORE_SUCCESS < 1000;
 	MSG_SCORE_SUCCESS:
 		if (deadflag) print "In that game you"; else print "You have so far";
 		print " scored ", score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
 		if(turns ~= 1) print "s";
 		rtrue;
-#EndIf;
+#Endif;
+#Endif;
 #IfDef OPTIONAL_FULL_SCORE;
 #IfTrue MSG_FULLSCORE_START < 1000;
 	MSG_FULLSCORE_START:
@@ -683,7 +689,8 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 	MSG_RESTART_CONFIRM:
 		print "Are you sure you want to restart? ";
 #Endif;
-#IfTrue MSG_PARSER_NEW_SCORE < 1000;
+#Ifndef NO_SCORE;
+#Iftrue MSG_PARSER_NEW_SCORE < 1000;
 	MSG_PARSER_NEW_SCORE:
 		print "^[The score has just gone ";
 		if(p_arg_1 < score) {
@@ -696,6 +703,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		print " by ", p_arg_2, " point";
 		if(p_arg_2 > 1) print "s";
 		print ".]^";
+#Endif;
 #Endif;
 
 

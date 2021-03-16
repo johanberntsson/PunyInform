@@ -8,8 +8,6 @@
 
 Switches e;
 
-!Constant DEBUG;
-
 ! Testbench - a platform for trying things out in PunyInform
 
 !Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform

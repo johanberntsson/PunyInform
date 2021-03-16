@@ -952,16 +952,18 @@ Verb meta 'again' 'g//'
 Verb meta 'brief' 'normal'
 	*                                           -> LookModeNormal;
 
-#IfDef OPTIONAL_FULL_SCORE;
+#Ifdef OPTIONAL_FULL_SCORE;
 Verb meta 'fullscore' 'full'
     *                                           -> FullScore
     * 'score'                                   -> FullScore;
-#EndIf;
+#Endif;
 
+#Ifndef NO_SCORE;
 Verb meta 'notify'
 	*                                           -> NotifyOn
 	* 'on'                                      -> NotifyOn
 	* 'off'                                     -> NotifyOff;
+#Endif;
 
 Verb meta 'oops'
     *                                           -> Oops
@@ -976,8 +978,10 @@ Verb meta 'restore'
 Verb meta 'save'
 	*                                           -> Save;
 
+#Ifndef NO_SCORE;
 Verb meta 'score'
     *                                           -> Score;
+#Endif;
 
 Verb meta 'superbrief' 'short'
 	*                                           -> LookModeShort;
@@ -1052,6 +1056,7 @@ Verb meta 'quit' 'q//'
 	PrintMsg(MSG_LOOKMODE_SHORT);
 ];
 
+#Ifndef NO_SCORE;
 [ NotifyOnSub;
 	notify_mode = 1;
 	"Score notification on.";
@@ -1061,6 +1066,7 @@ Verb meta 'quit' 'q//'
 	notify_mode = 0;
 	"Score notification off.";
 ];
+#Endif;
 
 [ OopsSub;
 	"Think nothing of it.";
@@ -1115,10 +1121,12 @@ Verb meta 'quit' 'q//'
 #EndIf;
 ];
 
+#Ifndef NO_SCORE;
 [ ScoreSub;
 	PrintMsg(MSG_SCORE_SUCCESS);
 	PrintRank();
 ];
+#Endif;
 
 [ Banner _i;
 	new_line;
@@ -1590,9 +1598,11 @@ Global scope_cnt;
 		give location visited;
 ];
 
-#IfnDef PrintRank;
+#Ifndef NO_SCORE;
+#Ifndef PrintRank;
 [ PrintRank; "."; ];
-#EndIf;
+#Endif;
+#Endif;
 
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef TASKS_PROVIDED;

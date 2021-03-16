@@ -421,3 +421,4 @@ v2.2: bug fix (and new feature release?)
   objects which have concealed attribute, unless they *also* have scenery.
 - The global "turns" now holds -1 until the first turn begins, at which time
   it's set to 0.
+- NO_SCORE constant is now supported and saves 310+ bytes if defined.

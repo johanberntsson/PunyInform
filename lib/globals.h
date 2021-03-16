@@ -398,10 +398,17 @@ Global location = INITIAL_LOCATION_VALUE;		! Must be the first global to show lo
 	#EndIf;
 #EndIf;
 
+#Ifdef NO_SCORE;
+Global status_field_1 = NO_SCORE; ! Must be the second global to show score or hours
+#Ifnot;
 Global status_field_1 = 0; ! Must be the second global to show score or hours
+#Endif;
+
 Global status_field_2 = 0; ! Must be the third global to show turns or minutes
 Global real_location;
+#Ifndef NO_SCORE;
 Global score;
+#Endif;
 Global undo_flag;
 Global notify_mode = true;          ! Score notification
 #Ifndef sys_statusline_flag;

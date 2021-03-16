@@ -202,7 +202,28 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
+#Ifdef NO_SCORE;
+[ _PrintStatusLineScore p_width _pos;
+#Ifnot;
 [ _PrintStatusLineScore p_width;
+#Endif;
+#Ifdef NO_SCORE;
+	if (p_width > 24) {
+		if (p_width < 30) {
+			! Width is 25-29, only print moves as "0"
+			_PrintSpacesOrMoveBack(3, ONE_SPACE_STRING);
+		} else {
+			! Width is 30-, print "Moves: 0"
+			_pos = 10;
+			if (p_width > 52) {
+				! Width is 53+, leave some space to the right
+				_pos = 14;
+			}
+			_PrintSpacesOrMoveBack(_pos, MOVES__TX);
+		}
+		print status_field_2;
+	}
+#Ifnot;
 	if (p_width > 24) {
 		if (p_width < 30) {
 			! Width is 25-29, only print score as "0", no moves
@@ -228,6 +249,7 @@ Constant ONE_SPACE_STRING = " ";
 			print status_field_2;
 		}
 	}
+#Endif;
 ];
 
 [ DrawStatusLine _width _visibility_ceiling;
@@ -1239,11 +1261,15 @@ Object thedark "Darkness"
 	status_field_2 = the_time%60;
 #Ifnot;
 	#Ifdef STATUSLINE_SCORE;
+	#Ifndef NO_SCORE;
 		status_field_1 = score;
+	#Endif;
 		status_field_2 = turns;
 	#Ifnot;
 		if (sys_statusline_flag == 0) {
-			status_field_1 = score;
+			#Ifndef NO_SCORE;
+				status_field_1 = score;
+			#Endif;
 			status_field_2 = turns;
 		} else {
 			status_field_1 = the_time/60;
@@ -1299,8 +1325,11 @@ Object thedark "Darkness"
 ];
 #Endif;
 
+#Ifdef NO_SCORE;
+[ main _i _j _copylength _sentencelength _parsearraylength _again_saved _parser_oops _disallow_complex_again;
+#Ifnot;
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops _disallow_complex_again;
-
+#Endif;
 #IfDef DEBUG;
 	dict_start = HDR_DICTIONARY-->0;
 	dict_entry_size = dict_start->(dict_start->0 + 1);
@@ -1321,7 +1350,9 @@ Object thedark "Darkness"
 	player = selfobj;
 	deadflag = GS_PLAYING;
 	turns = -1;
+#Ifndef NO_SCORE;
 	score = 0;
+#Endif;
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;
 	places_score = 0;
@@ -1358,7 +1389,9 @@ Object thedark "Darkness"
 		if(_sentencelength > 0) @new_line;
 
 		_UpdateScope(player);
+#Ifndef NO_SCORE;
 		_score = score;
+#Endif;
 #Ifdef DEBUG_TIMER;
 	timer1 = 0-->2 - timer1;
 	print "[Before ReadPlayerInput took ",timer1," jiffies]^";
@@ -1438,9 +1471,11 @@ Object thedark "Darkness"
         	AfterLife();
 		}
 
+#Ifndef NO_SCORE;
 		if(_score ~= score && notify_mode == true) {
 			PrintMsg(MSG_PARSER_NEW_SCORE, _score);
 		}
+#Endif;
 
 		_parsearraylength = parse->1;
 		if(_parsearraylength > _sentencelength) {
@@ -1475,7 +1510,9 @@ Object thedark "Darkness"
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
 	print " ***^^";
+#Ifndef NO_SCORE;
 	ScoreSub();
+#Endif;
 	for(::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
 		_ReadPlayerInput(true);
