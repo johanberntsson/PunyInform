@@ -423,3 +423,4 @@ v2.2: bug fix (and new feature release?)
   it's set to 0.
 - NO_SCORE constant is now supported and saves 310+ bytes if defined.
 - Optimized matching of directions.
+- Removed superfluous global scope_copy_is_good

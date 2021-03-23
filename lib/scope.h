@@ -111,8 +111,8 @@ System_file;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
 #EndIf;
 	if(scope_pov == p_actor && scope_modified == false && p_force == false) return;
-	
-	scope_copy_is_good = false;
+
+	scope_copy_actor = 0;
 	scope_pov = p_actor;
 	_start_pos = ScopeCeiling(p_actor);
 
@@ -171,7 +171,7 @@ System_file;
 
 	_UpdateScope(p_actor);
 
-	if(scope_copy_actor ~= p_actor || scope_copy_is_good == false) {
+	if(scope_copy_actor ~= p_actor) {
 #IfV5;
 		_i = scope_objects * 2;
 		@copy_table scope scope_copy _i;
@@ -184,7 +184,6 @@ System_file;
 		}
 #EndIf;
 		scope_copy_actor = p_actor;
-		scope_copy_is_good = true;
 	}
 	return scope_objects;
 ];
