@@ -1518,7 +1518,9 @@ Array guess_num_objects->5;
 		jump parse_success;
 	}
 	if(_best_score < parse->1) {
-		if(_best_phase2 == PHASE2_ERROR) {
+		if(_best_score == 0) {
+			PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+		} else if(_best_phase2 == PHASE2_ERROR) {
 			! call again to generate suitable error message
 			_score = _ParsePattern(_best_pattern, PHASE2);
 		} else {
