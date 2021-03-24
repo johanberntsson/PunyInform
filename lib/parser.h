@@ -1522,7 +1522,12 @@ Array guess_num_objects->5;
 			! call again to generate suitable error message
 			_score = _ParsePattern(_best_pattern, PHASE2);
 		} else {
-			PrintMsg(MSG_PARSER_NOSUCHTHING);
+			if(parser_unknown_noun_found ~= 0 &&
+				parser_unknown_noun_found-->0 == 0) {
+				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
+			} else {
+				PrintMsg(MSG_PARSER_NOSUCHTHING);
+			}
 		} 
 		rtrue;
 	}

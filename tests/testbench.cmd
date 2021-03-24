@@ -1,7 +1,7 @@
 
 transcript
 
-take torch
+take torch.
 take torch and john
 open box
 get all from box

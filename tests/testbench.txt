@@ -1,4 +1,5 @@
-> take torch
+
+> take torch.
 Taken.
 
 > take torch and john
@@ -19,7 +20,7 @@ red book: Yay, got rid of the red book!
 You're carrying a red book and an electric torch (Ugly as sin).
 
 > put all
-I think you wanted to say "put red book in something". Please try again.
+I think you wanted to say "put electric torch in something". Please try again.
 
 > put all except
 I don't understand that sentence.
