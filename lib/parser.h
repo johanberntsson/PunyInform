@@ -1210,9 +1210,27 @@ Array guess_num_objects->5;
 		_type = ((_pattern_pointer -> 0) & $0f);
 		if(_type == TT_END) {
 			if(_IsSentenceDivider(_parse_pointer)) {
-				wn++;
-				return 100; ! pattern matched
+				! check if dictionary word after sentence divider
+				if(parse->1 > wn && (_parse_pointer + 4)-->0 == 0) {
+					! uknown word, so probably an unknown word in a
+					! list matching the multi token, such as
+					! 'get box and SDASDASD'
+					if(p_phase == PHASE2) {
+						parser_unknown_noun_found = _parse_pointer + 4;
+						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
+					} else {
+						phase2_necessary = true;
+					}
+					return wn;
+				} else {
+					wn++;
+					return 100; ! pattern matched
+				}
 			}
+			!if(_IsSentenceDivider(_parse_pointer)) {
+			!	wn++;
+			!	return 100; ! pattern matched
+			!}
 			if(wn == 1 + parse->1) {
 				return 100; ! pattern matched
 			}

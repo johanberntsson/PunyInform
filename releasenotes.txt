@@ -425,3 +425,4 @@ v2.2: bug fix (and new feature release?)
 - Optimized matching of directions.
 - Removed superfluous global scope_copy_is_good
 - Better response when grammar missing (e.g. Extend 'close' replace;)
+- Better responses when trying to parse unknown words
