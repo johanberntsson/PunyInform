@@ -1,4 +1,13 @@
 
+> i blue
+I only understood you as far as wanting to take inventory.
+
+> open all
+You can't use multiple objects with that verb.
+
+> put all
+What do you want to put those things in?
+
 > take torch.
 Taken.
 

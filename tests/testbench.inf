@@ -108,10 +108,11 @@ Constant F_BOUGHT_TICKETS 2;
 
 
 #Ifdef USEINFORM;
+Attribute reactive;
 Include "Parser";
 Include "VerbLib";
-Include "ext_cheap_scenery.h";
-Include "ext_flags.h";
+Include "../lib/ext_cheap_scenery.h";
+Include "../lib/ext_flags.h";
 
 [OnOff obj; ! TODO: is there something like this in I6? change name if needed
     if(obj has on) print "on";

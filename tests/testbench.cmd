@@ -1,6 +1,9 @@
 
 transcript
 
+i blue
+open all
+put all
 take torch.
 take torch and john
 open box
