@@ -282,7 +282,7 @@ Default MSG_EXAMINE_ONOFF 97;
 Default MSG_ORDERS_WONT 98;
 Default MSG_AUTO_TAKE 99;
 Default MSG_AUTO_DISROBE = 100;
-! 101 is currently unused
+Default MSG_PARSER_PARTIAL_MATCH = 101;
 Default MSG_TAKE_BELONGS 102;
 Default MSG_TAKE_PART_OF 103;
 Default MSG_TAKE_NOT_AVAILABLE 104;
@@ -532,6 +532,12 @@ Default LibraryMessages 0;
 #EndIf;
 	MSG_PARSER_NOT_HOLDING, MSG_WAVE_NOTHOLDING:
 		print_ret "But you are not holding ", (the) p_arg_1, ".";
+#IfTrue MSG_PARSER_PARTIAL_MATCH < 1000;
+	MSG_PARSER_PARTIAL_MATCH:
+		print "I only understood you as far as ~";
+		_PrintPartialMatch(verb_wordnum, p_arg_1);
+		"~ but then you lost me.";
+#EndIf;
 #IfTrue MSG_PARSER_CANT_TALK < 1000;
 	MSG_PARSER_CANT_TALK:
 		print_ret "You can't talk to ", (the) p_arg_1, ".";

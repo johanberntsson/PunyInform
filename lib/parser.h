@@ -1000,13 +1000,6 @@ System_file;
 	}
 ];
 
-[ _PrintPartialMatchMessage _num_words;
-	print "I only understood you as far as ~";
-	_PrintPartialMatch(verb_wordnum, _num_words);
-	"~ but then you lost me.";
-];
-
-
 [ _PrintUnknownWord _i;
 	for(_i = 0: _i < parser_unknown_noun_found->2: _i++) {
 		print (char) buffer->(_i + parser_unknown_noun_found->3);
@@ -1431,7 +1424,7 @@ Array guess_num_objects->5;
 				jump parse_success;
 			}
 			! bad direction command, such as "n n"
-			return _PrintPartialMatchMessage(_i);
+			return PrintMsg(MSG_PARSER_PARTIAL_MATCH, _i);
 		}
 		! not a direction, check if beginning of a command
 		_noun = _CheckNoun(parse+2);
@@ -1545,8 +1538,14 @@ Array guess_num_objects->5;
 			if(parser_unknown_noun_found ~= 0 &&
 				parser_unknown_noun_found-->0 == 0) {
 				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
+			} else if((((_best_pattern - 1 + wn*3 )-> 0) & $0f) == TT_END) {
+				if((parse - 2 + wn*4)-->0 == ALL_WORD) {
+					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
+				} else {
+					PrintMsg(MSG_PARSER_NOSUCHTHING);
+				}
 			} else {
-				PrintMsg(MSG_PARSER_NOSUCHTHING);
+				PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
 			}
 		} 
 		rtrue;

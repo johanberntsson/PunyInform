@@ -1,6 +1,6 @@
 
 > i blue
-I only understood you as far as wanting to take inventory.
+I only understood you as far as "i" but then you lost me.
 
 > open all
 You can't use multiple objects with that verb.
@@ -35,7 +35,7 @@ I think you wanted to say "put electric torch in something". Please try again.
 I don't understand that sentence.
 
 > put all except in box
-You can't see any such thing.
+I only understood you as far as "put" but then you lost me.
 
 > put all except book in box
 electric torch: You put the electric torch into the box.
