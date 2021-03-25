@@ -1,5 +1,5 @@
 > get all but box
-There is nothing to get.
+There are no things available that match "get all but box".
 
 > get all from bag
 rock: Removed.
@@ -20,7 +20,7 @@ The room with the static box and static bag. Exits n
 There's a box here. In the box is a bag (which contains a rock).
 
 > get all but box
-There is nothing to get.
+There are no things available that match "get all but box".
 
 > get all from bag
 rock: Removed.

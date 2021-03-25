@@ -65,7 +65,7 @@ Dropped.
 Dropped.
 
 > drop cubes
-There is nothing to drop.
+There are no things available that match "drop cubes".
 
 > get black ball
 Taken.
@@ -89,7 +89,7 @@ small red ball: You put the small red ball into the transparent box.
 small red ball: Removed.
 
 > get all from transparent
-There is nothing to get.
+There are no things available that match "get all from transparent".
 
 > drop red ball
 Dropped.

@@ -833,7 +833,7 @@ System_file;
 							_UpdateScope(player, true); ! restore scope
 							if(_noun <= 0) {
 								if(p_phase == PHASE2) {
-									PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
+									PrintMsg(MSG_PARSER_NOTHING_TO_VERB, wn);
 								}
 								return GPR_FAIL;
 							}
@@ -875,7 +875,7 @@ System_file;
 						parser_all_found = true;
 						if(multiple_objects --> 0 == 0) {
 							if(p_phase == PHASE2) {
-								PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
+								PrintMsg(MSG_PARSER_NOTHING_TO_VERB, wn);
 								return GPR_FAIL;
 							}
 							return GPR_MULTIPLE;
@@ -1700,7 +1700,7 @@ Array guess_num_objects->5;
 				PerformPreparedAction();
 				++_score;
 			}
-			if(_score == 0) PrintMsg(MSG_PARSER_NOTHING_TO_VERB);
+			if(_score == 0) PrintMsg(MSG_PARSER_NOTHING_TO_VERB, wn);
 		}
 	}
 	return num_words_parsed;

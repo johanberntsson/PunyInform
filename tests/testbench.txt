@@ -6,10 +6,13 @@ I only understood you as far as "i" but then you lost me.
 You can't use multiple objects with that verb.
 
 > put all
-What do you want to put those things in?
+You are not carrying anything.
 
 > take torch.
 Taken.
+
+> put all
+I think you wanted to say "put electric torch in something". Please try again.
 
 > take torch and john
 electric torch: You already have that.

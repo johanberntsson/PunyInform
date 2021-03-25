@@ -7,7 +7,7 @@ mounting: Taken.
 toolbox: Taken.
 
 > take all
-There is nothing to take.
+There are no things available that match "take all".
 
 > slowly i
 You're carrying a toolbox, a mounting and a battery.

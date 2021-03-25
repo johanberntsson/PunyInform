@@ -1,3 +1,4 @@
+
 > pry molly with max
 (first taking Max)
 That doesn't seem to be something you can unlock.
@@ -26,7 +27,7 @@ You put Max into Molly.
 You are empty handed.
 
 > drop all
-There is nothing to drop.
+You are not carrying anything.
 
 > transfer max to molly
 (first taking Max)
@@ -36,7 +37,7 @@ You put Max into Molly.
 You are empty handed.
 
 > drop all
-There is nothing to drop.
+You are not carrying anything.
 
 > put on max
 (first taking Max)

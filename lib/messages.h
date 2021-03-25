@@ -528,7 +528,13 @@ Default LibraryMessages 0;
 #Endif;
 #IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;
 	MSG_PARSER_NOTHING_TO_VERB:
-		"There is nothing to ",  (verbname) verb_word,".";
+		if(action == ##Drop or ##Insert && (parse + 2 + (p_arg_1 - 2) *4)-->0 == ALL_WORD) {
+			"You are not carrying anything.";
+		}  else {
+			print "There are no things available that match ~";
+			_PrintPartialMatch(verb_wordnum, p_arg_1 - 1);
+			"~.";
+		}
 #EndIf;
 	MSG_PARSER_NOT_HOLDING, MSG_WAVE_NOTHOLDING:
 		print_ret "But you are not holding ", (the) p_arg_1, ".";

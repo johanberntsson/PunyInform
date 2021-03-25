@@ -5,6 +5,7 @@ i blue
 open all
 put all
 take torch.
+put all
 take torch and john
 open box
 get all from box
