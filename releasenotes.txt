@@ -408,7 +408,7 @@ v2.1: bug fix and new feature release (5 March 2021)
 - Fixed bug that didn't restore scope after using a scope=XXX grammar token.
 
 =======
-v2.2: bug fix (and new feature release?)
+v2.2: bug fix release (27 March 2021)
 
 - Changed so BeforeRoutines() is not executed for meta verbs (issue 74)
 - Fixed 'take all except X' offset error
@@ -427,3 +427,7 @@ v2.2: bug fix (and new feature release?)
 - Better parser response when grammar missing (e.g. Extend 'close' replace;)
 - Better parser responses when trying to parse unknown words
 - Better parser responses to bad input such as 'i blue' and 'open all'
+- Better parser response when list of nouns found where it isn't allowed
+
+=======
+v2.3: bug fix release

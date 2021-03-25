@@ -1,6 +1,8 @@
 
 transcript
 
+i.i
+open torch and ladder
 i blue
 open all
 put all

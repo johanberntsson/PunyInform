@@ -1,4 +1,12 @@
 
+> i.i
+You are empty handed.
+
+You are empty handed.
+
+> open torch and ladder
+You can't use multiple objects with that verb.
+
 > i blue
 I only understood you as far as "i" but then you lost me.
 

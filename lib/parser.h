@@ -1215,6 +1215,19 @@ Array guess_num_objects->5;
 						phase2_necessary = true;
 					}
 					return wn;
+				} else if(parse->1 > wn && ((((_parse_pointer + 4)-->0) + DICT_BYTES_FOR_WORD)->0 & 1) == 0) {
+					++wn;
+					if(Directions.parse_name()) {
+						return 100; ! Next is a direction, so this is fine
+					}
+					! neither a verb nor a direction, so probably a list
+					! of nouns without a matching multi token
+					if(p_phase == PHASE2) {
+						PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
+					} else {
+						phase2_necessary = true;
+					}
+					return wn - 1;
 				} else {
 					wn++;
 					return 100; ! pattern matched
