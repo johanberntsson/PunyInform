@@ -158,6 +158,12 @@ Constant MSG_PARSER_COMPLEX_AGAIN "The 'again' command must be on a new input li
 #Ifndef MSG_PARSER_NOTHING_TO_AGAIN;
 Constant MSG_PARSER_NOTHING_TO_AGAIN "You can hardly repeat that.";
 #EndIf;
+#Ifndef MSG_PARSER_BAD_PATTERN_PREFIX;
+Constant MSG_PARSER_BAD_PATTERN_PREFIX "I think you wanted to say ~";
+#EndIf;
+#Ifndef MSG_PARSER_BAD_PATTERN_SUFFIX;
+Constant MSG_PARSER_BAD_PATTERN_SUFFIX "~. Please try again.^";
+#EndIf;
 
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;

@@ -1133,7 +1133,7 @@ Array guess_num_objects->5;
 #EndIf;
 
 	! write an error message and return false
-	print "I think you wanted to say ~";
+	print (string) MSG_PARSER_BAD_PATTERN_PREFIX;
 	print (verbname) verb_word;
 	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
 		_type = (_token -> 0) & $0f;
@@ -1154,7 +1154,7 @@ Array guess_num_objects->5;
 			} else {
 				if(noun ~= 0) {
 					_noun = 0; ! avoid repeat (and we don't need _noun anymore)
-					print (name) noun;
+					if(parser_all_found) print "all"; else print (name) noun;
 				} else if(_token->2 == CREATURE_OBJECT) {
 					print (string) SOMEONE_STR;
 				} else {
@@ -1163,7 +1163,7 @@ Array guess_num_objects->5;
 			}
 		}
 	}
-	print "~. Please try again.^";
+	print (string) MSG_PARSER_BAD_PATTERN_SUFFIX;
 	rfalse;
 ];
 
