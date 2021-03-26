@@ -1216,7 +1216,8 @@ Array guess_num_objects->5;
 					}
 					return wn;
 				} else if(parse->1 > wn && ((((_parse_pointer + 4)-->0) + DICT_BYTES_FOR_WORD)->0 & 1) == 0) {
-					++wn;
+					_current_wn = wn;
+					wn++;
 					if(Directions.parse_name()) {
 						return 100; ! Next is a direction, so this is fine
 					}
@@ -1227,7 +1228,7 @@ Array guess_num_objects->5;
 					} else {
 						phase2_necessary = true;
 					}
-					return wn - 1;
+					return _current_wn;
 				} else {
 					wn++;
 					return 100; ! pattern matched
