@@ -107,6 +107,9 @@ Constant F_BOUGHT_TICKETS 2;
 
 #Ifdef USEINFORM;
 Include "Parser";
+
+Attribute reactive;
+
 Include "VerbLib";
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
