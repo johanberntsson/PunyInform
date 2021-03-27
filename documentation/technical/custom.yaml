@@ -1,0 +1,15 @@
+title: PunyInform
+toc: true
+include-before: |
+    **PunyInform**
+
+    A fast and compact library for writing text adventure games for the Z-machine running on 8-bit computers as well as other platforms. 
+
+    Release 1 
+
+    &nbsp;
+
+    &nbsp;
+
+    PunyInform was conceived and designed by Johan Berntsson and Fredrik Ramsberg. Coding by Johan Berntsson, Fredrik Ramsberg, Pablo Martinez and Tomas Öberg. Includes code from the Inform 6 standard library, by Graham Nelson. Thanks to Stefan Vogt, Jason Compton, John Wilson, Hugo Labrande, Richard Fairweather, Adam Sommerfield, auraes and Hannesss for issue reporting, advice, testing, code contributions and promotion. Thanks to David Kinder and Andrew Plotkin for helping out with compiler issues and sharing their deep knowledge of the compiler. Huge thanks to Graham Nelson for creating the Inform 6 compiler and library in the first place.
+
