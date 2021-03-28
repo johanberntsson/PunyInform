@@ -1,9 +1,11 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
+
 ! ============================================================================ !
 !   Cloak of Darkness - a simple demonstration of Interactive Fiction
 !	   This version for INFORM written by Roger Firth on 17Sep99
 ! ============================================================================ !
+
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
 Constant MANUAL_PRONOUNS;
