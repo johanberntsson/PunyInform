@@ -1406,15 +1406,32 @@ Global scope_cnt;
 #Ifnot;
 			print "Probably give reactive to these objects (see notes about ~reactive~ in manual) :^";
 			objectloop(_o) {
+#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
 				if(_o hasnt reactive && (_o.&react_before ~= 0 ||
-						_o.&react_after ~= 0 || _o.&each_turn ~= 0))
+						_o.&react_after ~= 0 || _o.&each_turn ~= 0 ||
+						_o.&add_to_scope ~= 0 || _o.&parse_name ~= 0))
 					print "(",_o,") ", (name) _o, "^";
+#Ifnot;
+				if(_o hasnt reactive && (_o.&react_before ~= 0 ||
+						_o.&react_after ~= 0 || _o.&each_turn ~= 0 ||
+						_o.&add_to_scope ~= 0))
+					print "(",_o,") ", (name) _o, "^";
+#Endif;
 			}
 			print "^Remove reactive from these objects:^";
-			objectloop(_o)
+			objectloop(_o) {
+#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
 				if(_o has reactive && _o.&react_before == 0 &&
-						_o.&react_after == 0 && _o.&each_turn == 0)
+						_o.&react_after == 0 && _o.&each_turn == 0 &&
+						_o.&add_to_scope == 0 && _o.&parse_name == 0)
 					print "(",_o,") ", (name) _o, "^";
+#Ifnot;
+				if(_o has reactive && _o.&react_before == 0 &&
+						_o.&react_after == 0 && _o.&each_turn == 0 &&
+						_o.&add_to_scope == 0)
+					print "(",_o,") ", (name) _o, "^";
+#Endif;
+			}
 #Endif;
 		default:
 			"Type one of the following:^

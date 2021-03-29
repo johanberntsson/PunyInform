@@ -486,8 +486,15 @@ else
 	_stop = top_object + 1;
 	for(_i = Directions : _i < _stop : _i++) {
 #Ifndef OPTIONAL_MANUAL_REACTIVE;
-		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0)
+#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
+		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0 ||
+				_i.&add_to_scope ~= 0 || _i.&parse_name ~= 0)
 			give _i reactive;
+#Ifnot;
+		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0 ||
+				_i.&add_to_scope ~= 0)
+			give _i reactive;
+#Endif;
 #Endif;
 		if(_i.&found_in) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;

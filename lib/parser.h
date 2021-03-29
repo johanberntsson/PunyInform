@@ -263,23 +263,31 @@ System_file;
 		print "Testing ", (the) _obj, " _n is ", _n, "...^";
 #EndIf;
 		if((noun_filter == 0 || _UserFilter(_obj) ~= 0)) {
-#IfDef DEBUG;
+#Ifdef DEBUG;
 			! Problem: parse_name is an alias of sw_to, and debug verbs can
 			! reference any object in the game, some of which are rooms.
 			! Solution: If the object seems to be a room, we will not call
 			! parse_name, unless DebugParseNameObject(object) returns true
+#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
+			if(_obj has reactive && _obj.parse_name ofclass Routine) {
+#Ifnot;
 			if(_obj.parse_name ofclass Routine) {
+#Endif;
 				_j = wn;
 				_result = 0;
 				if(meta == 0 || parent(_obj) ~= 0
 						|| (_obj provides describe or life or found_in)
 						|| DebugParseNameObject(_obj))
 					_result = _obj.parse_name();
-#IfNot;
+#Ifnot; ! Not DEBUG
+#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
+			if(_obj has reactive && _obj.parse_name) {
+#Ifnot;
 			if(_obj.parse_name) {
+#Endif;
 				_j = wn;
 				_result = _obj.parse_name();
-#EndIf;
+#Endif;
 				if(_result == -1) jump try_name_match;
 				_n = _n + _result; ! number of words consumed
 				wn = _j;
@@ -1561,7 +1569,7 @@ Array guess_num_objects->5;
 			} else {
 				PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
 			}
-		} 
+		}
 		rtrue;
 	}
 

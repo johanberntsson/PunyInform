@@ -39,6 +39,7 @@ Constant OPTIONAL_SIMPLE_DOORS;
 Constant OPTIONAL_SHIP_DIRECTIONS;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant OPTIONAL_MANUAL_REACTIVE;
+Constant OPTIONAL_REACTIVE_PARSE_NAME;
 Constant OPTIONAL_ORDERED_TIMERS;
 Constant OPTIONAL_PROVIDE_UNDO;
 
@@ -804,7 +805,7 @@ Book -> PinkBook "pink book"
 				"You dared taking the pink book. Bravo!";
 		],
 		description "The book is nice and tidy.",
-	has clothing;
+	has clothing reactive;
 
 Object -> Torch "electric torch"
 	with
@@ -908,7 +909,8 @@ Class MultiTopic
 				rtrue;
 			}
 			print_ret (string) _k;
-		];
+		],
+	has reactive;
 
 Object questions "questions";
 

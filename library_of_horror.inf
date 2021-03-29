@@ -25,6 +25,7 @@
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_MANUAL_SCOPE;
+Constant OPTIONAL_REACTIVE_PARSE_NAME;
 Constant RUNTIME_ERRORS = 0; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 
 Constant INITIAL_LOCATION_VALUE = GloomyStreet;
@@ -536,7 +537,7 @@ Object -> Frank "Frank the Robot"
 								print "^When it sees you inside the room, it starts to get nervous.
 									~Oh, no, no, no, sir! It's not right for you to be here! There's
 									nothing to see here, really. Let me escort you.~ And he pushes you out
-									gently but firmly.^";
+									gently but firmly.^^";
 								move self to StorageRoom;
 								PlayerTo(StorageRoom);
 							}

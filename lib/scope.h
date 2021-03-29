@@ -53,7 +53,7 @@ System_file;
 !		scope-->(scope_objects++) = p_obj;
 
 		! Add_to_scope
-		if(p_no_add == 0) _PerformAddToScope(p_obj);
+		if(p_no_add == 0 && p_obj has reactive) _PerformAddToScope(p_obj);
 
 		_child = child(p_obj);
 		if(_child ~= 0 && (p_obj has supporter || p_obj has transparent || (p_obj has container && p_obj has open)))
@@ -93,7 +93,7 @@ System_file;
 	scope-->(scope_objects++) = p_obj;
 ];
 
-[ _UpdateScope p_actor p_force _start_pos _i _initial_scope_objects
+[ _UpdateScope p_actor p_force _start_pos _i _obj _initial_scope_objects
 		_current_scope_objects _risk_duplicates;
 	if(p_actor == 0) p_actor = player;
 
@@ -152,8 +152,11 @@ System_file;
 #Endif;
 
 	_current_scope_objects = scope_objects;
-	for(_i = _initial_scope_objects : _i < _current_scope_objects : _i++)
-		_PerformAddToScope(scope-->_i);
+	for(_i = _initial_scope_objects : _i < _current_scope_objects : _i++) {
+		_obj = scope-->_i;
+		if(_obj has reactive)
+			_PerformAddToScope(_obj);
+	}
 
 	scope_modified = false;
 #IfDef DEBUG_SCOPE;

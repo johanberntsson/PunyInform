@@ -13,7 +13,8 @@ Include "globals.h";
 Include "puny.h";
 
 [ SwitchFromPlayerCharacter p_old_pc _i;
-	give p_old_pc ~concealed ~transparent;
+!	give p_old_pc ~concealed ~transparent;
+	give p_old_pc ~concealed;
 	for(_i = 0 : _i < 3 : _i++)
 		p_old_pc.&name-->_i = p_old_pc.&name_other-->_i;
 	p_old_pc.short_name = p_old_pc.short_name_other;
@@ -84,7 +85,8 @@ Object -> Table "table"
 
 Object -> -> plate "plate"
 	with
-		name 'plate';
+		name 'plate',
+	has supporter;
 
 Object -> -> "fork"
 	with
