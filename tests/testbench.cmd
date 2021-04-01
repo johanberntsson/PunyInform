@@ -1,6 +1,8 @@
 
 transcript
 
+close close door
+open close door
 i.i
 open torch and ladder
 i blue
