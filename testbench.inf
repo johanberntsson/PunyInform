@@ -124,9 +124,6 @@ Include "ext_flags.h";
 Include "globals.h";
 #EndIf;
 
-
-];
-
 [ DarkToDark;
 	deadflag = 1;
 	"You are eaten by a grue.";
