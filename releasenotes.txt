@@ -434,4 +434,5 @@ v2.3: bug fix and new feature release
 
 - Made use of reactive attribute for add_to_scope as well, and (optionally)
   for parse_name.
+- Better parser response when a dictionary word failed to parse a noun
   

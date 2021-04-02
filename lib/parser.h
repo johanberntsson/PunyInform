@@ -1557,17 +1557,31 @@ Array guess_num_objects->5;
 			! call again to generate suitable error message
 			_score = _ParsePattern(_best_pattern, PHASE2);
 		} else {
+			! parser_unknown_word is set when we tried to parse
+			! a noun but were found a word that was didn't match
+			! any object in scope. This word can be completely 
+			! crazy (not in the dictionary) or a valid word in
+			! another context but not right now. Reasons may
+			! be that it matches something that isn't in scope,
+			! or this word isn't a noun word.
 			if(parser_unknown_noun_found ~= 0 &&
 				parser_unknown_noun_found-->0 == 0) {
+				! this is not a dictionary word.
 				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
 			} else if((((_best_pattern - 1 + wn*3 )-> 0) & $0f) == TT_END) {
+				! the sentence matched the pattern
 				if((parse - 2 + wn*4)-->0 == ALL_WORD) {
 					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 				} else {
 					PrintMsg(MSG_PARSER_NOSUCHTHING);
 				}
 			} else {
-				PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
+				! we didn't match the pattern at all
+				if(parser_unknown_noun_found == 0) {
+					PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
+				} else {
+					PrintMsg(MSG_PARSER_NOSUCHTHING);
+				}
 			}
 		}
 		rtrue;

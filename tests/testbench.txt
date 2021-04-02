@@ -1,9 +1,9 @@
 
 > close close door
-I only understood you as far as "close close" but then you lost me.
+You can't see any such thing.
 
 > open close door
-I only understood you as far as "open close" but then you lost me.
+You can't see any such thing.
 
 > i.i
 You are empty handed.

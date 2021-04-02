@@ -56,7 +56,7 @@ You put the transparent box into the red box.
 > close red box then get transparent box
 You close the red box.
 
-I only understood you as far as "get transparent" but then you lost me.
+You can't see any such thing.
 
 > open red box
 You open the red box, revealing a transparent box (which contains a red cube), a
