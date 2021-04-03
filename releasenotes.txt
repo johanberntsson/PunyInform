@@ -436,3 +436,5 @@ v2.3: bug fix and new feature release
   for parse_name.
 - Better parser response when a dictionary word failed to parse a noun
 - Made _UpdateScope code shorter
+- Fixed scope bug: add_to_scope was not run for the objects in an add_to_scope
+  list.

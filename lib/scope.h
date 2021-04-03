@@ -23,6 +23,8 @@ System_file;
 				_add_obj =  _addr --> _i;
 				if(_add_obj) {
 					_PutInScope(_add_obj);
+					if(_add_obj has reactive)
+						_PerformAddToScope(_add_obj);
 					_SearchScope(child(_add_obj));
 #IfDef DEBUG_SCOPE;
 					print _i, ": ", _add_obj, "^";
