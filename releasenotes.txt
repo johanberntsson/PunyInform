@@ -438,3 +438,4 @@ v2.3: bug fix and new feature release
 - Made _UpdateScope code shorter
 - Fixed scope bug: add_to_scope was not run for the objects in an add_to_scope
   list.
+- Added objects in the dark to scope.

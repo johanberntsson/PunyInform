@@ -143,8 +143,9 @@ System_file;
 	_scope_base = _start_pos;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(location == thedark && p_actor == player) {
-		! only the player's possessions are in scope
+		! only the player's possessions and whatever is in the dark are in scope
 		_PutInScope(player, _risk_duplicates);
+		_SearchScope(child(location), _risk_duplicates, true);
 		_scope_base = player;
 	}
 #Endif;
