@@ -287,10 +287,11 @@ Object -> Key "key"
 		after [; print "*** Key.after^"; ],
 		before [; print "*** Key.before^"; ],
 #EndIf;
+	has transparent
 #IfDef OPTIONAL_FULL_SCORE;
-	has scored
+	scored
 #EndIf;
-	has transparent;
+;
 
 Object -> -> Keyring "keyring"
 	with

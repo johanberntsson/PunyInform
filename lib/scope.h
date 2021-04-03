@@ -94,7 +94,7 @@ System_file;
 ];
 
 [ _UpdateScope p_actor p_force _start_pos _i _obj _initial_scope_objects
-		_current_scope_objects _risk_duplicates;
+		_current_scope_objects _risk_duplicates _scope_base;
 	if(p_actor == 0) p_actor = player;
 
 	if(scope_stage == 2) {
@@ -137,19 +137,16 @@ System_file;
 		_PutInScope(_start_pos, _risk_duplicates);
 	}
 
-#Ifdef OPTIONAL_NO_DARKNESS;
 	! Add all in player location (which may be inside an object)
-	_SearchScope(child(_start_pos), _risk_duplicates, true);
-#Ifnot;
+	_scope_base = _start_pos;
+#Ifndef OPTIONAL_NO_DARKNESS;
 	if(location == thedark && p_actor == player) {
 		! only the player's possessions are in scope
 		_PutInScope(player, _risk_duplicates);
-		_SearchScope(child(player), _risk_duplicates, true);
-	} else {
-		! Add all in player location (which may be inside an object)
-		_SearchScope(child(_start_pos), _risk_duplicates, true);
+		_scope_base = player;
 	}
 #Endif;
+	_SearchScope(child(_scope_base), _risk_duplicates, true);
 
 	_current_scope_objects = scope_objects;
 	for(_i = _initial_scope_objects : _i < _current_scope_objects : _i++) {
