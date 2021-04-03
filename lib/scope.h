@@ -230,6 +230,7 @@ System_file;
 ];
 
 Constant PlaceInScope = _PutInScope;
+Constant AddToScope = _PutInScope;
 
 ! [ PlaceInScope p_obj _i;
 	! ! DM: PlaceInScope(obj)
