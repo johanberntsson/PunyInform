@@ -440,3 +440,5 @@ v2.3: bug fix and new feature release
   list.
 - Added objects in the dark to scope.
 - Added AddToScope as a synonym for PlaceInScope.
+- The death/win message is now printed in bold in z5.
+- Removed full stop after You have won/died messages.
