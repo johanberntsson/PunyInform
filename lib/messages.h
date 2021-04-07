@@ -680,12 +680,12 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #EndIf;
 #IfTrue MSG_YOU_HAVE_WON < 1000;
 	MSG_YOU_HAVE_WON: ! print and rtrue to avoid newline
- 		print "You have won.";
+ 		print "You have won";
  		rtrue;
 #EndIf;
 #IfTrue MSG_YOU_HAVE_DIED < 1000;
 	MSG_YOU_HAVE_DIED: ! print and rtrue to avoid newline
-		print "You have died.";
+		print "You have died";
 		rtrue;
 #EndIf;
 #IfTrue MSG_ENTER_BAD_LOCATION < 1000;

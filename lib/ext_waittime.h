@@ -19,7 +19,7 @@
 ! one minute, and the player can't specify a time of day to wait until.
 !
 ! The game author can check the variable waittime_waiting - if it's true it
-! means that waiting is currently in proress. The author can choose to set this
+! means that waiting is currently in progress. The author can choose to set this
 ! variable to false to abort the player's waiting prematurely, i.e. if code in
 ! a daemon decides that a person enters the room, or there's an explosion
 ! nearby. If something happens that alters the time in the game drastically,
