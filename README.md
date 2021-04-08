@@ -59,6 +59,8 @@ Fredrik Ramsberg has written a few articles describing PunyInform for beginners:
 
 * [PunyInform Coding 3: Daemons and Describing Objects](https://vintageisthenewold.com/punyinform-coding-3-daemons-and-describing-objects/) covers daemons, some techniques for affecting how objects are described, fake actions and performing actions in code.
 
+* [A tutorial index](https://docs.google.com/spreadsheets/d/1DSAu3bTkmWByLOGGGeb9qj9TwXoUEvAJCihF_8hYzPE/edit?usp=sharing) saying in which coding tutorial different concepts are first explained, and which concepts we intend to cover but haven't yet.
+
 Fredrik has also written [a comparison of PunyInform and the standard Inform 6 library](https://intfiction.org/t/punyinform-vs-inform-6-a-comparison/46625).
 
 ## Credits
