@@ -8,7 +8,7 @@
 
 System_file;
 
-[ _PerformAddToScope p_obj _add_obj _i _len _addr;
+[ _PerformAddToScope p_obj _add_obj _i _len _addr _n;
 	_addr = p_obj.&add_to_scope;
 	if(_addr) {
 		! routine or a list of objects
@@ -22,8 +22,9 @@ System_file;
 			for(_i = 0: _i  < _len: _i++) {
 				_add_obj =  _addr --> _i;
 				if(_add_obj) {
+					_n = scope_objects;
 					_PutInScope(_add_obj);
-					if(_add_obj has reactive)
+					if(scope_objects > _n && _add_obj has reactive)
 						_PerformAddToScope(_add_obj);
 					_SearchScope(child(_add_obj));
 #IfDef DEBUG_SCOPE;
