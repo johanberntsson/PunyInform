@@ -430,7 +430,7 @@ v2.2: bug fix release (27 March 2021)
 - Better parser response when list of nouns found where it isn't allowed
 
 =======
-v2.3: bug fix and new feature release
+v2.3: bug fix and new feature release (8 April 2021)
 
 - Made use of reactive attribute for add_to_scope as well, and (optionally)
   for parse_name.
@@ -442,3 +442,7 @@ v2.3: bug fix and new feature release
 - Added AddToScope as a synonym for PlaceInScope.
 - The death/win message is now printed in bold in z5.
 - Removed full stop after You have won/died messages.
+
+=======
+v2.4: bug fix and new feature release
+
