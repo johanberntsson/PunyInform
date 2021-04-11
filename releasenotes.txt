@@ -446,3 +446,5 @@ v2.3: bug fix and new feature release (8 April 2021)
 =======
 v2.4: bug fix and new feature release
 
+- Fixed bug in ext_quote_box (which crashed some interpreters in z3 just after
+  quote box was printed.)
