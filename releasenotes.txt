@@ -452,3 +452,4 @@ v2.4: bug fix and new feature release
 - Merged a library message into another, to save some bytes.
 - Removed before and after for thedark.
 - Reworked howto/semidark.inf to work without using thedark.before().
+- Added climb and climb up/over to grammar, new action Climb.

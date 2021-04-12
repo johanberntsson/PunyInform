@@ -20,6 +20,8 @@ Verb 'attack' 'break' 'crack' 'destroy'
     * noun 'with' held                          -> Attack;
 
 Verb 'climb' 'scale'
+	* noun                                      -> Climb
+	* 'up'/'over' noun                          -> Climb
 	* 'into'/'onto' noun                        -> Enter
 	* 'out' 'of'/'from' noun                    -> Exit;
 
@@ -226,6 +228,11 @@ Verb 'wear'
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
 	PrintMsg(MSG_ATTACK_SUCCESS);
+];
+
+[ ClimbSub;
+	if(noun has animate) { PrintMsg(MSG_CLIMB_ANIMATE); rtrue;}
+	PrintMsg(MSG_CLIMB_DEFAULT);
 ];
 
 [ CloseSub;

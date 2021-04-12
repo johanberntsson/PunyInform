@@ -312,6 +312,8 @@ Default MSG_RESTART_CONFIRM 121;
 #Ifndef NO_SCORE;
 Default MSG_PARSER_NEW_SCORE 122;
 #Endif;
+Default MSG_CLIMB_ANIMATE 123;
+Default MSG_CLIMB_DEFAULT 124;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -446,7 +448,7 @@ Default LibraryMessages 0;
 		print_ret (CTheyreorThats) noun, " fixed in place.";
 	MSG_TURN_SCENERY, MSG_PUSH_SCENERY, MSG_PULL_SCENERY:
 		"What a concept!";
-	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE:
+	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE, MSG_CLIMB_ANIMATE:
 		"That would be less than courteous.";
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING,
 		MSG_WEAR_NOT_HOLDING:
@@ -572,7 +574,7 @@ Default LibraryMessages 0;
 	MSG_CONSULT_NOTHING_INTERESTING:
 		"You discover nothing of interest in ", (the) second, ".";
 #EndIf;
-	MSG_CUT_NO_USE, MSG_JUMP_OVER, MSG_TIE_DEFAULT:
+	MSG_CUT_NO_USE, MSG_JUMP_OVER, MSG_TIE_DEFAULT, MSG_CLIMB_DEFAULT:
 		"You would achieve nothing by this.";
 	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_UNLOCKED:
 		print_ret (CObjIs) noun, " already ", (verbname) p_arg_1, "ed.";
