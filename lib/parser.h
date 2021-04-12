@@ -693,7 +693,7 @@ System_file;
     rfalse;
 ];
 
-[ _ParseTopic p_wn p_parse_pointer p_preposition _i;
+[ _ParseTopic p_wn p_parse_pointer p_preposition;
 	consult_from = p_wn;
 	consult_words = 0;
 	for(::) {
@@ -1579,7 +1579,7 @@ Array guess_num_objects->5;
 		} else {
 			! parser_unknown_word is set when we tried to parse
 			! a noun but were found a word that was didn't match
-			! any object in scope. This word can be completely 
+			! any object in scope. This word can be completely
 			! crazy (not in the dictionary) or a valid word in
 			! another context but not right now. Reasons may
 			! be that it matches something that isn't in scope,
@@ -1691,7 +1691,7 @@ Array guess_num_objects->5;
 		} else {
 			if(RunLife(actor, ##Order)) rtrue;
 		}
-		PrintMsg(MSG_ORDERS_WONT);
+		PrintMsg(MSG_ORDERS_WONT, actor);
 		return num_words_parsed;
 	}
 

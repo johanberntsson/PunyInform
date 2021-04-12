@@ -467,11 +467,13 @@ else
 ];
 
 [ RunRoutines p_obj p_prop p_switch;
+#Ifndef OPTIONAL_NO_DARKNESS;
+	if(p_obj == thedark && p_prop ~= initial or short_name or description) p_obj = real_location;
+#Endif;
 	if(p_switch == 0) sw__var = action; else sw__var = p_switch;
 	if (p_obj.&p_prop == 0 && p_prop >= INDIV_PROP_START) rfalse;
 	return p_obj.p_prop();
 ];
-
 
 [ PrintOrRun p_obj p_prop p_no_string_newline _val;
 	_val = p_obj.p_prop;
@@ -1257,9 +1259,7 @@ Object thedark "Darkness"
 	with
 		initial 0,
 		description "It is pitch dark here!",
- 		short_name 0,
-		before 0,
-		after 0;
+ 		short_name 0;
 #Endif;
 
 [ _UpdateScoreOrTime;

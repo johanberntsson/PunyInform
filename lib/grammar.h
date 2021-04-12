@@ -214,12 +214,12 @@ Verb 'wear'
 ];
 
 [ AskToSub;
-	PrintMsg(MSG_ASKTO_SUCCESS);
+	PrintMsg(MSG_ASKTO_SUCCESS, noun);
 ];
 
 [ AskForSub;
 	if (noun == player) <<Inv>>;
-	PrintMsg(MSG_ASKFOR_SUCCESS);
+	PrintMsg(MSG_ASKFOR_SUCCESS, noun);
 ];
 
 [ AttackSub;

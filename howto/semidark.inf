@@ -24,6 +24,8 @@ Attribute semidark;
 ! Define the entry point routines you need here, like Amusing, DarkToDark etc.
 
 [InScope x;
+	! When in a semidark location, add all semidark objects and their
+	! contents to scope.
 	if(location == thedark && real_location has semidark)
 		objectloop(x in real_location) {
 			if(x has semidark) {
@@ -34,7 +36,24 @@ Attribute semidark;
 	rfalse;
 ];
 
+[GamePreRoutine;
+	! Examine normally doesn't work in dark locations. We want it to work
+	! in semidark locations though.
+	if(location == thedark && action == ##Examine &&
+			real_location has semidark) {
+		if(noun provides description) {
+			PrintOrRun(noun, description);
+			rtrue;
+		} else {
+			PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
+			rtrue;
+		}
+	}
+	rfalse;
+];
+
 [LookRoutine x;
+	! When in a semidark location, list semidark objects.
 	if(location == thedark && real_location has semidark) {
 		objectloop(x in real_location) {
 			give x ~workflag;
@@ -148,19 +167,6 @@ Object -> -> Spoon "spoon"
 	"It's too dark to see here.";
 ];
 
-[TheDarkBefore;
-	Examine:
-		if(noun provides description) {
-			PrintOrRun(noun, description);
-			rtrue;
-		} else {
-			PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
-			rtrue;
-		}
-	default:
-		rfalse;
-];
-
 [TheDarkShortName;
 	if(real_location has semidark) {
 		print (name) real_location;
@@ -171,7 +177,6 @@ Object -> -> Spoon "spoon"
 
 [Initialise;
 	thedark.description = TheDarkDescription;
-	thedark.before = TheDarkBefore;
 	thedark.short_name = TheDarkShortName;
 
 	print "^^This is a demonstration of ~semidark~ rooms - rooms where it's

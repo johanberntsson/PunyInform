@@ -478,8 +478,8 @@ Default LibraryMessages 0;
 		"You ", (verbname) p_arg_1, " ", (the) noun, ".";
 	MSG_GIVE_SUCCESS, MSG_SHOW_SUCCESS:
 		print_ret (The) second, " doesn't seem interested.";
-	MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS:
-		print_ret (The) noun, " has better things to do.";
+	MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS, MSG_ORDERS_WONT:
+		print_ret (The) p_arg_1, " has better things to do.";
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
 		"You can't, since ",(the) p_arg_1, " is closed.";
 #IfTrue MSG_GIVE_PLAYER < 1000;
@@ -622,10 +622,6 @@ Default LibraryMessages 0;
 #EndIf;
 MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 	"You achieve nothing by this.";
-#IfTrue MSG_ORDERS_WONT < 1000;
-	MSG_ORDERS_WONT:
-		print_ret (The) actor, " has better things to do.";
-#EndIf;
 #IfTrue MSG_TAKE_NOT_AVAILABLE < 1000;
 	MSG_TAKE_NOT_AVAILABLE:
 		print_ret (CObjIs) noun, " not available.";

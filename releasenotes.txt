@@ -449,3 +449,6 @@ v2.4: bug fix and new feature release
 - Fixed bug in ext_quote_box (which crashed some interpreters in z3 just after
   quote box was printed.)
 - Fixed bad parsning of topic followed by multiple preposition alternatives.
+- Merged a library message into another, to save some bytes.
+- Removed before and after for thedark.
+- Reworked howto/semidark.inf to work without using thedark.before().
