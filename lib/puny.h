@@ -724,14 +724,14 @@ Include "parser.h";
 		@inc_chk _i _max ?~next_entry;
 	}
 #IfDef DEBUG;
-	if(debug_flag & 1) print "(", (name) location, ").before()^";
+	if(debug_flag & 1) print "(", (name) real_location, ").before()^";
 #EndIf;
-	if(location.&before) {
+	if(real_location.&before) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 		! Assume that every routine may modify the scope
 		scope_modified = true;
 #EndIf;
-		if(RunRoutines(location, before)) rtrue;
+		if(RunRoutines(real_location, before)) rtrue;
 	}
 	if(inp1 > 1) {
 #IfDef DEBUG;
@@ -774,14 +774,14 @@ Include "parser.h";
 		@inc_chk _i _max ?~next_entry;
 	}
 #IfDef DEBUG;
-	if(debug_flag & 1) print "(", (name) location, ").after()^";
+	if(debug_flag & 1) print "(", (name) real_location, ").after()^";
 #EndIf;
-	if(location.&after) {
+	if(real_location.&after) {
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 		! Assume that every routine may modify the scope
 		scope_modified = true;
 #EndIf;
-		if(RunRoutines(location, after)) rtrue;
+		if(RunRoutines(real_location, after)) rtrue;
 	}
 	if(inp1 > 1) {
 #IfDef DEBUG;
