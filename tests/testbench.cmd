@@ -1,6 +1,8 @@
 
 transcript
 
+type abc on ladder
+type abc into ladder
 close close door
 open close door
 i.i

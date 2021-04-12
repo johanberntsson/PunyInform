@@ -141,6 +141,13 @@ Include "globals.h";
 ];
 
 
+Verb 'type'
+	*	topic 'into'/'on' noun -> Type;
+
+[ TypeSub;
+    print consult_from;
+];
+
 Verb 'talk'
 	*	'to'/'with'	creature	-> Talk;
 

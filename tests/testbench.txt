@@ -1,4 +1,8 @@
 
+> type abc on ladder
+2
+> type abc into ladder
+2
 > close close door
 You can't see any such thing.
 

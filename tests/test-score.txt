@@ -23,7 +23,7 @@ one point: You put the one point into the box.
 [The score has just gone up by 4 points.]
 
 
-  *** You have won. ***
+  *** You have won ***
 
 In that game you scored 4 out of a possible 4, in 5 turns.
 
@@ -62,7 +62,7 @@ Taken.
 AAAargh!
 
 
-  *** You have died. ***
+  *** You have died ***
 
 In that game you scored 1 out of a possible 4, in 5 turns.
 

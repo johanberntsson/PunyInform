@@ -1,3 +1,4 @@
+
 > give it to him
 I don't know what "it" refers to.
 
@@ -78,7 +79,7 @@ Failed restore.
 You eat the apple. Not bad.
 
 
-  *** You have won. ***
+  *** You have won ***
 
 In that game you scored 0 out of a possible 0, in 18 turns.
 
