@@ -693,6 +693,24 @@ System_file;
     rfalse;
 ];
 
+[ _ParseTopic p_wn p_parse_pointer p_preposition _i;
+	consult_from = p_wn;
+	consult_words = 0;
+	for(::) {
+		++p_wn;
+		++consult_words;
+		p_parse_pointer = p_parse_pointer + 4;
+		if(p_wn > parse->1) {
+			! end of line
+			rfalse;
+		}
+		if(p_parse_pointer --> 0 == p_preposition) {
+			! found the stop token
+			rtrue;
+		}
+	}
+];
+
 [ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data _old_wn;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
@@ -924,26 +942,28 @@ System_file;
 			}
 			return GPR_MULTIPLE;
 		} else if(_token_data == TOPIC_OBJECT) {
-			consult_from = wn;
-			consult_words = 0;
 			! topic continues until end of line or
 			! until the word matches the preposition
-			! defined in the next pattern
+			! defined in the next pattern(s)
+			! p_pattern_pointer now points at <topic>
+			! p_pattern_pointer + 3 could be the preposition
 			!print (p_pattern_pointer + 3) -> 0, "^"; ! token
 			!print (p_pattern_pointer + 4) --> 0, "^"; ! token_data
 			if(p_pattern_pointer ~= 0) {
-				_i = (p_pattern_pointer + 4) --> 0; ! word to stop at
-			} else {
-				_i = NULL;
-			}
-			for(::) {
-				++wn;
-				++consult_words;
-				p_parse_pointer = p_parse_pointer + 4;
-				if(wn > parse->1 || p_parse_pointer --> 0 == _i) {
-					! found the stop token, or end of line
-					break;
+				! loop over all possible prepositions and update wn
+				! if topic and preposition matched
+				for(_i = 3: (p_pattern_pointer + _i)->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP or TOKEN_LAST_PREP or TOKEN_SINGLE_PREP: _i = _i + 3) {
+					!print (address) (p_pattern_pointer + _i + 1) --> 0, "^";
+					if(_ParseTopic(wn, p_parse_pointer, (p_pattern_pointer + _i + 1) --> 0)) {
+						wn = wn + consult_words; break;
+					}
 				}
+			}
+			if(consult_words == 0) {
+				! topic with preposition wasn't found, so slurp all
+				! into topic.
+				_ParseTopic(wn, p_parse_pointer, -1);
+				wn = wn + consult_words;
 			}
 			return GPR_NUMBER;
 		} else if(_token_data == SPECIAL_OBJECT) {
