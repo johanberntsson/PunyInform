@@ -952,19 +952,19 @@ System_file;
 			if(p_pattern_pointer ~= 0) {
 				! loop over all possible prepositions and update wn
 				! if topic and preposition matched
-				for(_i = 3: (p_pattern_pointer + _i)->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP or TOKEN_LAST_PREP or TOKEN_SINGLE_PREP: _i = _i + 3) {
+				for(_i = 3: (p_pattern_pointer + _i)->0 >= TOKEN_SINGLE_PREP: _i = _i + 3) {
 					!print (address) (p_pattern_pointer + _i + 1) --> 0, "^";
 					if(_ParseTopic(wn, p_parse_pointer, (p_pattern_pointer + _i + 1) --> 0)) {
-						wn = wn + consult_words; break;
+						break;
 					}
 				}
 			}
 			if(consult_words == 0) {
-				! topic with preposition wasn't found, so slurp all
-				! into topic.
+				! topic with preposition wasn't found, so the
+				! remaining part of the sentence as topic
 				_ParseTopic(wn, p_parse_pointer, -1);
-				wn = wn + consult_words;
 			}
+			wn = wn + consult_words;
 			return GPR_NUMBER;
 		} else if(_token_data == SPECIAL_OBJECT) {
 			parsed_number = TryNumber(wn);
