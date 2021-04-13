@@ -164,9 +164,18 @@ Fake_Action NotUnderstood;
 Fake_Action PluralFound;
 Fake_Action Going;
 
+Property additive life   $ffff;
+Property initial;
+Property description;
+Property cant_go;
+Property number;
+Property found_in;         !  For fiddly reasons this can't alias
+Property time_left;
+Property additive time_out $ffff;
+Property short_name 0;
+Property additive describe $ffff;
 Property additive before $ffff;
 Property additive after  $ffff;
-Property additive life   $ffff;
 
 Property n_to;  Property s_to; !  Slightly wastefully, these are
 Property e_to;  Property w_to; !  (they might be routines)
@@ -188,67 +197,28 @@ Property se_to;
 Property sw_to;
 #EndIf;
 
-
 Constant N_TO_CONST = n_to;
 Constant OUT_TO_CONST = out_to;
 
-Property door_to     alias n_to;     !  For economy: these properties are
-Property when_closed alias s_to;     !  used only by objects which
-Property with_key    alias e_to;     !  aren't rooms
-Property door_dir    alias w_to;
-Property invent      alias u_to;
-Property add_to_scope alias se_to;
-!Property list_together alias sw_to;
-Property react_before alias out_to;
-Property react_after  alias in_to;
-!Property grammar     alias nw_to;
-Property orders      alias ne_to;
-
-Property initial;
-Property when_open   alias initial;
-Property when_on     alias initial;
-Property when_off    alias when_closed;
-Property inside_description alias d_to;
-Property description;
-Property additive describe $ffff;
-
-Property cant_go;
-Property article alias cant_go;
-
-Property found_in;         !  For fiddly reasons this can't alias
-
-Property time_left;
-Property number;
-Property additive time_out $ffff;
-Property daemon alias time_out;
 Property additive each_turn $ffff;
 
-Property capacity alias nw_to;
-
-Property short_name 0;
-Property parse_name   alias sw_to;
-
-
-! ! directions
-! Property n_to;
-! Property s_to;
-! Property e_to;
-! Property w_to;
-! #IfDef OPTIONAL_FULL_DIRECTIONS;
-! Property ne_to;
-! Property nw_to;
-! Property se_to;
-! Property sw_to;
-! #EndIf;
-! Property u_to;
-! Property d_to;
-! Property in_to;
-! Property out_to;
-
-! Property cant_go;
-! Property door_to alias n_to;
-! Property door_dir alias s_to;
-!Constant OPTIONAL_FULL_DIRECTIONS;
+Property door_to            alias n_to;     !  For economy: these properties
+Property when_closed        alias s_to;     !  are used only by objects which
+Property when_off           alias s_to;     !  aren't rooms
+Property with_key           alias e_to;
+Property door_dir           alias w_to;
+Property orders             alias ne_to;
+Property capacity           alias nw_to;
+Property invent             alias se_to;
+Property inside_description alias sw_to;
+Property react_before       alias u_to;
+Property react_after        alias d_to;
+Property add_to_scope       alias in_to;
+Property parse_name         alias out_to;
+Property when_open          alias initial;
+Property when_on            alias initial;
+Property daemon             alias time_out;
+Property article            alias cant_go;
 
 Constant FAKE_N_OBJ = 10001;
 Constant FAKE_S_OBJ = 10002;
