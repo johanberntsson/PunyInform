@@ -1783,7 +1783,8 @@ Global scope_cnt;
 	! If _new_location is 0, we tell the player they can't go there and exit
 	if(_new_location == 0) {
 		if(real_location provides cant_go) {
-			print_ret (string) real_location.cant_go;
+			PrintOrRun(real_location, cant_go);
+			rtrue;
 		}
         PrintMsg(MSG_GO_CANT_GO);
 		rtrue;

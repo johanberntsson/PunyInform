@@ -454,3 +454,4 @@ v2.4: bug fix and new feature release
 - Reworked howto/semidark.inf to work without using thedark.before().
 - Added climb and climb up/over to grammar, new action Climb.
 - Improved parser response when refering to objects outside scope (issue 75)
+- Fixed so cant_go property can hold a routine or string, not just a string.
