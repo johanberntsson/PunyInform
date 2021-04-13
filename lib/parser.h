@@ -1195,7 +1195,7 @@ Array guess_num_objects->5;
 	rfalse;
 ];
 
-[ _ParsePattern p_pattern p_phase _pattern_pointer _parse_pointer _noun _i _j _k _word _type _current_wn;
+[ _ParsePattern p_pattern p_phase _parse_pointer _noun _i _j _k _word _type _current_wn;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1203,7 +1203,7 @@ Array guess_num_objects->5;
 	!   100 if perfect match
 	wn = verb_wordnum + 1;
 	_parse_pointer = parse + 2 + 4*(verb_wordnum);
-	_pattern_pointer = p_pattern - 1;
+	pattern_pointer = p_pattern - 1;
 	num_noun_groups = 0;
 	noun = 0;
 	second = 0;
@@ -1223,12 +1223,12 @@ Array guess_num_objects->5;
 	phase2_necessary = PHASE2_SUCCESS;
 
 	while(true) {
-		_pattern_pointer = _pattern_pointer + 3;
+		pattern_pointer = pattern_pointer + 3;
 #IfDef DEBUG_PARSEPATTERN;
-		print "TOKEN: ", _pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+		print "TOKEN: ", pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
-		_type = ((_pattern_pointer -> 0) & $0f);
+		_type = ((pattern_pointer -> 0) & $0f);
 		if(_type == TT_END) {
 			if(_IsSentenceDivider(_parse_pointer)) {
 				! check if dictionary word after sentence divider
@@ -1286,17 +1286,17 @@ Array guess_num_objects->5;
 			return wn - verb_wordnum;!Fail because input ends here but not the grammar line
 		}
 #IfDef DEBUG_PARSEPATTERN;
-		print "Calling ParseToken: token ", _pattern_pointer->0," type ", (_pattern_pointer->0) & $f, ", data ", (_pattern_pointer + 1) --> 0,"^";
+		print "Calling ParseToken: token ", pattern_pointer->0," type ", (pattern_pointer->0) & $f, ", data ", (pattern_pointer + 1) --> 0,"^";
 #EndIf;
 		_current_wn = wn;
-		_noun = _ParseToken(_pattern_pointer, _parse_pointer, p_phase);
+		_noun = _ParseToken(pattern_pointer, _parse_pointer, p_phase);
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse + 2 + 4 * (wn - 1);
 
 		switch(_noun) {
 		GPR_FAIL:
 			if(_type == TT_PARSE_ROUTINE) return _current_wn - 1;
-			if(_pattern_pointer->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) {
+			if(pattern_pointer->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) {
 				! First or in the middle of a list of alternative prepositions
 #IfDef DEBUG_PARSEPATTERN;
 				print "Preposition failed, but more options available so reparsing^";
@@ -1305,7 +1305,7 @@ Array guess_num_objects->5;
 			}
 
 			! write error messages if PHASE2 as needed
-			if(_pattern_pointer->0 == TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
+			if(pattern_pointer->0 == TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
 				! bad preposition
 				if(p_phase == PHASE2) PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 			} else if(parser_unknown_noun_found ~= 0) {
@@ -1352,16 +1352,16 @@ Array guess_num_objects->5;
 		GPR_PREPOSITION:
 			! advance until the end of the list of prepositions
 #IfDef DEBUG_PARSEPATTERN;
-			print "-- preposition mached ", _pattern_pointer, " ", _pattern_pointer->0, "^";
+			print "-- preposition mached ", pattern_pointer, " ", pattern_pointer->0, "^";
 #Endif;
-			_type = ((_pattern_pointer -> 0) & $0f);
+			_type = ((pattern_pointer -> 0) & $0f);
 			while(_type ~= TT_END && _type ~= TT_PARSE_ROUTINE &&
-				(_pattern_pointer->0 ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP)) {
+				(pattern_pointer->0 ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP)) {
 #IfDef DEBUG_PARSEPATTERN;
-			print "-- increasing _pattern_pointer^";
+			print "-- increasing pattern_pointer^";
 #Endif;
-				_pattern_pointer = _pattern_pointer + 3;
-				_type = ((_pattern_pointer -> 0) & $0f);
+				pattern_pointer = pattern_pointer + 3;
+				_type = ((pattern_pointer -> 0) & $0f);
 			}
 		GPR_MULTIPLE:
 			! multiple_objects contains the objects
@@ -1394,7 +1394,7 @@ Array guess_num_objects->5;
 	! the while(true) loop is only exited by return statements
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _pattern _pattern_pointer _noun _score _best_score _best_pattern _best_phase2 _action;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action;
 	! returns
 	! 0: to reparse
 	! 1/true: if error was found (so you can abort with "error...")
@@ -1545,17 +1545,18 @@ Array guess_num_objects->5;
 		} else if(_score > _best_score) {
 			_best_score = _score;
 			_best_pattern = _pattern;
+			_best_pattern_pointer = pattern_pointer;
 			_best_phase2 = phase2_necessary;
 			! check if pefect match found
 			if(_best_score == 100) break;
 		}
 
 		! Scan to the end of this pattern
-		_pattern_pointer = _pattern + 2;
-		while(_pattern_pointer -> 0 ~= TT_END) {
-			_pattern_pointer = _pattern_pointer + 3;
+		_j  = _pattern + 2;
+		while(_j  -> 0 ~= TT_END) {
+			_j  = _j  + 3;
 		}
-		_pattern = _pattern_pointer + 1;
+		_pattern = _j  + 1;
 	}
 
 	! skip phase 2 if last pattern matched perfectly
@@ -1597,7 +1598,8 @@ Array guess_num_objects->5;
 				}
 			} else {
 				! we didn't match the pattern at all
-				if(parser_unknown_noun_found == 0) {
+				if(parser_unknown_noun_found == 0 && 
+					((_best_pattern_pointer-> 0) & $0f) == TT_END) {
 					PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
 				} else {
 					PrintMsg(MSG_PARSER_NOSUCHTHING);

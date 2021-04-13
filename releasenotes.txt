@@ -453,3 +453,4 @@ v2.4: bug fix and new feature release
 - Removed before and after for thedark.
 - Reworked howto/semidark.inf to work without using thedark.before().
 - Added climb and climb up/over to grammar, new action Climb.
+- Improved parser response when refering to objects outside scope (issue 75)
