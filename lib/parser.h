@@ -397,7 +397,11 @@ System_file;
 
 
 	which_object->0 = _matches;
-	which_object->1 = _best_score - wn;
+    if(_best_score > wn) {
+    	which_object->1 = _best_score - wn;
+	} else {
+    	which_object->1 = 0;
+	}
 
 	if(_matches == 1) {
 		_result = which_object-->1;
@@ -507,7 +511,7 @@ System_file;
 	! check if the noun phrase contains a plural word
 	_pluralword = false;
 	for(_i = 0: _i < _num_words_in_nounphrase: _i++) {
-		if(((p_parse_pointer-->0) -> #dict_par1) & 4) _pluralword = true;
+		if((((p_parse_pointer + _i * 4)-->0)-> #dict_par1) & 4) _pluralword = true;
 	}
 
 .recheck_noun;
