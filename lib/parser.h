@@ -497,13 +497,18 @@ System_file;
 	}
 
 	! not a pronoun, continue
-	_pluralword = ((p_parse_pointer-->0) -> #dict_par1) & 4;
 #IfDef DEBUG_GETNEXTNOUN;
 	print "Calling _CheckNoun(",p_parse_pointer,");^";
 	if(p_parse_pointer-->0 > 2000) print (address) p_parse_pointer-->0, " ", _pluralword, "^";
 #Endif;
 	_noun = _CheckNoun(p_parse_pointer);
 	_num_words_in_nounphrase = which_object -> 1;
+
+	! check if the noun phrase contains a plural word
+	_pluralword = false;
+	for(_i = 0: _i < _num_words_in_nounphrase: _i++) {
+		if(((p_parse_pointer-->0) -> #dict_par1) & 4) _pluralword = true;
+	}
 
 .recheck_noun;
 	if(_noun < 0) {
