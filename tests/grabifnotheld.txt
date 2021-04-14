@@ -66,7 +66,7 @@ You can see a dust, Max and Molly (which is empty) here.
 Another Room
 You are in a brightly lit room.
 
-You can see a green book and a blue book here.
+You can see a green book, a blue book and Sally here.
 
 > what is samarkand
 Samarkand is a city in south-eastern Uzbekistan.
@@ -91,6 +91,16 @@ At the moment, even the simplest questions confuse you.
 
 > what is green book
 At the moment, even the simplest questions confuse you.
+
+> show green
+(to Sally)
+Sally doesn't seem interested.
+
+> show green to sally
+Sally doesn't seem interested.
+
+> show sally green
+Sally doesn't seem interested.
 
 > quit
 Are you sure you want to quit? yes

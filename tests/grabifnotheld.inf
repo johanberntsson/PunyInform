@@ -141,6 +141,11 @@ Object -> Book2 "blue book"
     with
         name 'blue' 'book';
 
+Object -> Sally "Sally"
+    with
+        name 'sally',
+    has animate proper;
+
 [Initialise;
 #IfDef USEINFORM;
     location=INITIAL_LOCATION_VALUE;;

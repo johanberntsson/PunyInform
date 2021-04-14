@@ -27,6 +27,9 @@ what is sdasfafaf
 take green
 what is green
 what is green book
+show green
+show green to sally
+show sally green
 quit
 yes
 
