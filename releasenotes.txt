@@ -456,4 +456,4 @@ v2.4: bug fix and new feature release
 - Improved parser response when refering to objects outside scope (issue 75)
 - Fixed so cant_go property can hold a routine or string, not just a string.
 - Reordered properties to put those that have to be fast at the end.
-- Improved detection of nounflag when parsing a noun phrase
+- Improved detection of pluralword flag when parsing a noun phrase
