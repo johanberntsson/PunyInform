@@ -30,6 +30,8 @@ what is green book
 show green
 show green to sally
 show sally green
+show green to blue
+show green blue
 quit
 yes
 

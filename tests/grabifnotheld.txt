@@ -93,14 +93,19 @@ At the moment, even the simplest questions confuse you.
 At the moment, even the simplest questions confuse you.
 
 > show green
-(to Sally)
-Sally doesn't seem interested.
+I think you wanted to say "show green book to someone". Please try again.
 
 > show green to sally
 Sally doesn't seem interested.
 
 > show sally green
 Sally doesn't seem interested.
+
+> show green to blue
+You can only do that to something animate.
+
+> show green blue
+You can't see any such thing.
 
 > quit
 Are you sure you want to quit? yes

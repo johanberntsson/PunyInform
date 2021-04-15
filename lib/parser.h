@@ -1543,7 +1543,7 @@ Array guess_num_objects->5;
 			_UpdateScope(player, true);
 
 #IfDef DEBUG_PARSEANDPERFORM;
-		print "### PHASE 1: result ", _score, "^";
+		print "### PHASE 1: result ", _score, " phase2 ", phase2_necessary, "^";
 #EndIf;
 		! note that _ParsePattern will never return -1 in PHASE1
 		if(_score == 0) {
@@ -1551,7 +1551,7 @@ Array guess_num_objects->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 			print "Pattern didn't match.^";
 #EndIf;
-		} else if(_score > _best_score) {
+		} else if(_score > _best_score || (_score == _best_score && _best_phase2 == 1 && phase2_necessary == 0)) {
 			_best_score = _score;
 			_best_pattern = _pattern;
 			_best_pattern_pointer = pattern_pointer;
