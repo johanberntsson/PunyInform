@@ -733,7 +733,9 @@ Object -> John "John"
 		orders [;
 			Go: "~I must not leave this room.~";
 			NotUnderstood:
+#IfDef DEBUG;
 				DebugLife("trying john.orders.NotUnderstood");
+#EndIf;
 				rfalse;
 				!print special_number, " ", special_word, " ", 'pink', " ", consult_from;
 				!if(special_word == 0) "~You speak in riddles.~";
@@ -741,17 +743,23 @@ Object -> John "John"
 		life [c w1 w2;
 		! Attack Kiss WakeOther ThrowAt Give Show Ask Tell Answer Order
 		Order:
+#IfDef DEBUG;
 			DebugLife("order");
+#EndIf;
 			if(action==##Take && noun==LargeBox) "~", (The) noun, " is too big.~";
 			if(action==##Take) "~I don't need more possessions.~";
 			if(action==##NotUnderstood) "~I don't understand what you say.~";
 			"John ignores your comment.";
 		Show, Give:
+#IfDef DEBUG;
 			DebugLife("life");
+#EndIf;
 			if(noun==PinkBook) <<Ask self PinkBook>>;
 			"John doesn't appear to be interested.";
 		Ask, Tell, Answer:
+#IfDef DEBUG;
 			DebugLife("life");
+#EndIf;
 			w1=0;
 			w2=0;
 			wn=consult_from; c=consult_words; if(c>0) w1=NextWord();
