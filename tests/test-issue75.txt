@@ -1,0 +1,8 @@
+
+> put apple in box
+You can't see any such thing.
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]
