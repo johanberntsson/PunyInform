@@ -93,7 +93,8 @@ At the moment, even the simplest questions confuse you.
 At the moment, even the simplest questions confuse you.
 
 > show green
-I think you wanted to say "show green book to someone". Please try again.
+(assuming to Sally)
+Sally doesn't seem interested.
 
 > show green to sally
 Sally doesn't seem interested.
