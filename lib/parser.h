@@ -958,6 +958,7 @@ System_file;
 			! p_pattern_pointer + 3 could be the preposition
 			!print (p_pattern_pointer + 3) -> 0, "^"; ! token
 			!print (p_pattern_pointer + 4) --> 0, "^"; ! token_data
+			consult_words = 0;
 			if(p_pattern_pointer ~= 0) {
 				! loop over all possible prepositions and update wn
 				! if topic and preposition matched

@@ -458,3 +458,4 @@ v2.4: bug fix and new feature release
 - Reordered properties to put those that have to be fast at the end.
 - Improved detection of pluralword flag when parsing a noun phrase
 - Improved selection of incomplete patterns ("show XXX" with missing obj)
+- Fixed consult_from bug (would only work the first time)
