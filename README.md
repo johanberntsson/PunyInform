@@ -36,11 +36,11 @@ Writing a game with PunyInform is very similar to writing a game with the Inform
 The biggest differences between the standard library and PunyInform are:
 
 * The files you need to include. Start your project by copying `minimal.inf` in the root directory and you're good to go.
-* Parts of the PunyInform library are optional. If you want to use directions like nw and se, you need to define `OPTIONAL_FULL_DIRECTIONS`. If you want just about all the verbs and actions available in the standard library to work in PunyInform, you need to defint `OPTIONAL_EXTENDED_VERBSET`. See [Customizing the library](https://github.com/johanberntsson/PunyInform/wiki/Manual#customizing-the-library) in the PunyInform manual.
+* Parts of the PunyInform library are optional. If you want to use directions like nw and se, you need to define `OPTIONAL_FULL_DIRECTIONS`. If you want just about all the verbs and actions available in the standard library to work in PunyInform, you need to define `OPTIONAL_EXTENDED_VERBSET`. See [Customizing the library](https://github.com/johanberntsson/PunyInform/wiki/Manual#customizing-the-library) in the PunyInform manual.
 * Directions are handled quite differently. See [Direction handling](https://github.com/johanberntsson/PunyInform/wiki/Manual#direction-handling) in the PunyInform manual.
 * Customizing library messages is done differently. See [Library messages and customization](https://github.com/johanberntsson/PunyInform/wiki/Manual#library-messages-and-customization) in the PunyInform manual.
 * PunyInform doesn't support identical objects. You can have very similar objects like a small green book and a small red book, but the player must be able to say which one (s)he means.
-* PunyInform doesn't have the versatile routine `WriteListFrom`, for printing what's in a location or in/on an object. Instead, it has a simpler routine called `PrintContents`. See (Printing the contents of an object)(https://github.com/johanberntsson/PunyInform/wiki/Manual#printing-the-contents-of-an-object) in the PunyInform manual.
+* PunyInform doesn't have the versatile routine `WriteListFrom`, for printing what's in a location or in/on an object. Instead, it has a simpler routine called `PrintContents`. See [Printing the contents of an object](https://github.com/johanberntsson/PunyInform/wiki/Manual#printing-the-contents-of-an-object) in the PunyInform manual.
 
 ## Games Using PunyInform
 
