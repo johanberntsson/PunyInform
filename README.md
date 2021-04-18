@@ -31,8 +31,8 @@ You can see what tasks we're currently working on, tasks we've done and tasks co
 
 There are two manuals you need to know about: DM4 and the PunyInform manual. Read on to learn how to use them and where to find them. Alternatively, you can start learning PunyInform by following the tutorials under [Articles](https://github.com/johanberntsson/PunyInform#articles).
 
-* Inform Designer's manual, 4th Edition, AKA DM4: [Online version](https://www.inform-fiction.org/manual/html/index.html) [PDF version](https://www.inform-fiction.org/manual/DM4.pdf)
-* PunyInform manual: [Online version](https://github.com/johanberntsson/PunyInform/wiki/manual) [PDF version](https://github.com/johanberntsson/PunyInform/tree/master/documentation)
+* ** Inform Designer's manual, 4th Edition, AKA DM4: [Online version](https://www.inform-fiction.org/manual/html/index.html), [PDF version](https://www.inform-fiction.org/manual/DM4.pdf) **
+* ** PunyInform manual: [Online version](https://github.com/johanberntsson/PunyInform/wiki/manual), [PDF version](https://github.com/johanberntsson/PunyInform/tree/master/documentation) **
 
 Writing a game with PunyInform is very similar to writing a game with the Inform 6 standard library - almost everything works the same. If you want to learn PunyInform by reading manuals, you first need to read the official documentation for the Inform 6 standard library, called The Inform Designer's Manual, 4th Edition, or DM4 for short (see links above). You can assume that everything in it also goes for PunyInform (but read the short list stating the biggest differences just below the next paragraph!).
 
