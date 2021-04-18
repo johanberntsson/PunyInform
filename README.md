@@ -27,6 +27,21 @@ There is also a Game Author's Guide (under Documentation) with various tips for 
 
 You can see what tasks we're currently working on, tasks we've done and tasks coming up on our Trello board: https://trello.com/b/mfGVsB4H/punyinform
 
+## Learning PunyInform
+
+There are two manuals you need to know about: DM4 and the PunyInform manual.
+
+Writing a game with PunyInform is very similar to writing a game with the Inform 6 standard library. Almost everything works the same. If you want to learn PunyInform by reading manuals, you first need to read the official documentation for the Inform 6 standard library, called The Inform Designer's Manual, 4th Edition, or DM4 for short. You can read it [online](https://www.inform-fiction.org/manual/html/index.html) or download it as a [PDF](https://www.inform-fiction.org/manual/DM4.pdf). You can assume that everything in it also goes for PunyInform (but read the short list stating the biggest differences just below this paragraph!). As you start trying out examples, or start writing your own game, and there's something which you don't get to work, you should check the PunyInform manual. It's available on this site (click [Wiki](https://github.com/johanberntsson/PunyInform/wiki/manual) at the top) and it's available as a PDF in the [documentation](https://github.com/johanberntsson/PunyInform/tree/master/documentation) folder of the PunyInform distribution.
+
+The biggest differences between the standard library and PunyInform are:
+
+* The files you need to include. Start your project by copying `minimal.inf` in the root directory and you're good to go.
+* Parts of the PunyInform library are optional. If you want to use directions like nw and se, you need to define `OPTIONAL_FULL_DIRECTIONS`. If you want just about all the verbs and actions available in the standard library to work in PunyInform, you need to defint `OPTIONAL_EXTENDED_VERBSET`. See [Customizing the library](https://github.com/johanberntsson/PunyInform/wiki/Manual#customizing-the-library) in the PunyInform manual.
+* Directions are handled quite differently. See [Direction handling](https://github.com/johanberntsson/PunyInform/wiki/Manual#direction-handling) in the PunyInform manual.
+* Customizing library messages is done differently. See [Library messages and customization](https://github.com/johanberntsson/PunyInform/wiki/Manual#library-messages-and-customization) in the PunyInform manual.
+* PunyInform doesn't support identical objects. You can have very similar objects like a small green book and a small red book, but the player must be able to say which one (s)he means.
+* PunyInform doesn't have the versatile routine `WriteListFrom`, for printing what's in a location or in/on an object. Instead, it has a simpler routine called `PrintContents`. See (Printing the contents of an object)(https://github.com/johanberntsson/PunyInform/wiki/Manual#printing-the-contents-of-an-object) in the PunyInform manual.
+
 ## Games Using PunyInform
 
 These games are known to use PunyInform:
@@ -43,7 +58,9 @@ These games are known to use PunyInform:
 
 * [The Fishing-Trip - Brown Trout and Goblins](https://ifdb.tads.org/viewgame?id=fqhoqlh01ex5wwvo), by John Wilson.
 
-All of these games can be downloaded from the links above. They are also available at [Ozmoo Online](http://microheaven.com/ozmooonline/) where you can create disk images for Commodore C64, C128 or Plus/4.
+* [Ghost Mountain](https://compdelta.itch.io/ghost-mountain), by Michael Cox.
+
+All of these games can be downloaded from the links above. Most of them are also available at [Ozmoo Online](http://microheaven.com/ozmooonline/) where you can create disk images for Commodore C64, C128 or Plus/4.
 
 ## Articles
 
