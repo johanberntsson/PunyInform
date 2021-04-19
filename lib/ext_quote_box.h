@@ -31,6 +31,11 @@
 ! [AnyRoutine;
 !   QuoteBox(quote_1);
 ! ];
+!
+! You can also add a second argument to QuoteBox. Setting it to true makes
+! QuoteBox skip waiting for a keypress after the quote box has been shown:
+!
+!   QuoteBox(quote_1, true); ! Don't wait for keypress
 
 System_file;
 
@@ -71,7 +76,7 @@ Constant QUOTE_INDENT_STRING = "";
 
 Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 
-[ QuoteBox p_quote_data _quote_lines _quote_width _screen_width _i _j _k _last_index;
+[ QuoteBox p_quote_data p_dont_pause _quote_lines _quote_width _screen_width _i _j _k _last_index;
 	_quote_lines = p_quote_data --> 0;
 	_quote_width = p_quote_data --> 1;
 #IfV5;
@@ -97,6 +102,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #EndIf;
 	@new_line;
 	@new_line;
+	font off;
 	_last_index = 2 + _quote_lines;
 	for(_i = 1 : _i <= _last_index : _i++) {
 #IfDef QUOTE_INDENT_STRING;
@@ -125,20 +131,21 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #EndIf;
 		@new_line;
 	}
+	font on;
 
-!	print (string) p_line_1;
-!	@new_line;
 #IfV5;
 	@set_window 0;
 !	print "[Press any key to continue]";
-	@read_char _i;
+	if(p_dont_pause == 0)
+		@read_char _i;
 !	@split_window 0;
 	@erase_window -1;
 #IfNot;
 	@new_line;
 !	print "[ENTER]";
-	quote_buffer -> 0 = 1;
-	read quote_buffer quote_buffer;
+	if(p_dont_pause == 0) {
+		quote_buffer -> 0 = 1;
+		read quote_buffer quote_buffer;
+	}
 #EndIf;
-!	" Ok.";
 ];

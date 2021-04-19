@@ -459,3 +459,7 @@ v2.4: bug fix and new feature release
 - Improved detection of pluralword flag when parsing a noun phrase
 - Improved selection of incomplete patterns ("show XXX" with missing obj)
 - Fixed consult_from bug (would only work the first time)
+- Switched to fixed-width font for quote box in z3.
+- Added a second parameter for QuoteBox() to not wait for keypress after quote
+  box.
+ 
