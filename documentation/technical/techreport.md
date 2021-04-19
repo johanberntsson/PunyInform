@@ -1,54 +1,134 @@
+---
+title: PunyInform Technical Report
+numbersections: true
+---
 # Program and Data Structures
 
-## Overview
+PunyLib starts executing from the main routine in lib/puny.h, which contains the game loop. To support and implement the game these additional blocks are used:
 
-The main parts of Ozmoo are as follows:
+- Parser, implemented in lib/parser.h
+- Grammar, implemented in lib/grammar.h
+- Messages, implemented in lib/messages.h
+- Scope, implemented in lib/scope.h
 
-- Parser
-- Grammar
-- Messages
-- Scope
+The structure and main routines of these blocks are described in separate chapters below.
 
 # Parser
 
-The entry point for the parser is `ParseAndPerformAction` which relies on a few global variables:
+## Overview
 
-- buffer: the string to parse
-- parse: the tokenised input string, where each token contains a pointer to the word string in `buffer` and a pointer to the dictionary word.
+The game loop, implemented in the `main` routine lib/puny.h, controls the execution of the game. In this loop the player input is read by a call to `_ReadPlayerInput`.  The parser entry routine `_ParseAndPerformAction` is then called, which determines which verb the input uses, tries all patterns found in the grammar for this verb, using `_ParsePattern`, and executes the best pattern found.  If no good pattern found it will instead write an error message, such as "I don't understand that sentence."
 
-Both `buffer` and `parse` are normally set up by a call to `_ReadPlayerInput` which prints the prompt, waits for player input, and divides the input string into tokens.
+`_ParsePattern` loops over the pattern, calling `_ParseToken` for every token, and handles errors such as running out of either user or pattern data prematurely. 
 
-## ParseAndPerformAction
+`_ParseToken` in its turn uses `_GetNextNoun` when detecting a noun-related token (`NOUN_OBJECT`, `CREATURE_OBJECT`, `HELD_OBJECT`, `MULTI*_OBJECT`) to parse a noun phrase. It also handles preposition handling.
 
-## ParsePattern
+`_GetNextNoun` relies on `_CheckNoun` to try parsing a noun phrase, but adds checks for pronouns and plurals, and disambiguates if needed.
 
-## ParseToken
+`_CheckNoun` checks if objects in scope match words in the input string, either by using its `name` property or its `parse_name` routine. More than one object could match if the input is incomplete, which is reported back using the `which_object` global variable, and used in disambiguation.
 
-## GetNextNoun
+## State Variables
 
-## CheckNoun
+These are the most important state variables in the parser
 
-## _FixIncompleteSentenceOrComplain
-Called because sentence shorter than the pattern
+- noun: as described in DM4
+- second: as described in DM4
+- action: as described in DM4
+- actor: as described in DM4
+- consult_word: as described in DM4
+- consult_from: as described in DM4
+- special_word: as described in DM4
+- special_number: as described in DM4
+- which_object: this array holds the objects that matched the currently parsed noun phrase
+- multiple_objects: this array holds the object or objects that matched a `MULTI*_OBJECT` token
+- parser_all_found: this is true if "all" was parsed, such as "get all".
+- parser_check_multiple: this is set to the `MULTI*_OBJECT` token being parsed
+- parser_all_except_object: this is set to Y when parsing "take all Xs except Y" or "take all but Y", so it can be skipped when executing the action.
 
-Available data: wn, parse and p_pattern_token (last matched token)
 
-Either guess missing parts in the pattern and return true,
-or print a suitable error message and return false
+## Handling Errors
 
-## _GuessMissingNoun
+The parser uses a two phase approach to matching grammar templates to user input. In phase 1 the parser is testing several patterns to give them a score on how well they match the input. In this phase no messages are printed.
 
-## Utility Functions
+The best candidate then enters phase 2, where the same tests are run, but in this phase error messages are printed. If any errors are found and printed in phase 2, then the parser gives up (since the best candidate failed) and returns control to the game loop, which will prompt new user input.
 
-### _AskWhichNoun
+## Handling Disambiguation
 
-### AddMultipleNouns
+## Main Routines
+
+### `_ParseAndPerformAction`
+
+`_ParseAndPerformAction` uses the global variables `buffer` and `parse`. `buffer` contains the input string, while `parse` is a list of tokens, where each token contains a pointer to the word string in `buffer` and a pointer to the dictionary word. The routine returns the negative number of words when the input could be parsed successfully (so -2 if two words parsed), or true if the parser failed to parse the input, and the user needs to add new input.
+
+`_ParseAndPerformAction` firsts determines which verb the input uses. It then checks each pattern to see if it matches the input. This is done by calling `_ParsePattern` which takes p_pattern (the current pattern to check) and p_phase (set to 1). `_ParsePattern` returns a score that indicates how well the pattern matches the input.  During phase 1 this match will be done silently, so no error messages are printed even if the pattern fails to match the input.
+
+The score is 100 if a perfect match was found, or the number of words matches by the pattern if it failed to match. This means that only part of the pattern matched, or the match silently failed during phase 1. This could happen because for example "examine dog" was matched when no dog was in scope (visible). To distinguish between these options `_ParsePattern` will set the `phase2_necessary` flag to `PHASE2_ERROR` when an error was found.
+
+`_ParseAndPerformAction` keeps track of the score for each pattern, and if a perfect score of 100 is found then it it will set up the PunyInform variables for `noun`, `second`, `action` etc as described in the PunyInform documentation, and then run the implementation routine for the grammar line. For example, if the input was "examine me" the `ExamineSub` routine will be activated with `noun` set to the player object.
+
+However, if no perfect score was found then the highest score is used. If `phase2_necessary` is set to PHASE2_ERROR, then `_ParsePattern` will be called again with this pattern and `p_phase` set to 2. In phase 2 `_ParsePattern` will print the error messages that were surpressed during phase 1. If the match failed and `phase2_necessary` wasn't set if means that there wasn't enough input to match the pattern, and a message such as "I think you wanted to say 'climb something'. Please try again" is printed.
+
+Another possibility is that the pattern seems to match but the noun phrase is ambigus. In this case the pattern returns a score as if the pattern matched the noun phrase, but sets `phase2_necessary` to PHASE2_DISAMBIGUATION, and - like for PHASE2_ERROR - `_ParsePattern` is called again with `p_phase` set to 2. `_ParsePattern/_GetNextNoun` will then call `_AskWhichNoun` to prompt the user for additional information ("Do you mean the blue or the red book?"), and return 100 if the noun phrase is successfully parsed.
+
+### `_ParsePattern`
+
+### `_ParseToken`
+
+### `_GetNextNoun`
+
+`_GetNextNoun` takes the current input position and phase, and returns the object number for the next noun if no problem occured. In addition ot the return value it will also update `parser_action`.
+
+`_GetNextNoun` first skips articles and "all", so it can parse noun phrases such as "all books", "the bird", and "an apple". It then checks if the current word is a pronoun such as "it" or "him". If it is a pronoun, a suitable objects has been referred to before so the parser knows who or what to refer to, and that object is still in scope, then the routine returns the object associated with the pronoun.
+
+`_GetNextNoun` now calls `_CheckNoun` to get a list of objects in scope that match the current input. The matching words have their plural flag checked, and if the noun phrase indicated plurals (e.g. "books", "all birds") then `parser_action` is set to `##PluralFound`.
+
+If a single object matches then it is returned.  If more than one object matches and it is not a plural noun phrase then disambiguation takes place. In phase 1 it accepts the input for now, but if code is run again in phase 2 then `_AskWhichNoun` is called to prompt the user to disambiguate ("Do you mean the blue book or the red book?"). If the new input doesn't help then an error message is printed and the routine returns the error code.
+
+### `_CheckNoun`
+
+`_CheckNoun` takes the current input position, and returns the object that matches one or more words. In addition to the return value, it updates the `which_object` global array, which contains a list of objects that matches (since there could be more than one), the number of objects that matches, and the number of words parsed against these object(s).
+
+`_CheckNoun` loops over all objects in scope, trying to parse each of them against the words in the input, using either the `name` property or `parse_name`. There is additional logic to handle debugging verbs that need to try to match against any object, regardless of the normal scoping rules. This is only enabled if the DEBUG compiler flag is used.
+
+`_CheckNoun` also takes into account if the object is concealed or in the open, by keeping track of a object level score. This is calculated by `_CalculateObjectLevel` and stored in the `which_level` array, which shadows `which_object`. Concealed objects will dropped if there are any openly visible objects that also match the input.
+
+## Utility Routines
+
+### `_AskWhichNoun`
+
+`_AskWhichNoun` uses `which_object` to print a list of objects used in disambiguation. The typical output is "Do you mean X or Y?".
+
+### `_AddMultipleNouns`
+
+`_AddMultipleNouns` is used do replace "all" with all suitable objects in scope.These objects are stored in the `multiple_objects` global array.
+
+The routine takes the token type being processed, so that `MULTIHELD_OBJECT` will add all objects that are being held, which `MULTI_OBJECT` are all objects in scope, except for objects being animated, held or concealed.
+
+### `_FixIncompleteSentenceOrComplain`
+
+`_FixIncompleteSentenceOrComplain` is called from `_ParsePattern` because the sentence shorter than the pattern. The routine checks if the pattern is expectign another noun phrase. If so, it can call `_GuessMissingNoun` to try adding the missing information.  If `_GuessMissingNoun` manages to fix the sentence then `_ParsePattern` will return a perfect score, otherwise an error message is shown ("I think you want to say 'kill someone', please try again.").
+
+### `_GuessMissingNoun`
+
+`_GuessMissingNoun` is used then `noun` or `second` is missing. It tries to guess the missing parts of the sentence. A typical usage is 
+
+```
+> show diamond
+(to Sally)
+````
+where `_GuessMissingNoun` checked the scope and found that only Sally was possible, so "(to Sally)" was written and `second` set to Sally to complete the parsing. 
 
 ### PronounNotice
 
-### _PrintPartialMatch
+This routine is called with an object, and update the matching pronoun. For example, the object Sally will set `herobj` to Sally, while the object Sword will set `itobj` to Sword.
 
-### _PrintUnknownWord
+### `_PrintPartialMatch`
+
+`_PrintPartialMatch` prints a grammar rule and is used to produce output such as "I only understood you are far as 'look' but then you lost me." as a reply to "look on me".
+
+### `_PrintUnknownWord`
+
+Prints a word that doesn't exist in the dictionary by typing it from the `buffer` array, using `parser_unknown_noun_found` which points to an entry in the `parse` array. Used for messages such as "Sorry, I don't understand what 'sdasdasda' means."
 
 # Grammar
 
@@ -100,8 +180,6 @@ Verb number (255 - value is for "traditional Infocom reasons")
 
 Grammar table is always located at the start of static memory (address pointed to by word at $0e in header). Word (Verb number) points to the start address for the grammar for a verb.
 
-### Grammar for a verb
-
 For a detailed description of grammar version 2, read the text starting with "GV2 is a much more suitable data structure" at https://www.inform-fiction.org/source/tm/TechMan.txt
 
 ```
@@ -139,9 +217,8 @@ ENDIT_TOKEN        = 15
 
 ## Grammar 1
 
-Note that Grammar 1 is not used by PunyInform.
+*Note that Grammar 1 is not used by PunyInform.*
 
-### Grammar for Quit
 01 Number of grammar lines
 
 ```
