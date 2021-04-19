@@ -462,4 +462,5 @@ v2.4: bug fix and new feature release
 - Switched to fixed-width font for quote box in z3.
 - Added a second parameter for QuoteBox() to not wait for keypress after quote
   box.
+- Fixed bug in detection of multiple words from the room's name property
  

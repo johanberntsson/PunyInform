@@ -1466,8 +1466,14 @@ Object thedark "Darkness"
 			_CopyParseArray(parse, parse2);
 		}
 
-		if(_sentencelength <= 0) _sentencelength = -_sentencelength;
-		else _sentencelength = parse->1;
+		if(_sentencelength <= 0) {
+			_sentencelength = -_sentencelength;
+		} else {
+			! _ParseAndPerformAction found a problem and
+			! printed an error message. We set _sentencelength
+			! to the end of the line to force new user input
+			_sentencelength = parse->1;
+		}
 		if(action >= 0 && meta == false) {
 			EndTurnSequence();
         }

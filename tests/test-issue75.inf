@@ -57,7 +57,10 @@ Include "Grammar";
 #Endif;
 
 Object Library "The Library"
-	with description "You are in a library.";
+	with 
+	    name 'scenery' 'useless',
+	    description "You are in a library."
+	has light;
 
 Object -> Box "box"
 	with name 'box',

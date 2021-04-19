@@ -1,4 +1,13 @@
 
+> x useless
+You don't need to refer to "useless" in this game.
+
+> x scenery
+You don't need to refer to "scenery" in this game.
+
+> x useless scenery
+You don't need to refer to "useless" in this game.
+
 > put apple in box
 You can't see any such thing.
 

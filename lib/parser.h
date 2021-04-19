@@ -1355,6 +1355,7 @@ Array guess_num_objects->5;
 					! give higher score to unknown words matches
 					! so that for examine 'get goblin' and 'take goblin'
 					! works the same when goblin isn't in scope.
+					phase2_necessary = PHASE2_ERROR;
 					wn = wn + 1;
 				}
 			}
@@ -1406,8 +1407,8 @@ Array guess_num_objects->5;
 
 [ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action;
 	! returns
-	! 0: to reparse
-	! 1/true: if error was found (so you can abort with "error...")
+	! 1/true: if error was found (so you can about with:
+	!         return PrintMsg(ERROR...);
 	! -n: if <n> words were used to find a match,
 	!
 	! taking periods and other sentence breaks into account.
