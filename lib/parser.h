@@ -765,7 +765,8 @@ System_file;
 		scope_stage = 2;
 		_UpdateScope();
 		scope_stage = 0;
-		phase2_necessary = true;
+		! not a real error, just to make sure that phase2 runs
+		phase2_necessary = PHASE2_ERROR;
 	} else if(_token_type == TT_PARSE_ROUTINE) {
 		! allow the 'general parsing routine' to do all instead.
 		! it returns object or GRP_FAIL, ...; just like _ParseToken

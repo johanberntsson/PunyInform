@@ -444,7 +444,7 @@ v2.3: bug fix and new feature release (8 April 2021)
 - Removed full stop after You have won/died messages.
 
 =======
-v2.4: bug fix and new feature release
+v2.4: bug fix and new feature release (20 April 2021)
 
 - Fixed bug in ext_quote_box (which crashed some interpreters in z3 just after
   quote box was printed.)
@@ -464,3 +464,6 @@ v2.4: bug fix and new feature release
   box.
 - Fixed bug in detection of multiple words from the room's name property
  
+=======
+v2.5: bug fix and new feature release 
+

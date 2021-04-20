@@ -2,6 +2,20 @@
 title: PunyInform Technical Report
 numbersections: true
 ---
+
+Du skriver "the which_object global variable", men senare skriver du att which_object är en array.
+
+global variables buffer and parse -- Jag skulle kalla dem arrayer
+
+The format of _ParseToken is the same as ParseToken for Inform 6 compatibility. -- Vad är nyttan av att en intern rutin i PunyInforms parser är "kompatibel" med Inform 6?
+
+...the routine calls _GetNextNoun and the object into the multiple_objects array -- ?
+
+In addition ot the return value it will also update parser_action. -- Jag tror inte parser_action nämnts.  Den är inte med i listan av parser state-variabler.
+
+Nämn att _GuessMissingNoun är optional - kommer den inte med alls om man inte aktiverar den, eller blir det bara en dummare version av rutinen?
+I övrigt är det rätt många typos, men jag väntar med dem.
+
 # Introduction
 
 PunyInform is based on the Inform 6 standard library, developed by Graham Nelson. In this document DM4 refers to the _Inform_ _Designer's Manual, 4th edition_, which is availble online at: [http://www.inform-fiction.org/manual/html/index.html](http://www.inform-fiction.org/manual/html/index.html)
