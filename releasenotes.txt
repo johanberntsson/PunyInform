@@ -451,6 +451,8 @@ v2.4: bug fix and new feature release (20 April 2021)
 - Fixed bad parsning of topic followed by multiple preposition alternatives.
 - Merged a library message into another, to save some bytes.
 - Removed before and after for thedark.
+- Changed so before and after are run for real_location rather than
+  location.
 - Reworked howto/semidark.inf to work without using thedark.before().
 - Added climb and climb up/over to grammar, new action Climb.
 - Improved parser response when refering to objects outside scope (issue 75)
@@ -465,5 +467,4 @@ v2.4: bug fix and new feature release (20 April 2021)
 - Fixed bug in detection of multiple words from the room's name property
  
 =======
-v2.5: bug fix and new feature release 
-
+v2.5: bug fix and new feature release
