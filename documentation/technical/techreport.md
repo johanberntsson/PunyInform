@@ -2,7 +2,13 @@
 title: PunyInform Technical Report
 numbersections: true
 ---
-# Program and Data Structures
+# Introduction
+
+PunyInform is based on the Inform 6 standard library, developed by Graham Nelson. In this document DM4 refers to the _Inform_ _Designer's Manual, 4th edition_, which is availble online at: [http://www.inform-fiction.org/manual/html/index.html](http://www.inform-fiction.org/manual/html/index.html)
+
+The PunyInform parser is to a large extent compatible with Inform 6, for example wn, NextWord() and NextWordStopped() are implemented, and noun/second/inp1/inp2/special_number/parsed_number work the same. However, the internals are completely different, and this document gives an overview of how the code works.
+
+## Program and Data Structures
 
 PunyLib starts executing from the main routine in lib/puny.h, which contains the game loop. To support and implement the game these additional blocks are used:
 
@@ -52,7 +58,11 @@ The parser uses a two phase approach to matching grammar templates to user input
 
 The best candidate then enters phase 2, where the same tests are run, but in this phase error messages are printed. If any errors are found and printed in phase 2, then the parser gives up (since the best candidate failed) and returns control to the game loop, which will prompt new user input.
 
+There is an optimisation that allows phase 2 to be skipped when the pattern fit perfectly, and all processing has already been done in phase 1. This is controlled by the `phase2_necessary` variable, which is set during phase 1 to either `PHASE2_SUCCESS`, `PHASE2_ERROR` or `PHASE2_DISAMBIGUATION`. `PHASE2_ERROR` indicates that phase 1 failed silently for this pattern, but that it will produce a message if run again in phase 2.
+
 ## Handling Disambiguation
+
+When the pattern matches a single noun token such as NOUN_OBJECT with more than one object then the parser will indicate this by setting `phase2_necessary` to `PHASE2_DISAMBIGUATION` in phase 1. If the same pattern is run in phase 2 then the parser will ask the user to disambiguate ("Do you mean the blue book or the red book?"). If the user input reduces the options to a single object it will be used for the noun phrase, otherwise the parser will print an error message.
 
 ## Main Routines
 
@@ -72,7 +82,25 @@ Another possibility is that the pattern seems to match but the noun phrase is am
 
 ### `_ParsePattern`
 
+`_ParsePattern` takes a pattern and the current phase, and returns a score that indicated how many words could be successfully parsed using the pattern. If the whole pattern could be parsed, then 100 is returned, and -1 is returned if the input needs to be reparsed. This can happen if the player was asked to disambiguate, but instead of adding to the noun phrase a completely new command as given.
+
+`_ParsePattern` calls `_ParseToken` for each token in the pattern, until either the complete pattern has been parsed, or it runs out of user input to parse against. It can also return early if `_ParseToken` returns `GPR_FAIL`.
+
+Since patterns can contains a list of acceptable prepositions the routine needs to skip ahead until the end of the preposition list if `_ParseToken` managed to match a preposition. The routine will also not return early in case `_ParseToken` failed to parse on of the preposition alternatives.
+
+If `_ParseToken` successfully parsed one of the noun token types, then `_UpdateNounSecond` is called to update the `noun` and `second` parser state variables.
+
+`_ParsePattern` also detects bad input (words that are not in the dictionary) and prints error messages if in phase 2.
+
 ### `_ParseToken`
+
+The format of `_ParseToken` is the same as `ParseToken` for Inform 6 compatibility. `ParseToken` takes two arguments, token type and token data, and returns the object number or a failure code (`GPR_FAIL`, `GPR_MULTIPLE`, `GPR_NUMBER`, `GPR_REPARSE` or `GPR_PREPOSITION`). In addition, `_ParseToken` also takes p_phase to indicate the current phase. 
+
+`_ParseToken` handles each token type differently. If it is a preposition, then it checks if the current word in the input is a match, and returns `GPR_PREPOSITION`. If not, it returns `GPR_FAIL`. It handles topics and numbers in a similar way, using `_ParseTopic` and `TryNumber` to update `consult_from`, `consult_words`, `parsed_number`, and `special_word` as needed.
+
+Nouns are more complicated.  If the expected token is a single noun, then `_GetNextNoun` is called and the object is returned. Before returning it makes sure that `CREATURE_OBJECT` only matches something animate, and `HELD_OBJECT` tries to pick up objects if not carried by the player.
+
+However, if the expected token is a `MULTI*_OBJECT` type, then the routine calls `_GetNextNoun` and the object into the `multiple_objects` array. However, if `_getNextNoun` has detected a plural noun, then `which_object` holds all objects that partially matches ("books") and these objects are copied into `multiple_objects` instead. It is also possible that it is a single `all`, in which case `_AddMultipleNouns` is called to fill `multiple_objects` wih all reasonable objects that are in scope. The routine uses look-ahead to handle lists of noun phrases separated by commas or "and". It also detects the "all but X" pattern, and sets `parser_all_except_object` if found.
 
 ### `_GetNextNoun`
 
