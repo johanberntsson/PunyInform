@@ -465,6 +465,10 @@ v2.4: bug fix and new feature release (20 April 2021)
 - Added a second parameter for QuoteBox() to not wait for keypress after quote
   box.
 - Fixed bug in detection of multiple words from the room's name property
- 
+
 =======
 v2.5: bug fix and new feature release
+
+- Changed the library messages for searching a container or supporter
+  (MSG_SEARCH_IN_IT_ISARE, MSG_SEARCH_ON_IT_ISARE)
+- The (undocumented) routine SearchInOnNoun() was removed.

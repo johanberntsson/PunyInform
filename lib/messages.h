@@ -592,15 +592,19 @@ Default LibraryMessages 0;
 #EndIf;
 #IfTrue MSG_SEARCH_IN_IT_ISARE < 1000;
 	MSG_SEARCH_IN_IT_ISARE:
-		print "In ";
-		SearchInOnNoun();
-		rtrue;
+		print (The) noun, " contains ";
+		PrintContents(0, noun);
+		".";
 #EndIf;
 #IfTrue MSG_SEARCH_ON_IT_ISARE < 1000;
 	MSG_SEARCH_ON_IT_ISARE:
-		print "On ";
-		SearchInOnNoun();
-		rtrue;
+		print "On ", (the) noun;
+		if (children(noun) == 1 && child(noun) hasnt pluralname)
+			print " is ";
+		else
+			print " are ";
+		PrintContents(0, noun);
+		".";
 #EndIf;
 #IfTrue MSG_SEARCH_EMPTY < 1000;
 	MSG_SEARCH_EMPTY:
@@ -750,11 +754,6 @@ default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
 	}
-];
-
-[ SearchInOnNoun;
-	print (the) noun, " is ";
-	if(PrintContents(0, noun)) print ".^";
 ];
 
 [OnOff obj;
