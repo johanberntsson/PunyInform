@@ -643,7 +643,7 @@ Include "parser.h";
 
 [ PerformPreparedAction;
 #IfDef DEBUG;
-	if(debug_flag & 2) TraceAction(action, noun, second);
+	if(debug_flag & 2) TraceAction();
 #EndIf;
 	if ((meta || (BeforeRoutines() == false)) && action < 4096) {
 		ActionPrimitive();
@@ -857,26 +857,34 @@ Include "parser.h";
 	print "(attribute ", p_attr, ")";
 ];
 
-[ DebugParameter _w;
-    print _w;
-    if (_w >= 1 && _w <= top_object) print " (", (name) _w, ")";
-    if (UnsignedCompare(_w, dict_start) >= 0 &&
-            UnsignedCompare(_w, dict_end) < 0 &&
-            (_w - dict_start) % dict_entry_size == 0)
-        print " ('", (address) _w, "')";
+[ DebugParameter p_w;
+    print p_w;
+    if (p_w >= 1 && p_w <= top_object) print " (", (name) p_w, ")";
+    if (UnsignedCompare(p_w, dict_start) >= 0 &&
+            UnsignedCompare(p_w, dict_end) < 0 &&
+            (p_w - dict_start) % dict_entry_size == 0)
+        print " ('", (address) p_w, "')";
 ];
 
-[ DebugAction a anames;
-    if (a >= 4096) { print "<fake action ", a-4096, ">"; return; }
-    anames = #identifiers_table;
-    anames = anames + 2*(anames-->0) + 2*48;
-    print (string) anames-->a;
+[ DebugAction p_a _anames;
+    if (p_a >= 4096) { print "<fake action ", p_a-4096, ">"; return; }
+    _anames = #identifiers_table;
+    _anames = _anames + 2*(_anames-->0) + 2*48;
+    print (string) _anames-->p_a;
 ];
 
-[ TraceAction p_action p_noun p_second;
-	print "[ Action ", (DebugAction) p_action;
-    if (p_noun ~= 0)   print " with noun ", (DebugParameter) p_noun;
-    if (p_second ~= 0) print " and second ", (DebugParameter) p_second;
+[ TraceAction;
+	print "[ Action ", (DebugAction) action;
+    if (noun ~= 0) {
+		print " with noun ";
+		if(inp1 == 1) print noun;
+		else print (DebugParameter) noun;
+		if (second ~= 0) {
+			print " and second ";
+			if(inp2 == 1) print second;
+			else print (DebugParameter) second;
+		}
+	}
     print "]^";
 ];
 

@@ -473,3 +473,6 @@ v2.5: bug fix and new feature release
   (MSG_SEARCH_IN_IT_ISARE, MSG_SEARCH_ON_IT_ISARE)
 - The (undocumented) routine SearchInOnNoun() was removed.
 - Fixed warning in ext_cheap_scenery when SceneryReply is not defined.
+- Changed so "actions" debug verb doesn't print object name when noun or second
+  is a number.
+ 
