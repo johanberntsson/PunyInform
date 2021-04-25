@@ -130,7 +130,11 @@ Object CheapScenery "object"
 			}
 			print_ret (string) _k;
 		],
+#Ifdef SceneryReply;
 		before [i w1;
+#Ifnot;
+		before [;
+#Endif;
 			Examine:
 				rfalse;
 			default:
