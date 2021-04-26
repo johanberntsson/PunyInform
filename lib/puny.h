@@ -682,6 +682,22 @@ Include "parser.h";
 	}
 ];
 
+[ _NoteObjectAcquisitions _i;
+	objectloop(_i in player) {
+		if(_i hasnt moved) {
+			give _i moved;
+#IfDef OPTIONAL_SCORED;
+			if(noun has scored) {
+				score = score + OBJECT_SCORE;
+#IfDef OPTIONAL_FULL_SCORE;
+				things_score = things_score + OBJECT_SCORE;
+#EndIf;
+			}
+#EndIf;
+		}
+	}
+];
+
 [ BeforeRoutines _i _obj _scope_count _max;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
@@ -1315,6 +1331,7 @@ Object thedark "Darkness"
 #Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness(true);
 #Endif;
+	_NoteObjectAcquisitions();
 ];
 
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;

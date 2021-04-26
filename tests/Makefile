@@ -16,8 +16,8 @@ containers:
 	frotz containers.z3
 
 inform:
-	inform -v8 grabifnotheld.inf
-	frotz grabifnotheld.z8
+	inform -v8 test-issue75.inf
+	frotz test-issue75.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output

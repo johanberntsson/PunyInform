@@ -1692,16 +1692,8 @@ Global scope_cnt;
 
     if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
-#IfDef OPTIONAL_SCORED;
-	if(noun hasnt moved && noun has scored) {
-		score = score + OBJECT_SCORE;
-#IfDef OPTIONAL_FULL_SCORE;
-		things_score = things_score + OBJECT_SCORE;
-#EndIf;
-	}
-#EndIf;
 	move noun to player;
-	give noun moved ~concealed;
+	give noun ~concealed;
 
 	! Send "after" message to the object letting go of the item, if any.
 

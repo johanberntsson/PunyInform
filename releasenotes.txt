@@ -475,4 +475,4 @@ v2.5: bug fix and new feature release
 - Fixed warning in ext_cheap_scenery when SceneryReply is not defined.
 - Changed so "actions" debug verb doesn't print object name when noun or second
   is a number.
- 
+- Changed 'moved' and scoring to work like I6, added _NoteObjectAcquisitions

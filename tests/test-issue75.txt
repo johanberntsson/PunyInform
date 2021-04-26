@@ -11,6 +11,12 @@ You don't need to refer to "useless" in this game.
 > put apple in box
 You can't see any such thing.
 
+> take box
+Why did you pick up the box?
+
+> i
+You're carrying a box (which is empty).
+
 > quit
 Are you sure you want to quit? yes
 
