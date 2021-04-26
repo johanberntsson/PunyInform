@@ -1331,7 +1331,10 @@ Object thedark "Darkness"
 #Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness(true);
 #Endif;
-	_NoteObjectAcquisitions();
+	if(update_moved) {
+		_NoteObjectAcquisitions();
+		update_moved = false;
+	}
 ];
 
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
@@ -1401,6 +1404,7 @@ Object thedark "Darkness"
 	_j = Initialise();
 
 	objectloop (_i in player) give _i moved ~concealed;
+	update_moved = false;
 
 	if(_j ~= 2) {
 		Banner();

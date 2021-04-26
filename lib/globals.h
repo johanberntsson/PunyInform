@@ -397,6 +397,7 @@ Global num_words;        ! number of words typed
 Global action;           ! the current action
 Global action_reverse;   ! if parameters are in reversed order
 Global meta;             ! if the verb has the meta attribute or not
+Global update_moved;     ! if _NoteObjectAcquisitions should update moved
 Global verb_word;        ! verb word, eg 'take' in "take all"
 Global verb_wordnum;     ! the position of the verb in the current sentence
 Global consult_from;     ! Word that a "consult" topic starts on

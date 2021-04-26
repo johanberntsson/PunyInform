@@ -1694,6 +1694,7 @@ Global scope_cnt;
 
 	move noun to player;
 	give noun ~concealed;
+	update_moved = true;
 
 	! Send "after" message to the object letting go of the item, if any.
 
