@@ -235,7 +235,7 @@ Constant AddToScope = _PutInScope;
 
 ! [ PlaceInScope p_obj _i;
 	! ! DM: PlaceInScope(obj)
-	! ! Used in “scope routines” (only) when scope_stage is set to 2 (only).
+	! ! Used in "scope routines" (only) when scope_stage is set to 2 (only).
 	! ! Places obj in scope for the token currently being parsed. No other
 	! ! objects are placed in scope as a result of this, unlike the case of
 	! ! ScopeWithin. No return value
@@ -262,7 +262,7 @@ Constant AddToScope = _PutInScope;
 
 [ ScopeWithin p_obj _child;
 	! DM: ScopeWithin(obj)
-	! Used in “scope routines” (only) when scope_stage is set to 2 (only).
+	! Used in "scope routines" (only) when scope_stage is set to 2 (only).
 	! Places the contents of obj in scope for the token currently being
 	! parsed, and applies the rules of scope recursively so that contents of
 	! see-through objects are also in scope, as is anything added to scope.
@@ -351,7 +351,7 @@ Constant AddToScope = _PutInScope;
 	! Determines whether any solid barrier, that is, any container that is
 	! not open, lies between the player and obj. If flag is true, this
 	! routine never prints anything; otherwise it prints a message like
-	! “You can't, because ! … is in the way.” if any barrier is found.
+	! "You can't, because ! ... is in the way." if any barrier is found.
 	! The routine returns true if a barrier is found, false if not.
 
 	_g_item = p_item;
