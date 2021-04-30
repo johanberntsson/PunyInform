@@ -136,10 +136,11 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #IfV5;
 	@set_window 0;
 !	print "[Press any key to continue]";
-	if(p_dont_pause == 0)
+	if(p_dont_pause == 0) {
 		@read_char _i;
 !	@split_window 0;
-	@erase_window -1;
+		@erase_window -1;
+	}
 #IfNot;
 	@new_line;
 !	print "[ENTER]";

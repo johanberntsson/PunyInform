@@ -479,3 +479,7 @@ v2.5: bug fix and new feature release
   Note: Game author must set update_moved to true when moving objects into
   player's inventory!
 - Fixed: MoveFloatingObjects didn't set scope_modified.
+- Fixed bug: QuoteBox cleared the screen in z5, even when the second parameter
+  was set as to not wait for keypress, making the quote box disappear
+  immediately.
+ 
