@@ -476,3 +476,6 @@ v2.5: bug fix and new feature release
 - Changed so "actions" debug verb doesn't print object name when noun or second
   is a number.
 - Changed 'moved' and scoring to work like I6, added _NoteObjectAcquisitions
+  Note: Game author must set update_moved to true when moving objects into
+  player's inventory!
+- Fixed: MoveFloatingObjects didn't set scope_modified.

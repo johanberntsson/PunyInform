@@ -544,6 +544,7 @@ else
 			remove _obj;
 		_i++;
 	}
+	scope_modified = true;
 ];
 
 [ PlayerTo p_loc p_flag _old_loc _old_real_loc _old_lookmode _old_parent _vc _old_vc;
