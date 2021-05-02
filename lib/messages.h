@@ -158,12 +158,6 @@ Constant MSG_PARSER_COMPLEX_AGAIN "The 'again' command must be on a new input li
 #Ifndef MSG_PARSER_NOTHING_TO_AGAIN;
 Constant MSG_PARSER_NOTHING_TO_AGAIN "You can hardly repeat that.";
 #EndIf;
-#Ifndef MSG_PARSER_BAD_PATTERN_PREFIX;
-Constant MSG_PARSER_BAD_PATTERN_PREFIX "I think you wanted to say ~";
-#EndIf;
-#Ifndef MSG_PARSER_BAD_PATTERN_SUFFIX;
-Constant MSG_PARSER_BAD_PATTERN_SUFFIX "~. Please try again.^";
-#EndIf;
 
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;
@@ -314,6 +308,8 @@ Default MSG_PARSER_NEW_SCORE 122;
 #Endif;
 Default MSG_CLIMB_ANIMATE 123;
 Default MSG_CLIMB_DEFAULT 124;
+Default MSG_PARSER_BAD_PATTERN_PREFIX 125;
+Default MSG_PARSER_BAD_PATTERN_SUFFIX 126;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -568,6 +564,15 @@ Default LibraryMessages 0;
 			_PrintUnknownWord();
 			print_ret "~ means.";
 #EndIf;
+#IfTrue MSG_PARSER_BAD_PATTERN_PREFIX < 1000;
+	MSG_PARSER_BAD_PATTERN_PREFIX:
+		print "I think you wanted to say ~";
+		rtrue;
+#EndIf;
+#IfTrue MSG_PARSER_BAD_PATTERN_SUFFIX < 1000;
+	MSG_PARSER_BAD_PATTERN_SUFFIX:
+		"~. Please try again.";
+#EndIf;
 	MSG_TOUCHABLE_FOUND_CLOSED, MSG_PARSER_CONTAINER_ISNT_OPEN, MSG_CLOSE_NOT_OPEN:
 		print_ret (CObjIs) p_arg_1, "n't open.";
 #IfTrue MSG_CONSULT_NOTHING_INTERESTING < 1000;
@@ -725,6 +730,8 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		print ".]^";
 #Endif;
 #Endif;
+
+
 
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;

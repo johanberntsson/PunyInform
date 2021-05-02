@@ -482,4 +482,7 @@ v2.5: bug fix and new feature release
 - Fixed bug: QuoteBox cleared the screen in z5, even when the second parameter
   was set as to not wait for keypress, making the quote box disappear
   immediately.
- 
+- Fixed a bug that made it impossible to customize
+  MSG_PARSER_BAD_PATTERN_PREFIX and MSG_PARSER_BAD_PATTERN_SUFFIX.
+- Messages MSG_PARSER_BAD_PATTERN_PREFIX and MSG_PARSER_BAD_PATTERN_SUFFIX
+  were changed to be complex messages instead of static strings.

@@ -1172,7 +1172,7 @@ Array guess_num_objects->5;
 #EndIf;
 
 	! write an error message and return false
-	print (string) MSG_PARSER_BAD_PATTERN_PREFIX;
+	PrintMsg(MSG_PARSER_BAD_PATTERN_PREFIX);
 	print (verbname) verb_word;
 	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
 		_type = (_token -> 0) & $0f;
@@ -1202,7 +1202,7 @@ Array guess_num_objects->5;
 			}
 		}
 	}
-	print (string) MSG_PARSER_BAD_PATTERN_SUFFIX;
+	PrintMsg(MSG_PARSER_BAD_PATTERN_SUFFIX);
 	rfalse;
 ];
 
@@ -1610,7 +1610,7 @@ Array guess_num_objects->5;
 				}
 			} else {
 				! we didn't match the pattern at all
-				if(parser_unknown_noun_found == 0 && 
+				if(parser_unknown_noun_found == 0 &&
 					((_best_pattern_pointer-> 0) & $0f) == TT_END) {
 					PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
 				} else {
