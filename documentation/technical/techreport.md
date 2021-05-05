@@ -3,22 +3,9 @@ title: PunyInform Technical Report
 numbersections: true
 ---
 
-Du skriver "the which_object global variable", men senare skriver du att which_object är en array.
-
-global variables buffer and parse -- Jag skulle kalla dem arrayer
-
-The format of _ParseToken is the same as ParseToken for Inform 6 compatibility. -- Vad är nyttan av att en intern rutin i PunyInforms parser är "kompatibel" med Inform 6?
-
-...the routine calls _GetNextNoun and the object into the multiple_objects array -- ?
-
-In addition ot the return value it will also update parser_action. -- Jag tror inte parser_action nämnts.  Den är inte med i listan av parser state-variabler.
-
-Nämn att _GuessMissingNoun är optional - kommer den inte med alls om man inte aktiverar den, eller blir det bara en dummare version av rutinen?
-I övrigt är det rätt många typos, men jag väntar med dem.
-
 # Introduction
 
-PunyInform is based on the Inform 6 standard library, developed by Graham Nelson. In this document DM4 refers to the _Inform_ _Designer's Manual, 4th edition_, which is availble online at: [http://www.inform-fiction.org/manual/html/index.html](http://www.inform-fiction.org/manual/html/index.html)
+PunyInform is based on the Inform 6 standard library, developed by Graham Nelson. In this document DM4 refers to the _Inform_ _Designer's Manual, 4th edition_, which is available online at: [http://www.inform-fiction.org/manual/html/index.html](http://www.inform-fiction.org/manual/html/index.html)
 
 The PunyInform parser is to a large extent compatible with Inform 6, for example wn, NextWord() and NextWordStopped() are implemented, and noun/second/inp1/inp2/special_number/parsed_number work the same. However, the internals are completely different, and this document gives an overview of how the code works.
 
@@ -45,7 +32,7 @@ The game loop, implemented in the `main` routine lib/puny.h, controls the execut
 
 `_GetNextNoun` relies on `_CheckNoun` to try parsing a noun phrase, but adds checks for pronouns and plurals, and disambiguates if needed.
 
-`_CheckNoun` checks if objects in scope match words in the input string, either by using its `name` property or its `parse_name` routine. More than one object could match if the input is incomplete, which is reported back using the `which_object` global variable, and used in disambiguation.
+`_CheckNoun` checks if objects in scope match words in the input string, either by using its `name` property or its `parse_name` routine. More than one object could match if the input is incomplete, which is reported back using the `which_object` global array, and used in disambiguation.
 
 ## State Variables
 
@@ -59,6 +46,7 @@ These are the most important state variables in the parser
 - consult_from: as described in DM4
 - special_word: as described in DM4
 - special_number: as described in DM4
+- parser_action: this is set to ##PluralFound if plurals, otherwise 0. Note that ##TheSame (described in DM4) is not supported.
 - which_object: this array holds the objects that matched the currently parsed noun phrase
 - multiple_objects: this array holds the object or objects that matched a `MULTI*_OBJECT` token
 - parser_all_found: this is true if "all" was parsed, such as "get all".
@@ -82,7 +70,7 @@ When the pattern matches a single noun token such as NOUN_OBJECT with more than 
 
 ### `_ParseAndPerformAction`
 
-`_ParseAndPerformAction` uses the global variables `buffer` and `parse`. `buffer` contains the input string, while `parse` is a list of tokens, where each token contains a pointer to the word string in `buffer` and a pointer to the dictionary word. The routine returns the negative number of words when the input could be parsed successfully (so -2 if two words parsed), or true if the parser failed to parse the input, and the user needs to add new input.
+`_ParseAndPerformAction` uses the global arrays `buffer` and `parse`. `buffer` contains the input string, while `parse` is a list of tokens, where each token contains a pointer to the word string in `buffer` and a pointer to the dictionary word. The routine returns the negative number of words when the input could be parsed successfully (so -2 if two words parsed), or true if the parser failed to parse the input, and the user needs to add new input.
 
 `_ParseAndPerformAction` firsts determines which verb the input uses. It then checks each pattern to see if it matches the input. This is done by calling `_ParsePattern` which takes p_pattern (the current pattern to check) and p_phase (set to 1). `_ParsePattern` returns a score that indicates how well the pattern matches the input.  During phase 1 this match will be done silently, so no error messages are printed even if the pattern fails to match the input.
 
@@ -92,7 +80,7 @@ The score is 100 if a perfect match was found, or the number of words matches by
 
 However, if no perfect score was found then the highest score is used. If `phase2_necessary` is set to PHASE2_ERROR, then `_ParsePattern` will be called again with this pattern and `p_phase` set to 2. In phase 2 `_ParsePattern` will print the error messages that were surpressed during phase 1. If the match failed and `phase2_necessary` wasn't set if means that there wasn't enough input to match the pattern, and a message such as "I think you wanted to say 'climb something'. Please try again" is printed.
 
-Another possibility is that the pattern seems to match but the noun phrase is ambigus. In this case the pattern returns a score as if the pattern matched the noun phrase, but sets `phase2_necessary` to PHASE2_DISAMBIGUATION, and - like for PHASE2_ERROR - `_ParsePattern` is called again with `p_phase` set to 2. `_ParsePattern/_GetNextNoun` will then call `_AskWhichNoun` to prompt the user for additional information ("Do you mean the blue or the red book?"), and return 100 if the noun phrase is successfully parsed.
+Another possibility is that the pattern seems to match but the noun phrase is ambiguous. In this case the pattern returns a score as if the pattern matched the noun phrase, but sets `phase2_necessary` to PHASE2_DISAMBIGUATION, and - like for PHASE2_ERROR - `_ParsePattern` is called again with `p_phase` set to 2. `_ParsePattern/_GetNextNoun` will then call `_AskWhichNoun` to prompt the user for additional information ("Do you mean the blue or the red book?"), and return 100 if the noun phrase is successfully parsed.
 
 ### `_ParsePattern`
 
@@ -108,17 +96,19 @@ If `_ParseToken` successfully parsed one of the noun token types, then `_UpdateN
 
 ### `_ParseToken`
 
-The format of `_ParseToken` is the same as `ParseToken` for Inform 6 compatibility. `ParseToken` takes two arguments, token type and token data, and returns the object number or a failure code (`GPR_FAIL`, `GPR_MULTIPLE`, `GPR_NUMBER`, `GPR_REPARSE` or `GPR_PREPOSITION`). In addition, `_ParseToken` also takes p_phase to indicate the current phase. 
+The format of `_ParseToken` is compatible with `ParseToken` for Inform 6 compatibility, but takes an extra argument, p_phase, to indicate the current phase. `ParseToken` is mentioned in DM4 and can be used by games to provide custom parsning, so keeping the same format allows also PunyGames to offer this functionality.
+
+The first two arguments are the same as `ParseToken`: token type and token data. The routine returns the object number or a failure code (`GPR_FAIL`, `GPR_MULTIPLE`, `GPR_NUMBER`, `GPR_REPARSE` or `GPR_PREPOSITION`). 
 
 `_ParseToken` handles each token type differently. If it is a preposition, then it checks if the current word in the input is a match, and returns `GPR_PREPOSITION`. If not, it returns `GPR_FAIL`. It handles topics and numbers in a similar way, using `_ParseTopic` and `TryNumber` to update `consult_from`, `consult_words`, `parsed_number`, and `special_word` as needed.
 
 Nouns are more complicated.  If the expected token is a single noun, then `_GetNextNoun` is called and the object is returned. Before returning it makes sure that `CREATURE_OBJECT` only matches something animate, and `HELD_OBJECT` tries to pick up objects if not carried by the player.
 
-However, if the expected token is a `MULTI*_OBJECT` type, then the routine calls `_GetNextNoun` and the object into the `multiple_objects` array. However, if `_getNextNoun` has detected a plural noun, then `which_object` holds all objects that partially matches ("books") and these objects are copied into `multiple_objects` instead. It is also possible that it is a single `all`, in which case `_AddMultipleNouns` is called to fill `multiple_objects` wih all reasonable objects that are in scope. The routine uses look-ahead to handle lists of noun phrases separated by commas or "and". It also detects the "all but X" pattern, and sets `parser_all_except_object` if found.
+However, if the expected token is a `MULTI*_OBJECT` type, then the routine calls `_GetNextNoun` and stores the object number in the `multiple_objects` array. However, if `_GetNextNoun` has detected a plural noun, then `which_object` holds all objects that partially matches ("books") and these objects are copied into `multiple_objects` instead. It is also possible that it is a single `all`, in which case `_AddMultipleNouns` is called to fill `multiple_objects` with all reasonable objects that are in scope. The routine uses look-ahead to handle lists of noun phrases separated by commas or "and". It also detects the "all but X" pattern, and sets `parser_all_except_object` if found.
 
 ### `_GetNextNoun`
 
-`_GetNextNoun` takes the current input position and phase, and returns the object number for the next noun if no problem occured. In addition ot the return value it will also update `parser_action`.
+`_GetNextNoun` takes the current input position and phase, and returns the object number for the next noun if no problem occurred. In addition ot the return value it will also update `parser_action`.
 
 `_GetNextNoun` first skips articles and "all", so it can parse noun phrases such as "all books", "the bird", and "an apple". It then checks if the current word is a pronoun such as "it" or "him". If it is a pronoun, a suitable objects has been referred to before so the parser knows who or what to refer to, and that object is still in scope, then the routine returns the object associated with the pronoun.
 
@@ -148,7 +138,7 @@ The routine takes the token type being processed, so that `MULTIHELD_OBJECT` wil
 
 ### `_FixIncompleteSentenceOrComplain`
 
-`_FixIncompleteSentenceOrComplain` is called from `_ParsePattern` because the sentence shorter than the pattern. The routine checks if the pattern is expectign another noun phrase. If so, it can call `_GuessMissingNoun` to try adding the missing information.  If `_GuessMissingNoun` manages to fix the sentence then `_ParsePattern` will return a perfect score, otherwise an error message is shown ("I think you want to say 'kill someone', please try again.").
+`_FixIncompleteSentenceOrComplain` is called from `_ParsePattern` because the sentence shorter than the pattern. The routine checks if the pattern is expecting another noun phrase. If so, and if OPTIONAL_GUESS_MISSING_NOUN is defined, it can optionally call `_GuessMissingNoun` to try adding the missing information.  If `_GuessMissingNoun` is available and manages to fix the sentence then `_ParsePattern` will return a perfect score, otherwise an error message is shown ("I think you want to say 'kill someone', please try again.").
 
 ### `_GuessMissingNoun`
 
@@ -174,7 +164,7 @@ Prints a word that doesn't exist in the dictionary by typing it from the `buffer
 
 # Grammar
 
-The standard actions of PunyInform are defined in grammar.h. By default only the most essential actions are included, but different addional subsets can be enabled by defining the OPTIONAL_EXTENDED_VERBSET, OPTIONAL_EXTENDED_METAVERBS, OPTIONAL_PROVIDE_UNDO, and DEBUG constants.
+The standard actions of PunyInform are defined in grammar.h. By default only the most essential actions are included, but different additional subsets can be enabled by defining the OPTIONAL_EXTENDED_VERBSET, OPTIONAL_EXTENDED_METAVERBS, OPTIONAL_PROVIDE_UNDO, and DEBUG constants.
 
 For more detail and a list of standard actions defined for each subset, see the PunyInform manual.
 
@@ -182,7 +172,7 @@ For more detail and a list of standard actions defined for each subset, see the 
 
 All texts and messages are located in messages.h, to make it easy to customise them. Customisation is described in the main PunyInform manual.
 
-Puny internally accesses these messages through the `PrintMsg` function, which takes the identifier and optional arguments. For example, `PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);` will print something like "You can't use multiple objects with thas verb.".
+Puny internally accesses these messages through the `PrintMsg` function, which takes the identifier and optional arguments. For example, `PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);` will print something like "You can't use multiple objects with that verb.".
 
 # Scope
 
@@ -231,8 +221,8 @@ Byte 1 ... Syntax line 0, 1, ...
 
 Grammar line
 ```
-0: Highbyte of action_value
-1: Lowbyte of action_value
+0: highbyte of action_value
+1: lowbyte of action_value
 ```
 
 (action_value & $0400) ~= 0 means the action is reversed
