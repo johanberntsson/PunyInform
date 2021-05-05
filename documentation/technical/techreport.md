@@ -26,7 +26,7 @@ The structure and main routines of these blocks are described in separate chapte
 
 The game loop, implemented in the `main` routine lib/puny.h, controls the execution of the game. In this loop the player input is read by a call to `_ReadPlayerInput`.  The parser entry routine `_ParseAndPerformAction` is then called, which determines which verb the input uses, tries all patterns found in the grammar for this verb, using `_ParsePattern`, and executes the best pattern found.  If no good pattern found it will instead write an error message, such as "I don't understand that sentence."
 
-`_ParsePattern` loops over the pattern, calling `_ParseToken` for every token, and handles errors such as running out of either user or pattern data prematurely. 
+`_ParsePattern` loops over the pattern, calling `_ParseToken` for every token, and handles errors such as running out of either user or pattern data prematurely.
 
 `_ParseToken` in its turn uses `_GetNextNoun` when detecting a noun-related token (`NOUN_OBJECT`, `CREATURE_OBJECT`, `HELD_OBJECT`, `MULTI*_OBJECT`) to parse a noun phrase. It also handles preposition handling.
 
@@ -98,7 +98,7 @@ If `_ParseToken` successfully parsed one of the noun token types, then `_UpdateN
 
 The format of `_ParseToken` is compatible with `ParseToken` for Inform 6 compatibility, but takes an extra argument, p_phase, to indicate the current phase. `ParseToken` is mentioned in DM4 and can be used by games to provide custom parsning, so keeping the same format allows also PunyGames to offer this functionality.
 
-The first two arguments are the same as `ParseToken`: token type and token data. The routine returns the object number or a failure code (`GPR_FAIL`, `GPR_MULTIPLE`, `GPR_NUMBER`, `GPR_REPARSE` or `GPR_PREPOSITION`). 
+The first two arguments are the same as `ParseToken`: token type and token data. The routine returns the object number or a failure code (`GPR_FAIL`, `GPR_MULTIPLE`, `GPR_NUMBER`, `GPR_REPARSE` or `GPR_PREPOSITION`).
 
 `_ParseToken` handles each token type differently. If it is a preposition, then it checks if the current word in the input is a match, and returns `GPR_PREPOSITION`. If not, it returns `GPR_FAIL`. It handles topics and numbers in a similar way, using `_ParseTopic` and `TryNumber` to update `consult_from`, `consult_words`, `parsed_number`, and `special_word` as needed.
 
@@ -142,13 +142,13 @@ The routine takes the token type being processed, so that `MULTIHELD_OBJECT` wil
 
 ### `_GuessMissingNoun`
 
-`_GuessMissingNoun` is used then `noun` or `second` is missing. It tries to guess the missing parts of the sentence. A typical usage is 
+`_GuessMissingNoun` is used then `noun` or `second` is missing. It tries to guess the missing parts of the sentence. A typical usage is
 
 ```
 > show diamond
 (to Sally)
 ````
-where `_GuessMissingNoun` checked the scope and found that only Sally was possible, so "(to Sally)" was written and `second` set to Sally to complete the parsing. 
+where `_GuessMissingNoun` checked the scope and found that only Sally was possible, so "(to Sally)" was written and `second` set to Sally to complete the parsing.
 
 ### PronounNotice
 
@@ -176,22 +176,76 @@ Puny internally accesses these messages through the `PrintMsg` function, which t
 
 # Scope
 
-Scope is a list of things you can interact with. Normally, PunyInform updates the scope when a turn starts, before the after routines are run, before the timers and daemons are run, and before each_turn is run. It is however possible to switch to manual scope updates by defining the constant `OPTIONAL_MANUAL_SCOPE`. With manual_scope enabled, scope is only updated at the start of each turn AND when the `scope_modified` variable is set to true.
+Scope is a list of things an actor (typically the player) can interact with. Normally, PunyInform updates the scope when a turn starts, before the after routines are run, before the timers and daemons are run, and before each_turn is run. It is however possible to switch to manual scope updates by defining the constant `OPTIONAL_MANUAL_SCOPE`. With manual scope updates enabled, scope is only updated when the `scope_modified` variable is set to true. The library sets it to true whenever library code does something that may affect scope, like when the player moves or opens or closes a container. If something happens in game code which may mean that what's in scope changes, the game programmer must set `scope_modified = true`.
 
 The main routine is `_UpdateScope` which is called from `ParseAndPerformAction` and some other locations in the parser to update the scope when objects move or is modified by parsing the scope token. In addition, there are several utility functions that use the loop over or test if objects are in visible or touchable (that is, are in scope).
 
-## _UpdateScope
+## _PerformAddToScope(p_obj)
 
-## LoopOverScope
+Check the contents of `p_obj.add_to_scope`. If it's an array, add all objects in the array to scope, plus any objects they want to add through their `add_to_scope` properties. If it's a routine, execute it. That routine can then add any objects it likes to scope by calling `PlaceInScope(p_obj)`.
 
-## ScopeWithin
+## _SearchScope(p_obj, p_risk_duplicate, p_no_add)
 
-## TestScope
+Place the specified object in scope, plus all its siblings and children. If `p_risk_duplicate` is `false`, check first that the objects haven't already been added to scope. If `p_no_add` is `false`, allow the `add_to_scope` property of every object to add objects to scope.
 
-## ObjectIsUntouchable
+## _PutInScope(p_obj, p_risk_duplicate), synonyms PlaceInScope, AddToScope
 
-## ObjectIsInvisible
+Place an object in scope. If `p_risk_duplicate` is `false`, check first that the object hasn't already been added to scope. User code should ignore the parameter `p_risk_duplicate`, thus always leaving it as `false`.
 
+This routine is used by the other scope routines in the library, as well as by `add_to_scope` routines.
+
+## _UpdateScope(p_actor, p_force)
+
+Update the `scope` array to hold the objects currently in scope to `p_actor`. If the `scope` array seems to have the correct contents already, skip the update -  _unless_ `p_force` is `true`.
+
+## GetScopeCopy(p_actor)
+
+Calculate what's in scope for `p_actor`, and create a copy of the `scope` array in the `scope_copy` array. This is needed when looping over scope items and performing operations which may change the contents of the `scope` array, like calling TestScope for another actor.
+
+## ScopeCeiling(p_actor, p_stop_before)
+
+Find the innermost closed non-transparent container the actor is in, or the room the actor is in.
+
+Start with the actor and move upwards in the object tree until a closed non-transparent container or the room is found. If, however, `p_stop_before` is found along this path, return the object that was found just before it, one step closer to the player.
+
+## TouchCeiling(p_actor)
+
+Find the innermost closed container the actor is in, or the room the actor is in.
+
+## LoopOverScope(p_routine, p_actor)
+
+Call a routine once for every object in scope to an actor (default is the player).
+
+## ScopeWithin(p_obj)
+
+Add everything inside an object, but not the object itself, to scope. This routine should only be used in scope routines, and only when `scope_stage == 2`.
+
+## TestScope(p_obj, p_actor)
+
+Check if an object is in scope to a certain actor (default is the player).
+
+## _ObjectScopedBySomething(p_obj)
+
+If the specified object is in an add_to_scope array of any other object, anywhere in the game, return that object's object ID.
+
+## ObjectIsUntouchable(p_item, p_dontprint, p_checktake)
+
+Check if there's something stopping the player from touching a certain object. If parameter `p_dontprint` is set to `false`, print a message saying why the player can't get to the object. If parameter `p_checktake` is set to `true`, extend the check to decide if the player can take the object. I.e. a button that is part of a machine can be touched but not taken.
+
+## ObjectIsInvisible(p_item, p_dontprint)
+
+Very similar to `ObjectIsUntouchable`, but check if there's something stopping the player from _seeing_ a certain object.
+
+## _FindBarrier(p_ancestor, p_obj, p_dontprint)
+
+Utility function used by ObjectIsUntouchable and ObjectIsInvisible to find out if there are barriers between an object and one of its ancestors in the object tree that prevent the player from touching or seeing the object.
+
+To allow this function to work for z3 games, where a function can not be called with more than three arguments, three global variables are used exclusively to pass parameters to this function:
+* `_g_item` - the object which the calling function is trying to figure out whether it can be seen or touched
+* `_g_check_visible` - `true` means we're checking if the object can be seen, `false` means we're checking if it can be touched.
+* `_g_check_take` - `true` means we should check if the player can take the object.
+
+If parameter `p_dontprint` is set to `false`, this function prints an error message if it finds such a barrier. It might be something like "But the aquarium is closed!"
 
 # Appendix: Infocom Dictionary and Grammar Formats
 
@@ -301,4 +355,3 @@ Prepositions are located in the "adjectives table". The start address is in the 
 Each entry consists of two words. If the second word is the preposition-number (like $ff), the first
 word is the address of the dictionary word. There is no length number or end marker. You should just expect
 to find the entry somewhere in there.
-
