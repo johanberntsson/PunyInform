@@ -92,15 +92,16 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #EndIf;
 #EndIf;
 	_screen_width = 0->$21;
-	_i = _quote_lines + 4;
+	_i = _quote_lines + 5;
 	@erase_window -2;
 	@split_window _i;
 	@set_window 1;
 !	@erase_window 1;
+	@new_line;
+	@new_line;
 #IfNot;
 	_screen_width = QUOTE_V3_SCREEN_WIDTH;
 #EndIf;
-	@new_line;
 	@new_line;
 	font off;
 	_last_index = 2 + _quote_lines;
@@ -142,7 +143,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 	} else
 		@split_window 1;
 #IfNot;
-	@new_line;
+!	@new_line;
 !	print "[ENTER]";
 	if(p_dont_pause == 0) {
 		quote_buffer -> 0 = 1;

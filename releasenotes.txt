@@ -487,3 +487,4 @@ v2.5: bug fix and new feature release
 - Messages MSG_PARSER_BAD_PATTERN_PREFIX and MSG_PARSER_BAD_PATTERN_SUFFIX
   were changed to be complex messages instead of static strings.
 - Fixed bug in ext_quote_box.h which made quote box stay on screen forever.
+- Changed newlines before and after quote box.
