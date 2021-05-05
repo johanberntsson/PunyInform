@@ -1374,7 +1374,7 @@ Global scope_cnt;
 [ ScopeSub;
 	scope_cnt = 1;
 	LoopOverScope(_ScopeSubHelper, noun);
-	if(scope_cnt == 0) "Nothing in scope.^";
+	if(scope_cnt < 2) "Nothing in scope.^";
 ];
 
 [ TreeSub _obj _p;

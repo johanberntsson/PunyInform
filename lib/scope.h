@@ -293,26 +293,31 @@ Constant AddToScope = _PutInScope;
 		p_actor = player;
 
 	_UpdateScope(p_actor);
+#IfV5;
+	@scan_table p_obj scope scope_objects -> _i ?~failed;
+	rtrue;
+.failed;
+#IfNot;
 	for(_i = 0: _i < scope_objects: _i++) {
 		if(scope-->_i == p_obj) rtrue;
 	}
+#EndIf;
 	rfalse;
 ];
 
-[ _ObjectScopedBySomething p_item _i _j _k _l _m;
-	_i = p_item;
-	objectloop (_j .& add_to_scope) {
+[ _ObjectScopedBySomething p_obj _j _k _l _m;
+	objectloop (_j has reactive && (_j.&add_to_scope ~= 0)) {
 		_l = _j.&add_to_scope;
 		if (_l-->0 ofclass Routine) continue;
 #IfV5;
 		_k = _j.#add_to_scope;
 		@log_shift _k (-1) -> _k;
-		@scan_table _i _l _k -> _m ?~failed;
+		@scan_table p_obj _l _k -> _m ?~failed;
 		return _j;
 .failed;
 #IfNot;
 		_k = (_j.#add_to_scope)/WORDSIZE;
-		for (_m=0 : _m<_k : _m++) if (_l-->_m == _i) return _j;
+		for (_m=0 : _m<_k : _m++) if (_l-->_m == p_obj) return _j;
 #EndIf;
 	}
 	rfalse;
