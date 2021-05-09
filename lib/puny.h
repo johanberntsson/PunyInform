@@ -688,7 +688,7 @@ Include "parser.h";
 		if(_i hasnt moved) {
 			give _i moved;
 #IfDef OPTIONAL_SCORED;
-			if(noun has scored) {
+			if(_i has scored) {
 				score = score + OBJECT_SCORE;
 #IfDef OPTIONAL_FULL_SCORE;
 				things_score = things_score + OBJECT_SCORE;
