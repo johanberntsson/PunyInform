@@ -68,7 +68,7 @@ When the pattern matches a single noun token such as NOUN_OBJECT with more than 
 
 ## Main Routines
 
-### `_ParseAndPerformAction`
+### `_ParseAndPerformAction()`
 
 `_ParseAndPerformAction` uses the global arrays `buffer` and `parse`. `buffer` contains the input string, while `parse` is a list of tokens, where each token contains a pointer to the word string in `buffer` and a pointer to the dictionary word. The routine returns the negative number of words when the input could be parsed successfully (so -2 if two words parsed), or true if the parser failed to parse the input, and the user needs to add new input.
 
@@ -82,7 +82,7 @@ However, if no perfect score was found then the highest score is used. If `phase
 
 Another possibility is that the pattern seems to match but the noun phrase is ambiguous. In this case the pattern returns a score as if the pattern matched the noun phrase, but sets `phase2_necessary` to PHASE2_DISAMBIGUATION, and - like for PHASE2_ERROR - `_ParsePattern` is called again with `p_phase` set to 2. `_ParsePattern/_GetNextNoun` will then call `_AskWhichNoun` to prompt the user for additional information ("Do you mean the blue or the red book?"), and return 100 if the noun phrase is successfully parsed.
 
-### `_ParsePattern`
+### `_ParsePattern(p_pattern, p_phase)`
 
 `_ParsePattern` takes a pattern and the current phase, and returns a score that indicated how many words could be successfully parsed using the pattern. If the whole pattern could be parsed, then 100 is returned, and -1 is returned if the input needs to be reparsed. This can happen if the player was asked to disambiguate, but instead of adding to the noun phrase a completely new command as given.
 
@@ -94,7 +94,7 @@ If `_ParseToken` successfully parsed one of the noun token types, then `_UpdateN
 
 `_ParsePattern` also detects bad input (words that are not in the dictionary) and prints error messages if in phase 2.
 
-### `_ParseToken`
+### `_ParseToken(p_token_type, p_token_data, p_phase)`
 
 The format of `_ParseToken` is compatible with `ParseToken` for Inform 6 compatibility, but takes an extra argument, p_phase, to indicate the current phase. `ParseToken` is mentioned in DM4 and can be used by games to provide custom parsning, so keeping the same format allows also PunyGames to offer this functionality.
 
@@ -106,7 +106,7 @@ Nouns are more complicated.  If the expected token is a single noun, then `_GetN
 
 However, if the expected token is a `MULTI*_OBJECT` type, then the routine calls `_GetNextNoun` and stores the object number in the `multiple_objects` array. However, if `_GetNextNoun` has detected a plural noun, then `which_object` holds all objects that partially matches ("books") and these objects are copied into `multiple_objects` instead. It is also possible that it is a single `all`, in which case `_AddMultipleNouns` is called to fill `multiple_objects` with all reasonable objects that are in scope. The routine uses look-ahead to handle lists of noun phrases separated by commas or "and". It also detects the "all but X" pattern, and sets `parser_all_except_object` if found.
 
-### `_GetNextNoun`
+### `_GetNextNoun(p_parse_pointer, p_phase)`
 
 `_GetNextNoun` takes the current input position and phase, and returns the object number for the next noun if no problem occurred. In addition ot the return value it will also update `parser_action`.
 
@@ -116,7 +116,7 @@ However, if the expected token is a `MULTI*_OBJECT` type, then the routine calls
 
 If a single object matches then it is returned.  If more than one object matches and it is not a plural noun phrase then disambiguation takes place. In phase 1 it accepts the input for now, but if code is run again in phase 2 then `_AskWhichNoun` is called to prompt the user to disambiguate ("Do you mean the blue book or the red book?"). If the new input doesn't help then an error message is printed and the routine returns the error code.
 
-### `_CheckNoun`
+### `_CheckNoun(p_parse_pointer)`
 
 `_CheckNoun` takes the current input position, and returns the object that matches one or more words. In addition to the return value, it updates the `which_object` global array, which contains a list of objects that matches (since there could be more than one), the number of objects that matches, and the number of words parsed against these object(s).
 
@@ -126,21 +126,21 @@ If a single object matches then it is returned.  If more than one object matches
 
 ## Utility Routines
 
-### `_AskWhichNoun`
+### `_AskWhichNoun(p_num_matching_nouns)`
 
 `_AskWhichNoun` uses `which_object` to print a list of objects used in disambiguation. The typical output is "Do you mean X or Y?".
 
-### `_AddMultipleNouns`
+### `_AddMultipleNouns(p_multiple_objects_type)`
 
 `_AddMultipleNouns` is used do replace "all" with all suitable objects in scope.These objects are stored in the `multiple_objects` global array.
 
 The routine takes the token type being processed, so that `MULTIHELD_OBJECT` will add all objects that are being held, which `MULTI_OBJECT` are all objects in scope, except for objects being animated, held or concealed.
 
-### `_FixIncompleteSentenceOrComplain`
+### `_FixIncompleteSentenceOrComplain(p_pattern)`
 
 `_FixIncompleteSentenceOrComplain` is called from `_ParsePattern` because the sentence shorter than the pattern. The routine checks if the pattern is expecting another noun phrase. If so, and if OPTIONAL_GUESS_MISSING_NOUN is defined, it can optionally call `_GuessMissingNoun` to try adding the missing information.  If `_GuessMissingNoun` is available and manages to fix the sentence then `_ParsePattern` will return a perfect score, otherwise an error message is shown ("I think you want to say 'kill someone', please try again.").
 
-### `_GuessMissingNoun`
+### `_GuessMissingNoun(p_type, p_prep, p_nounphrase_num)`
 
 `_GuessMissingNoun` is used then `noun` or `second` is missing. It tries to guess the missing parts of the sentence. A typical usage is
 
@@ -150,15 +150,15 @@ The routine takes the token type being processed, so that `MULTIHELD_OBJECT` wil
 ````
 where `_GuessMissingNoun` checked the scope and found that only Sally was possible, so "(to Sally)" was written and `second` set to Sally to complete the parsing.
 
-### PronounNotice
+### `PronounNotice(p_object)`
 
 This routine is called with an object, and update the matching pronoun. For example, the object Sally will set `herobj` to Sally, while the object Sword will set `itobj` to Sword.
 
-### `_PrintPartialMatch`
+### `_PrintPartialMatch(p_start, p_stop)`
 
 `_PrintPartialMatch` prints a grammar rule and is used to produce output such as "I only understood you are far as 'look' but then you lost me." as a reply to "look on me".
 
-### `_PrintUnknownWord`
+### `_PrintUnknownWord()`
 
 Prints a word that doesn't exist in the dictionary by typing it from the `buffer` array, using `parser_unknown_noun_found` which points to an entry in the `parse` array. Used for messages such as "Sorry, I don't understand what 'sdasdasda' means."
 
@@ -180,63 +180,65 @@ Scope is a list of things an actor (typically the player) can interact with. Nor
 
 The main routine is `_UpdateScope` which is called from `ParseAndPerformAction` and some other locations in the parser to update the scope when objects move or is modified by parsing the scope token. In addition, there are several utility functions that use the loop over or test if objects are in visible or touchable (that is, are in scope).
 
-## _PerformAddToScope(p_obj)
+## `_PerformAddToScope(p_obj)`
 
 Check the contents of `p_obj.add_to_scope`. If it's an array, add all objects in the array to scope, plus any objects they want to add through their `add_to_scope` properties. If it's a routine, execute it. That routine can then add any objects it likes to scope by calling `PlaceInScope(p_obj)`.
 
-## _SearchScope(p_obj, p_risk_duplicate, p_no_add)
+## `_SearchScope(p_obj, p_risk_duplicate, p_no_add)`
 
 Place the specified object in scope, plus all its siblings and children. If `p_risk_duplicate` is `false`, check first that the objects haven't already been added to scope. If `p_no_add` is `false`, allow the `add_to_scope` property of every object to add objects to scope.
 
-## _PutInScope(p_obj, p_risk_duplicate), synonyms PlaceInScope, AddToScope
+## `_PutInScope(p_obj, p_risk_duplicate)`
+
+(synonyms `PlaceInScope`, `AddToScope`)
 
 Place an object in scope. If `p_risk_duplicate` is `false`, check first that the object hasn't already been added to scope. User code should ignore the parameter `p_risk_duplicate`, thus always leaving it as `false`.
 
 This routine is used by the other scope routines in the library, as well as by `add_to_scope` routines.
 
-## _UpdateScope(p_actor, p_force)
+## `_UpdateScope(p_actor, p_force)`
 
 Update the `scope` array to hold the objects currently in scope to `p_actor`. If the `scope` array seems to have the correct contents already, skip the update -  _unless_ `p_force` is `true`.
 
-## GetScopeCopy(p_actor)
+## `GetScopeCopy(p_actor)`
 
 Calculate what's in scope for `p_actor`, and create a copy of the `scope` array in the `scope_copy` array. This is needed when looping over scope items and performing operations which may change the contents of the `scope` array, like calling TestScope for another actor.
 
-## ScopeCeiling(p_actor, p_stop_before)
+## `ScopeCeiling(p_actor, p_stop_before)`
 
 Find the innermost closed non-transparent container the actor is in, or the room the actor is in.
 
 Start with the actor and move upwards in the object tree until a closed non-transparent container or the room is found. If, however, `p_stop_before` is found along this path, return the object that was found just before it, one step closer to the player.
 
-## TouchCeiling(p_actor)
+## `TouchCeiling(p_actor)`
 
 Find the innermost closed container the actor is in, or the room the actor is in.
 
-## LoopOverScope(p_routine, p_actor)
+## `LoopOverScope(p_routine, p_actor)`
 
 Call a routine once for every object in scope to an actor (default is the player).
 
-## ScopeWithin(p_obj)
+## `ScopeWithin(p_obj)`
 
 Add everything inside an object, but not the object itself, to scope. This routine should only be used in scope routines, and only when `scope_stage == 2`.
 
-## TestScope(p_obj, p_actor)
+## `TestScope(p_obj, p_actor)`
 
 Check if an object is in scope to a certain actor (default is the player).
 
-## _ObjectScopedBySomething(p_obj)
+## `_ObjectScopedBySomething(p_obj)`
 
 If the specified object is in an add_to_scope array of any other object, anywhere in the game, return that object's object ID.
 
-## ObjectIsUntouchable(p_item, p_dontprint, p_checktake)
+## `ObjectIsUntouchable(p_item, p_dontprint, p_checktake)`
 
 Check if there's something stopping the player from touching a certain object. If parameter `p_dontprint` is set to `false`, print a message saying why the player can't get to the object. If parameter `p_checktake` is set to `true`, extend the check to decide if the player can take the object. I.e. a button that is part of a machine can be touched but not taken.
 
-## ObjectIsInvisible(p_item, p_dontprint)
+## `ObjectIsInvisible(p_item, p_dontprint)`
 
 Very similar to `ObjectIsUntouchable`, but check if there's something stopping the player from _seeing_ a certain object.
 
-## _FindBarrier(p_ancestor, p_obj, p_dontprint)
+## `_FindBarrier(p_ancestor, p_obj, p_dontprint)`
 
 Utility function used by ObjectIsUntouchable and ObjectIsInvisible to find out if there are barriers between an object and one of its ancestors in the object tree that prevent the player from touching or seeing the object.
 
