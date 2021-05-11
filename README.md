@@ -17,7 +17,7 @@ have support for z3 (which the Inform 6 library lacks).
 To compile games using PunyInform, we recommend the official Inform 6
 compiler maintained by David Kinder, at
 https://github.com/DavidKinder/Inform6.  Binaries can be found at
-[if-archive](http://www.ifarchive.org/indexes/if-archiveXinfocomXcompilersXinform6Xexecutables.html).
+[if-archive](https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/).
 PunyInform requires Inform v6.34 or newer.
 
 ![A minimal game in PunyInform](https://github.com/johanberntsson/PunyInform/blob/master/documentation/screenshots/simplegame.png?raw=true)
