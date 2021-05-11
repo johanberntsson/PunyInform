@@ -44,14 +44,14 @@ your modern PC.  To do this you will need a Z-code interpreter.
 PunyInform compiles Inform 6 source code to Z-code, a game format
 invented by the text adventure wizards at Infocom. A Z-code file is in
 fact a memory image for a virtual/imaginary computer called the
-Z-machine. While the Z-machine doesn't physically exist, it can be emulated on a
-wide array of platforms, including the 8-bit computers of the eighties,
-but also 16-bit computers like Commodore Amiga and Atari ST, as well as
-computers running MS-DOS, any flavour of Windows, Mac OS, Unix, Linux,
-Android -- you name it. It just takes a Z-code interpreter (an emulator
-for the Z-machine) for that platform. There is a very popular
-interpreter called Frotz, which has been ported to many different
-platforms. For Windows, I recommend you get Windows Frotz.
+Z-machine. While the Z-machine doesn't physically exist, it can be
+emulated on a wide array of platforms, including the 8-bit computers of
+the eighties, but also 16-bit computers like Commodore Amiga and Atari
+ST, as well as computers running MS-DOS, any flavour of Windows, Mac OS,
+Unix, Linux, Android -- you name it. It just takes a Z-code interpreter
+(an emulator for the Z-machine) for that platform. There is a very
+popular interpreter called Frotz, which has been ported to many
+different platforms. For Windows, I recommend you get Windows Frotz.
 
 ![](getting-started-pic2.png){ width=450px }
 
