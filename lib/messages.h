@@ -17,9 +17,6 @@ Constant MSG_TAKE_SCENERY "That's hardly portable.";
 #Ifndef MSG_TAKE_STATIC;
 Constant MSG_TAKE_STATIC "That's fixed in place.";
 #EndIf;
-#Ifndef MSG_TAKE_ALREADY_HAVE;
-Constant MSG_TAKE_ALREADY_HAVE "You already have that.";
-#EndIf;
 #Ifndef MSG_TAKE_NO_CAPACITY;
 Constant MSG_TAKE_NO_CAPACITY "You are carrying too many things already.";
 #EndIf;
@@ -310,6 +307,7 @@ Default MSG_CLIMB_ANIMATE 123;
 Default MSG_CLIMB_DEFAULT 124;
 Default MSG_PARSER_BAD_PATTERN_PREFIX 125;
 Default MSG_PARSER_BAD_PATTERN_SUFFIX 126;
+Default MSG_TAKE_ALREADY_HAVE 127;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -480,10 +478,8 @@ Default LibraryMessages 0;
 		print_ret (The) p_arg_1, " has better things to do.";
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
 		"You can't, since ",(the) p_arg_1, " is closed.";
-#IfTrue MSG_GIVE_PLAYER < 1000;
-	MSG_GIVE_PLAYER:
+	MSG_GIVE_PLAYER, MSG_TAKE_ALREADY_HAVE:
 		"You already have ", (ItorThem) noun, ".";
-#EndIf;
 	MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
 		"Failed ", (verbname) verb_word, ".";
 	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY:

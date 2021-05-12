@@ -491,3 +491,5 @@ v2.5: bug fix and new feature release
 - PunyInform Technical report added (documentation/techreport.pdf)
 - Fixed a bug in scoring objects with the scored attribute. (Bug was introduced
   in v2.5)
+- Changed MSG_TAKE_ALREADY_HAVE from a static string to a complex message,
+  merging it with another message.
