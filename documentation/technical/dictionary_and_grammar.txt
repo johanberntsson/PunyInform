@@ -6,11 +6,15 @@ byte 0 & $2 : Meta flag
 
 
 
-Grammar table is always located at the start of static memory (address pointed to by word at $0e in header). Word (Verb number) points to the start address for the grammar for a verb.
+Grammar table is always located at the start of static memory (address
+pointed to by word at $0e in header). Word (Verb number) points to the
+start address for the grammar for a verb.
 
 Grammar for a verb:
 
-For a detailed description of grammar version 2 (which is what we use), read the text starting with "GV2 is a much more suitable data structure" at https://www.inform-fiction.org/source/tm/TechMan.txt
+For a detailed description of grammar version 2 (which is what we use),
+read the text starting with "GV2 is a much more suitable data structure"
+at https://www.inform-fiction.org/source/tm/TechMan.txt
 
 Byte 0: Number of grammar lines for this verb + 1
 Byte 1 ... Syntax line 0, 1, ...
@@ -28,7 +32,8 @@ action = action_value & $03ff
 3 bytes per token:
     byte 0 & $0f : token_type
     byte 1 + 2 : Token data
-If token_type = 15 (ENDIT_TOKEN), this is the end of line, and byte 1 and 2 are not supplied.
+If token_type = 15 (ENDIT_TOKEN), this is the end of line, and byte 1
+and 2 are not supplied.
 
 
 ILLEGAL_TT         = 0;    ! Types of grammar token: illegal
@@ -89,8 +94,9 @@ Routine address is in #preactions_table-->(token-80)
 Token $80-$b3 are attribute filters (ATTR_FILTER_TT). e.g. edible
 
 Token $b4-$ff are prepositions (PREPOSITION_TT). e.g. 'into'
-Prepositions are located in the "adjectives table". The start address is in the constant #adjectives_table .
-Each entry consists of two words. If the second word is the preposition-number (like $ff), the first
-word is the address of the dictionary word. There is no length number or end marker. You should just expect
-to find the entry somewhere in there.
+Prepositions are located in the "adjectives table". The start address is
+in the constant #adjectives_table . Each entry consists of two words. If
+the second word is the preposition-number (like $ff), the first word is
+the address of the dictionary word. There is no length number or end
+marker. You should just expect to find the entry somewhere in there.
 

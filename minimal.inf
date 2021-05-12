@@ -1,10 +1,13 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
 
-! The very first lines of the main source code file for a game can contain compiler options, like the two lines above.
-! -~S disables strict error checking. This is otherwise used in z5 and z8 games by default. While useful for debugging,
-!   it adds ~10 KB to the story file size and it makes the game slower.
-! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which aren't used. This can save some space.
+! The very first lines of the main source code file for a game can
+! contain compiler options, like the two lines above. -~S disables
+! strict error checking. This is otherwise used in z5 and z8 games by
+! default. While useful for debugging, it adds ~10 KB to the story file
+! size and it makes the game slower.
+! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
+! aren't used. This can save some space.
 
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";

@@ -24,7 +24,8 @@ Constant USEINFORM;
 Constant STATUSLINE_TIME; Statusline time;
 !Constant STATUSLINE_SCORE; Statusline score;
 
-Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
+! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
+Constant RUNTIME_ERRORS = 2;
 
 #IfnDef USEINFORM;
 ! Uncomment to add optional features to PunyInform
@@ -60,8 +61,11 @@ Constant INITIAL_LOCATION_VALUE = Library;
 Constant Story      "Testbench";
 Constant Headline   "^A sandbox for PunyInform development^";
 
+
+! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies
+! since start) can be read from $1c-->0
 #IfDef DEBUG_TIMER;
-Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0
+Serial "999999";
 #EndIf;
 
 
@@ -81,7 +85,8 @@ Constant MAX_SCORE = 3;
 #EndIf;
 
 [ Amusing;
-	"^Did you try?^^1. Pushing John many times.^2. Going outside and looking at the sun";
+	"^Did you try?^^1. Pushing John many times.^2. Going outside and
+	looking at the sun";
 ];
 
 ! Setup cheap scenery
