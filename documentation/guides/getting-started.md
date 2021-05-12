@@ -30,16 +30,19 @@ The file mygame.inf should now look something like this:
 ```
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
-! The very first lines of the main source code file for a game can contain compiler options, like the two lines above.
-! -~S disables strict error checking. This is otherwise used in z5 and z8 games by default. While useful for debugging,
-!   it adds ~10 KB to the story file size and it makes the game slower.
-! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which aren't used. This can save some space.
+! The very first lines of the main source code file for a game can
+! contain compiler options, like the two lines above.
+! -~S disables strict error checking. This is otherwise used in z5
+!     and z8 games by default. While useful for debugging, it adds
+!     ~10 KB to the story file size and it makes the game slower.
+! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines
+!     which aren't used. This can save some space.
 
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";
 
-! Uncomment ONE of the two following lines, to show either time or score/turns
-! Leaving both commented out makes the library bigger.
+! Uncomment ONE of the two following lines, to show either time or
+! score/turns. Leaving both commented out makes the library bigger.
 !Constant STATUSLINE_TIME; Statusline time;
 Constant STATUSLINE_SCORE; Statusline score;
 
@@ -60,8 +63,8 @@ Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_ORDERED_TIMERS;
 !Constant RUNTIME_ERRORS = 0;
 
-! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
-! MAX_CARRIED, SACK_OBJECT,  etc.
+! Define any library constants you need here, like MAX_SCORE, 
+! AMUSING_PROVIDED, MAX_CARRIED, SACK_OBJECT,  etc.
 
 Constant INITIAL_LOCATION_VALUE = Library;
 
@@ -69,7 +72,8 @@ Include "globals.h";
 
 ! Define your own global variables here, if any
 
-! Define the entry point routines you need here, like Amusing, DarkToDark etc.
+! Define the entry point routines you need here, like
+! Amusing, DarkToDark etc.
 
 ! Uncomment to add PunyLib extensions
 !Include "ext_menu.h";
