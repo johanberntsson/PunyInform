@@ -489,4 +489,5 @@ v2.5: bug fix and new feature release
 - Fixed bug in ext_quote_box.h which made quote box stay on screen forever.
 - Changed newlines before and after quote box.
 - PunyInform Technical report added (documentation/techreport.pdf)
-- Fixed a bug in scoring objects with the scored attribute.
+- Fixed a bug in scoring objects with the scored attribute. (Bug was introduced
+  in v2.5)
