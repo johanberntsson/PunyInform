@@ -27,6 +27,9 @@ drop all
 get red book, xyzzy and torch
 get xyzzy and torch
 get xyzzy
+x green
+get green
+read green
 quit
 yes
 

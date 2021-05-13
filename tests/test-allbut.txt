@@ -31,7 +31,7 @@ You can see some trousers and a box (which is empty) here.
 You leave the sack.
 
 > take battery
-You already have that.
+You already have it.
 
 > drop battery
 Dropped.

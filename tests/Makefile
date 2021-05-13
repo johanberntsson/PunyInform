@@ -3,9 +3,9 @@ all: runtests
 runtests:
 	ruby runtests.rb
 
-test-issue73:
-	inform +../lib -v3 test-issue73.inf
-	frotz test-issue73.z3
+testbench:
+	inform +../lib -v3 testbench.inf
+	frotz testbench.z3
 
 test-beforeparsing:
 	inform +../lib -v3 test-beforeparsing.inf
@@ -16,8 +16,8 @@ containers:
 	frotz containers.z3
 
 inform:
-	inform -v8 test-issue75.inf
-	frotz test-issue75.z8
+	inform -v8 testbench.inf
+	frotz testbench.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output

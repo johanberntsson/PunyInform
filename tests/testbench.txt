@@ -33,7 +33,7 @@ Taken.
 I think you wanted to say "put all in something". Please try again.
 
 > take torch and john
-electric torch: You already have that.
+electric torch: You already have it.
 John: I don't suppose John would care for that.
 
 > open box
@@ -87,6 +87,15 @@ Sorry, I don't understand what "xyzzy" means.
 
 > get xyzzy
 Sorry, I don't understand what "xyzzy" means.
+
+> x green
+You can't see any such thing.
+
+> get green
+You can't see any such thing.
+
+> read green
+You can't see any such thing.
 
 > quit
 You ain't no quitter eh? yes

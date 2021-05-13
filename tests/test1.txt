@@ -51,7 +51,7 @@ Taken.
 
 > get all balls
 small blue ball: Taken.
-small red ball: You already have that.
+small red ball: You already have it.
 small green ball: Taken.
 
 > get cubes
