@@ -2,7 +2,7 @@
 title: PunyInform Game Author's Guide
 numbersections: true
 toc: true
-author: Written by Fredrik Ramsberg
+author: Written by Fredrik Ramsberg and Hugo Labrande
 ---
 
 # Introduction
@@ -80,7 +80,7 @@ save up to an extra 10kb on your game file size!
 
 ## Things that save hundreds of bytes
 
-### Using abbreviations properly
+### Use abbreviations properly
 
 Abbreviations are fixed strings that get replaced by a 10-bit long code in order
 to save space in the text. You just need to declare them, and the compiler will
@@ -150,7 +150,7 @@ as z5 or z8 for it to work.
 
 ## Things that save dozens of bytes
 
-### Using string constants
+### Use string constants
 
 If you have a string of over 10 characters repeated somewhere in your code, you
 could declare that string to be a constant, then point every instance of it to
@@ -188,10 +188,11 @@ constant names.
 
 ### Replace a switch with an array
 
-If you have a large conditional switch statement for which the consequences are
-of the same format (they're all a print, or adding something to the same
-variable, etc), you can turn this into a simple table lookup. Construct an array
-with the changing values, and use a-->var to access them. So instead of:
+If you have a large conditional switch statement for which the consequences 
+are of the same format (they're all a print, or adding something to the same
+variable, etc), you can turn this into a simple table lookup. Construct an 
+array with the changing values, and use a-->var to access them. So instead 
+of:
 
 ```
 switch(i){
@@ -206,11 +207,12 @@ Array songs "We are the champions" "We will rock you" ...
 print (string) songs-->i;
 ```
 
-Yes, this is the opposite of the example ??.?? in the DM4, but that example is
-concerned with saving static memory by not declaring too many arrays, and is
-willing to pay the cost in order to transform it into a routine.
+This is the opposite of the advice under `2b` in section 45 of the DM4,
+but that example is for when you want to save on readable memory (which can be
+no more than 64 KB) by not declaring too many arrays, and you're willing to 
+pay the cost to transform it into a routine.
 
-### Comparing to multiple values
+### Compare a value to multiple values
 
 When writing complicated conditions featuring comparing one variable to multiple
 things (dictionary word, in the case of a parse_name, for instance), always
@@ -223,7 +225,7 @@ if w=='sea' or 'ocean' or 'atlantic' or ....
 The Z-machine has an opcode to perform such comparisons by groups of three,
 which the Inform compiler utilizes to generate shorter code.
 
-### Simple doors
+### Use Simple Doors
 
 If you're using more than four doors, you can save space by using
 `OPTIONAL_SIMPLE_DOORS`. As a bonus, the code gets shorter and more legible.
@@ -263,7 +265,7 @@ if (player == werewolf) {
 ### Compare to zero
 
 The Z-Machine has an opcode for "test if zero" or "test if non-zero". If you
-know that a variable is either true ( == 1) or false ( == 0), it's' faster and
+know that a variable is either true ( == 1) or false ( == 0), it's faster and
 shorter to compare the variable to false than to true. So instead of:
 
 ```
@@ -303,11 +305,11 @@ literally tests the same thing twice. Remove any useless test to save a few
 bytes every time. This could also help with fitting everything in a "name"
 property, instead of having to write a "parse_name" routine, which is costly.
 
-## Optimizations purely for speed
+## Other optimizations
 
-### Manual scope
+### Use Manual Scope
  
-"Scope" means which
+This is an optimization for speed only. "Scope" means which
 objects the player, or another actor, can refer to. By default, the
 PunyInform library will assume that what's in scope changes whenever a
 user-supplied routine is called, and this may happen a lot. This causes
@@ -344,7 +346,7 @@ Object Button "button"
   has static;	
 ```
 
-### Manual setting of reactive attribute
+### Use manual setting of reactive attribute
 
 This is an optimization you can perform to make your game start faster.
 Unless you have done this, PunyInform will look through all your objects
@@ -365,6 +367,19 @@ These are the steps you need to take to set the attribute manually instead:
    attribute, add the attribute in the source code for that object.
    Typically, you can skip it for the player object, unless you have added
    an each_turn routine to it.
+
+### Move arrays to static memory
+
+If you have arrays whose contents never change, you can place them in 
+static memory, like this:
+
+```
+Array my_array static --> 1 2 3 4 5 "String1" "String2"; 
+```
+
+This makes dynamic memory smaller, which means save and restore get 
+faster. Since static memory can also be swapped out, it means gameplay
+can be smoother in sections of the game where the arrays aren't used.
 
 # Before release
 
