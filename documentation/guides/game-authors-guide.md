@@ -67,126 +67,247 @@ others who have somehow helped out with your game.
 
 # Optimizations
 
-As your game grows, you may find that you have to make optimizations or
-it won't fit in the desired Z-code version size constraint, or it won't
-fit on a disk for a certain 8-bit computer that you want to release it
-for. But even if you don't get in the situation that you have to make
-optimizations, you may want to anyway. A shorter game will play smoother
-on a machine with little memory, like most 8-bit computers.
+PunyInform leaves you with about 100k bytes to write your game (if you're using
+the z3 format), but sometimes it's not enough. Maybe your ambitious game "almost
+fits" in the z3 format; maybe you'd like your grand epic to be playable on a
+single 1541 disk for the C64; maybe you could fit it all on a 130kb disk for the
+Atari 8bit. But even if you don't get in a situation where you have to make
+optimizations, you may want to anyway - a shorter game will play smoother on a
+machine with little memory, like most 8-bit computers. In any case, we're here
+to help! This chapter will give you some helpful tips and tricks to make your
+game smaller. Depending on how much time and energy you can spend, you could
+save up to an extra 10kb on your game file size!
 
-## Abbreviations
+## Things that save hundreds of bytes
 
-Inform has two means of text compression built-in. The first is that
-each character in a string is reduced to one or more five-bit codes, and
-three five-bit codes are put into two bytes. Lowercase letters and space
-use a single five-bit code each, so for the most part, three characters
-fit into two bytes. This kind of compression is always in use.
+### Using abbreviations properly
 
-The second means of text compression is abbreviations. You can define up
-to 64 abbreviations to be used in a story file. When you compile, you
-add the flag `-e` to say that you want "economy mode", which means
-enable the use of abbreviations. Each abbreviation takes up two five-bit
-codes, regardless of its length.
+Abbreviations are fixed strings that get replaced by a 10-bit long code in order
+to save space in the text. You just need to declare them, and the compiler will
+apply them whenever possible, if you compile with the `-e` switch. A topic of 
+particular interest is which abbreviations to use.
 
-PunyInform has a set of abbreviations which provide a good starting
-point, but they are only based on the text in the library. As you add
-text to your game, these abbreviations will be less and less relevant.
-To have Inform come up with the best set of abbreviations, compile the
-game with the -u flag, and redirect output to a text file, like this:
+Infocom used the full 96 abbreviations one can declare in the Z-machine. 
+PunyInform ships with 64 abbreviations, which have been picked based on the text
+in the library files. This saves some space, but these generic abbreviations
+will not capture the fact that your protagonist's name, "Eyjafjallajökull",
+could be declared as abbreviated text. A good set of abbreviations is uniquely
+tailored to your game. Inform's compiler has a switch, `-u`, that looks at your
+game's text and finds 64 custom abbreviations; it usually gives better results.
+To have Inform come up with the best set of abbreviations, compile the game with
+the `-u` switch, and redirect output to a text file, like this:
 
 ```
 inform6 +lib mygame.inf -v3u > abbreviations.txt
 ```
 
-Then open the produced text file and scroll to the bottom. Copy the last
-64 lines of the file, and paste them at the beginning of your source
-code file, right after the lines at the top with compiler directives. As
-an alternative, you can put them in a separate file which you `Include`
-in your main source code file. Also, make sure you have the line
-`Constant CUSTOM_ABBREVIATIONS;` in your source, before including
+Then open the produced text file and scroll to the bottom. Copy the last all the
+lines at the end of the file beginning with `Abbreviate`, and paste them at the
+beginning of your source code file, right after the lines at the top with
+compiler directives. As an alternative, you can put them in a separate file
+which you `Include` in your main source code file. Also, make sure you have the
+line `Constant CUSTOM_ABBREVIATIONS;` in your source, before including
 globals.h, or your new abbreviations won't be used.
 
-To get even better abbreviations, you can use Hugo Labrande's Python
-script, available at https://github.com/hlabrand/retro-scripts . This
-script isn't very user-friendly at the moment, but the author intends to
-remedy this situation in the near future.
+Very recently, interest in the algorithmics of the problem have led to the
+creation of tools to compute even better abbreviations. [Matthew Russotto's
+program](https://gitlab.com/russotto/zilabbrs) and [Henrik Åsman's
+program](https://github.com/heasm66/ZAbbrevMaker) both aim to compute 96
+abbreviations on a ZIL game; their algorithms are efficient and written in C. A
+slightly less efficient solution [in Python, written by Hugo
+Labrande](https://github.com/hlabrand/retro-scripts), can output any number of
+abbreviations in Inform's expected format. In any case, for each of these, you
+need to generate the gametext of your game (-r switch), then cut out the
+abbrevations and the vocabulary table, then feed it to them - although
+Labrande's script is also compatible with Inform 6's newest gametext format,
+introduced in version 6.35.
 
-Using Inform's mechanism to find the best abbreviations can typically
-make the story file about 10% smaller. Using Labrande's script can
-increase that by about 1%, so if you managed to save 10% with Inform's
-abbreviations you can save ~11% with Labrande's abbreviations.
+In any case, Inform 6.34 and older does not support more than 64 abbreviations;
+Inform 6.35 allows you to declare up to 96 (if you dont declare any "low string"
+- that is, set the compiler switches MAX_ABBREVS to 96 and MAX_DYNAMIC_STRINGS
+to 0), which saves even more space. You could expect savings of up to 7kb on a
+128kb file!
 
-## Reusing string values
+### Omit unused routines
 
-If you write the same string in two different places in the source code,
-it will be created in two different places in the final story file, and
-use twice as much memory as if you had only written it once. If you use
-the same string several times in the source code, you can instead put it
-in a constant. If you print the value, you need to put `(string)` before
-it. If you would otherwise write it as a string in code, meaning "print
-this string, print a newline and then return true", you must add
-`print_ret (string)` before it. Example:
+The Inform 6 compiler switch $OMIT_UNUSED_ROUTINES is off by default, but can be
+turned on by putting it in the compilation flags. This frees up memory at no
+cost, and can save several hundred, maybe even thousands, of bytes! This switch
+is set at the start of the file `minimal.inf` so if you base you game on that
+file, you have this covered. 
+
+### Turn off strict error checking
+
+By default, the Inform compiler adds code to every z5 or z8 game to check for a
+number of problems in your code at runtime. This is a useful and nice feature,
+but it makes the game slower and ~10 KB larger, so you probably want to turn it
+off when targeting 8-bit computers. You do this with `-~S`. This is done in the
+first line in `minimal.inf`.
+
+Just keep in mind that this mechanism exists, and if you get weird errors or
+crashes you may want to enable it for testing. Note that you'll need to compile
+as z5 or z8 for it to work.
+
+## Things that save dozens of bytes
+
+### Using string constants
+
+If you have a string of over 10 characters repeated somewhere in your code, you
+could declare that string to be a constant, then point every instance of it to
+the constant instead. Something like
 
 ```
-Object Hallway "Moor"
-  with
-    description "You're on a moor.",
-    n_to "It would be foolish to wander off in that direction.",
-    w_to "It would be foolish to wander off in that direction.",
-    e_to [;
-      if(self hasnt general) {
-        print "It would be foolish to wander off in that direction.";
-        give self general;
-        " You hesitate.";
-      }
-      return OutsideCottage;
-    ],
-    s_to [;
-      if(PaperMap in player)
-        return Castle;
-      "It would be foolish to wander off in that direction.";
-    ],
-  has light;
-``` 
+Constant MSG_LOOKS_DANGEROUS = "Going in that direction looks dangerous.";
+Constant MSG_HAM " braised ham with mashed potatoes and green beans";
 
-can be transformed into this:
+
+Object Pub "Pub"
+  with
+    description [;
+		"You're in the pub. Dark doorways lead north and west.
+			On the menu today:", (string) MSG_HAM, ".";
+	],
+	before [;
+		OrderFood:
+			"You decide to order the", (string) MSG_HAM, 
+				". Yummy, that was delicious!";
+	],
+    n_to MSG_LOOKS_DANGEROUS,
+    w_to MSG_LOOKS_DANGEROUS,
+	s_to Street,
+  has light;
+```
+
+Depending on the size of the text fragment that's repeated, you could save
+anywhere from a few bytes to a few hundred bytes. You can also tweak your text
+so very similar sentences end up being the same ("There is no power on the
+island" vs "There isn't any electricity on the island"). Using this technique
+repeatedly can yield savings of a few kilobytes in a long game, at the expense
+of making your code a bit less readable; just make sure you use explicit
+constant names.
+
+### Replace a switch with an array
+
+If you have a large conditional switch statement for which the consequences are
+of the same format (they're all a print, or adding something to the same
+variable, etc), you can turn this into a simple table lookup. Construct an array
+with the changing values, and use a-->var to access them. So instead of:
 
 ```
-Constant REPLY_FOOLISH_WANDER =
-  "It would be foolish to wander off in that direction.";
+switch(i){
+  1: print "We are the champions";
+  2: print "We will rock you";
+```
 
-Object Hallway "Moor"
-  with
-    description "You're on a moor.",
-    n_to REPLY_FOOLISH_WANDER,
-    w_to REPLY_FOOLISH_WANDER,
-    e_to [;
-      if(self hasnt general) {
-        print (string) REPLY_FOOLISH_WANDER;
-        give self general;
-        " You hesitate.";
-      }
-      return OutsideCottage;
-    ],
-    s_to [;
-      if(PaperMap in player)
-        return Castle;
-      print_ret (string) REPLY_FOOLISH_WANDER;
-    ],
-  has light;
-``` 
+use this:
 
-## Simple doors
+```
+Array songs "We are the champions" "We will rock you" ...
+print (string) songs-->i;
+```
+
+Yes, this is the opposite of the example ??.?? in the DM4, but that example is
+concerned with saving static memory by not declaring too many arrays, and is
+willing to pay the cost in order to transform it into a routine.
+
+### Comparing to multiple values
+
+When writing complicated conditions featuring comparing one variable to multiple
+things (dictionary word, in the case of a parse_name, for instance), always
+group these comparisons using 'or', as follows:
+
+```
+if w=='sea' or 'ocean' or 'atlantic' or ....
+```
+
+The Z-machine has an opcode to perform such comparisons by groups of three,
+which the Inform compiler utilizes to generate shorter code.
+
+### Simple doors
 
 If you're using more than four doors, you can save space by using
-`OPTIONAL_SIMPLE_DOORS`. As a bonus, the code gets shorter and more
-legible. Read more at
+`OPTIONAL_SIMPLE_DOORS`. As a bonus, the code gets shorter and more legible.
+Read more at https://github.com/johanberntsson/PunyInform/wiki/Manual#doors .
 
-https://github.com/johanberntsson/PunyInform/wiki/Manual#doors .
+### Set RUNTIME_ERRORS to 0
 
-## Manual scope
+This makes the library less helpful in checking for and reporting errors in your
+code at runtime, making the game slightly smaller and faster. Keep
+RUNTIME_ERRORS set to 1 or 2 while developing and testing your game, but when
+you're confident that it's been tested properly and is ready for a public
+release, set it to 0.
+
+## Things that save several bytes
+
+### Avoid conditions in mathematical expressions
+
+Inform has support for evaluating conditions as part of a mathematical
+expression, as in `return (Lamp has light);` or `danger = (child(elevator) ~=
+0)`. However, this requires Inform to generate some complex code, so try not to
+use it - Write explicit `if` statements instead.
+
+```
+return (player == werewolf);
+```
+
+ will not be as space-efficient as
+
+``` 
+if (player == werewolf) {
+    return true;
+} else {
+    return false;
+}
+```
+
+### Compare to zero
+
+The Z-Machine has an opcode for "test if zero" or "test if non-zero". If you
+know that a variable is either true ( == 1) or false ( == 0), it's' faster and
+shorter to compare the variable to false than to true. So instead of:
+
+```
+if(x == true) print "The squirrel is happy".;
+```
+
+use:
+
+```
+if(x ~= false) print "The squirrel is happy".;
+```
+
+or just:
+
+```
+if(x) print "The squirrel is happy".;
+```
+
+### Use the random() statement
+
+If you want to print a text at random, or return a value at random, don't forget
+that the random() statement can take any number of arguments and return one of
+them with equal probability. No need for a switch or an if to simulate a
+weighted dice: random(1,2,3,4,6,6) will give you the value you need.
+
+### [Z3-specific] Use the low dictionary resolution to your advantage
+
+The z3 format has a resolution of 6 characters; that is, every single word is
+identified by its first 6 characters. The compiler will replace every word with
+the suitable dictionary value, which means
+
+```
+if(w == 'insect' or 'insects')
+```
+
+literally tests the same thing twice. Remove any useless test to save a few
+bytes every time. This could also help with fitting everything in a "name"
+property, instead of having to write a "parse_name" routine, which is costly.
+
+## Optimizations purely for speed
+
+### Manual scope
  
-This is not an optimization for size, but for speed. "Scope" means which
+"Scope" means which
 objects the player, or another actor, can refer to. By default, the
 PunyInform library will assume that what's in scope changes whenever a
 user-supplied routine is called, and this may happen a lot. This causes
@@ -201,8 +322,8 @@ a general rule, set `scope_modified` to `true` whenever you use `move`
 or `remove` or you change any of the attributes `open`, `transparent` or
 `light`. However, if the object affected is nowhere near the player you
 don't need to set `scope_modified`. All library routines that move the
-player or move objects, like `TakeSub()` and `PlayerTo()`, set
-`scope_modified` as needed.
+player or move or modify objects, like `OpenSub()` and `PlayerTo()`, 
+already set `scope_modified` as needed.
 
 Example:
 
@@ -223,7 +344,7 @@ Object Button "button"
   has static;	
 ```
 
-## Manual setting of reactive attribute
+### Manual setting of reactive attribute
 
 This is an optimization you can perform to make your game start faster.
 Unless you have done this, PunyInform will look through all your objects
@@ -231,7 +352,7 @@ when the game starts, and set the `reactive` attribute on all objects
 that provide `react_before`, `react_after` or `each_turn`. When the game
 is running, only objects that have this attribute are considered when
 checking for these properties, for reasons of speed. While letting the
-library setting this attributes automatically works well, it means
+library set this attributes automatically works well, it means
 there's an extra pause as the game starts. For a large game, this could
 take a few seconds on an 8-bit computer.
 

@@ -494,4 +494,6 @@ v2.5: bug fix and new feature release
 - Changed MSG_TAKE_ALREADY_HAVE from a static string to a complex message,
   merging it with another message.
 - Fixed a bug where patterns with 'topic' got too much impact (issue 77)
-
+- Game Author's Guide has been updated with more material on optimization,
+  thanks to Hugo Labrande.
+  
