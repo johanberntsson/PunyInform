@@ -467,7 +467,7 @@ v2.4: bug fix and new feature release (20 April 2021)
 - Fixed bug in detection of multiple words from the room's name property
 
 =======
-v2.5: bug fix and new feature release
+v2.5: bug fix and new feature release (14 May 2021)
 
 - Changed the library messages for searching a container or supporter
   (MSG_SEARCH_IN_IT_ISARE, MSG_SEARCH_ON_IT_ISARE)
@@ -497,3 +497,5 @@ v2.5: bug fix and new feature release
 - Game Author's Guide has been updated with more material on optimization,
   thanks to Hugo Labrande.
   
+=======
+v2.6: bug fix and new feature release
