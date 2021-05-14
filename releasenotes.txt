@@ -493,3 +493,5 @@ v2.5: bug fix and new feature release
   in v2.5)
 - Changed MSG_TAKE_ALREADY_HAVE from a static string to a complex message,
   merging it with another message.
+- Fixed a bug where patterns with 'topic' got too much impact (issue 77)
+

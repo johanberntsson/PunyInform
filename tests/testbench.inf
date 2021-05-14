@@ -8,7 +8,7 @@
 
 Switches e;
 
-!Constant DEBUG;
+Constant DEBUG;
 
 ! Testbench - a platform for trying things out in PunyInform
 

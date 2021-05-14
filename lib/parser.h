@@ -1554,11 +1554,23 @@ Array guess_num_objects->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 			print "Pattern didn't match.^";
 #EndIf;
-		} else if(_score > _best_score || (_score == _best_score && _best_phase2 == 1 && phase2_necessary == 0)) {
+		} else if(_score > _best_score || (
+				! we override previous best if this pattern is equally
+				! good but it doesn't require reparsing (it will 
+				! produce some error message in phase 2), and 
+				! the previously best pattern did.
+				_score == _best_score &&
+				_best_phase2 == 1 &&  ! if previous best requested reparsing
+				phase2_necessary == 0 &&  ! and we don't request reparsing
+				consult_from == 0)) ! and this pattern didn't include 'topic'
+			{
 			_best_score = _score;
 			_best_pattern = _pattern;
 			_best_pattern_pointer = pattern_pointer;
 			_best_phase2 = phase2_necessary;
+#IfDef DEBUG_PARSEANDPERFORM;
+		print "### PHASE 1: new best pattern ", _i, " ", consult_from, "^";
+#EndIf;
 			! check if pefect match found
 			if(_best_score == 100) break;
 		}
