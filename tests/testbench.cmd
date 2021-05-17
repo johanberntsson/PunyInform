@@ -32,6 +32,9 @@ get xyzzy
 x green
 get green
 read green
+purloin pink book
+i
+take book
 quit
 yes
 

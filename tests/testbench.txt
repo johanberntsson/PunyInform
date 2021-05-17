@@ -103,6 +103,15 @@ You can't see any such thing.
 > read green
 You can't see any such thing.
 
+> purloin pink book
+Purloined.
+
+> i
+You're carrying that stupid old pink book.
+
+> take book
+You take the red book.
+
 > quit
 You ain't no quitter eh? yes
 
