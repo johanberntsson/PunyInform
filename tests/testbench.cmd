@@ -1,6 +1,8 @@
 
 transcript
 
+kiss ladder
+open it
 type abc on ladder
 type abc into ladder
 close close door

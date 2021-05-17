@@ -821,6 +821,7 @@ System_file;
 			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {
 				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
+					PronounNotice(_noun);
 					PrintMsg(MSG_PARSER_ONLY_TO_ANIMATE);
 				}
 				return GPR_FAIL;

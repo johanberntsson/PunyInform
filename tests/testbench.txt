@@ -1,4 +1,10 @@
 
+> kiss ladder
+You can only do that to something animate.
+
+> open it
+How would you go about opening a ladder?
+
 > type abc on ladder
 2
 > type abc into ladder
