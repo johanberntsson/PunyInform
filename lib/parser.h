@@ -212,7 +212,14 @@ System_file;
 	}
 	if (p_obj has concealed) return 1;
 	if(p_obj has scenery) return 2;
-	if(action == ##Drop && p_obj notin player) return 3;
+	if(action == ##Take && p_obj in player) {
+		! take gives low priority for already held objects
+		return 3;
+	}
+	if(action == ##Drop && p_obj notin player) {
+		! drop gives low priority for not held objects
+		return 3;
+	}
 	return 4;
 ];
 

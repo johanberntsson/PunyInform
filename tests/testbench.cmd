@@ -35,6 +35,8 @@ read green
 purloin pink book
 i
 take book
+drop pink
+take all
 quit
 yes
 

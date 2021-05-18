@@ -110,7 +110,17 @@ Purloined.
 You're carrying that stupid old pink book.
 
 > take book
-You take the red book.
+Taken.
+
+> drop pink
+Dropped.
+
+> take all
+pink book: You dared taking the pink book. Bravo!
+sweater: Taken.
+electric torch: You are carrying too many things already.
+ladder: You are carrying too many things already.
+infinite bag: You are carrying too many things already.
 
 > quit
 You ain't no quitter eh? yes
