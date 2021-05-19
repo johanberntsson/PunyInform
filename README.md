@@ -142,6 +142,26 @@ These games are known to use PunyInform:
 
 * [Ghost Mountain](https://compdelta.itch.io/ghost-mountain), by Michael Cox.
 
+There were also nine new PunyInform games submitted to [PunyJam #1](https://itch.io/jam/punyjam1):
+
+* [Captain Cutter's Treasure](https://itch.io/jam/punyjam1/rate/1020269), by Garry Francis.
+
+* [Djinn on the Rocks](https://itch.io/jam/punyjam1/rate/1020153), by Josua Wilson.
+
+* [Pub Hubbub](https://itch.io/jam/punyjam1/rate/1024938), by Christopher Drum.
+
+* [Death Number 4](https://itch.io/jam/punyjam1/rate/1025382), by themeteorstorm.
+
+* [Pub Adventure](https://itch.io/jam/punyjam1/rate/1019467), by Tom and Robin Edwards.
+
+* [Closet of Mystery](https://itch.io/jam/punyjam1/rate/1022240), by Michael Cox.
+
+* [Arthur's day out](https://itch.io/jam/punyjam1/rate/1021841), by Jason 'WaluloK' Oakley.
+
+* [Buccaneer's Cache](https://itch.io/jam/punyjam1/rate/1025257), by Frodewin.
+
+* [The Job](https://itch.io/jam/punyjam1/rate/1025662), by Fredrik Ramsberg.
+
 All of these games can be downloaded from the links above. Most of them
 are also available at [Ozmoo Online](http://microheaven.com/ozmooonline/)
 where you can create disk images for Commodore C64, C128 or Plus/4.
