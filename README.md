@@ -142,7 +142,7 @@ These games are known to use PunyInform:
 
 * [Ghost Mountain](https://compdelta.itch.io/ghost-mountain), by Michael Cox.
 
-There were also nine new PunyInform games submitted to [PunyJam #1](https://itch.io/jam/punyjam1):
+There were also nine new PunyInform games submitted to [PunyJam #1](https://ifdb.org/viewcomp?id=z913f8kco23t5dz4):
 
 * [Captain Cutter's Treasure](https://itch.io/jam/punyjam1/rate/1020269), by Garry Francis.
 
@@ -150,7 +150,7 @@ There were also nine new PunyInform games submitted to [PunyJam #1](https://itch
 
 * [Pub Hubbub](https://itch.io/jam/punyjam1/rate/1024938), by Christopher Drum.
 
-* [Death Number 4](https://itch.io/jam/punyjam1/rate/1025382), by themeteorstorm.
+* [Death Number 4](https://itch.io/jam/punyjam1/rate/1025382), by Dave Footitt.
 
 * [Pub Adventure](https://itch.io/jam/punyjam1/rate/1019467), by Tom and Robin Edwards.
 
@@ -158,7 +158,7 @@ There were also nine new PunyInform games submitted to [PunyJam #1](https://itch
 
 * [Arthur's day out](https://itch.io/jam/punyjam1/rate/1021841), by Jason 'WaluloK' Oakley.
 
-* [Buccaneer's Cache](https://itch.io/jam/punyjam1/rate/1025257), by Frodewin.
+* [Buccaneer's Cache](https://itch.io/jam/punyjam1/rate/1025257), by Wilfried Elmenreich.
 
 * [The Job](https://itch.io/jam/punyjam1/rate/1025662), by Fredrik Ramsberg.
 
