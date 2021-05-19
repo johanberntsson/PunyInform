@@ -501,4 +501,5 @@ v2.5: bug fix and new feature release (14 May 2021)
 v2.6: bug fix and new feature release
 - Fixed a pronoun update bug when trying to talk to inamimate objects.
 - Added rule to not include held objects when disambiguate for the take action
+- Added 'sniff' as a synonym to 'smell'
 

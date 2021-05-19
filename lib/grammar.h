@@ -156,7 +156,7 @@ Verb 'sit' 'lie'
 	* 'on' 'top' 'of' noun                      -> Enter
 	* 'on'/'in'/'inside' noun                   -> Enter;
 
-Verb 'smell'
+Verb 'smell' 'sniff'
 	*                                           -> Smell
 	* noun                                      -> Smell;
 
