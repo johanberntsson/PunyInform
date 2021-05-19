@@ -146,7 +146,7 @@ There were also nine new PunyInform games submitted to [PunyJam #1](https://ifdb
 
 * [Captain Cutter's Treasure](https://itch.io/jam/punyjam1/rate/1020269), by Garry Francis.
 
-* [Djinn on the Rocks](https://itch.io/jam/punyjam1/rate/1020153), by Josua Wilson.
+* [Djinn on the Rocks](https://itch.io/jam/punyjam1/rate/1020153), by Joshua Wilson.
 
 * [Pub Hubbub](https://itch.io/jam/punyjam1/rate/1024938), by Christopher Drum.
 
@@ -156,7 +156,7 @@ There were also nine new PunyInform games submitted to [PunyJam #1](https://ifdb
 
 * [Closet of Mystery](https://itch.io/jam/punyjam1/rate/1022240), by Michael Cox.
 
-* [Arthur's day out](https://itch.io/jam/punyjam1/rate/1021841), by Jason 'WaluloK' Oakley.
+* [Arthur's day out](https://itch.io/jam/punyjam1/rate/1021841), by Jason Oakley.
 
 * [Buccaneer's Cache](https://itch.io/jam/punyjam1/rate/1025257), by Wilfried Elmenreich.
 
