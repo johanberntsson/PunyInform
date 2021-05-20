@@ -496,10 +496,10 @@ v2.5: bug fix and new feature release (14 May 2021)
 - Fixed a bug where patterns with 'topic' got too much impact (issue 77)
 - Game Author's Guide has been updated with more material on optimization,
   thanks to Hugo Labrande.
-  
+
 =======
 v2.6: bug fix and new feature release
 - Fixed a pronoun update bug when trying to talk to inamimate objects.
 - Added rule to not include held objects when disambiguate for the take action
 - Added 'sniff' as a synonym to 'smell'
-
+- Made statusline drawing faster in ext_menu.h (only affects z5+).

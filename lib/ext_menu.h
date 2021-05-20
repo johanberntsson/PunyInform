@@ -69,6 +69,14 @@ Constant PKEY2__KY      = 'p';
 Constant QKEY1__KY      = 'Q';
 Constant QKEY2__KY      = 'q';
 
+[ FastSpaces p_spaces;
+	while(p_spaces > 10) {
+		@print_table TenSpaces 10;
+		p_spaces = p_spaces - 10;
+	}
+	@print_table TenSpaces p_spaces;
+];
+
 [ DoMenu menu_choices EntryR ChoiceR
          lines main_title main_wid cl i j oldcl pkey ch y x;
 	menu_nesting++;
@@ -90,13 +98,13 @@ Constant QKEY2__KY      = 'q';
 	@set_cursor 1 1;
 
 	style reverse;
-	spaces(i); j=1+(i-main_wid)/2;
+	FastSpaces(i); j=1+(i-main_wid)/2;
 	@set_cursor 1 j;
 	print (string) main_title;
-	y=1+ch; @set_cursor y 1; spaces(i);
+	y=1+ch; @set_cursor y 1; FastSpaces(i);
 	x=1+1; @set_cursor y x; print (string) NKEY__TX;
 	j=1+i-13; @set_cursor y j; print (string) PKEY__TX;
-	y=y+ch; @set_cursor y 1; spaces(i);
+	y=y+ch; @set_cursor y 1; FastSpaces(i);
 	@set_cursor y x; print (string) RKEY__TX;
 	j=1+i-18; @set_cursor y j;
 
@@ -139,7 +147,7 @@ Constant QKEY2__KY      = 'q';
 			@erase_window $ffff;
 			@split_window ch;
 			i = HDR_SCREENWCHARS->0; if ( i== 0) i = 80;
-			@set_window 1; @set_cursor 1 1; style reverse; spaces(i);
+			@set_window 1; @set_cursor 1 1; style reverse; FastSpaces(i);
 			j=1+(i-item_width)/2;
 			@set_cursor 1 j;
 			print (string) item_name;
