@@ -144,25 +144,25 @@ These games are known to use PunyInform:
 
 There were also nine new PunyInform games submitted to [PunyJam #1](https://ifdb.org/viewcomp?id=z913f8kco23t5dz4):
 
-* [Captain Cutter's Treasure](https://itch.io/jam/punyjam1/rate/1020269), by Garry Francis.
+* [Captain Cutter's Treasure](https://warrigal.itch.io/captain-cutters-treasure), by Garry Francis.
 
-* [Djinn on the Rocks](https://itch.io/jam/punyjam1/rate/1020153), by Joshua Wilson.
+* [Djinn on the Rocks](https://captainedgecase.itch.io/djinn-on-the-rocks), by Joshua Wilson.
 
-* [Pub Hubbub](https://itch.io/jam/punyjam1/rate/1024938), by Christopher Drum.
+* [Pub Hubbub](https://christopherdrum.itch.io/pub-hubbub), by Christopher Drum.
 
-* [Death Number 4](https://itch.io/jam/punyjam1/rate/1025382), by Dave Footitt.
+* [Death Number 4](https://themeteorstorm.itch.io/deathnumber4), by Dave Footitt.
 
-* [Pub Adventure](https://itch.io/jam/punyjam1/rate/1019467), by Tom and Robin Edwards.
+* [Pub Adventure](https://electrotrains.itch.io/pub-adventure), by Tom and Robin Edwards.
 
-* [Closet of Mystery](https://itch.io/jam/punyjam1/rate/1022240), by Michael Cox.
+* [Closet of Mystery](https://compdelta.itch.io/closet-of-mystery), by Michael Cox.
 
-* [Arthur's day out](https://itch.io/jam/punyjam1/rate/1021841), by Jason Oakley.
+* [Arthur's day out](https://waulok.itch.io/arthurs-day-out), by Jason Oakley.
 
-* [Buccaneer's Cache](https://itch.io/jam/punyjam1/rate/1025257), by Wilfried Elmenreich.
+* [Buccaneer's Cache](https://frodewin.itch.io/buccaneers-cache), by Wilfried Elmenreich.
 
-* [The Job](https://itch.io/jam/punyjam1/rate/1025662), by Fredrik Ramsberg.
+* [The Job](https://fredrikr.itch.io/the-job), by Fredrik Ramsberg.
 
-All of these games can be downloaded from the links above. Most of them
+All of these games can be downloaded from the links above. Many of them
 are also available at [Ozmoo Online](http://microheaven.com/ozmooonline/)
 where you can create disk images for Commodore C64, C128 or Plus/4.
 
