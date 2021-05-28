@@ -71,10 +71,10 @@ Constant QKEY2__KY      = 'q';
 
 [ FastSpaces p_spaces;
 	while(p_spaces > 10) {
-		@print_table TenSpaces 10;
+		@print_table TenSpaces 10 1;
 		p_spaces = p_spaces - 10;
 	}
-	@print_table TenSpaces p_spaces;
+	@print_table TenSpaces p_spaces 1;
 ];
 
 [ DoMenu menu_choices EntryR ChoiceR

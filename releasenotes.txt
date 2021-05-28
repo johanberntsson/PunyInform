@@ -503,3 +503,5 @@ v2.6: bug fix and new feature release
 - Added rule to not include held objects when disambiguate for the take action
 - Added 'sniff' as a synonym to 'smell'
 - Made statusline drawing faster in ext_menu.h (only affects z5+).
+- Changed statusline printing for z5 and menu printing for z5 to make them
+  avoid a bug in the ZXZVM interpreter.

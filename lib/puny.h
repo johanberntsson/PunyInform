@@ -158,10 +158,10 @@ Array TenSpaces -> "          ";
 	} else {
 		p_col = p_col - _current_col;
 		while(p_col > 10) {
-			@print_table TenSpaces 10;
+			@print_table TenSpaces 10 1;
 			p_col = p_col - 10;
 		}
-		@print_table TenSpaces p_col;
+		@print_table TenSpaces p_col 1;
 	}
 	if(p_string)
 		print (string) p_string;
