@@ -38,7 +38,11 @@ Constant STATUSLINE_SCORE; Statusline score;
 
 Constant Story	  "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game, by Pablo Martinez and Fredrik Ramsberg.^";
-Release 5;
+Release 6;
+Serial "210530";
+
+! Get your own unique IFID for your game at https://www.tads.org/ifidgen/ifidgen
+Array UUID_ARRAY string "UUID://43E00AEE-DEAF-40D9-8306-11BC80779320//"; #Ifdef UUID_ARRAY; #Endif;
 
 Constant MAX_SCORE = 100;
 Constant TASKS_PROVIDED;
