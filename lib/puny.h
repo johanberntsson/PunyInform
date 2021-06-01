@@ -71,6 +71,20 @@ Include "grammar.h";
 	return -1;
 ];
 
+#Ifdef OPTIONAL_MANUAL_SCOPE;
+[ RunEntryPointRoutine p_routine;
+	return p_routine();
+];
+#Ifnot;
+[ RunEntryPointRoutine p_routine _ret;
+	if(p_routine) {
+		_ret = p_routine();
+		scope_modified = true;
+		return _ret;
+	}
+];
+#Endif;
+
 [ IndirectlyContains p_o1 p_o2;
 	! Does o1 indirectly contain o2?  (Same as testing if o1 is one of the ancestors of o2.)
 	while (p_o2 ~= 0) {
@@ -472,7 +486,13 @@ else
 #Endif;
 	if(p_switch == 0) sw__var = action; else sw__var = p_switch;
 	if (p_prop >= INDIV_PROP_START && p_obj.&p_prop == 0) rfalse;
+#Ifdef OPTIONAL_MANUAL_SCOPE;
 	return p_obj.p_prop();
+#Ifnot;
+	p_switch = p_obj.p_prop(); ! Repurposing p_switch
+	scope_modified = true;
+	return p_switch;
+#Endif;
 ];
 
 [ PrintOrRun p_obj p_prop p_no_string_newline _val;
@@ -554,8 +574,7 @@ else
 	move Player to p_loc;
 	real_location = superparent(p_loc);
 	location = real_location;
-	scope_modified = true;
-	MoveFloatingObjects();
+	MoveFloatingObjects(); ! Also sets scope_modified
 #Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness();
 #Endif;
@@ -581,10 +600,10 @@ else
 				jump recheck_vc;
 		}
 #Ifdef OPTIONAL_NO_DARKNESS;
-		NewRoom();
+		RunEntryPointRoutine(NewRoom);
 #Ifnot;
 		if(location ~= thedark)
-			NewRoom();
+			RunEntryPointRoutine(NewRoom);
 #Endif;
 	}
 
@@ -592,7 +611,7 @@ else
 	if(_old_real_loc ~= real_location && location == thedark && _old_loc == thedark) {
 		! we have moved between dark rooms
 		! give entry point a chance to react
-		DarkToDark();
+		RunEntryPointRoutine(DarkToDark);
 	}
 #Endif;
 	_old_lookmode = lookmode;
@@ -658,9 +677,6 @@ Include "parser.h";
 #IfDef DEBUG;
 	if(debug_flag & 1 && location has reactive && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
 #EndIf;
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 	_scope_count = GetScopeCopy();
 	RunRoutines(location, each_turn);
 
@@ -672,10 +688,6 @@ Include "parser.h";
 		if(_obj has reactive && _obj.&each_turn ~= 0) {
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").each_turn()^";
-#EndIf;
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-			! Assume that every each_turn routine may have modified the scope
-			scope_modified = true;
 #EndIf;
 			RunRoutines(_obj, each_turn);
 		}
@@ -702,23 +714,16 @@ Include "parser.h";
 [ BeforeRoutines _i _obj _scope_count _max;
 	! react_before - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
-#IfnDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 	_scope_count = GetScopeCopy();
 #IfDef GamePreRoutine;
 #IfDef DEBUG;
 	if(debug_flag & 1) print "GamePreRoutine()^";
 #EndIf;
-	if(GamePreRoutine()) rtrue;
+	if(RunEntryPointRoutine(GamePreRoutine)) rtrue;
 #EndIf;
 
 #IfDef DEBUG;
 	if(debug_flag & 1) print "player.orders()^";
-#EndIf;
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-	! Assume that every routine may modify the scope
-	scope_modified = true;
 #EndIf;
 	if(RunRoutines(player, orders)) rtrue;
 
@@ -730,10 +735,6 @@ Include "parser.h";
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_before()^";
 #EndIf;
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-			! Assume that every routine may modify the scope
-			scope_modified = true;
-#EndIf;
 			if(RunRoutines(_obj, react_before)) {
 				rtrue;
 			}
@@ -744,10 +745,6 @@ Include "parser.h";
 	if(debug_flag & 1) print "(", (name) real_location, ").before()^";
 #EndIf;
 	if(real_location.&before) {
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-		! Assume that every routine may modify the scope
-		scope_modified = true;
-#EndIf;
 		if(RunRoutines(real_location, before)) rtrue;
 	}
 	if(inp1 > 1) {
@@ -755,10 +752,6 @@ Include "parser.h";
 		if(debug_flag & 1) print "(", (name) inp1, ").before()^";
 #EndIf;
 		if(inp1.&before) {
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-			! Assume that every routine may modify the scope
-			scope_modified = true;
-#EndIf;
 			if(RunRoutines(inp1, before)) rtrue;
 		}
 	}
@@ -768,9 +761,6 @@ Include "parser.h";
 [ AfterRoutines _i _obj _scope_count _max;
 	! react_after - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
-#IfnDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 	_scope_count = GetScopeCopy();
 
 	if(_scope_count) {
@@ -781,12 +771,7 @@ Include "parser.h";
 #IfDef DEBUG;
 			if(debug_flag & 1) print "(", (name) _obj, ").react_after()^";
 #EndIf;
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-			! Assume that every routine may modify the scope
-			scope_modified = true;
-#EndIf;
-			if(RunRoutines(_obj, react_after))
-				rtrue;
+			if(RunRoutines(_obj, react_after)) rtrue;
 		}
 		@inc_chk _i _max ?~next_entry;
 	}
@@ -794,10 +779,6 @@ Include "parser.h";
 	if(debug_flag & 1) print "(", (name) real_location, ").after()^";
 #EndIf;
 	if(real_location.&after) {
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-		! Assume that every routine may modify the scope
-		scope_modified = true;
-#EndIf;
 		if(RunRoutines(real_location, after)) rtrue;
 	}
 	if(inp1 > 1) {
@@ -805,10 +786,6 @@ Include "parser.h";
 		if(debug_flag & 1) print "(", (name) inp1, ").after()^";
 #EndIf;
 		if(inp1.&after) {
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-			! Assume that every routine may modify the scope
-			scope_modified = true;
-#EndIf;
 			if(RunRoutines(inp1, after)) rtrue;
 		}
 	}
@@ -816,23 +793,14 @@ Include "parser.h";
 #IfDef DEBUG;
 	if(debug_flag & 1) print "GamePostRoutine()^";
 #EndIf;
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-	! Assume that every routine may modify the scope
-	scope_modified = true;
+	if(RunEntryPointRoutine(GamePostRoutine)) rtrue;
 #EndIf;
-	return GamePostRoutine();
-#IfNot;
 	rfalse;
-#EndIf;
 ];
 
 [ RunLife p_actor p_reason;
 #IfDef DEBUG;
 	if(debug_flag & 1 && p_actor provides life) print "(", (name) p_actor, ").life()^";
-#EndIf;
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-	! Assume that every routine may modify the scope
-	scope_modified = true;
 #EndIf;
     return RunRoutines(p_actor, life, p_reason);
 ];
@@ -1032,9 +1000,6 @@ Include "parser.h";
 ];
 
 [ RunTimersAndDaemons _j _t;
-#IfnDef OPTIONAL_MANUAL_SCOPE;
-	scope_modified = true;
-#EndIf;
 	for (current_timer=0 : current_timer<active_timers : current_timer++) {
 		if (deadflag >= GS_DEAD) return;
 		_j = the_timers-->current_timer;
@@ -1053,10 +1018,6 @@ Include "parser.h";
 		}
 #EndIf;
 
-#Ifndef OPTIONAL_MANUAL_SCOPE;
-		! Assume that every routine may modify the scope
-		scope_modified = true;
-#EndIf;
 		if (_j < 0) RunRoutines(_j & ~WORD_HIGHBIT, daemon);
 		else {
 			_t = _j.time_left;
@@ -1328,7 +1289,7 @@ Object thedark "Darkness"
 #Endif;
 	RunTimersAndDaemons(); if(deadflag >= GS_DEAD) rtrue;
 	RunEachTurn(); if(deadflag >= GS_DEAD) rtrue;
-	TimePasses();
+	RunEntryPointRoutine(TimePasses);
 #Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness(true);
 #Endif;
@@ -1511,7 +1472,7 @@ Object thedark "Darkness"
         if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {
         	! we died somehow, use entry routine to give
         	! a chance of resurrection
-        	AfterLife();
+        	RunEntryPointRoutine(AfterLife);
 		}
 
 #Ifndef NO_SCORE;

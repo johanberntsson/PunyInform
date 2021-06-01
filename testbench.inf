@@ -306,6 +306,9 @@ Object -> LeadWeight "lead weight"
 			remove self;
 			move pencil to parent(player);
 			PronounNotice(pencil);
+#IfDef OPTIONAL_MANUAL_SCOPE;
+			scope_modified = true;
+#EndIf;
 			"When the lead weight hits the ground it sounds different.";
 		]
 	;
@@ -373,7 +376,9 @@ Object Toilet "The toilet"
 	with
 		short_name [; print "A toilet"; rtrue; ],
 		description[;
-			print "This toilet is in dire need of cleaning. The toilet door leads west back into the library. ";
+			print "This toilet is in dire need of cleaning. The toilet door
+				leads west back into the library, and there's a dark doorway
+				to the east. ";
 			if(Faucet has on) {
 				"Water is streaming from the faucet into the sink. ";
 			}
@@ -384,6 +389,7 @@ Object Toilet "The toilet"
 #IfNot;
 		w_to ToiletDoor,
 #EndIf;
+		e_to DarkChamber,
 	has ~light;
 
 Object -> ToiletDoor "toilet door"
@@ -466,6 +472,11 @@ Object -> Faucet "faucet"
 			"It's currently ", (OnOff) self, ".";
 		],
 	has switchable static scenery; !TODO: scenery objects still shown in room description
+
+Object DarkChamber "Dark Chamber"
+	with
+		description "It's almost entirely dark.",
+		w_to Toilet;
 
 Object Library "The Library"
 	with

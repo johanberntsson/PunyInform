@@ -504,3 +504,4 @@ v2.6: bug fix and new feature release
 - Added 'sniff' as a synonym to 'smell'
 - Made statusline drawing faster in ext_menu.h (only affects z5+).
 - Made RunRoutines() faster for all common properties.
+- Try to set scope_modified in the correct places in the library files.
