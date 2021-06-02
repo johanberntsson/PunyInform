@@ -505,3 +505,7 @@ v2.6: bug fix and new feature release
 - Made statusline drawing faster in ext_menu.h (only affects z5+).
 - Made RunRoutines() faster for all common properties.
 - Try to set scope_modified in the correct places in the library files.
+- Changed so 'shout' is not a synonym of 'say' but has its own grammar and has
+  'scream' and 'yell' as synonyms. "shout hello to John" still triggers the
+  ##Answer action. "shout hello" triggers the new ##ShoutSomething action,
+  while just "shout" triggers the new ##Shout action.

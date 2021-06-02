@@ -4,7 +4,7 @@
 ! Base verbs
 ! ---------------------
 
-Verb 'answer' 'say' 'shout' 'speak'
+Verb 'answer' 'say' 'speak'
     * topic 'to' creature                       -> Answer;
 
 Verb 'ask'
@@ -147,6 +147,11 @@ Verb 'search'
 
 Verb 'shed' 'disrobe' 'doff'
 	* held                                      -> Disrobe;
+
+Verb 'shout' 'scream' 'yell'
+    * topic 'to' creature                       -> Answer
+	* topic                                     -> ShoutSomething
+	*                                           -> Shout;
 
 Verb 'show' 'display' 'present'
 	* creature held                             -> Show reverse
@@ -584,6 +589,14 @@ Verb 'wear'
 		PrintMsg(MSG_SEARCH_EMPTY);
 	else
 		PrintMsg(MSG_SEARCH_IN_IT_ISARE);
+];
+
+[ ShoutSub;
+	PrintMsg(MSG_SHOUT_SUCCESS);
+];
+
+[ ShoutSomethingSub;
+	PrintMsg(MSG_SHOUTSOMETHING_SUCCESS);
 ];
 
 [ ShowSub;
