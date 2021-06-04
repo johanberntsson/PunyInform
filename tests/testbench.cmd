@@ -1,6 +1,14 @@
 
 transcript
 
+go
+get
+x orb
+frob it
+x ladder
+frob ladder
+frob it
+pronouns
 kiss ladder
 open it
 type abc on ladder

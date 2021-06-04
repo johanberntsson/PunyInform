@@ -139,12 +139,29 @@ Include "globals.h";
   if (score >= 2) "Explorer.";
   "Tourist.";
 ];
+
 [ PrintTaskName task_number;
   switch (task_number) {
       0: "opening the box";
   }
 ];
 
+[IsSpherical;
+    print "*";
+    return (noun == Orb);
+];
+
+Verb 'Frob'
+    * noun = IsSpherical -> Frob
+    * noun -> CantFrob;
+
+[FrobSub;
+    print "Frobbing ",(name) noun, " as requested.";
+];
+
+[ CantFrobSub;
+    print "You can't frob that!";
+];
 
 Verb 'type'
 	*	topic 'into'/'on' noun -> Type;
@@ -480,6 +497,10 @@ Object Library "The Library"
 		],
 #EndIf;
 	has light;
+
+Object -> Orb "Orb"
+    with
+        name 'orb';
 
 Object -> LightSwitch "LightSwitch"
 	with

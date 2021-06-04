@@ -1,4 +1,28 @@
 
+> go
+I think you wanted to say "go somewhere". Please try again.
+
+> get
+I think you wanted to say "get out of something". Please try again.
+
+> x orb
+There is nothing special about the Orb.
+
+> frob it
+Frobbing Orb as requested.
+> x ladder
+It's very sturdy. On the ladder is a sticker.
+
+> frob ladder
+********************You can't frob that!
+> frob it
+********************You can't frob that!
+> pronouns
+It: ladder
+Him: nothing
+Her: nothing
+Them: nothing
+
 > kiss ladder
 You can only do that to something animate.
 
@@ -117,7 +141,8 @@ Dropped.
 
 > take all
 pink book: You dared taking the pink book. Bravo!
-sweater: Taken.
+Orb: Taken.
+sweater: You are carrying too many things already.
 electric torch: You are carrying too many things already.
 ladder: You are carrying too many things already.
 infinite bag: You are carrying too many things already.
