@@ -17,7 +17,7 @@ System_file;
 #EndIf;
 	if(p_no_prompt == false) PrintMsg(MSG_PROMPT);
 	! library entry routine
-	AfterPrompt();
+	RunEntryPointRoutine(AfterPrompt);
 #IfV5;
 	DrawStatusLine();
 	buffer->1 = 0;
@@ -28,7 +28,7 @@ System_file;
 #EndIf;
 
 	! call library entry routine
-	BeforeParsing();
+	RunEntryPointRoutine(BeforeParsing);
 
 	num_words = parse -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
@@ -1061,9 +1061,8 @@ Constant GUESS_CONTAINER = 2;
 Constant GUESS_THING = 3;
 Constant GUESS_DOOR = 4;
 Array guess_object-->5;
-Array guess_num_objects->5;
-[ _GuessMissingNoun p_type p_prep p_nounphrase_num _assumed _exclude _i _noun;
-	for(_i = 0: _i < 5: _i++) guess_num_objects->_i = 0;
+[ _GuessMissingNoun p_type p_prep p_nounphrase_num _assumed _exclude _i _noun
+	_door_count _container_count _creature_count _held_count _thing_count;
 
 	if(p_nounphrase_num == 1) {
 		_assumed = noun;
@@ -1079,44 +1078,44 @@ Array guess_num_objects->5;
 		if(ObjectIsInvisible(_noun)) continue;
 		if(_noun has door && _noun ~= _exclude) {
 			guess_object-->GUESS_DOOR = _noun;
-			guess_num_objects->GUESS_DOOR = 1 + guess_num_objects->GUESS_DOOR;
+			_door_count++;
 		}
 		if(_noun has container && _noun ~= _exclude) {
 			guess_object-->GUESS_CONTAINER = _noun;
-			guess_num_objects->GUESS_CONTAINER = 1 + guess_num_objects->GUESS_CONTAINER;
+			_container_count++;
 		}
 		if(_noun has animate && _noun ~= _exclude) {
 			guess_object-->GUESS_CREATURE = _noun;
-			guess_num_objects->GUESS_CREATURE = 1 + guess_num_objects->GUESS_CREATURE;
+			_creature_count++;
 		}
 		if(_noun in player && _noun ~= _exclude) {
 			guess_object-->GUESS_HELD = _noun;
-			guess_num_objects->GUESS_HELD = 1 + guess_num_objects->GUESS_HELD;
+			_held_count++;
 		}
 		if(_noun hasnt scenery or concealed && _noun ~= _exclude) {
 			guess_object-->GUESS_THING = _noun;
-			guess_num_objects->GUESS_THING = 1 + guess_num_objects->GUESS_THING;
+			_thing_count++;
 		}
 	}
 
 	_noun = 0;
 	switch(p_type) {
 	HELD_OBJECT:
-		if(guess_num_objects->GUESS_HELD == 1)
+		if(_held_count == 1)
 			_noun = guess_object-->GUESS_HELD;
 	CREATURE_OBJECT:
-		if(guess_num_objects->GUESS_CREATURE == 1)
+		if(_creature_count == 1)
 			_noun = guess_object-->GUESS_CREATURE;
 	default:
-		if(_noun == 0 && guess_num_objects->GUESS_CONTAINER == 1 &&
+		if(_noun == 0 && _container_count == 1 &&
 			action == ##Open or ##Close) {
 			_noun = guess_object-->GUESS_CONTAINER;
 		}
-		if(_noun == 0 && guess_num_objects->GUESS_DOOR == 1 &&
+		if(_noun == 0 && _door_count == 1 &&
 			action == ##Lock or ##Unlock or ##Open or ##Close) {
 			_noun = guess_object-->GUESS_DOOR;
 		}
-		if(_noun == 0 && guess_num_objects->GUESS_THING == 1) {
+		if(_noun == 0 && _thing_count == 1) {
 			_noun = guess_object-->GUESS_THING;
 		}
 	}
@@ -1564,8 +1563,8 @@ Array guess_num_objects->5;
 #EndIf;
 		} else if(_score > _best_score || (
 				! we override previous best if this pattern is equally
-				! good but it doesn't require reparsing (it will 
-				! produce some error message in phase 2), and 
+				! good but it doesn't require reparsing (it will
+				! produce some error message in phase 2), and
 				! the previously best pattern did.
 				_score == _best_score &&
 				_best_phase2 == 1 &&  ! if previous best requested reparsing
