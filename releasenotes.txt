@@ -510,3 +510,4 @@ v2.6: bug fix and new feature release
   ##Answer action. "shout hello" triggers the new ##ShoutSomething action,
   while just "shout" triggers the new ##Shout action.
 - Made the noun guessing code faster and shorter.
+- Made 'place' a synonym of 'put'.

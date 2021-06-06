@@ -124,7 +124,7 @@ Verb 'push' 'clear' 'move' 'press' 'shift'
     * noun noun                                 -> PushDir
     * noun 'to' noun                            -> Transfer;
 
-Verb 'put'
+Verb 'put' 'place'
 	* multiexcept 'in'/'inside'/'into' noun     -> Insert
 	* multiexcept 'on'/'onto' noun              -> PutOn
 	* 'on' held									-> Wear;
