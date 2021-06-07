@@ -511,7 +511,7 @@ v2.6: bug fix and new feature release
   while just "shout" triggers the new ##Shout action.
 - Made the noun guessing code faster and shorter.
 - Made 'place' a synonym of 'put'.
-- Now writing all prepositions when complaining that the input is incomplete
+- Now printing all prepositions when complaining that the input is incomplete
 - Parsing "go" (without a direction or object) correctly.
 - Fixed so that noun filters are applied when parsing pronouns.
 - Improved message for incomplete sentences ('take ladder and')
