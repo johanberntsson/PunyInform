@@ -503,6 +503,10 @@ System_file;
 				return -2;
 			}
 	 	}
+		if((noun_filter ~= 0 && _UserFilter(_noun) == 0)) {
+			! a filter was defined, but failed for it/his/her
+			return 0;
+		}
 		++wn;
 		return _noun;
 	}

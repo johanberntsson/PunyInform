@@ -1,6 +1,6 @@
 
 > go
-I think you wanted to say "go something". Please try again.
+I think you wanted to say "go somewhere". Please try again.
 
 > get
 I think you wanted to say "get out of something". Please try again.
@@ -9,14 +9,14 @@ I think you wanted to say "get out of something". Please try again.
 There is nothing special about the Orb.
 
 > frob it
-Frobbing Orb as requested.
+*Frobbing Orb as requested.
 > x ladder
 It's very sturdy. On the ladder is a sticker.
 
 > frob ladder
 ********************You can't frob that!
 > frob it
-********************You can't frob that!
+*You can't frob that!
 > pronouns
 It: ladder
 Him: nothing

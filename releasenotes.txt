@@ -513,3 +513,4 @@ v2.6: bug fix and new feature release
 - Made 'place' a synonym of 'put'.
 - Now writing all prepositions when complaining that the input is incomplete
 - Parsing "go" (without a direction or object) correctly.
+- Fixed so that noun filters are applied when parsing pronouns.
