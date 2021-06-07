@@ -514,3 +514,4 @@ v2.6: bug fix and new feature release
 - Now writing all prepositions when complaining that the input is incomplete
 - Parsing "go" (without a direction or object) correctly.
 - Fixed so that noun filters are applied when parsing pronouns.
+- Improved message for incomplete sentences ('take ladder and')

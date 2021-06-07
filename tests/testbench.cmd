@@ -9,6 +9,7 @@ x ladder
 frob ladder
 frob it
 pronouns
+get ladder and
 kiss ladder
 open it
 type abc on ladder

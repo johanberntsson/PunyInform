@@ -1365,6 +1365,8 @@ Array guess_object-->5;
 						} else {
 							PrintMsg(MSG_PARSER_NOSUCHTHING);
 						}
+					} else if((parser_unknown_noun_found->2) == 0) {
+						PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 					} else {
 						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
 					}
