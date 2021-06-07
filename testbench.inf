@@ -44,7 +44,7 @@ Constant OPTIONAL_PROVIDE_UNDO;
 Constant INITIAL_LOCATION_VALUE = Library;
 
 Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
-Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEANDPERFORM;
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSETOKEN;
 !Constant DEBUG_CHECKNOUN;

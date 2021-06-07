@@ -106,6 +106,7 @@ Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
 ! Isolating words and punctuation for reuse and potential translation
 Constant SOMETHING_STR = "something";
 Constant SOMEONE_STR = "someone";
+Constant SOMEWHERE_STR = "somewhere";
 
 #Ifndef DEFAULT_CAPACITY;
 Constant DEFAULT_CAPACITY = 100;
