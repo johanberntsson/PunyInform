@@ -34,7 +34,7 @@ Object table "table" example_room
 	return 2;
 ];
 
-Verb 'place' = 'put';
+!Verb 'place' = 'put';
 
 Extend 'put'
 	*	held 'under' noun		-> PutUnder;

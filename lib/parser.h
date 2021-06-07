@@ -1184,7 +1184,9 @@ Array guess_object-->5;
 	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
 		_type = (_token -> 0) & $0f;
 		_data = (_token + 1) --> 0;
+		if(_token->0 == TOKEN_FIRST_PREP or TOKEN_SINGLE_PREP) _num_preps = 0;
 		if(_type == TT_PREPOSITION) {
+			! only write the first preposition in an array of alternatives
 			if(_num_preps == 0) print " ", (address) _data;
 			++_num_preps;
 		} else {

@@ -10,8 +10,6 @@ Switches e;
 
 ! Testbench - a platform for trying things out in PunyInform
 
-!Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
-
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
@@ -45,13 +43,14 @@ Constant OPTIONAL_PROVIDE_UNDO;
 
 Constant INITIAL_LOCATION_VALUE = Library;
 
-!Constant DEBUG_TIMER; ! requires special Ozmoo
-!Constant DEBUG_PARSEANDPERFORM;
+Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
+Constant DEBUG_PARSEANDPERFORM;
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSETOKEN;
 !Constant DEBUG_CHECKNOUN;
 !Constant DEBUG_GETNEXTNOUN;
 !Constant DEBUG_SCOPE;
+!Constant DEBUG_TIMER; ! requires special Ozmoo
 #EndIf;
 
 !Constant TEST_BEFOREAFTER;

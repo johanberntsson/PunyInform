@@ -1,6 +1,6 @@
 
 > go
-I think you wanted to say "go somewhere". Please try again.
+I think you wanted to say "go something". Please try again.
 
 > get
 I think you wanted to say "get out of something". Please try again.
