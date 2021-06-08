@@ -1,7 +1,14 @@
 
 transcript
 
+again me
 n
+again
+again me
+put sweater in s
+drop sweater
+put ladder on ladder
+put ladder in ladder
 go n
 go sweater
 go

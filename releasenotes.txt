@@ -515,3 +515,4 @@ v2.6: bug fix and new feature release
 - Parsing "go" (without a direction or object) correctly.
 - Fixed so that noun filters are applied when parsing pronouns.
 - Improved message for incomplete sentences ('take ladder and')
+- Improved messages for putting things in/on itself.
