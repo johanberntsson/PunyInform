@@ -1649,6 +1649,7 @@ Array guess_object-->5;
 				}
 			}
 		}
+		action = 0;
 		rtrue;
 	}
 

@@ -22,10 +22,10 @@ There is nothing special about Bob.
 Bob doesn't seem interested.
 
 > put apple on apple
-Cannot put something on itself.
+You can't put something on itself.
 
 > put apple in apple
-Cannot put something inside itself.
+You can't put something inside itself.
 
 > search bush
 You find a pineapple. You take it.
