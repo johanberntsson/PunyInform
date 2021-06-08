@@ -517,4 +517,5 @@ v2.6: bug fix and new feature release
 - Improved message for incomplete sentences ('take ladder and')
 - Improved messages for putting things in/on itself.
 - Fixed broken 'again me' response (issue 81)
+- Fixed shortname for Directions ('put sweater in s')
 

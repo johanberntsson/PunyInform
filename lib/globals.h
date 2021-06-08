@@ -644,7 +644,7 @@ Object Directions
 			return 0;
 #EndIf;
 		]
-has scenery proper
+has scenery 
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
 		reactive
 #Endif;
