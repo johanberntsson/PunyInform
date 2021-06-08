@@ -1236,6 +1236,7 @@ Array guess_object-->5;
 	noun = 0;
 	second = 0;
 	consult_from = 0;
+	consult_words = 0;
 	inp1 = 0;
 	inp2 = 0;
 	special_number = 0;

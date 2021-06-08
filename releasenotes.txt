@@ -519,3 +519,4 @@ v2.6: bug fix and new feature release
 - Fixed broken 'again me' response (issue 81)
 - Fixed shortname for Directions ('put sweater in s')
 - Changed PushDir to use the ADirection filter for the direction argument
+- Fixed that consult_words sometimes held a value when it shouldn't.
