@@ -121,7 +121,7 @@ Verb 'pull' 'drag'
 
 Verb 'push' 'clear' 'move' 'press' 'shift'
     * noun                                      -> Push
-    * noun noun                                 -> PushDir
+    * noun noun=ADirection                      -> PushDir
     * noun 'to' noun                            -> Transfer;
 
 Verb 'put' 'place'
