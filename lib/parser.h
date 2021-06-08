@@ -1198,7 +1198,7 @@ Array guess_object-->5;
 		} else {
 			@print_char ' ';
 			if(_noun == 0) {
-				if(verb_word == 'go') {
+				if(_type == TT_ROUTINE_FILTER && UnsignedCompare(_data, ADirection) == 0) {
 					print (string) SOMEWHERE_STR;
 				} else if(second == 0) {
 					if(_token->2 == CREATURE_OBJECT) {
