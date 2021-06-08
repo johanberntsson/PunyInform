@@ -31,7 +31,7 @@ You can't go that way.
 That doesn't seem to be something you can enter.
 
 > go
-I think you wanted to say "go somewhere". Please try again.
+I think you wanted to say "go (some direction)". Please try again.
 
 > get
 I think you wanted to say "get out of something". Please try again.
