@@ -80,8 +80,8 @@ Verb 'give' 'feed' 'offer' 'pay'
 ];
 
 Verb 'go'
-	* noun                                      -> Enter
-	* noun=ADirection                           -> Go;
+	* noun=ADirection                           -> Go
+	* noun                                      -> Enter;
 
 Verb 'insert'
     * multiexcept 'in'/'into' noun              -> Insert;

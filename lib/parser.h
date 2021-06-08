@@ -1138,7 +1138,7 @@ Array guess_object-->5;
 
 #EndIf;
 
-[ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second _num_preps;
+[ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second _num_preps _num_nouns;
 	! Called because sentence shorter than the pattern
 	! Available data: wn, parse and p_pattern_token (last matched token)
 	!
@@ -1163,6 +1163,7 @@ Array guess_object-->5;
 		if(_type > 9) {
 			_prep = _token;
 		} else {
+			++_num_nouns;
 			if(_noun == 0) {
 				_noun = _token;
 			} else {
@@ -1176,7 +1177,7 @@ Array guess_object-->5;
 #IfDef OPTIONAL_GUESS_MISSING_NOUN;
 	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0, 1);
 	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep, 2);
-	if((_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
+	if(_num_nouns > 0 && (_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
 		!print "message complete: ", noun, " ", second, "^";
 		rtrue;
 	}
@@ -1197,7 +1198,9 @@ Array guess_object-->5;
 		} else {
 			@print_char ' ';
 			if(_noun == 0) {
-				if(second == 0) {
+				if(verb_word == 'go') {
+					print (string) SOMEWHERE_STR;
+				} else if(second == 0) {
 					if(_token->2 == CREATURE_OBJECT) {
 						print (string) SOMEONE_STR;
 					} else {
@@ -1208,8 +1211,6 @@ Array guess_object-->5;
 				if(noun ~= 0) {
 					_noun = 0; ! avoid repeat (and we don't need _noun anymore)
 					if(parser_all_found) print "all"; else print (name) noun;
-				} else if(verb_word == 'go') {
-					print (string) SOMEWHERE_STR;
 				} else if(_token->2 == CREATURE_OBJECT) {
 					print (string) SOMEONE_STR;
 				} else {

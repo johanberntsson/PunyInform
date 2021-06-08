@@ -1,6 +1,9 @@
 
 transcript
 
+n
+go n
+go sweater
 go
 get
 x orb

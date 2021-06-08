@@ -1,4 +1,13 @@
 
+> n
+You can't go that way.
+
+> go n
+You can't go that way.
+
+> go sweater
+That doesn't seem to be something you can enter.
+
 > go
 I think you wanted to say "go somewhere". Please try again.
 
