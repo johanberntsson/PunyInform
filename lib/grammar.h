@@ -150,7 +150,7 @@ Verb 'shed' 'disrobe' 'doff'
 
 Verb 'shout' 'scream' 'yell'
     * topic 'to' creature                       -> Answer
-	* topic                                     -> ShoutSomething
+	* topic                                     -> Shout
 	*                                           -> Shout;
 
 Verb 'show' 'display' 'present'
@@ -593,10 +593,6 @@ Verb 'wear'
 
 [ ShoutSub;
 	PrintMsg(MSG_SHOUT_SUCCESS);
-];
-
-[ ShoutSomethingSub;
-	PrintMsg(MSG_SHOUTSOMETHING_SUCCESS);
 ];
 
 [ ShowSub;

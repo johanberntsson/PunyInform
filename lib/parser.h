@@ -1449,6 +1449,8 @@ Array guess_object-->5;
 	actor = player;
 	noun = 0; ! needed since _ParsePattern not always called
 	second = 0;
+	consult_from = 0;
+	consult_words = 0;
 
 	if(scope_routine ~= 0) {
 		! if true, then scope=Routine was executed
