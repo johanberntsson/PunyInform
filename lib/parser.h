@@ -1198,7 +1198,7 @@ Array guess_object-->5;
 		} else {
 			@print_char ' ';
 			if(_noun == 0) {
-				if(_type == TT_ROUTINE_FILTER && UnsignedCompare(_data, ADirection) == 0) {
+				if(_type == TT_ROUTINE_FILTER && _data == ADirection) {
 					print (string) SOMEWHERE_STR;
 				} else if(second == 0) {
 					if(_token->2 == CREATURE_OBJECT) {
