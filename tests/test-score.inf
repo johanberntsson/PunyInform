@@ -42,11 +42,11 @@ Constant NUMBER_TASKS = 1;
 Constant MAX_SCORE = 4;
 #EndIf;
 
-[ PrintTaskName task_number;
-  switch (task_number) {
-      0: "opening the box";
-  }
-];
+![ PrintTaskName task_number;
+!  switch (task_number) {
+!      0: "opening the box";
+!  }
+!];
 
 
 #Ifdef USEINFORM;

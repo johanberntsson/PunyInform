@@ -44,7 +44,7 @@ Include "puny.h";
 #EndIf;
 Extend only 'say' first
   * topic -> Say;
-[ SaySub i;
+[ SaySub;
   print "consult_words = ", consult_words, "^";
   print "consult_from = ", consult_from, "^";
   !print "~";

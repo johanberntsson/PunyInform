@@ -88,10 +88,10 @@ Include "Grammar";
 ! but since restart is already orginally defined as meta
 ! we have to reinvert the logic here, and add a notMeta
 ! (to disable meta) instead.
-[ isMeta; 
-    meta = true;
-    return GPR_PREPOSITION;
-];
+![ isMeta; 
+!    meta = true;
+!    return GPR_PREPOSITION;
+!];
 
 [ notMeta; 
     meta = false;

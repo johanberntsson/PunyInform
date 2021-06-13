@@ -39,7 +39,9 @@ Constant OPTIONAL_MANUAL_SCOPE;
 Constant OPTIONAL_MANUAL_REACTIVE;
 Constant OPTIONAL_REACTIVE_PARSE_NAME;
 Constant OPTIONAL_ORDERED_TIMERS;
+#Iftrue (#version_number == 5);
 Constant OPTIONAL_PROVIDE_UNDO;
+#EndIf;
 
 Constant INITIAL_LOCATION_VALUE = Library;
 
@@ -94,9 +96,9 @@ Constant MAX_SCORE = 3;
 
 ! Setup flags
 Constant FLAG_COUNT 8;
-Constant F_SQUIRREL_ESCAPED 0;
-Constant F_PARROT_FED 1;
-Constant F_BOUGHT_TICKETS 2;
+!Constant F_SQUIRREL_ESCAPED 0;
+!Constant F_PARROT_FED 1;
+!Constant F_BOUGHT_TICKETS 2;
 
 #IfDef TEST_BEFOREAFTER;
 [LookRoutine;
@@ -964,12 +966,12 @@ Object  Beard "John's beard"
         ],
   has   proper concealed;
 
-Array quote_1 --> 5 35
-"When I die, I want to go peacefully"
-"in my sleep like my grandfather."
-"Not screaming in terror, like the"
-"passengers in his car."
-"               -- Jack Handey";
+!Array quote_1 --> 5 35
+!"When I die, I want to go peacefully"
+!"in my sleep like my grandfather."
+!"Not screaming in terror, like the"
+!"passengers in his car."
+!"               -- Jack Handey";
 
 [Initialise;
 #IfnDef USEINFORM;

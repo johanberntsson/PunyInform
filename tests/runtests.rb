@@ -12,6 +12,7 @@ end
 def runtest(filename, version, inform_args)
     basename = File.basename(filename, ".inf")
     command_file = basename + ".cmd"
+    compileroutput_file = basename + "_z#{version}.messages"
     transcript_file = basename + ".scr"
     output_file = basename + ".output"
     template_file = basename + ".txt"
@@ -32,6 +33,7 @@ def runtest(filename, version, inform_args)
     print "#{basename}: "
     begin
         result = %x[#{inform_cmd}]
+        File.open(compileroutput_file, 'w') { |file| file.write(result) }
         if result.include? "(no output)" then
             puts result
             raise Errno::ENOENT
