@@ -458,7 +458,8 @@ Default LibraryMessages 0;
 #Iftrue MSG_OPEN_SUCCESS < 1000;
 	MSG_OPEN_SUCCESS:
 		print "You open ", (the) noun;
-		if(noun has container && noun hasnt transparent) {
+		if(noun has container && noun hasnt transparent &&
+				~~IndirectlyContains(noun, player)) {
 			print ", revealing ";
 			if(PrintContents(0, noun)==false) print "nothing";
 		}

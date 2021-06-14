@@ -523,3 +523,4 @@ v2.6: bug fix and new feature release
 
 =======
 v2.7: bug fix and new feature release
+- Removed the text "revealing..." when opening a container from the inside.
