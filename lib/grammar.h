@@ -92,7 +92,7 @@ Verb 'inventory' 'i//'
 Verb 'jump'
 	*                                           -> Jump
 	* 'over' noun                               -> JumpOver
-	* 'into'/'onto' noun                        -> Enter
+	* 'in'/'into'/'onto' noun                   -> Enter
 	* 'out' 'of'/'from' noun                    -> Exit
 	* 'off' noun                                -> Exit;
 
@@ -149,7 +149,8 @@ Verb 'shed' 'disrobe' 'doff'
 	* held                                      -> Disrobe;
 
 Verb 'shout' 'scream' 'yell'
-    * topic 'to' creature                       -> Answer
+    * topic 'to'/'at' creature                  -> Answer
+    * 'to'/'at' noun                            -> ShoutAt
 	* topic                                     -> Shout
 	*                                           -> Shout;
 
@@ -593,6 +594,10 @@ Verb 'wear'
 
 [ ShoutSub;
 	PrintMsg(MSG_SHOUT_SUCCESS);
+];
+
+[ ShoutAtSub;
+	PrintMsg(MSG_SHOUTAT_SUCCESS);
 ];
 
 [ ShowSub;

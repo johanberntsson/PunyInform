@@ -524,3 +524,8 @@ v2.6: bug fix and new feature release
 =======
 v2.7: bug fix and new feature release
 - Removed the text "revealing..." when opening a container from the inside.
+- Added grammar for "shout (topic) at (creature)", triggering the Answer action
+  ('to' was recognized before, 'at' is a new synonym)
+- Added a new action ShoutAt, triggered by "shout to/at (noun)"
+- Added grammar for "jump in (noun)", triggering the Enter action. ('into' was
+  recognized before, 'in' is a new synonym)
