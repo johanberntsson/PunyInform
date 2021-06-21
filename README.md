@@ -125,6 +125,20 @@ The biggest differences between the standard library and PunyInform are:
   [Printing the contents of an object](https://github.com/johanberntsson/PunyInform/wiki/Manual#printing-the-contents-of-an-object)
   in the PunyInform manual.
 
+## Tools
+
+* To work with source code you may want a text editor which has a syntax
+  colouring mode for Inform 6. Some popular choices include Visual Studio
+  Code and Atom, both available for Windows, Mac and Linux.
+
+* To quickly build a game for play on Commodore 64, 128, Plus/4 or MEGA65, you
+  can use [Ozmoo Online](http://microheaven.com/ozmooonline/).
+
+* To build a game for 25 different platforms at once, you can use the
+  [Puddle BuildTools](https://github.com/ByteProject/Puddle-BuildTools). This
+  tool set can be installed on Linux. Windows users can create a virtual machine
+  running Linux.
+
 ## Games Using PunyInform
 
 These games are known to use PunyInform:
@@ -147,6 +161,8 @@ These games are known to use PunyInform:
   by John Wilson.
 
 * [Ghost Mountain](https://compdelta.itch.io/ghost-mountain), by Michael Cox.
+
+* [Hibernated 1, Director's Cut](https://8bitgames.itch.io/hibernated1), by Stefan Vogt.
 
 There were also nine new PunyInform games submitted to [PunyJam #1](https://ifdb.org/viewcomp?id=z913f8kco23t5dz4):
 
