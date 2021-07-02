@@ -369,7 +369,11 @@ Global location = INITIAL_LOCATION_VALUE;		! Must be the first global to show lo
 	#EndIf;
 #EndIf;
 
+
 #Ifdef NO_SCORE;
+#Ifndef OPTIONAL_SL_NO_SCORE;
+Constant OPTIONAL_SL_NO_SCORE;
+#Endif;
 Global status_field_1 = NO_SCORE; ! Must be the second global to show score or hours
 #Ifnot;
 Global status_field_1 = 0; ! Must be the second global to show score or hours
@@ -644,7 +648,7 @@ Object Directions
 			return 0;
 #EndIf;
 		]
-has scenery 
+has scenery
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
 		reactive
 #Endif;

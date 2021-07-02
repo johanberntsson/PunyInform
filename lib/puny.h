@@ -216,34 +216,44 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
-#Ifdef NO_SCORE;
 [ _PrintStatusLineScore p_width _pos;
-#Ifnot;
-[ _PrintStatusLineScore p_width;
-#Endif;
-#Ifdef NO_SCORE;
-	if (p_width > 24) {
+	_pos = p_width; ! Just to get rid of warnings
+#Ifdef OPTIONAL_SL_NO_SCORE;
+#Ifndef OPTIONAL_SL_NO_MOVES;
+	! Show moves only
+	if (p_width > 25) {
 		if (p_width < 30) {
 			! Width is 25-29, only print moves as "0"
-			_PrintSpacesOrMoveBack(3, ONE_SPACE_STRING);
+			_PrintSpacesOrMoveBack(4, ONE_SPACE_STRING);
 		} else {
 			! Width is 30-, print "Moves: 0"
-			_pos = 10;
+			_pos = 11;
 			if (p_width > 52) {
 				! Width is 53+, leave some space to the right
-				_pos = 14;
+				_pos = 15;
 			}
 			_PrintSpacesOrMoveBack(_pos, MOVES__TX);
 		}
 		print status_field_2;
 	}
+#Endif; ! Ifndef NO_MOVES
 #Ifnot;
+	! Show score and maybe moves
 	if (p_width > 24) {
 		if (p_width < 30) {
 			! Width is 25-29, only print score as "0", no moves
 			_PrintSpacesOrMoveBack(3, ONE_SPACE_STRING);
 			print status_field_1;
 		} else {
+#Ifdef OPTIONAL_SL_NO_MOVES;
+	! Show score only
+			! Width is 30-, print "Score: 0"
+			_pos = 13;
+			if(p_width < 55) _pos = 10;
+			_PrintSpacesOrMoveBack(_pos, SCORE__TX);
+			print status_field_1;
+#Ifnot;
+	! Show score + moves
 			if (p_width > 66) {
 				! Width is 67-, print "Score: 0 Moves: 0"
 				_PrintSpacesOrMoveBack(28, SCORE__TX);
@@ -255,12 +265,13 @@ Constant ONE_SPACE_STRING = " ";
 					_PrintSpacesOrMoveBack(15, SCORE__TX);
 				} else {
 					! Width is 29-35, print "0/0"
-					_PrintSpacesOrMoveBack(9, ONE_SPACE_STRING);
+					_PrintSpacesOrMoveBack(8, ONE_SPACE_STRING);
 				}
 				print status_field_1;
 				@print_char '/';
 			}
 			print status_field_2;
+#Endif;
 		}
 	}
 #Endif;

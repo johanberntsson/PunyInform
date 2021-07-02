@@ -529,3 +529,7 @@ v2.7: bug fix and new feature release
 - Added a new action ShoutAt, triggered by "shout to/at (noun)"
 - Added grammar for "jump in (noun)", triggering the Enter action. ('into' was
   recognized before, 'in' is a new synonym)
+- New constants OPTIONAL_SL_NO_SCORE and OPTIONAL_SL_NO_MOVES to hide score and
+  moves from the statusline in z5+ games. Defining NO_SCORE will define
+  OPTIONAL_SL_NO_SCORE automatically.
+  
