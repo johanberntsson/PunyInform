@@ -21,6 +21,10 @@ Constant STATUSLINE_SCORE; Statusline score;
 ! The value is what will be shown as the score on statusline in z3
 Constant NO_SCORE = 0;
 
+! Customize the statusline in z5+ (will have no effect in z3)
+!Constant OPTIONAL_SL_NO_SCORE;
+!Constant OPTIONAL_SL_NO_MOVES;
+
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
 !Constant CUSTOM_ABBREVIATIONS;
