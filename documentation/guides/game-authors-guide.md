@@ -84,10 +84,10 @@ save up to an extra 10kb on your game file size!
 
 Abbreviations are fixed strings that get replaced by a 10-bit long code in order
 to save space in the text. You just need to declare them, and the compiler will
-apply them whenever possible, if you compile with the `-e` switch. A topic of 
+apply them whenever possible, if you compile with the `-e` switch. A topic of
 particular interest is which abbreviations to use.
 
-Infocom used the full 96 abbreviations one can declare in the Z-machine. 
+Infocom used the full 96 abbreviations one can declare in the Z-machine.
 PunyInform ships with 64 abbreviations, which have been picked based on the text
 in the library files. This saves some space, but these generic abbreviations
 will not capture the fact that your protagonist's name, "Eyjafjallajökull",
@@ -101,7 +101,7 @@ the `-u` switch, and redirect output to a text file, like this:
 inform6 +lib mygame.inf -v3u > abbreviations.txt
 ```
 
-Then open the produced text file and scroll to the bottom. Copy the last all the
+Then open the produced text file and scroll to the bottom. Copy all the
 lines at the end of the file beginning with `Abbreviate`, and paste them at the
 beginning of your source code file, right after the lines at the top with
 compiler directives. As an alternative, you can put them in a separate file
@@ -134,7 +134,7 @@ The Inform 6 compiler switch $OMIT_UNUSED_ROUTINES is off by default, but can be
 turned on by putting it in the compilation flags. This frees up memory at no
 cost, and can save several hundred, maybe even thousands, of bytes! This switch
 is set at the start of the file `minimal.inf` so if you base you game on that
-file, you have this covered. 
+file, you have this covered.
 
 ### Turn off strict error checking
 
@@ -169,7 +169,7 @@ Object Pub "Pub"
 	],
 	before [;
 		OrderFood:
-			"You decide to order the", (string) MSG_HAM, 
+			"You decide to order the", (string) MSG_HAM,
 				". Yummy, that was delicious!";
 	],
     n_to MSG_LOOKS_DANGEROUS,
@@ -188,10 +188,10 @@ constant names.
 
 ### Replace a switch with an array
 
-If you have a large conditional switch statement for which the consequences 
+If you have a large conditional switch statement for which the consequences
 are of the same format (they're all a print, or adding something to the same
-variable, etc), you can turn this into a simple table lookup. Construct an 
-array with the changing values, and use a-->var to access them. So instead 
+variable, etc), you can turn this into a simple table lookup. Construct an
+array with the changing values, and use a-->var to access them. So instead
 of:
 
 ```
@@ -209,7 +209,7 @@ print (string) songs-->i;
 
 This is the opposite of the advice under `2b` in section 45 of the DM4,
 but that example is for when you want to save on readable memory (which can be
-no more than 64 KB) by not declaring too many arrays, and you're willing to 
+no more than 64 KB) by not declaring too many arrays, and you're willing to
 pay the cost to transform it into a routine.
 
 ### Compare a value to multiple values
@@ -254,7 +254,7 @@ return (player == werewolf);
 
  will not be as space-efficient as
 
-``` 
+```
 if (player == werewolf) {
     return true;
 } else {
@@ -308,7 +308,7 @@ property, instead of having to write a "parse_name" routine, which is costly.
 ## Other optimizations
 
 ### Use Manual Scope
- 
+
 This is an optimization for speed only. "Scope" means which
 objects the player, or another actor, can refer to. By default, the
 PunyInform library will assume that what's in scope changes whenever a
@@ -324,7 +324,7 @@ a general rule, set `scope_modified` to `true` whenever you use `move`
 or `remove` or you change any of the attributes `open`, `transparent` or
 `light`. However, if the object affected is nowhere near the player you
 don't need to set `scope_modified`. All library routines that move the
-player or move or modify objects, like `OpenSub()` and `PlayerTo()`, 
+player or move or modify objects, like `OpenSub()` and `PlayerTo()`,
 already set `scope_modified` as needed.
 
 Example:
@@ -343,7 +343,7 @@ Object Button "button"
         "A loud click is heard, a puppy comes running into the room,
           and the button sinks into the table, becoming invisible.";
     ],
-  has static;	
+  has static;
 ```
 
 ### Use manual setting of reactive attribute
@@ -368,16 +368,22 @@ These are the steps you need to take to set the attribute manually instead:
    Typically, you can skip it for the player object, unless you have added
    an each_turn routine to it.
 
+Note: If you use `parse_name` quite sparingly (up to about 10% of all objects
+the player can refer to), you probably want to define
+`OPTIONAL_REACTIVE_PARSE_NAME` as well. If you do this, and you define
+`OPTIONAL_MANUAL_REACTIVE`, you will also need to set the `reactive`
+attribute for all objects that provide the `parse_name` property.
+
 ### Move arrays to static memory
 
-If you have arrays whose contents never change, you can place them in 
+If you have arrays whose contents never change, you can place them in
 static memory, like this:
 
 ```
-Array my_array static --> 1 2 3 4 5 "String1" "String2"; 
+Array my_array static --> 1 2 3 4 5 "String1" "String2";
 ```
 
-This makes dynamic memory smaller, which means save and restore get 
+This makes dynamic memory smaller, which means save and restore get
 faster. Since static memory can also be swapped out, it means gameplay
 can be smoother in sections of the game where the arrays aren't used.
 
@@ -409,7 +415,7 @@ game. If the game is ported to a new system (say from PunyInform to
 Twine or Inform 7), it gets a new IFID. Also, if the game is translated
 to another language (say French), it gets a new IFID as well.
 
-## Set Release and Serial 
+## Set Release and Serial
 
 When you start developing a game, you don't need to set the Release
 number and Serial number. They will get reasonable defaults. As you
@@ -507,4 +513,3 @@ it faster. If you still want all error checks, but skip the explanatory
 error messages, you can set it to 1. This is the default when building
 without the DEBUG mode. When in DEBUG mode, the default setting is 2,
 meaning that full error messages are also printed.
-
