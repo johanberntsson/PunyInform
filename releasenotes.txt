@@ -532,4 +532,7 @@ v2.7: bug fix and new feature release
 - New constants OPTIONAL_SL_NO_SCORE and OPTIONAL_SL_NO_MOVES to hide score and
   moves from the statusline in z5+ games. Defining NO_SCORE will define
   OPTIONAL_SL_NO_SCORE automatically.
-  
+- Added routines NumberWords and WordValue (described in DM4)
+- Moved PronounNotice routine to a better place in parser.h, considering
+  virtual memory handling in Ozmoo and other 8-bit terps.
+    

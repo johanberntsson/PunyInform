@@ -151,12 +151,20 @@ System_file;
 ! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to _CheckNoun,
 ! since they will typically be called from parse_name routines, which are called from _CheckNoun
 
-[ WordAddress p_wordnum;  ! Absolute addr of 'wordnum' string in buffer
+[ WordAddress p_wordnum;    ! Absolute addr of 'wordnum' string in buffer
 	return buffer + parse->(p_wordnum*4+1);
 ];
 
 [ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
 	return parse->(p_wordnum*4);
+];
+
+[ WordValue p_wordnum;      ! Dictionary value of 'wordnum' string in buffer
+    return parse-->(p_wordnum*2-1);
+];
+
+[ NumberWords;              ! Number of parsed strings in buffer
+    return parse->1;
 ];
 
 [ _PeekAtNextWord _i;
@@ -177,18 +185,6 @@ System_file;
 [ NextWordStopped;
 	if (wn > parse->1) { wn++; return -1; }
 	return NextWord();
-];
-
-[ PronounNotice p_object;
-	if(p_object == 0 or player or Directions) return;
-	if(p_object has pluralname) {
-		themobj = p_object;
-	} else if(p_object has animate) {
-		if(p_object has female) herobj = p_object;
-		else if(p_object has neuter) itobj = p_object;
-		else himobj = p_object;
-	} else itobj = p_object;
-	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
 ];
 
 [ _UserFilter _obj;
@@ -1424,6 +1420,18 @@ Array guess_object-->5;
 	}
 	! we should never reach this line
 	! the while(true) loop is only exited by return statements
+];
+
+[ PronounNotice p_object;
+	if(p_object == 0 or player or Directions) return;
+	if(p_object has pluralname) {
+		themobj = p_object;
+	} else if(p_object has animate) {
+		if(p_object has female) herobj = p_object;
+		else if(p_object has neuter) itobj = p_object;
+		else himobj = p_object;
+	} else itobj = p_object;
+	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
 ];
 
 [ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action;

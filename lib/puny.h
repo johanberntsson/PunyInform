@@ -17,6 +17,7 @@
 ! - NextWord
 ! - NextWordStopped
 ! - NumberWord
+! - NumberWords
 ! - ObjectIsUntouchable
 ! - PlayerTo
 ! - ParseToken
@@ -28,6 +29,7 @@
 ! - TryNumber
 ! - WordAddress
 ! - WordLength
+! - WordValue
 ! - YesOrNo
 ! OTHERS:
 ! - PrintOrRun
