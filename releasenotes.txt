@@ -498,7 +498,7 @@ v2.5: bug fix and new feature release (14 May 2021)
   thanks to Hugo Labrande.
 
 =======
-v2.6: bug fix and new feature release
+v2.6: bug fix and new feature release (8 June 2021)
 - Fixed a pronoun update bug when trying to talk to inamimate objects.
 - Added rule to not include held objects when disambiguate for the take action
 - Added 'sniff' as a synonym to 'smell'
@@ -522,7 +522,7 @@ v2.6: bug fix and new feature release
 - Fixed that consult_words sometimes held a value when it shouldn't.
 
 =======
-v2.7: bug fix and new feature release
+v2.7: bug fix and new feature release (19 July 2021)
 - Removed the text "revealing..." when opening a container from the inside.
 - Added grammar for "shout (topic) at (creature)", triggering the Answer action
   ('to' was recognized before, 'at' is a new synonym)
@@ -535,4 +535,7 @@ v2.7: bug fix and new feature release
 - Added routines NumberWords and WordValue (described in DM4)
 - Moved PronounNotice routine to a better place in parser.h, considering
   virtual memory handling in Ozmoo and other 8-bit terps.
+
+=======
+v2.8: bug fix and new feature release
     
