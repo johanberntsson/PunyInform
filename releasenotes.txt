@@ -539,4 +539,6 @@ v2.7: bug fix and new feature release (19 July 2021)
 =======
 v2.8: bug fix and new feature release
 - Slight updates to Game Author's Guide
-    
+- Fixed a bug in _UserFilter which caused problems when using a filter function
+  for second.
+      
