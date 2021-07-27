@@ -187,15 +187,17 @@ System_file;
 	return NextWord();
 ];
 
-[ _UserFilter _obj;
+[ _UserFilter _obj _noun _ret;
 	!  UserFilter consults the user's filter (or checks on attribute)
 	!  to see what already-accepted nouns are acceptable
     if(noun_filter > 0 && noun_filter < 49) {
         if (_obj has (noun_filter-1)) rtrue;
         rfalse;
     }
-    noun = _obj;
-    return indirect(noun_filter);
+	_noun = noun; noun = _obj;
+    _ret = indirect(noun_filter);
+	noun = _noun;
+	return _ret;
 ];
 
 [ _CalculateObjectLevel p_obj;
