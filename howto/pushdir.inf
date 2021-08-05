@@ -25,7 +25,7 @@ Object Street "Street"
 		s_to Lawn,
 		e_to Square;
 
-Object -> Gocart "go-kart"
+Object -> Gokart "go-kart"
 	with
 		name 'gokart' 'go-kart' 'kart',
 		invent [;
