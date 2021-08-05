@@ -1,0 +1,75 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+Constant Story      "PushDir demo";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+! Uncomment to add optional features to PunyInform
+Constant DEBUG;
+Constant OPTIONAL_NO_DARKNESS;
+
+Constant INITIAL_LOCATION_VALUE = Street;
+
+Include "globals.h";
+
+Include "puny.h";
+
+Verb 'start'
+	* noun -> SwitchOn;
+
+Object Street "Street"
+	with
+		description "You are in the street outside your house. The lawn is to the south. The square is to the east.",
+		s_to Lawn,
+		e_to Square;
+
+Object -> Gocart "go-kart"
+	with
+		name 'gokart' 'go-kart' 'kart',
+		invent [;
+			if(inventory_stage == 2)
+				print " (broken)";
+		],
+!		describe [; rtrue; ],
+		before [ dirobj;
+		Take, Remove:
+			"You can't be serious.";
+		SwitchOn:
+			"It won't start.";
+		Push, Pull, Turn:
+			"You can move the kart with ~PUSH KART EAST~";
+		PushDir:
+			! Make sure the player isn't in/on anything
+			if(player notin location)
+				"You'd have to be on your own feet to do that.";
+
+			! First define where this item can't be pushed
+			if(location == Street && selected_direction == s_to)
+				"It would just mess up the grass!";
+
+			! Now try to walk in this direction, and move the object
+			! there as well. It's okay that we may not be able to go there.
+			dirobj = DirPropToFakeObj(selected_direction);
+			<Go dirobj>;
+			move self to real_location;
+			rtrue;
+		],
+	has container open enterable switchable;
+
+Object Lawn "Lawn"
+	with
+		description "You are on your well-kept lawn. You wouldn't want to have
+			a go-kart on this lawn. The street lies to the north.",
+		n_to Street;
+
+Object Square "Workshop"
+	with
+		description "You're in the workshop. The street lies to the west.",
+		w_to Street;
+
+[Initialise;
+	print "^^You need to get your go-kart out of the way. How about pushing it
+		east, to the workshop?^^";
+];

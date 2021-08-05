@@ -541,4 +541,6 @@ v2.8: bug fix and new feature release
 - Slight updates to Game Author's Guide
 - Fixed a bug in _UserFilter which caused problems when using a filter function
   for second.
+- Added howto/pushdir.inf to show how to program items that can be pushed to
+  other locations.
       
