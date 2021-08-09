@@ -543,4 +543,4 @@ v2.8: bug fix and new feature release
   for second.
 - Added howto/pushdir.inf to show how to program items that can be pushed to
   other locations.
-      
+- Removed the common property "number".

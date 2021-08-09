@@ -169,7 +169,6 @@ Property additive life   $ffff;
 Property initial;
 Property description;
 Property cant_go;
-Property number;
 Property found_in;         !  For fiddly reasons this can't alias
 Property time_left;
 Property additive time_out $ffff;
