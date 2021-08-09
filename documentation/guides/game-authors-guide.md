@@ -314,7 +314,7 @@ objects the player, or another actor, can refer to. By default, the
 PunyInform library will assume that what's in scope changes whenever a
 user-supplied routine is called, and this may happen a lot. This causes
 the library to recalculate the scope quite often, and this makes the
-game slower, particulary in situations where a lot of objects are in
+game slower, particularly in situations where a lot of objects are in
 scope.
 
 If you want to improve on this situation, you can define the constant
@@ -327,7 +327,13 @@ don't need to set `scope_modified`. All library routines that move the
 player or move or modify objects, like `OpenSub()` and `PlayerTo()`,
 already set `scope_modified` as needed.
 
-Example:
+If you don't want to worry about manual scope while programming, you can
+just wait until you're ready to release the game, add
+`Constant OPTIONAL_MANUAL_SCOPE;` at the beginning of your program, then
+search for `move`, `remove` and `give` in your code and add
+`scope_modified = true;` as appropriate.
+
+Example of code that needs `scope_modified = true`:
 
 ```
 Constant OPTIONAL_MANUAL_SCOPE;
