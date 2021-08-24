@@ -20,8 +20,8 @@ Constant MSG_TAKE_STATIC "That's fixed in place.";
 #Ifndef MSG_TAKE_NO_CAPACITY;
 Constant MSG_TAKE_NO_CAPACITY "You are carrying too many things already.";
 #EndIf;
-#Ifndef MSG_TAKE_SUCCESS;
-Constant MSG_TAKE_SUCCESS "Taken.";
+#Ifndef MSG_TAKE_DEFAULT;
+Constant MSG_TAKE_DEFAULT "Taken.";
 #EndIf;
 #Ifndef MSG_EAT_INEDIBLE;
 Constant MSG_EAT_INEDIBLE "That's plainly inedible.";
@@ -41,20 +41,20 @@ Constant MSG_OPEN_LOCKED "It seems to be locked.";
 #Ifndef MSG_THROW_ANIMATE;
 Constant MSG_THROW_ANIMATE "Futile.";
 #Endif;
-#Ifndef MSG_THROW_SUCCESS;
-Constant MSG_THROW_SUCCESS "You lack the nerve when it comes to the crucial moment.";
+#Ifndef MSG_THROW_DEFAULT;
+Constant MSG_THROW_DEFAULT "You lack the nerve when it comes to the crucial moment.";
 #Endif;
-#Ifndef MSG_SMELL_SUCCESS;
-Constant MSG_SMELL_SUCCESS "You smell nothing unexpected.";
+#Ifndef MSG_SMELL_DEFAULT;
+Constant MSG_SMELL_DEFAULT "You smell nothing unexpected.";
 #Endif;
-#Ifndef MSG_LISTEN_SUCCESS;
-Constant MSG_LISTEN_SUCCESS "You hear nothing unexpected.";
+#Ifndef MSG_LISTEN_DEFAULT;
+Constant MSG_LISTEN_DEFAULT "You hear nothing unexpected.";
 #Endif;
 #Ifndef MSG_TELL_PLAYER;
 Constant MSG_TELL_PLAYER "You talk to yourself for a while.";
 #Endif;
-#Ifndef MSG_TELL_SUCCESS;
-Constant MSG_TELL_SUCCESS "This provokes no reaction.";
+#Ifndef MSG_TELL_DEFAULT;
+Constant MSG_TELL_DEFAULT "This provokes no reaction.";
 #Endif;
 #Ifndef MSG_ENTER_ALREADY;
 Constant MSG_ENTER_ALREADY "But you are already there!";
@@ -74,8 +74,8 @@ Constant MSG_INVENTORY_EMPTY "You are empty handed.";
 #Ifndef MSG_GO_CANT_GO;
 Constant MSG_GO_CANT_GO "You can't go that way.";
 #Endif;
-#Ifndef MSG_SAVE_SUCCESS;
-Constant MSG_SAVE_SUCCESS "Ok.";
+#Ifndef MSG_SAVE_DEFAULT;
+Constant MSG_SAVE_DEFAULT "Ok.";
 #Endif;
 #Ifndef MSG_INSERT_ITSELF;
 Constant MSG_INSERT_ITSELF "You can't put something inside itself.";
@@ -86,8 +86,8 @@ Constant MSG_PUTON_NOT_SUPPORTER "You can't put things on top of that.";
 #Ifndef MSG_PUTON_ITSELF;
 Constant MSG_PUTON_ITSELF "You can't put something on itself.";
 #Endif;
-#Ifndef MSG_ATTACK_SUCCESS;
-Constant MSG_ATTACK_SUCCESS "Violence isn't the answer to this one.";
+#Ifndef MSG_ATTACK_DEFAULT;
+Constant MSG_ATTACK_DEFAULT "Violence isn't the answer to this one.";
 #Endif;
 #Ifndef MSG_FILL_NO_WATER;
 Constant MSG_FILL_NO_WATER "But there's no water here to carry.";
@@ -95,11 +95,11 @@ Constant MSG_FILL_NO_WATER "But there's no water here to carry.";
 #Ifndef MSG_DIG_NO_USE;
 Constant MSG_DIG_NO_USE "Digging would achieve nothing here.";
 #EndIf;
-#Ifndef MSG_WAIT_SUCCESS;
-Constant MSG_WAIT_SUCCESS "Nothing happens.";
+#Ifndef MSG_WAIT_DEFAULT;
+Constant MSG_WAIT_DEFAULT "Nothing happens.";
 #EndIf;
-#Ifndef MSG_TOUCH_SUCCESS;
-Constant MSG_TOUCH_SUCCESS "You don't feel anything unexpected.";
+#Ifndef MSG_TOUCH_DEFAULT;
+Constant MSG_TOUCH_DEFAULT "You don't feel anything unexpected.";
 #EndIf;
 #Ifndef MSG_PUSHDIR_DEFAULT;
 Constant MSG_PUSHDIR_DEFAULT "Is that the best you can think of?";
@@ -107,8 +107,8 @@ Constant MSG_PUSHDIR_DEFAULT "Is that the best you can think of?";
 #Ifndef MSG_JUMP;
 Constant MSG_JUMP "You jump on the spot, fruitlessly.";
 #EndIf;
-#Ifndef MSG_REMOVE_SUCCESS;
-Constant MSG_REMOVE_SUCCESS "Removed.";
+#Ifndef MSG_REMOVE_DEFAULT;
+Constant MSG_REMOVE_DEFAULT "Removed.";
 #EndIf;
 #Ifndef MSG_SEARCH_NOTHING_SPECIAL;
 Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
@@ -182,48 +182,48 @@ Default MSG_TAKE_ANIMATE = 5;
 Default MSG_TAKE_PLAYER_PARENT = 6;
 Default MSG_EAT_ANIMATE = 7;
 Default MSG_DROP_NOT_HOLDING = 8;
-Default MSG_OPEN_SUCCESS = 9;
-Default MSG_CLOSE_SUCCESS = 10;
+Default MSG_OPEN_DEFAULT = 9;
+Default MSG_CLOSE_DEFAULT = 10;
 Default MSG_LOOK_BEFORE_ROOMNAME  = 11;
 Default MSG_SHOW_NOT_HOLDING = 12;
-Default MSG_SHOW_SUCCESS = 13;
+Default MSG_SHOW_DEFAULT = 13;
 Default MSG_GIVE_NOT_HOLDING = 14;
-Default MSG_GIVE_SUCCESS = 15;
-Default MSG_ASKFOR_SUCCESS = 16;
-Default MSG_ASKTO_SUCCESS = 17;
-Default MSG_ENTER_SUCCESS = 18;
+Default MSG_GIVE_DEFAULT = 15;
+Default MSG_ASKFOR_DEFAULT = 16;
+Default MSG_ASKTO_DEFAULT = 17;
+Default MSG_ENTER_DEFAULT = 18;
 Default MSG_EXIT_FIRST_LEAVE = 19;
 Default MSG_ENTER_NOT_OPEN = 20;
 Default MSG_EXIT_NOT_OPEN = 21;
-Default MSG_EXIT_SUCCESS = 22;
-Default MSG_INVENTORY_SUCCESS = 23;
+Default MSG_EXIT_DEFAULT = 22;
+Default MSG_INVENTORY_DEFAULT = 23;
 Default MSG_GO_FIRST_LEAVE = 24;
 Default MSG_GIVE_PLAYER 25;
 Default MSG_SAVE_FAILED 26;
 Default MSG_RESTORE_FAILED 27;
 Default MSG_RESTART_FAILED 28;
-Default MSG_INSERT_SUCCESS 29;
+Default MSG_INSERT_DEFAULT 29;
 Default MSG_INSERT_NOT_OPEN 30;
-Default MSG_ASK_SUCCESS 31;
-Default MSG_ANSWER_SUCCESS 32;
+Default MSG_ASK_DEFAULT 31;
+Default MSG_ANSWER_DEFAULT 32;
 Default MSG_RESTART_RESTORE_OR_QUIT 33;
 Default MSG_AREYOUSUREQUIT 34;
 Default MSG_WEAR_ALREADY_WORN 35;
 Default MSG_WEAR_NOT_CLOTHING 36;
 Default MSG_WEAR_NOT_HOLDING 37;
-Default MSG_WEAR_SUCCESS 38;
+Default MSG_WEAR_DEFAULT 38;
 Default MSG_INSERT_ALREADY 39;
 Default MSG_INSERT_NO_ROOM 40;
 Default MSG_PUTON_ALREADY 41;
 Default MSG_PUTON_NO_ROOM 42;
-Default MSG_PUTON_SUCCESS 43;
+Default MSG_PUTON_DEFAULT 43;
 Default MSG_GO_DOOR_CLOSED 44;
 Default MSG_SWITCH_ON_NOT_SWITCHABLE 45;
 Default MSG_SWITCH_OFF_NOT_SWITCHABLE 46;
 Default MSG_SWITCH_ON_ON 47;
 Default MSG_SWITCH_OFF_NOT_ON 48;
-Default MSG_SWITCH_ON_SUCCESS 49;
-Default MSG_SWITCH_OFF_SUCCESS 50;
+Default MSG_SWITCH_ON_DEFAULT 49;
+Default MSG_SWITCH_OFF_DEFAULT 50;
 Default MSG_PUSH_STATIC 51;
 Default MSG_PULL_STATIC 52;
 Default MSG_TURN_STATIC 53;
@@ -233,9 +233,9 @@ Default MSG_TURN_SCENERY 56;
 Default MSG_PUSH_ANIMATE 57;
 Default MSG_PULL_ANIMATE 58;
 Default MSG_TURN_ANIMATE 59;
-Default MSG_TURN_SUCCESS 60;
-Default MSG_PUSH_SUCCESS 61;
-Default MSG_PULL_SUCCESS 62;
+Default MSG_TURN_DEFAULT 60;
+Default MSG_PUSH_DEFAULT 61;
+Default MSG_PULL_DEFAULT 62;
 Default MSG_YOU_HAVE_WON 63;
 Default MSG_YOU_HAVE_DIED 64;
 Default MSG_PARSER_NOTHING_TO_VERB 66;
@@ -247,9 +247,9 @@ Default MSG_LOCK_NOT_A_LOCK 71;
 Default MSG_LOCK_ALREADY_LOCKED 72;
 Default MSG_LOCK_CLOSE_FIRST 73;
 Default MSG_LOCK_KEY_DOESNT_FIT 74;
-Default MSG_LOCK_SUCCESS 75;
+Default MSG_LOCK_DEFAULT 75;
 Default MSG_DISROBE_NOT_WEARING 76;
-Default MSG_DISROBE_SUCCESS 77;
+Default MSG_DISROBE_DEFAULT 77;
 Default MSG_REMOVE_CLOSED 78;
 Default MSG_REMOVE_NOT_HERE 79;
 Default MSG_SEARCH_IN_IT_ISARE 80;
@@ -257,18 +257,18 @@ Default MSG_SEARCH_ON_IT_ISARE 81;
 Default MSG_SEARCH_EMPTY 82;
 Default MSG_SEARCH_NOTHING_ON 83;
 Default MSG_SEARCH_CANT_SEE_CLOSED 84;
-Default MSG_EAT_SUCCESS = 85;
+Default MSG_EAT_DEFAULT = 85;
 #Ifdef OPTIONAL_FULL_SCORE;
 Default MSG_FULLSCORE_START 86;
 Default MSG_FULLSCORE_END 87;
 #Endif;
 #Ifndef NO_SCORE;
-Default MSG_SCORE_SUCCESS 88;
+Default MSG_SCORE_DEFAULT 88;
 #Endif;
 Default MSG_UNLOCK_NOT_A_LOCK 89;
 Default MSG_UNLOCK_ALREADY_UNLOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
-Default MSG_UNLOCK_SUCCESS 92;
+Default MSG_UNLOCK_DEFAULT 92;
 Default MSG_ENTER_BAD_LOCATION 93;
 Default MSG_PROMPT 94;
 #Ifndef OPTIONAL_NO_DARKNESS;
@@ -308,8 +308,8 @@ Default MSG_CLIMB_DEFAULT 124;
 Default MSG_PARSER_BAD_PATTERN_PREFIX 125;
 Default MSG_PARSER_BAD_PATTERN_SUFFIX 126;
 Default MSG_TAKE_ALREADY_HAVE 127;
-Default MSG_SHOUT_SUCCESS 128;
-Default MSG_SHOUTAT_SUCCESS 129;
+Default MSG_SHOUT_DEFAULT 128;
+Default MSG_SHOUTAT_DEFAULT 129;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -371,17 +371,17 @@ Constant MSG_THINK_DEFAULT "What a good idea.";
 #Ifndef MSG_WAVEHANDS_DEFAULT;
 Constant MSG_WAVEHANDS_DEFAULT "You wave, feeling foolish.";
 #EndIf;
-#Ifndef MSG_WAKE_SUCCESS;
-Constant MSG_WAKE_SUCCESS "The dreadful truth is, this is not a dream.";
+#Ifndef MSG_WAKE_DEFAULT;
+Constant MSG_WAKE_DEFAULT "The dreadful truth is, this is not a dream.";
 #Endif;
-#Ifndef MSG_WAKEOTHER_SUCCESS;
-Constant MSG_WAKEOTHER_SUCCESS "That seems unnecessary.";
+#Ifndef MSG_WAKEOTHER_DEFAULT;
+Constant MSG_WAKEOTHER_DEFAULT "That seems unnecessary.";
 #Endif;
 #Ifndef MSG_KISS_PLAYER;
 Constant MSG_KISS_PLAYER "If you think that'll help.";
 #Endif;
-#Ifndef MSG_KISS_SUCCESS;
-Constant MSG_KISS_SUCCESS "Keep your mind on the game.";
+#Ifndef MSG_KISS_DEFAULT;
+Constant MSG_KISS_DEFAULT "Keep your mind on the game.";
 #Endif;
 #Ifndef MSG_MILD_DEFAULT;
 Constant MSG_MILD_DEFAULT "Quite.";
@@ -412,7 +412,7 @@ Default LibraryMessages 0;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
-	MSG_TURN_SUCCESS, MSG_PUSH_SUCCESS, MSG_PULL_SUCCESS:
+	MSG_TURN_DEFAULT, MSG_PUSH_DEFAULT, MSG_PULL_DEFAULT:
 		"Nothing obvious happens.";
 #IfDef SACK_OBJECT;
 #IfTrue MSG_SACK_PUTTING < 1000;
@@ -425,8 +425,8 @@ Default LibraryMessages 0;
 		print "> ";
 		rtrue;
 #EndIf;
-#IfTrue MSG_INVENTORY_SUCCESS < 1000;
-	MSG_INVENTORY_SUCCESS:
+#IfTrue MSG_INVENTORY_DEFAULT < 1000;
+	MSG_INVENTORY_DEFAULT:
 		! return true if something listed to run afterroutines
 		! or false if MSG_INVENTORY_EMPTY should be displayed
 		if(PrintContents("You're carrying ", player)) {
@@ -456,8 +456,8 @@ Default LibraryMessages 0;
 		"I don't suppose ", (the) noun, " would care for that.";
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg_1, ".";
-#Iftrue MSG_OPEN_SUCCESS < 1000;
-	MSG_OPEN_SUCCESS:
+#Iftrue MSG_OPEN_DEFAULT < 1000;
+	MSG_OPEN_DEFAULT:
 		print "You open ", (the) noun;
 		if(noun has container && noun hasnt transparent &&
 				~~IndirectlyContains(noun, player)) {
@@ -472,12 +472,12 @@ Default LibraryMessages 0;
 		! add a newline, but default is to write nothing.
 		!@new_line;
 #Endif;
-	MSG_CLOSE_SUCCESS, MSG_ENTER_SUCCESS, MSG_LOCK_SUCCESS,
-		MSG_UNLOCK_SUCCESS, MSG_EXIT_SUCCESS:
+	MSG_CLOSE_DEFAULT, MSG_ENTER_DEFAULT, MSG_LOCK_DEFAULT,
+		MSG_UNLOCK_DEFAULT, MSG_EXIT_DEFAULT:
 		"You ", (verbname) p_arg_1, " ", (the) noun, ".";
-	MSG_GIVE_SUCCESS, MSG_SHOW_SUCCESS:
+	MSG_GIVE_DEFAULT, MSG_SHOW_DEFAULT:
 		print_ret (The) second, " doesn't seem interested.";
-	MSG_ASKFOR_SUCCESS, MSG_ASKTO_SUCCESS, MSG_ORDERS_WONT:
+	MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT, MSG_ORDERS_WONT:
 		print_ret (The) p_arg_1, " has better things to do.";
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
 		"You can't, since ",(the) p_arg_1, " is closed.";
@@ -489,37 +489,37 @@ Default LibraryMessages 0;
 		"Already there.";
 	MSG_INSERT_NO_ROOM, MSG_PUTON_NO_ROOM:
 		"There is no more room.";
-#IfTrue MSG_INSERT_SUCCESS < 1000;
-	MSG_INSERT_SUCCESS:
+#IfTrue MSG_INSERT_DEFAULT < 1000;
+	MSG_INSERT_DEFAULT:
 		"You put ", (the) noun, " into ", (the) second, ".";
 #EndIf;
-#IfTrue MSG_PUTON_SUCCESS < 1000;
-	MSG_PUTON_SUCCESS:
+#IfTrue MSG_PUTON_DEFAULT < 1000;
+	MSG_PUTON_DEFAULT:
 		"You put ", (the) noun, " on ", (the) second, ".";
 #EndIf;
-	MSG_ASK_SUCCESS, MSG_ANSWER_SUCCESS, MSG_SHOUT_SUCCESS, MSG_SHOUTAT_SUCCESS:
+	MSG_ASK_DEFAULT, MSG_ANSWER_DEFAULT, MSG_SHOUT_DEFAULT, MSG_SHOUTAT_DEFAULT:
 		"There is no reply.";
 #IfTrue MSG_WEAR_ALREADY_WORN < 1000;
 	MSG_WEAR_ALREADY_WORN:
 		"You are already wearing ", (ItorThem) noun, ".";
 #EndIf;
-#IfTrue MSG_WEAR_SUCCESS < 1000;
-	MSG_WEAR_SUCCESS:
+#IfTrue MSG_WEAR_DEFAULT < 1000;
+	MSG_WEAR_DEFAULT:
 		"You are now wearing ", (the) noun, ".";
 #EndIf;
 #IfTrue MSG_DISROBE_NOT_WEARING < 1000;
 	MSG_DISROBE_NOT_WEARING:
 		"You're not wearing ", (the) noun, ".";
 #EndIf;
-#IfTrue MSG_DISROBE_SUCCESS < 1000;
-	MSG_DISROBE_SUCCESS:
+#IfTrue MSG_DISROBE_DEFAULT < 1000;
+	MSG_DISROBE_DEFAULT:
 		"You take off ", (the) noun, ".";
 #EndIf;
 	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
 		print_ret (CTheyreorThats) noun, " not something you can switch.";
 	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
 		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ".";
-	MSG_SWITCH_ON_SUCCESS, MSG_SWITCH_OFF_SUCCESS:
+	MSG_SWITCH_ON_DEFAULT, MSG_SWITCH_OFF_DEFAULT:
 		"You switch ", (the) noun, " ", (OnOff) noun, ".";
 #Iftrue MSG_AUTO_TAKE < 1000;
 	MSG_AUTO_TAKE:
@@ -626,8 +626,8 @@ Default LibraryMessages 0;
 	MSG_EXAMINE_ONOFF:
 		print_ret (The) noun, " ", (IsOrAre) noun, " currently switched ", (onoff) noun, ".";
 #EndIf;
-#IfTrue MSG_EAT_SUCCESS < 1000;
-	MSG_EAT_SUCCESS:
+#IfTrue MSG_EAT_DEFAULT < 1000;
+	MSG_EAT_DEFAULT:
 		"You eat ", (the) noun, ". Not bad.";
 #EndIf;
 MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
@@ -649,8 +649,8 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		"But it's dark.";
 #Endif;
 #Ifndef NO_SCORE;
-#Iftrue MSG_SCORE_SUCCESS < 1000;
-	MSG_SCORE_SUCCESS:
+#Iftrue MSG_SCORE_DEFAULT < 1000;
+	MSG_SCORE_DEFAULT:
 		if (deadflag) print "In that game you"; else print "You have so far";
 		print " scored ", score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
 		if(turns ~= 1) print "s";
