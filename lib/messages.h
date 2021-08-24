@@ -401,6 +401,231 @@ Default MSG_SET_TO_DEFAULT 204;
 Default LibraryMessages 0;
 
 
+#Iffalse MSG_PUSH_DEFAULT < 1000;
+#Iffalse MSG_PULL_DEFAULT < 1000;
+#Iffalse MSG_TURN_DEFAULT < 1000;
+Constant SKIP_MSG_PUSH_DEFAULT;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_PUSH_STATIC < 1000;
+#Iffalse MSG_PULL_STATIC < 1000;
+#Iffalse MSG_TURN_STATIC < 1000;
+Constant SKIP_MSG_PUSH_STATIC;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_PUSH_SCENERY < 1000;
+#Iffalse MSG_PULL_SCENERY < 1000;
+#Iffalse MSG_TURN_SCENERY < 1000;
+Constant SKIP_MSG_PUSH_SCENERY;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_PUSH_ANIMATE < 1000;
+#Iffalse MSG_PULL_ANIMATE < 1000;
+#Iffalse MSG_TURN_ANIMATE < 1000;
+#Iffalse MSG_CLIMB_ANIMATE < 1000;
+Constant SKIP_MSG_PUSH_ANIMATE;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+
+
+#Iffalse MSG_DROP_NOT_HOLDING < 1000;
+#Iffalse MSG_SHOW_NOT_HOLDING < 1000;
+#Iffalse MSG_GIVE_NOT_HOLDING < 1000;
+#Iffalse MSG_WEAR_NOT_HOLDING < 1000;
+Constant SKIP_MSG_DROP_NOT_HOLDING;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_OPEN_YOU_CANT < 1000;
+#Iffalse MSG_CLOSE_YOU_CANT < 1000;
+#Iffalse MSG_ENTER_YOU_CANT < 1000;
+#Iffalse MSG_LOCK_YOU_CANT < 1000;
+#Iffalse MSG_UNLOCK_YOU_CANT < 1000;
+#Iffalse MSG_WEAR_YOU_CANT < 1000;
+Constant SKIP_MSG_OPEN_YOU_CANT;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_TAKE_ANIMATE < 1000;
+#Iffalse MSG_EAT_ANIMATE < 1000;
+Constant SKIP_MSG_TAKE_ANIMATE;
+#Endif;
+#Endif;
+
+#Iffalse MSG_TAKE_PLAYER_PARENT < 1000;
+#Iffalse MSG_GO_FIRST_LEAVE < 1000;
+#Iffalse MSG_EXIT_FIRST_LEAVE < 1000;
+Constant SKIP_MSG_TAKE_PLAYER_PARENT;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_CLOSE_DEFAULT < 1000;
+#Iffalse MSG_ENTER_DEFAULT < 1000;
+#Iffalse MSG_LOCK_DEFAULT < 1000;
+#Iffalse MSG_UNLOCK_DEFAULT < 1000;
+#Iffalse MSG_EXIT_DEFAULT < 1000;
+Constant SKIP_MSG_CLOSE_DEFAULT;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_GIVE_DEFAULT < 1000;
+#Iffalse MSG_SHOW_DEFAULT < 1000;
+Constant SKIP_MSG_GIVE_DEFAULT;
+#Endif;
+#Endif;
+
+#Iffalse MSG_ASKFOR_DEFAULT < 1000;
+#Iffalse MSG_ASKTO_DEFAULT < 1000;
+#Iffalse MSG_ORDERS_WONT < 1000;
+Constant SKIP_MSG_ASKFOR_DEFAULT;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_ENTER_NOT_OPEN < 1000;
+#Iffalse MSG_EXIT_NOT_OPEN < 1000;
+#Iffalse MSG_INSERT_NOT_OPEN < 1000;
+#Iffalse MSG_GO_DOOR_CLOSED < 1000;
+Constant SKIP_MSG_ENTER_NOT_OPEN;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_GIVE_PLAYER < 1000;
+#Iffalse MSG_TAKE_ALREADY_HAVE < 1000;
+Constant SKIP_MSG_GIVE_PLAYER;
+#Endif;
+#Endif;
+
+#Iffalse MSG_SAVE_FAILED < 1000;
+#Iffalse MSG_RESTORE_FAILED < 1000;
+#Iffalse MSG_RESTART_FAILED < 1000;
+Constant SKIP_MSG_SAVE_FAILED;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_INSERT_ALREADY < 1000;
+#Iffalse MSG_PUTON_ALREADY < 1000;
+Constant SKIP_MSG_INSERT_ALREADY;
+#Endif;
+#Endif;
+
+#Iffalse MSG_INSERT_NO_ROOM < 1000;
+#Iffalse MSG_PUTON_NO_ROOM < 1000;
+Constant SKIP_MSG_INSERT_NO_ROOM;
+#Endif;
+#Endif;
+
+#Iffalse MSG_ASK_DEFAULT < 1000;
+#Iffalse MSG_ANSWER_DEFAULT < 1000;
+#Iffalse MSG_SHOUT_DEFAULT < 1000;
+#Iffalse MSG_SHOUTAT_DEFAULT < 1000;
+Constant SKIP_MSG_ASK_DEFAULT;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_SWITCH_ON_NOT_SWITCHABLE < 1000;
+#Iffalse MSG_SWITCH_OFF_NOT_SWITCHABLE < 1000;
+Constant SKIP_MSG_SWITCH_ON_NOT_SWITCHABL;
+#Endif;
+#Endif;
+
+#Iffalse MSG_SWITCH_ON_ON < 1000;
+#Iffalse MSG_SWITCH_OFF_NOT_ON < 1000;
+Constant SKIP_MSG_SWITCH_ON_ON;
+#Endif;
+#Endif;
+
+#Iffalse MSG_SWITCH_ON_DEFAULT < 1000;
+#Iffalse MSG_SWITCH_OFF_DEFAULT < 1000;
+Constant SKIP_MSG_SWITCH_ON_DEFAULT;
+#Endif;
+#Endif;
+
+#Iffalse MSG_PARSER_NOT_HOLDING < 1000;
+#Iffalse MSG_WAVE_NOTHOLDING < 1000;
+Constant SKIP_MSG_PARSER_NOT_HOLDING;
+#Endif;
+#Endif;
+
+#Iffalse MSG_CLOSE_NOT_OPEN < 1000;
+#Iffalse MSG_TOUCHABLE_FOUND_CLOSED < 1000;
+#Iffalse MSG_PARSER_CONTAINER_ISNT_OPEN < 1000;
+Constant SKIP_MSG_CLOSE_NOT_OPEN;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_CUT_NO_USE < 1000;
+#Iffalse MSG_JUMP_OVER < 1000;
+#Iffalse MSG_TIE_DEFAULT < 1000;
+#Iffalse MSG_CLIMB_DEFAULT < 1000;
+Constant SKIP_MSG_CUT_NO_USE;
+#Endif;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_LOCK_ALREADY_LOCKED < 1000;
+#Iffalse MSG_UNLOCK_ALREADY_UNLOCKED < 1000;
+Constant SKIP_MSG_LOCK_ALREADY_LOCKED;
+#Endif;
+#Endif;
+
+#Iffalse MSG_LOCK_KEY_DOESNT_FIT < 1000;
+#Iffalse MSG_UNLOCK_KEY_DOESNT_FIT < 1000;
+Constant SKIP_MSG_LOCK_KEY_DOESNT_FIT;
+#Endif;
+#Endif;
+
+#Iffalse MSG_EXAMINE_CLOSED < 1000;
+#Iffalse MSG_REMOVE_CLOSED < 1000;
+#Iffalse MSG_EMPTY_IS_CLOSED < 1000;
+Constant SKIP_MSG_EXAMINE_CLOSED;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_RUB_DEFAULT < 1000;
+#Iffalse MSG_SQUEEZE_DEFAULT < 1000;
+Constant SKIP_MSG_RUB_DEFAULT;
+#Endif;
+#Endif;
+
+#Iffalse MSG_EXAMINE_DARK < 1000;
+#Iffalse MSG_SEARCH_DARK < 1000;
+Constant SKIP_MSG_EXAMINE_DARK;
+#Endif;
+#Endif;
+
+#Iffalse MSG_INSERT_NOT_CONTAINER < 1000;
+#Iffalse MSG_EMPTY_CANT_CONTAIN < 1000;
+Constant SKIP_MSG_INSERT_NOT_CONTAINER;
+#Endif;
+#Endif;
+
 [ _PrintMsg p_msg p_arg_1 p_arg_2;
 	if(p_msg ofclass String)
 		print_ret (string) p_msg;
@@ -412,8 +637,18 @@ Default LibraryMessages 0;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
-	MSG_TURN_DEFAULT, MSG_PUSH_DEFAULT, MSG_PULL_DEFAULT:
+#Ifndef SKIP_MSG_PUSH_DEFAULT;
+	MSG_PUSH_DEFAULT, MSG_PULL_DEFAULT, MSG_TURN_DEFAULT:
 		"Nothing obvious happens.";
+#Endif;
+#Ifndef SKIP_MSG_PUSH_STATIC;
+	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
+		print_ret (CTheyreorThats) noun, " fixed in place.";
+#Endif;
+#Ifndef SKIP_MSG_PUSH_SCENERY;
+	MSG_PUSH_SCENERY, MSG_PULL_SCENERY, MSG_TURN_SCENERY:
+		"What a concept!";
+#Endif;
 #IfDef SACK_OBJECT;
 #IfTrue MSG_SACK_PUTTING < 1000;
 	MSG_SACK_PUTTING:
@@ -440,22 +675,28 @@ Default LibraryMessages 0;
 	MSG_EXAMINE_NOTHING_SPECIAL:
 		"There is nothing special about ", (the) noun, ".";
 #EndIf;
-	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
-		print_ret (CTheyreorThats) noun, " fixed in place.";
-	MSG_TURN_SCENERY, MSG_PUSH_SCENERY, MSG_PULL_SCENERY:
-		"What a concept!";
-	MSG_TURN_ANIMATE, MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE, MSG_CLIMB_ANIMATE:
+#Ifndef SKIP_MSG_PUSH_ANIMATE;
+	MSG_PUSH_ANIMATE, MSG_PULL_ANIMATE, MSG_TURN_ANIMATE, MSG_CLIMB_ANIMATE:
 		"That would be less than courteous.";
+#Endif;
+#Ifndef SKIP_MSG_DROP_NOT_HOLDING;
 	MSG_DROP_NOT_HOLDING, MSG_SHOW_NOT_HOLDING, MSG_GIVE_NOT_HOLDING,
-		MSG_WEAR_NOT_HOLDING:
+	MSG_WEAR_NOT_HOLDING:
 		"You aren't holding ", (ItorThem) noun, ".";
+#Endif;
+#Ifndef SKIP_MSG_OPEN_YOU_CANT;
 	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT,
-		MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK, MSG_WEAR_NOT_CLOTHING:
+	MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK, MSG_WEAR_NOT_CLOTHING:
 		"That doesn't seem to be something you can ", (verbname) p_arg_1, ".";
+#Endif;
+#Ifndef SKIP_MSG_TAKE_ANIMATE;
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
+#Endif;
+#Ifndef SKIP_MSG_TAKE_PLAYER_PARENT;
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
 		"First, you'd have to leave ", (the) p_arg_1, ".";
+#Endif;
 #Iftrue MSG_OPEN_DEFAULT < 1000;
 	MSG_OPEN_DEFAULT:
 		print "You open ", (the) noun;
@@ -472,23 +713,40 @@ Default LibraryMessages 0;
 		! add a newline, but default is to write nothing.
 		!@new_line;
 #Endif;
+#Ifndef SKIP_MSG_CLOSE_DEFAULT;
 	MSG_CLOSE_DEFAULT, MSG_ENTER_DEFAULT, MSG_LOCK_DEFAULT,
-		MSG_UNLOCK_DEFAULT, MSG_EXIT_DEFAULT:
+	MSG_UNLOCK_DEFAULT, MSG_EXIT_DEFAULT:
 		"You ", (verbname) p_arg_1, " ", (the) noun, ".";
+#Endif;
+#Ifndef SKIP_MSG_GIVE_DEFAULT;
 	MSG_GIVE_DEFAULT, MSG_SHOW_DEFAULT:
 		print_ret (The) second, " doesn't seem interested.";
+#Endif;
+#Ifndef SKIP_MSG_ASKFOR_DEFAULT;
 	MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT, MSG_ORDERS_WONT:
 		print_ret (The) p_arg_1, " has better things to do.";
-	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN, MSG_GO_DOOR_CLOSED:
+#Endif;
+#Ifndef SKIP_MSG_ENTER_NOT_OPEN;
+	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN,
+	MSG_GO_DOOR_CLOSED:
 		"You can't, since ",(the) p_arg_1, " is closed.";
+#Endif;
+#Ifndef SKIP_MSG_GIVE_PLAYER;
 	MSG_GIVE_PLAYER, MSG_TAKE_ALREADY_HAVE:
 		"You already have ", (ItorThem) noun, ".";
+#Endif;
+#Ifndef SKIP_MSG_SAVE_FAILED;
 	MSG_SAVE_FAILED, MSG_RESTORE_FAILED, MSG_RESTART_FAILED:
 		"Failed ", (verbname) verb_word, ".";
+#Endif;
+#Ifndef SKIP_MSG_INSERT_ALREADY;
 	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY:
 		"Already there.";
+#Endif;
+#Ifndef SKIP_MSG_INSERT_NO_ROOM;
 	MSG_INSERT_NO_ROOM, MSG_PUTON_NO_ROOM:
 		"There is no more room.";
+#Endif;
 #IfTrue MSG_INSERT_DEFAULT < 1000;
 	MSG_INSERT_DEFAULT:
 		"You put ", (the) noun, " into ", (the) second, ".";
@@ -497,8 +755,10 @@ Default LibraryMessages 0;
 	MSG_PUTON_DEFAULT:
 		"You put ", (the) noun, " on ", (the) second, ".";
 #EndIf;
+#Ifndef SKIP_MSG_ASK_DEFAULT;
 	MSG_ASK_DEFAULT, MSG_ANSWER_DEFAULT, MSG_SHOUT_DEFAULT, MSG_SHOUTAT_DEFAULT:
 		"There is no reply.";
+#Endif;
 #IfTrue MSG_WEAR_ALREADY_WORN < 1000;
 	MSG_WEAR_ALREADY_WORN:
 		"You are already wearing ", (ItorThem) noun, ".";
@@ -515,12 +775,18 @@ Default LibraryMessages 0;
 	MSG_DISROBE_DEFAULT:
 		"You take off ", (the) noun, ".";
 #EndIf;
+#Ifndef SKIP_MSG_SWITCH_ON_NOT_SWITCHABL;
 	MSG_SWITCH_ON_NOT_SWITCHABLE, MSG_SWITCH_OFF_NOT_SWITCHABLE:
 		print_ret (CTheyreorThats) noun, " not something you can switch.";
+#Endif;
+#Ifndef SKIP_MSG_SWITCH_ON_ON;
 	MSG_SWITCH_ON_ON, MSG_SWITCH_OFF_NOT_ON:
 		print_ret (CTheyreorThats) noun, " already ", (OnOff) noun, ".";
+#Endif;
+#Ifndef SKIP_MSG_SWITCH_ON_DEFAULT;
 	MSG_SWITCH_ON_DEFAULT, MSG_SWITCH_OFF_DEFAULT:
 		"You switch ", (the) noun, " ", (OnOff) noun, ".";
+#Endif;
 #Iftrue MSG_AUTO_TAKE < 1000;
 	MSG_AUTO_TAKE:
 	print "(first taking ", (the) p_arg_1, ")^";
@@ -539,8 +805,10 @@ Default LibraryMessages 0;
 			"~.";
 		}
 #EndIf;
+#Ifndef SKIP_MSG_PARSER_NOT_HOLDING;
 	MSG_PARSER_NOT_HOLDING, MSG_WAVE_NOTHOLDING:
 		print_ret "But you are not holding ", (the) p_arg_1, ".";
+#Endif;
 #IfTrue MSG_PARSER_PARTIAL_MATCH < 1000;
 	MSG_PARSER_PARTIAL_MATCH:
 		print "I only understood you as far as ~";
@@ -572,24 +840,35 @@ Default LibraryMessages 0;
 	MSG_PARSER_BAD_PATTERN_SUFFIX:
 		"~. Please try again.";
 #EndIf;
-	MSG_TOUCHABLE_FOUND_CLOSED, MSG_PARSER_CONTAINER_ISNT_OPEN, MSG_CLOSE_NOT_OPEN:
+#Ifndef SKIP_MSG_CLOSE_NOT_OPEN;
+	MSG_CLOSE_NOT_OPEN, MSG_TOUCHABLE_FOUND_CLOSED,
+	MSG_PARSER_CONTAINER_ISNT_OPEN:
 		print_ret (CObjIs) p_arg_1, "n't open.";
+#Endif;
 #IfTrue MSG_CONSULT_NOTHING_INTERESTING < 1000;
 	MSG_CONSULT_NOTHING_INTERESTING:
 		"You discover nothing of interest in ", (the) second, ".";
 #EndIf;
+#Ifndef SKIP_MSG_CUT_NO_USE;
 	MSG_CUT_NO_USE, MSG_JUMP_OVER, MSG_TIE_DEFAULT, MSG_CLIMB_DEFAULT:
 		"You would achieve nothing by this.";
+#Endif;
+#Ifndef SKIP_MSG_LOCK_ALREADY_LOCKED;
 	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_UNLOCKED:
 		print_ret (CObjIs) noun, " already ", (verbname) p_arg_1, "ed.";
+#Endif;
 #IfTrue MSG_LOCK_CLOSE_FIRST < 1000;
 	MSG_LOCK_CLOSE_FIRST:
 		"First you'd have to close ", (the) noun, ".";
 #EndIf;
+#Ifndef SKIP_MSG_LOCK_KEY_DOESNT_FIT;
 	MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT:
 		print_ret (The) second, " doesn't seem to fit the lock.";
+#Endif;
+#Ifndef SKIP_MSG_EXAMINE_CLOSED;
 	MSG_EXAMINE_CLOSED, MSG_REMOVE_CLOSED, MSG_EMPTY_IS_CLOSED:
 		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " closed.";
+#Endif;
 #IfTrue MSG_REMOVE_NOT_HERE < 1000;
 	MSG_REMOVE_NOT_HERE:
 		"But ", (the) noun, " isn't there now.";
@@ -630,8 +909,10 @@ Default LibraryMessages 0;
 	MSG_EAT_DEFAULT:
 		"You eat ", (the) noun, ". Not bad.";
 #EndIf;
+#Ifndef SKIP_MSG_RUB_DEFAULT;
 MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 	"You achieve nothing by this.";
+#Endif;
 #IfTrue MSG_TAKE_NOT_AVAILABLE < 1000;
 	MSG_TAKE_NOT_AVAILABLE:
 		print_ret (CObjIs) noun, " not available.";
@@ -645,8 +926,10 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		print_ret (The) p_arg_1, " seems to be part of ", (the) p_arg_2, ".";
 #EndIf;
 #Ifndef OPTIONAL_NO_DARKNESS;
+#Ifndef SKIP_MSG_EXAMINE_DARK;
 	MSG_EXAMINE_DARK, MSG_SEARCH_DARK:
 		"But it's dark.";
+#Endif;
 #Endif;
 #Ifndef NO_SCORE;
 #Iftrue MSG_SCORE_DEFAULT < 1000;
@@ -703,8 +986,10 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 			print "enter ", (the) parent(noun);
 		" first.";
 #EndIf;
+#Ifndef SKIP_MSG_INSERT_NOT_CONTAINER;
 	MSG_INSERT_NOT_CONTAINER, MSG_EMPTY_CANT_CONTAIN:
 		print_ret (The) p_arg_1, " can't contain things.";
+#Endif;
 #IfTrue MSG_YES_OR_NO < 1000;
 	MSG_YES_OR_NO:
 		print "Please answer yes or no: ";
