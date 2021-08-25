@@ -558,3 +558,5 @@ v2.8: bug fix and new feature release
   MSG_WAIT_SUCCESS, MSG_WAKE_SUCCESS, MSG_WAKEOTHER_SUCCESS, MSG_WEAR_SUCCESS
 - Changed so complex library messages shared by multiple identifiers are now
   omitted if all identifiers have been replaced by custom messages.
+- New messages: MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE.
+- Changed InsertSub and PutOnSub to call a common routine, to save bytes.

@@ -400,31 +400,72 @@ Verb 'wear'
 	GoDir(_prop);
 ];
 
-[ InsertSub _ancestor;
-	if(noun == player) <<Enter second>>;
-	receive_action = ##Insert;
+! Generic routine to move object. Can be used for Insert, PutOn, Take, Drop, Transfer, Empty (and Enter/Exit?)
+! p_messages:
+! 0: Noun is already in second
+! 1: Can't put noun in/on itself
+! 2: Second isn't open
+! 3: Try to grab if not held (1 to try, no message#)
+! 4: Try to disrobe noun if worn (1 to try, no message#)
+! 5: Second is animate
+! 6: Second isn't container
+! 7: Second isn't supporter
+! 8: Check if second is full
+! 9: Default (success) message
+[ _MoveNounToSecond p_messages _msg _ancestor _action;
 	if(ObjectIsUntouchable(second)) return;
-	if (parent(noun) == second) { PrintMsg(MSG_INSERT_ALREADY); rtrue; }
 	_ancestor = CommonAncestor(noun, second);
-	if (_ancestor == noun) { PrintMsg(MSG_INSERT_ITSELF); rtrue; }
-	if (second ~= _ancestor && second has container && second hasnt open) {
-		PrintMsg(MSG_INSERT_NOT_OPEN, second);
+
+	_msg = p_messages-->0;
+	if(_msg && parent(noun) == second) {
+		PrintMsg(_msg);
 		rtrue;
 	}
+	_msg = p_messages-->1;
+	if(_msg && _ancestor == noun) {
+		PrintMsg(_msg);
+		rtrue;
+	}
+	_msg = p_messages-->2;
+	if(_msg && second ~= _ancestor && second has container && second hasnt open) {
+		PrintMsg(_msg, second);
+		rtrue;
+	}
+	_msg = p_messages-->3;
+	if(_msg && noun ~=player && _ImplicitGrabIfNotHeld(noun)) rtrue;
 
-	if(noun ~=player && _ImplicitGrabIfNotHeld(noun)) rtrue;
-	if(_ImplicitDisrobeIfWorn(noun)) rtrue;
+	_msg = p_messages-->4;
+	if(_msg && _ImplicitDisrobeIfWorn(noun)) rtrue;
 
 	! run before on receiver
 #IfDef DEBUG;
 	if(debug_flag & 1) print "(", (name) second, ").before()^";
 #EndIf;
-	action = ##Receive;
-	if(RunRoutines(second, before) ~= 0) { action = ##Insert; rtrue; }
-	action = ##Insert;
+	receive_action = action;
+	_action = action; action = ##Receive;
+	if(RunRoutines(second, before) ~= 0) { action = _action; rtrue; }
+	action = _action;
 
-	if (second hasnt container) { PrintMsg(MSG_INSERT_NOT_CONTAINER, second); rtrue; }
-	if (_AtFullCapacity(second)) { PrintMsg(MSG_INSERT_NO_ROOM); rtrue; }
+	_msg = p_messages-->5;
+	if(_msg && second has animate) {
+		PrintMsg(_msg);
+		rtrue;
+	}
+	_msg = p_messages-->6;
+	if(_msg && second hasnt container) {
+		PrintMsg(_msg, second);
+		rtrue;
+	}
+	_msg = p_messages-->7;
+	if(_msg && second hasnt supporter) {
+		PrintMsg(_msg, second);
+		rtrue;
+	}
+	_msg = p_messages-->8;
+	if(_msg && _AtFullCapacity(second)) {
+		PrintMsg(_msg);
+		rtrue;
+	}
 
 	move noun to second;
 
@@ -435,12 +476,41 @@ Verb 'wear'
 #IfDef DEBUG;
 	if(debug_flag & 1) print "(", (name) second, ").after()^";
 #EndIf;
-	action = ##Receive;
-	if(RunRoutines(second, after) ~= 0) { action = ##Insert; rtrue; }
-	action = ##Insert;
+	_action = action; action = ##Receive;
+	if(RunRoutines(second, after) ~= 0) { action = _action; rtrue; }
+	action = _action;
 
 	if (keep_silent) return;
-	PrintMsg(MSG_INSERT_DEFAULT);
+	_msg = p_messages-->9;
+	if(_msg) PrintMsg(_msg);
+];
+
+
+! 0: Noun is already in second
+! 1: Can't put noun in/on itself
+! 2: Second isn't open
+! 3: Try to grab if not held (1 to try, no message#)
+! 4: Try to disrobe noun if worn (1 to try, no message#)
+! 5: Second is animate
+! 6: Second isn't container
+! 7: Second isn't supporter
+! 8: Check if second is full
+! 9: Default (success) message
+Array _InsertMessages -->
+	MSG_INSERT_ALREADY
+	MSG_INSERT_ITSELF
+	MSG_INSERT_NOT_OPEN
+	1
+	1
+	MSG_INSERT_ANIMATE
+	MSG_INSERT_NOT_CONTAINER
+	0
+	MSG_INSERT_NO_ROOM
+	MSG_INSERT_DEFAULT;
+
+[ InsertSub;
+	if(noun == player) <<Enter second>>;
+	_MoveNounToSecond(_InsertMessages);
 ];
 
 [ InvSub;
@@ -517,40 +587,31 @@ Verb 'wear'
 	PrintMsg(MSG_PUSHDIR_DEFAULT);
 ];
 
-[ PutOnSub _ancestor;
+! 0: Noun is already in second
+! 1: Can't put noun in/on itself
+! 2: Second isn't open
+! 3: Try to grab if not held (1 to try, no message#)
+! 4: Try to disrobe noun if worn (1 to try, no message#)
+! 5: Second is animate
+! 6: Second isn't container
+! 7: Second isn't supporter
+! 8: Check if second is full
+! 9: Default (success) message
+Array _PutOnMessages -->
+	MSG_PUTON_ALREADY
+	MSG_PUTON_ITSELF
+	0
+	1
+	1
+	MSG_PUTON_ANIMATE
+	0
+	MSG_PUTON_NOT_SUPPORTER
+	MSG_PUTON_NO_ROOM
+	MSG_PUTON_DEFAULT;
+
+[ PutOnSub;
 	if(noun == player) <<Enter second>>;
-	receive_action = ##PutOn;
-	if (ObjectIsUntouchable(second)) return;
-	if (parent(noun) == second) { PrintMsg(MSG_PUTON_ALREADY); rtrue; }
-	_ancestor = CommonAncestor(noun, second);
-	if (_ancestor == noun) { PrintMsg(MSG_PUTON_ITSELF); rtrue; }
-	if(noun ~= player && _ImplicitGrabIfNotHeld(noun)) rtrue;
-	if(_ImplicitDisrobeIfWorn(noun)) rtrue;
-
-	! run before on receiver
-#IfDef DEBUG;
-	if(debug_flag & 1) print "(", (name) second, ").before()^";
-#EndIf;
-	action = ##Receive;
-	if(RunRoutines(second, before) ~= 0) { action = ##PutOn; rtrue; }
-	action = ##PutOn;
-
-	if (second hasnt supporter) { PrintMsg(MSG_PUTON_NOT_SUPPORTER); rtrue; }
-	if (_AtFullCapacity(second)) { PrintMsg(MSG_PUTON_NO_ROOM); rtrue; }
-
-	move noun to second;
-
-	! run after on receiver
-#IfDef DEBUG;
-	if(debug_flag & 1) print "(", (name) second, ").after()^";
-#EndIf;
-	action = ##Receive;
-	if(RunRoutines(second, after) ~= 0) { action = ##PutOn; rtrue; }
-	action = ##PutOn;
-
-	if(AfterRoutines()) rtrue;
-	if (keep_silent) return;
-	PrintMsg(MSG_PUTON_DEFAULT);
+	_MoveNounToSecond(_PutOnMessages);
 ];
 
 [ RemoveSub _i;

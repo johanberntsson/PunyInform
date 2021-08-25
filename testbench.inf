@@ -592,7 +592,9 @@ Book -> -> RedBook "red book"
 			initial "On the bottom of the box, there is a red book.",
 			description "The book is old and worn.",
 			before [;
-	 			Take:
+	 			Transfer:
+					"NO WAY!";
+	 			Take, Remove:
 	 				if(player in LargeBox) {
 	 					"It's too hard to pick it up while inside the box.";
 	 				}
@@ -616,6 +618,18 @@ Object -> -> Gun "gun"
 Object -> -> -> Trigger "trigger"
 	with
 		name 'trigger';
+
+Object -> Shelf "shelf"
+	with
+		name 'shelf',
+		capacity 1,
+	has supporter enterable;
+
+Object -> -> Boots "boots"
+	with
+		name 'pair' 'of' 'boots',
+		article "a pair of",
+	has supporter enterable pluralname;
 
 Object -> Ladder "ladder"
 	with
