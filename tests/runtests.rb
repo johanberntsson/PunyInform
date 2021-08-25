@@ -3,8 +3,8 @@
 $is_windows = (ENV['OS'] == 'Windows_NT')
 
 def checkforfailures() 
-    if $some_tests_failed then
-        puts "\nSOME TESTS FAILED!"
+    if $num_tests_failed > 0 then
+        puts "\n#{$num_tests_failed}/#{$num_tests} TESTS FAILED!"
         exit
     end
 end
@@ -38,6 +38,7 @@ def runtest(filename, version, inform_args)
             puts result
             raise Errno::ENOENT
         end
+        $num_tests += 1
         result = %x[#{frotz_cmd}]
         result = %x[#{prune_cmd}]
         result = %x[#{diff_cmd_ignore_banner}]
@@ -45,7 +46,7 @@ def runtest(filename, version, inform_args)
             puts "passed"
         else
             puts "failed"
-            $some_tests_failed = true
+            $num_tests_failed += 1
             puts %x[#{diff_cmd}]
         end
     rescue Errno::ENOENT
@@ -54,7 +55,8 @@ def runtest(filename, version, inform_args)
     end
 end
 
-$some_tests_failed = false
+$num_tests = 0
+$num_tests_failed = 0
 
 puts "Testing v3 debug"
 Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
