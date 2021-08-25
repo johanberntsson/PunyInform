@@ -77,14 +77,8 @@ Constant MSG_GO_CANT_GO "You can't go that way.";
 #Ifndef MSG_SAVE_DEFAULT;
 Constant MSG_SAVE_DEFAULT "Ok.";
 #Endif;
-#Ifndef MSG_INSERT_ITSELF;
-Constant MSG_INSERT_ITSELF "You can't put something inside itself.";
-#Endif;
 #Ifndef MSG_PUTON_NOT_SUPPORTER;
 Constant MSG_PUTON_NOT_SUPPORTER "You can't put things on top of that.";
-#Endif;
-#Ifndef MSG_PUTON_ITSELF;
-Constant MSG_PUTON_ITSELF "You can't put something on itself.";
 #Endif;
 #Ifndef MSG_ATTACK_DEFAULT;
 Constant MSG_ATTACK_DEFAULT "Violence isn't the answer to this one.";
@@ -155,6 +149,8 @@ Constant MSG_PARSER_COMPLEX_AGAIN "The 'again' command must be on a new input li
 #Ifndef MSG_PARSER_NOTHING_TO_AGAIN;
 Constant MSG_PARSER_NOTHING_TO_AGAIN "You can hardly repeat that.";
 #EndIf;
+
+
 
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;
@@ -312,6 +308,16 @@ Default MSG_SHOUT_DEFAULT 128;
 Default MSG_SHOUTAT_DEFAULT 129;
 Default MSG_INSERT_ANIMATE 130;
 Default MSG_PUTON_ANIMATE 131;
+Default MSG_TRANSFER_ALREADY 132;
+Default MSG_INSERT_ITSELF 133;
+Default MSG_PUTON_ITSELF 134;
+Default MSG_TRANSFER_IN_ON_ITSELF 135;
+Default MSG_TRANSFER_NOT_OPEN 136;
+Default MSG_TRANSFER_ANIMATE 137;
+Default MSG_TRANSFER_NOT_CONTAIN_SUPPORT 138;
+Default MSG_TRANSFER_NO_ROOM 139;
+Default MSG_TRANSFER_DEFAULT 140;
+
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -505,8 +511,10 @@ Constant SKIP_MSG_ASKFOR_DEFAULT;
 #Iffalse MSG_ENTER_NOT_OPEN < 1000;
 #Iffalse MSG_EXIT_NOT_OPEN < 1000;
 #Iffalse MSG_INSERT_NOT_OPEN < 1000;
+#Iffalse MSG_TRANSFER_NOT_OPEN < 1000;
 #Iffalse MSG_GO_DOOR_CLOSED < 1000;
 Constant SKIP_MSG_ENTER_NOT_OPEN;
+#Endif;
 #Endif;
 #Endif;
 #Endif;
@@ -528,19 +536,25 @@ Constant SKIP_MSG_SAVE_FAILED;
 
 #Iffalse MSG_INSERT_ALREADY < 1000;
 #Iffalse MSG_PUTON_ALREADY < 1000;
+#Iffalse MSG_TRANSFER_ALREADY < 1000;
 Constant SKIP_MSG_INSERT_ALREADY;
+#Endif;
 #Endif;
 #Endif;
 
 #Iffalse MSG_INSERT_ANIMATE < 1000;
 #Iffalse MSG_PUTON_ANIMATE < 1000;
+#Iffalse MSG_TRANSFER_ANIMATE < 1000;
 Constant SKIP_MSG_INSERT_ANIMATE;
+#Endif;
 #Endif;
 #Endif;
 
 #Iffalse MSG_INSERT_NO_ROOM < 1000;
 #Iffalse MSG_PUTON_NO_ROOM < 1000;
+#Iffalse MSG_TRANSFER_NO_ROOM < 1000;
 Constant SKIP_MSG_INSERT_NO_ROOM;
+#Endif;
 #Endif;
 #Endif;
 
@@ -633,6 +647,31 @@ Constant SKIP_MSG_EXAMINE_DARK;
 Constant SKIP_MSG_INSERT_NOT_CONTAINER;
 #Endif;
 #Endif;
+
+
+!#Ifndef MSG_INSERT_ITSELF;
+!Constant MSG_INSERT_ITSELF "You can't put something inside itself.";
+!#Endif;
+!#Ifndef MSG_PUTON_ITSELF;
+!Constant MSG_PUTON_ITSELF "You can't put something on itself.";
+!#Endif;
+#Iffalse MSG_INSERT_ITSELF < 1000;
+#Iffalse MSG_PUTON_ITSELF < 1000;
+#Iffalse MSG_TRANSFER_IN_ON_ITSELF < 1000;
+Constant SKIP_MSG_INSERT_ITSELF;
+#Endif;
+#Endif;
+#Endif;
+
+
+#Iffalse MSG_INSERT_DEFAULT < 1000;
+#Iffalse MSG_PUTON_DEFAULT < 1000;
+#Iffalse MSG_TRANSFER_DEFAULT < 1000;
+Constant SKIP_MSG_INSERT_DEFAULT;
+#Endif;
+#Endif;
+#Endif;
+
 
 [ _PrintMsg p_msg p_arg_1 p_arg_2;
 	if(p_msg ofclass String)
@@ -736,7 +775,7 @@ Constant SKIP_MSG_INSERT_NOT_CONTAINER;
 #Endif;
 #Ifndef SKIP_MSG_ENTER_NOT_OPEN;
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN,
-	MSG_GO_DOOR_CLOSED:
+	MSG_TRANSFER_NOT_OPEN, MSG_GO_DOOR_CLOSED:
 		"You can't, since ",(the) p_arg_1, " is closed.";
 #Endif;
 #Ifndef SKIP_MSG_GIVE_PLAYER;
@@ -748,24 +787,29 @@ Constant SKIP_MSG_INSERT_NOT_CONTAINER;
 		"Failed ", (verbname) verb_word, ".";
 #Endif;
 #Ifndef SKIP_MSG_INSERT_ALREADY;
-	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY:
+	MSG_INSERT_ALREADY, MSG_PUTON_ALREADY, MSG_TRANSFER_ALREADY:
 		"Already there.";
 #Endif;
+#Ifndef SKIP_MSG_INSERT_ITSELF;
+!#Iftrue MSG_TRANSFER_IN_ON_ITSELF < 1000;
+	MSG_INSERT_ITSELF, MSG_PUTON_ITSELF, MSG_TRANSFER_IN_ON_ITSELF:
+		"You can't put something ", (InsideorOn) second, " itself.";
+#Endif;
 #Ifndef SKIP_MSG_INSERT_ANIMATE;
-	MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE:
+	MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE, MSG_TRANSFER_ANIMATE:
 		"Try giving ",(ItorThem) noun," instead.";
 #Endif;
 #Ifndef SKIP_MSG_INSERT_NO_ROOM;
-	MSG_INSERT_NO_ROOM, MSG_PUTON_NO_ROOM:
+	MSG_INSERT_NO_ROOM, MSG_PUTON_NO_ROOM, MSG_TRANSFER_NO_ROOM:
 		"There is no more room.";
 #Endif;
-#IfTrue MSG_INSERT_DEFAULT < 1000;
-	MSG_INSERT_DEFAULT:
-		"You put ", (the) noun, " into ", (the) second, ".";
+#IfTrue MSG_TRANSFER_NOT_CONTAIN_SUPPORT < 1000;
+	MSG_TRANSFER_NOT_CONTAIN_SUPPORT:
+		"You can't put anything in or on ", (ThatorThose) noun, ".";
 #EndIf;
-#IfTrue MSG_PUTON_DEFAULT < 1000;
-	MSG_PUTON_DEFAULT:
-		"You put ", (the) noun, " on ", (the) second, ".";
+#Ifndef SKIP_MSG_INSERT_DEFAULT;
+	MSG_INSERT_DEFAULT, MSG_PUTON_DEFAULT, MSG_TRANSFER_DEFAULT:
+		"You put ", (the) noun, " ", (IntoorOn) second, " ", (the) second, ".";
 #EndIf;
 #Ifndef SKIP_MSG_ASK_DEFAULT;
 	MSG_ASK_DEFAULT, MSG_ANSWER_DEFAULT, MSG_SHOUT_DEFAULT, MSG_SHOUTAT_DEFAULT:
@@ -1057,6 +1101,18 @@ default:
 		! No code found. Print an error message.
 		RuntimeError(ERR_UNKNOWN_MSGNO);
 	}
+];
+
+[InsideorOn obj;
+	if(obj has supporter) print "on";
+	else print "inside";
+	return;
+];
+
+[IntoorOn obj;
+	if(obj has supporter) print "on";
+	else print "into";
+	return;
 ];
 
 [OnOff obj;

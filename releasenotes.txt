@@ -560,3 +560,4 @@ v2.8: bug fix and new feature release
   omitted if all identifiers have been replaced by custom messages.
 - New messages: MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE.
 - Changed InsertSub and PutOnSub to call a common routine, to save bytes.
+- Changed TransferSub to move noun without picking it up.
