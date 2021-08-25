@@ -11,13 +11,13 @@ test-beforeparsing:
 	inform +../lib -v3 test-beforeparsing.inf
 	frotz test-beforeparsing.z3
 
-containers:
-	inform +../lib -v3 containers.inf
-	frotz containers.z3
+test-issue85:
+	inform +../lib -v3 test-issue85.inf
+	frotz test-issue85.z3
 
 inform:
-	inform -v8 testbench.inf
-	frotz testbench.z8
+	inform -v8 test-issue85.inf
+	frotz test-issue85.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages
