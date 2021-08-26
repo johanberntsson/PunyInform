@@ -618,7 +618,7 @@ Array _PutOnMessages -->
 	_i = parent(noun);
 	if (_i has container && _i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED, _i); rtrue; }
 	if (_i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
-	if(TryToTakeNoun() == 1) rtrue;
+	if(TryToTakeNoun() ~= false) rtrue;
 	action = ##Remove; if (AfterRoutines()) rtrue;
 	action = ##Take;   if (AfterRoutines()) rtrue;
 	if (keep_silent) rtrue;
@@ -694,7 +694,7 @@ Array _PutOnMessages -->
 ];
 
 [ TakeSub;
-	if(TryToTakeNoun() == 1) rtrue;
+	if(TryToTakeNoun() ~= false) rtrue;
 	if(AfterRoutines()) rtrue;
 	if (keep_silent) return;
 	PrintMsg(MSG_TAKE_DEFAULT);
@@ -737,7 +737,7 @@ Array _PutOnMessages -->
 		PrintMsg(MSG_TRANSFER_ALREADY);
 		rtrue;
 	}
-	if(noun notin player && TryToTakeNoun()) return;
+	if(noun notin player && TryToTakeNoun() == true) return;
 	if (second has supporter) <<PutOn noun second>>;
 	if (second == Directions && selected_direction == d_to) <<Drop noun>>;
 	<Insert noun second>;
@@ -1714,7 +1714,8 @@ Global scope_cnt;
 [ TryToTakeNoun _i _k _ancestor _after_recipient;
     ! Try to transfer the given item to the player: return false
     ! if successful, true if unsuccessful, printing a suitable message
-    ! in the latter case.
+    ! in the latter case. Return value 2 means it was a success, and a "Taken"
+	! message has been printed.
     ! People cannot ordinarily be taken.
     if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
 #Ifdef DisallowTakeAnimate;
@@ -1765,8 +1766,9 @@ Global scope_cnt;
 		if(debug_flag & 1) print "(", (name) _after_recipient, ").after()^";
 #EndIf;
 		_k = action; action = ##LetGo;
-		RunRoutines(_after_recipient, after);
+		_i = RunRoutines(_after_recipient, after);
 		action = _k;
+		if(_i) return 2;
 	}
 
 	rfalse;
