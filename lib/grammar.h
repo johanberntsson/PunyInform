@@ -890,42 +890,25 @@ Verb 'yes' 'y//'
 	<EmptyT noun FAKE_D_OBJ>;
 ];
 
-[ EmptyTSub _i _j _k _flag _recipient;
+[ EmptyTSub _i _recipient;
 	if(noun == second) { PrintMsg(MSG_EMPTY_WOULDNT_ACHIEVE); rtrue; }
-	if(ObjectIsUntouchable(noun) || ObjectIsUntouchable(second)) return;
-!		_recipient = TouchCeiling(player);
-	if(selected_direction ~= d_to) {
-!	else {
-		_recipient = second;
-		if(second hasnt supporter) {
-			if(second hasnt container) { PrintMsg(MSG_EMPTY_CANT_CONTAIN, second); rtrue; }
-			if(second hasnt open) { PrintMsg(MSG_EMPTY_IS_CLOSED, second); rtrue; }
-		}
+	if(noun has container && noun hasnt open) { 
+		PrintMsg(MSG_EMPTY_IS_CLOSED, noun);
+		rtrue;
 	}
-	_i = child(noun); _k = children(noun);
+	if(second == Directions && selected_direction ~= 0)
+		_recipient = DirPropToFakeObj(selected_direction);
+	else
+		_recipient = second;
+	_i = child(noun);
 	if(_i == 0) { PrintMsg(MSG_EMPTY_ALREADY_EMPTY, noun); rtrue; }
 	while(_i ~= 0) {
-		_j = sibling(_i);
-		_flag = 0;
-		if(ObjectIsUntouchable(noun)) _flag = 1;
-		if(noun hasnt container) _flag = 1;
-		if(noun hasnt open) _flag = 1;
-		if(selected_direction ~= d_to) {
-			if(second hasnt supporter) {
-				if(second hasnt container) _flag = 1;
-				if(second hasnt open) _flag = 1;
-			}
-		}
-		if(_k-- == 0) _flag = 1;
-		if(_flag) break;
 		if(keep_silent == 0) print (name) _i, ": ";
-		if(selected_direction == d_to) {
-			_ImplicitGrabIfNotHeld(_i);
-			<Drop _i>;
-		} else
-			<Transfer _i _recipient>;
-		_i = _j;
+		<Transfer _i _recipient>;
+		if(_i in noun || _i in player) rtrue;
+		_i = child(noun);
 	}
+	AfterRoutines();
 ];
 
 [ GoInSub;

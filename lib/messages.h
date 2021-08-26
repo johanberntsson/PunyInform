@@ -293,11 +293,10 @@ Default MSG_CLOSE_NOT_OPEN 111;
 Default MSG_RUB_DEFAULT 112;
 Default MSG_SQUEEZE_DEFAULT 113;
 Default MSG_EXAMINE_CLOSED 114;
-Default MSG_EMPTY_IS_CLOSED 115;
+Default MSG_EMPTY_IS_CLOSED 115; ! Only used from extended verbset, but same message also used in basic set.
 Default MSG_PARSER_NO_NEED_REFER_TO 116;
 Default MSG_PARSER_DONT_UNDERSTAND_WORD 117;
 Default MSG_INSERT_NOT_CONTAINER 118;
-Default MSG_EMPTY_CANT_CONTAIN 119; ! Extended verbset, but uses same msg as INSERT
 Default MSG_YES_OR_NO 120;
 Default MSG_RESTART_CONFIRM 121;
 #Ifndef NO_SCORE;
@@ -506,7 +505,11 @@ Constant SKIP_MSG_ASKFOR_DEFAULT;
 #Iffalse MSG_EXIT_NOT_OPEN < 1000;
 #Iffalse MSG_INSERT_NOT_OPEN < 1000;
 #Iffalse MSG_GO_DOOR_CLOSED < 1000;
+#Iffalse MSG_EMPTY_IS_CLOSED < 1000;
+#Iffalse MSG_REMOVE_CLOSED < 1000;
 Constant SKIP_MSG_ENTER_NOT_OPEN;
+#Endif;
+#Endif;
 #Endif;
 #Endif;
 #Endif;
@@ -608,14 +611,6 @@ Constant SKIP_MSG_LOCK_KEY_DOESNT_FIT;
 #Endif;
 #Endif;
 
-#Iffalse MSG_EXAMINE_CLOSED < 1000;
-#Iffalse MSG_REMOVE_CLOSED < 1000;
-#Iffalse MSG_EMPTY_IS_CLOSED < 1000;
-Constant SKIP_MSG_EXAMINE_CLOSED;
-#Endif;
-#Endif;
-#Endif;
-
 #Iffalse MSG_RUB_DEFAULT < 1000;
 #Iffalse MSG_SQUEEZE_DEFAULT < 1000;
 Constant SKIP_MSG_RUB_DEFAULT;
@@ -625,12 +620,6 @@ Constant SKIP_MSG_RUB_DEFAULT;
 #Iffalse MSG_EXAMINE_DARK < 1000;
 #Iffalse MSG_SEARCH_DARK < 1000;
 Constant SKIP_MSG_EXAMINE_DARK;
-#Endif;
-#Endif;
-
-#Iffalse MSG_INSERT_NOT_CONTAINER < 1000;
-#Iffalse MSG_EMPTY_CANT_CONTAIN < 1000;
-Constant SKIP_MSG_INSERT_NOT_CONTAINER;
 #Endif;
 #Endif;
 
@@ -736,8 +725,8 @@ Constant SKIP_MSG_INSERT_NOT_CONTAINER;
 #Endif;
 #Ifndef SKIP_MSG_ENTER_NOT_OPEN;
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN,
-	MSG_GO_DOOR_CLOSED:
-		"You can't, since ",(the) p_arg_1, " is closed.";
+	MSG_GO_DOOR_CLOSED, MSG_EMPTY_IS_CLOSED, MSG_REMOVE_CLOSED:
+		"You can't, since ",(the) p_arg_1, " ", (isorare) p_arg_1, " closed.";
 #Endif;
 #Ifndef SKIP_MSG_GIVE_PLAYER;
 	MSG_GIVE_PLAYER, MSG_TAKE_ALREADY_HAVE:
@@ -877,8 +866,8 @@ Constant SKIP_MSG_INSERT_NOT_CONTAINER;
 	MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT:
 		print_ret (The) second, " doesn't seem to fit the lock.";
 #Endif;
-#Ifndef SKIP_MSG_EXAMINE_CLOSED;
-	MSG_EXAMINE_CLOSED, MSG_REMOVE_CLOSED, MSG_EMPTY_IS_CLOSED:
+#IfTrue MSG_EXAMINE_CLOSED < 1000;
+	MSG_EXAMINE_CLOSED:
 		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " closed.";
 #Endif;
 #IfTrue MSG_REMOVE_NOT_HERE < 1000;
@@ -998,8 +987,8 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 			print "enter ", (the) parent(noun);
 		" first.";
 #EndIf;
-#Ifndef SKIP_MSG_INSERT_NOT_CONTAINER;
-	MSG_INSERT_NOT_CONTAINER, MSG_EMPTY_CANT_CONTAIN:
+#IfTrue MSG_INSERT_NOT_CONTAINER < 1000;
+	MSG_INSERT_NOT_CONTAINER:
 		print_ret (The) p_arg_1, " can't contain things.";
 #Endif;
 #IfTrue MSG_YES_OR_NO < 1000;

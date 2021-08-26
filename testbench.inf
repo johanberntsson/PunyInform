@@ -602,9 +602,12 @@ Book -> -> RedBook "red book"
 						print "The blue book does not want to be near the red book and jumps out of your grasp and lands on the floor.^^";
 						move BlueBook to location;
 					}
-
-
 			];
+
+Book -> -> BrownBook "brown book"
+		with
+			name 'brown' 'book',
+			description "The book is beautiful..";
 
 Object -> -> Gun "gun"
 	with
@@ -808,7 +811,6 @@ Object -> infiniteBag "infinite bag"
 		invent 0,
 		name 'infinite' 'bag',
 		article "an",
-		description "An infinitely deep bag.",
 	has container open openable;
 
 Book -> GreenBook "green book"
