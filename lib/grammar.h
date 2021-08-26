@@ -410,10 +410,9 @@ Verb 'wear'
 ! 5: Second is animate
 ! 6: Second isn't container
 ! 7: Second isn't supporter
-! 8: Second isn't supporter or container
-! 9: Check if second is full
-! 10: Default (success) message
-[ _MoveNounToSecond p_messages _msg _ancestor _action ;
+! 8: Check if second is full
+! 9: Default (success) message
+[ _MoveNounToSecond p_messages _msg _ancestor _action;
 	if(ObjectIsUntouchable(second)) return;
 	_ancestor = CommonAncestor(noun, second);
 
@@ -463,11 +462,6 @@ Verb 'wear'
 		rtrue;
 	}
 	_msg = p_messages-->8;
-	if(_msg && second hasnt container && second hasnt supporter) {
-		PrintMsg(_msg, second);
-		rtrue;
-	}
-	_msg = p_messages-->9;
 	if(_msg && _AtFullCapacity(second)) {
 		PrintMsg(_msg);
 		rtrue;
@@ -487,7 +481,7 @@ Verb 'wear'
 	action = _action;
 
 	if (keep_silent) return;
-	_msg = p_messages-->10;
+	_msg = p_messages-->9;
 	if(_msg) PrintMsg(_msg);
 ];
 
@@ -500,10 +494,9 @@ Verb 'wear'
 ! 5: Second is animate
 ! 6: Second isn't container
 ! 7: Second isn't supporter
-! 8: Second isn't supporter or container
-! 9: Check if second is full
-! 10: Default (success) message
-Array _InsertMessages static -->
+! 8: Check if second is full
+! 9: Default (success) message
+Array _InsertMessages -->
 	MSG_INSERT_ALREADY
 	MSG_INSERT_ITSELF
 	MSG_INSERT_NOT_OPEN
@@ -511,7 +504,6 @@ Array _InsertMessages static -->
 	1
 	MSG_INSERT_ANIMATE
 	MSG_INSERT_NOT_CONTAINER
-	0
 	0
 	MSG_INSERT_NO_ROOM
 	MSG_INSERT_DEFAULT;
@@ -603,10 +595,9 @@ Array _InsertMessages static -->
 ! 5: Second is animate
 ! 6: Second isn't container
 ! 7: Second isn't supporter
-! 8: Second isn't supporter or container
-! 9: Check if second is full
-! 10: Default (success) message
-Array _PutOnMessages static -->
+! 8: Check if second is full
+! 9: Default (success) message
+Array _PutOnMessages -->
 	MSG_PUTON_ALREADY
 	MSG_PUTON_ITSELF
 	0
@@ -615,7 +606,6 @@ Array _PutOnMessages static -->
 	MSG_PUTON_ANIMATE
 	0
 	MSG_PUTON_NOT_SUPPORTER
-	0
 	MSG_PUTON_NO_ROOM
 	MSG_PUTON_DEFAULT;
 
@@ -742,34 +732,11 @@ Array _PutOnMessages static -->
 	PrintMsg(MSG_TOUCH_DEFAULT);
 ];
 
-
-! 0: Noun is already in second
-! 1: Can't put noun in/on itself
-! 2: Second isn't open
-! 3: Try to grab if not held (1 to try, no message#)
-! 4: Try to disrobe noun if worn (1 to try, no message#)
-! 5: Second is animate
-! 6: Second isn't container
-! 7: Second isn't supporter
-! 8: Second isn't supporter or container
-! 9: Check if second is full
-! 10: Default (success) message
-Array _TransferMessages static -->
-	MSG_TRANSFER_ALREADY
-	MSG_TRANSFER_IN_ON_ITSELF
-	MSG_TRANSFER_NOT_OPEN
-	0
-	1
-	MSG_TRANSFER_ANIMATE
-	0
-	0
-	MSG_TRANSFER_NOT_CONTAIN_SUPPORT
-	MSG_TRANSFER_NO_ROOM
-	MSG_TRANSFER_DEFAULT;
-
 [ TransferSub;
-	if(noun == player) <<Enter second>>;
-	_MoveNounToSecond(_TransferMessages);
+	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
+	if (second has supporter) <<PutOn noun second>>;
+	!if (second == d_obj) <<Drop noun>>;
+	<Insert noun second>;
 ];
 
 [ TurnSub;
