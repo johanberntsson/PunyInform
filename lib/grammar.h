@@ -733,6 +733,10 @@ Array _PutOnMessages -->
 ];
 
 [ TransferSub;
+	if(noun in second || (noun in parent(player) && selected_direction == d_to)) {
+		PrintMsg(MSG_TRANSFER_ALREADY);
+		rtrue;
+	}
 	if(noun notin player && TryToTakeNoun()) return;
 	if (second has supporter) <<PutOn noun second>>;
 	if (second == Directions && selected_direction == d_to) <<Drop noun>>;
@@ -892,7 +896,7 @@ Verb 'yes' 'y//'
 
 [ EmptyTSub _i _recipient;
 	if(noun == second) { PrintMsg(MSG_EMPTY_WOULDNT_ACHIEVE); rtrue; }
-	if(noun has container && noun hasnt open) { 
+	if(noun has container && noun hasnt open) {
 		PrintMsg(MSG_EMPTY_IS_CLOSED, noun);
 		rtrue;
 	}
