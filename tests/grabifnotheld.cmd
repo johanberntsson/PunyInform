@@ -1,21 +1,21 @@
 transcript
 
-pry molly with max
+pry box with gizmo
 i
 drop all
-throw max at molly
+throw gizmo at box
 i
 drop all
-insert max in molly
+insert gizmo in box
 i
 drop all
-transfer max to molly
+transfer gizmo to box
 i
 drop all
-put on max
+put on gizmo
 i
 drop all
-empty molly
+empty box
 i
 look
 s

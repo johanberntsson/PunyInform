@@ -1,29 +1,31 @@
 
->push apple to box
+> push apple to box
 Apples are verboten
 
->push banana to box
+> push banana to box
 You put the banana into the box.
 
->push lemon to box
+> push lemon to box
 You put the lemon into the box.
 
->l
-
+> l
 The Library
 You are in a library.
 
 You can see a box (which contains a lemon and a banana) here.
 
->take banana
+> i
+You're carrying a apple.
+
+> take banana
 taking banana
 It seems to be stuck inside the box.
 
->empty box
+> empty box
 lemon: Dropped.
 banana: It seems to be stuck inside the box.
 
->quit
+> quit
 Are you sure you want to quit? yes
 
 [Hit any key to exit.]
