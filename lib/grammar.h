@@ -733,9 +733,9 @@ Array _PutOnMessages -->
 ];
 
 [ TransferSub;
-	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
+	if(noun notin player && TryToTakeNoun()) return;
 	if (second has supporter) <<PutOn noun second>>;
-	!if (second == d_obj) <<Drop noun>>;
+	if (second == Directions && selected_direction == d_to) <<Drop noun>>;
 	<Insert noun second>;
 ];
 
@@ -1778,7 +1778,7 @@ Global scope_cnt;
 		if(debug_flag & 1) print "(", (name) _after_recipient, ").after()^";
 #EndIf;
 		_k = action; action = ##LetGo;
-		if (RunRoutines(_after_recipient, after)) { action = _k; rtrue; }
+		RunRoutines(_after_recipient, after);
 		action = _k;
 	}
 

@@ -560,3 +560,7 @@ v2.8: bug fix and new feature release
   omitted if all identifiers have been replaced by custom messages.
 - New messages: MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE.
 - Changed InsertSub and PutOnSub to call a common routine, to save bytes.
+- Fixed bug: TryToTakeNoun would return true, signalling that take failed,
+  if original supporter/container's after routine returned true for ##LetGo.
+- Added support for "move object to floor" (gets translated to
+  "get object. drop it")
