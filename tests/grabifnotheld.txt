@@ -1,27 +1,27 @@
 
-> pry molly with max
-(first taking Max)
+> pry box with gizmo
+(first taking gizmo)
 That doesn't seem to be something you can unlock.
 
 > i
-You're carrying Max.
+You're carrying gizmo.
 
 > drop all
-Max: Dropped.
+gizmo: Dropped.
 
-> throw max at molly
-(first taking Max)
+> throw gizmo at box
+(first taking gizmo)
 Futile.
 
 > i
-You're carrying Max.
+You're carrying gizmo.
 
 > drop all
-Max: Dropped.
+gizmo: Dropped.
 
-> insert max in molly
-(first taking Max)
-You put Max into Molly.
+> insert gizmo in box
+(first taking gizmo)
+You put gizmo into box.
 
 > i
 You are empty handed.
@@ -29,9 +29,8 @@ You are empty handed.
 > drop all
 You are not carrying anything.
 
-> transfer max to molly
-(first taking Max)
-You put Max into Molly.
+> transfer gizmo to box
+Already there.
 
 > i
 You are empty handed.
@@ -39,19 +38,18 @@ You are empty handed.
 > drop all
 You are not carrying anything.
 
-> put on max
-(first taking Max)
+> put on gizmo
+(first taking gizmo)
 That doesn't seem to be something you can wear.
 
 > i
-You're carrying Max.
+You're carrying gizmo.
 
 > drop all
-Max: Dropped.
+gizmo: Dropped.
 
-> empty molly
-dust: (first taking the dust)
-Dropped.
+> empty box
+dust: Dropped.
 
 > i
 You are empty handed.
@@ -60,7 +58,7 @@ You are empty handed.
 Lit Room
 You are in a brightly lit room.
 
-You can see a dust, Max and Molly (which is empty) here.
+You can see a dust, gizmo and box (which is empty) here.
 
 > s
 Another Room

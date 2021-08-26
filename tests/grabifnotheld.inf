@@ -111,14 +111,14 @@ Object LitRoom "Lit Room"
 		s_to Room2,
 	has light;
 
-Object -> Thing1 "Max"
+Object -> Thing1 "gizmo"
     with
-        name 'max'
+        name 'gizmo'
     has proper;
 
-Object -> Thing2 "Molly"
+Object -> Thing2 "box"
     with
-        name 'molly'
+        name 'box'
     has proper container open;
 
 Object -> -> Dust "dust"
