@@ -558,7 +558,6 @@ v2.8: bug fix and new feature release
   MSG_WAIT_SUCCESS, MSG_WAKE_SUCCESS, MSG_WAKEOTHER_SUCCESS, MSG_WEAR_SUCCESS
 - Changed so complex library messages shared by multiple identifiers are now
   omitted if all identifiers have been replaced by custom messages.
-- New messages: MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE.
 - Changed InsertSub and PutOnSub to call a common routine, to save bytes.
 - Fixed bug: TryToTakeNoun would return true, signalling that take failed,
   if original supporter/container's after routine returned true for ##LetGo.
@@ -571,3 +570,5 @@ v2.8: bug fix and new feature release
   "are closed" for pluralname objects.
 - TransferSub no longer tries to drop something if it couldn't be picked up.
 - TransferSub now runs AfterRoutines().
+- New messages: MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE, MSG_TRANSFER_ALREADY.
+- Removed message MSG_EMPTY_CANT_CONTAIN.
