@@ -570,4 +570,4 @@ v2.8: bug fix and new feature release
   MSG_GO_DOOR_CLOSED, MSG_EMPTY_IS_CLOSED, MSG_REMOVE_CLOSED now print
   "are closed" for pluralname objects.
 - TransferSub no longer tries to drop something if it couldn't be picked up.
-- TransferSub no runs AfterRoutines().
+- TransferSub now runs AfterRoutines().
