@@ -620,9 +620,11 @@ Constant SKIP_MSG_RUB_DEFAULT;
 #Endif;
 #Endif;
 
+#Ifndef OPTIONAL_NO_DARKNESS;
 #Iffalse MSG_EXAMINE_DARK < 1000;
 #Iffalse MSG_SEARCH_DARK < 1000;
 Constant SKIP_MSG_EXAMINE_DARK;
+#Endif;
 #Endif;
 #Endif;
 
