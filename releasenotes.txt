@@ -537,7 +537,7 @@ v2.7: bug fix and new feature release (19 July 2021)
   virtual memory handling in Ozmoo and other 8-bit terps.
 
 =======
-v2.8: bug fix and new feature release
+v2.8: bug fix and new feature release (26 August 2021)
 - Slight updates to Game Author's Guide
 - Fixed a bug in _UserFilter which caused problems when using a filter function
   for second.
@@ -572,3 +572,6 @@ v2.8: bug fix and new feature release
 - TransferSub now runs AfterRoutines().
 - New messages: MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE, MSG_TRANSFER_ALREADY.
 - Removed message MSG_EMPTY_CANT_CONTAIN.
+=======
+v2.9: bug fix and new feature release 
+
