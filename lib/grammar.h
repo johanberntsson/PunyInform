@@ -246,9 +246,7 @@ Verb 'wear'
 	if(noun hasnt openable) { PrintMsg(MSG_CLOSE_YOU_CANT, 'close'); rtrue; }
 	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN, noun); rtrue; }
 	give noun ~open;
-#IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
-#EndIf;
 	if(AfterRoutines()) rtrue;
 	if (keep_silent) return;
 	PrintMsg(MSG_CLOSE_DEFAULT, 'close');
@@ -295,9 +293,7 @@ Verb 'wear'
 	if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
 	if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
 	remove noun;
-#IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
-#EndIf;
 	if (AfterRoutines()) rtrue;
 	if (keep_silent) rtrue;
 	PrintMsg(MSG_EAT_DEFAULT);
@@ -559,9 +555,7 @@ Array _InsertMessages -->
 	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
 	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
 	give noun open;
-#IfDef OPTIONAL_MANUAL_SCOPE;
 	scope_modified = true;
-#EndIf;
 	if(AfterRoutines()) rtrue;
 	if (keep_silent) return;
 	PrintMsg(MSG_OPEN_DEFAULT);

@@ -578,3 +578,6 @@ v2.9: bug fix and new feature release
 - Part of the message MSG_RESTART_RESTORE_OR_QUIT was compiled even if the
   message had been replaced by the game, wasting space and printing a
   warning.
+- Fixed some action routines which didn't set scope_modified when they should.
+- Changed so MoveFloatingObjects doesn't set scope_modified if there are no
+  floating objects.
