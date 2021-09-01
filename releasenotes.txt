@@ -572,6 +572,9 @@ v2.8: bug fix and new feature release (26 August 2021)
 - TransferSub now runs AfterRoutines().
 - New messages: MSG_INSERT_ANIMATE, MSG_PUTON_ANIMATE, MSG_TRANSFER_ALREADY.
 - Removed message MSG_EMPTY_CANT_CONTAIN.
-=======
-v2.9: bug fix and new feature release 
 
+=======
+v2.9: bug fix and new feature release
+- Part of the message MSG_RESTART_RESTORE_OR_QUIT was compiled even if the
+  message had been replaced by the game, wasting space and printing a
+  warning.

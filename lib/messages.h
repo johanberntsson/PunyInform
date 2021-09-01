@@ -961,13 +961,13 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_RESTART_RESTORE_OR_QUIT < 1000;
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE";
-#EndIf;
 #IfDef OPTIONAL_FULL_SCORE;
 		print ", give the FULL score for that game";
 #EndIf;
 		if(deadflag == 2 && AMUSING_PROVIDED == 0) print ", see some suggestions for AMUSING things to do";
 		print " or QUIT? ";
 		rtrue;
+#EndIf;
 #IfTrue MSG_AREYOUSUREQUIT < 1000;
 	MSG_AREYOUSUREQUIT: ! print and rtrue to avoid newline
 		print "Are you sure you want to quit? ";
