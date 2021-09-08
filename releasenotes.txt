@@ -589,3 +589,6 @@ v2.9: bug fix and new feature release
 - Changed so "routines on" doesn't print double messages under z5+.
 - Added code so parse_name calls are also printed after "routines on", under
   all Z-code versions.
+- Added constant CUSTOM_PLAYER_OBJECT - set it to your own player object, and
+  the library won't create the default selfobj.
+  

@@ -1268,7 +1268,7 @@ Include "parser.h";
 ];
 #EndIf;
 
-
+#Ifndef CUSTOM_PLAYER_OBJECT;
 Object selfobj "you"
 	with
 		name 'me' 'myself' 'self',
@@ -1286,6 +1286,7 @@ Object selfobj "you"
 		orders 0,
 		number 0,
 	has concealed animate proper transparent;
+#Endif;
 
 #Ifndef OPTIONAL_NO_DARKNESS;
 Object thedark "Darkness"
@@ -1391,7 +1392,11 @@ Object thedark "Darkness"
 	top_object = #largest_object-255;
 	sys_statusline_flag = ( ($1->0) & 2 ) / 2;
 
+#Ifdef CUSTOM_PLAYER_OBJECT;
+	player = CUSTOM_PLAYER_OBJECT;
+#Ifnot;
 	player = selfobj;
+#Endif;
 	deadflag = GS_PLAYING;
 	turns = -1;
 #Ifndef NO_SCORE;
