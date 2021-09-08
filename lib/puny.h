@@ -674,15 +674,25 @@ Include "parser.h";
 
 [ ActionPrimitive; indirect(#actions_table-->action); ];
 
-[ PerformPreparedAction;
+[ PerformPreparedAction _ret_val;
 #IfDef DEBUG;
 	if(debug_flag & 2) TraceAction();
 #EndIf;
 	if ((meta || (BeforeRoutines() == false)) && action < 4096) {
+		@push run_after_routines_msg; @push run_after_routines_arg_1;
+		run_after_routines_msg = 0;
 		ActionPrimitive();
-		return true; ! could run the command
+		! If the action has set run_after_routines_msg = true, after routines
+		! should be run. If it has set it to another value, this message should
+		! be printed unless after routines returns true.
+		if(run_after_routines_msg && AfterRoutines() == false &&
+				run_after_routines_msg > 1 &&
+				keep_silent == false)
+			PrintMsg(run_after_routines_msg, run_after_routines_arg_1);
+		@pull run_after_routines_arg_1; @pull run_after_routines_msg;
+		_ret_val = true; ! could run the command
 	}
-	return false; ! failed to run (stopped by BeforeRoutines)
+	return _ret_val;
 ];
 
 [ RunEachTurn _i _obj _scope_count _max;

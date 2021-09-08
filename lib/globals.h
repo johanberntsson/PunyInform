@@ -440,6 +440,8 @@ Global inventory_stage;
 Global phase2_necessary;
 Global receive_action;
 Global scope_copy_actor = 0;
+Global run_after_routines_msg;
+Global run_after_routines_arg_1;
 
 #IfDef DEBUG;
 Global dict_start;

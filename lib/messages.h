@@ -174,7 +174,7 @@ Constant MSG_FULLSCORE_ACTIONS "performing noteworthy actions";
 ! complex messages (enumerated)
 !
 
-Default MSG_OPEN_YOU_CANT = 1;
+! Note, we can only use id 2-999
 Default MSG_CLOSE_YOU_CANT = 2;
 Default MSG_ENTER_YOU_CANT = 3;
 Default MSG_EXAMINE_NOTHING_SPECIAL = 4;
@@ -238,6 +238,7 @@ Default MSG_PUSH_DEFAULT 61;
 Default MSG_PULL_DEFAULT 62;
 Default MSG_YOU_HAVE_WON 63;
 Default MSG_YOU_HAVE_DIED 64;
+Default MSG_OPEN_YOU_CANT = 65;
 Default MSG_PARSER_NOTHING_TO_VERB 66;
 Default MSG_TOUCHABLE_FOUND_CLOSED 67;
 Default MSG_CONSULT_NOTHING_INTERESTING 68;
@@ -633,8 +634,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 		print_ret (string) p_msg;
 
 	if(p_msg > 999) {
-		LibraryMessages(p_msg, p_arg_1, p_arg_2);
-		rtrue;
+		return LibraryMessages(p_msg, p_arg_1, p_arg_2);
 	}
 
 	! Not a string, there should be code for the message here

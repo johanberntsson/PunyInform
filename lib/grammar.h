@@ -247,9 +247,8 @@ Verb 'wear'
 	if(noun hasnt open) { PrintMsg(MSG_CLOSE_NOT_OPEN, noun); rtrue; }
 	give noun ~open;
 	scope_modified = true;
-	if(AfterRoutines()) rtrue;
-	if (keep_silent) return;
-	PrintMsg(MSG_CLOSE_DEFAULT, 'close');
+	run_after_routines_msg = MSG_CLOSE_DEFAULT;
+	run_after_routines_arg_1 = 'close';
 ];
 
 [ ConsultSub;
@@ -267,9 +266,7 @@ Verb 'wear'
 [ DisrobeSub;
     if (noun notin player || noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
     give noun ~worn;
-    if (AfterRoutines()) rtrue;
-    if (keep_silent) rtrue;
-    PrintMsg(MSG_DISROBE_DEFAULT);
+	run_after_routines_msg = MSG_DISROBE_DEFAULT;
 ];
 
 [ DrinkSub;
@@ -283,9 +280,7 @@ Verb 'wear'
 	!if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
 	give noun moved;
-	if(AfterRoutines()) rtrue;
-	if(keep_silent) return;
-	PrintMsg(MSG_DROP_DROPPED);
+	run_after_routines_msg = MSG_DROP_DROPPED;
 ];
 
 [ EatSub;
@@ -294,9 +289,7 @@ Verb 'wear'
 	if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
 	remove noun;
 	scope_modified = true;
-	if (AfterRoutines()) rtrue;
-	if (keep_silent) rtrue;
-	PrintMsg(MSG_EAT_DEFAULT);
+	run_after_routines_msg = MSG_EAT_DEFAULT;
 ];
 
 [ EnterSub _door_dir;
@@ -326,9 +319,8 @@ Verb 'wear'
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
 	if(parent(noun) ~= parent(player)) { PrintMsg(MSG_ENTER_BAD_LOCATION); rtrue; }
 	PlayerTo(noun, true);
-	if(AfterRoutines()) rtrue;
-	if (keep_silent) return;
-	PrintMsg(MSG_ENTER_DEFAULT, 'enter');
+	run_after_routines_msg = MSG_ENTER_DEFAULT;
+	run_after_routines_arg_1 = 'enter';
 ];
 
 [ ExamineSub x;
@@ -349,7 +341,7 @@ Verb 'wear'
     }
 	x = PrintOrRun(noun, description);
 	if (x == 0 && noun has switchable) PrintMsg(MSG_EXAMINE_ONOFF);
-	AfterRoutines();
+	run_after_routines_msg = 1; ! Run after routines, don't print a msg
 ];
 
 [ ExitSub _p;
@@ -364,9 +356,8 @@ Verb 'wear'
 	}
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN, noun); rtrue; }
 	PlayerTo(parent(noun), true);
-	if(AfterRoutines()) rtrue;
-	if (keep_silent) return;
-	PrintMsg(MSG_EXIT_DEFAULT, 'leave');
+	run_after_routines_msg = MSG_EXIT_DEFAULT;
+	run_after_routines_arg_1 = 'leave';
 ];
 
 [ FillSub;
@@ -510,11 +501,10 @@ Array _InsertMessages -->
 ];
 
 [ InvSub;
-    if(PrintMsg(MSG_INVENTORY_DEFAULT)) {
-		AfterRoutines();
-	} else {
+    if(PrintMsg(MSG_INVENTORY_DEFAULT) == false) {
 		PrintMsg(MSG_INVENTORY_EMPTY);
 	}
+	run_after_routines_msg = 1; ! Run after routines, don't print a msg
 ];
 
 [ JumpSub;
@@ -537,9 +527,8 @@ Array _InsertMessages -->
 	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
 	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun locked;
-	if (AfterRoutines()) rtrue;
-	if (keep_silent) rtrue;
-	PrintMsg(MSG_LOCK_DEFAULT, 'lock');
+	run_after_routines_msg = MSG_LOCK_DEFAULT;
+	run_after_routines_arg_1 = 'lock';
 ];
 
 [ LookSub _old_lookmode;
@@ -556,9 +545,7 @@ Array _InsertMessages -->
 	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
 	give noun open;
 	scope_modified = true;
-	if(AfterRoutines()) rtrue;
-	if (keep_silent) return;
-	PrintMsg(MSG_OPEN_DEFAULT);
+	run_after_routines_msg = MSG_OPEN_DEFAULT;
 ];
 
 [ PullSub;
@@ -614,9 +601,8 @@ Array _PutOnMessages -->
 	if (_i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
 	if(TryToTakeNoun() ~= false) rtrue;
 	action = ##Remove; if (AfterRoutines()) rtrue;
-	action = ##Take;   if (AfterRoutines()) rtrue;
-	if (keep_silent) rtrue;
-	PrintMsg(MSG_REMOVE_DEFAULT);
+	action = ##Take;
+	run_after_routines_msg = MSG_REMOVE_DEFAULT;
 ];
 
 [ RubSub;
@@ -641,10 +627,10 @@ Array _PutOnMessages -->
 		PrintMsg(MSG_SEARCH_CANT_SEE_CLOSED); rtrue;
 	}
 	if(AfterRoutines()) rtrue;
-	if(_f == 0)
-		PrintMsg(MSG_SEARCH_EMPTY);
-	else
-		PrintMsg(MSG_SEARCH_IN_IT_ISARE);
+	_i = MSG_SEARCH_EMPTY;
+	if(_f)
+		_i = MSG_SEARCH_IN_IT_ISARE;
+	PrintMsg(_i);
 ];
 
 [ ShoutSub;
@@ -672,9 +658,7 @@ Array _PutOnMessages -->
 	if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_OFF_NOT_SWITCHABLE); rtrue; }
 	if (noun hasnt on)         { PrintMsg(MSG_SWITCH_OFF_NOT_ON); rtrue; }
 	give noun ~on;
-	if (AfterRoutines()) rtrue;
-	if (keep_silent) rtrue;
-	PrintMsg(MSG_SWITCH_OFF_DEFAULT);
+	run_after_routines_msg = MSG_SWITCH_OFF_DEFAULT;
 ];
 
 [ SwitchOnSub;
@@ -682,16 +666,12 @@ Array _PutOnMessages -->
 	if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
 	if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; }
 	give noun on;
-	if (AfterRoutines()) rtrue;
-	if (keep_silent) rtrue;
-	PrintMsg(MSG_SWITCH_ON_DEFAULT);
+	run_after_routines_msg = MSG_SWITCH_ON_DEFAULT;
 ];
 
 [ TakeSub;
 	if(TryToTakeNoun() ~= false) rtrue;
-	if(AfterRoutines()) rtrue;
-	if (keep_silent) return;
-	PrintMsg(MSG_TAKE_DEFAULT);
+	run_after_routines_msg = MSG_TAKE_DEFAULT;
 ];
 
 [ TieSub;
@@ -751,13 +731,13 @@ Array _PutOnMessages -->
 	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED, 'unlock'); rtrue; }
 	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun ~locked;
-	if (AfterRoutines()) rtrue;
-	if (keep_silent) rtrue;
-	PrintMsg(MSG_UNLOCK_DEFAULT, 'unlock');
+	run_after_routines_msg = MSG_UNLOCK_DEFAULT;
+	run_after_routines_arg_1 = 'unlock';
 ];
 
 [ WaitSub;
-    PrintMsg(MSG_WAIT_DEFAULT);
+	if(AfterRoutines()) rtrue;
+	PrintMsg(MSG_WAIT_DEFAULT);
 ];
 
 [ WearSub;
@@ -765,9 +745,7 @@ Array _PutOnMessages -->
 	if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
 	if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING, 'wear'); rtrue; }
 	give noun worn;
-	if (AfterRoutines()) rtrue;
-	if (keep_silent) rtrue;
-	PrintMsg(MSG_WEAR_DEFAULT);
+	run_after_routines_msg = MSG_WEAR_DEFAULT;
 ];
 
 
@@ -906,7 +884,7 @@ Verb 'yes' 'y//'
 		if(_i in noun || _i in player) rtrue;
 		_i = child(noun);
 	}
-	AfterRoutines();
+	run_after_routines_msg = 1;
 ];
 
 [ GoInSub;

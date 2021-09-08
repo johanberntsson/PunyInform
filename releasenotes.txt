@@ -581,3 +581,8 @@ v2.9: bug fix and new feature release
 - Fixed some action routines which didn't set scope_modified when they should.
 - Changed so MoveFloatingObjects doesn't set scope_modified if there are no
   floating objects.
+- Fixed bug which made for incorrect display when player didn't carry anything,
+  if MSG_INVENTORY_DEFAULT had been replaced.
+- ##Wait now runs after-routines.
+- ##Inv now runs after-routines, even if the player is empty-handed.
+- Optimized running of after-routines in action routines, saving ~140 bytes.
