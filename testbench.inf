@@ -39,13 +39,14 @@ Constant OPTIONAL_MANUAL_SCOPE;
 Constant OPTIONAL_MANUAL_REACTIVE;
 Constant OPTIONAL_REACTIVE_PARSE_NAME;
 Constant OPTIONAL_ORDERED_TIMERS;
+Constant MAX_SCOPE = 50;
 #Iftrue (#version_number == 5);
 Constant OPTIONAL_PROVIDE_UNDO;
-#EndIf;
+#Endif;
 
 Constant INITIAL_LOCATION_VALUE = Library;
 
-Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
+!Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
 !Constant DEBUG_PARSEANDPERFORM;
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSETOKEN;
@@ -441,7 +442,7 @@ Object -> Goblin "Goblin"
 				print "But he has a grim looking scimitar, and you are defenceless. Are you sure that's a good idea? ";
 				if(YesOrNo()) {
 					deadflag = 1;
-					"You'd never believe that so much blood was possible to be contained within this body. ";
+					"You'd never believe that so much blood could be contained within this body. ";
 				} else {
 					"Wise call.";
 				}
@@ -456,13 +457,12 @@ Object -> Sink "Sink"
 		short_name "sink",
 		name 'sink' 'water',
 		description[;
-			print "It's a regular white sink with a faucet for turning water on or off. ";
-			if(Faucet has on) {
-				"There's water running into the sink from the faucet. ";
-			}
-			rtrue;
+			print "It's a regular white sink with a faucet for turning water on or off.";
+			if(Faucet has on)
+				" There's water running into the sink from the faucet.";
+			"";
 		],
-	has container static scenery; !TODO: scenery objects still shown in room description
+	has container static scenery;
 
 Object -> Faucet "faucet"
 	with
@@ -472,7 +472,7 @@ Object -> Faucet "faucet"
 			print "It's a faucet, possible to switch on/off. ";
 			"It's currently ", (OnOff) self, ".";
 		],
-	has switchable static scenery; !TODO: scenery objects still shown in room description
+	has switchable static scenery;
 
 Object DarkChamber "Dark Chamber"
 	with
@@ -707,7 +707,7 @@ Object -> -> BlueBookTitle "title"
 		name 'title',
 		description "The title of the blue book is ~War and peace~";
 
-
+#Ifdef DEBUG;
 [ DebugLife rule;
 	! same output as the table in
 	! http://www.inform-fiction.org/manual/html/s18.html
@@ -733,6 +733,7 @@ Object -> -> BlueBookTitle "title"
     if(consult_from > 0) print ", consult ", consult_from, " ", consult_words;
     print ", special_number ", special_number, "^";
 ];
+#Endif;
 
 Object -> John "John"
 	with
