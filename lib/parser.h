@@ -282,8 +282,12 @@ System_file;
 				_result = 0;
 				if(meta == 0 || parent(_obj) ~= 0
 						|| (_obj provides describe or life or found_in)
-						|| DebugParseNameObject(_obj))
+						|| DebugParseNameObject(_obj)) {
+#IfV3;
+					if(debug_flag & 1) print (name) _obj, ".parse_name()^";
+#EndIf;
 					_result = _obj.parse_name();
+				}
 #Ifnot; ! Not DEBUG
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
 			if(_obj has reactive && _obj.parse_name) {
