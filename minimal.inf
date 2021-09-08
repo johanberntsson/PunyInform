@@ -28,6 +28,7 @@ Constant NO_SCORE = 0;
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
 !Constant CUSTOM_ABBREVIATIONS;
+!Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
 Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 !Constant OPTIONAL_EXTENDED_METAVERBS;
