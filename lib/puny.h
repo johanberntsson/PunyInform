@@ -577,7 +577,9 @@ else
 			remove _obj;
 		_i++;
 	}
-	if(_len) scope_modified = true;
+	! It's not certain that scope has been modified, but PlayerTo relies on it
+	! being set.
+	scope_modified = true;
 ];
 
 [ PlayerTo p_loc p_flag _old_loc _old_real_loc _old_lookmode _old_parent _vc _old_vc;
@@ -587,7 +589,7 @@ else
 	move Player to p_loc;
 	real_location = superparent(p_loc);
 	location = real_location;
-	MoveFloatingObjects(); ! Also sets scope_modified
+	MoveFloatingObjects(); ! Also sets scope_modified = true;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness();
 #Endif;
