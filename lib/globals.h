@@ -235,25 +235,16 @@ Constant FAKE_U_OBJ = 10009;
 Constant FAKE_D_OBJ = 10010;
 Constant FAKE_IN_OBJ = 10011;
 Constant FAKE_OUT_OBJ = 10012;
-Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' 0 0;
-Array full_direction_array static table 'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
+#IfV5;
+Array _direction_dict_words static --> 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' 0 0
+	'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
+#Ifdef OPTIONAL_SHIP_DIRECTIONS;
+Array _ship_direction_dict_words static --> 'f//' 'a//' 'sb' 'p//' 0 0 0 0 'u//' 'd//' 0 0
+	'fore' 'aft' 'starboard' 'port' 0 0 0 0 'up' 'down' 'in' 'out';
+#Endif;
+#Endif;
 Array direction_properties_array static table n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
 Array direction_name_array static table "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
-#Ifdef OPTIONAL_SHIP_DIRECTIONS;
-Array abbr_ship_direction_array static table 'f//' 'a//' 'sb' 'p//' 0 0 0 0 'u//' 'd//' 0 0;
-Array full_ship_direction_array static table 'fore' 'aft' 'starboard' 'port' 0 0 0 0 'up' 'down' 'in' 'out';
-#IfV3;
-! These arrays say the position of the first and last direction which has 1, 2, 3, 4, 5 and 6+ letters respectively
-Array _dir_start static -> 0  1  3  2  1 1 3;
-Array _dir_end static ->   0 10 11 12 10 2 8;
-#EndIf; ! V3
-#IfNot; ! not OPTIONAL_SHIP_DIRECTIONS
-#IfV3;
-! These arrays say the position of the first and last direction which has 1, 2, 3, 4, 5 and 6+ letters respectively
-Array _dir_start static -> 0  1  5 12  3 1 5;
-Array _dir_end static ->   0 10 11 12 10 2 8;
-#EndIf; ! V3
-#EndIf; !If not OPTIONAL_SHIP_DIRECTIONS
 Constant DIRECTION_COUNT = 12;
 
 #IfNot; ! not OPTIONAL_FULL_DIRECTIONS
@@ -262,25 +253,16 @@ Constant FAKE_U_OBJ = 10005;
 Constant FAKE_D_OBJ = 10006;
 Constant FAKE_IN_OBJ = 10007;
 Constant FAKE_OUT_OBJ = 10008;
-Array abbr_direction_array static table 'n//' 's//' 'e//' 'w//' 'u//' 'd//' 0 0;
-Array full_direction_array static table 'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
+#IfV5;
+Array _direction_dict_words static --> 'n//' 's//' 'e//' 'w//' 'u//' 'd//' 0 0
+	'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
+#Ifdef OPTIONAL_SHIP_DIRECTIONS;
+Array _ship_direction_dict_words static --> 'f//' 'a//' 'sb' 'p//' 'u//' 'd//' 0 0
+	'fore' 'aft' 'starboard' 'port' 'up' 'down' 'in' 'out';
+#Endif;
+#Endif;
 Array direction_properties_array static table n_to s_to e_to w_to u_to d_to in_to out_to;
 Array direction_name_array static table "north" "south" "east" "west" "up" "down" "in" "out";
-#Ifdef OPTIONAL_SHIP_DIRECTIONS;
-Array abbr_ship_direction_array static table 'f//' 'a//' 'sb' 'p//' 'u//' 'd//' 0 0;
-Array full_ship_direction_array static table 'fore' 'aft' 'starboard' 'port' 'up' 'down' 'in' 'out';
-#IfV3;
-! These arrays say the position of the first and last direction which has 1, 2, 3, 4, 5 and 6+ letters respectively
-Array _dir_start static -> 0 1 3 2 1 1 3;
-Array _dir_end static ->   0 6 7 8 6 2 3;
-#EndIf; ! V3
-#IfNot; ! not OPTIONAL_SHIP_DIRECTIONS
-#IfV3;
-! These arrays say the position of the first and last direction which has 1, 2, 3, 4, 5 and 6+ letters respectively
-Array _dir_start static -> 0 1 5 8 3 1 0;
-Array _dir_end static ->   0 6 7 8 6 2 0;
-#EndIf; ! V3
-#EndIf; ! not OPTIONAL_SHIP_DIRECTIONS
 Constant DIRECTION_COUNT = 8;
 
 #EndIf; ! not OPTIONAL_FULL_DIRECTIONS
@@ -556,92 +538,97 @@ Object Directions
 			rtrue;
 		],
 #IfV5;
-		parse_name [_parse _len _i _w _arr;
+		parse_name [_parse _i _w _arr;
 #IfNot;
-		parse_name [_parse _len _i _w _w1 _w2;
+		parse_name [_parse _i _w;
 #EndIf;
 			_parse = parse+4*wn-2;
 			_w = _parse-->0;
 			if(_w == 'floor' or 'ground') {
-#IfDef OPTIONAL_FULL_DIRECTIONS;
-				selected_direction_index = 10;
-#IfNot;
-				selected_direction_index = 6;
-#EndIf;
+				selected_direction_index = DIRECTION_COUNT - 2;
         		jump match2;
 			}
 
 #IfV5;
-			_len = DIRECTION_COUNT;
-			_arr = abbr_direction_array + 2;
-			if(normal_directions_enabled) {
-				@scan_table _w _arr _len -> _i ?success;
-				! not found, try full
-				_arr = full_direction_array + 2;
-				@scan_table _w _arr _len -> _i ?success;
-			}
+			_arr = _direction_dict_words;
+			if(normal_directions_enabled)
+				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?success;
 #IfDef OPTIONAL_SHIP_DIRECTIONS;
-			if(ship_directions_enabled) {
-				! not found, try abbreviated ship directions
-				_arr = abbr_ship_direction_array + 2;
-				@scan_table _w _arr _len -> _i ?success;
-				! not found, try full ship directions
-				_arr = full_ship_direction_array + 2;
-				@scan_table _w _arr _len -> _i ?success;
-			}
+			_arr = _ship_direction_dict_words;
+			if(ship_directions_enabled)
+				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?success;
 #EndIf;
 			! no match
 			selected_direction_index = 0;
 			selected_direction = 0;
 			return 0;
 .success;
-			selected_direction_index = _i - _arr + 2;
-			@log_shift selected_direction_index (-1) -> selected_direction_index; ! Divide by 2
+			_i = _i - _arr;
+			@log_shift _i (-1) -> _i; ! Divide by 2
+			selected_direction_index = (_i % DIRECTION_COUNT) + 1;
 .match2;
 			selected_direction = direction_properties_array --> selected_direction_index;
 			return 1;
 #IfNot;
 			! This is V3
-#IfnDef OPTIONAL_SHIP_DIRECTIONS;
-			if(normal_directions_enabled == 0)
-				jump fail;
-#EndIf;
-			_w1 = _parse->2; ! length of typed word
-			if(_w1 > 6)
-				_w1 = 6;
-			_i = _dir_start->_w1;
-			if(_i > 0) {
-				_len = _dir_end->_w1;
-!				print "Testing from ", _i, " to ", _len, "^";
-!				for(_i = 1 : _i <= _len : _i++) {
-
-
-.checkNextDir;
-#IfDef OPTIONAL_SHIP_DIRECTIONS;
-				if(normal_directions_enabled) {
-					@loadw abbr_direction_array _i -> _w1;
-					@loadw full_direction_array _i -> _w2;
-					@je _w _w1 _w2 ?match;
-				}
-				if(ship_directions_enabled) {
-					@loadw abbr_ship_direction_array _i -> _w1;
-					@loadw full_ship_direction_array _i -> _w2;
-					@je _w _w1 _w2 ?match;
-				}
-#IfNot;
-				! No ship directions, and we know normal_directions_enabled==1
-				@loadw abbr_direction_array _i -> _w1;
-				@loadw full_direction_array _i -> _w2;
-				@je _w _w1 _w2 ?match;
-#EndIf;
-				@inc_chk _i _len ?~checkNextDir;
-                jump fail;
-.match;
-    			selected_direction_index = _i;
-.match2;
-    			selected_direction = direction_properties_array --> selected_direction_index;
-    			return 1;
+			if(normal_directions_enabled) {
+#Ifndef OPTIONAL_SHIP_DIRECTIONS;
+				@je _w 'out' ?match_out;
+				@je _w 'in' ?match_in;
+				@je _w 'd//' 'down' ?match_d;
+				@je _w 'u//' 'up' ?match_u;
+#Endif;
+#Ifdef OPTIONAL_FULL_DIRECTIONS;
+				@je _w 'se' 'southeast' ?match_se;
+				@je _w 'sw' 'southwest' ?match_sw;
+				@je _w 'ne' 'northeast' ?match_ne;
+				@je _w 'nw' 'northwest' ?match_nw;
+#Endif;
+				@je _w 'e//' 'east' ?match_e;
+				@je _w 'w//' 'west' ?match_w;
+				@je _w 's//' 'south' ?match_s;
+				@je _w 'n//' 'north' ?match_n;
 			}
+
+#Ifdef OPTIONAL_SHIP_DIRECTIONS;
+			if(normal_directions_enabled || ship_directions_enabled) {
+				@je _w 'out' ?match_out;
+				@je _w 'in' ?match_in;
+				@je _w 'd//' 'down' ?match_d;
+				@je _w 'u//' 'up' ?match_u;
+			}
+
+			if(ship_directions_enabled) {
+				@je _w 'sb' 'starboard' ?match_e;
+				@je _w 'p//' 'port' ?match_w;
+				@je _w 'a//' 'aft' ?match_s;
+				@je _w 'f//' 'fore' ?match_n;
+			}
+
+#Endif; ! OPTIONAL_SHIP_DIRECTIONS
+			jump fail;
+
+
+.match_out; @inc _i;
+.match_in; @inc _i;
+.match_d; @inc _i;
+.match_u; @inc _i;
+#Ifdef OPTIONAL_FULL_DIRECTIONS;
+.match_sw; @inc _i;
+.match_se; @inc _i;
+.match_nw; @inc _i;
+.match_ne; @inc _i;
+#Endif;
+.match_w; @inc _i;
+.match_e; @inc _i;
+.match_s; @inc _i;
+.match_n; @inc _i;
+
+.match;
+			selected_direction_index = _i;
+.match2;
+			selected_direction = direction_properties_array --> selected_direction_index;
+			return 1;
 .fail;
       		! No direction was matched
 			selected_direction_index = 0;
