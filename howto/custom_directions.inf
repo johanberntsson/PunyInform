@@ -1,0 +1,97 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+Constant Story      "Custom Directions";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+Constant NO_SCORE = 0;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+Constant OPTIONAL_NO_DARKNESS;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_SHIP_DIRECTIONS;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+Constant INITIAL_LOCATION_VALUE = Field;
+
+Include "globals.h";
+
+Include "puny.h";
+
+Object Field "Field"
+	with
+		n_to Street,
+		u_to Hill,
+		description "You are in a field, surrounded by hills. A steep path
+			leads up. A street lies hubwards.";
+
+Object Hill "Hill"
+	with
+		d_to Field,
+		description "You're up in the clouds. You can't see the ground below.
+			A steep path leads down.";
+
+Object Street "Street"
+	with
+		w_to TurnwiseStreet,
+		e_to WiddershinsStreet,
+		s_to Field,
+		description "You are in a street, which stretches turnwise and
+			widdershins from here. A field lies rimwards.";
+
+Object TurnwiseStreet "Turnwise Street"
+	with e_to Street,
+	description "This is a turning circle. The street contiues widdershins.";
+
+Object WiddershinsStreet "Widdershins Street"
+	with w_to Street,
+	description "The street ends here at a brick wall. You can go back
+		turnwise.";
+
+Array custom_dir_name_array static table "hubwards" "rimwards" "east" "west" "up" "down" "in" "out";
+
+[ DirShortName;
+	if(selected_direction_index)
+		print (string) custom_dir_name_array-->selected_direction_index;
+	else
+		print "direction";
+	rtrue;
+];
+
+[ DirParseName _i _w;
+	_w = WordValue(wn);
+	switch(_w) {
+		'hubwards', 'h//': _i = 1;
+		'rimwards', 'r//': _i = 2;
+		'widdershins', 'w//': _i = 3;
+		'turnwise', 't//': _i = 4;
+		'up', 'u//': _i = 5;
+		'down', 'd//', 'floor', 'ground': _i = 6;
+		'in': _i = 7;
+		'out': _i = 8;
+	}
+	if(_i == 0) {
+		! No direction was matched
+		selected_direction_index = 0;
+		selected_direction = 0;
+		return 0;
+	}
+
+	! A match was found
+	selected_direction_index = _i;
+	selected_direction = direction_properties_array --> selected_direction_index;
+	return 1;
+];
+
+[Initialise;
+	lookmode = 2; ! Verbose room descriptions every time
+	Directions.short_name = DirShortName;
+	Directions.parse_name = DirParseName;
+	print "^^In this game, the directions N, S, E, W have been replaced with
+			HUBWARDS, RIMWARDS, WIDDERSHINS, TURNWISE, while keeping
+			UP, DOWN, IN and OUT.^^
+			We could of course have decreased or increased the number of
+			directions, using new properties for any extra directions.^^";
+];

@@ -579,8 +579,6 @@ v2.9: bug fix and new feature release
   message had been replaced by the game, wasting space and printing a
   warning.
 - Fixed some action routines which didn't set scope_modified when they should.
-- Changed so MoveFloatingObjects doesn't set scope_modified if there are no
-  floating objects.
 - Fixed bug which made for incorrect display when player didn't carry anything,
   if MSG_INVENTORY_DEFAULT had been replaced.
 - ##Wait now runs after-routines.
@@ -592,3 +590,6 @@ v2.9: bug fix and new feature release
 - Added constant CUSTOM_PLAYER_OBJECT - set it to your own player object, and
   the library won't create the default selfobj.
 - Optimized parsing of directions, saving 84 bytes in minimal config.
+- Removed deprecated arrays abbr_direction_array and full_direction_array.
+- Added file howto/custom_directions.inf to show how one can create a custom
+  set of directions, complementing or replacing the standard directions.
