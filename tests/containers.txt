@@ -22,7 +22,7 @@ The time is: 0:6
 The time is: 0:7
 
 > wait
-Nothing happens.
+Let's go!
 The time is: 0:8
 
 > quit
