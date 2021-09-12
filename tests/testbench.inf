@@ -8,11 +8,9 @@
 
 Switches e;
 
-Constant DEBUG;
-
 ! Testbench - a platform for trying things out in PunyInform
 
-!Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
+Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
 
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
 #Iftrue (#version_number == 8);
@@ -43,6 +41,7 @@ Constant OPTIONAL_SHIP_DIRECTIONS;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant OPTIONAL_MANUAL_REACTIVE;
 Constant OPTIONAL_ORDERED_TIMERS;
+Constant MAX_SCOPE = 50;
 #Iftrue (#version_number == 5);
 Constant OPTIONAL_PROVIDE_UNDO;
 #EndIf;

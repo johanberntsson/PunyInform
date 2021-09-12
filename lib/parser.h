@@ -948,7 +948,12 @@ System_file;
 				! check if we should continue: and or comma
 				! not followed by a verb
 				if(_PeekAtNextWord() == comma_word or AND_WORD) {
-					if((((parse + 2 ) --> (2 * wn)) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
+					! check the next word after "and" or comma
+					if(wn > parse->1) {
+						! there is no word, so the pattern fails
+						return GPR_FAIL;
+					}
+					if((((parse + 2 + 4*wn ) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
 						! this is not a verb so we assume it is a list
 						! of nouns instead. Continue to parse
 						++wn;
