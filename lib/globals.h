@@ -544,19 +544,27 @@ Object Directions
 #EndIf;
 			_parse = parse+4*wn-2;
 			_w = _parse-->0;
-			if(_w == 'floor' or 'ground') {
-				selected_direction_index = DIRECTION_COUNT - 2;
-        		jump match2;
-			}
-
 #IfV5;
 			_arr = _direction_dict_words;
-			if(normal_directions_enabled)
+			if(normal_directions_enabled) {
 				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?success;
+#Ifndef OPTIONAL_SHIP_DIRECTIONS;
+				if(_w == 'floor' or 'ground') {
+					selected_direction_index = DIRECTION_COUNT - 2;
+	        		jump match2;
+				}
+#Endif;
+			}
+
 #IfDef OPTIONAL_SHIP_DIRECTIONS;
 			_arr = _ship_direction_dict_words;
 			if(ship_directions_enabled)
 				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?success;
+			if((normal_directions_enabled || ship_directions_enabled) &&
+					_w == 'floor' or 'ground') {
+				selected_direction_index = DIRECTION_COUNT - 2;
+        		jump match2;
+			}
 #EndIf;
 			! no match
 			selected_direction_index = 0;
@@ -576,6 +584,7 @@ Object Directions
 				@je _w 'out' ?match_out;
 				@je _w 'in' ?match_in;
 				@je _w 'd//' 'down' ?match_d;
+				@je _w 'floor' 'ground' ?match_d;
 				@je _w 'u//' 'up' ?match_u;
 #Endif;
 #Ifdef OPTIONAL_FULL_DIRECTIONS;
@@ -595,6 +604,7 @@ Object Directions
 				@je _w 'out' ?match_out;
 				@je _w 'in' ?match_in;
 				@je _w 'd//' 'down' ?match_d;
+				@je _w 'floor' 'ground' ?match_d;
 				@je _w 'u//' 'up' ?match_u;
 			}
 
@@ -635,7 +645,7 @@ Object Directions
 			selected_direction = 0;
 			return 0;
 #EndIf;
-		]
+		],
 has scenery
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
 		reactive
