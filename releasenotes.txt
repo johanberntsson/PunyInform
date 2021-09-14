@@ -594,3 +594,4 @@ v3.0: bug fix and new feature release
 - Added file howto/custom_directions.inf to show how one can create a custom
   set of directions, complementing or replacing the standard directions.
 - Fixed pattern offset bug in error handling of incomplete noun lists
+- Added documentation on statusline to manual.
