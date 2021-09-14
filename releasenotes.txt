@@ -574,7 +574,7 @@ v2.8: bug fix and new feature release (26 August 2021)
 - Removed message MSG_EMPTY_CANT_CONTAIN.
 
 =======
-v2.9: bug fix and new feature release
+v3.0: bug fix and new feature release
 - Part of the message MSG_RESTART_RESTORE_OR_QUIT was compiled even if the
   message had been replaced by the game, wasting space and printing a
   warning.
@@ -593,3 +593,4 @@ v2.9: bug fix and new feature release
 - Removed deprecated arrays abbr_direction_array and full_direction_array.
 - Added file howto/custom_directions.inf to show how one can create a custom
   set of directions, complementing or replacing the standard directions.
+- Fixed pattern offset bug in error handling of incomplete noun lists

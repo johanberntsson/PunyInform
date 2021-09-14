@@ -951,6 +951,7 @@ System_file;
 					! check the next word after "and" or comma
 					if((wn + 1) > parse->1) {
 						! there is no word, so the pattern fails
+						pattern_pointer = pattern_pointer + 3;
 						return GPR_FAIL;
 					}
 					_i = (parse + 2 + 4*wn ) --> 0; ! Word value

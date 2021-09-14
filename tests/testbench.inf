@@ -41,7 +41,6 @@ Constant OPTIONAL_SHIP_DIRECTIONS;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant OPTIONAL_MANUAL_REACTIVE;
 Constant OPTIONAL_ORDERED_TIMERS;
-Constant MAX_SCOPE = 50;
 #Iftrue (#version_number == 5);
 Constant OPTIONAL_PROVIDE_UNDO;
 #EndIf;
