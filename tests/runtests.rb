@@ -21,6 +21,9 @@ def runtest(filename, version, inform_args)
         puts "Someone needs to provide Windows commands"
         exit
     else
+        # use specific template file is available
+        specific_template = "#{basename}.z#{version}.txt"
+        template_file = specific_template if File.exists? specific_template
         inform_cmd = "inform +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz #{basename}.z#{version} < #{command_file}"
         prune_cmd = "tail +6 #{transcript_file} | grep -v PunyInform > #{output_file}"
