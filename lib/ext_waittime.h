@@ -44,25 +44,25 @@ Constant MAX_WAIT_MINUTES 1440;
 
 !Action routines for Wait command...
 
-[ WaitMovesSub _is_minutes _time_left _time_before _minutes_passed;
+[ WaitMovesSub p_is_minutes _time_left _time_before _minutes_passed;
 	meta = 1;
 
 	! If it's not a time game, waiting in minutes is changed to moves instead.
-	if (sys_statusline_flag == false) _is_minutes = false;
+	if (sys_statusline_flag == false) p_is_minutes = false;
 
 	if (noun == 0) {
 		"Time doesn't pass.";
 	};
 
-	if ((_is_minutes == false && noun > MAX_WAIT_MOVES) ||
-			(_is_minutes && noun > MAX_WAIT_MINUTES)) {
+	if ((p_is_minutes == false && noun > MAX_WAIT_MOVES) ||
+			(p_is_minutes && noun > MAX_WAIT_MINUTES)) {
 		"That's too long to wait.";
 	};
 
 	print "Time passes.^";
 	waittime_waiting = true;
 	_time_left = noun;
-	_minutes_passed = 1; ! Unless _is_minutes is set, this value won't change
+	_minutes_passed = 1; ! Unless p_is_minutes is set, this value won't change
 
 	while(_time_left > 0 && deadflag == GS_PLAYING && waittime_waiting) {
 		_time_before = the_time;
@@ -73,14 +73,15 @@ Constant MAX_WAIT_MINUTES 1440;
 		#IfNot;
 			DrawStatusLine();
 		#EndIf;
-		if(_is_minutes) {
+		if(p_is_minutes) {
 			_minutes_passed = the_time - _time_before;
 			if(_minutes_passed < 0)
 				_minutes_passed = _minutes_passed + 1440;
 		}
 		_time_left = _time_left - _minutes_passed;
 	}
-	if ((waittime_waiting == 0) && (_time_left > 0) && (deadflag == GS_PLAYING))
+	if(AfterRoutines() == false && waittime_waiting == 0 && _time_left > 0 &&
+			deadflag == GS_PLAYING)
 		print "^(waiting stopped)^";
 	waittime_waiting = 0;
 ];
@@ -118,7 +119,6 @@ Constant MAX_WAIT_MINUTES 1440;
 !is, the one that's just ahead of the current time.
 
 [ ParseTime _i _j _k _flg _loop _dig _hr _mn;
-!	give tw_waiting ~general;
 	if (sys_statusline_flag == false) return GPR_FAIL;
 
 	_i = NextWord();
@@ -205,7 +205,6 @@ Constant MAX_WAIT_MINUTES 1440;
 			if (_i == 'pm')
 				_hr = _hr + 12;
 			else if (_i~='am') {                            ! am or pm implied, then?
-!				give tw_waiting general;
 				wn--;
 				_i = (_hr * 60 + _mn);
 				_j = ((_hr + 12) * 60 + _mn);

@@ -595,3 +595,4 @@ v3.0: bug fix and new feature release
   set of directions, complementing or replacing the standard directions.
 - Fixed pattern offset bug in error handling of incomplete noun lists
 - Added documentation on statusline to manual.
+- Actions defined by ext_waittime.h now run AfterRoutines() as well.
