@@ -81,9 +81,9 @@ Verb 'scan'
 		print "selected_direction_index is ", selected_direction_index,
 		" while selected_direction is ", selected_direction, ".^";
 	else {
-		print "Direction is ",selected_direction, " (";
-		if(selected_direction > 0 && selected_direction <= DIRECTION_COUNT)
-			print (string) direction_name_array-->selected_direction;
+		print "Direction is ",selected_direction_index, " (";
+		if(selected_direction_index > 0 && selected_direction_index <= DIRECTION_COUNT)
+			print (string) direction_name_array-->selected_direction_index;
 		else
 			print "not a valid direction";
 		print ")^";
@@ -106,9 +106,9 @@ Verb 'scan'
 		print "selected_direction_index is ", selected_direction_index,
 		" while selected_direction is ", selected_direction, ".^";
 	else {
-		print "Direction is ",selected_direction, " (";
-		if(selected_direction > 0 && selected_direction <= DIRECTION_COUNT)
-			print (string) direction_name_array-->selected_direction;
+		print "Direction is ",selected_direction_index, " (";
+		if(selected_direction_index > 0 && selected_direction_index <= DIRECTION_COUNT)
+			print (string) direction_name_array-->selected_direction_index;
 		else
 			print "not a valid direction";
 		print ")^";
