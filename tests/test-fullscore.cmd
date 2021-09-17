@@ -9,6 +9,8 @@ restart
 yes
 take point
 open box
+score
+full score
 put point in box
 take poison
 eat poison

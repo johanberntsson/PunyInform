@@ -16,7 +16,7 @@ The time is: 0:5
 > wait xyzzy
 I didn't understand that number.
 
-> wait 2
+> wait two
 Time passes.
 The time is: 0:6
 The time is: 0:7

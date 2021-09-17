@@ -59,6 +59,17 @@ You open the box, revealing nothing.
 
 [The score has just gone up by 3 points.]
 
+> score
+You have so far scored 4 out of a possible 7, in 2 turns.
+
+> full score
+
+The score is made up as follows:
+     3 opening the box
+     1 finding sundry items
+
+     4 total (out of 7)
+
 > put point in box
 You put the one point into the box.
 

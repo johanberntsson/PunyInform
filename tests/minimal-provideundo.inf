@@ -22,8 +22,8 @@ Constant STATUSLINE_SCORE; Statusline score;
 Constant NO_SCORE = 0;
 
 ! Customize the statusline in z5+ (will have no effect in z3)
-!Constant OPTIONAL_SL_NO_SCORE;
-!Constant OPTIONAL_SL_NO_MOVES;
+Constant OPTIONAL_SL_NO_SCORE;
+Constant OPTIONAL_SL_NO_MOVES;
 
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
@@ -50,7 +50,7 @@ Constant OPTIONAL_PROVIDE_UNDO;
 ! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
 ! MAX_CARRIED, SACK_OBJECT,  etc.
 
-Constant INITIAL_LOCATION_VALUE = Library;
+!Constant INITIAL_LOCATION_VALUE = Library;
 
 Include "globals.h";
 
@@ -69,6 +69,8 @@ Include "puny.h";
 ! Uncomment to add PunyLib extensions
 !Include "ext_waittime.h";
 
+Object Dummy "dummy";
+
 Object Library "The Library"
 	with
 		description "You are in a library.";
@@ -80,5 +82,6 @@ Object -> Box "box"
 	has container open openable enterable;
 
 [Initialise;
+    location = Library;
 	print "^^And so the story begins...^^";
 ];

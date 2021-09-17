@@ -28,7 +28,7 @@ Statusline time;
 
 ! Uncomment to add optional features to PunyLib
 !Constant CUSTOM_ABBREVIATIONS;
-!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_FULL_SCORE;

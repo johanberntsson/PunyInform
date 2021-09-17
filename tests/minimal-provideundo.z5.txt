@@ -5,6 +5,9 @@ You are empty handed.
 > undo
 Previous turn undone.
 
+> score
+That is not a verb I recognize.
+
 > quit
 Are you sure you want to quit? yes
 
