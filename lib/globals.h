@@ -567,8 +567,8 @@ Object Directions
 			}
 #EndIf;
 			! no match
-			selected_direction_index = 0;
-			selected_direction = 0;
+!			selected_direction_index = 0;
+!			selected_direction = 0;
 			return 0;
 .success;
 			_i = _i - _arr;
@@ -641,8 +641,8 @@ Object Directions
 			return 1;
 .fail;
       		! No direction was matched
-			selected_direction_index = 0;
-			selected_direction = 0;
+!			selected_direction_index = 0;
+!			selected_direction = 0;
 			return 0;
 #EndIf;
 		],
