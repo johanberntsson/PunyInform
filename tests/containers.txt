@@ -8,6 +8,7 @@ The time is: 0:1
 The time is: 0:2
 The time is: 0:3
 The time is: 0:4
+Let's go!
 
 > wait until xyzzy
 You can't see any such thing.
@@ -20,6 +21,7 @@ I didn't understand that number.
 Time passes.
 The time is: 0:6
 The time is: 0:7
+Let's go!
 
 > wait
 Let's go!

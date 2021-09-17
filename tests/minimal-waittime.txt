@@ -1,0 +1,23 @@
+
+> wait until 1
+(tomorrow)
+
+Time passes.
+The time is now 0 minutes past 1. 
+
+> wait for ten minutes
+Time passes.
+The time is now 10 minutes past 1. 
+
+> wait for one hour
+Time passes.
+The time is now 10 minutes past 2. 
+
+> wait until 3:05
+Time passes.
+The time is now 5 minutes past 3. 
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]
