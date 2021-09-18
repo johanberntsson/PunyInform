@@ -1256,6 +1256,8 @@ Array guess_object-->5;
 	parser_unknown_noun_found = 0;
 	parser_all_found = false;
 	parser_all_except_object = 0;
+	selected_direction_index = 0;
+	selected_direction = 0;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 	phase2_necessary = PHASE2_SUCCESS;
