@@ -1,0 +1,23 @@
+
+> scan north statue
+Action ##Scan.
+Direction is 1 (north)
+Noun is 10 (north statue) 
+Second is 0 (not a proper object) 
+
+> scan east of north statue
+Action ##ScanDirOf.
+Direction is 1 (north)
+Noun is 5 (north) 
+Second is 10 (north statue) 
+
+> scan north on
+Action ##ScanNorthOn.
+Direction is 1 (north)
+Noun is 0 (not a proper object) 
+Second is 0 (not a proper object) 
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]
