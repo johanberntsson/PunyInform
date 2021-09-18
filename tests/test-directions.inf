@@ -69,14 +69,9 @@ Include "puny.h";
 ! Uncomment to add PunyLib extensions
 !Include "ext_waittime.h";
 
-Verb 'scan'
-	* noun -> Scan
-	* noun=ADirection 'of' noun -> ScanDirOf;
-
-[ ScanSub;
-	print "Action ##Scan.^";
+[PrintDirection;
 	if(selected_direction_index == 0 && selected_direction == 0)
-		print "No direction was given.^";
+		print "No direction is set.^";
 	else if(selected_direction_index == 0 || selected_direction == 0)
 		print "selected_direction_index is ", selected_direction_index,
 		" while selected_direction is ", selected_direction, ".^";
@@ -88,45 +83,41 @@ Verb 'scan'
 			print "not a valid direction";
 		print ")^";
 	}
+];
 
-	print "Noun is ", noun, " (";
-	if(noun ofclass ProperObject || noun == Directions)
-		print (name) noun;
+[ PrintNoun p_name p_noun;
+	print (string) p_name, " is ", p_noun, " (";
+	if(p_noun ofclass ProperObject || p_noun == Directions)
+		print (name) p_noun;
 	else
 		print "not a proper object";
 	print ") ^";
+];
 
+Verb 'scan'
+	* noun -> Scan
+	* noun=ADirection 'of' noun -> ScanDirOf
+	* 'north' 'on' -> ScanNorthOn;
+
+[ ScanSub;
+	print "Action ##Scan.^";
+	PrintDirection();
+	PrintNoun("Noun", noun);
+	PrintNoun("Second", second);
 ];
 
 [ ScanDirOfSub;
 	print "Action ##ScanDirOf.^";
-	if(selected_direction_index == 0 && selected_direction == 0)
-		print "No direction was given.^";
-	else if(selected_direction_index == 0 || selected_direction == 0)
-		print "selected_direction_index is ", selected_direction_index,
-		" while selected_direction is ", selected_direction, ".^";
-	else {
-		print "Direction is ",selected_direction_index, " (";
-		if(selected_direction_index > 0 && selected_direction_index <= DIRECTION_COUNT)
-			print (string) direction_name_array-->selected_direction_index;
-		else
-			print "not a valid direction";
-		print ")^";
-	}
+	PrintDirection();
+	PrintNoun("Noun", noun);
+	PrintNoun("Second", second);
+];
 
-	print "Noun is ", noun, " (";
-	if(noun ofclass ProperObject || noun == Directions)
-		print (name) noun;
-	else
-		print "not a proper object";
-	print ") ^";
-
-	print "Second is ", second, " (";
-	if(second ofclass ProperObject || second == Directions)
-		print (name) second;
-	else
-		print "not a proper object";
-	print ") ^";
+[ ScanNorthOnSub;
+	print "Action ##ScanNorthOn.^";
+	PrintDirection();
+	PrintNoun("Noun", noun);
+	PrintNoun("Second", second);
 ];
 
 Class ProperObject;
@@ -152,7 +143,8 @@ ProperObject -> SStatue "south statue"
 
 [Initialise;
 	print "^^Try typing:^^
-		SCAN EAST OF HOUSE^
-		SCAN EAST OF NORTH STATUE^
-		SCAN NORTH STATUE^^";
+		SCAN EAST OF HOUSE (##ScanDirOf)^
+		SCAN EAST OF NORTH STATUE (##ScanDirOf)^
+		SCAN NORTH STATUE (##Scan)^
+		SCAN NORTH ON (##ScanNorthOn)^^";
 ];
