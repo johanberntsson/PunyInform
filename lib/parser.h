@@ -1232,7 +1232,7 @@ Array guess_object-->5;
 	rfalse;
 ];
 
-[ _ParsePattern p_pattern p_phase _parse_pointer _noun _i _j _k _word _type _current_wn;
+[ _ParsePattern p_pattern p_phase _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1329,6 +1329,7 @@ Array guess_object-->5;
 		print "Calling ParseToken: token ", pattern_pointer->0," type ", (pattern_pointer->0) & $f, ", data ", (pattern_pointer + 1) --> 0,"^";
 #EndIf;
 		_current_wn = wn;
+		_old_dir_index = selected_direction_index;
 		_noun = _ParseToken(pattern_pointer, _parse_pointer, p_phase);
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse + 2 + 4 * (wn - 1);
@@ -1430,6 +1431,11 @@ Array guess_object-->5;
 			return -1; ! the player_input and parse have changed
 		default:
 			! _noun was a valid noun
+			if(_noun ~= Directions) {
+				selected_direction_index = _old_dir_index;
+				selected_direction =
+					direction_properties_array --> selected_direction_index;
+			}
 			_UpdateNounSecond(_noun, _noun);
 		}
 	}

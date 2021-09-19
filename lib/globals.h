@@ -243,8 +243,8 @@ Array _ship_direction_dict_words static --> 'f//' 'a//' 'sb' 'p//' 0 0 0 0 'u//'
 	'fore' 'aft' 'starboard' 'port' 0 0 0 0 'up' 'down' 'in' 'out';
 #Endif;
 #Endif;
-Array direction_properties_array static table n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
-Array direction_name_array static table "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
+Array direction_properties_array static --> 0 n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
+Array direction_name_array static --> "direction" "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
 Constant DIRECTION_COUNT = 12;
 
 #IfNot; ! not OPTIONAL_FULL_DIRECTIONS
@@ -261,8 +261,8 @@ Array _ship_direction_dict_words static --> 'f//' 'a//' 'sb' 'p//' 'u//' 'd//' 0
 	'fore' 'aft' 'starboard' 'port' 'up' 'down' 'in' 'out';
 #Endif;
 #Endif;
-Array direction_properties_array static table n_to s_to e_to w_to u_to d_to in_to out_to;
-Array direction_name_array static table "north" "south" "east" "west" "up" "down" "in" "out";
+Array direction_properties_array static --> 0 n_to s_to e_to w_to u_to d_to in_to out_to;
+Array direction_name_array static --> "direction" "north" "south" "east" "west" "up" "down" "in" "out";
 Constant DIRECTION_COUNT = 8;
 
 #EndIf; ! not OPTIONAL_FULL_DIRECTIONS
@@ -531,10 +531,7 @@ Object Directions
 	with
 		description "A look in that direction reveals nothing new.",
 		short_name [;
-			if(selected_direction_index)
-				print (string) direction_name_array-->selected_direction_index;
-			else
-				print "direction";
+			print (string) direction_name_array-->selected_direction_index;
 			rtrue;
 		],
 #IfV5;
