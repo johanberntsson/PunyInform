@@ -50,13 +50,10 @@ Object WiddershinsStreet "Widdershins Street"
 	description "The street ends here at a brick wall. You can go back
 		turnwise.";
 
-Array custom_dir_name_array static table "hubwards" "rimwards" "east" "west" "up" "down" "in" "out";
+Array custom_dir_name_array static --> "direction" "hubwards" "rimwards" "east" "west" "up" "down" "in" "out";
 
 [ DirShortName;
-	if(selected_direction_index)
-		print (string) custom_dir_name_array-->selected_direction_index;
-	else
-		print "direction";
+	print (string) custom_dir_name_array-->selected_direction_index;
 	rtrue;
 ];
 
@@ -72,16 +69,11 @@ Array custom_dir_name_array static table "hubwards" "rimwards" "east" "west" "up
 		'in': _i = 7;
 		'out': _i = 8;
 	}
-	if(_i == 0) {
-		! No direction was matched
-		selected_direction_index = 0;
-		selected_direction = 0;
-		return 0;
-	}
+	if(_i == 0) return 0; ! No direction was matched
 
 	! A match was found
 	selected_direction_index = _i;
-	selected_direction = direction_properties_array --> selected_direction_index;
+	selected_direction = direction_properties_array -> selected_direction_index;
 	return 1;
 ];
 

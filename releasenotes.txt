@@ -575,24 +575,34 @@ v2.8: bug fix and new feature release (26 August 2021)
 
 =======
 v3.0: bug fix and new feature release
-- Part of the message MSG_RESTART_RESTORE_OR_QUIT was compiled even if the
-  message had been replaced by the game, wasting space and printing a
+- Part of the message MSG_RESTART_RESTORE_OR_QUIT was compiled even if
+  the message had been replaced by the game, wasting space and printing a
   warning.
-- Fixed some action routines which didn't set scope_modified when they should.
-- Fixed bug which made for incorrect display when player didn't carry anything,
-  if MSG_INVENTORY_DEFAULT had been replaced.
+- Fixed some action routines which didn't set scope_modified when they
+  should.
+- Fixed bug which made for incorrect display when player didn't carry
+  anything, if MSG_INVENTORY_DEFAULT had been replaced.
 - ##Wait now runs after-routines.
 - ##Inv now runs after-routines, even if the player is empty-handed.
-- Optimized running of after-routines in action routines, saving ~140 bytes.
+- Optimized running of after-routines in action routines, saving ~140
+  bytes.
 - Changed so "routines on" doesn't print double messages under z5+.
-- Added code so parse_name calls are also printed after "routines on", under
-  all Z-code versions.
-- Added constant CUSTOM_PLAYER_OBJECT - set it to your own player object, and
-  the library won't create the default selfobj.
+- Added code so parse_name calls are also printed after "routines on",
+  under all Z-code versions.
+- Added constant CUSTOM_PLAYER_OBJECT - set it to your own player object,
+  and the library won't create the default selfobj.
 - Optimized parsing of directions, saving 84 bytes in minimal config.
-- Removed deprecated arrays abbr_direction_array and full_direction_array.
-- Added file howto/custom_directions.inf to show how one can create a custom
-  set of directions, complementing or replacing the standard directions.
+- Removed deprecated arrays abbr_direction_array and
+  full_direction_array.
+- Added file howto/custom_directions.inf to show how one can create a
+  custom set of directions, complementing or replacing the standard
+  directions.
 - Fixed pattern offset bug in error handling of incomplete noun lists
 - Added documentation on statusline to manual.
 - Actions defined by ext_waittime.h now run AfterRoutines() as well.
+- Changed direction_properties_array to be a byte array instead of a
+  table. This means it must be accessed with "->" instead of "-->", and
+  the first entry does not hold the number of elements.
+- Changed direction_name_array to be a word arrary instead of a table.
+  This means the first entry does not hold the number of elements.
+  

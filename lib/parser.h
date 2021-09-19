@@ -1434,7 +1434,7 @@ Array guess_object-->5;
 			if(_noun ~= Directions) {
 				selected_direction_index = _old_dir_index;
 				selected_direction =
-					direction_properties_array --> selected_direction_index;
+					direction_properties_array -> selected_direction_index;
 			}
 			_UpdateNounSecond(_noun, _noun);
 		}

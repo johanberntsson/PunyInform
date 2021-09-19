@@ -243,7 +243,7 @@ Array _ship_direction_dict_words static --> 'f//' 'a//' 'sb' 'p//' 0 0 0 0 'u//'
 	'fore' 'aft' 'starboard' 'port' 0 0 0 0 'up' 'down' 'in' 'out';
 #Endif;
 #Endif;
-Array direction_properties_array static --> 0 n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
+Array direction_properties_array static -> 0 n_to s_to e_to w_to ne_to nw_to se_to sw_to u_to d_to in_to out_to;
 Array direction_name_array static --> "direction" "north" "south" "east" "west" "northeast" "northwest" "southeast" "southwest" "up" "down" "in" "out";
 Constant DIRECTION_COUNT = 12;
 
@@ -261,7 +261,7 @@ Array _ship_direction_dict_words static --> 'f//' 'a//' 'sb' 'p//' 'u//' 'd//' 0
 	'fore' 'aft' 'starboard' 'port' 'up' 'down' 'in' 'out';
 #Endif;
 #Endif;
-Array direction_properties_array static --> 0 n_to s_to e_to w_to u_to d_to in_to out_to;
+Array direction_properties_array static -> 0 n_to s_to e_to w_to u_to d_to in_to out_to;
 Array direction_name_array static --> "direction" "north" "south" "east" "west" "up" "down" "in" "out";
 Constant DIRECTION_COUNT = 8;
 
@@ -572,7 +572,7 @@ Object Directions
 			@log_shift _i (-1) -> _i; ! Divide by 2
 			selected_direction_index = (_i % DIRECTION_COUNT) + 1;
 .match2;
-			selected_direction = direction_properties_array --> selected_direction_index;
+			selected_direction = direction_properties_array -> selected_direction_index;
 			return 1;
 #IfNot;
 			! This is V3
@@ -634,7 +634,7 @@ Object Directions
 .match;
 			selected_direction_index = _i;
 .match2;
-			selected_direction = direction_properties_array --> selected_direction_index;
+			selected_direction = direction_properties_array -> selected_direction_index;
 			return 1;
 .fail;
       		! No direction was matched
