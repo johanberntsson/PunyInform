@@ -261,6 +261,7 @@ System_file;
 	for(_i = 0: _i < _stop: _i++) {
 		_obj = scope-->_i;
 #Endif;
+		if(parser_check_multiple && _obj == Directions) continue;
 		_n = wn;
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
