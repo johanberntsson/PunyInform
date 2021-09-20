@@ -128,6 +128,9 @@ Constant MSG_PARSER_ONLY_TO_ANIMATE "You can only do that to something animate."
 #Ifndef MSG_PARSER_NOT_MULTIPLE_VERB;
 Constant MSG_PARSER_NOT_MULTIPLE_VERB "You can't use multiple objects with that verb.";
 #EndIf;
+#Ifndef MSG_PARSER_NOT_MULTIPLE_DIRS;
+Constant MSG_PARSER_NOT_MULTIPLE_DIRS "You can't use multiple directions.";
+#EndIf;
 #Ifndef MSG_PARSER_BAD_NUMBER;
 Constant MSG_PARSER_BAD_NUMBER "I didn't understand that number.";
 #EndIf;

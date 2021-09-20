@@ -12,7 +12,7 @@ You can't go that way.
 I only understood you as far as "again" but then you lost me.
 
 > put sweater in s
-You can't see any such thing.
+The south can't contain things.
 
 > drop sweater
 You aren't holding it.
@@ -179,9 +179,6 @@ sweater: You are carrying too many things already.
 electric torch: You are carrying too many things already.
 ladder: You are carrying too many things already.
 infinite bag: You are carrying too many things already.
-
-> take all but e
-There are no things available that match "take all but e".
 
 > quit
 You ain't no quitter eh? yes

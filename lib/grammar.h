@@ -419,7 +419,7 @@ Verb 'wear'
 		rtrue;
 	}
 	_msg = p_messages-->3;
-	if(_msg && noun ~=player && _ImplicitGrabIfNotHeld(noun)) rtrue;
+	if(_msg && noun ~=player && second ~= Directions &&  _ImplicitGrabIfNotHeld(noun)) rtrue;
 
 	_msg = p_messages-->4;
 	if(_msg && _ImplicitDisrobeIfWorn(noun)) rtrue;

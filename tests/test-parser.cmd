@@ -56,7 +56,6 @@ i
 take book
 drop pink
 take all
-take all but e
 quit
 yes
 

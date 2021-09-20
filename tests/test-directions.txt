@@ -17,6 +17,18 @@ No direction is set.
 Noun is 0 (not a proper object) 
 Second is 0 (not a proper object) 
 
+> take all but e
+There are no things available that match "take all but e".
+
+> take s and e
+You can't see any such thing.
+
+> push e w
+You can't use multiple directions.
+
+> unlock west with up
+You can't use multiple directions.
+
 > quit
 Are you sure you want to quit? yes
 

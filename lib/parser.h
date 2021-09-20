@@ -261,7 +261,7 @@ System_file;
 	for(_i = 0: _i < _stop: _i++) {
 		_obj = scope-->_i;
 #Endif;
-		if(parser_check_multiple && _obj == Directions) continue;
+		if(parser_check_multiple && _obj == Directions && selected_direction ~= 0) continue;
 		_n = wn;
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
@@ -843,7 +843,7 @@ System_file;
 			if(_token_data == HELD_OBJECT && _noun notin player) {
 				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
-					if(_ImplicitGrabIfNotHeld(_noun)) {
+					if(_noun ~= Directions && _ImplicitGrabIfNotHeld(_noun)) {
 						return GPR_FAIL;
 					}
 				}
@@ -1432,7 +1432,15 @@ Array guess_object-->5;
 			return -1; ! the player_input and parse have changed
 		default:
 			! _noun was a valid noun
-			if(_noun ~= Directions) {
+			if(_noun == Directions) {
+				if(noun == Directions) {
+					! This is second, and noun is already Directions.
+						if(p_phase == PHASE2)
+							PrintMsg(MSG_PARSER_NOT_MULTIPLE_DIRS);
+					phase2_necessary = PHASE2_SUCCESS;
+					return wn - verb_wordnum;
+				}
+			} else {
 				selected_direction_index = _old_dir_index;
 				selected_direction =
 					direction_properties_array -> selected_direction_index;
