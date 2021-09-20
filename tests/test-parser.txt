@@ -12,11 +12,10 @@ You can't go that way.
 I only understood you as far as "again" but then you lost me.
 
 > put sweater in s
-(first taking the sweater)
-The south can't contain things.
+You can't see any such thing.
 
 > drop sweater
-Dropped.
+You aren't holding it.
 
 > put ladder on ladder
 You can't put something on itself.
@@ -174,9 +173,9 @@ Taken.
 Dropped.
 
 > take all
-sweater: Taken.
 pink book: You dared taking the pink book. Bravo!
-Orb: You are carrying too many things already.
+Orb: Taken.
+sweater: You are carrying too many things already.
 electric torch: You are carrying too many things already.
 ladder: You are carrying too many things already.
 infinite bag: You are carrying too many things already.
