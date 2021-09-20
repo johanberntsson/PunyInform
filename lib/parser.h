@@ -1437,7 +1437,7 @@ Array guess_object-->5;
 					! This is second, and noun is already Directions.
 						if(p_phase == PHASE2)
 							PrintMsg(MSG_PARSER_NOT_MULTIPLE_DIRS);
-					phase2_necessary = PHASE2_SUCCESS;
+					phase2_necessary = PHASE2_ERROR;
 					return wn - verb_wordnum;
 				}
 			} else {
