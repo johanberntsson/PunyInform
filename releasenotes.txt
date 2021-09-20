@@ -597,7 +597,8 @@ v3.0: bug fix and new feature release
 - Added file howto/custom_directions.inf to show how one can create a
   custom set of directions, complementing or replacing the standard
   directions.
-- Fixed pattern offset bug in error handling of incomplete noun lists
+- Fixed pattern offset bug in error handling of incomplete noun lists,
+  leading to better error message for input like "take ball and"
 - Added documentation on statusline to manual.
 - Actions defined by ext_waittime.h now run AfterRoutines() as well.
 - Changed direction_properties_array to be a byte array instead of a
@@ -605,4 +606,7 @@ v3.0: bug fix and new feature release
   the first entry does not hold the number of elements.
 - Changed direction_name_array to be a word arrary instead of a table.
   This means the first entry does not hold the number of elements.
-  
+- Slight updates to game author's guide, hopefully making it clearer.
+- Fixed parser problems when player refers to multiple directions in one
+  command, like "take e and w" or "push e w", since direction object
+  can't remember different matches.
