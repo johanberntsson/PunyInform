@@ -614,3 +614,7 @@ v3.0: bug fix and new feature release
   the parsed sentence contains an object that begins with a direction,
   like "look to the east of the north statue" (in a game where the look
   verb has been extended to allow this).
+
+=======
+v3.1: bug fix and new feature release
+- Fixed two incorrect direction names in howto/custom_directions.inf.

@@ -50,7 +50,8 @@ Object WiddershinsStreet "Widdershins Street"
 	description "The street ends here at a brick wall. You can go back
 		turnwise.";
 
-Array custom_dir_name_array static --> "direction" "hubwards" "rimwards" "east" "west" "up" "down" "in" "out";
+Array custom_dir_name_array static --> "direction" "hubwards" "rimwards"
+	"widdershins" "turnwise" "up" "down" "in" "out";
 
 [ DirShortName;
 	print (string) custom_dir_name_array-->selected_direction_index;
