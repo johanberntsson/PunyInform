@@ -122,11 +122,10 @@ abbrevations and the vocabulary table, then feed it to them - although
 Labrande's script is also compatible with Inform 6's newest gametext format,
 introduced in version 6.35.
 
-In any case, Inform 6.34 and older does not support more than 64 abbreviations;
-Inform 6.35 allows you to declare up to 96 (if you dont declare any "low string"
-- that is, set the compiler switches MAX_ABBREVS to 96 and MAX_DYNAMIC_STRINGS
-to 0), which saves even more space. You could expect savings of up to 7kb on a
-128kb file!
+Starting with Inform 6.35, you can declare up to 96 abbreviations (if you don't
+declare any "low strings" - that is, set the compiler switches MAX_ABBREVS to
+96 and MAX_DYNAMIC_STRINGS to 0), which saves even more space. You could expect
+savings of up to 7kb on a 128kb file!
 
 ### Omit unused routines
 
@@ -233,11 +232,22 @@ Read more at https://github.com/johanberntsson/PunyInform/wiki/Manual#doors .
 
 ### Set RUNTIME_ERRORS to 0
 
-This makes the library less helpful in checking for and reporting errors in your
-code at runtime, making the game slightly smaller and faster. Keep
-RUNTIME_ERRORS set to 1 or 2 while developing and testing your game, but when
-you're confident that it's been tested properly and is ready for a public
-release, set it to 0.
+RUNTIME_ERRORS has three settings:
+
+- 0: Perform a bare minimum of error checking. If there's a problem, just
+print the error number.
+- 1: Perform full error checks. If there's a problem, just print the error
+number.
+- 2: Perform full error checks. If there's a problem, print a suitable error
+message.
+
+When compiling with DEBUG enabled, setting 2 is the default. When DEBUG isn't
+enabled, setting 1 is the default.
+
+In a production build, when the code has been thoroughly tested, you may
+want to set RUNTIME_ERRORS to 0. This helps make the game file smaller, and
+the reduced checks also make it faster. If you still want all error checks,
+but skip the explanatory error messages, you can set it to 1.
 
 ## Things that save several bytes
 
@@ -507,15 +517,3 @@ turn it off when compiling a game for release, or it will allow players
 to cheat, plus it looks like a rather sloppy release. Note that when the
 game is compiled in DEBUG mode, a "D" is printed after the library
 verion when the game starts, like "PunyInform v1.9 D".
-
-## Set RUNTIME_ERRORS
-
-In a production build, when the code has been thoroughly tested, you may
-want to set RUNTIME_ERRORS to 0. This means the library will only check
-for a bare minimum of error conditions, and if an error occurs only the
-error code will be printed, not an explanation of what the error means.
-This helps make the game file smaller, and the reduced checks also makes
-it faster. If you still want all error checks, but skip the explanatory
-error messages, you can set it to 1. This is the default when building
-without the DEBUG mode. When in DEBUG mode, the default setting is 2,
-meaning that full error messages are also printed.
