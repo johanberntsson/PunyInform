@@ -180,6 +180,9 @@ electric torch: You are carrying too many things already.
 ladder: You are carrying too many things already.
 infinite bag: You are carrying too many things already.
 
+> take all but e
+There are no things available that match "take all but e".
+
 > quit
 You ain't no quitter eh? yes
 
