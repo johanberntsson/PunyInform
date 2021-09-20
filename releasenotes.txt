@@ -610,3 +610,7 @@ v3.0: bug fix and new feature release
 - Fixed parser problems when player refers to multiple directions in one
   command, like "take e and w" or "push e w", since direction object
   can't remember different matches.
+- Fixed so Directions object remembers the correct direction even when
+  the parsed sentence contains an object that begins with a direction,
+  like "look to the east of the north statue" (in a game where the look
+  verb has been extended to allow this).
