@@ -574,7 +574,7 @@ v2.8: bug fix and new feature release (26 August 2021)
 - Removed message MSG_EMPTY_CANT_CONTAIN.
 
 =======
-v3.0: bug fix and new feature release
+v3.0: bug fix and new feature release (20 September 2021)
 - Part of the message MSG_RESTART_RESTORE_OR_QUIT was compiled even if
   the message had been replaced by the game, wasting space and printing a
   warning.
@@ -614,6 +614,7 @@ v3.0: bug fix and new feature release
   the parsed sentence contains an object that begins with a direction,
   like "look to the east of the north statue" (in a game where the look
   verb has been extended to allow this).
+- Changed compiler requirements to Inform 6.35
 
 =======
 v3.1: bug fix and new feature release
