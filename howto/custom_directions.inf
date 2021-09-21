@@ -43,7 +43,7 @@ Object Street "Street"
 
 Object TurnwiseStreet "Turnwise Street"
 	with e_to Street,
-	description "This is a turning circle. The street contiues widdershins.";
+	description "This is a turning circle. The street continues widdershins.";
 
 Object WiddershinsStreet "Widdershins Street"
 	with w_to Street,
