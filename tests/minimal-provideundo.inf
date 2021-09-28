@@ -22,8 +22,8 @@ Constant STATUSLINE_SCORE; Statusline score;
 Constant NO_SCORE = 0;
 
 ! Customize the statusline in z5+ (will have no effect in z3)
-Constant OPTIONAL_SL_NO_SCORE;
-Constant OPTIONAL_SL_NO_MOVES;
+!Constant OPTIONAL_SL_NO_SCORE;
+!Constant OPTIONAL_SL_NO_MOVES;
 
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
@@ -43,7 +43,9 @@ Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_MANUAL_SCOPE;
 !Constant OPTIONAL_MANUAL_REACTIVE;
 !Constant OPTIONAL_ORDERED_TIMERS;
+#Iftrue (#version_number > 3);
 Constant OPTIONAL_PROVIDE_UNDO;
+#EndIf;
 !Constant OPTIONAL_REACTIVE_PARSE_NAME;
 !Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
 
