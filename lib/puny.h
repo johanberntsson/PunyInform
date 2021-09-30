@@ -1325,7 +1325,9 @@ Object thedark "Darkness"
 [ EndTurnSequence;
 	turns++;
 #Ifndef STATUSLINE_SCORE;
+#Ifndef STATUSLINE_TIME;
 	if (sys_statusline_flag) {
+#Endif;
 		if (time_rate >= 0) the_time=the_time+time_rate;
 		else {
 			time_step--;
@@ -1335,7 +1337,9 @@ Object thedark "Darkness"
 			}
 		}
 		the_time = the_time % 1440;
+#Ifndef STATUSLINE_TIME;
 	}
+#Endif;
 #Endif;
 	RunTimersAndDaemons(); if(deadflag >= GS_DEAD) rtrue;
 	RunEachTurn(); if(deadflag >= GS_DEAD) rtrue;

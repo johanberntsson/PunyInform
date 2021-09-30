@@ -2,6 +2,8 @@
 v3.1: bug fix and new feature release
 
 - Fixed two incorrect direction names in howto/custom_directions.inf.
+- Changed so library doesn't check if header says it's a timed game
+  before updating time, if STATUSLINE_TIME has been defined.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
