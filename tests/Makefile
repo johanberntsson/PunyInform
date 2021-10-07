@@ -16,8 +16,8 @@ test-issue85:
 	frotz test-issue85.z3
 
 inform:
-	inform -v8 test-issue85.inf
-	frotz test-issue85.z8
+	inform -v8 test-consult.inf
+	frotz test-consult.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages
