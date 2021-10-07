@@ -856,7 +856,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #IfTrue MSG_CONSULT_NOTHING_INTERESTING < 1000;
 	MSG_CONSULT_NOTHING_INTERESTING:
-		"You discover nothing of interest in ", (the) second, ".";
+		"You discover nothing of interest in ", (the) noun, ".";
 #EndIf;
 #Ifndef SKIP_MSG_CUT_NO_USE;
 	MSG_CUT_NO_USE, MSG_JUMP_OVER, MSG_TIE_DEFAULT, MSG_CLIMB_DEFAULT:

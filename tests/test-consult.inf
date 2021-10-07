@@ -1,0 +1,110 @@
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+Constant Story      "Parser test";
+Constant Headline   "^A parser test suite for PunyInform.^";
+Serial "200827";
+Constant INITIAL_LOCATION_VALUE = Library;
+
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
+Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+!Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_NO_DARKNESS;
+!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#EndIf;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+
+Object Library "The Library"
+	with
+	    description "You are in a library.",
+	    before [;
+	        print "before: ", noun, ": ", second, "^";
+	    ],
+	has light;
+
+Object -> Book "book"
+	with name 'book',
+	before [;
+	Consult:
+  print "special_number = ", special_number, "^";
+  print "consult_words = ", consult_words, "^";
+  print "consult_from = ", consult_from, "^";
+	],
+	has open openable;
+
+Object -> John "John"
+	with name 'john',
+	life [;
+	Answer: 
+	if(noun ~=0) print (address) noun, "^"; else print "???^";
+  print "special_number = ", special_number, "^";
+  print "consult_words = ", consult_words, "^";
+  print "consult_from = ", consult_from, "^";
+	"no answer.";
+	Ask:
+	if(second ~=0) print (address) second, "^"; else print "???^";
+  print "special_number = ", special_number, "^";
+  print "consult_words = ", consult_words, "^";
+  print "consult_from = ", consult_from, "^";
+	"John ignores your question.";
+	],
+	before [;
+	Consult:
+  print "special_number = ", special_number, "^";
+  print "consult_words = ", consult_words, "^";
+  print "consult_from = ", consult_from, "^";
+	],
+	has animate proper;
+
+Object apple "apple"
+	with name 'apple',
+	has edible;
+
+
+
+
+[ Initialise;
+#IfDef USEINFORM;
+    location=INITIAL_LOCATION_VALUE;
+#EndIf;
+];
+
