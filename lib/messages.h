@@ -964,6 +964,9 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_RESTART_RESTORE_OR_QUIT < 1000;
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE";
+#Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
+		print ", UNDO the last move";
+#Endif;
 #IfDef OPTIONAL_FULL_SCORE;
 		print ", give the FULL score for that game";
 #EndIf;
