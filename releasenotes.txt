@@ -5,6 +5,8 @@ v3.1: bug fix and new feature release
 - Changed so library doesn't check if header says it's a timed game
   before updating time, if STATUSLINE_TIME has been defined.
 - Fixed noun/second setup for Consult, Answer and Ask action.
+- Added UNDO to end of game message.
+- Fixed so we don't risk duplicates in scope when InScope is used.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
