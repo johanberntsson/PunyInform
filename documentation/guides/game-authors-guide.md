@@ -110,17 +110,15 @@ line `Constant CUSTOM_ABBREVIATIONS;` in your source, before including
 globals.h, or your new abbreviations won't be used.
 
 Very recently, interest in the algorithmics of the problem have led to the
-creation of tools to compute even better abbreviations. [Matthew Russotto's
-program](https://gitlab.com/russotto/zilabbrs) and [Henrik Åsman's
-program](https://github.com/heasm66/ZAbbrevMaker) both aim to compute 96
-abbreviations on a ZIL game; their algorithms are efficient and written in C. A
-slightly less efficient solution [in Python, written by Hugo
-Labrande](https://github.com/hlabrand/retro-scripts), can output any number of
-abbreviations in Inform's expected format. In any case, for each of these, you
-need to generate the gametext of your game (-r switch), then cut out the
-abbrevations and the vocabulary table, then feed it to them - although
-Labrande's script is also compatible with Inform 6's newest gametext format,
-introduced in version 6.35.
+creation of tools to compute even better abbreviations. [Henrik Åsman's
+program](https://github.com/heasm66/ZAbbrevMaker) and [Matthew Russotto's
+program](https://gitlab.com/russotto/zilabbrs) aim to compute 96
+abbreviations with efficient implementations; a
+slightly less efficient program [in Python is the one written by Hugo
+Labrande](https://github.com/hlabrand/retro-scripts). Both Åsman's and
+Labrande's programs can output any number of abbreviations in Inform's
+expected format and can handle Inform 6's newest gametext format, introduced
+in version 6.35.
 
 Starting with Inform 6.35, you can declare up to 96 abbreviations (if you don't
 declare any "low strings" - that is, set the compiler switches MAX_ABBREVS to
