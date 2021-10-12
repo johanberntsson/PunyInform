@@ -28,7 +28,7 @@ def runtest(filename, version, inform_args)
         frotz_cmd = "frotz #{basename}.z#{version} < #{command_file}"
         prune_cmd = "tail +6 #{transcript_file} | grep -v PunyInform > #{output_file}"
         diff_cmd = "diff -Z #{template_file} #{output_file}"
-        diff_cmd_ignore_banner = "diff -Z #{template_file} #{output_file} | grep -v PunyInform | tail +3"
+        diff_cmd_ignore_banner = "diff -ZB #{template_file} #{output_file} | grep -v PunyInform"
     end
     # Remove old transcripts
     File.delete transcript_file if File.exist? transcript_file
