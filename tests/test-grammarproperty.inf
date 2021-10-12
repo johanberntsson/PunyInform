@@ -56,51 +56,25 @@ Include "Grammar";
 Object Library "The Library"
 	with
 	    description "You are in a library.",
-	    before [;
-	        !print "before: ", noun, ": ", second, "^";
-	    ],
 	has light;
-
-Object -> Book "book"
-	with name 'book',
-	before [;
-	Consult:
-  print "special_number = ", special_number, "^";
-  print "consult_words = ", consult_words, "^";
-  print "consult_from = ", consult_from, "^";
-	],
-	has open openable;
 
 Object -> John "John"
 	with name 'john',
 	life [;
-	Answer: 
-	if(noun ~=0) print (address) noun, "^"; else print "???^";
-  print "special_number = ", special_number, "^";
-  print "consult_words = ", consult_words, "^";
-  print "consult_from = ", consult_from, "^";
-	"no answer.";
-	Ask:
-	if(second ~=0) print (address) second, "^"; else print "???^";
-  print "special_number = ", special_number, "^";
-  print "consult_words = ", consult_words, "^";
-  print "consult_from = ", consult_from, "^";
-	"John ignores your question.";
+	Answer:  print "answer words ", consult_words, " from ", consult_from, "^";
+	Ask: print "ask^";
 	],
 	before [;
-	Consult:
-  print "special_number = ", special_number, "^";
-  print "consult_words = ", consult_words, "^";
-  print "consult_from = ", consult_from, "^";
+	Consult: print "consult^";
 	],
+	grammar [;
+	    print "grammar^";
+    ],
 	has animate proper;
 
 Object apple "apple"
 	with name 'apple',
 	has edible;
-
-
-
 
 [ Initialise;
 #IfDef USEINFORM;

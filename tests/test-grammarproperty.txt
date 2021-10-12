@@ -1,0 +1,10 @@
+
+> john, hello
+grammar
+answer words 1 from 3
+John has better things to do.
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]
