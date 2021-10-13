@@ -669,12 +669,8 @@ Constant SKIP_MSG_EXAMINE_DARK;
 	MSG_INVENTORY_DEFAULT:
 		! return true if something listed to run afterroutines
 		! or false if MSG_INVENTORY_EMPTY should be displayed
-		if(PrintContents("You're carrying ", player)) {
-			print ".^";
-			rtrue;
-		} else {
-			rfalse;
-		}
+		if(PrintContents("You're carrying ", player)) ".";
+		rfalse;
 #EndIf;
 #IfTrue MSG_EXAMINE_NOTHING_SPECIAL < 1000;
 	MSG_EXAMINE_NOTHING_SPECIAL:
