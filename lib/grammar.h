@@ -1812,6 +1812,11 @@ Global scope_cnt;
 	! If _new_location is 0, we tell the player they can't go there and exit
 	if(_new_location == 0) {
 		if(real_location provides cant_go) {
+#IfDef DEBUG;
+#IfV3;
+			if(debug_flag & 1) print "(", (name) real_location, ").cant_go()^";
+#EndIf;
+#EndIf;
 			PrintOrRun(real_location, cant_go);
 			rtrue;
 		}
@@ -1819,6 +1824,11 @@ Global scope_cnt;
 		rtrue;
 	}
 
+#IfDef DEBUG;
+#IfV3;
+	if(debug_flag & 1) print "(", (name) _new_location, ").before()^";
+#EndIf;
+#EndIf;
 	action = ##Going;
 	if (RunRoutines(_new_location, before) ~= 0) { action = ##Go; rtrue; }
 	action = ##Go;
