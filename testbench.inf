@@ -17,7 +17,7 @@ Constant USEINFORM;
 
 ! Uncomment ONE of the two following lines, to show either time or score/turns
 ! Leaving both commented out makes the library bigger.
-Constant STATUSLINE_TIME; Statusline time;
+Statusline time;
 !Constant STATUSLINE_SCORE; Statusline score;
 
 Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
@@ -25,6 +25,7 @@ Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error cod
 #IfnDef USEINFORM;
 ! Uncomment to add optional features to PunyInform
 !Constant OPTIONAL_NO_DARKNESS;
+Constant STATUSLINE_TIME;
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
@@ -342,6 +343,7 @@ Object RiverBank "River Bank"
   with
 		description "The river is quite wide here. The sun reflects in the blue water, the birds are
       flying high up above.",
+	  	d_to SecretHatch,
 		w_to CarPark,
 		nw_to Library,
 		cheap_scenery
@@ -349,6 +351,46 @@ Object RiverBank "River Bank"
 			'bird' 'birds' "They seem so carefree."
 			1 'sun' SCN_SUN,
 	has light;
+
+Object -> Microphone "microphone"
+	with
+		name 'microphone',
+		orders [;
+			"~Don't you boss me around!~ says the microphone.";
+		],
+		before [;
+			Ask:
+				print "Before: Microphone - Ask^";
+			AskFor:
+				print "Before: Microphone - AskFor^";
+			Answer:
+				print "Before: Microphone - Answer^";
+			Tell:
+				print "Before: Microphone - Tell^";
+		],
+
+		life [;
+			Ask:
+				"Life: Microphone - Ask";
+			AskFor:
+				"Life: Microphone - AskFor";
+			Answer:
+				"Life: Microphone - Answer";
+			Tell:
+				"Life: Microphone - Tell";
+		],
+	has talkable;
+
+Object -> SecretHatch "secret hatch"
+	with
+		name 'secret' 'hatch',
+		description "It's very secret.",
+		after [;
+			give self ~concealed;
+		],
+		door_to Library,
+		door_dir (d_to),
+	has concealed door openable;
 
 Object -> Lizard "cute little lizard"
 	with
@@ -711,18 +753,7 @@ Object -> -> BlueBookTitle "title"
 [ DebugLife rule;
 	! same output as the table in
 	! http://www.inform-fiction.org/manual/html/s18.html
-    print "Rule ", (string) rule, ", action ";
-    switch(action) {
-	##Ask: print "Ask";
-	##Answer: print "Answer";
-	##Tell: print "Tell";
-	##Take: print "Take";
-	##Yes: print "Yes";
-	##Give: print "Give";
-	##NotUnderstood: print "NotUnderstood";
-	default: print action;
-	}
-    print ", noun ";
+    print "Rule ", (string) rule, ", action ", (DebugAction) action, ", noun ";
     if (noun == 0) print "0";
    	else if(noun < top_object) print (the) noun;
    	else print "'",(address) noun,"'";
