@@ -27,7 +27,6 @@ Do you mean the small red ball, the small blue ball or the small green ball?
 Futile.
 
 > take all balls
-small red ball: You already have it.
 small blue ball: Taken.
 small green ball: Taken.
 
