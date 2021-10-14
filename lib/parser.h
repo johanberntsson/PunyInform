@@ -1088,8 +1088,9 @@ Array guess_object-->5;
 
 	for(_i = 0: _i < scope_objects: _i++) {
 		_noun = scope-->_i;
-		if(_noun == player) continue;
-		if(ObjectIsInvisible(_noun)) continue;
+		if(_noun == player || _noun has concealed ||
+				ObjectIsInvisible(_noun, true))
+			continue;
 		if(_noun has door && _noun ~= _exclude) {
 			guess_object-->GUESS_DOOR = _noun;
 			_door_count++;
@@ -1106,7 +1107,7 @@ Array guess_object-->5;
 			guess_object-->GUESS_HELD = _noun;
 			_held_count++;
 		}
-		if(_noun hasnt scenery or concealed && _noun ~= _exclude) {
+		if(_noun hasnt scenery && _noun ~= _exclude) {
 			guess_object-->GUESS_THING = _noun;
 			_thing_count++;
 		}

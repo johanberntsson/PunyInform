@@ -390,7 +390,7 @@ Object -> SecretHatch "secret hatch"
 		],
 		door_to Library,
 		door_dir (d_to),
-	has concealed door openable;
+	has static concealed door openable;
 
 Object -> Lizard "cute little lizard"
 	with

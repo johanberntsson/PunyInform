@@ -7,6 +7,8 @@ v3.1: bug fix and new feature release
 - Fixed noun/second setup for Consult, Answer and Ask action.
 - Added UNDO to end of game message.
 - Fixed so we don't risk duplicates in scope when InScope is used.
+- OPTIONAL_GUESS_MISSING_NOUN function would sometimes reveal a concealed
+  object.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
