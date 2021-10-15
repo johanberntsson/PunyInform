@@ -298,9 +298,9 @@ System_file;
 				_j = wn;
 				_result = _obj.parse_name();
 #Endif;
+				wn = _j;
 				if(_result == -1) jump try_name_match;
 				_n = _n + _result; ! number of words consumed
-				wn = _j;
 				if(_n > wn) {
 					_which_object_level = _CalculateObjectLevel(_obj);
 					if(_n == _best_score) {

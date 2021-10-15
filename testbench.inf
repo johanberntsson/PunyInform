@@ -169,22 +169,6 @@ Verb 'scan'
 	"Scanning ", (the) noun, "... Clear!";
 ];
 
-#IfnDef USEINFORM;
-Verb 'visible' 'visibility'
-	* -> Visible;
-
-[ TestVisibility p_obj;
-	print (The) p_obj, " is ";
-	if(ObjectIsInvisible(p_obj)) print "NOT ";
-	"visible.";
-];
-
-[VisibleSub;
-	LoopOverScope(TestVisibility);
-	"Done!";
-];
-#Endif;
-
 #Ifndef USEINFORM;
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";

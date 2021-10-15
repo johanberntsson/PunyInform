@@ -12,6 +12,7 @@ v3.1: bug fix and new feature release
 - removed ObjectIsInvisible which is no longer needed. Use TestScope instead.
 - Remove duplicates from match list when player specifies same object twice
   for a multi token.
+- When parse_name returned -1 wn was not reset.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
