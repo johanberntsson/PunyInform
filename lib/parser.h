@@ -712,7 +712,8 @@ System_file;
 	! Will this obj do for a "creature" token?
     if (actor ~= player) rtrue;
     if (obj has animate) rtrue;
-!    if (obj hasnt talkable) rfalse;
+    if (obj has talkable && action == ##Ask or ##Answer or ##Tell or ##AskFor)
+		rtrue;
     rfalse;
 ];
 
@@ -959,6 +960,7 @@ System_file;
 					if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
 						! this is not a verb so we assume it is a list
 						! of nouns instead. Continue to parse
+						parser_and_found = true;
 						++wn;
 						p_parse_pointer = p_parse_pointer + 4;
 						!print "and followed by a noun^";
@@ -1263,6 +1265,7 @@ Array guess_object-->5;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 	phase2_necessary = PHASE2_SUCCESS;
+	parser_and_found = false;
 
 	while(true) {
 		pattern_pointer = pattern_pointer + 3;
@@ -1418,6 +1421,22 @@ Array guess_object-->5;
 				! a suitable message.
 				phase2_necessary = PHASE2_ERROR;
 			} else {
+				if(parser_and_found && multiple_objects-->0 > 1) {
+					! Search for and remove duplicates in list
+					_k = multiple_objects-->0;
+					for(_i = 1: _i < _k: _i++) {
+						for(_j = _i + 1: _j <= _k: _j++) {
+							if(multiple_objects-->_i == multiple_objects-->_j) {
+								! Remove a duplicate
+								multiple_objects-->_j =
+								 	multiple_objects-->_k;
+								_k--;
+								(multiple_objects-->0)--;
+								_j--;
+							}
+						}
+					}
+				}
 				_UpdateNounSecond(multiple_objects-->1, multiple_objects-->1);
 			}
 		GPR_NUMBER:

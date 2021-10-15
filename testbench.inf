@@ -154,6 +154,37 @@ Verb 'talk'
 	"You have nothing to say.";
 ];
 
+[ScanScope;
+	switch(scope_stage) {
+		1: rtrue;
+		2: ScopeWithin(RiverBank);
+		3: "You're crazy!";
+	}
+];
+
+Verb 'scan'
+	* scope=ScanScope -> Scan;
+
+[ScanSub;
+	"Scanning ", (the) noun, "... Clear!";
+];
+
+#IfnDef USEINFORM;
+Verb 'visible' 'visibility'
+	* -> Visible;
+
+[ TestVisibility p_obj;
+	print (The) p_obj, " is ";
+	if(ObjectIsInvisible(p_obj)) print "NOT ";
+	"visible.";
+];
+
+[VisibleSub;
+	LoopOverScope(TestVisibility);
+	"Done!";
+];
+#Endif;
+
 #Ifndef USEINFORM;
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
@@ -704,6 +735,7 @@ Object -> -> Sticker "sticker"
 Object -> BlueBook "blue book" class Book
 	with
 		name 'book' 'blue',
+		time_left 0,
 		initial [;
 			!print "Self is ", self, ". ";
 			!if(BlueBook provides hello && BlueBook.hello > 10) {
@@ -716,13 +748,10 @@ Object -> BlueBook "blue book" class Book
 		before [;
 			Turn:
 				"You turn the book around and around. It is endlessly fun. ";
-            Drop:
-                if (self in player) {
-                   StopDaemon(Self);
-                }
 		],
 		after [;
-
+!            Drop:
+!               StopDaemon(Self);
 			Take:
 				if(RedBook in player) {
 					print "The red book does not want to be near the blue book and jumps out of your grasp and lands on the floor.^^";
@@ -730,13 +759,19 @@ Object -> BlueBook "blue book" class Book
                 }
 !                StartDaemon(LargeBox);
                 StartDaemon(self);
+				self.time_left = turns; ! Remember which turn we started
                 StartTimer(LargeBox, 3);
-				print "The blue box starts ticking...^";
+				print "The blue book starts ticking...^";
 				rtrue; ! stop normal printouts
 		],
 !		description "The book looks new and shiny.",
         daemon [;
-            print "^The blue book glows annoyingly.^";
+			if(self.time_left < turns - 1) {
+				if(TestScope(self))
+	            	print "^The blue book ticks loudly.^";
+				else
+	        		print "^You hear a faint ticking in the distance.^";
+			}
         ],
 		bobby 7,
 		hello 13,
@@ -771,8 +806,8 @@ Object -> John "John"
 		name 'john' 'johan',
 		description "John is the meanest gangster around. Don't mess with him.",
 		messed_with 0,
-		add_to_scope Hair Beard,
-		!add_to_scope [; PlaceInScope(Hair); ],
+		! add_to_scope Hair Beard,
+		add_to_scope [; PlaceInScope(Hair); PlaceInScope(Beard); ],
 		react_before [;
 			Take:
 				if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
