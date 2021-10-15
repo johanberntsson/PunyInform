@@ -470,11 +470,6 @@ saying why the player can't get to the object. If parameter
 can take the object. I.e. a button that is part of a machine can be
 touched but not taken.
 
-## `ObjectIsInvisible(p_item, p_dontprint)`
-
-Very similar to `ObjectIsUntouchable`, but check if there's something
-stopping the player from _seeing_ a certain object.
-
 ## `_FindBarrier(p_ancestor, p_obj, p_dontprint)`
 
 Utility function used by ObjectIsUntouchable and ObjectIsInvisible to

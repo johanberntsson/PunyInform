@@ -1089,8 +1089,9 @@ Array guess_object-->5;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_noun = scope-->_i;
 		if(_noun == player || _noun has concealed ||
-				ObjectIsInvisible(_noun, true))
+				TestScope(_noun, player) == false) {
 			continue;
+		}
 		if(_noun has door && _noun ~= _exclude) {
 			guess_object-->GUESS_DOOR = _noun;
 			_door_count++;

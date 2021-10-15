@@ -1401,7 +1401,6 @@ Global scope_cnt;
 [ _ScopeSubHelper p_obj;
 	print scope_cnt++,": ", (a) p_obj, " (", p_obj, ")";
 	if(ObjectIsUntouchable(p_obj, true)) print " [untouchable]";
-	if(ObjectIsInvisible(p_obj, true)) print " [invisible]";
 	@new_line;
 ];
 
