@@ -398,8 +398,3 @@ Constant AddToScope = _PutInScope;
 	_g_check_visible = false;
     rfalse;
 ];
-
-[ ObjectIsInvisible p_item p_dontprint;
-	_g_check_visible = true;
-	return ObjectIsUntouchable(p_item, p_dontprint);
-];

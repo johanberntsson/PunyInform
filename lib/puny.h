@@ -40,7 +40,6 @@
 ! - IsOrAre
 ! PUNYINFORM ONLY:
 ! - OnOff
-! - ObjectIsInvisible
 ! - PrintMsg
 ! - RunTimeError
 
