@@ -162,6 +162,48 @@ Verb 'talk'
 	}
 ];
 
+[BangParse;
+#Ifdef USEINFORM;
+	return ParseToken(ELEMENTARY_TT, NUMBER_TOKEN);
+#Ifnot;
+	return ParseToken(TT_OBJECT, NUMBER_OBJECT);
+#Endif;
+];
+
+Verb 'bang'
+	* BangParse -> Bang;
+
+[BangSub;
+	"Noun is ", parsed_number, ".";
+];
+
+[WowScope;
+	switch(scope_stage) {
+		1: rfalse;
+		2: ScopeWithin(CarPark); rtrue;
+		3: "You can't wow that, you crazy person!";
+	}
+];
+
+[WowParse x;
+#Ifdef USEINFORM;
+	x = ParseToken(SCOPE_TT, WowScope);
+#Ifnot;
+	x = ParseToken(TT_SCOPE, WowScope);
+#Endif;
+	print "ParseToken returned ", x, "^";
+	return x;
+];
+
+Verb 'wow'
+	* WowParse -> Wow;
+
+[WowSub;
+	print (The) noun, " is in scope!^";
+
+!	LoopOverScope(WowLoop);
+];
+
 Verb 'scan'
 	* scope=ScanScope -> Scan;
 
