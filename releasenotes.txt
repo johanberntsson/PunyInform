@@ -10,6 +10,8 @@ v3.1: bug fix and new feature release
 - OPTIONAL_GUESS_MISSING_NOUN function would sometimes reveal a concealed
   object.
 - removed ObjectIsInvisible which is no longer needed. Use TestScope instead.
+- Remove duplicates from match list when player specifies same object twice
+  for a multi token.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
