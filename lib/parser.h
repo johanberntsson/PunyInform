@@ -299,9 +299,54 @@ System_file;
 				_result = _obj.parse_name();
 #Endif;
 				wn = _j;
-				if(_result == -1) jump try_name_match;
-				_n = _n + _result; ! number of words consumed
-				if(_n > wn) {
+				if(_result >= 0) {
+					_n = _n + _result; ! number of words consumed
+					jump register_candidate;
+				}
+			}
+
+.try_name_match;
+			@get_prop_addr _obj name -> _name_array;
+			if(_name_array) {
+				! Assembler equivalent of _name_array_len = _obj.#name / 2
+				@get_prop_len _name_array -> _name_array_len;
+#IfV5;
+				@log_shift _name_array_len (-1) -> _name_array_len;
+#IfNot;
+				@div _name_array_len 2 -> _name_array_len;
+				@dec _name_array_len; ! This is needed for the loop.
+#EndIf;
+#IfDef DEBUG_CHECKNOUN;
+				print "Trying to find ", (address) _current_word," in name (length ",_name_array_len,").^";
+#EndIf;
+				while(_IsSentenceDivider(_p) == false) {
+#IfV5;
+					@scan_table _current_word _name_array _name_array_len -> _result ?success;
+#IfNot;
+					_j = 0;
+.next_word_in_name_prop;
+					@loadw _name_array _j -> _result;
+!						print "Word #", _j, " is ", _result, "('",(address) _result,"'): ";
+					@je _result _current_word ?success;
+!						print "Fail.^";
+!					if(_name_array-->_j == _current_word) jump success;
+					@inc_chk _j _name_array_len ?~next_word_in_name_prop;
+#EndIf;
+					jump register_candidate;
+.success;
+!						print "Success!^";
+!#IfV3;
+!						@inc _name_array_len; ! restore after loop
+!#EndIf;
+#IfDef DEBUG_CHECKNOUN;
+					print " - matched ", (address) _current_word,"^";
+#EndIf;
+					_n++;
+					_p = _p + 4;
+					_current_word = _p-->0;
+				}
+.register_candidate;
+				if(_n > wn && _n >= _best_score) {
 					_which_object_level = _CalculateObjectLevel(_obj);
 					if(_n == _best_score) {
 						_matches++;
@@ -315,7 +360,7 @@ System_file;
 #EndIf;
 					} else if(_n > _best_score) {
 #IfDef DEBUG_CHECKNOUN;
-						print "New best score - matched with parse_name ", _n,"^";
+						print "New best score ", _n, ". Old score was ", _best_score,". Matched with name: ", _n,"^";
 #EndIf;
 						_best_score = _n;
 						_matches = 1;
@@ -324,72 +369,12 @@ System_file;
 						_which_best_level = _which_object_level;
 					}
 				}
-			} else {
-.try_name_match;
-				@get_prop_addr _obj name -> _name_array;
-				if(_name_array) {
-					! Assembler equivalent of _name_array_len = _obj.#name / 2
-					@get_prop_len _name_array -> _name_array_len;
-#IfV5;
-					@log_shift _name_array_len (-1) -> _name_array_len;
-#IfNot;
-					@div _name_array_len 2 -> _name_array_len;
-#EndIf;
-
-					while(_IsSentenceDivider(_p) == false) {
-#IfV5;
-						@scan_table _current_word _name_array _name_array_len -> _result ?success;
-#IfNot;
-						_j = 0;
-						@dec _name_array_len; ! This is needed for the loop.
-.next_word_in_name_prop;
-						@loadw _name_array _j -> _result;
-						@je _result _current_word ?success;
-	!					if(_name_array-->_j == _current_word) jump success;
-						@inc_chk _j _name_array_len ?~next_word_in_name_prop;
-#EndIf;
-						jump not_matched;
-.success;
-#IfV3;
-						@inc _name_array_len; ! restore after loop
-#EndIf;
-#IfDef DEBUG_CHECKNOUN;
-						print " - matched ", (address) _current_word,"^";
-#EndIf;
-						_n++;
-						_p = _p + 4;
-						_current_word = _p-->0;
-						if(_n >= _best_score) {
-							_which_object_level = _CalculateObjectLevel(_obj);
-							if(_n == _best_score) {
-								_matches++;
-								which_object-->_matches = _obj;
-								which_level-->_matches = _which_object_level;
-								if(_which_best_level < _which_object_level) {
-									_which_best_level = _which_object_level;
-								}
-#IfDef DEBUG_CHECKNOUN;
-								print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
-#EndIf;
-							} else if(_n > _best_score) {
-								_matches = 1;
-#IfDef DEBUG_CHECKNOUN;
-								print "New best score ", _n, ". Old score was ", _best_score,". Matches is now ",_matches,".^";
-#EndIf;
-								_best_score = _n;
-								which_object-->1 = _obj;
-								which_level-->1 = _which_object_level;
-								_which_best_level = _which_object_level;
-							}
-						}
-					}
-				}
 			}
 		}
 .not_matched;
 	}
 
-	! remove all objects in which that are less than _which_best_level
+	! remove all objects that are less than _which_best_level
 	! (so that concealed/scenery are not considered if there are
 	! better non-concealed options available)
 	!print _matches, "^";

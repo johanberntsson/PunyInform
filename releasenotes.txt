@@ -13,6 +13,7 @@ v3.1: bug fix and new feature release
 - Remove duplicates from match list when player specifies same object twice
   for a multi token.
 - When parse_name returned -1 wn was not reset.
+- Optimized _CheckNoun to save 70 bytes.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
