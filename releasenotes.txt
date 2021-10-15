@@ -14,6 +14,8 @@ v3.1: bug fix and new feature release
   for a multi token.
 - When parse_name returned -1 wn was not reset.
 - Optimized _CheckNoun to save 70 bytes.
+- Optimized code order to let virtual memory systems shift out parts of the
+  library for long times, for speed.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)

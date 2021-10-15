@@ -1055,26 +1055,6 @@ default:
 	}
 ];
 
-[OnOff obj;
-	if(obj has on) print "on";
-	else print "off";
-	return;
-];
-
-[ CTheyreorThats obj;
-	if (obj == player)			 { print "You're"; return; }
-	if (obj has pluralname)		{ print "They're"; return; }
-	if (obj has animate) {
-		if (obj has female)		{ print "She's"; return; }
-		else if (obj hasnt neuter) { print "He's"; return; }
-	}
-	print "That's";
-];
-
-[ IsorAre obj;
-	if (obj has pluralname || obj == player) print "are"; else print "is";
-];
-
 [ ThatorThose obj;
 	if (obj has pluralname || obj == player) print "those"; else print "that";
 ];
@@ -1092,6 +1072,27 @@ default:
 [ CObjIs p_obj;
 	print (The) p_obj, " ", (isorare) p_obj;
 ];
+
+[ IsorAre obj;
+	if (obj has pluralname || obj == player) print "are"; else print "is";
+];
+
+[ CTheyreorThats obj;
+	if (obj == player)			 { print "You're"; return; }
+	if (obj has pluralname)		{ print "They're"; return; }
+	if (obj has animate) {
+		if (obj has female)		{ print "She's"; return; }
+		else if (obj hasnt neuter) { print "He's"; return; }
+	}
+	print "That's";
+];
+
+[OnOff obj;
+	if(obj has on) print "on";
+	else print "off";
+	return;
+];
+
 
 !
 ! Error messages

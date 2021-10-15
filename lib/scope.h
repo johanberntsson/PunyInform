@@ -216,20 +216,6 @@ System_file;
     }
 ];
 
-[ LoopOverScope p_routine p_actor _i _scope_count;
-	! DM: LoopOverScope(R,actor)
-	! Calls routine p_routine(obj) for each object obj in scope for the
-	! given actor. If no actor is given, the actor defaults to be the player.
-	! No return value
-	if(p_actor == 0)
-		p_actor = player;
-
-	_UpdateScope(p_actor);
-	_scope_count = GetScopeCopy(p_actor);
-
-	for(_i = 0: _i < _scope_count: _i++) p_routine(scope_copy-->_i);
-];
-
 Constant PlaceInScope = _PutInScope;
 Constant AddToScope = _PutInScope;
 
@@ -260,25 +246,6 @@ Constant AddToScope = _PutInScope;
 	! scope-->(scope_objects++) = p_obj;
 ! ];
 
-[ ScopeWithin p_obj _child;
-	! DM: ScopeWithin(obj)
-	! Used in "scope routines" (only) when scope_stage is set to 2 (only).
-	! Places the contents of obj in scope for the token currently being
-	! parsed, and applies the rules of scope recursively so that contents of
-	! see-through objects are also in scope, as is anything added to scope.
-	!
-	! Note that p_obj is NOT added to the scope, only its contents.
-	!
-	! No return value
-
-	! is there a child?
-	_child = child(p_obj);
-	if(_child == nothing) return;
-
-	! add the child (will also add all siblings)
-	_SearchScope(_child);
-];
-
 [ TestScope p_obj p_actor _i;
 	! DM: TestScope(obj,actor)
 	! Tests whether the object obj is in scope to the given actor. If no
@@ -302,24 +269,6 @@ Constant AddToScope = _PutInScope;
 		if(scope-->_i == p_obj) rtrue;
 	}
 #EndIf;
-	rfalse;
-];
-
-[ _ObjectScopedBySomething p_obj _j _k _l _m;
-	objectloop (_j has reactive && (_j.&add_to_scope ~= 0)) {
-		_l = _j.&add_to_scope;
-		if (_l-->0 ofclass Routine) continue;
-#IfV5;
-		_k = _j.#add_to_scope;
-		@log_shift _k (-1) -> _k;
-		@scan_table p_obj _l _k -> _m ?~failed;
-		return _j;
-.failed;
-#IfNot;
-		_k = (_j.#add_to_scope)/WORDSIZE;
-		for (_m=0 : _m<_k : _m++) if (_l-->_m == p_obj) return _j;
-#EndIf;
-	}
 	rfalse;
 ];
 
@@ -397,4 +346,55 @@ Constant AddToScope = _PutInScope;
 	}
 	_g_check_visible = false;
     rfalse;
+];
+
+[ _ObjectScopedBySomething p_obj _j _k _l _m;
+	objectloop (_j has reactive && (_j.&add_to_scope ~= 0)) {
+		_l = _j.&add_to_scope;
+		if (_l-->0 ofclass Routine) continue;
+#IfV5;
+		_k = _j.#add_to_scope;
+		@log_shift _k (-1) -> _k;
+		@scan_table p_obj _l _k -> _m ?~failed;
+		return _j;
+.failed;
+#IfNot;
+		_k = (_j.#add_to_scope)/WORDSIZE;
+		for (_m=0 : _m<_k : _m++) if (_l-->_m == p_obj) return _j;
+#EndIf;
+	}
+	rfalse;
+];
+
+[ ScopeWithin p_obj _child;
+	! DM: ScopeWithin(obj)
+	! Used in "scope routines" (only) when scope_stage is set to 2 (only).
+	! Places the contents of obj in scope for the token currently being
+	! parsed, and applies the rules of scope recursively so that contents of
+	! see-through objects are also in scope, as is anything added to scope.
+	!
+	! Note that p_obj is NOT added to the scope, only its contents.
+	!
+	! No return value
+
+	! is there a child?
+	_child = child(p_obj);
+	if(_child == nothing) return;
+
+	! add the child (will also add all siblings)
+	_SearchScope(_child);
+];
+
+[ LoopOverScope p_routine p_actor _i _scope_count;
+	! DM: LoopOverScope(R,actor)
+	! Calls routine p_routine(obj) for each object obj in scope for the
+	! given actor. If no actor is given, the actor defaults to be the player.
+	! No return value
+	if(p_actor == 0)
+		p_actor = player;
+
+	_UpdateScope(p_actor);
+	_scope_count = GetScopeCopy(p_actor);
+
+	for(_i = 0: _i < _scope_count: _i++) p_routine(scope_copy-->_i);
 ];

@@ -7,6 +7,158 @@
 
 System_file;
 
+[ YesOrNo;
+    for (::) {
+        _ReadPlayerInput(true);
+        if(parse -> 1 == 1) {
+        	! one word reply
+            if(parse --> 1 == 'yes' or 'y//') rtrue;
+            if(parse --> 1 == 'no' or 'n//') rfalse;
+        }
+        PrintMsg(MSG_YES_OR_NO);
+    }
+];
+
+[ _UserFilter _obj _noun _ret;
+	!  UserFilter consults the user's filter (or checks on attribute)
+	!  to see what already-accepted nouns are acceptable
+    if(noun_filter > 0 && noun_filter < 49) {
+        if (_obj has (noun_filter-1)) rtrue;
+        rfalse;
+    }
+	_noun = noun; noun = _obj;
+    _ret = indirect(noun_filter);
+	noun = _noun;
+	return _ret;
+];
+
+[ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second _num_preps _num_nouns;
+	! Called because sentence shorter than the pattern
+	! Available data: wn, parse and p_pattern_token (last matched token)
+	!
+	! Either guess missing parts in the pattern and return true,
+	! or print a suitable error message and return false
+	!
+	! INFORM:
+	! lock: What do you want to lock?
+	! lock door: What do you want to lock the toilet door with?
+	! lock door with: What do you want to lock the toilet door with?
+	! lock door on: I didn't understand that sentence.
+	! give john: What do you want to give John?
+	! jump at: I only understood you as far as wanting to jump.
+	! jump over: What do you want to jump over?
+	!
+	! Inform tries the 'itobj' if second missing, and his/herobj
+	! is creature missing (or if only one animate object in scope)
+
+	! analyse the rest of the pattern to see if second and prep are expected
+	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
+		_type = _token -> 0;
+		if(_type > 9) {
+			_prep = _token;
+		} else {
+			++_num_nouns;
+			if(_noun == 0) {
+				_noun = _token;
+			} else {
+				_second = _token;
+			}
+		}
+	}
+
+	! try to guess missing parts in the pattern
+	! return true if we could fix everything
+#IfDef OPTIONAL_GUESS_MISSING_NOUN;
+	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0, 1);
+	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep, 2);
+	if(_num_nouns > 0 && (_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
+		!print "message complete: ", noun, " ", second, "^";
+		rtrue;
+	}
+#EndIf;
+
+	! write an error message and return false
+	PrintMsg(MSG_PARSER_BAD_PATTERN_PREFIX);
+	print (verbname) verb_word;
+	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
+		_type = (_token -> 0) & $0f;
+		_data = (_token + 1) --> 0;
+		! check if this is a new list of prepositions
+		if(_token->0 == TOKEN_FIRST_PREP or TOKEN_SINGLE_PREP) _num_preps = 0;
+		if(_type == TT_PREPOSITION) {
+			! only write the first item in a list of alternative prepositions
+			if(_num_preps == 0) print " ", (address) _data;
+			++_num_preps;
+		} else {
+			@print_char ' ';
+			if(_noun == 0) {
+				if(_type == TT_ROUTINE_FILTER && _data == ADirection) {
+					print (string) SOMEDIRECTION_STR;
+				} else if(second == 0) {
+					if(_token->2 == CREATURE_OBJECT) {
+						print (string) SOMEONE_STR;
+					} else {
+						print (string) SOMETHING_STR;
+					}
+				} else print (name) second;
+			} else {
+				if(noun ~= 0) {
+					_noun = 0; ! avoid repeat (and we don't need _noun anymore)
+					if(parser_all_found) print "all"; else print (name) noun;
+				} else if(_token->2 == CREATURE_OBJECT) {
+					print (string) SOMEONE_STR;
+				} else {
+					print (string) SOMETHING_STR;
+				}
+			}
+		}
+	}
+	PrintMsg(MSG_PARSER_BAD_PATTERN_SUFFIX);
+	rfalse;
+];
+
+[ _AskWhichNoun p_num_matching_nouns _i;
+	print "Do you mean ";
+	for(_i = 1 : _i <= p_num_matching_nouns : _i++) {
+		if(_i > 1) {
+			if(_i == p_num_matching_nouns) {
+				print " or ";
+			} else {
+				print ", ";
+			}
+		}
+		print (the) which_object --> _i;
+	}
+	print "?";
+];
+
+[ _CreatureTest obj;
+	! Will this obj do for a "creature" token?
+    if (actor ~= player) rtrue;
+    if (obj has animate) rtrue;
+    if (obj has talkable && action == ##Ask or ##Answer or ##Tell or ##AskFor)
+		rtrue;
+    rfalse;
+];
+
+[ _ParseTopic p_wn p_parse_pointer p_preposition;
+	consult_from = p_wn;
+	consult_words = 0;
+	for(::) {
+		++p_wn;
+		++consult_words;
+		p_parse_pointer = p_parse_pointer + 4;
+		if(p_wn > parse->1) {
+			! end of line
+			rfalse;
+		}
+		if(p_parse_pointer --> 0 == p_preposition) {
+			! found the stop token
+			rtrue;
+		}
+	}
+];
+
 [ _ReadPlayerInput p_no_prompt _result;
 ! #IfV5;
 !   print "Width: ", HDR_SCREENWCHARS->0,"^";
@@ -35,18 +187,6 @@ System_file;
 	_result = 2 * (parse -> 1) + 1;
 	parse-->_result = 0;
 	parse-->(_result + 1) = 0;
-];
-
-[ YesOrNo;
-    for (::) {
-        _ReadPlayerInput(true);
-        if(parse -> 1 == 1) {
-        	! one word reply
-            if(parse --> 1 == 'yes' or 'y//') rtrue;
-            if(parse --> 1 == 'no' or 'n//') rfalse;
-        }
-        PrintMsg(MSG_YES_OR_NO);
-    }
 ];
 
 #Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
@@ -185,19 +325,6 @@ System_file;
 [ NextWordStopped;
 	if (wn > parse->1) { wn++; return -1; }
 	return NextWord();
-];
-
-[ _UserFilter _obj _noun _ret;
-	!  UserFilter consults the user's filter (or checks on attribute)
-	!  to see what already-accepted nouns are acceptable
-    if(noun_filter > 0 && noun_filter < 49) {
-        if (_obj has (noun_filter-1)) rtrue;
-        rfalse;
-    }
-	_noun = noun; noun = _obj;
-    _ret = indirect(noun_filter);
-	noun = _noun;
-	return _ret;
 ];
 
 [ _CalculateObjectLevel p_obj;
@@ -413,21 +540,6 @@ System_file;
 		return -_matches;
 	}
 	return 0;
-];
-
-[ _AskWhichNoun p_num_matching_nouns _i;
-	print "Do you mean ";
-	for(_i = 1 : _i <= p_num_matching_nouns : _i++) {
-		if(_i > 1) {
-			if(_i == p_num_matching_nouns) {
-				print " or ";
-			} else {
-				print ", ";
-			}
-		}
-		print (the) which_object --> _i;
-	}
-	print "?";
 ];
 
 [ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i _all_found;
@@ -691,33 +803,6 @@ System_file;
 	keep_silent = _ks;
 	if (p_noun notin player || p_noun has worn) rtrue;
 	rfalse;
-];
-
-[ _CreatureTest obj;
-	! Will this obj do for a "creature" token?
-    if (actor ~= player) rtrue;
-    if (obj has animate) rtrue;
-    if (obj has talkable && action == ##Ask or ##Answer or ##Tell or ##AskFor)
-		rtrue;
-    rfalse;
-];
-
-[ _ParseTopic p_wn p_parse_pointer p_preposition;
-	consult_from = p_wn;
-	consult_words = 0;
-	for(::) {
-		++p_wn;
-		++consult_words;
-		p_parse_pointer = p_parse_pointer + 4;
-		if(p_wn > parse->1) {
-			! end of line
-			rfalse;
-		}
-		if(p_parse_pointer --> 0 == p_preposition) {
-			! found the stop token
-			rtrue;
-		}
-	}
 ];
 
 [ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data _old_wn;
@@ -1136,91 +1221,6 @@ Array guess_object-->5;
 ];
 
 #EndIf;
-
-[ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second _num_preps _num_nouns;
-	! Called because sentence shorter than the pattern
-	! Available data: wn, parse and p_pattern_token (last matched token)
-	!
-	! Either guess missing parts in the pattern and return true,
-	! or print a suitable error message and return false
-	!
-	! INFORM:
-	! lock: What do you want to lock?
-	! lock door: What do you want to lock the toilet door with?
-	! lock door with: What do you want to lock the toilet door with?
-	! lock door on: I didn't understand that sentence.
-	! give john: What do you want to give John?
-	! jump at: I only understood you as far as wanting to jump.
-	! jump over: What do you want to jump over?
-	!
-	! Inform tries the 'itobj' if second missing, and his/herobj
-	! is creature missing (or if only one animate object in scope)
-
-	! analyse the rest of the pattern to see if second and prep are expected
-	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
-		_type = _token -> 0;
-		if(_type > 9) {
-			_prep = _token;
-		} else {
-			++_num_nouns;
-			if(_noun == 0) {
-				_noun = _token;
-			} else {
-				_second = _token;
-			}
-		}
-	}
-
-	! try to guess missing parts in the pattern
-	! return true if we could fix everything
-#IfDef OPTIONAL_GUESS_MISSING_NOUN;
-	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0, 1);
-	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep, 2);
-	if(_num_nouns > 0 && (_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
-		!print "message complete: ", noun, " ", second, "^";
-		rtrue;
-	}
-#EndIf;
-
-	! write an error message and return false
-	PrintMsg(MSG_PARSER_BAD_PATTERN_PREFIX);
-	print (verbname) verb_word;
-	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
-		_type = (_token -> 0) & $0f;
-		_data = (_token + 1) --> 0;
-		! check if this is a new list of prepositions
-		if(_token->0 == TOKEN_FIRST_PREP or TOKEN_SINGLE_PREP) _num_preps = 0;
-		if(_type == TT_PREPOSITION) {
-			! only write the first item in a list of alternative prepositions
-			if(_num_preps == 0) print " ", (address) _data;
-			++_num_preps;
-		} else {
-			@print_char ' ';
-			if(_noun == 0) {
-				if(_type == TT_ROUTINE_FILTER && _data == ADirection) {
-					print (string) SOMEDIRECTION_STR;
-				} else if(second == 0) {
-					if(_token->2 == CREATURE_OBJECT) {
-						print (string) SOMEONE_STR;
-					} else {
-						print (string) SOMETHING_STR;
-					}
-				} else print (name) second;
-			} else {
-				if(noun ~= 0) {
-					_noun = 0; ! avoid repeat (and we don't need _noun anymore)
-					if(parser_all_found) print "all"; else print (name) noun;
-				} else if(_token->2 == CREATURE_OBJECT) {
-					print (string) SOMEONE_STR;
-				} else {
-					print (string) SOMETHING_STR;
-				}
-			}
-		}
-	}
-	PrintMsg(MSG_PARSER_BAD_PATTERN_SUFFIX);
-	rfalse;
-];
 
 [ _ParsePattern p_pattern p_phase _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index;
 	! Check if the current pattern will parse, with side effects if PHASE2

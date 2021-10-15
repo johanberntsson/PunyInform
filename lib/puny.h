@@ -59,7 +59,6 @@ Include "messages.h";
 
 ! ######################### Include utility files
 
-Include "scope.h";
 Include "grammar.h";
 
 ! ######################### Helper routines
@@ -109,13 +108,6 @@ Include "grammar.h";
         _i = parent(_i);
     }
     return 0;
-];
-
-[ SetTime p_time p_step;
-	the_time = p_time;
-	time_rate = p_step;
-	time_step = 0;
-	if(p_step < 0) time_step = -p_step;
 ];
 
 #IfV5;
@@ -516,32 +508,6 @@ else
 	}
 ];
 
-[ _InitObjects _i _k _stop;
-	_stop = top_object + 1;
-	for(_i = Directions : _i < _stop : _i++) {
-#Ifndef OPTIONAL_MANUAL_REACTIVE;
-#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0 ||
-				_i.&add_to_scope ~= 0 || _i.&parse_name ~= 0)
-			give _i reactive;
-#Ifnot;
-		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0 ||
-				_i.&add_to_scope ~= 0)
-			give _i reactive;
-#Endif;
-#Endif;
-		if(_i.&found_in) {
-#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-			if(_k >= MAX_FLOATING_OBJECTS) {
-				RunTimeError(ERR_TOO_MANY_FLOATING);
-				rtrue;
-			}
-#EndIf;
-			floating_objects-->(_k++) = _i;
-		}
-	}
-];
-
 [ MoveFloatingObjects _i _j _len _obj _present;
 	while((_obj = floating_objects-->_i) ~= 0) {
 		_len = _obj.#found_in;
@@ -671,6 +637,8 @@ else
 ];
 #Endif;
 
+
+Include "scope.h";
 Include "parser.h";
 
 [ ActionPrimitive; indirect(#actions_table-->action); ];
@@ -851,22 +819,6 @@ Include "parser.h";
 #EndIf;
 #EndIf;
     return RunRoutines(p_actor, life, p_reason);
-];
-
-[ DirPropToFakeObj p_dir_prop;
-#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if(p_dir_prop < N_TO_CONST || p_dir_prop > OUT_TO_CONST)
-		RunTimeError(ERR_NOT_DIR_PROP);
-#EndIf;
-	return p_dir_prop - N_TO_CONST + FAKE_N_OBJ;
-];
-
-[ FakeObjToDirProp p_fake_obj;
-#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if(p_fake_obj < FAKE_N_OBJ || p_fake_obj > FAKE_OUT_OBJ)
-		RunTimeError(ERR_NOT_FAKE_OBJ);
-#EndIf;
-	return p_fake_obj - FAKE_N_OBJ + N_TO_CONST;
 ];
 
 [ _SetDirectionIfIsFakeDir p_obj p_noun_no _idx;
@@ -1258,17 +1210,6 @@ Include "parser.h";
 ];
 #EndIf;
 
-#IfTrue RUNTIME_ERRORS < RTE_VERBOSE;
-[RT__Err err_no par1 par2;
-	print "Inform error: ";
-	if(err_no ofclass String)
-		print (string) err_no, " - ";
-	else
-		print_ret err_no;
-	print_ret " (", par1, ", ", par2, ")";
-];
-#EndIf;
-
 #Ifndef CUSTOM_PLAYER_OBJECT;
 Object selfobj "you"
 	with
@@ -1374,6 +1315,69 @@ Object thedark "Darkness"
 	return 1;
 ];
 #Endif;
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Rarely used routines
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#IfTrue RUNTIME_ERRORS < RTE_VERBOSE;
+[RT__Err err_no par1 par2;
+	print "Inform error: ";
+	if(err_no ofclass String)
+		print (string) err_no, " - ";
+	else
+		print_ret err_no;
+	print_ret " (", par1, ", ", par2, ")";
+];
+#EndIf;
+
+[ DirPropToFakeObj p_dir_prop;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(p_dir_prop < N_TO_CONST || p_dir_prop > OUT_TO_CONST)
+		RunTimeError(ERR_NOT_DIR_PROP);
+#EndIf;
+	return p_dir_prop - N_TO_CONST + FAKE_N_OBJ;
+];
+
+[ FakeObjToDirProp p_fake_obj;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(p_fake_obj < FAKE_N_OBJ || p_fake_obj > FAKE_OUT_OBJ)
+		RunTimeError(ERR_NOT_FAKE_OBJ);
+#EndIf;
+	return p_fake_obj - FAKE_N_OBJ + N_TO_CONST;
+];
+
+[ _InitObjects _i _k _stop;
+	_stop = top_object + 1;
+	for(_i = Directions : _i < _stop : _i++) {
+#Ifndef OPTIONAL_MANUAL_REACTIVE;
+#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
+		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0 ||
+				_i.&add_to_scope ~= 0 || _i.&parse_name ~= 0)
+			give _i reactive;
+#Ifnot;
+		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0 ||
+				_i.&add_to_scope ~= 0)
+			give _i reactive;
+#Endif;
+#Endif;
+		if(_i.&found_in) {
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+			if(_k >= MAX_FLOATING_OBJECTS) {
+				RunTimeError(ERR_TOO_MANY_FLOATING);
+				rtrue;
+			}
+#EndIf;
+			floating_objects-->(_k++) = _i;
+		}
+	}
+];
+
+[ SetTime p_time p_step;
+	the_time = p_time;
+	time_rate = p_step;
+	time_step = 0;
+	if(p_step < 0) time_step = -p_step;
+];
 
 #Ifdef NO_SCORE;
 [ main _i _j _copylength _sentencelength _parsearraylength _again_saved _parser_oops _disallow_complex_again;
