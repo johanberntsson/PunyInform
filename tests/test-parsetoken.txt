@@ -1,0 +1,23 @@
+
+> bang 100
+Noun is 100.
+
+> wow asdsadas
+ParseToken returned -1
+You can't wow that, you crazy person!
+
+> wow john
+ParseToken returned -1
+You can't wow that, you crazy person!
+
+> wow apple
+ParseToken returned 11
+The apple is in scope!
+
+> bang xyzzy
+I didn't understand that number.
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]
