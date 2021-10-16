@@ -127,6 +127,15 @@ Include "ext_flags.h";
 Include "globals.h";
 #EndIf;
 
+[ParseNoun obj w;
+	if(obj == LargeBox) {
+		w = NextWord();
+		wn--;
+		if(w == 'crate') return 1;
+	}
+	return -1;
+];
+
 [ DarkToDark;
 	deadflag = 1;
 	"You are eaten by a grue.";
@@ -144,72 +153,6 @@ Include "globals.h";
   }
 ];
 
-
-Verb 'talk'
-	*	'to'/'with'	creature	-> Talk;
-
-[TalkSub;
-	if (noun == player) "The conversation is hardly inspiring.";
-	if (RunLife(noun,##Talk) ~= false) return;
-	"You have nothing to say.";
-];
-
-[ScanScope;
-	switch(scope_stage) {
-		1: rtrue;
-		2: ScopeWithin(RiverBank);
-		3: "You're crazy!";
-	}
-];
-
-[BangParse;
-#Ifdef USEINFORM;
-	return ParseToken(ELEMENTARY_TT, NUMBER_TOKEN);
-#Ifnot;
-	return ParseToken(TT_OBJECT, NUMBER_OBJECT);
-#Endif;
-];
-
-Verb 'bang'
-	* BangParse -> Bang;
-
-[BangSub;
-	"Noun is ", parsed_number, ".";
-];
-
-[WowScope;
-	switch(scope_stage) {
-		1: rfalse;
-		2: ScopeWithin(CarPark); rtrue;
-		3: "You can't wow that, you crazy person!";
-	}
-];
-
-[WowParse x;
-#Ifdef USEINFORM;
-	x = ParseToken(SCOPE_TT, WowScope);
-#Ifnot;
-	x = ParseToken(TT_SCOPE, WowScope);
-#Endif;
-	print "ParseToken returned ", x, "^";
-	return x;
-];
-
-Verb 'wow'
-	* WowParse -> Wow;
-
-[WowSub;
-	print (The) noun, " is in scope!^";
-
-!	LoopOverScope(WowLoop);
-];
-
-Verb 'scan'
-	* scope=ScanScope -> Scan;
-
-[ScanSub;
-	"Scanning ", (the) noun, "... Clear!";
-];
 
 #Ifndef USEINFORM;
 Include "ext_cheap_scenery.h";
@@ -278,6 +221,74 @@ Include "puny.h";
 Include "ext_waittime.h";
 
 #Endif;
+
+Verb 'talk'
+	*	'to'/'with'	creature	-> Talk;
+
+[TalkSub;
+	if (noun == player) "The conversation is hardly inspiring.";
+	if (RunLife(noun,##Talk) ~= false) return;
+	"You have nothing to say.";
+];
+
+[ScanScope;
+	switch(scope_stage) {
+		1: rtrue;
+		2: ScopeWithin(RiverBank);
+		3: "You're crazy!";
+	}
+];
+
+[BangParse;
+#Ifdef USEINFORM;
+	return ParseToken(ELEMENTARY_TT, NUMBER_TOKEN);
+#Ifnot;
+	return ParseToken(TT_OBJECT, NUMBER_OBJECT);
+#Endif;
+];
+
+Verb 'bang'
+	* BangParse -> Bang;
+
+[BangSub;
+	"Noun is ", parsed_number, ".";
+];
+
+[WowScope;
+	switch(scope_stage) {
+		1: rfalse;
+		2: ScopeWithin(CarPark); rtrue;
+		3: "You can't wow that, you crazy person!";
+	}
+];
+
+[WowParse x;
+#Ifdef USEINFORM;
+	x = ParseToken(SCOPE_TT, WowScope);
+#Ifnot;
+	x = ParseToken(TT_SCOPE, WowScope);
+#Endif;
+	print "ParseToken returned ", x, "^";
+	return x;
+];
+
+Verb 'wow'
+	* WowParse -> Wow;
+
+[WowSub;
+	print (The) noun, " is in scope!^";
+
+!	LoopOverScope(WowLoop);
+];
+
+Verb 'scan'
+	* scope=ScanScope -> Scan;
+
+[ScanSub;
+	"Scanning ", (the) noun, "... Clear!";
+];
+
+
 
 Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
 [SCN_SUN;

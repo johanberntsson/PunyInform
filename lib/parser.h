@@ -432,6 +432,14 @@ System_file;
 				}
 			}
 
+#Ifdef ParseNoun;
+			_result = ParseNoun(_obj);
+			if(_result >= 0) {
+				_n = _n + _result; ! number of words consumed
+				jump register_candidate;
+			}
+#Endif;
+
 .try_name_match;
 			@get_prop_addr _obj name -> _name_array;
 			if(_name_array) {
