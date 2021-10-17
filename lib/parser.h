@@ -857,7 +857,6 @@ System_file;
 		! trigger add to scope
 		scope_stage = 2;
 		_UpdateScope();
-		scope_stage = 0;
 		! not a real error, just to make sure that phase2 runs
 		phase2_necessary = PHASE2_ERROR;
 	} else if(_token_type == TT_PARSE_ROUTINE) {
@@ -1335,7 +1334,13 @@ Array guess_object-->5;
 
 		switch(_noun) {
 		GPR_FAIL:
-			if(_type == TT_PARSE_ROUTINE) return _current_wn - 1;
+			if(_type == TT_PARSE_ROUTINE) {
+				if(p_phase == PHASE2 && scope_stage == 2) {
+						scope_stage = 3;
+						indirect(scope_routine);
+				}
+				return _current_wn - 1;
+			}
 			if(pattern_pointer->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) {
 				! First or in the middle of a list of alternative prepositions
 #IfDef DEBUG_PARSEPATTERN;

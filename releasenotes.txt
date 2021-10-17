@@ -18,6 +18,7 @@ v3.1: bug fix and new feature release
   library for long times, for speed.
 - Added support for ParseNoun, at the cost of ~20 bytes if you use it, and no
   cost if you don't.
+- Fixed error reporting from ParseToken with TT_SCOPE parameter.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)

@@ -4,18 +4,22 @@ Noun is 100.
 
 > wow asdsadas
 ParseToken returned -1
+ParseToken returned -1
 You can't wow that, you crazy person!
 
 > wow john
+ParseToken returned -1
 ParseToken returned -1
 You can't wow that, you crazy person!
 
 > wow apple
 ParseToken returned 11
+ParseToken returned 11
 The apple is in scope!
 
 > bang xyzzy
 I didn't understand that number.
+
 > s
 Car Park
 You are in a car park.
