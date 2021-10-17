@@ -63,12 +63,18 @@ Object -> John "John"
 	life [;
 	Answer:  print "answer words ", consult_words, " from ", consult_from, "^";
 	Ask: print "ask^";
+	Order: print "order ", action, ": inv ", ##Inv, " take ", ##Take, "^";
 	],
 	before [;
 	Consult: print "consult^";
 	],
 	grammar [;
-	    print "grammar^";
+	    print "grammar ", verb_wordnum, " ", verb_word == 'jump', "^";
+	    if(verb_word == 'jump') {
+	        action = ##Inv;
+	        rtrue;
+        }
+        rfalse;
     ],
 	has animate proper;
 

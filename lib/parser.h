@@ -1525,7 +1525,7 @@ Array guess_object-->5;
 	verb_wordnum = 1;
 
 .reparse;
-	verb_word = (parse - 2) --> (2 * verb_wordnum) ;
+	verb_word = (parse - 2) --> (2 * verb_wordnum);
 	if(UnsignedCompare(verb_word, (HDR_DICTIONARY-->0)) == -1) {
 		! Not a verb. Try the entry point routine before giving up
 		verb_word = UnknownVerb(verb_word);
@@ -1580,8 +1580,16 @@ Array guess_object-->5;
 		! See http://www.inform-fiction.org/manual/html/s18.html
 		! set actor
 		actor = _noun;
-		!print "Trying to talk to to ", (the) _noun, ".^";
 		verb_wordnum = wn;
+		verb_word = (parse - 2) --> (2 * verb_wordnum);
+		if(actor provides grammar) {
+			_i = actor.grammar();
+			if(_i == true) {
+				++wn; ! to account for the correctly parsed verb
+				jump parse_success;
+			}
+			! TODO: 'verb' and -'verb'
+		}
 		jump reparse;
 	}
 
