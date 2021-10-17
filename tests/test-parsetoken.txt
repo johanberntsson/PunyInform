@@ -24,7 +24,7 @@ I didn't understand that number.
 Car Park
 You are in a car park.
 
-You can see a apple here.
+You can see a apple and a egg here.
 
 > x apple
 There is nothing special about the apple.
@@ -35,6 +35,24 @@ There is nothing special about the apple.
 > x banana
 Sorry, I don't understand what "banana" means.
 
+> take apricot and egg
+apple: Taken.
+egg: Taken.
+
+> take banana and egg
+Sorry, I don't understand what "banana" means.
+
+> take apple. go north
+You already have it.
+
+The Library
+
+You can see John here.
+> s
+Car Park
+
+> take banana. go north
+Sorry, I don't understand what "banana" means.
 > quit
 Are you sure you want to quit? yes
 

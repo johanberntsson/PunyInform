@@ -139,6 +139,10 @@ Object -> apple "apple"
 	with name 'apple',
 	has edible;
 
+Object -> egg "egg"
+	with name 'egg',
+	has edible;
+
 [ Initialise;
 #IfDef USEINFORM;
     location=INITIAL_LOCATION_VALUE;
