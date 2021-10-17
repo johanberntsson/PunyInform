@@ -16,6 +16,20 @@ The apple is in scope!
 
 > bang xyzzy
 I didn't understand that number.
+> s
+Car Park
+You are in a car park.
+
+You can see a apple here.
+
+> x apple
+There is nothing special about the apple.
+
+> x apricot
+There is nothing special about the apple.
+
+> x banana
+Sorry, I don't understand what "banana" means.
 
 > quit
 Are you sure you want to quit? yes
