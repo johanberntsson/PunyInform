@@ -165,6 +165,7 @@ Fake_Action NotUnderstood;
 Fake_Action PluralFound;
 Fake_Action Going;
 
+Property grammar;
 Property additive life   $ffff;
 Property initial;
 Property description;
