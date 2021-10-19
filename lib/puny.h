@@ -1389,12 +1389,10 @@ Object thedark "Darkness"
 #Ifnot;
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops _disallow_complex_again;
 #Endif;
-#IfDef DEBUG;
 	dict_start = HDR_DICTIONARY-->0;
 	dict_entry_size = dict_start->(dict_start->0 + 1);
 	dict_start = dict_start + dict_start->0 + 4;
 	dict_end = dict_start + (dict_start - 2)-->0 * dict_entry_size;
-#EndIf;
 
 	parse->0 = MAX_INPUT_WORDS;
 #IfV5;

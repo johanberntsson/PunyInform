@@ -1517,6 +1517,7 @@ Array guess_object-->5;
 	second = 0;
 	consult_from = 0;
 	consult_words = 0;
+	usual_grammar_after = 0;
 
 	if(scope_routine ~= 0) {
 		! if true, then scope=Routine was executed
@@ -1534,6 +1535,7 @@ Array guess_object-->5;
 
 .reparse;
 	verb_word = (parse - 2) --> (2 * verb_wordnum);
+.reparse2;
 	if(UnsignedCompare(verb_word, (HDR_DICTIONARY-->0)) == -1) {
 		! Not a verb. Try the entry point routine before giving up
 		verb_word = UnknownVerb(verb_word);
@@ -1592,11 +1594,24 @@ Array guess_object-->5;
 		verb_word = (parse - 2) --> (2 * verb_wordnum);
 		if(actor provides grammar) {
 			_i = actor.grammar();
-			if(_i == true) {
+			if((_i ~= 0 or 1) &&
+				(UnsignedCompare(_i, dict_start) < 0 ||
+				UnsignedCompare(_i, dict_end) >= 0 ||
+				(_i - dict_start) % dict_entry_size ~= 0)) {
+				! returned -'verb'
+				usual_grammar_after = verb_word;
+				_i = -_i;
+			}
+			if(_i == 1) {
 				++wn; ! to account for the correctly parsed verb
 				jump parse_success;
 			}
-			! TODO: 'verb' and -'verb'
+			if(_i ~= 0) {
+				! _i == 'verb', so use its grammar instead
+				verb_wordnum = wn;
+				verb_word = _i;
+				jump reparse2;
+			}
 		}
 		jump reparse;
 	}
@@ -1689,6 +1704,14 @@ Array guess_object-->5;
 		print "### Skipping phase 2^";
 #EndIf;
 		jump parse_success;
+	}
+	if(usual_grammar_after ~= 0) {
+		! we have parsed a grammar given by the grammar property
+		! which failed, so we should reparse using the original
+		! grammar instead.
+		verb_word = usual_grammar_after;
+		usual_grammar_after = 0;
+		jump reparse2;
 	}
 	if(_best_score < parse->1) {
 		if(_best_score == 0) {

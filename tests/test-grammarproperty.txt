@@ -11,8 +11,19 @@ John has better things to do.
 
 > john, jump
 grammar 3 1
-order 24: inv 24 take 19
-John has better things to do.
+I have nothing
+
+> john, open apple
+grammar 3 0
+What do you want me to close
+
+> john, close apple
+grammar 3 0
+What do you want me to open
+
+> john, close off apple
+grammar 3 0
+I switch off
 
 > quit
 Are you sure you want to quit? yes

@@ -1,3 +1,7 @@
+! this code looks messy but it tests all return values from the 
+! grammar property. -1, 0, 'verb' and -'verb'. See test-grammarproperty.cmd
+! for example inputs.
+
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
 #Endif;
@@ -10,7 +14,7 @@ Constant INITIAL_LOCATION_VALUE = Library;
 ! Uncomment to show time instead of score/turns
 !Statusline time;
 
-Constant DEBUG;
+!Constant DEBUG;
 !Constant DEBUG_PARSEANDPERFORM;
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSETOKEN;
@@ -24,6 +28,7 @@ Constant DEBUG;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_GRAMMAR_PROPERTY;
 !Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_FULL_SCORE;
 !Constant OPTIONAL_FULL_DIRECTIONS;
@@ -68,8 +73,24 @@ Object -> John "John"
 	before [;
 	Consult: print "consult^";
 	],
+	orders [;
+    Open: "What do you want me to open";
+    Close: "What do you want me to close";
+    Jump: "I jump";
+    Unlock: "I unlock";
+    SwitchOff: "I switch off";
+    Inv: "I have nothing";
+	],
 	grammar [;
 	    print "grammar ", verb_wordnum, " ", verb_word == 'jump', "^";
+	    if(verb_word == 'open') {
+	        verb_wordnum++;
+	        return 'close';
+        }
+	    if(verb_word == 'close') {
+	        verb_wordnum++;
+	        return -'open';
+        }
 	    if(verb_word == 'jump') {
 	        action = ##Inv;
 	        rtrue;
@@ -78,7 +99,7 @@ Object -> John "John"
     ],
 	has animate proper;
 
-Object apple "apple"
+Object -> apple "apple"
 	with name 'apple',
 	has edible;
 

@@ -407,6 +407,7 @@ Global parser_unknown_noun_found;! parser should report unknown word
 Global parser_all_found;! parser encountered 'all'
 Global parser_all_except_object; ! used to filter all but/except patterns
 Global parser_and_found;! parser encountered 'all'
+Global usual_grammar_after; ! needed for grammar property parsing
 Global deadflag;
 Global scope_modified;   ! true if daemons, each_turn etc has invalidated scope
 Global scope_objects;
@@ -427,10 +428,10 @@ Global scope_copy_actor = 0;
 Global run_after_routines_msg;
 Global run_after_routines_arg_1;
 
-#IfDef DEBUG;
 Global dict_start;
 Global dict_entry_size;
 Global dict_end;
+#IfDef DEBUG;
 Global debug_flag = 0;
 #EndIf;
 
