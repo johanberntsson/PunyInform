@@ -22,6 +22,7 @@ v3.1: bug fix and new feature release
 - Fixed that actions sometimes didn't print a message in large games.
 - Fixed compile-time error if SACK_OBJECT and OPTIONAL_NO_DARKNESS were defined.
 - Implemented the grammar property as described in DM4.
+- Fixed a bad noun flag test in _CheckNoun.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)

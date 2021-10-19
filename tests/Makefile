@@ -7,7 +7,11 @@ testbench:
 	inform +../lib -v3 testbench.inf
 	frotz testbench.z3
 
-largegame:
+large3:
+	inform +../lib -v3 largegame.inf
+	frotz largegame.z3
+
+large5:
 	inform +../lib -v5 largegame.inf
 	frotz largegame.z5
 

@@ -31,6 +31,12 @@ Constant MAX_CARRIED = 3;
 
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
 !Constant CUSTOM_ABBREVIATIONS;
 !Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
 !Constant OPTIONAL_NO_DARKNESS;

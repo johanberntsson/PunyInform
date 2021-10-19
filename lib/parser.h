@@ -369,7 +369,8 @@ System_file;
 		p_parse_pointer = p_parse_pointer + 4;
 	}
 
-	if((((p_parse_pointer-->0) -> #dict_par1) & 128) == 0) {
+	_i = p_parse_pointer-->0;
+	if(_i == 0 || ((_i -> #dict_par1) & 128) == 0) {
 		! this word doesn't have the noun flag set,
 		! so it can't be part of a noun phrase
 		return 0;
