@@ -362,6 +362,9 @@ System_file;
 	!     - stores number of words consumed in -> 1
 	!     - stores all matching nouns if more than one in -->1 ...
 
+	! don't check if wn out of range
+	if(wn > num_words) return 0;
+
 	! this is needed after a which question, so that we
 	! can answer 'the pink book' and similar
 	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an') {
@@ -369,8 +372,7 @@ System_file;
 		p_parse_pointer = p_parse_pointer + 4;
 	}
 
-	_i = p_parse_pointer-->0;
-	if(_i == 0 || ((_i -> #dict_par1) & 128) == 0) {
+	if((((p_parse_pointer-->0) -> #dict_par1) & 128) == 0) {
 		! this word doesn't have the noun flag set,
 		! so it can't be part of a noun phrase
 		return 0;
@@ -660,7 +662,9 @@ System_file;
 		_CopyParseArray(parse, parse2);
 		@new_line;
 		@new_line;
-		_ReadPlayerInput();
+		_i = num_words;
+		_ReadPlayerInput(); ! ReadPlayerInput destroys num_words
+		num_words = _i;
 		! is this a reply to the question?
 		if((((parse + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
 			! the first word is not a verb. Assume
