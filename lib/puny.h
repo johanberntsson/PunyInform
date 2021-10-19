@@ -655,7 +655,7 @@ Include "parser.h";
 		! should be run. If it has set it to another value, this message should
 		! be printed unless after routines returns true.
 		if(run_after_routines_msg && AfterRoutines() == false &&
-				run_after_routines_msg > 1 &&
+				run_after_routines_msg ~= 0 or 1 &&
 				keep_silent == false)
 			PrintMsg(run_after_routines_msg, run_after_routines_arg_1);
 		@pull run_after_routines_arg_1; @pull run_after_routines_msg;
