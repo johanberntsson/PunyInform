@@ -56,6 +56,11 @@ i
 take book
 drop pink
 take all
+s
+drop all
+get blue and blue and blue
+get blue and blue
+get blue
 quit
 yes
 

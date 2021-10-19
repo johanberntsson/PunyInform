@@ -406,7 +406,6 @@ Global parser_check_multiple;    ! parser should check if multiheld/multiinside
 Global parser_unknown_noun_found;! parser should report unknown word
 Global parser_all_found;! parser encountered 'all'
 Global parser_all_except_object; ! used to filter all but/except patterns
-Global parser_and_found;! parser encountered 'all'
 Global usual_grammar_after; ! needed for grammar property parsing
 Global deadflag;
 Global scope_modified;   ! true if daemons, each_turn etc has invalidated scope

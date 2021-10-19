@@ -180,6 +180,43 @@ electric torch: You are carrying too many things already.
 ladder: You are carrying too many things already.
 infinite bag: You are carrying too many things already.
 
+> s
+Wow, this is a huge car park!
+
+Car Park
+You are in a car park in front of the library. You can enter to the north. There
+is a river off to the east.
+
+A little red car is parked here.
+
+A blue book is standing on a shelf. Looking at the blue book makes you dizzy.
+
+An old and torn green book is here.
+
+You can also see a key and a lead weight here.
+
+[The score has just gone up by 5 points.]
+
+> drop all
+Orb: Dropped.
+pink book: Dropped.
+red book: Dropped.
+
+> get blue and blue and blue
+The blue box starts ticking...
+
+The blue book glows annoyingly.
+
+> get blue and blue
+You already have it.
+
+The blue book glows annoyingly.
+
+> get blue
+You already have it.
+
+The blue book glows annoyingly.
+
 > quit
 You ain't no quitter eh? yes
 

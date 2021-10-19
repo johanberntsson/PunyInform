@@ -1035,7 +1035,7 @@ System_file;
 				! adding a single object - check if it's already there
 				_j = false;
 				_k = multiple_objects-->0;
-				if(parser_and_found && _k > 0) {
+				if(_k > 0) {
 					! Search for and remove duplicates in list
 					for(_i = 1: _i <= _k: _i++) {
 						if(multiple_objects-->_i == _noun) {
@@ -1066,7 +1066,6 @@ System_file;
 					if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
 						! this is not a verb so we assume it is a list
 						! of nouns instead. Continue to parse
-						parser_and_found = true;
 						++wn;
 						p_parse_pointer = parse + 2 + 4 * (wn - 1);
 						!print "and followed by a noun^";
@@ -1287,7 +1286,6 @@ Array guess_object-->5;
 	action = (p_pattern --> 0) & $03ff;
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 	phase2_necessary = PHASE2_SUCCESS;
-	parser_and_found = false;
 
 	while(true) {
 		pattern_pointer = pattern_pointer + 3;

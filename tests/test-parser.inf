@@ -282,11 +282,6 @@ Object CarPark "Car Park"
 		sw_to [; "There's an angry dragon blocking the path!"; ],
 		e_to RiverBank,
 		each_turn [;
-			print (string) random(
-					"^An owl is howling nearby.",
-					"^A terrible scream is heard from the library.",
-					"^The sound of many birds comes from the east.");
-			"";
 		],
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** CarPark.after^"; ],
