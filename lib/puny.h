@@ -352,7 +352,7 @@ else
 #IfDef SACK_OBJECT;
 [ _RoomInSack _obj _ks;
     if (SACK_OBJECT in player) {
-        for (_obj=youngest(player) : _obj : _obj=elder(_obj))
+        for (_obj=youngest(player) : _obj : _obj=elder(_obj)) {
 #Ifdef OPTIONAL_NO_DARKNESS;
             if (_obj ~= SACK_OBJECT && _obj hasnt worn) {
 #Ifnot;
@@ -367,6 +367,7 @@ else
                     rtrue;
                 }
             }
+		}
     }
     rfalse;
 ];
