@@ -353,7 +353,11 @@ else
 [ _RoomInSack _obj _ks;
     if (SACK_OBJECT in player) {
         for (_obj=youngest(player) : _obj : _obj=elder(_obj))
+#Ifdef OPTIONAL_NO_DARKNESS;
+            if (_obj ~= SACK_OBJECT && _obj hasnt worn) {
+#Ifnot;
             if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
+#Endif;
                 _ks = keep_silent;
                 keep_silent = 1;
                 <Insert _obj SACK_OBJECT>;
