@@ -133,4 +133,5 @@ Object -> Fork "fork"
 
 [Initialise;
 	print "^^And so the story begins...^^";
+	a1-->0 = 0; ! to avoid compiler warnings
 ];

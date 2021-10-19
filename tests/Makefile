@@ -7,9 +7,9 @@ testbench:
 	inform +../lib -v3 testbench.inf
 	frotz testbench.z3
 
-test-beforeparsing:
-	inform +../lib -v3 test-beforeparsing.inf
-	frotz test-beforeparsing.z3
+largegame:
+	inform +../lib -v5 largegame.inf
+	frotz largegame.z5
 
 test-grammarproperty:
 	inform +../lib -v3 -s test-grammarproperty.inf
