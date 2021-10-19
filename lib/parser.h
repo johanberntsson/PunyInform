@@ -813,7 +813,7 @@ System_file;
 	rfalse;
 ];
 
-[ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data _old_wn;
+[ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data _old_wn _j _k;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
@@ -821,7 +821,6 @@ System_file;
 	! while a general parse routine takes no arguments.
 	! (this is mostly to avoid recalculating the values from wn
 	! when the calling routine already has them at hand)
-
 	if(p_phase < 0) {
 		! called from ParseToken (DM library API)
 		p_phase = -p_phase;
@@ -903,8 +902,12 @@ System_file;
 				return GPR_FAIL;
 			}
 			_noun = _GetNextNoun(p_parse_pointer, p_phase);
-			if(_noun == -2) return GPR_FAIL;
-			if(_noun == -1) return GPR_REPARSE;
+			if(_noun == -2) {
+				return GPR_FAIL;
+			}
+			if(_noun == -1) {
+				return GPR_REPARSE;
+			}
 			if(_noun == 0) {
 				parser_unknown_noun_found = p_parse_pointer;
 				return GPR_FAIL;
@@ -931,8 +934,12 @@ System_file;
 			for(::) {
 				_old_wn = wn;
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
-				if(_noun == -2) return GPR_FAIL;
-				if(_noun == -1) return GPR_REPARSE;
+				if(_noun == -2) {
+					return GPR_FAIL;
+				}
+				if(_noun == -1) {
+					return GPR_REPARSE;
+				}
 				if(_noun == 0 || parser_all_found) {
 					! here it is either a plural, 'all' or not understood
 					!
@@ -1020,10 +1027,26 @@ System_file;
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
 				}
+				! adding a single object - check if it's already there
+				_j = false;
+				_k = multiple_objects-->0;
+				if(parser_and_found && _k > 0) {
+					! Search for and remove duplicates in list
+					for(_i = 1: _i <= _k: _i++) {
+						if(multiple_objects-->_i == _noun) {
+							_j = true;
+							break;
+						}
+					}
+				}
 				! adding a single object
-				p_parse_pointer = parse + 2 + 4 * (wn - 1);
-				multiple_objects --> 0 = 1 + (multiple_objects --> 0);
-				multiple_objects --> (multiple_objects --> 0) = _noun;
+				if(_j == false) {
+					p_parse_pointer = parse + 2 + 4 * (wn - 1);
+					multiple_objects --> 0 = 1 + (multiple_objects --> 0);
+					multiple_objects --> (multiple_objects --> 0) = _noun;
+					!print "ADDED ", (the) _noun, "!^";
+				!} else { print "SKIPPED ", (the) _noun, "!^";
+				}
 				! check if we should continue: and or comma
 				! not followed by a verb
 				if(_PeekAtNextWord() == comma_word or AND_WORD) {
@@ -1031,6 +1054,7 @@ System_file;
 					if((wn + 1) > parse->1) {
 						! there is no word, so the pattern fails
 						pattern_pointer = pattern_pointer + 3;
+						!print "and followed by nothing^";
 						return GPR_FAIL;
 					}
 					_i = (parse + 2 + 4*wn ) --> 0; ! Word value
@@ -1039,7 +1063,7 @@ System_file;
 						! of nouns instead. Continue to parse
 						parser_and_found = true;
 						++wn;
-						p_parse_pointer = p_parse_pointer + 4;
+						p_parse_pointer = parse + 2 + 4 * (wn - 1);
 						!print "and followed by a noun^";
 						continue;
 					}
@@ -1420,22 +1444,6 @@ Array guess_object-->5;
 				! a suitable message.
 				phase2_necessary = PHASE2_ERROR;
 			} else {
-				if(parser_and_found && multiple_objects-->0 > 1) {
-					! Search for and remove duplicates in list
-					_k = multiple_objects-->0;
-					for(_i = 1: _i < _k: _i++) {
-						for(_j = _i + 1: _j <= _k: _j++) {
-							if(multiple_objects-->_i == multiple_objects-->_j) {
-								! Remove a duplicate
-								multiple_objects-->_j =
-								 	multiple_objects-->_k;
-								_k--;
-								(multiple_objects-->0)--;
-								_j--;
-							}
-						}
-					}
-				}
 				_UpdateNounSecond(multiple_objects-->1, multiple_objects-->1);
 			}
 		GPR_NUMBER:
