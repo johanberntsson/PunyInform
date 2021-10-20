@@ -17,7 +17,7 @@ v3.1: bug fix and new feature release
 - Optimized code order to let virtual memory systems shift out parts of the
   library for long times, for speed.
 - Added support for ParseNoun, at the cost of ~20 bytes if you use it, and no
-  cost if you don't.
+  cost if you don't. Called *before* parse_name, unlike I6lib.
 - Fixed error reporting from ParseToken with TT_SCOPE parameter.
 - Fixed that actions sometimes didn't print a message in large games.
 - Fixed compile-time error if SACK_OBJECT and OPTIONAL_NO_DARKNESS were defined.
