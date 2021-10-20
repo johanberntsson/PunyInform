@@ -180,6 +180,18 @@ electric torch: You are carrying too many things already.
 ladder: You are carrying too many things already.
 infinite bag: You are carrying too many things already.
 
+> push dsdasdsa
+Sorry, I don't understand what "dsdasdsa" means.
+
+> oops john
+"Hey, don't push!", John yells. 
+
+> g
+"I'm gonna make you regret that!", John mutters. 
+
+> push john
+"This is your final warning!", John says. 
+
 > s
 Wow, this is a huge car park!
 

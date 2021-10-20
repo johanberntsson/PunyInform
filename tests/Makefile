@@ -15,9 +15,9 @@ large5:
 	inform +../lib -v5 largegame.inf
 	frotz largegame.z5
 
-test-grammarproperty:
-	inform +../lib -v3 -s test-grammarproperty.inf
-	frotz test-grammarproperty.z3
+test-parser:
+	inform +../lib -v3 -s test-parser.inf
+	frotz test-parser.z3
 
 inform:
 	inform -v8 test-grammarproperty.inf

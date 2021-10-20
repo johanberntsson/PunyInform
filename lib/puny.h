@@ -1494,6 +1494,7 @@ Object thedark "Darkness"
 			if(_again_saved && _parser_oops > 0) {
 				_CopyInputArray(buffer2, buffer);
 				_CopyParseArray(parse2, parse);
+				num_words = parse -> 1;
 				_parser_oops-->0 = special_word;
 				_again_saved = false;
 				jump do_it_again;
@@ -1510,6 +1511,7 @@ Object thedark "Darkness"
 			} else if(_again_saved) {
 				_CopyInputArray(buffer2, buffer);
 				_CopyParseArray(parse2, parse);
+				num_words = parse -> 1;
 				jump do_it_again;
 			} else {
 				PrintMsg(MSG_PARSER_NOTHING_TO_AGAIN);

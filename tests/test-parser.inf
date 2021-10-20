@@ -4,28 +4,27 @@
 !% $MAX_LABELS=5000
 !% $MAX_ZCODE_SIZE=50000
 
-
-
 Switches e;
-
-! Testbench - a platform for trying things out in PunyInform
-
-Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
-
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
 #Endif;
-
 ! Uncomment ONE of the two following lines, to show either time or score/turns
 ! Leaving both commented out makes the library bigger.
 Constant STATUSLINE_TIME; Statusline time;
 !Constant STATUSLINE_SCORE; Statusline score;
-
 ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 Constant RUNTIME_ERRORS = 2;
 
+Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
 #IfnDef USEINFORM;
+!Constant DEBUG_TIMER; ! requires special Ozmoo
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
 ! Uncomment to add optional features to PunyInform
 !Constant OPTIONAL_NO_DARKNESS;
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
@@ -47,13 +46,6 @@ Constant OPTIONAL_PROVIDE_UNDO;
 
 Constant INITIAL_LOCATION_VALUE = Library;
 
-!Constant DEBUG_TIMER; ! requires special Ozmoo
-!Constant DEBUG_PARSEANDPERFORM;
-!Constant DEBUG_PARSEPATTERN;
-!Constant DEBUG_PARSETOKEN;
-!Constant DEBUG_CHECKNOUN;
-!Constant DEBUG_GETNEXTNOUN;
-!Constant DEBUG_SCOPE;
 #EndIf;
 
 !Constant TEST_BEFOREAFTER;
@@ -725,9 +717,10 @@ Object -> John "John"
 		before[;
 			Pull, Push:
 			switch(++self.messed_with) {
-				1: "~I'm gonna make you regret that!~, John mutters. ";
-				2: "~This is your final warning!~, John says. ";
-				3: deadflag=1;
+				1: "~Hey, don't push!~, John yells. ";
+				2: "~I'm gonna make you regret that!~, John mutters. ";
+				3: "~This is your final warning!~, John says. ";
+				4: deadflag=1;
 					"Oh dear, who would have guessed John was carrying a double barrelled gun with him to the library. ";
 
 			}

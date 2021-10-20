@@ -56,6 +56,10 @@ i
 take book
 drop pink
 take all
+push dsdasdsa
+oops john
+g
+push john
 s
 drop all
 get blue and blue and blue

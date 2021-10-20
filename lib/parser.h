@@ -662,9 +662,7 @@ System_file;
 		_CopyParseArray(parse, parse2);
 		@new_line;
 		@new_line;
-		_i = num_words;
 		_ReadPlayerInput(); ! ReadPlayerInput destroys num_words
-		num_words = _i;
 		! is this a reply to the question?
 		if((((parse + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
 			! the first word is not a verb. Assume
@@ -738,6 +736,7 @@ System_file;
 					! don't forget to restore the old arrays
 					_CopyInputArray(buffer2, buffer);
 					_CopyParseArray(parse2, parse);
+                    num_words = parse -> 1;
 					jump recheck_noun;
 				}
 			}
