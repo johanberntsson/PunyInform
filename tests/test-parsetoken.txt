@@ -20,6 +20,8 @@ The apple is in scope!
 > bang xyzzy
 I didn't understand that number.
 
+> yeah
+I don't understand that sentence.
 > s
 Car Park
 You are in a car park.

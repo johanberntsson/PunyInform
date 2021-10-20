@@ -1361,9 +1361,13 @@ Array guess_object-->5;
 		switch(_noun) {
 		GPR_FAIL:
 			if(_type == TT_PARSE_ROUTINE) {
-				if(p_phase == PHASE2 && scope_stage == 2) {
+				if(p_phase == PHASE2) {
+				    if(scope_stage == 2) {
 						scope_stage = 3;
 						indirect(scope_routine);
+                    } else {
+                        PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+                    }
 				}
 				return _current_wn - 1;
 			}

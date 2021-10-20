@@ -15,13 +15,17 @@ large5:
 	inform +../lib -v5 largegame.inf
 	frotz largegame.z5
 
+test-parsetoken:
+	inform +../lib -v3 -s test-parsetoken.inf
+	frotz test-parsetoken.z3
+
 test-parser:
 	inform +../lib -v3 -s test-parser.inf
 	frotz test-parser.z3
 
 inform:
-	inform -v8 test-grammarproperty.inf
-	frotz test-grammarproperty.z8
+	inform -v8 test-parsetoken.inf
+	frotz test-parsetoken.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages

@@ -89,10 +89,19 @@ Verb 'wow'
 
 [WowSub;
     print (The) noun, " is in scope!^";
-
 !   LoopOverScope(WowLoop);
 ];
 
+[ YeahParse;
+    return -1;
+];
+
+Verb 'yeah'
+    * YeahParse -> Yeah;
+
+[ YeahSub;
+    print "yeah^";
+];
 
 #Ifndef USEINFORM;
 Include "puny.h";

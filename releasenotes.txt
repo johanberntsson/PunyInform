@@ -25,6 +25,7 @@ v3.1: bug fix and new feature release
 - Fixed a bad noun flag test in _CheckNoun.
 - Fixed bad num_words value after disambiguation question.
 - Fixed a side effect from the num_words fix above (issue 90)
+- Fixed error reporting from general parse routines.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
