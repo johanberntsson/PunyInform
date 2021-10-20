@@ -456,7 +456,6 @@ Global normal_directions_enabled = true;
 Global ship_directions_enabled = true;
 #EndIf;
 
-Global _g_check_visible = 0;
 Global _g_check_take = 0;
 Global _g_item = 0;
 

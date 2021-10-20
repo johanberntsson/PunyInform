@@ -289,10 +289,8 @@ Constant AddToScope = _PutInScope;
 			}
 			PrintMsg(MSG_TAKE_NOT_AVAILABLE); rtrue;
 		}
-		if(p_obj has container && p_obj hasnt open &&
-			(_g_check_visible == false || p_obj hasnt transparent)) {
+		if(p_obj has container && p_obj hasnt open) {
 			if(p_dontprint == false) PrintMsg(MSG_TOUCHABLE_FOUND_CLOSED, p_obj);
-			_g_check_visible = false;
 			rtrue;
 		}
 		p_obj = parent(p_obj);
@@ -321,7 +319,6 @@ Constant AddToScope = _PutInScope;
 		if(_i ~= 0) {
 			if(ObjectIsUntouchable(_i, p_dontprint, p_checktake)) {
 				! Item immediately added to scope
-				_g_check_visible = false;
 				rtrue;
 			}
 		}
@@ -331,7 +328,6 @@ Constant AddToScope = _PutInScope;
 			! First, a barrier between the player and the ancestor.  The player
 			! can only be in a sequence of enterable objects, and only closed
 			! containers form a barrier.
-			_g_check_visible = false;
 			rtrue;
 		}
 		_g_check_take = p_checktake;
@@ -341,10 +337,8 @@ Constant AddToScope = _PutInScope;
 	! be carried by someone, part of a piece of machinery, in or on top
 	! of something and so on.
 	if (p_item ~= _ancestor && _FindBarrier(_ancestor, parent(p_item), p_dontprint)) {
-		_g_check_visible = false;
 		rtrue;
 	}
-	_g_check_visible = false;
     rfalse;
 ];
 
