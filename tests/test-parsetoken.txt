@@ -1,4 +1,15 @@
 
+> scan paper
+Scanning the paper... Clear!
+
+> scan paper and paperclip
+paper: Scanning the paper... Clear!
+paperclip: Scanning the paperclip... Clear!
+
+> scan all
+paper: Scanning the paper... Clear!
+paperclip: Scanning the paperclip... Clear!
+
 > bang 100
 Noun is 100.
 
@@ -22,6 +33,7 @@ I didn't understand that number.
 
 > yeah
 I don't understand that sentence.
+
 > s
 Car Park
 You are in a car park.
@@ -50,11 +62,13 @@ You already have it.
 The Library
 
 You can see John here.
+
 > s
 Car Park
 
 > take banana. go north
 Sorry, I don't understand what "banana" means.
+
 > quit
 Are you sure you want to quit? yes
 
