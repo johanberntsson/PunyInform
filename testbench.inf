@@ -130,8 +130,14 @@ Include "globals.h";
 [ParseNoun obj w;
 	if(obj == LargeBox) {
 		w = NextWord();
+		if(w == 'crate') { wn = wn + 7; return 1; } ! Change wn just to check that nothing breaks
+		if(w == 'huge') return -1;
 		wn--;
-		if(w == 'crate') return 1;
+	}
+	if(obj == PinkBook) {
+		w = NextWord();
+		if(w == 'tiny') return -1;
+		wn--;
 	}
 	return -1;
 ];
@@ -669,7 +675,7 @@ Object -> Aquarium "aquarium"
 Object -> LargeBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
 	with
 		short_name "box",
-		name 'box',
+		name 'large' 'box',
 		inside_description "The box looked pretty big from the outside, but you feel really confined in here.",
 		description "It's a large box. You could probably fit several people in there.",
         time_out [;

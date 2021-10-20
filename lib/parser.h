@@ -348,7 +348,16 @@ System_file;
 	return 4;
 ];
 
-[ _CheckNoun p_parse_pointer _i _j _n _p _obj _matches _which_object_level _which_best_level _current_word _name_array _name_array_len _best_score _result _stop;
+
+#Ifdef ParseNoun;
+[ _CheckNoun p_parse_pointer _i _j _k _p _obj _matches
+		_which_best_level _current_word _name_array _name_array_len _best_score
+		_result _stop _parse_noun_words;
+#Ifnot;
+[ _CheckNoun p_parse_pointer _i _j _k _p _obj _matches
+		_which_best_level _current_word _name_array _name_array_len _best_score
+		_result _stop;
+#Endif;
 #IfDef DEBUG_CHECKNOUN;
 	print "Entering _CheckNoun!^";
 #EndIf;
@@ -377,6 +386,7 @@ System_file;
 		! so it can't be part of a noun phrase
 		return 0;
 	}
+	_k = wn;
 
 #IfDef DEBUG;
 	if(meta) {
@@ -392,13 +402,26 @@ System_file;
 		_obj = scope-->_i;
 #Endif;
 		if(parser_check_multiple && _obj == Directions && selected_direction ~= 0) continue;
-		_n = wn;
+		wn = _k;
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
 #IfDef DEBUG_CHECKNOUN;
-		print "Testing ", (the) _obj, " _n is ", _n, "...^";
+		print "Testing ", (the) _obj, "...^";
 #EndIf;
 		if((noun_filter == 0 || _UserFilter(_obj) ~= 0)) {
+#Ifdef ParseNoun;
+			_parse_noun_words = 0;
+			_result = ParseNoun(_obj);
+			if(_result >= 0) {
+				jump register_candidate;
+			}
+			else if(wn > _k) {
+				_parse_noun_words = wn - _k;
+				_p = _p + 4 * _parse_noun_words;
+				_current_word = _p-->0;
+			}
+#Endif;
+
 #Ifdef DEBUG;
 			! Problem: parse_name is an alias of sw_to, and debug verbs can
 			! reference any object in the game, some of which are rooms.
@@ -409,7 +432,6 @@ System_file;
 #Ifnot;
 			if(_obj.parse_name ofclass Routine) {
 #Endif;
-				_j = wn;
 				_result = 0;
 				if(meta == 0 || parent(_obj) ~= 0
 						|| (_obj provides describe or life or found_in)
@@ -425,86 +447,75 @@ System_file;
 #Ifnot;
 			if(_obj.parse_name) {
 #Endif;
-				_j = wn;
 				_result = _obj.parse_name();
 #Endif;
-				wn = _j;
 				if(_result >= 0) {
-					_n = _n + _result; ! number of words consumed
 					jump register_candidate;
 				}
+				wn = _k;
 			}
-
-#Ifdef ParseNoun;
-			_result = ParseNoun(_obj);
-			if(_result >= 0) {
-				_n = _n + _result; ! number of words consumed
-				jump register_candidate;
-			}
-#Endif;
 
 .try_name_match;
 			@get_prop_addr _obj name -> _name_array;
 			if(_name_array) {
+				_result = 0;
 				! Assembler equivalent of _name_array_len = _obj.#name / 2
 				@get_prop_len _name_array -> _name_array_len;
 #IfV5;
 				@log_shift _name_array_len (-1) -> _name_array_len;
 #IfNot;
 				@div _name_array_len 2 -> _name_array_len;
-				@dec _name_array_len; ! This is needed for the loop.
 #EndIf;
 #IfDef DEBUG_CHECKNOUN;
 				print "Trying to find ", (address) _current_word," in name (length ",_name_array_len,").^";
 #EndIf;
+#IfV3;
+				@dec _name_array_len; ! This is needed for the loop.
+#EndIf;
 				while(_IsSentenceDivider(_p) == false) {
 #IfV5;
-					@scan_table _current_word _name_array _name_array_len -> _result ?success;
+					@scan_table _current_word _name_array _name_array_len -> _j ?success;
 #IfNot;
 					_j = 0;
 .next_word_in_name_prop;
-					@loadw _name_array _j -> _result;
-!						print "Word #", _j, " is ", _result, "('",(address) _result,"'): ";
-					@je _result _current_word ?success;
-!						print "Fail.^";
-!					if(_name_array-->_j == _current_word) jump success;
+					@loadw _name_array _j -> sp;
+					@je sp _current_word ?success;
 					@inc_chk _j _name_array_len ?~next_word_in_name_prop;
 #EndIf;
 					jump register_candidate;
 .success;
-!						print "Success!^";
-!#IfV3;
-!						@inc _name_array_len; ! restore after loop
-!#EndIf;
 #IfDef DEBUG_CHECKNOUN;
 					print " - matched ", (address) _current_word,"^";
 #EndIf;
-					_n++;
+					_result++;
 					_p = _p + 4;
 					_current_word = _p-->0;
 				}
 .register_candidate;
-				if(_n > wn && _n >= _best_score) {
-					_which_object_level = _CalculateObjectLevel(_obj);
-					if(_n == _best_score) {
+#Ifdef ParseNoun;
+				_result = _result + _parse_noun_words;
+#Endif;
+				if(_result > 0 && _result  >= _best_score) {
+					_j = _CalculateObjectLevel(_obj);
+					if(_result == _best_score) {
 						_matches++;
 						which_object-->_matches = _obj;
-						which_level-->_matches = _which_object_level;
-						if(_which_best_level < _which_object_level) {
-							_which_best_level = _which_object_level;
+						which_level-->_matches = _j;
+						if(_which_best_level < _j) {
+							_which_best_level = _j;
 						}
 #IfDef DEBUG_CHECKNOUN;
 						print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
-					} else if(_n > _best_score) {
+					} else if(_result > _best_score) {
 #IfDef DEBUG_CHECKNOUN;
-						print "New best score ", _n, ". Old score was ", _best_score,". Matched with name: ", _n,"^";
+						print "New best score ", _result, ". Old score was ", _best_score,"^";
 #EndIf;
-						_best_score = _n;
+						_best_score = _result;
 						_matches = 1;
 						which_object-->1 = _obj;
-						which_level-->1 = _which_object_level;
-						_which_best_level = _which_object_level;
+						which_level-->1 = _j;
+						_which_best_level = _j;
 					}
 				}
 			}
@@ -515,9 +526,7 @@ System_file;
 	! remove all objects that are less than _which_best_level
 	! (so that concealed/scenery are not considered if there are
 	! better non-concealed options available)
-	!print _matches, "^";
     for(_i = 1, _j = 1 : _i <= _matches : _i++) {
-        !print which_level --> _i, "^";
         if(which_level --> _i < _which_best_level) {
         	continue;
 		}
@@ -530,8 +539,8 @@ System_file;
 
 
 	which_object->0 = _matches;
-    if(_best_score > wn) {
-    	which_object->1 = _best_score - wn;
+    if(_best_score > 0) {
+    	which_object->1 = _best_score;
 	} else {
     	which_object->1 = 0;
 	}
