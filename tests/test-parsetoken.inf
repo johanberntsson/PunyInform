@@ -118,6 +118,21 @@ Include "puny.h";
 Include "Grammar";
 #Endif;
 
+[ScanScope;
+    switch(scope_stage) {
+        1: rtrue;
+        2: ScopeWithin(RiverBank);
+        3: "You're crazy!";
+    }
+];
+
+Verb 'scan'
+    * scope=ScanScope -> Scan;
+
+[ScanSub;
+    "Scanning ", (the) noun, "... Clear!";
+];
+
 Object Library "The Library"
 	with
 	    description "You are in a library.",
@@ -142,6 +157,7 @@ Object CarPark "Car Park"
 	with
 	    description "You are in a car park.",
 	    n_to Library,
+	    e_to RiverBank,
 	has light;
 
 Object -> apple "apple"
@@ -151,6 +167,23 @@ Object -> apple "apple"
 Object -> egg "egg"
 	with name 'egg',
 	has edible;
+
+Object RiverBank "River Bank"
+  with
+        description "The river is quite wide here. The sun reflects in the blue water, the birds are
+      flying high up above.",
+        w_to CarPark,
+    has light;
+
+Object -> paper "paper"
+    with
+        name 'paper',
+        describe "^There is a paper here.";
+
+Object -> paperclip "paperclip"
+    with
+        name 'paperclip' 'clip',
+        describe "^There is a paperclip here.";
 
 [ Initialise;
 #IfDef USEINFORM;

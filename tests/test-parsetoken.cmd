@@ -1,5 +1,8 @@
 transcript
 
+scan paper
+scan paper and paperclip
+scan all
 bang 100
 wow asdsadas
 wow john
