@@ -123,7 +123,7 @@ Object -> Bag "bag"
 	with
 		name 'bag',
 		description "Lovely.",
-	has container openable;
+	has container open;
 
 Ball -> YellowBall "yellow ball"
 	with
@@ -135,7 +135,7 @@ Object -> Knife "knife"
 
 Object -> Fork "fork"
 	with
-		name 'knife';
+		name 'fork';
 
 [Initialise;
 	print "^^And so the story begins...^^";
