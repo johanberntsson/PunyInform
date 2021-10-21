@@ -569,7 +569,7 @@ System_file;
 	return 0;
 ];
 
-[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i _j _all_found;
+[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i _j _k _all_found;
 	! try getting a noun from the <p_parse_pointer> entry in parse
 	! return:
 	!   <noun number> if found
@@ -681,8 +681,10 @@ System_file;
 		@new_line;
 		_ReadPlayerInput(); ! ReadPlayerInput destroys num_words
 		! is this a reply to the question?
-		if((((parse + 2) --> 0) + DICT_BYTES_FOR_WORD)->0 & 1 == 0) {
-			! the first word is not a verb. Assume
+		_j = parse + 2;
+		_k = parse + 6;
+		if((_j-->0 ~= 0 && (_j-->0)->#dict_par1 & 129 == 128)) {
+			! the first word is not a verb, but is a noun. Assume
 			! a valid reply and add the other
 			! entry into parse, then retry
 
@@ -701,7 +703,7 @@ System_file;
 			_CopyParseArray(parse, parse3);
 			for(_i = 0 : _i < parse3 -> 1 : _i++) {
 				!print "Testing ", (address) (parse3 + 2 + _i * 4) --> 0, "^";
-				(parse + 2) --> 0 = (parse3 + 2 + _i * 4) --> 0;
+				_j-->0 = (parse3 + 2 + _i * 4) --> 0;
 
 				! note that we have to add this is correct order otherwise
 				! parse_name routines may not work, so we need to test
@@ -710,10 +712,10 @@ System_file;
 #IfDef DEBUG;
 				!_PrintParseArray(parse);
 #Endif;
-				(parse + 6)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
-				if((parse + 6)-->0 == (parse + 2)-->0) {
+				_k-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
+				if(_k-->0 == _j-->0) {
 					! don't allow repeated words (red red etc)
-					(parse + 6) --> 0 = 0;
+					_k-->0 = 0;
 					parse->1 = 1;
 				} else {
 					parse->1 = 2;
@@ -722,18 +724,18 @@ System_file;
 				!_PrintParseArray(parse);
 #Endif;
 				wn = 1;
-				_noun = _CheckNoun(parse+2);
+				_noun = _CheckNoun(_j);
 				if(_noun <= 0) {
 					! the normal word order didn't work. Try the other way
 					!print "testing other word order^";
 #IfDef DEBUG;
 					!_PrintParseArray(parse);
 #Endif;
-					(parse + 6)-->0 = (parse + 2)-->0;
-					(parse + 2)-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
-					if((parse + 6)-->0 == (parse + 2)-->0) {
+					_k-->0 = _j-->0;
+					_j-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
+					if(_k-->0 == _j-->0) {
 						! don't allow repeated words (red red etc)
-						(parse + 6) --> 0 = 0;
+						_k-->0 = 0;
 						parse->1 = 1;
 					} else {
 						parse->1 = 2;
@@ -742,7 +744,7 @@ System_file;
 					!_PrintParseArray(parse);
 #Endif;
 					wn = 1;
-					_noun = _CheckNoun(parse+2);
+					_noun = _CheckNoun(_j);
 				}
 				wn = _oldwn; ! restore wn after the _CheckNoun calls
 				if(_noun > 0) {
