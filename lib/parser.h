@@ -569,7 +569,7 @@ System_file;
 	return 0;
 ];
 
-[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i _all_found;
+[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i _j _all_found;
 	! try getting a noun from the <p_parse_pointer> entry in parse
 	! return:
 	!   <noun number> if found
@@ -648,8 +648,9 @@ System_file;
 
 	! check if the noun phrase contains a plural word
 	_pluralword = false;
-	for(_i = 0: _i < _num_words_in_nounphrase: _i++) {
-		if((((p_parse_pointer + _i * 4)-->0)-> #dict_par1) & 4) _pluralword = true;
+	for(_i = p_parse_pointer + (_num_words_in_nounphrase - 1) * 4: _i >= p_parse_pointer: _i = _i - 4) {
+		_j = _i-->0;
+		if(_j && (_j-> #dict_par1) & 4) _pluralword = true;
 	}
 
 .recheck_noun;
