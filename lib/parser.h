@@ -449,10 +449,10 @@ System_file;
 #Endif;
 				_result = _obj.parse_name();
 #Endif;
+				wn = _k;
 				if(_result >= 0) {
 					jump register_candidate;
 				}
-				wn = _k;
 			}
 
 .try_name_match;
@@ -536,7 +536,6 @@ System_file;
         _j = _j + 1;
     }
     _matches = _j - 1;
-
 
 	which_object->0 = _matches;
     if(_best_score > 0) {
