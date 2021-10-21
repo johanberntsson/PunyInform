@@ -43,10 +43,17 @@ Include "globals.h";
 #EndIf;
 
 [ParseNoun obj w;
-    if(obj == apple) {
-        w = NextWord();
-        wn--;
-        if(w == 'apricot') return 1;
+	switch(obj) {
+	apple:
+		w = NextWord();
+		wn--;
+		if(w == 'apricot') return 1;
+	egg:
+		w = NextWord();
+		if(w ~= 'yummy') wn--;
+	John:
+		w = NextWord();
+		if(w ~= 'beautiful') wn--;
     }
     return -1;
 ];
@@ -141,6 +148,7 @@ Object Library "The Library"
 
 Object -> John "John"
 	with name 'john',
+	description "He is beautiful and he knows it.",
 	life [;
 	Answer:  print "answer words ", consult_words, " from ", consult_from, "^";
 	Ask: print "ask^";
@@ -165,7 +173,13 @@ Object -> apple "apple"
 	has edible;
 
 Object -> egg "egg"
-	with name 'egg',
+	! Can be referred to as "egg" or "yolk" or "yummy" or "yummy egg" or "yummy yolk"
+	with
+		name 'yolk',
+		parse_name [;
+			if(NextWord() == 'egg') return 1;
+			return -1;
+		],
 	has edible;
 
 Object RiverBank "River Bank"
@@ -190,4 +204,3 @@ Object -> paperclip "paperclip"
     location=INITIAL_LOCATION_VALUE;
 #EndIf;
 ];
-

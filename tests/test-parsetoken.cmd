@@ -10,6 +10,11 @@ wow apple
 bang xyzzy
 yeah
 s
+x egg
+x yolk
+x yummy
+x yummy egg
+x yummy yolk
 x apple
 x apricot
 x banana
@@ -20,4 +25,3 @@ s
 take banana. go north
 quit
 yes
-
