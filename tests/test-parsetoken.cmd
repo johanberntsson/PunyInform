@@ -1,5 +1,8 @@
 transcript
 
+x john
+x beautiful
+x the beautiful john
 scan paper
 scan paper and paperclip
 scan all
@@ -15,6 +18,8 @@ x yolk
 x yummy
 x yummy egg
 x yummy yolk
+x the egg
+x the yummy egg
 x apple
 x apricot
 x banana
