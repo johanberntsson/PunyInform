@@ -450,7 +450,12 @@ System_file;
 #Endif;
 				_result = _obj.parse_name();
 #Endif;
+
+#Ifdef ParseNoun;
 				wn = _k + _parse_noun_words;
+#Ifnot;
+				wn = _k;
+#Endif;
 				if(_result >= 0) {
 					jump register_candidate;
 				}
