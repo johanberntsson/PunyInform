@@ -239,8 +239,8 @@ Verb 'talk'
 
 [ScanScope;
 	switch(scope_stage) {
-		1: rtrue;
-		2: ScopeWithin(RiverBank);
+		1: rfalse;
+		2: ScopeWithin(RiverBank); rtrue;
 		3: "You're crazy!";
 	}
 ];
@@ -925,10 +925,27 @@ Object -> infiniteBag "infinite bag"
 
 Book -> GreenBook "green book"
 	with
-		name 'book' 'green',
+!		name 'book' 'green',
+	    parse_name [ first_word;
+			first_word = NextWord();
+			if(first_word == 'green') {
+				if(NextWord() == 'book') return 2;
+				return 1;
+			} else if (first_word == 'pinkish') {
+				parser_action = ##PluralFound;
+				if(NextWord() == 'green') {
+					if(NextWord() == 'book') return 3;
+					return 2;
+				}
+				return 1;
+			} else if (first_word == 'book' or 'books') {
+				return 1;
+			}
+			return 0;
+	    ],
 		describe [; "^An old and torn green book is here."; ],
-		description "The book is nice and tidy.",
-		;
+		description "The green book is nice and tidy.",
+	has reactive;
 
 
 Book -> PinkBook "pink book"
@@ -937,6 +954,10 @@ Book -> PinkBook "pink book"
 	    parse_name [ first_word;
 			first_word = NextWord();
 			if(first_word == 'pink') {
+				if(NextWord() == 'book') return 2;
+				return 1;
+			} else if (first_word == 'pinkish') {
+				parser_action = ##PluralFound;
 				if(NextWord() == 'book') return 2;
 				return 1;
 			} else if (first_word == 'book' or 'books') {
@@ -948,7 +969,7 @@ Book -> PinkBook "pink book"
 			Take:
 				"You dared taking the pink book. Bravo!";
 		],
-		description "The book is nice and tidy.",
+		description "The pink book is nice and tidy.",
 	has clothing reactive;
 
 Object -> Torch "electric torch"
