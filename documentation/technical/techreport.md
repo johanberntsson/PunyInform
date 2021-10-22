@@ -270,13 +270,15 @@ that matches one or more words. In addition to the return value, it
 updates the `which_object` global array, which contains a list of
 objects that matches (since there could be more than one), the number of
 objects that matches, and the number of words parsed against these
-object(s).
+object(s). It can also modify the wn variable to skip words such as 'the' and 'an'. If the routine is successful it will leave wn pointing to the first word of the found noun phrase.
 
 `_CheckNoun` loops over all objects in scope, trying to parse each of
-them against the words in the input, using either the `name` property or
-`parse_name`. There is additional logic to handle debugging verbs that
-need to try to match against any object, regardless of the normal
-scoping rules. This is only enabled if the DEBUG compiler flag is used.
+them against the words in the input, using either the ParseName routine,
+if defined, the `name` property or `parse_name`. There is additional
+logic to handle debugging verbs that need to try to match against any
+object, regardless of the normal scoping rules. This is only enabled if
+the DEBUG compiler flag is used. Note that ParseName is checked first. This
+is different from DM4.
 
 `_CheckNoun` also takes into account if the object is concealed or in
 the open, by keeping track of a object level score. This is calculated
@@ -472,7 +474,7 @@ touched but not taken.
 
 ## `_FindBarrier(p_ancestor, p_obj, p_dontprint)`
 
-Utility function used by ObjectIsUntouchable and ObjectIsInvisible to
+Utility function used by ObjectIsUntouchable to
 find out if there are barriers between an object and one of its
 ancestors in the object tree that prevent the player from touching or
 seeing the object.
