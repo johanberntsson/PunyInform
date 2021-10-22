@@ -579,7 +579,8 @@ System_file;
 	!   -2 if parsing failed, and error message written
 	!
 	! Side effects:
-	! - if found, then wn will be updated
+	! - if found, then wn will be set to the first word in the noun phrase,
+	!       skipping any articles
 	! - if plural matched, then parser_action set to ##PluralFound
 	!
 	! NOTE: you need to update parse_pointer after calling _GetNextNoun since
@@ -1054,7 +1055,6 @@ System_file;
 				_j = false;
 				_k = multiple_objects-->0;
 				if(_k > 0) {
-					! Search for and remove duplicates in list
 					for(_i = 1: _i <= _k: _i++) {
 						if(multiple_objects-->_i == _noun) {
 							_j = true;
@@ -1062,13 +1062,11 @@ System_file;
 						}
 					}
 				}
-				! adding a single object
+				! If _j == false, the object is not in the list, so add it!
 				if(_j == false) {
 					p_parse_pointer = parse + 2 + 4 * (wn - 1);
 					multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 					multiple_objects --> (multiple_objects --> 0) = _noun;
-					!print "ADDED ", (the) _noun, "!^";
-				!} else { print "SKIPPED ", (the) _noun, "!^";
 				}
 				! check if we should continue: and or comma
 				! not followed by a verb
