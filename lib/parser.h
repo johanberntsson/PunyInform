@@ -1153,6 +1153,7 @@ System_file;
 			_addobj = false;
 			if((_p == _ceil || (_p ~= 0 && _p in _ceil && _p has scenery or static && _p hasnt concealed && _p has container or supporter)) && _obj hasnt scenery or concealed or static or animate)
 				_addobj = true;
+			if(scope_stage == 2) _addobj = true; ! added by scope routine
 		MULTIINSIDE_OBJECT:
 			_p = parent(_obj);
 			_ceil = TouchCeiling(player);
