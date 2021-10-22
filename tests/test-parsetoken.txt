@@ -7,16 +7,24 @@ He is beautiful and he knows it.
 > x the beautiful john
 He is beautiful and he knows it.
 
-> scan paper
+> scan1 paper
 Scanning the paper... Clear!
 
-> scan paper and paperclip
+> scan1 paper and paperclip
 paper: Scanning the paper... Clear!
 paperclip: Scanning the paperclip... Clear!
 
-> scan all
+> scan1 all
 paper: Scanning the paper... Clear!
 paperclip: Scanning the paperclip... Clear!
+> scan2 paper
+Scanning the paper... Clear!
+
+> scan2 paper and paperclip
+You can't use multiple objects with that verb.
+
+> scan2 all
+You can't use multiple objects with that verb.
 
 > bang 100
 Noun is 100.

@@ -125,7 +125,7 @@ Include "puny.h";
 Include "Grammar";
 #Endif;
 
-[ScanScope;
+[Scan1Scope;
     switch(scope_stage) {
         1: rtrue;
         2: ScopeWithin(RiverBank);
@@ -133,8 +133,19 @@ Include "Grammar";
     }
 ];
 
-Verb 'scan'
-    * scope=ScanScope -> Scan;
+[Scan2Scope;
+    switch(scope_stage) {
+        1: rfalse;
+        2: ScopeWithin(RiverBank);
+        3: "You're crazy!";
+    }
+];
+
+Verb 'scan1'
+    * scope=Scan1Scope -> Scan;
+
+Verb 'scan2'
+    * scope=Scan2Scope -> Scan;
 
 [ScanSub;
     "Scanning ", (the) noun, "... Clear!";

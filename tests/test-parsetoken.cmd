@@ -3,9 +3,12 @@ transcript
 x john
 x beautiful
 x the beautiful john
-scan paper
-scan paper and paperclip
-scan all
+scan1 paper
+scan1 paper and paperclip
+scan1 all
+scan2 paper
+scan2 paper and paperclip
+scan2 all
 bang 100
 wow asdsadas
 wow john
