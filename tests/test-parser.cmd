@@ -65,6 +65,8 @@ drop all
 get blue and blue and blue
 get blue and blue
 get blue
+take book
+n
 quit
 yes
 
