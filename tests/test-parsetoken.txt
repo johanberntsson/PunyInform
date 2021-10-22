@@ -1,3 +1,11 @@
+> x john
+He is beautiful and he knows it.
+
+> x beautiful
+He is beautiful and he knows it.
+
+> x the beautiful john
+He is beautiful and he knows it.
 
 > scan paper
 Scanning the paper... Clear!
@@ -39,6 +47,26 @@ Car Park
 You are in a car park.
 
 You can see a apple and a egg here.
+> x egg
+There is nothing special about the egg.
+
+> x yolk
+There is nothing special about the egg.
+
+> x yummy
+There is nothing special about the egg.
+
+> x yummy egg
+There is nothing special about the egg.
+
+> x yummy yolk
+There is nothing special about the egg.
+
+> x the egg
+There is nothing special about the egg.
+
+> x the yummy egg
+There is nothing special about the egg.
 
 > x apple
 There is nothing special about the apple.
