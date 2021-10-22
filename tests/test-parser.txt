@@ -214,6 +214,25 @@ Orb: Dropped.
 pink book: Dropped.
 red book: Dropped.
 
+> take books
+pink book: You dared taking the pink book. Bravo!
+red book: Taken.
+green book: Taken.
+blue book: You are carrying too many things already.
+
+> drop all
+pink book: Dropped.
+red book: Dropped.
+green book: Dropped.
+
+> take pinkish
+pink book: You dared taking the pink book. Bravo!
+green book: Taken.
+
+> drop all
+pink book: Dropped.
+green book: Dropped.
+
 > get blue and blue and blue
 The blue box starts ticking...
 

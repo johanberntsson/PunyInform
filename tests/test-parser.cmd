@@ -62,6 +62,10 @@ g
 push john
 s
 drop all
+take books
+drop all
+take pinkish
+drop all
 get blue and blue and blue
 get blue and blue
 get blue
