@@ -699,14 +699,6 @@ System_file;
 
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 
-			! is this a direction?
-			wn = 1;
-			_noun = _CheckNoun(parse+2);
-			if(_noun == Directions) {
-				! a direction should be treated as new input instead
-				return -1;
-			}
-
 			! add the original words to the new input. For example,
 			! if the input was 'take book' and we added 'red'
 			! then the complete new input to test should be
@@ -738,6 +730,7 @@ System_file;
 				!_PrintParseArray(parse);
 #Endif;
 				wn = 1;
+				num_words = parse->1;
 				_noun = _CheckNoun(_j);
 				if(_noun <= 0) {
 					! the normal word order didn't work. Try the other way
@@ -758,7 +751,14 @@ System_file;
 					!_PrintParseArray(parse);
 #Endif;
 					wn = 1;
+					num_words = parse->1;
 					_noun = _CheckNoun(_j);
+				}
+				if(_noun == Directions && which_object->1 < parse->1) {
+					! _CheckNoun only matched a direction and 
+					! should be treated as new input instead
+					parse->1 = which_object->1;
+					return -1;
 				}
 				wn = _oldwn; ! restore wn after the _CheckNoun calls
 				if(_noun > 0) {
