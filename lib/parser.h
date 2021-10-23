@@ -699,6 +699,19 @@ System_file;
 
 			_oldwn = wn; ! wn is used in _CheckNoun, so save it
 
+			! is this a direction?
+			wn = 1;
+			_noun = _CheckNoun(parse+2);
+			if(_noun == Directions) {
+				! a direction should be treated as new input instead
+				return -1;
+			}
+
+			! add the original words to the new input. For example,
+			! if the input was 'take book' and we added 'red'
+			! then the complete new input to test should be
+			! 'red' 'book'
+			!
 			! since more than one word may be given we need to loop
 			! over and test each word
 			_CopyParseArray(parse, parse3);

@@ -253,6 +253,9 @@ Do you mean the pink book, the red book or the green book?
 
 > n
 
+The box goes BOOM.
+
+The blue book glows annoyingly.
 Huge library
 
 You can also see a light switch, a sweater, an aquarium (which is empty), a box

@@ -27,6 +27,7 @@ v3.1: bug fix and new feature release
 - Fixed a side effect from the num_words fix above (issue 90)
 - Fixed error reporting from general parse routines.
 - Fixed bug in scope routines that match multiple nouns.
+- Fixed that a direction instead of a disambiguation reply didn't work.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
