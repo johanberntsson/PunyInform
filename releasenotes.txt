@@ -32,6 +32,7 @@ v3.1: bug fix and new feature release (23 October 2021)
 - Fixed bug in scope routines that match multiple nouns.
 - Fixed that a direction instead of a disambiguation reply didn't work.
 - Fixed so that parser_action can be set to PluralFound in parse_name.
+- Optimized disambiguation code to save ~70 bytes.
 
 =======
 v3.0: bug fix and new feature release (20 September 2021)
