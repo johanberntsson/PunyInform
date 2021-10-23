@@ -1,5 +1,8 @@
 =======
-v3.1: bug fix and new feature release
+v3.2: bug fix and new feature release
+
+=======
+v3.1: bug fix and new feature release (23 October 2021)
 
 - Fixed two incorrect direction names in howto/custom_directions.inf.
 - Changed so library doesn't check if header says it's a timed game
