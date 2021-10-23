@@ -648,7 +648,7 @@ System_file;
 	_num_words_in_nounphrase = which_object -> 1;
 
 	! check if the noun phrase contains a plural word
-	_pluralword = false;
+	_pluralword = (parser_action == ##PluralFound);
 	for(_i = p_parse_pointer + (_num_words_in_nounphrase - 1) * 4: _i >= p_parse_pointer: _i = _i - 4) {
 		_j = _i-->0;
 		if(_j && (_j-> #dict_par1) & 4) _pluralword = true;
@@ -730,7 +730,6 @@ System_file;
 				!_PrintParseArray(parse);
 #Endif;
 				wn = 1;
-				num_words = parse->1;
 				_noun = _CheckNoun(_j);
 				if(_noun <= 0) {
 					! the normal word order didn't work. Try the other way
@@ -751,7 +750,6 @@ System_file;
 					!_PrintParseArray(parse);
 #Endif;
 					wn = 1;
-					num_words = parse->1;
 					_noun = _CheckNoun(_j);
 				}
 				if(_noun == Directions && which_object->1 < parse->1) {
