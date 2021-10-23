@@ -28,6 +28,23 @@ trouble getting your code to run in `before`, `after` etc, you can use
 _Actions_ and/or _Routines_ to figure out which actions are triggered
 and which user-supplied routines are executed.
 
+## Enable all error checking
+
+Inform 6 has the ability to check for a number of problems at runtime,
+using Strict error checking mode. Strict error checking is enabled by
+default when compiling to z5 or z8, but is not available at all for z3.
+Since it makes Inform code both bigger and slower, we usually recommend
+game authors to disable it, and this is done on the first line of
+the game template minimal.inf ("!% -~S"). When you're looking for
+problems in your code, it's often useful to enable strict error
+checking (comment out that line) and compile as z5 or z8.
+
+Also, PunyInform has a constant called RUNTIME_ERRORS. whenever you're
+looking for problems in your code, set this to 2. This enables all
+checks for errors and prints full information when a problem is
+detected. If you don't define it, it defaults to 2 when DEBUG is
+defined.
+
 ## Create a command file
 
 Consider saving a list of commands needed to play the game from start to
