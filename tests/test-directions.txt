@@ -1,4 +1,13 @@
 
+> x north statue
+There is nothing special about the north statue.
+
+> x statue
+Do you mean the north statue or the south statue?
+
+> north
+There is nothing special about the north statue.
+
 > scan north statue
 Action ##Scan.
 No direction is set.

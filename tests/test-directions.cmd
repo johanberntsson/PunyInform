@@ -1,5 +1,8 @@
 transcript
 
+x north statue
+x statue
+north
 scan north statue
 scan east of north statue
 scan north on
