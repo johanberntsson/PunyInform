@@ -648,7 +648,8 @@ System_file;
 	_num_words_in_nounphrase = which_object -> 1;
 
 	! check if the noun phrase contains a plural word
-	_pluralword = (parser_action == ##PluralFound);
+	_pluralword = false;
+	if(parser_action == ##PluralFound) _pluralword = true;
 	for(_i = p_parse_pointer + (_num_words_in_nounphrase - 1) * 4: _i >= p_parse_pointer: _i = _i - 4) {
 		_j = _i-->0;
 		if(_j && (_j-> #dict_par1) & 4) _pluralword = true;
@@ -753,7 +754,7 @@ System_file;
 					_noun = _CheckNoun(_j);
 				}
 				if(_noun == Directions && which_object->1 < parse->1) {
-					! _CheckNoun only matched a direction and 
+					! _CheckNoun only matched a direction and
 					! should be treated as new input instead
 					parse->1 = which_object->1;
 					return -1;
