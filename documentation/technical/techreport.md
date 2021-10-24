@@ -273,12 +273,15 @@ objects that matches, and the number of words parsed against these
 object(s). It can also modify the wn variable to skip words such as 'the' and 'an'. If the routine is successful it will leave wn pointing to the first word of the found noun phrase.
 
 `_CheckNoun` loops over all objects in scope, trying to parse each of
-them against the words in the input, using either the ParseName routine,
-if defined, the `name` property or `parse_name`. There is additional
-logic to handle debugging verbs that need to try to match against any
-object, regardless of the normal scoping rules. This is only enabled if
-the DEBUG compiler flag is used. Note that ParseName is checked first. This
-is different from DM4.
+them against the words in the input, first using the `ParseNoun` routine,
+if defined. If there is no `ParseNoun`, or if this routine declines to make
+a decision, the object's `parse_name` routine is checked. If `parse_name`
+isn't available or declines to make a decision, the `name` property is used.
+Note that ParseNoun is checked first. This is different from DM4.
+
+There is additional logic to handle debugging verbs that need to try to match
+against any object, regardless of the normal scoping rules. This is only
+enabled if the DEBUG compiler flag is used.
 
 `_CheckNoun` also takes into account if the object is concealed or in
 the open, by keeping track of a object level score. This is calculated
