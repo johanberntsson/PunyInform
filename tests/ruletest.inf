@@ -1,0 +1,93 @@
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+Constant Story "Rule test";
+Constant Headline "^A test to see when rules run as you go between rooms.^";
+Serial "200827";
+
+Constant INITIAL_LOCATION_VALUE = Room1;
+Constant DEBUG;
+
+#Ifndef USEINFORM;
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_NO_DARKNESS;
+!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+#EndIf;
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#EndIf;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+
+Class Room
+	with
+		print_trace [ prop;
+#Ifdef DEBUG;
+			print " *** ", (name) self, ".", (string) prop, ": action is ", (DebugAction) action, "^";
+#Endif;
+		],
+		before [; self.print_trace("before"); ],
+		after [; self.print_trace("after"); ],
+	has light;
+
+Room Room1 "Room 1"
+	with
+		description "You can see that room 2 lies to the north.",
+		n_to Room2;
+
+Room -> John "John"
+	with
+		name 'john',
+		life [; self.print_trace("life"); ],
+		orders [; self.print_trace("orders"); ],
+	has animate proper;
+
+Room Room2 "Room 2"
+	with
+		description "You can see that room 1 lies to the south.",
+		s_to Room1
+	has ~light;
+
+[ Initialise;
+ 	location = Room1;
+#Ifndef DEBUG;
+	print "^^You need to compile in DEBUG mode to see what's happening!";
+#Endif;
+	"^^";
+];
