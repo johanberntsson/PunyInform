@@ -1745,7 +1745,7 @@ Global scope_cnt;
 	rfalse;
 ];
 
-[ GoDir p_property _new_location _door_to _vehicle _vehicle_mode _saved_location;
+[ GoDir p_property _new_location _old_location _door_to _vehicle _vehicle_mode _saved_location;
 	if(parent(player) ~= real_location) {
 		! special rule when in enterable (veichles)
 		! before routine for the object is called with Go dir, and returns
@@ -1829,17 +1829,26 @@ Global scope_cnt;
 #EndIf;
 #EndIf;
 	action = ##Going;
-	if (RunRoutines(_new_location, before) ~= 0) { action = ##Go; rtrue; }
+	if(RunRoutines(_new_location, before)) { action = ##Go; rtrue; }
 	action = ##Go;
 
 	if(_vehicle_mode == 1) {
 		move _vehicle to _new_location;
 		_new_location = _vehicle;
 	}
+
+	_old_location = location;
+
 	PlayerTo(_new_location, true);
 	if(deadflag ~= GS_PLAYING) rtrue;
-	if (AfterRoutines()) rtrue;
-	if (keep_silent) rtrue;
+
+	action = ##Going;
+	if(RunRoutines(_old_location, after)) { action = ##Go; rtrue; }
+	action = ##Go;
+
+
+	if(AfterRoutines()) rtrue;
+	if(keep_silent) rtrue;
 	Look();
 ];
 

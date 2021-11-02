@@ -128,6 +128,7 @@ Include "Grammar";
 [Scan1Scope;
     switch(scope_stage) {
         1: rtrue;
+        !2: PlaceInScope(RiverBank);
         2: ScopeWithin(RiverBank);
         3: "You're crazy!";
     }
@@ -147,8 +148,15 @@ Verb 'scan1'
 Verb 'scan2'
     * scope=Scan2Scope -> Scan;
 
+[ _ScopeHelper p_obj;
+    !print (a) p_obj, " (", p_obj, ")";
+    !@new_line;
+    p_obj = 0;
+];
+
 [ScanSub;
-    "Scanning ", (the) noun, "... Clear!";
+    print "Scanning ", (the) noun, "... Clear!^";
+    LoopOverScope(_ScopeHelper, noun);
 ];
 
 Object Library "The Library"

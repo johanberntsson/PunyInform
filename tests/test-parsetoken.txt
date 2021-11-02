@@ -17,6 +17,7 @@ paperclip: Scanning the paperclip... Clear!
 > scan1 all
 paper: Scanning the paper... Clear!
 paperclip: Scanning the paperclip... Clear!
+
 > scan2 paper
 Scanning the paper... Clear!
 

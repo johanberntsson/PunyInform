@@ -427,7 +427,7 @@ else
 	}
 !	if(p_obj has light && action == ##Inv) print " (providing light)";
 #Ifndef OPTIONAL_NO_DARKNESS;
-	if(p_obj has light) print " (providing light)";
+	if(p_obj has light && p_obj hasnt animate) print " (providing light)";
 #Endif;
 	if(p_obj has worn && action == ##Inv) print " (worn)";
 ];

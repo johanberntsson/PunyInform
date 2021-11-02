@@ -1,6 +1,9 @@
 =======
 v3.2: bug fix and new feature release
 
+- Don't write "(providing light)" for animated objects with light.
+- Added missing ##Going after rule call when moving between rooms.
+
 =======
 v3.1: bug fix and new feature release (23 October 2021)
 
