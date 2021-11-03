@@ -1752,6 +1752,7 @@ Array guess_object-->5;
 		usual_grammar_after = 0;
 		jump reparse2;
 	}
+	if(player ~= actor) jump treat_bad_line_as_conversation;
 	if(_best_score < parse->1) {
 		if(_best_score == 0) {
 			PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
@@ -1865,12 +1866,13 @@ Array guess_object-->5;
 		! offered to the Order: part of the other person's "life"
 		! property, the old-fashioned way of dealing with conversation.
 		sw__var = action;
-		if(RunRoutines(player, orders)) rtrue;
 		if(RunRoutines(actor, orders)) rtrue;
+		if(RunRoutines(player, orders)) rtrue;
 		if(action == ##NotUnderstood) {
 			second = actor;
 			inp2=second;
 			action = ##Answer;
+			if(BeforeRoutines()) rtrue;
 			if(RunLife(actor, action)) rtrue;
 		} else {
 			if(RunLife(actor, ##Order)) rtrue;

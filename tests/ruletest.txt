@@ -22,7 +22,7 @@ You can see John here.
  *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
  *** Room1.before: action is Answer/2 (going 4102, notustood 4100)
  *** John.life: action is Answer/2 (going 4102, notustood 4100)
-John has better things to do.
+There is no reply.
 
 > john, open xyzzy
  *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
