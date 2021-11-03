@@ -100,31 +100,32 @@ System_file;
 		_current_scope_objects _risk_duplicates _scope_base;
 	if(p_actor == 0) p_actor = player;
 
-	if(scope_stage == 2) {
-		! call scope_routine to add objects, then abort if it returns true
-		scope_objects = 0;
-		if(indirect(scope_routine)) rtrue;
-
-		! keep going, but set modified to force update of the normal scope
-		scope_modified = true;
-	}
-
 	! check if scope is already calculated
 #IfDef DEBUG_SCOPE;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
 #EndIf;
-	if(scope_pov == p_actor && scope_modified == false && p_force == false) return;
+	if(cached_scope_pov == p_actor && scope_modified == false &&
+			p_force == false &&
+			((scope_stage == 2 && cached_scope_routine == scope_routine) ||
+				(scope_stage ~= 2 && cached_scope_routine == 0))) return;
 
 	scope_copy_actor = 0;
-	scope_pov = p_actor;
+	cached_scope_pov = p_actor;
 	_start_pos = ScopeCeiling(p_actor);
+	scope_objects = 0;
 
 	if(scope_stage == 2) {
-		! if scope_stage == 2, then scope_routine has already added
-		! some objects that we don't want to overwrite
+		cached_scope_routine = scope_routine;
+		! call scope_routine to add objects, then abort if it returns true
+		if(indirect(scope_routine)) rtrue;
+
+		! scope_routine has added some objects that we don't want to overwrite
 		_initial_scope_objects = scope_objects;
+
+		! keep going, but set modified to force update of the normal scope
+!		scope_modified = true; ! *** Don't think we should do this anymore ***
 	} else {
-		scope_objects = 0;
+		cached_scope_routine = 0;
 		_risk_duplicates = 1;
 	}
 

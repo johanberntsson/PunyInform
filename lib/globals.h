@@ -465,7 +465,8 @@ Default MAX_INPUT_CHARS       78;
 Default MAX_INPUT_WORDS       20;
 Default MAX_SCOPE             32;
 
-Global scope_pov;        ! Whose POV the scope is from (usually the player)
+Global cached_scope_pov;        ! Whose POV the cached scope is from (usually the player)
+Global cached_scope_routine;    ! Which scope routine the cached scope is for
 Array scope-->MAX_SCOPE; ! objects visible from the current POV
 Array scope_copy-->MAX_SCOPE; ! Used to hold a copy of a scope list, for iteration
 
