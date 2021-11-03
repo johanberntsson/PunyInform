@@ -5,6 +5,7 @@ x beautiful
 x the beautiful john
 scan1 paper
 scan1 paper and paperclip
+scan1 paper with me
 scan1 all
 scan2 paper
 scan2 paper and paperclip

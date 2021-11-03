@@ -143,7 +143,8 @@ Include "Grammar";
 ];
 
 Verb 'scan1'
-    * scope=Scan1Scope -> Scan;
+    * scope=Scan1Scope -> Scan
+    * scope=Scan1Scope 'with' noun -> Scan;
 
 Verb 'scan2'
     * scope=Scan2Scope -> Scan;
@@ -155,7 +156,11 @@ Verb 'scan2'
 ];
 
 [ScanSub;
-    print "Scanning ", (the) noun, "... Clear!^";
+    if(second == 0) {
+        print "Scanning ", (the) noun, "... Clear!^";
+    } else {
+        print "Scanning ", (the) noun, " with ", (the) second, "^";
+    }
     LoopOverScope(_ScopeHelper, noun);
 ];
 
