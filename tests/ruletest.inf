@@ -71,6 +71,14 @@ Room Room1 "Room 1"
 		description "You can see that room 2 lies to the north.",
 		n_to Room2;
 
+Room -> RedCube "red cube"
+    with
+        name 'red' 'cube';
+
+Room -> BlackCube "black cube"
+    with
+        name 'black' 'cube';
+
 Room -> John "John"
 	with
 		name 'john',

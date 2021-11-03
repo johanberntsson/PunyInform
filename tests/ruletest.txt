@@ -15,7 +15,7 @@ It is pitch dark here!
  *** Room 1.after: action is Go/23 (going 4102, notustood 4100)
 Room 1
 
-You can see John here.
+You can see a red cube, a black cube and John here.
  *** Room 1.after: action is Look/29 (going 4102, notustood 4100)
 
 > john, hello
@@ -31,6 +31,12 @@ There is no reply.
 There is no reply.
 
 > john, open in on
+ *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
+ *** Room 1.before: action is Answer/2 (going 4102, notustood 4100)
+ *** John.life: action is Answer/2 (going 4102, notustood 4100)
+There is no reply.
+
+> john, get cube
  *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
  *** Room 1.before: action is Answer/2 (going 4102, notustood 4100)
  *** John.life: action is Answer/2 (going 4102, notustood 4100)
