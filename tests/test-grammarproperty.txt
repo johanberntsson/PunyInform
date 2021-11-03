@@ -2,12 +2,12 @@
 > john, hello
 grammar 3 0
 answer words 1 from 3
-John has better things to do.
+There is no reply.
 
 > john, take me
 grammar 3 0
 order 19: inv 24 take 19
-John has better things to do.
+There is no reply.
 
 > john, jump
 grammar 3 1

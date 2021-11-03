@@ -20,19 +20,19 @@ You can see John here.
 
 > john, hello
  *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
- *** Room1.before: action is Answer/2 (going 4102, notustood 4100)
+ *** Room 1.before: action is Answer/2 (going 4102, notustood 4100)
  *** John.life: action is Answer/2 (going 4102, notustood 4100)
 There is no reply.
 
 > john, open xyzzy
  *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
- *** Room1.before: action is Answer/2 (going 4102, notustood 4100)
+ *** Room 1.before: action is Answer/2 (going 4102, notustood 4100)
  *** John.life: action is Answer/2 (going 4102, notustood 4100)
 There is no reply.
 
 > john, open in on
  *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
- *** Room1.before: action is Answer/2 (going 4102, notustood 4100)
+ *** Room 1.before: action is Answer/2 (going 4102, notustood 4100)
  *** John.life: action is Answer/2 (going 4102, notustood 4100)
 There is no reply.
 
