@@ -288,7 +288,8 @@ Verb 'wow'
 ];
 
 Verb 'scan'
-	* scope=ScanScope -> Scan;
+	* scope=ScanScope -> Scan
+	* noun 'locally' -> Scan;
 
 [ScanSub;
 	"Scanning ", (the) noun, "... Clear!";
