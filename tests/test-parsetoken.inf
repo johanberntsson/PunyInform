@@ -30,7 +30,7 @@ Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_FULL_SCORE;
 !Constant OPTIONAL_FULL_DIRECTIONS;
-!Constant OPTIONAL_GUESS_MISSING_NOUN;
+Constant OPTIONAL_GUESS_MISSING_NOUN;
 !Constant OPTIONAL_MANUAL_SCOPE;
 !Constant RUNTIME_ERRORS = 0;
 #EndIf;
@@ -137,7 +137,7 @@ Include "Grammar";
 [Scan2Scope;
     switch(scope_stage) {
         1: rfalse;
-        2: ScopeWithin(RiverBank);
+        2: ScopeWithin(RiverBank); rtrue;
         3: "You're crazy!";
     }
 ];
@@ -147,6 +147,14 @@ Verb 'scan1'
     * scope=Scan1Scope 'with' noun -> Scan;
 
 Verb 'scan2'
+    * scope=Scan2Scope -> Scan;
+
+Verb 'scan3'
+    * scope=Scan2Scope -> Scan
+    * noun 'here' -> Scan;
+
+Verb 'scan4'
+    * noun 'here' -> Scan
     * scope=Scan2Scope -> Scan;
 
 [ _ScopeHelper p_obj;

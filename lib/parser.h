@@ -71,7 +71,7 @@ System_file;
 #IfDef OPTIONAL_GUESS_MISSING_NOUN;
 	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0, 1);
 	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep, 2);
-	if(_num_nouns > 0 && (_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
+	if(_num_nouns > 0 && _noun ~= 0 && _second ~=0 && (_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
 		!print "message complete: ", noun, " ", second, "^";
 		rtrue;
 	}
@@ -1228,7 +1228,7 @@ Array guess_object-->5;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_noun = scope-->_i;
 		if(_noun == player || _noun has concealed ||
-				TestScope(_noun, player) == false) {
+			TestScope(_noun, player) == false) {
 			continue;
 		}
 		if(_noun has door && _noun ~= _exclude) {
@@ -1366,7 +1366,12 @@ Array guess_object-->5;
 			if(wn == 1 + parse->1) {
 				return 100; ! pattern matched
 			}
-			return wn - verb_wordnum; ! Fail because the grammar line ends here but not the input
+			! Fail because the grammar line ends here but not the input
+			if(p_phase == 2) {
+				! last resort when no other error message printed
+				PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+			}
+			return wn - verb_wordnum; 
 		}
 
 		if(scope_stage > 0) {
@@ -1396,7 +1401,6 @@ Array guess_object-->5;
 		_current_wn = wn;
 		_old_dir_index = selected_direction_index;
 		_noun = _ParseToken(pattern_pointer, _parse_pointer, p_phase);
-
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse + 2 + 4 * (wn - 1);
 
@@ -1690,7 +1694,6 @@ Array guess_object-->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: Pattern ",_i," address ", _pattern, "^";
 #EndIf;
-		scope_stage = 0;
 		_score = _ParsePattern(_pattern, PHASE1);
 
 #IfDef DEBUG_PARSEANDPERFORM;

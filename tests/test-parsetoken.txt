@@ -31,6 +31,30 @@ You can't use multiple objects with that verb.
 > scan2 all
 You can't use multiple objects with that verb.
 
+> scan3 paper
+Scanning the paper... Clear!
+
+> scan3 paper here
+I don't understand that sentence.
+
+> scan3 john here
+Scanning John... Clear!
+
+> scan3 john
+I think you wanted to say "scan3 John here". Please try again.
+
+> scan4 paper
+Scanning the paper... Clear!
+
+> scan4 paper here
+You're crazy!
+
+> scan4 john here
+Scanning John... Clear!
+
+> scan4 john
+I think you wanted to say "scan4 John here". Please try again.
+
 > bang 100
 Noun is 100.
 

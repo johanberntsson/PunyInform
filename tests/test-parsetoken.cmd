@@ -10,6 +10,14 @@ scan1 all
 scan2 paper
 scan2 paper and paperclip
 scan2 all
+scan3 paper
+scan3 paper here
+scan3 john here
+scan3 john
+scan4 paper
+scan4 paper here
+scan4 john here
+scan4 john
 bang 100
 wow asdsadas
 wow john
