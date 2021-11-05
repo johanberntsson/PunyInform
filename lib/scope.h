@@ -106,9 +106,8 @@ System_file;
 #EndIf;
 	if(cached_scope_pov == p_actor && scope_modified == false &&
 			p_force == false &&
-			((scope_stage == 2 && cached_scope_routine == scope_routine) ||
-				(scope_stage ~= 2 && cached_scope_routine == 0))) return;
-
+			((scope_stage ~= 2 && cached_scope_routine == 0) ||
+			 (scope_stage == 2 && cached_scope_routine == scope_routine))) return;
 	scope_copy_actor = 0;
 	cached_scope_pov = p_actor;
 	_start_pos = ScopeCeiling(p_actor);
