@@ -163,7 +163,12 @@ Constant QKEY2__KY      = 'q';
 	}
 	menu_nesting--; if (menu_nesting > 0) rfalse;
 	font on; @set_cursor 1 1;
-	@erase_window $ffff; @set_window 0;
+	@erase_window -1; @set_window 0;
+#IfDef PUNYINFORM_MAJOR_VERSION;
+	statusline_current_height = 0;
+#IfNot;
+	gg_statuswin_cursize = 0;
+#EndIf;
 	new_line; new_line; new_line;
 	if (deadflag == 0) <<Look>>;
 ];

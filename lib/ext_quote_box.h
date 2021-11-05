@@ -141,7 +141,13 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 		@read_char _i;
 		@erase_window -1;
 	} else
-		@split_window 1;
+		@split_window 0;
+	! Force a re-split to show game's statusline
+#IfDef PUNYINFORM_MAJOR_VERSION;
+	statusline_current_height = 0;
+#IfNot;
+	gg_statuswin_cursize = 0;
+#EndIf;
 #IfNot;
 !	@new_line;
 !	print "[ENTER]";

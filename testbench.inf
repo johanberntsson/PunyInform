@@ -165,35 +165,6 @@ Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
 Include "ext_menu.h";
 
-[ HelpItems;
-    print "There is information provided on the following:^^";
-    print "      Instructions^";
-    print "      About this game^";
-    print "      Game credits^";
-];
-
-[ HelpMenu;
-    switch(menu_item) {
-    0: item_width=20; item_name="Help and Information"; return 3;
-    1: item_width=12; item_name="Instructions";
-    2: item_width=15; item_name="About this game";
-    3: item_width=12; item_name="Game credits";
-    }
-];
-
-[ HelpInfo;
-    switch(menu_item) {
-    1: "You play this game like any old Infocom game.^^Common commands lnclude examine, open, close, save, restore and quit.";
-    2: "This is a test game";
-    3: "This was was created by us";
-    }
-];
-
-[ HelpSub;
-    DoMenu(HelpItems, HelpMenu, HelpInfo);
-];
-Verb 'help' * -> Help;
-
 ! Setup custom library messages
 Constant MSG_OPEN_YOU_CANT 1000;
 Constant MSG_AREYOUSUREQUIT 1001;
@@ -227,6 +198,37 @@ Include "puny.h";
 Include "ext_waittime.h";
 
 #Endif;
+
+[ HelpItems;
+    print "There is information provided on the following:^^";
+    print "      Instructions^";
+    print "      About this game^";
+    print "      Game credits^";
+];
+
+[ HelpMenu;
+    switch(menu_item) {
+    0: item_width=20; item_name="Help and Information"; return 3;
+    1: item_width=12; item_name="Instructions";
+    2: item_width=15; item_name="About this game";
+    3: item_width=12; item_name="Game credits";
+    }
+];
+
+[ HelpInfo;
+    switch(menu_item) {
+    1: "You play this game like any old Infocom game.^^Common commands lnclude examine, open, close, save, restore and quit.";
+    2: "This is a test game";
+    3: "This was was created by us";
+    }
+];
+
+[ HelpSub;
+    DoMenu(HelpItems, HelpMenu, HelpInfo);
+];
+Verb 'help' * -> Help;
+
+
 
 Verb 'talk'
 	*	'to'/'with'	creature	-> Talk;
