@@ -1368,6 +1368,14 @@ Array guess_object-->5;
 			}
 			return wn - verb_wordnum; ! Fail because the grammar line ends here but not the input
 		}
+
+		if(scope_stage > 0) {
+			! the previous iteration found a scope token which
+			! could alter the scope, and we need to reset the
+			! scope to normal rules before executing the next token.
+			scope_stage = 0;
+			_UpdateScope(player, true);
+		}
 		! parse_routine doesn't match anything and is always allowed
 		if(wn >= 1 + parse->1 && _type ~= TT_PARSE_ROUTINE) {
 #IfDef DEBUG_PARSEPATTERN;
@@ -1388,6 +1396,7 @@ Array guess_object-->5;
 		_current_wn = wn;
 		_old_dir_index = selected_direction_index;
 		_noun = _ParseToken(pattern_pointer, _parse_pointer, p_phase);
+
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse + 2 + 4 * (wn - 1);
 
@@ -1557,14 +1566,7 @@ Array guess_object-->5;
 	consult_from = 0;
 	consult_words = 0;
 	usual_grammar_after = 0;
-
-	if(scope_routine ~= 0) {
-		! if true, then scope=Routine was executed
-		! in the previous _ParseAndPerformAction,
-		! which can have added stuff to the scope
-		scope_modified = true;
-	}
-	scope_routine = 0; ! prepare for a new scope=Routine
+	scope_routine = 0;
 
 	if(parse->1 < 1) {
 		return PrintMsg(MSG_PARSER_NO_INPUT);
@@ -1690,9 +1692,6 @@ Array guess_object-->5;
 #EndIf;
 		scope_stage = 0;
 		_score = _ParsePattern(_pattern, PHASE1);
-		! reset scope if _ParsePattern messed with it
-		if(scope_stage > 0)
-			_UpdateScope(player, true);
 
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: result ", _score, " phase2 ", phase2_necessary, "^";
