@@ -7,6 +7,8 @@ v3.2: bug fix and new feature release
 - Fixed scope token handling of pattern with more than one object.
   Now the scope modification is only valid during the parsing of the
   scope token, and then reset to normal scoping rules.
+- Fixed bad is/are for MSG_SEARCH_CANT_SEE_CLOSED (issue 92)
+
 
 =======
 v3.1: bug fix and new feature release (23 October 2021)

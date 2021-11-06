@@ -904,7 +904,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_SEARCH_CANT_SEE_CLOSED < 1000;
 	MSG_SEARCH_CANT_SEE_CLOSED:
-		"You can't see inside, since ", (the) noun, " is closed.";
+		"You can't see inside, since ", (the) noun, " ", (IsorAre) noun, " closed.";
 #EndIf;
 #IfTrue MSG_EXAMINE_ONOFF < 1000;
 	MSG_EXAMINE_ONOFF:
