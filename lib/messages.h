@@ -1056,7 +1056,7 @@ default:
 ];
 
 [ ThatorThose obj;
-	if (obj has pluralname || obj == player) print "those"; else print "that";
+	if (obj has pluralname) print "those"; else print "that";
 ];
 
 [ ItorThem obj;
