@@ -1,12 +1,18 @@
 =======
 v3.2: bug fix and new feature release
 
-- Don't write "(providing light)" for animated objects with light.
+- Updated techreport.
+- Added markdown version of QuickRef document.
+- Don't print "(providing light)" for animated objects with light attribute.
 - Added missing ##Going after rule call when moving between rooms.
-- Fixed bad NPC order handling (notunderstood and answer callbacks).
+- Fixed bad NPC order handling (##NotUnderstood and ##Answer callbacks).
 - Fixed scope token handling of pattern with more than one object.
   Now the scope modification is only valid during the parsing of the
   scope token, and then reset to normal scoping rules.
+- _UpdateScope changed so it remembers if the last calculated scope was for a
+  scope routine.
+- ext_menu.h and ext_quote_box.h now force a resplit for the statusline upon
+  exit.
 - Fixed bad is/are for MSG_SEARCH_CANT_SEE_CLOSED (issue 92)
 - Fixed ThatorThose response for the player object (issue 91)
 
