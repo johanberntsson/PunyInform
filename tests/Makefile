@@ -28,8 +28,8 @@ test-parser:
 	frotz test-parser.z3
 
 inform:
-	inform -v8 test-parsetoken.inf
-	frotz test-parsetoken.z8
+	inform -v8 ruletest.inf
+	frotz ruletest.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages
