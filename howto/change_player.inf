@@ -7,7 +7,9 @@ Constant Headline   "^A PunyInform code sample.^";
 Constant STATUSLINE_SCORE; Statusline score;
 
 Constant INITIAL_LOCATION_VALUE = WhiteRoom;
-Constant CUSTOM_PLAYER_OBJECT = Bob;
+Constant CUSTOM_PLAYER_OBJECT = Bob; ! Set initial player object to one of our
+                                     ! PCs - doesn't matter which, to avoid
+									 ! creating a PC object which won't be used
 
 Include "globals.h";
 
@@ -35,8 +37,8 @@ Include "puny.h";
 	_UpdateDarkness();
 ];
 
-[ ChangePlayer p_new_pc _character;
-	if(player ofclass PlayableCharacter) {
+[ ChangePlayer p_new_pc p_first_time _character;
+	if(player ofclass PlayableCharacter && p_first_time == 0) {
 		SwitchFromPlayerCharacter(player);
 	} else {
 		! This is the first time ChangePlayer is called. We need to switch to
@@ -143,7 +145,7 @@ Verb 'become'
 	* scope=PlayableCharacterScope -> Become;
 
 [Initialise;
-	ChangePlayer(Bob);
+	ChangePlayer(Bob, true);
 	! In the Initialise routine, you must remove the player if you want to
 	! get the initial Look. The library will put the player back into 'location'
 	remove player;
