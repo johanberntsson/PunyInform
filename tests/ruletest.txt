@@ -42,6 +42,11 @@ There is no reply.
  *** John.life: action is Answer/2 (going 4102, notustood 4100)
 There is no reply.
 
+> john, get red cube
+ *** John.orders: action is Take/19 (going 4102, notustood 4100)
+ *** John.life: action is Take/19 (going 4102, notustood 4100)
+John has better things to do.
+
 > quit
 Are you sure you want to quit? yes
 
