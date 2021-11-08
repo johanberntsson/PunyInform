@@ -7,7 +7,7 @@ There is no reply.
 > john, take me
 grammar 3 0
 order 19: inv 24 take 19
-There is no reply.
+John has better things to do.
 
 > john, jump
 grammar 3 1

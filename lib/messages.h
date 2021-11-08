@@ -500,7 +500,9 @@ Constant SKIP_MSG_GIVE_DEFAULT;
 
 #Iffalse MSG_ASKFOR_DEFAULT < 1000;
 #Iffalse MSG_ASKTO_DEFAULT < 1000;
+#Iffalse MSG_ORDERS_WONT < 1000;
 Constant SKIP_MSG_ASKFOR_DEFAULT;
+#Endif;
 #Endif;
 #Endif;
 
@@ -556,9 +558,7 @@ Constant SKIP_MSG_INSERT_NO_ROOM;
 #Iffalse MSG_ANSWER_DEFAULT < 1000;
 #Iffalse MSG_SHOUT_DEFAULT < 1000;
 #Iffalse MSG_SHOUTAT_DEFAULT < 1000;
-#Iffalse MSG_ORDERS_WONT < 1000;
 Constant SKIP_MSG_ASK_DEFAULT;
-#Endif;
 #Endif;
 #Endif;
 #Endif;
@@ -724,7 +724,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 		print_ret (The) second, " doesn't seem interested.";
 #Endif;
 #Ifndef SKIP_MSG_ASKFOR_DEFAULT;
-	MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT:
+	MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT, MSG_ORDERS_WONT:
 		print_ret (The) p_arg_1, " has better things to do.";
 #Endif;
 #Ifndef SKIP_MSG_ENTER_NOT_OPEN;
@@ -761,7 +761,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 		"You put ", (the) noun, " on ", (the) second, ".";
 #EndIf;
 #Ifndef SKIP_MSG_ASK_DEFAULT;
-	MSG_ASK_DEFAULT, MSG_ANSWER_DEFAULT, MSG_SHOUT_DEFAULT, MSG_SHOUTAT_DEFAULT, MSG_ORDERS_WONT:
+	MSG_ASK_DEFAULT, MSG_ANSWER_DEFAULT, MSG_SHOUT_DEFAULT, MSG_SHOUTAT_DEFAULT:
 		"There is no reply.";
 #Endif;
 #IfTrue MSG_WEAR_ALREADY_WORN < 1000;

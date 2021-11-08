@@ -1876,10 +1876,11 @@ Array guess_object-->5;
 			action = ##Answer;
 			if(BeforeRoutines()) rtrue;
 			if(RunLife(actor, action)) rtrue;
+		    PrintMsg(MSG_ASK_DEFAULT);
 		} else {
 			if(RunLife(actor, ##Order)) rtrue;
+		    PrintMsg(MSG_ORDERS_WONT, actor);
 		}
-		PrintMsg(MSG_ORDERS_WONT, actor);
 		return num_words_parsed;
 	}
 
