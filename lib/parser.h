@@ -869,6 +869,7 @@ System_file;
 		_token_data = (p_pattern_pointer + 1) --> 0;
 	}
 	_token_type = _token & $0f;
+	if(_token_type ~= TT_PREPOSITION or TT_SCOPE) _UpdateScope(actor);
 	! first set up filters, if any
 	noun_filter = 0;
 	if(_token_type == TT_ROUTINE_FILTER) {
@@ -1325,6 +1326,7 @@ Array guess_object-->5;
 		print "TOKEN: ", pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
+		scope_stage = 0;
 		_type = ((pattern_pointer -> 0) & $0f);
 		if(_type == TT_END) {
 			if(_IsSentenceDivider(_parse_pointer)) {
@@ -1371,16 +1373,9 @@ Array guess_object-->5;
 				! last resort when no other error message printed
 				PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 			}
-			return wn - verb_wordnum; 
+			return wn - verb_wordnum;
 		}
 
-		if(scope_stage > 0) {
-			! the previous iteration found a scope token which
-			! could alter the scope, and we need to reset the
-			! scope to normal rules before executing the next token.
-			scope_stage = 0;
-			_UpdateScope(player, true);
-		}
 		! parse_routine doesn't match anything and is always allowed
 		if(wn >= 1 + parse->1 && _type ~= TT_PARSE_ROUTINE) {
 #IfDef DEBUG_PARSEPATTERN;

@@ -291,10 +291,11 @@ Verb 'wow'
 
 Verb 'scan'
 	* scope=ScanScope -> Scan
-	* noun 'locally' -> Scan;
+	* 'local' noun -> Scan;
 
 [ScanSub;
-	"Scanning ", (the) noun, "... Clear!";
+	if(AfterRoutines()) rtrue;
+	print "Scanning ", (the) noun, "... Clear!^";
 ];
 
 
@@ -859,6 +860,11 @@ Object -> John "John"
 				if(noun == GreenBook && IndirectlyContains(parent(John), GreenBook) ) {
 					print_ret (The) John, " says, ~Oh no! That's mine!~";
 				}
+		],
+		react_after [;
+			Scan:
+				if(noun == Paper)
+					"John scoffs at your feeble attempt to scan the paper.";
 		],
 		before[;
 			Pull, Push:
