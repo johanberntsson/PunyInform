@@ -86,6 +86,10 @@ Room -> John "John"
 		orders [; self.print_trace("orders"); ],
 	has animate proper;
 
+Object -> -> Gun "gun"
+    with
+        name 'gun';
+
 Room Room2 "Room 2"
 	with
 		description "You can see that room 1 lies to the south.",

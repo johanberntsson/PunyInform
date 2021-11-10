@@ -47,6 +47,14 @@ There is no reply.
  *** John.life: action is Take/19 (going 4102, notustood 4100)
 John has better things to do.
 
+> john, examine gun
+ *** John.orders: action is Examine/17 (going 4102, notustood 4100)
+ *** John.life: action is Examine/17 (going 4102, notustood 4100)
+John has better things to do.
+
+> examine gun
+You can't see any such thing.
+
 > quit
 Are you sure you want to quit? yes
 
