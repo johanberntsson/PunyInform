@@ -127,6 +127,12 @@ Include "ext_flags.h";
 Include "globals.h";
 #EndIf;
 
+[InScope p_actor;
+	if(p_actor == player && location == thedark && John in real_location)
+		PlaceInScope(John);
+	rfalse;
+];
+
 [ParseNoun obj w;
 	if(obj == LargeBox) {
 		w = NextWord();
@@ -837,7 +843,7 @@ Object -> -> BlueBookTitle "title"
 	! http://www.inform-fiction.org/manual/html/s18.html
     print "Rule ", (string) rule, ", action ", (DebugAction) action, ", noun ";
     if (noun == 0) print "0";
-   	else if(noun < top_object) print (the) noun;
+   	else if(noun <= top_object) print (the) noun;
    	else print "'",(address) noun,"'";
     print ", second ";
     if (second == 0) print "0";

@@ -26,7 +26,7 @@ def runtest(filename, version, inform_args)
         template_file = specific_template if File.exists? specific_template
         inform_cmd = "inform +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz #{basename}.z#{version} < #{command_file}"
-        prune_cmd = "tail +6 #{transcript_file} | grep -v PunyInform > #{output_file}"
+        prune_cmd = "tail -n +6 #{transcript_file} | grep -v PunyInform > #{output_file}"
         diff_cmd = "diff -Z #{template_file} #{output_file}"
         diff_cmd_ignore_banner = "diff -ZB #{template_file} #{output_file} | grep -v PunyInform"
     end

@@ -142,14 +142,22 @@ System_file;
 
 	! Add all in player location (which may be inside an object)
 	_scope_base = _start_pos;
-#Ifndef OPTIONAL_NO_DARKNESS;
-	if(location == thedark && p_actor == player) {
+#Ifdef OPTIONAL_NO_DARKNESS;
+	if(p_actor hasnt transparent) {
+		! The player's possessions are in scope to the actor
+		_SearchScope(child(p_actor), _risk_duplicates, true);
+	}
+#Ifnot;
+	if(location == thedark || p_actor hasnt transparent) {
 		! only the player's possessions and whatever is in the dark are in scope
-		_PutInScope(player, _risk_duplicates);
-		_SearchScope(child(player), _risk_duplicates, true);
-		_scope_base = location;
+		if(location == thedark) {
+			_PutInScope(p_actor, _risk_duplicates);
+			_scope_base = location;
+		}
+		_SearchScope(child(p_actor), _risk_duplicates, true);
 	}
 #Endif;
+
 	_SearchScope(child(_scope_base), _risk_duplicates, true);
 
 	_current_scope_objects = scope_objects;
