@@ -65,7 +65,7 @@ There is no reply.
 There is no reply.
 
 > john, get cube
-There is more than one of them here. Try rephrasing.
+You need to be more specific.
 
 > john, get red cube
  *** John.orders: action is Take/19 noun=the red cube
