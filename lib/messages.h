@@ -161,6 +161,9 @@ Constant MSG_PARSER_COMPLEX_AGAIN "The 'again' command must be on a new input li
 #Ifndef MSG_PARSER_NOTHING_TO_AGAIN;
 Constant MSG_PARSER_NOTHING_TO_AGAIN "You can hardly repeat that.";
 #EndIf;
+#Ifndef MSG_PARSER_BE_MORE_SPECIFIC;
+Constant MSG_PARSER_BE_MORE_SPECIFIC "You need to be more specific.";
+#EndIf;
 
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;

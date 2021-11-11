@@ -664,7 +664,7 @@ Object -> LightSwitch "LightSwitch"
 
 Object -> Sweater "sweater"
 	with
-		name 'sweater',
+		name 'sweater' 'red',
 	with before [;
 		Wear:
 			if(PinkBook in player)

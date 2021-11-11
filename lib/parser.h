@@ -1606,7 +1606,8 @@ Array guess_object-->5;
 				jump parse_success;
 			}
 			! bad direction command, such as "n n"
-			return PrintMsg(MSG_PARSER_PARTIAL_MATCH, _i);
+			PrintMsg(MSG_PARSER_PARTIAL_MATCH, _i);
+			rtrue;
 		}
 		! not a direction, check if beginning of a command
 		_noun = _CheckNoun(parse+2);
@@ -1624,13 +1625,15 @@ Array guess_object-->5;
 
 .first_word_unknown;
 		if(actor ~= player) jump treat_bad_line_as_conversation;
-		if(parse-->3 == ',//') return PrintMsg(MSG_PARSER_UNKNOWN_PERSON);
-		return PrintMsg(MSG_PARSER_UNKNOWN_VERB);
+		if(parse-->3 == ',//') { PrintMsg(MSG_PARSER_UNKNOWN_PERSON); rtrue; }
+		PrintMsg(MSG_PARSER_UNKNOWN_VERB);
+		rtrue;
 
 
 .conversation;
 		if(_noun hasnt animate && _noun hasnt talkable) {
-			return PrintMsg(MSG_PARSER_CANT_TALK, _noun);
+			PrintMsg(MSG_PARSER_CANT_TALK, _noun);
+			rtrue;
 		}
 		! See http://www.inform-fiction.org/manual/html/s18.html
 		! set actor
@@ -1869,9 +1872,10 @@ Array guess_object-->5;
 		! offered to the Order: part of the other person's "life"
 		! property, the old-fashioned way of dealing with conversation.
 		sw__var = action;
-		if(noun ofclass Class) {
+		if(_best_phase2 == PHASE2_DISAMBIGUATION) {
 			! the order contained a failed disambiguation
-			"There is more than one of them here. Try rephrasing.";
+			PrintMsg(MSG_PARSER_BE_MORE_SPECIFIC);
+			rtrue;
 		}
 		if(RunRoutines(actor, orders)) rtrue;
 		if(RunRoutines(player, orders)) rtrue;
