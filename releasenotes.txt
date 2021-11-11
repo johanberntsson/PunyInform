@@ -1,5 +1,8 @@
 =======
-v3.2: bug fix and new feature release
+v3.3: bug fix and new feature release
+
+=======
+v3.2: bug fix and new feature release (11 November 2021)
 
 - Updated techreport.
 - Added markdown version of QuickRef document.
