@@ -1,22 +1,26 @@
 
 > n
- *** Room 1.before: action is Go/23 (going 4102, notustood 4100)
- *** Room 2.before: action is <fake action 6>/4102 (going 4102, notustood 4100)
- *** Room 1.after: action is <fake action 6>/4102 (going 4102, notustood 4100)
- *** Room 2.after: action is Go/23 (going 4102, notustood 4100)
+ *** Room 1.before: action is Go/23 noun=the north (going 4102, notustood 4100)
+ *** Room 2.before: action is <fake action 6>/4102 noun=the north (going 4102,
+notustood 4100)
+ *** Room 1.after: action is <fake action 6>/4102 noun=the north (going 4102,
+notustood 4100)
+ *** Room 2.after: action is Go/23 noun=the north (going 4102, notustood 4100)
 Darkness
 It is pitch dark here!
- *** Room 2.after: action is Look/29 (going 4102, notustood 4100)
+ *** Room 2.after: action is Look/29 noun=the north (going 4102, notustood 4100)
 
 > s
- *** Room 2.before: action is Go/23 (going 4102, notustood 4100)
- *** Room 1.before: action is <fake action 6>/4102 (going 4102, notustood 4100)
- *** Room 1.after: action is <fake action 6>/4102 (going 4102, notustood 4100)
- *** Room 1.after: action is Go/23 (going 4102, notustood 4100)
+ *** Room 2.before: action is Go/23 noun=the south (going 4102, notustood 4100)
+ *** Room 1.before: action is <fake action 6>/4102 noun=the south (going 4102,
+notustood 4100)
+ *** Room 1.after: action is <fake action 6>/4102 noun=the south (going 4102,
+notustood 4100)
+ *** Room 1.after: action is Go/23 noun=the south (going 4102, notustood 4100)
 Room 1
 
 You can see a red cube, a black cube and John here.
- *** Room 1.after: action is Look/29 (going 4102, notustood 4100)
+ *** Room 1.after: action is Look/29 noun=the south (going 4102, notustood 4100)
 
 > john, hello
  *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
@@ -31,9 +35,10 @@ There is no reply.
 There is no reply.
 
 > john, open in on
- *** John.orders: action is <fake action 4>/4100 (going 4102, notustood 4100)
- *** Room 1.before: action is Answer/2 (going 4102, notustood 4100)
- *** John.life: action is Answer/2 (going 4102, notustood 4100)
+ *** John.orders: action is <fake action 4>/4100 noun=the in (going 4102,
+notustood 4100)
+ *** Room 1.before: action is Answer/2 noun=the in (going 4102, notustood 4100)
+ *** John.life: action is Answer/2 noun=the in (going 4102, notustood 4100)
 There is no reply.
 
 > john, get cube
@@ -43,13 +48,14 @@ There is no reply.
 There is no reply.
 
 > john, get red cube
- *** John.orders: action is Take/19 (going 4102, notustood 4100)
- *** John.life: action is Take/19 (going 4102, notustood 4100)
+ *** John.orders: action is Take/19 noun=the red cube (going 4102, notustood
+4100)
+ *** John.life: action is Take/19 noun=the red cube (going 4102, notustood 4100)
 John has better things to do.
 
 > john, examine gun
- *** John.orders: action is Examine/17 (going 4102, notustood 4100)
- *** John.life: action is Examine/17 (going 4102, notustood 4100)
+ *** John.orders: action is Examine/17 noun=the gun (going 4102, notustood 4100)
+ *** John.life: action is Examine/17 noun=the gun (going 4102, notustood 4100)
 John has better things to do.
 
 > examine gun

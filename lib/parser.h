@@ -1863,11 +1863,13 @@ Array guess_object-->5;
 		! offered to the Order: part of the other person's "life"
 		! property, the old-fashioned way of dealing with conversation.
 		sw__var = action;
+		if(noun ofclass Class) {
+			! the order contained a failed disambiguation
+			noun = 0; 
+		}
 		if(RunRoutines(actor, orders)) rtrue;
 		if(RunRoutines(player, orders)) rtrue;
 		if(action == ##NotUnderstood) {
-			second = actor;
-			inp2=second;
 			action = ##Answer;
 			if(BeforeRoutines()) rtrue;
 			if(RunLife(actor, action)) rtrue;

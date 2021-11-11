@@ -9,14 +9,15 @@ v3.2: bug fix and new feature release
 - Fixed scope token handling of pattern with more than one object.
   Now the scope modification is only valid during the parsing of the
   scope token, and then reset to normal scoping rules.
-- _UpdateScope changed so it remembers if the last calculated scope was for a
-  scope routine.
-- ext_menu.h and ext_quote_box.h now force a resplit for the statusline upon
-  exit.
+- _UpdateScope changed so it remembers if the last calculated scope was
+  for a scope routine.
+- ext_menu.h and ext_quote_box.h now force a resplit for the statusline
+  upon exit.
 - Fixed bad is/are for MSG_SEARCH_CANT_SEE_CLOSED (issue 92)
 - Fixed ThatorThose response for the player object (issue 91)
-- Fixed bug in howto/change_player.inf that was introduced in v3.0 and made
-  nothing work as it should with the PC swapping.
+- Fixed bug in howto/change_player.inf that was introduced in v3.0 and
+  made nothing work as it should with the PC swapping.
+- Fixed setup of noun/second for NPC orders.
 
 =======
 v3.1: bug fix and new feature release (23 October 2021)

@@ -59,7 +59,10 @@ Class Room
 	with
 		print_trace [ prop;
 #Ifdef DEBUG;
-			print " *** ", (name) self, ".", (string) prop, ": action is ", (DebugAction) action, "/", action, " (going ", ##Going,  ", notustood ", ##NotUnderstood, ")^";
+			print " *** ", (name) self, ".", (string) prop, ": action is ", (DebugAction) action, "/", action;
+			if(noun ~= 0) print " noun=", (the) noun;
+			if(second ~=0) print " second=", (the) second;
+			print " (going ", ##Going,  ", notustood ", ##NotUnderstood, ")^";
 #Endif;
 		],
 		before [; self.print_trace("before"); ],
