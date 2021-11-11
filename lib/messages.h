@@ -113,15 +113,6 @@ Constant MSG_REMOVE_DEFAULT "Removed.";
 #Ifndef MSG_SEARCH_NOTHING_SPECIAL;
 Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
 #EndIf;
-#Ifndef MSG_LOOKMODE_NORMAL;
-Constant MSG_LOOKMODE_NORMAL "This game is now in its normal ~brief~ mode, which gives long descriptions of locations never before visited and short descriptions otherwise.";
-#EndIf;
-#Ifndef MSG_LOOKMODE_LONG;
-Constant MSG_LOOKMODE_LONG "This game is now in its ~verbose~ mode, which always gives long descriptions of locations (even if you've been there before).";
-#EndIf;
-#Ifndef MSG_LOOKMODE_SHORT;
-Constant MSG_LOOKMODE_SHORT "This game is now in its ~superbrief~ mode, which always gives short descriptions of locations (even if you haven't been there before).";
-#EndIf;
 #Ifndef MSG_PARSER_ONLY_TO_ANIMATE;
 Constant MSG_PARSER_ONLY_TO_ANIMATE "You can only do that to something animate.";
 #EndIf;
@@ -322,6 +313,9 @@ Default MSG_SHOUT_DEFAULT 128;
 Default MSG_SHOUTAT_DEFAULT 129;
 Default MSG_INSERT_ANIMATE 130;
 Default MSG_PUTON_ANIMATE 131;
+Default MSG_LOOKMODE_NORMAL 132;
+Default MSG_LOOKMODE_LONG 133;
+Default MSG_LOOKMODE_SHORT 134;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -629,6 +623,15 @@ Constant SKIP_MSG_LOCK_KEY_DOESNT_FIT;
 Constant SKIP_MSG_RUB_DEFAULT;
 #Endif;
 #Endif;
+
+#Iffalse MSG_LOOKMODE_NORMAL < 1000;
+#Iffalse MSG_LOOKMODE_LONG < 1000;
+#Iffalse MSG_LOOKMODE_SHORT < 1000;
+Constant SKIP_MSG_LOOKMODE;
+#Endif;
+#Endif;
+#Endif;
+
 
 #Ifndef OPTIONAL_NO_DARKNESS;
 #Iffalse MSG_EXAMINE_DARK < 1000;
@@ -963,6 +966,28 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		"total (out of ", MAX_SCORE, ")";
 #EndIf;
 #EndIf;
+#Ifndef SKIP_MSG_LOOKMODE;
+	MSG_LOOKMODE_NORMAL, MSG_LOOKMODE_LONG, MSG_LOOKMODE_SHORT:
+		print "This game is now in its ";
+		if(lookmode==1) print "normal ~";
+		if(lookmode==2) print "~verbose";
+		else {
+			if(lookmode==3) print "~super";
+			print "brief";
+		}
+		print "~ mode, which ";
+		if(lookmode ~= 1) print "always ";
+		print "gives ";
+		if(lookmode == 3) print "short";
+		else print "long";
+		print " descriptions of locations ";
+		if(lookmode == 1)
+			"never before visited and short descriptions otherwise.";
+		print "(even if you";
+		if(lookmode == 2) print "'ve";
+		else print " haven't";
+		" been there before).";
+#Endif;
 #IfTrue MSG_RESTART_RESTORE_OR_QUIT < 1000;
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE";

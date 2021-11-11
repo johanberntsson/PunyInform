@@ -20,8 +20,16 @@ v3.2: bug fix and new feature release (11 November 2021)
 - Fixed ThatorThose response for the player object (issue 91)
 - Fixed bug in howto/change_player.inf that was introduced in v3.0 and
   made nothing work as it should with the PC swapping.
+- Made non-transparent actors have their possessions in scope.
 - Fixed setup of noun/second for NPC orders.
 - Added error message when addressing a misspelled or missing NPC.
+- Added an error message when player is giving a too vague specification
+  of an object in an order to an NPC.
+- Optimized parser to gain some speed and make it a little smaller.
+- Made Banner() smaller by checking if Story and Headline are defined.
+- Optimized lookmode messages, to make minimal library smaller AND
+  allow for more generic abbreviations which will benefit games better.
+- Updated quickref document.
 
 =======
 v3.1: bug fix and new feature release (23 October 2021)
