@@ -1,9 +1,9 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v3.1 quick reference** |
+| **PunyInform v3.2 quick reference** |
 
   
-Document Release 1. More information on last page.
+Document Release 2. More information on last page.
 
 # Library objects
 
@@ -43,7 +43,7 @@ Document Release 1. More information on last page.
 
 ## deadflag
 
-###### 0 = the game is on, 1 = player has died, 2 = player has won, 3+ = game has ended and player will get a custom message delivered by entry point *DeathMessage()*.
+###### 0 = game is on, 1 = player is dead, 2 = player has won, 3+ = game is over - *DeathMessage()* prints why.
 
 ## inp1
 
@@ -127,7 +127,7 @@ Document Release 1. More information on last page.
 
 ## ship_directions_enabled **PUNY++**
 
-###### **I**f OPTIONAL_SHIP_DIRECTIONS is defined, set this to *true*/*false* to enable/disable ship directions ('fore' etc).
+###### If *OPTIONAL_SHIP_DIRECTIONS* is defined, set this to *true*/*false* to turn ship directions, e.g. *'aft',* on/off.
 
 ## task_done
 
@@ -151,7 +151,7 @@ Document Release 1. More information on last page.
 
 ## verb_word
 
-###### The verb in the current input, e.g. 'take'.
+###### The verb in the current input, e.g. *'take'*.
 
 ## wn
 
@@ -159,7 +159,7 @@ Document Release 1. More information on last page.
 
 # Library constants
 
-###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined.
+###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined. *PUNYINFORM_MAJOR_VERSION* and *PUNYINFORM_MINOR_VERSION* hold the library version.
 
 # User-defined constants
 
@@ -209,7 +209,7 @@ Document Release 1. More information on last page.
 
 ## NO_PLACES
 
-###### Don’t define the verbs 'objects' and 'places'.
+###### Don’t define the verbs *'objects'* and *'places'*.
 
 ## NO_SCORE = number **PUNY++**
 
@@ -225,7 +225,7 @@ Document Release 1. More information on last page.
 
 ## OPTIONAL_ALLOW_WRITTEN_NUMBERS **PUNY++**
 
-###### Allow the player to use 'one', 'two' .. 'twenty' as numbers.
+###### Allow the player to use *'one'* .. *'twenty'* as numbers.
 
 ## OPTIONAL_EXTENDED_METAVERBS **PUNY++**
 
@@ -241,7 +241,7 @@ Document Release 1. More information on last page.
 
 ## OPTIONAL_FULL_SCORE **PUNY++**
 
-###### Enable the 'fullscore' verb, and optionally support for tasks (See *TASKS_PROVIDED*).
+###### Enable the *'fullscore'* verb, and optionally support for tasks (See *TASKS_PROVIDED*).
 
 ## OPTIONAL_GUESS_MISSING_NOUN **PUNY++**
 
@@ -265,11 +265,11 @@ Document Release 1. More information on last page.
 
 ## OPTIONAL_PRINT_SCENERY_CONTENTS **PUNY++**
 
-###### Make 'look' describe what’s in/on containers/supporters which have the *scenery* attribute.
+###### Make *'look'* describe what’s in/on containers/supporters which have the *scenery* attribute.
 
 ## OPTIONAL_PROVIDE_UNDO **PUNY++**
 
-###### Enable the 'undo' verb (z5 & z8 only!)
+###### Enable the *'undo'* verb (z5 & z8 only!)
 
 ## OPTIONAL_REACTIVE_PARSE_NAME **PUNY++**
 
@@ -285,7 +285,7 @@ Document Release 1. More information on last page.
 
 ## OPTIONAL_SHIP_DIRECTIONS **PUNY++**
 
-###### Enable support for 'fore', 'aft' etc. Also see variable *ship_directions_enabled*.
+###### Enable support for *'fore'*, *'aft'* etc. Also see variable *ship_directions_enabled*.
 
 ## OPTIONAL_SL_NO_MOVES **PUNY++**
 
@@ -363,7 +363,7 @@ Document Release 1. More information on last page.
 
 ## NumberWord(numword)
 
-###### If *numword* is a word representing a number from 'one' to 'twenty', return the number. Otherwise return *false*. Requires *OPTIONAL_ALLOW_WRITTEN_NUMBERS*.
+###### If *numword* is a word, e.g. *'six',* representing a number 1-20, return the number. If not, return *false*. Requires *OPTIONAL_ALLOW_WRITTEN_NUMBERS*.
 
 ## NumberWords()
 
@@ -403,7 +403,7 @@ Document Release 1. More information on last page.
 
 ## PronounNotice(object)
 
-###### Make a pronoun ('it', 'him', 'her', 'them') refer to *object*.
+###### Make a pronoun (*'it'*, *'her'* etc) refer to *object*.
 
 ## RunRoutines(object, property, switch)
 
@@ -427,7 +427,7 @@ Document Release 1. More information on last page.
 
 ## TryNumber(wordnum)
 
-###### Try to parse word *wordnum* in player input as a number. If successful, return the number (0-10000, higher values are returned as 10000). If it's not a valid number, return -1000. If *OPTIONAL_ALLOW_WRITTEN_NUMBERS* is defined, also parse number words ('one' .. 'twenty').
+###### Try to parse word *wordnum* in player input as a number. If successful, return the number (0-10000, higher values are returned as 10000). If it's not a valid number, return -1000. If *OPTIONAL_ALLOW_WRITTEN_NUMBERS* is defined, also parse number words (*'one'* .. *'twenty'*).
 
 ## WordAddress(wordnum)
 
@@ -443,7 +443,7 @@ Document Release 1. More information on last page.
 
 ## YesOrNo()
 
-###### Wait for the player to type something. Return *true* if they typed 'yes', *false* if they typed 'no', or ask again.
+###### Wait for the player to type something. Return *true* if they typed yes, *false* if they typed no, or ask again.
 
 # 
 
@@ -508,7 +508,7 @@ circumstances stated for each routine.
 
 ## DebugParseNameObject(object) **PUNY++**
 
-###### When the parser checks for matching objects for a debug verb like 'purloin'. Return true if *object* has a *parse_name* routine.
+###### When the parser checks for matching objects for a debug verb like *'purloin'*. Return true if *object* has a *parse_name* routine.
 
 ## DisallowTakeAnimate() **PUNY++**
 
@@ -582,10 +582,12 @@ that the player is about to enter.
 *LetGo* Sent to the container/supporter from  
 which the player takes something.
 
-*NotUnderstood* Sent to creature when the player issued  
-an incomprehensible order to it.
+*NotUnderstood* Sent to creature's *orders* when player issued an
+incomprehensible order to it.
 
-*Order* Sent to the target of the player's orders.
+*Order* Sent to creature's *life* when player  
+issued an order to it, and *orders* didn't  
+handle it.
 
 *PluralFound* A *parse_name* routine can set  
 *parser_action *to this value when a  
@@ -886,7 +888,7 @@ from a class which also defines the property, it gets both values.
 
 ###### Holds a possible exit. The value can be any of:
 
-###### \* *false* – not an exit \* a room where the exits leads \* a door object – the exit leads through this door \* a string saying why the player can’t go there \* a routine which either returns false, a room, a door object, or prints its own message and returns *true*.
+###### \* *false* – not an exit \* a room where the exits leads \* a door object – the exit leads through this door \* a string saying why the player can’t go there \* a routine which either returns *false*, a room, a door object, or prints its own message and returns *true*.
 
 ## daemon \[OBJ\] \[ROOM\]
 
@@ -942,7 +944,7 @@ from a class which also defines the property, it gets both values.
 
 ## life \[OBJ\] (+)
 
-###### For *animate* objects: Works like a *before* routine, but receives only person-to-person actions (*Answer*, *Ask*, *Attack*, *Give*, *Kiss*, *Order*, *Show*, *Tell*, *ThrowAt*, *WakeOther*). 
+###### For *animate* objects: Works like a *before* routine, but receives only person-to-person actions (*Answer*, *Ask*, *Attack*, *Give*, *Kiss*, *Order*, *Show*, *Tell*, *ThrowAt*, *WakeOther*). Can be a string instead of a routine.
 
 ## n_to \[ROOM\]
 
