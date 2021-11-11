@@ -1171,16 +1171,18 @@ Verb meta 'quit' 'q//'
 
 [ Banner _i;
 	new_line;
-	if(Story ~= 0) {
-#IfV5;
+#IfDef Story;
+	#IfV5;
 		style bold;
-#EndIf;
+	#EndIf;
 		print (string) Story;
-#IfV5;
+	#IfV5;
 		style roman;
+	#EndIf;
+	#IfDef Headline;
+		print (string) Headline;
+	#EndIf;
 #EndIf;
-		if(Headline ~= 0) print (string) Headline;
-    }
 	print "Release ", (0-->1) & $03ff, " / Serial number ";
 	for (_i = 18:_i < 24: _i++) print (char) 0->_i;
 	print " / Inform v";

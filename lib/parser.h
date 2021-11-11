@@ -849,7 +849,8 @@ System_file;
 	rfalse;
 ];
 
-[ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token _token_type _token_data _old_wn _j _k;
+[ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token
+		_token_type _token_data _old_wn _j _k _parse_plus_2;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
@@ -857,12 +858,13 @@ System_file;
 	! while a general parse routine takes no arguments.
 	! (this is mostly to avoid recalculating the values from wn
 	! when the calling routine already has them at hand)
+	_parse_plus_2 = parse + 2;
 	if(p_phase < 0) {
 		! called from ParseToken (DM library API)
 		p_phase = -p_phase;
 		_token = p_pattern_pointer;
 		_token_data = p_parse_pointer;
-		p_parse_pointer = parse + 2 + 4 * (wn - 1);
+		p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 		p_pattern_pointer = 0;
 	} else {
 		_token = (p_pattern_pointer -> 0);
@@ -952,7 +954,7 @@ System_file;
 				parser_unknown_noun_found = p_parse_pointer;
 				return GPR_FAIL;
 			}
-			p_parse_pointer = parse + 2 + 4 * (wn - 1);
+			p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {
 				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
@@ -995,7 +997,7 @@ System_file;
 						print "adding plural ", which_object->0, " ", which_object->1, " ", multiple_objects --> 0, "^";
 #Endif;
 						! check if 'take all Xs but Y'
-						p_parse_pointer = parse + 2 + 4 * (wn - 1);
+						p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 						if(_PeekAtNextWord() == EXCEPT_WORD1 or EXCEPT_WORD2) {
 							wn = wn + 1;
 							! here we only want to consider the Xs
@@ -1006,7 +1008,7 @@ System_file;
 								scope-->_noun = multiple_objects-->(_noun + 1);
 							}
 							_noun = _GetNextNoun(p_parse_pointer + 4, p_phase);
-							_UpdateScope(player, true); ! restore scope
+							scope_modified = true; ! restore scope
 							if(_noun <= 0) {
 								if(p_phase == PHASE2) {
 									PrintMsg(MSG_PARSER_NOTHING_TO_VERB, wn);
@@ -1015,7 +1017,7 @@ System_file;
 							}
 							parser_all_except_object = _noun;
 							! allow 'take all Xs but Y one'
-							p_parse_pointer = parse + 2 + 4 * (wn - 1);
+							p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 							if(_PeekAtNextWord() == 'one') {
 								wn = wn + 1;
 							}
@@ -1029,7 +1031,7 @@ System_file;
 						!
 						! Add all reasonable objects in scope
 						! to the multiple_objects array
-						p_parse_pointer = parse + 2 + 4 * (wn - 2);
+						p_parse_pointer = _parse_plus_2 + 4 * (wn - 2);
 						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
 							!print "take all but^";
 							if(p_phase == PHASE2) {
@@ -1037,7 +1039,7 @@ System_file;
 							}
 							return GPR_FAIL;
 						}
-						p_parse_pointer = parse + 2 + 4 * (_old_wn);
+						p_parse_pointer = _parse_plus_2 + 4 * (_old_wn);
 						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
 
 							!print "take all but <noun>^";
@@ -1080,7 +1082,7 @@ System_file;
 				}
 				! If _j == false, the object is not in the list, so add it!
 				if(_j == false) {
-					p_parse_pointer = parse + 2 + 4 * (wn - 1);
+					p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 					multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 					multiple_objects --> (multiple_objects --> 0) = _noun;
 				}
@@ -1094,12 +1096,12 @@ System_file;
 						!print "and followed by nothing^";
 						return GPR_FAIL;
 					}
-					_i = (parse + 2 + 4*wn ) --> 0; ! Word value
+					_i = (_parse_plus_2 + 4*wn ) --> 0; ! Word value
 					if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
 						! this is not a verb so we assume it is a list
 						! of nouns instead. Continue to parse
 						++wn;
-						p_parse_pointer = parse + 2 + 4 * (wn - 1);
+						p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 						!print "and followed by a noun^";
 						continue;
 					}
@@ -1540,8 +1542,7 @@ Array guess_object-->5;
 
 [ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action;
 	! returns
-	! 1/true: if error was found (so you can about with:
-	!         return PrintMsg(ERROR...);
+	! 1/true: if error was found
 	! -n: if <n> words were used to find a match,
 	!
 	! taking periods and other sentence breaks into account.
@@ -1568,7 +1569,8 @@ Array guess_object-->5;
 	scope_routine = 0;
 
 	if(parse->1 < 1) {
-		return PrintMsg(MSG_PARSER_NO_INPUT);
+		PrintMsg(MSG_PARSER_NO_INPUT);
+		rtrue;
 	}
 
 	verb_wordnum = 1;
