@@ -1807,8 +1807,9 @@ Array guess_object-->5;
 .treat_bad_line_as_conversation;
 	! this is used when not understood and the actor is an NPC
 	action = ##NotUnderstood;
-	consult_from = wn;
-	consult_words = parse->1 - wn + 1;
+	consult_from = verb_wordnum; ! usually 3 (<person> , <command>)
+	consult_words = parse->1 - consult_from + 1;
+	wn = consult_from;
 	special_number = TryNumber(wn);
 	special_word = NextWord();
 	! fall through to jump parse_success;
