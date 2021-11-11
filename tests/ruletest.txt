@@ -13,6 +13,12 @@ It is pitch dark here!
  *** Room 2.after: action is Look/29 noun=the north
      consult 0/0 (going 4102, notustood 4100)
 
+> jhn, hello
+I can't see who you are referring to.
+
+> john, hello
+I can't see who you are referring to.
+
 > s
  *** Room 2.before: action is Go/23 noun=the south
      consult 0/0 (going 4102, notustood 4100)
