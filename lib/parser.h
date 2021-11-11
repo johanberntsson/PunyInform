@@ -1865,12 +1865,15 @@ Array guess_object-->5;
 		sw__var = action;
 		if(noun ofclass Class) {
 			! the order contained a failed disambiguation
-			noun = 0; 
+			"There is more than one of them here. Try rephrasing.";
 		}
 		if(RunRoutines(actor, orders)) rtrue;
 		if(RunRoutines(player, orders)) rtrue;
 		if(action == ##NotUnderstood) {
+			! convert to <answer topic second>
 			action = ##Answer;
+			second = actor;
+			inp2 = actor;
 			if(BeforeRoutines()) rtrue;
 			if(RunLife(actor, action)) rtrue;
 		    PrintMsg(MSG_ASK_DEFAULT);
@@ -1878,6 +1881,7 @@ Array guess_object-->5;
 			if(RunLife(actor, ##Order)) rtrue;
 		    PrintMsg(MSG_ORDERS_WONT, actor);
 		}
+		if(num_words_parsed < 0) return -num_words_parsed;
 		return num_words_parsed;
 	}
 

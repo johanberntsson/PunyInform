@@ -8,6 +8,7 @@ john, open in on
 john, get cube
 john, get red cube
 john, examine gun
+john, help me
 examine gun
 quit
 yes

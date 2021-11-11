@@ -62,6 +62,7 @@ Class Room
 			print " *** ", (name) self, ".", (string) prop, ": action is ", (DebugAction) action, "/", action;
 			if(noun ~= 0) print " noun=", (the) noun;
 			if(second ~=0) print " second=", (the) second;
+			print "^     consult ", consult_from, "/", consult_words;
 			print " (going ", ##Going,  ", notustood ", ##NotUnderstood, ")^";
 #Endif;
 		],
