@@ -29,6 +29,7 @@ v3.2: bug fix release (11 November 2021)
 - Made Banner() smaller by checking if Story and Headline are defined.
 - Optimized lookmode messages, to make minimal library smaller AND
   allow for more generic abbreviations which will benefit games better.
+- Updated the abbreviations.
 - Updated quickref document.
 - Fixed parser bug which would sometimes make it print "I think you wanted to
   (verb) *someone*" when it should have been *something*.
