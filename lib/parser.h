@@ -95,7 +95,7 @@ System_file;
 				if(_type == TT_ROUTINE_FILTER && _data == ADirection) {
 					print (string) SOMEDIRECTION_STR;
 				} else if(second == 0) {
-					if(_token->2 == CREATURE_OBJECT) {
+					if(_type == TT_OBJECT && _token->2 == CREATURE_OBJECT) {
 						print (string) SOMEONE_STR;
 					} else {
 						print (string) SOMETHING_STR;
@@ -105,7 +105,7 @@ System_file;
 				if(noun ~= 0) {
 					_noun = 0; ! avoid repeat (and we don't need _noun anymore)
 					if(parser_all_found) print "all"; else print (name) noun;
-				} else if(_token->2 == CREATURE_OBJECT) {
+				} else if(_type == TT_OBJECT && _token->2 == CREATURE_OBJECT) {
 					print (string) SOMEONE_STR;
 				} else {
 					print (string) SOMETHING_STR;
