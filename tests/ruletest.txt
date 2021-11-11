@@ -81,6 +81,13 @@ John has better things to do.
      consult 3/2 (going 4102, notustood 4100)
 There is no reply.
 
+> john, say dragon master to me
+ *** John.orders: action is Answer/2 second=yourself
+     consult 4/2 (going 4102, notustood 4100)
+ *** John.life: action is Answer/2 second=yourself
+     consult 4/2 (going 4102, notustood 4100)
+John has better things to do.
+
 > examine gun
 You can't see any such thing.
 

@@ -9,6 +9,7 @@ john, get cube
 john, get red cube
 john, examine gun
 john, help me
+john, say dragon master to me
 examine gun
 quit
 yes
