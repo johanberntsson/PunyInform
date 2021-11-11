@@ -18,6 +18,7 @@ v3.2: bug fix and new feature release
 - Fixed bug in howto/change_player.inf that was introduced in v3.0 and
   made nothing work as it should with the PC swapping.
 - Fixed setup of noun/second for NPC orders.
+- Added error message when addressing a misspelled or missing NPC.
 
 =======
 v3.1: bug fix and new feature release (23 October 2021)

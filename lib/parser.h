@@ -1585,6 +1585,7 @@ Array guess_object-->5;
 			print "Case 1, Word ", verb_word, "^";
 #EndIf;
 			if(actor ~= player) jump treat_bad_line_as_conversation;
+			if(parse-->3 == ',//') return PrintMsg(MSG_PARSER_UNKNOWN_PERSON);
 			return PrintMsg(MSG_PARSER_UNKNOWN_VERB);
 		}
 	}

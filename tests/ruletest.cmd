@@ -2,6 +2,7 @@ transcript
 
 n
 s
+jhn, hello
 john, hello
 john, open xyzzy
 john, open in on
