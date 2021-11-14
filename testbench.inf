@@ -486,7 +486,7 @@ Object -> Lizard "cute little lizard"
 					and peaks out, ready for adventure!";
 			Drop:
 				print "He jumps up and bites your hand. You die.";
-				@quit;
+				deadflag = GS_DEAD;
 		],
 	has animate neuter;
 

@@ -1019,10 +1019,8 @@ Verb meta 'restore'
 Verb meta 'save'
 	*                                           -> Save;
 
-#Ifndef NO_SCORE;
 Verb meta 'score'
     *                                           -> Score;
-#Endif;
 
 Verb meta 'superbrief' 'short'
 	*                                           -> LookModeShort;
@@ -1162,7 +1160,11 @@ Verb meta 'quit' 'q//'
 #EndIf;
 ];
 
-#Ifndef NO_SCORE;
+#Ifdef NO_SCORE;
+[ ScoreSub;
+	PrintMsg(MSG_SCORE_DEFAULT);
+];
+#Ifnot;
 [ ScoreSub;
 	PrintMsg(MSG_SCORE_DEFAULT);
 	PrintRank();

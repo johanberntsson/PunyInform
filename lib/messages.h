@@ -263,9 +263,7 @@ Default MSG_EAT_DEFAULT = 85;
 Default MSG_FULLSCORE_START 86;
 Default MSG_FULLSCORE_END 87;
 #Endif;
-#Ifndef NO_SCORE;
 Default MSG_SCORE_DEFAULT 88;
-#Endif;
 Default MSG_UNLOCK_NOT_A_LOCK 89;
 Default MSG_UNLOCK_ALREADY_UNLOCKED 90;
 Default MSG_UNLOCK_KEY_DOESNT_FIT 91;
@@ -945,9 +943,11 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		"But it's dark.";
 #Endif;
 #Endif;
-#Ifndef NO_SCORE;
 #Iftrue MSG_SCORE_DEFAULT < 1000;
 	MSG_SCORE_DEFAULT:
+#Ifdef NO_SCORE;
+		"There is no score in this game.";
+#Ifnot;
 		if (deadflag) print "In that game you"; else print "You have so far";
 		print " scored ", score, " out of a possible ", MAX_SCORE, ", in ", turns, " turn";
 		if(turns ~= 1) print "s";

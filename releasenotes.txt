@@ -1,6 +1,9 @@
 =======
 v3.3: bug fix and new feature release
 
+- Added a 'score' verb for games with no score, which just prints a message
+  saying there is no score in this game.
+
 =======
 v3.2: bug fix release (11 November 2021)
 
