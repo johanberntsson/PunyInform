@@ -4,6 +4,8 @@ v3.3: bug fix and new feature release
 - Added a 'score' verb for games with no score, which just prints a message
   saying there is no score in this game.
 - Exclude code to call LibraryMessages unless it's defined.
+- Stopped the parser from trying to pick up object for Held grammar token
+  when actor isn't player.
 
 =======
 v3.2: bug fix release (11 November 2021)

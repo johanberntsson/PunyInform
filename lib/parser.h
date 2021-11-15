@@ -963,7 +963,7 @@ System_file;
 				}
 				return GPR_FAIL;
 			}
-			if(_token_data == HELD_OBJECT && _noun notin player) {
+			if(_token_data == HELD_OBJECT && actor == player && _noun notin actor) {
 				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
 					if(_noun ~= Directions && _ImplicitGrabIfNotHeld(_noun)) {
@@ -1162,7 +1162,7 @@ System_file;
 		! we don't know yet know what 'second' is, so we
 		! add all reasonable objects and filter later
 		MULTIHELD_OBJECT, MULTIEXCEPT_OBJECT:
-			_addobj = _obj in player && _obj hasnt worn;
+			_addobj = _obj in actor && _obj hasnt worn;
 		MULTI_OBJECT:
 			_p = parent(_obj);
 			_ceil = TouchCeiling(player);
@@ -1246,7 +1246,7 @@ Array guess_object-->5;
 			guess_object-->GUESS_CREATURE = _noun;
 			_creature_count++;
 		}
-		if(_noun in player && _noun ~= _exclude) {
+		if(_noun in actor && _noun ~= _exclude) {
 			guess_object-->GUESS_HELD = _noun;
 			_held_count++;
 		}
