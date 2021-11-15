@@ -402,9 +402,6 @@ Default MSG_SET_TO_DEFAULT 204;
 #EndIf;
 
 
-Default LibraryMessages 0;
-
-
 #Iffalse MSG_PUSH_DEFAULT < 1000;
 #Iffalse MSG_PULL_DEFAULT < 1000;
 #Iffalse MSG_TURN_DEFAULT < 1000;
@@ -643,9 +640,11 @@ Constant SKIP_MSG_EXAMINE_DARK;
 	if(p_msg ofclass String)
 		print_ret (string) p_msg;
 
+#Ifdef LibraryMessages;
 	if(p_msg > 999) {
 		return LibraryMessages(p_msg, p_arg_1, p_arg_2);
 	}
+#Endif;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
