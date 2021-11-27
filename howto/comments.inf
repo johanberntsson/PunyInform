@@ -31,7 +31,7 @@ Global recent_comments_pointer = 0; ! Next place to store a printed message ID i
 ];
 
 Array global_comments static table
-	CommentMulti ! Due to a limitation in Inform v6.35, we can't declare a routine directly in a global array
+	CommentMulti ! Inform doesn't allow a routine definition in a global array, so we define it first and add a reference here
 	"makes some dance moves"
 	"yodels a bit"
 	"sings a lullaby"
@@ -42,10 +42,10 @@ Array global_comments static table
 
 	! Task: Print a comment and return true or don't print one and return false
 
-    if(random(comment_prob) > 1) {
-        if(comment_prob > 1) comment_prob--; ! Make printing more likely next time
-        rfalse; ! We didn't print anything
-    }
+	if(random(comment_prob) > 1) {
+		if(comment_prob > 1) comment_prob--; ! Make printing more likely next time
+		rfalse; ! We didn't print anything
+	}
 
 	! We have decided to try to say something
 
