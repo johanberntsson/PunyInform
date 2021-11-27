@@ -1,0 +1,166 @@
+Constant Story "Comments for Atmosphere";
+Constant Headline "^Showcasing a way to add comments to a game.^";
+Statusline score; Constant STATUSLINE_SCORE;
+
+Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+Constant INITIAL_LOCATION_VALUE = BigKitchen;
+
+Include "globals";
+
+! ####################################
+! Comments
+! ####################################
+
+
+Constant COMMENT_MAX_WAIT 4; ! Maximum time between comments
+Constant LOCAL_COMMENT_PROB 2; ! How likely are we to try to use a local comment when available. 1 = only use local comments, 10 = rarely use them.
+Constant TRACK_RECENT_COMMENTS = 3; ! How many recent comments to remember
+Constant COMMENT_STRING_PREFIX "Burt "; ! Print this before all comment strings
+Constant COMMENT_STRING_SUFFIX "."; ! Print this after all comment strings
+
+Array recent_comments --> TRACK_RECENT_COMMENTS;
+Global comment_prob = COMMENT_MAX_WAIT; ! Initial chance of saying something
+Global recent_comments_pointer = 0; ! Next place to store a printed message ID in recent_comments table
+
+[CommentMulti x y;
+	x = 1 + random(8); y = 1 + random(8);
+	"^Suddenly Burt asks you what ", x, " multiplied by ", y, " is.
+		~Oh, never mind, it's ", x * y, " right?~";
+];
+
+Array global_comments static table
+	CommentMulti ! Due to a limitation in Inform v6.35, we can't declare a routine directly in a global array
+	"makes some dance moves"
+	"yodels a bit"
+	"sings a lullaby"
+	"yawns"
+	"spins around and looks surprised to see you";
+
+[MaybeMakeComment i m tries local_comments loc newloc ret;
+
+	! Task: Print a comment and return true or don't print one and return false
+
+    if(random(comment_prob) > 1) {
+        if(comment_prob > 1) comment_prob--; ! Make printing more likely next time
+        rfalse; ! We didn't print anything
+    }
+
+	! We have decided to try to say something
+
+	! Check if there are location specific comments.
+	loc = location;
+	while(true) {
+		if(loc provides comments) {
+			local_comments = loc.#comments / 2;
+			newloc = loc.&comments-->0;
+			if(newloc > 0 && newloc <= top_object) {
+				loc = newloc;
+				local_comments = 0;
+			} else
+				break;
+		} else
+			break;
+	}
+
+	do {
+		if(local_comments && random(LOCAL_COMMENT_PROB) == 1) {
+			! Pick a local comment
+			m = loc.&comments-->(random(local_comments) - 1);
+		} else ! Pick a global comment
+			m = global_comments-->random(global_comments-->0);
+		for(i=0 : i<TRACK_RECENT_COMMENTS : i++)
+			if(recent_comments-->i == m) {
+				m = 0; ! Forget about this message. Must find a new one.
+				break;
+			}
+		if(m == 0 && ++tries > 5) rfalse; ! Give up
+	} until(m ~= 0);
+
+	! We have found a comment (String or routine m) which we will print/call.
+
+	recent_comments-->(recent_comments_pointer++) = m;
+	if(recent_comments_pointer >= TRACK_RECENT_COMMENTS)
+		recent_comments_pointer = 0;
+	comment_prob = COMMENT_MAX_WAIT; ! Chance of saying something next time
+	if(metaclass(m) == Routine) {
+		ret = m();
+		if(ret == 0)
+			comment_prob = 1; ! No comment was printed, so print something next time
+		return ret;
+	} else {
+		new_line;
+		print_ret (string) COMMENT_STRING_PREFIX, (string) m,  (string) COMMENT_STRING_SUFFIX; ! Return true since we said something
+	}
+];
+
+! Use entry point LookRoutine() to make comments just after each room description
+[ LookRoutine;
+	if(Burt in location)
+		MaybeMakeComment();
+];
+
+Include "puny";
+
+Object BigKitchen "Big Kitchen"
+	with
+		description "A modern, fully equipped kitchen. A doorway leads south,
+			to the smaller kitchen.",
+		s_to SmallKitchen,
+		e_to LivingRoom,
+		comments
+			"climbs into the blender, knocks on the glass from the inside and climbs out again"
+			"looks at his mirror image in the polished steel sink"
+			[;
+				"^Always trying to make himself useful, Burt takes out some ",
+					(string) random("forks", "knives", "spoons", "glasses"),
+					", polishes them and puts them back.";
+			];
+
+
+Object SmallKitchen "Small Kitchen"
+	with
+		description "A small, cosy kitchen. A doorway leads north,
+			to the big kitchen.",
+		n_to BigKitchen,
+		comments BigKitchen;
+
+Object LivingRoom "Living Room"
+	with
+		description "A nice big living room. The big kitchen lies to the west.",
+		w_to BigKitchen;
+
+Object -> Burt "Burt"
+	with
+		name 'burt',
+		description "It's your trusty sidekick Burt. He looks a bit like a
+			panda, only sadder.",
+		found_in [; rtrue; ],
+	has animate proper;
+
+[ Initialise;
+	"^^In this demonstration, you will get a comment after the room description
+		with random intervals, but at least every fourth time. The comments
+		routine keeps track of the last three comments and makes sure not to
+		repeat them.^^
+
+		All the comments are about your sidekick Burt, and if he isn't present,
+		no comments are printed (but he's always present).^^
+
+		There are a set of global comments, that are supposed to work in any
+		location. In the living room, these are the only comments available.^^
+
+		The big kitchen has a set of local comments, which can only be printed
+		when you're there. These are defined in the comments property of the
+		big kitchen. However, the small kitchen also uses the same set
+		of comments by referring to the big kitchen in its comments property.^^
+
+		A location can not both provide a set of local comments of its own and
+		refer to another location, nor can it refer to multiple locations.^^
+
+		A comment can be a string or a routine. If it's a routine and it may be
+		used in several different locations, it can check the value of
+		location to see where the player is right now. If a routine decides not
+		to print anything, it should return false.^^^";
+];

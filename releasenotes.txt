@@ -6,6 +6,8 @@ v3.3: bug fix and new feature release
 - Exclude code to call LibraryMessages unless it's defined.
 - Stopped the parser from trying to pick up object for Held grammar token
   when actor isn't player.
+- Added an example of how to add random comments to a game
+  (howto/comments.inf).
 
 =======
 v3.2: bug fix release (11 November 2021)
