@@ -485,8 +485,8 @@ Object -> Lizard "cute little lizard"
 				"It dives into your breast pocket, spins around
 					and peaks out, ready for adventure!";
 			Drop:
-				print "He jumps up and bites your hand. You die.";
-				deadflag = GS_DEAD;
+				deadflag = 1;
+				"He jumps up and bites your hand. You die.";
 		],
 	has animate neuter;
 
@@ -669,8 +669,9 @@ Object -> Sweater "sweater"
 		Wear:
 			if(PinkBook in player)
 				"You don't put things on while holding the pink book. It might bring bad luck.";
-			if(self has worn) rfalse;
-			give self worn;
+	],
+	after [;
+		Wear:
 			"You put it on. The fit is perfect!";
 	],
 	has clothing;
