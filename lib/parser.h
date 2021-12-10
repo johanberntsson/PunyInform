@@ -1819,6 +1819,7 @@ Array guess_object-->5;
 	action = ##NotUnderstood;
 	consult_from = verb_wordnum; ! usually 3 (<person> , <command>)
 	consult_words = parse->1 - consult_from + 1;
+	second = actor;
 	wn = consult_from;
 	special_number = TryNumber(wn);
 	special_word = NextWord();
@@ -1849,11 +1850,11 @@ Array guess_object-->5;
 
 	! prepare noun and second to point at dictionary words
 	! from the consult topic, if possible
-	if(consult_from && action==##Answer or ##Ask) {
+	if(consult_from && action==##Answer or ##Ask or ##NotUnderstood) {
 		if(0 == noun or second) {
 			for(_i=0 : _i < consult_words : _i++) {
 				_noun = (parse-->(2 * (consult_from + _i) - 1));
-				if(_noun ~= 'a//' or 'an' or 'the') {
+				if(action == ##NotUnderstood || _noun ~= 'a//' or 'an' or 'the') {
 					if(noun==0)
 						noun = _noun;
 					else

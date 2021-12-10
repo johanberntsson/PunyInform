@@ -8,6 +8,8 @@ v3.3: bug fix and new feature release
   when actor isn't player.
 - Added an example of how to add random comments to a game
   (howto/comments.inf).
+- Fix so noun is the first recognized word in topic, and second is the actor,
+  when action == ##NotUnderstood
 
 =======
 v3.2: bug fix release (11 November 2021)
