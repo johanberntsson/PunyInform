@@ -394,6 +394,7 @@ Global special_word;     ! Dictionary address for "special" token
 Global special_number;   ! Number typed special orders, e.g "john, 34"
 Global parsed_number;    ! For user-supplied parsing routines
 Global noun_filter;      ! For noun filtering by user routines
+Global object_token_type;! Remember what kind of object token type is worked on
 Global noun;
 Global second;
 Global selected_direction;

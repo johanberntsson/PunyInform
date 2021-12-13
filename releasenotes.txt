@@ -14,6 +14,10 @@ v3.3: bug fix and new feature release
 - Fixed bug which made parser not recognize NPC name if player first did
   "go (direction)" or asked an NPC to do it, e.g. "John, go east"
   "John, take the sweater".
+- Set lower priority in parser for objects that aren't held when issuing an
+  action that expects a held object.
+- Set lower priority in parser for held objects when issuing a Take command,
+  even for NPCs.
 
 =======
 v3.2: bug fix release (11 November 2021)

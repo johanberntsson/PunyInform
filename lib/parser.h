@@ -337,12 +337,12 @@ System_file;
 	}
 	if (p_obj has concealed) return 1;
 	if(p_obj has scenery) return 2;
-	if(action == ##Take && p_obj in player) {
+	if(action == ##Take && p_obj in actor) {
 		! take gives low priority for already held objects
 		return 3;
 	}
-	if(action == ##Drop && p_obj notin player) {
-		! drop gives low priority for not held objects
+	if(object_token_type == HELD_OBJECT or MULTIHELD_OBJECT && p_obj notin actor) {
+		! low priority for not held objects
 		return 3;
 	}
 	return 4;
@@ -858,6 +858,7 @@ System_file;
 	! while a general parse routine takes no arguments.
 	! (this is mostly to avoid recalculating the values from wn
 	! when the calling routine already has them at hand)
+	object_token_type = -1;
 	_parse_plus_2 = parse + 2;
 	if(p_phase < 0) {
 		! called from ParseToken (DM library API)
@@ -931,6 +932,7 @@ System_file;
 		! SPECIAL_OBJECT, NUMBER_OBJECT or TOPIC_OBJECT
 		!
 		! remember if except or inside found, so we can filter later
+		object_token_type = _token_data;
 		if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			parser_check_multiple = _token_data;
 		}
@@ -1568,6 +1570,7 @@ Array guess_object-->5;
 	usual_grammar_after = 0;
 	scope_routine = 0;
 	noun_filter = 0;
+	object_token_type = -1;
 
 	if(parse->1 < 1) {
 		PrintMsg(MSG_PARSER_NO_INPUT);
