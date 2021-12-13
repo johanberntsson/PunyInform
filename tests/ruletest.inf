@@ -55,13 +55,21 @@ Include "puny.h";
 Include "Grammar";
 #Endif;
 
+[ NounParameter p_w;
+    if (p_w >= 1 && p_w <= top_object) print p_w, " (", (name) p_w, ")";
+    if (UnsignedCompare(p_w, dict_start) >= 0 &&
+            UnsignedCompare(p_w, dict_end) < 0 &&
+            (p_w - dict_start) % dict_entry_size == 0)
+        print " ('", (address) p_w, "')";
+];
+
 Class Room
 	with
 		print_trace [ prop;
 #Ifdef DEBUG;
 			print " *** ", (name) self, ".", (string) prop, ": action is ", (DebugAction) action, "/", action;
-			if(noun ~= 0) print " noun=", (the) noun;
-			if(second ~=0) print " second=", (the) second;
+			if(noun ~= 0) print " noun=", (NounParameter) noun;
+			if(second ~=0) print " second=", (NounParameter) second;
 			print "^     consult ", consult_from, "/", consult_words;
 			print " (going ", ##Going,  ", notustood ", ##NotUnderstood, ")^";
 #Endif;

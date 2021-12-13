@@ -1,16 +1,16 @@
 
 > n
- *** Room 1.before: action is Go/23 noun=the north
+ *** Room 1.before: action is Go/23 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
- *** Room 2.before: action is <fake action 6>/4102 noun=the north
+ *** Room 2.before: action is <fake action 6>/4102 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
- *** Room 1.after: action is <fake action 6>/4102 noun=the north
+ *** Room 1.after: action is <fake action 6>/4102 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
- *** Room 2.after: action is Go/23 noun=the north
+ *** Room 2.after: action is Go/23 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
 Darkness
 It is pitch dark here!
- *** Room 2.after: action is Look/29 noun=the north
+ *** Room 2.after: action is Look/29 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
 
 > jhn, hello
@@ -20,47 +20,47 @@ I can't see who you are referring to.
 I can't see who you are referring to.
 
 > s
- *** Room 2.before: action is Go/23 noun=the south
+ *** Room 2.before: action is Go/23 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
- *** Room 1.before: action is <fake action 6>/4102 noun=the south
+ *** Room 1.before: action is <fake action 6>/4102 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
- *** Room 1.after: action is <fake action 6>/4102 noun=the south
+ *** Room 1.after: action is <fake action 6>/4102 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
- *** Room 1.after: action is Go/23 noun=the south
+ *** Room 1.after: action is Go/23 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
 Room 1
 
 You can see a red cube, a black cube and John here.
- *** Room 1.after: action is Look/29 noun=the south
+ *** Room 1.after: action is Look/29 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
 
 > jhn, hello
 I can't see who you are referring to.
 
 > john, hello
- *** John.orders: action is <fake action 4>/4100
+ *** John.orders: action is <fake action 4>/4100 second=12 (John)
      consult 3/1 (going 4102, notustood 4100)
- *** Room 1.before: action is Answer/2 second=John
+ *** Room 1.before: action is Answer/2 second=12 (John)
      consult 3/1 (going 4102, notustood 4100)
- *** John.life: action is Answer/2 second=John
+ *** John.life: action is Answer/2 second=12 (John)
      consult 3/1 (going 4102, notustood 4100)
 There is no reply.
 
 > john, open xyzzy
- *** John.orders: action is <fake action 4>/4100
+ *** John.orders: action is <fake action 4>/4100 noun= ('open') second=12 (John)
      consult 3/2 (going 4102, notustood 4100)
- *** Room 1.before: action is Answer/2 second=John
+ *** Room 1.before: action is Answer/2 noun= ('open') second=12 (John)
      consult 3/2 (going 4102, notustood 4100)
- *** John.life: action is Answer/2 second=John
+ *** John.life: action is Answer/2 noun= ('open') second=12 (John)
      consult 3/2 (going 4102, notustood 4100)
 There is no reply.
 
 > john, open in on
- *** John.orders: action is <fake action 4>/4100 noun=the in
+ *** John.orders: action is <fake action 4>/4100 noun=5 (in) second=12 (John)
      consult 3/3 (going 4102, notustood 4100)
- *** Room 1.before: action is Answer/2 noun=the in second=John
+ *** Room 1.before: action is Answer/2 noun=5 (in) second=12 (John)
      consult 3/3 (going 4102, notustood 4100)
- *** John.life: action is Answer/2 noun=the in second=John
+ *** John.life: action is Answer/2 noun=5 (in) second=12 (John)
      consult 3/3 (going 4102, notustood 4100)
 There is no reply.
 
@@ -68,32 +68,32 @@ There is no reply.
 You need to be more specific.
 
 > john, get red cube
- *** John.orders: action is Take/19 noun=the red cube
+ *** John.orders: action is Take/19 noun=10 (red cube)
      consult 0/0 (going 4102, notustood 4100)
- *** John.life: action is Take/19 noun=the red cube
+ *** John.life: action is Take/19 noun=10 (red cube)
      consult 0/0 (going 4102, notustood 4100)
 John has better things to do.
 
 > john, examine gun
- *** John.orders: action is Examine/17 noun=the gun
+ *** John.orders: action is Examine/17 noun=13 (gun)
      consult 0/0 (going 4102, notustood 4100)
- *** John.life: action is Examine/17 noun=the gun
+ *** John.life: action is Examine/17 noun=13 (gun)
      consult 0/0 (going 4102, notustood 4100)
 John has better things to do.
 
 > john, help me
- *** John.orders: action is <fake action 4>/4100
+ *** John.orders: action is <fake action 4>/4100 second=12 (John)
      consult 3/2 (going 4102, notustood 4100)
- *** Room 1.before: action is Answer/2 second=John
+ *** Room 1.before: action is Answer/2 second=12 (John)
      consult 3/2 (going 4102, notustood 4100)
- *** John.life: action is Answer/2 second=John
+ *** John.life: action is Answer/2 second=12 (John)
      consult 3/2 (going 4102, notustood 4100)
 There is no reply.
 
 > john, say dragon master to me
- *** John.orders: action is Answer/2 second=yourself
+ *** John.orders: action is Answer/2 second=6 (yourself)
      consult 4/2 (going 4102, notustood 4100)
- *** John.life: action is Answer/2 second=yourself
+ *** John.life: action is Answer/2 second=6 (yourself)
      consult 4/2 (going 4102, notustood 4100)
 John has better things to do.
 

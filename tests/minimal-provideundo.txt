@@ -6,7 +6,7 @@ You are empty handed.
 That is not a verb I recognize.
 
 > score
-That is not a verb I recognize.
+There is no score in this game.
 
 > quit
 Are you sure you want to quit? yes
