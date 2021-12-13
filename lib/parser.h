@@ -1567,6 +1567,7 @@ Array guess_object-->5;
 	consult_words = 0;
 	usual_grammar_after = 0;
 	scope_routine = 0;
+	noun_filter = 0;
 
 	if(parse->1 < 1) {
 		PrintMsg(MSG_PARSER_NO_INPUT);

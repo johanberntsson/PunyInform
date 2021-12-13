@@ -11,6 +11,9 @@ v3.3: bug fix and new feature release
 - Fix so noun is the first recognized word in topic, and second is the actor,
   when action == ##NotUnderstood
 - Fix so that NPC's can't use wildcards, such as "take all"
+- Fixed bug which made parser not recognize NPC name if player first did
+  "go (direction)" or asked an NPC to do it, e.g. "John, go east"
+  "John, take the sweater".
 
 =======
 v3.2: bug fix release (11 November 2021)
