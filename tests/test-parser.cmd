@@ -9,6 +9,7 @@ put sweater in s
 drop sweater
 put ladder on ladder
 put ladder in ladder
+john, take all
 go n
 go sweater
 go

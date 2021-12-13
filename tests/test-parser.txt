@@ -23,6 +23,9 @@ You can't put something on itself.
 > put ladder in ladder
 You can't put something inside itself.
 
+> john, take all
+You need to be more specific.
+
 > go n
 You can't go that way.
 

@@ -10,6 +10,7 @@ v3.3: bug fix and new feature release
   (howto/comments.inf).
 - Fix so noun is the first recognized word in topic, and second is the actor,
   when action == ##NotUnderstood
+- Fix so that NPC's can't use wildcards, such as "take all"
 
 =======
 v3.2: bug fix release (11 November 2021)

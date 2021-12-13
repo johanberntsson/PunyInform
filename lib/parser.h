@@ -1874,8 +1874,9 @@ Array guess_object-->5;
 		! "say grrr to floyd").  If it was a good command, it is finally
 		! offered to the Order: part of the other person's "life"
 		! property, the old-fashioned way of dealing with conversation.
+
 		sw__var = action;
-		if(_best_phase2 == PHASE2_DISAMBIGUATION) {
+		if(_best_phase2 == PHASE2_DISAMBIGUATION || parser_all_found) {
 			! the order contained a failed disambiguation
 			PrintMsg(MSG_PARSER_BE_MORE_SPECIFIC);
 			rtrue;
