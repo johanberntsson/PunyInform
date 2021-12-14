@@ -1,0 +1,21 @@
+
+> eat black
+(first taking the black cake)
+You decide to leave it for later.
+
+> drop all
+black cake: Dropped.
+
+> take black
+Do you mean the black rod or the black cake?
+
+> rod
+Taken.
+
+> take all
+black cake: Taken.
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]
