@@ -505,8 +505,10 @@ System_file;
 #Endif;
 			if(_result > 0 && _result  >= _best_score) {
 				_j = _CalculateObjectLevel(_obj);
+#Ifdef OPTIONAL_CHOOSEOBJECTS;
 				! give ChooseObjects a chance to modify the level
 				_j = _j + ChooseObjects(_obj, 2);
+#Endif;
 				if(_result == _best_score) {
 					_matches++;
 					which_object-->_matches = _obj;
@@ -1215,11 +1217,13 @@ System_file;
 !				(_p == 0 || parent(_p) == 0 || _p has container or supporter);
 		}
 		if(action == ##Take && _obj in player) _addobj = false;
+#Ifdef OPTIONAL_CHOOSEOBJECTS;
 		! give ChooseObjects a chance to override
 		switch(ChooseObjects(_obj, _addobj)) {
 			2: _addobj = 0; ! force rejection
 			1: _addobj = 1; ! force acceptance
 		}
+#Endif;
 		if(_addobj) {
 			multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 			multiple_objects --> (multiple_objects --> 0) = _obj;

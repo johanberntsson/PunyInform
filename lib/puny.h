@@ -1627,7 +1627,9 @@ Object thedark "Darkness"
 #Stub PrintVerb       1;
 #Stub TimePasses      0;
 #Stub UnknownVerb     1;
+#Ifdef OPTIONAL_CHOOSEOBJECTS;
 #Stub ChooseObjects   2;
+#Endif;
 !NO #Stub ParserError     1;
 #Ifndef OPTIONAL_NO_DARKNESS;
 #Stub DarkToDark      0;
