@@ -505,7 +505,7 @@ System_file;
 #Endif;
 			if(_result > 0 && _result  >= _best_score) {
 				_j = _CalculateObjectLevel(_obj);
-#Ifdef OPTIONAL_CHOOSEOBJECTS;
+#Ifdef ChooseObjects;
 				! give ChooseObjects a chance to modify the level
 				_j = _j + ChooseObjects(_obj, 2);
 #Endif;
@@ -1217,7 +1217,7 @@ System_file;
 !				(_p == 0 || parent(_p) == 0 || _p has container or supporter);
 		}
 		if(action == ##Take && _obj in player) _addobj = false;
-#Ifdef OPTIONAL_CHOOSEOBJECTS;
+#Ifdef ChooseObjects;
 		! give ChooseObjects a chance to override
 		switch(ChooseObjects(_obj, _addobj)) {
 			2: _addobj = 0; ! force rejection
@@ -1363,7 +1363,7 @@ Array guess_object-->5;
 	selected_direction_index = 0;
 	selected_direction = 0;
 	action = (p_pattern --> 0) & $03ff;
-	action_to_be = action; ! compability (referenced in DM4 for ChooseObjects)
+	action_to_be = action; ! compatibility (referenced in DM4 for ChooseObjects)
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 	phase2_necessary = PHASE2_SUCCESS;
 

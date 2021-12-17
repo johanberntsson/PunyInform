@@ -41,6 +41,7 @@ Constant OPTIONAL_MANUAL_REACTIVE;
 Constant OPTIONAL_REACTIVE_PARSE_NAME;
 Constant OPTIONAL_ORDERED_TIMERS;
 Constant MAX_SCOPE = 50;
+
 #Iftrue (#version_number == 5);
 Constant OPTIONAL_PROVIDE_UNDO;
 #Endif;
@@ -126,6 +127,17 @@ Include "ext_flags.h";
 #IfNot;
 Include "globals.h";
 #EndIf;
+
+[ChooseObjects obj code;
+	if(code == 2) {
+		if(action_to_be == ##SwitchOn or ##SwitchOff) {
+			if(obj has switchable)
+				return 2;
+		}
+		return 0;
+	}
+	rfalse; ! Don't interfere with ALL
+];
 
 [InScope p_actor;
 	if(p_actor == player && location == thedark && John in real_location)
@@ -926,11 +938,10 @@ Object -> John "John"
 			if(second == 'pink') "~That is a nice pink book.~";
 			"John ignores your question.";
 		],
-	has proper animate transparent reactive;
+	has proper animate reactive;
 
 Object -> -> JohnsBall "pink ball"
-  with  name 'pink' 'ball',
-  has   concealed;
+  with  name 'pink' 'ball';
 
 Object -> infiniteBag "infinite bag"
 	with
@@ -1163,6 +1174,12 @@ Object  Beard "John's beard"
 !	print "BlueBook.party is ", BlueBook.party, "^";
 !	BlueBook.party(5);
 	move Gun to John;
+	move BlueBook to John;
+!	move Sweater to John;
+!	give Sweater worn;
+#Ifndef USEINFORM;
+	scope_modified = true;
+#Endif;
 	print "^^Welcome to the Testbench... This is where all sorts of PunyInform
 		features are tried out. Don't expect much of a game here. Currently, you
 		can win by putting stuff in the box, or lose by checking out the sun by
