@@ -38,13 +38,25 @@ Constant OPTIONAL_GUESS_MISSING_NOUN;
 #Ifdef USEINFORM;
 Include "Parser";
 Include "VerbLib";
+
 #IfNot;
 Include "globals.h";
 #EndIf;
 
 [ ChooseObjects obj code;
-    if(code < 2) { if (obj has scenery) return 2; rfalse; }
-    !if(action_to_be == ##Eat && obj has edible) return 3;
+    if(obj == 0) return 1;
+print (the) obj," ",code, " ", action, " ", action_to_be, "^";
+    if(code < 2) {
+        ! considering including obj in "all", with
+        ! code == true if wanting to add the obj
+        if (obj has scenery) {
+            ! force include (would normally be excluded)
+            return 1;
+        }
+        rfalse; ! go with std parser decision
+    }
+    ! deciding between seemingly equally good matches
+    if(action_to_be == ##Eat && obj has edible) return 3;
     if(obj hasnt scenery) return 2;
     return 1;
 ];
@@ -62,7 +74,6 @@ Include "puny.h";
 #Ifdef USEINFORM;
 Include "Grammar";
 #Endif;
-
 Object Library "The Library"
 	with
 	    description "You are in a library.",

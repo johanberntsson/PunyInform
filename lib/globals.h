@@ -382,6 +382,7 @@ Global wn;               ! word number within parse array
 Global pattern_pointer;  ! token within current pattern
 Global num_words;        ! number of words typed
 Global action;           ! the current action
+Global action_to_be;     ! the action being considered
 Global action_reverse;   ! if parameters are in reversed order
 Global meta;             ! if the verb has the meta attribute or not
 Global update_moved;     ! if _NoteObjectAcquisitions should update moved
