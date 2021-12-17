@@ -4,27 +4,15 @@
 You decide to leave it for later.
 
 > drop all
-the direction 0 1 1
-yourself 0 1 1
-John 0 1 1
-the black rod 0 1 1
-the black cake 0 1 1
-the shrubbery 0 1 1
-You are not carrying anything.
+black cake: Dropped.
 
 > take black
-Do you mean the black rod or the black cake?
+Do you mean the black cake or the black rod?
 
 > rod
 Taken.
 
 > take all
-the direction 0 19 19
-yourself 0 19 19
-the black rod 0 19 19
-John 0 19 19
-the black cake 1 19 19
-the shrubbery 0 19 19
 direction: That's hardly portable.
 black cake: Taken.
 shrubbery: That's hardly portable.

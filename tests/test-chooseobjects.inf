@@ -45,7 +45,7 @@ Include "globals.h";
 
 [ ChooseObjects obj code;
     if(obj == 0) return 1;
-print (the) obj," ",code, " ", action, " ", action_to_be, "^";
+!print (the) obj," ",code, " ", action, " ", action_to_be, "^";
     if(code < 2) {
         ! considering including obj in "all", with
         ! code == true if wanting to add the obj

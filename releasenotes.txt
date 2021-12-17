@@ -18,6 +18,7 @@ v3.3: bug fix and new feature release
   action that expects a held object.
 - Set lower priority in parser for held objects when issuing a Take command,
   even for NPCs.
+- Implemented ChooseObjects
 
 =======
 v3.2: bug fix release (11 November 2021)

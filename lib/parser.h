@@ -505,6 +505,8 @@ System_file;
 #Endif;
 			if(_result > 0 && _result  >= _best_score) {
 				_j = _CalculateObjectLevel(_obj);
+				! give ChooseObjects a chance to modify the level
+				_j = _j + ChooseObjects(_obj, 2);
 				if(_result == _best_score) {
 					_matches++;
 					which_object-->_matches = _obj;
