@@ -63,6 +63,10 @@ g
 push john
 s
 drop all
+get blue and all books
+drop all
+get blue book and all books but blue
+drop all
 take books
 drop all
 take pinkish

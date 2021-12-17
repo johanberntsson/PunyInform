@@ -990,12 +990,23 @@ System_file;
 					! here it is either a plural, 'all' or not understood
 					!
 					if(parser_action == ##PluralFound) {
-						! take books or take all books
+						! take books [but xxx] or take all books [but xxx]
 						parser_all_found = true;
 						! copy which_object to multiple_objects
 						for(_i = 0: _i < which_object->0: _i++) {
-							multiple_objects --> 0 = 1 + (multiple_objects --> 0);
-							multiple_objects --> (multiple_objects --> 0) = which_object--> (_i + 1);
+							! don't add if already in multiple_objects
+							_k = 1;
+							for(_j = 0: _j < multiple_objects-->0: _j++) {
+								if(multiple_objects --> _j == which_object--> (_i + 1)) {
+									_k = 0;
+									! this was already added
+									!print _i, " ", _j, " ", (the) multiple_objects --> _j, " == ", (the) which_object--> (_i + 1), "^";
+								}
+							}
+							if(_k) {
+								multiple_objects --> 0 = 1 + (multiple_objects --> 0);
+								multiple_objects --> (multiple_objects --> 0) = which_object--> (_i + 1);
+							}
 						}
 #IfDef DEBUG_PARSETOKEN;
 						print "adding plural ", which_object->0, " ", which_object->1, " ", multiple_objects --> 0, "^";
