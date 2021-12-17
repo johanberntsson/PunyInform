@@ -852,7 +852,7 @@ System_file;
 ];
 
 [ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token
-		_token_type _token_data _old_wn _j _k _parse_plus_2;
+		_token_type _token_data _old_wn _j _k _parse_plus_2 _num_already_added;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
@@ -987,11 +987,17 @@ System_file;
 					return GPR_REPARSE;
 				}
 				if(_noun == 0 || parser_all_found) {
-					! here it is either a plural, 'all' or not understood
+					! Here it is either a plural, 'all' or not understood
 					!
 					if(parser_action == ##PluralFound) {
 						! take books [but xxx] or take all books [but xxx]
 						parser_all_found = true;
+
+						! There could be nouns that have already been added
+						! (such as 'take blue and books' - and multiple_objects
+						! will contain BlueBook here). Keep track of this
+						_num_already_added = multiple_objects-->0;
+
 						! copy which_object to multiple_objects
 						for(_i = 0: _i < which_object->0: _i++) {
 							! don't add if already in multiple_objects
@@ -1030,7 +1036,21 @@ System_file;
 								}
 								return GPR_FAIL;
 							}
-							parser_all_except_object = _noun;
+							! is the exception object included in the
+							! current NP? If it refers to one of the
+							! objects that were already declared before
+							! we started parsing this NP (e.g. get books
+							! but X), then it should not be used since
+							! the "but" object only refers to this NP.
+							_k = 1;
+							for(_i = 0: _i < _num_already_added: _i++) {
+								if(_noun == multiple_objects-->(_i + 1)) {
+									_k = 0;
+								}
+							}
+							if(_k) {
+								parser_all_except_object = _noun;
+							}
 							! allow 'take all Xs but Y one'
 							p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 							if(_PeekAtNextWord() == 'one') {

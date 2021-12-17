@@ -19,6 +19,8 @@ v3.3: bug fix and new feature release
 - Set lower priority in parser for held objects when issuing a Take command,
   even for NPCs.
 - Implemented ChooseObjects
+- Improved parsing of complex disambiguation messages such as
+  'get blue book and books' and 'get blue book and all books except blue'
 
 =======
 v3.2: bug fix release (11 November 2021)

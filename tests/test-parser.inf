@@ -580,12 +580,13 @@ Book -> -> RedBook "red book"
 	 				if(player in LargeBox) {
 	 					"It's too hard to pick it up while inside the box.";
 	 				}
+			],
+			after [;
+	 			Take:
 					if(BlueBook in player) {
-						print "The blue book does not want to be near the red book and jumps out of your grasp and lands on the floor.^^";
 						move BlueBook to location;
+						"The blue book does not want to be near the red book and jumps out of your grasp and lands on the floor.";
 					}
-
-
 			];
 
 Object -> -> Gun "gun"

@@ -222,8 +222,6 @@ blue book: The blue box starts ticking...
 pink book: You dared taking the pink book. Bravo!
 red book: The blue book does not want to be near the red book and jumps out of
 your grasp and lands on the floor.
-
-Taken.
 green book: Taken.
 
 The blue book glows annoyingly.
@@ -236,9 +234,10 @@ green book: Dropped.
 The blue book glows annoyingly.
 
 > get blue book and all books but blue
-blue book: Taken.
+blue book: The blue box starts ticking...
 green book: Taken.
-red book: Taken.
+red book: The blue book does not want to be near the red book and jumps out of
+your grasp and lands on the floor.
 pink book: You dared taking the pink book. Bravo!
 
 The blue book glows annoyingly.
