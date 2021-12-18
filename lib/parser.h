@@ -507,7 +507,7 @@ System_file;
 				_j = _CalculateObjectLevel(_obj);
 #Ifdef ChooseObjects;
 				! give ChooseObjects a chance to modify the level
-				_j = _j + ChooseObjects(_obj, 2);
+				_j = _j + 8*ChooseObjects(_obj, 2);
 #Endif;
 				if(_result == _best_score) {
 					_matches++;
