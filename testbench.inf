@@ -136,6 +136,7 @@ Include "globals.h";
 		}
 		return 0;
 	}
+!	print " ALL:", (name) obj;
 	rfalse; ! Don't interfere with ALL
 ];
 
