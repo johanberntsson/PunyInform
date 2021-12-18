@@ -295,14 +295,13 @@ Do you mean the green book, the red book or the pink book?
 
 > n
 
-The box goes BOOM.
-
-The blue book glows annoyingly.
 Huge library
 
 You can also see a light switch, a sweater, an aquarium (which is empty), a box
 (which contains an electric torch (Ugly as sin)), a ladder (on which is a
 sticker), John and an infinite bag (which is empty) here.
+
+The box goes BOOM.
 
 The blue book glows annoyingly.
 > quit

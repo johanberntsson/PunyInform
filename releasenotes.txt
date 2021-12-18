@@ -25,6 +25,7 @@ v3.3: bug fix and new feature release (18 December 2021)
 - Improved parsing of complex disambiguation messages such as
   'get blue book and books' and 'get blue book and all books except blue'
 - Added OPTIONAL_CHOOSEOBJECTS to control ChooseObjects inclusion
+- Fixed bad call to each_turn when aborting a disambiguation question
 
 =======
 v3.2: bug fix release (11 November 2021)

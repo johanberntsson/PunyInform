@@ -1531,7 +1531,7 @@ Object thedark "Darkness"
 			! to the end of the line to force new user input
 			_sentencelength = parse->1;
 		}
-		if(action >= 0 && meta == false) {
+		if(action >= 0 && meta == false && _sentencelength>0) {
 			EndTurnSequence();
         }
 
