@@ -171,10 +171,10 @@ Verb 'talk'
 	"You have nothing to say.";
 ];
 
-#Ifndef USEINFORM;
-Include "ext_cheap_scenery.h";
-Include "ext_flags.h";
+#Ifdef USEINFORM;
+#IfNot;
 Include "ext_menu.h";
+#Endif;
 
 [ HelpItems;
     print "There is information provided on the following:^^";
@@ -204,6 +204,10 @@ Include "ext_menu.h";
     DoMenu(HelpItems, HelpMenu, HelpInfo);
 ];
 Verb 'help' * -> Help;
+
+#Ifndef USEINFORM;
+Include "ext_cheap_scenery.h";
+Include "ext_flags.h";
 
 ! Setup custom library messages
 Constant MSG_OPEN_YOU_CANT 1000;

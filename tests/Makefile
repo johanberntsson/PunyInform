@@ -28,8 +28,8 @@ test-parser:
 	frotz test-parser.z3
 
 inform:
-	inform -v8 test-chooseobjects.inf
-	frotz test-chooseobjects.z8
+	inform -v8 test-parser.inf
+	frotz test-parser.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages
