@@ -810,7 +810,7 @@ System_file;
 [ _IsSentenceDivider p_parse_pointer;
 	! check if current parse block, indicated by p_parse_pointer,
 	! is a period or other sentence divider
-	if(p_parse_pointer --> 0 == './/' or ',//' or 'and' or 'then') rtrue;
+	if(p_parse_pointer --> 0 == './/' or ',//' or AND_WORD or THEN1__WD) rtrue;
 	rfalse;
 ];
 

@@ -1,6 +1,9 @@
 =======
 v3.4: bug fix and new feature release
 
+- _IsSentenceDivider was using dictionary words directly for 'then' and 'and'
+  although there are constants to be used. Fixed.
+
 =======
 v3.3: bug fix and new feature release (18 December 2021)
 
@@ -24,7 +27,6 @@ v3.3: bug fix and new feature release (18 December 2021)
 - Implemented ChooseObjects
 - Improved parsing of complex disambiguation messages such as
   'get blue book and books' and 'get blue book and all books except blue'
-- Added OPTIONAL_CHOOSEOBJECTS to control ChooseObjects inclusion
 - Fixed bad call to each_turn when aborting a disambiguation question
 
 =======

@@ -1,9 +1,9 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v3.2 quick reference** |
+| **PunyInform v3.3 quick reference** |
 
   
-Document Release 2. More information on last page.
+Document Release 3. More information on last page.
 
 # Library objects
 
@@ -498,6 +498,10 @@ circumstances stated for each routine.
 
 ###### After player input, before parsing starts.
 
+## ChooseObjects(obj, code)
+
+###### If *code* is 2, return a score 0-9 for how good a fit *obj* is for action *action_to_be*. Code 0 and 1 means player has typed ALL and parser means to exclude (0) or include (1) the object. Return 0 to don't interfere, 1 to force inclusion, 2 to force exclusion.
+
 ## DarkToDark()
 
 ###### When player moves from one dark location to another.
@@ -570,35 +574,7 @@ circumstances stated for each routine.
 
 ###### When the parser doesn’t recognize the verb. Return a dictionary word to use as the verb instead, or *false*.
 
-# Fake actions
-
-These actions are not referred to anywhere in the grammar, and they
-don’t have action routines, e.g. the fake action *Going* has no action
-routine *GoingSub*.
-
-*Going* Sent to the *before* routine for the room  
-that the player is about to enter.
-
-*LetGo* Sent to the container/supporter from  
-which the player takes something.
-
-*NotUnderstood* Sent to creature's *orders* when player issued an
-incomprehensible order to it.
-
-*Order* Sent to creature's *life* when player  
-issued an order to it, and *orders* didn't  
-handle it.
-
-*PluralFound* A *parse_name* routine can set  
-*parser_action *to this value when a  
-match is found and it’s in plural.
-
-*Receive* Sent to the object the player tries to place  
-something in/on. *receive_action  
-*holds the original action.
-
-*ThrownAt* Sent by action *ThrowAt* to the object the  
-player tries to throw something at.  
+## 
 
 # Group 1 actions
 
@@ -713,6 +689,38 @@ OPTIONAL_EXTENDED_VERBSET adds:
 *Yes* "YES"  
 
 # 
+
+# Fake actions
+
+These actions are not referred to anywhere in the grammar, and they
+don’t have action routines, e.g. the fake action *Going* has no action
+routine *GoingSub*.
+
+*Going* Sent to the *before* routine for the room  
+that the player is about to enter.
+
+*LetGo* Sent to the container/supporter from  
+which the player takes something.
+
+*NotUnderstood* Sent to creature's *orders* when player issued an
+incomprehensible order to it.
+
+*Order* Sent to creature's *life* when player  
+issued an order to it, and *orders* didn't  
+handle it.
+
+*PluralFound* A *parse_name* routine can set  
+*parser_action *to this value when a  
+match is found and it’s in plural.
+
+*Receive* Sent to the object the player tries to place  
+something in/on. *receive_action  
+*holds the original action.
+
+*ThrownAt* Sent by action *ThrowAt* to the object the  
+player tries to throw something at.
+
+  
 
 # Object attributes (flags)
 
@@ -843,14 +851,6 @@ An attribute is a flag which can be on or off.
 ## worn \[OBJ\]
 
 ###### For object that has *clothing*: Is currently being worn.
-
-## 
-
-###### 
-
-# 
-
-# 
 
 # Object properties
 
