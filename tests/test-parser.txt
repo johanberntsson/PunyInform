@@ -1,6 +1,9 @@
 
 > sit ladder
-I don't understand that sentence.
+I only understood you as far as "sit" but then you lost me.
+
+> look ladder
+I only understood you as far as "look" but then you lost me.
 
 > again me
 I only understood you as far as "again" but then you lost me.
@@ -125,7 +128,7 @@ I think you wanted to say "put all in something". Please try again.
 I don't understand that sentence.
 
 > put all except in box
-I don't understand that sentence.
+I only understood you as far as "put" but then you lost me.
 
 > put all except book in box
 electric torch: You put the electric torch into the box.

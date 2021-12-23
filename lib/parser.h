@@ -1834,12 +1834,7 @@ Array guess_object-->5;
 				}
 			} else {
 				! we didn't match the pattern at all
-				if(parser_unknown_noun_found == 0 &&
-					((_best_pattern_pointer-> 0) & $0f) == TT_END) {
-					PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
-				} else {
-					PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
-				}
+				PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
 			}
 		}
 		action = 0;

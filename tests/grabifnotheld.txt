@@ -104,7 +104,7 @@ Sally doesn't seem interested.
 You can only do that to something animate.
 
 > show green blue
-I don't understand that sentence.
+I only understood you as far as "show green" but then you lost me.
 
 > quit
 Are you sure you want to quit? yes
