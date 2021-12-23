@@ -125,7 +125,7 @@ I think you wanted to say "put all in something". Please try again.
 I don't understand that sentence.
 
 > put all except in box
-You can't see any such thing.
+I don't understand that sentence.
 
 > put all except book in box
 electric torch: You put the electric torch into the box.

@@ -173,6 +173,7 @@ Verb 'talk'
 
 #Ifdef USEINFORM;
 #IfNot;
+Constant EXT_MENU_STDLIB_MODE;
 Include "ext_menu.h";
 #Endif;
 
