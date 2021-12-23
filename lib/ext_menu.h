@@ -18,6 +18,8 @@ System_file;
 ! To get that behaviour, define the constant EXT_MENU_STDLIB_MODE before
 ! including the extension.
 
+#Ifdef EXT_MENU_STDLIB_MODE; #Endif;
+
 Global menu_item;
 Global item_width;
 Global item_name;
