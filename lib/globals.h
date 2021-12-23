@@ -617,8 +617,10 @@ Object Directions
 			}
 
 #Endif; ! OPTIONAL_SHIP_DIRECTIONS
-			jump fail;
-
+      		! No direction was matched
+!			selected_direction_index = 0;
+!			selected_direction = 0;
+			return 0;
 
 .match_out; @inc _i;
 .match_in; @inc _i;
@@ -640,11 +642,6 @@ Object Directions
 .match2;
 			selected_direction = direction_properties_array -> selected_direction_index;
 			return 1;
-.fail;
-      		! No direction was matched
-!			selected_direction_index = 0;
-!			selected_direction = 0;
-			return 0;
 #EndIf;
 		],
 has scenery

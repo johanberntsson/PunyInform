@@ -3,6 +3,7 @@ v3.4: bug fix and new feature release
 
 - _IsSentenceDivider was using dictionary words directly for 'then' and 'and'
   although there are constants to be used. Fixed.
+- Slight optimization in Direction.parse_name
 
 =======
 v3.3: bug fix and new feature release (18 December 2021)
