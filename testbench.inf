@@ -182,6 +182,7 @@ Include "globals.h";
 #Ifndef USEINFORM;
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
+Constant EXT_MENU_STDLIB_MODE;
 Include "ext_menu.h";
 
 ! Setup custom library messages
@@ -226,11 +227,14 @@ Include "ext_waittime.h";
 ];
 
 [ HelpMenu;
+! Note that we set item_width to half the length of each name, since we have
+! defined EXT_MENU_STDLIB_MODE to make ext_menu fully compatible with the
+! standard library DoMenu implementation.
     switch(menu_item) {
-    0: item_width=20; item_name="Help and Information"; return 3;
-    1: item_width=12; item_name="Instructions";
-    2: item_width=15; item_name="About this game";
-    3: item_width=12; item_name="Game credits";
+    0: item_width=10; item_name="Help and Information"; return 3;
+    1: item_width=6; item_name="Instructions";
+    2: item_width=7; item_name="About this game";
+    3: item_width=6; item_name="Game credits";
     }
 ];
 

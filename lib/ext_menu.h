@@ -1,5 +1,23 @@
 System_file;
 
+! This PunyInform extension offers a way to present menus that, from the
+! programmer's perspective, work the same on any Z-machine version. The
+! presentation on z5+ is like the DoMenu extension described in DM3 and
+! which is currently part of the Inform 6 standard library. On z3 the
+! presentation is simpler, but still fully functional.
+!
+! This extension deviates from the standard DoMenu implementation in one
+! respect - when assigning a value to the variable item_width, this value
+! should be the full width of the item, e.g. if the item title is "Help",
+! item_width should be set to 4, whereas in the standard library it should
+! be set to half the width of the item, e.g. 2 in this case.
+
+! If you're writing a game which should be compilable with both PunyInform
+! and the standard library, it may be more convenient to have ext_menu
+! use the same logic for item_width as DoMenu in the standard library does.
+! To get that behaviour, define the constant EXT_MENU_STDLIB_MODE before
+! including the extension.
+
 Global menu_item;
 Global item_width;
 Global item_name;
@@ -55,6 +73,7 @@ Global menu_nesting;
 	}
 ];
 #IfNot;
+! v5+
 
 Constant NKEY__TX       = "N = next subject";
 Constant PKEY__TX       = "P = previous";
@@ -98,7 +117,12 @@ Constant QKEY2__KY      = 'q';
 	@set_cursor 1 1;
 
 	style reverse;
-	FastSpaces(i); j=1+(i-main_wid)/2;
+	FastSpaces(i);
+#Ifdef EXT_MENU_STDLIB_MODE;
+	j=1+(i/2-main_wid);
+#Ifnot;
+	j=1+(i-main_wid)/2;
+#Endif;
 	@set_cursor 1 j;
 	print (string) main_title;
 	y=1+ch; @set_cursor y 1; FastSpaces(i);
@@ -146,9 +170,12 @@ Constant QKEY2__KY      = 'q';
 
 			@erase_window $ffff;
 			@split_window ch;
-			i = HDR_SCREENWCHARS->0; if ( i== 0) i = 80;
 			@set_window 1; @set_cursor 1 1; style reverse; FastSpaces(i);
+#Ifdef EXT_MENU_STDLIB_MODE;
+			j=1+(i/2-item_width);
+#Ifnot;
 			j=1+(i-item_width)/2;
+#Endif;
 			@set_cursor 1 j;
 			print (string) item_name;
 			style roman; @set_window 0; new_line;
