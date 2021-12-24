@@ -193,12 +193,20 @@ Object Pub "Pub"
 ```
 
 Depending on the size of the text fragment that's repeated, you could save
-anywhere from a few bytes to a few hundred bytes. You can also tweak your text
-so very similar sentences end up being the same ("There is no power on the
-island" vs "There isn't any electricity on the island"). Using this technique
-repeatedly can yield savings of a few kilobytes in a long game, at the expense
-of making your code a bit less readable; just make sure you use explicit
-constant names.
+anywhere from a few bytes to a few hundred bytes.  Using this technique
+repeatedly can yield savings of a few kilobytes in a long game, at the
+expense of making your code a bit less readable; just make sure you use
+explicit constant names.
+
+One useful trick to identify such fragments quickly is to export the
+game's text into a file (`-r` switch in I6's compiler), then sort the lines
+alphabetically. You might then be able to identify identical strings, or
+strings whose beginning have a lot in common (which is great: all things
+being equal, replacing a prefix or a suffix by a constant is slightly
+better than replacing text in the middle of a string, since that's 2
+`print` opcodes vs 3). You can also tweak your text so very similar
+sentences end up being the same ("There is no power on the island" vs
+"There isn't any electricity on the island").
 
 ### Replace a switch with an array
 
