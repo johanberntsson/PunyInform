@@ -609,17 +609,19 @@ Array _PutOnMessages -->
 	PrintMsg(MSG_RUB_DEFAULT);
 ];
 
-[ SearchSub _f _i;
+[ SearchSub _i _plural _is_are_string;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(location == thedark) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
 #Endif;
 	if (ObjectIsUntouchable(noun)) return;
-	objectloop(_i in noun) if(_i hasnt concealed && _i hasnt scenery) _f++;
+	_plural = PrintContents(1, noun);
+	_is_are_string = IsAreString(_plural);
+
 	if(noun has supporter) {
-		if(_f == 0)
+		if(_plural == 0)
 			PrintMsg(MSG_SEARCH_NOTHING_ON);
 		else
-			PrintMsg(MSG_SEARCH_ON_IT_ISARE);
+			PrintMsg(MSG_SEARCH_ON_IT_ISARE, _is_are_string);
 		rtrue;
 	}
 	if(noun hasnt container) { PrintMsg(MSG_SEARCH_NOTHING_SPECIAL); rtrue; }
@@ -628,9 +630,9 @@ Array _PutOnMessages -->
 	}
 	if(AfterRoutines()) rtrue;
 	_i = MSG_SEARCH_EMPTY;
-	if(_f)
+	if(_plural)
 		_i = MSG_SEARCH_IN_IT_ISARE;
-	PrintMsg(_i);
+	PrintMsg(_i, _is_are_string);
 ];
 
 [ ShoutSub;

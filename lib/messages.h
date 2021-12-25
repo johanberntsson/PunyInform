@@ -892,11 +892,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_SEARCH_ON_IT_ISARE < 1000;
 	MSG_SEARCH_ON_IT_ISARE:
-		print "On ", (the) noun;
-		if (children(noun) == 1 && child(noun) hasnt pluralname)
-			print " is ";
-		else
-			print " are ";
+		print "On ", (the) noun, (string) p_arg_1;
 		PrintContents(0, noun);
 		".";
 #EndIf;

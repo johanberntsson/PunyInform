@@ -414,7 +414,12 @@ else
 	PrintShortName(p_obj);
 ];
 
-[ _PrintAfterEntry p_obj;
+[IsAreString p_plural;
+	if(p_plural == 2) return " are ";
+	return " is ";
+];
+
+[ _PrintAfterEntry p_obj _plural;
 	if(p_obj has container && P_obj hasnt open) print " (which is closed)";
 	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
 		print " (which ";
@@ -422,16 +427,32 @@ else
 		else print "is empty)";
 	}
 	if(p_obj has supporter && child(p_obj) ~= nothing) {
-		if(PrintContents(" (on which is ", p_obj)) print ")";
+		_plural = PrintContents(1, p_obj);
+		if(_plural) {
+			print " (on which";
+			PrintContents(IsAreString(_plural), p_obj);
+			print ")";
+		}
 	}
-!	if(p_obj has light && action == ##Inv) print " (providing light)";
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj has light && p_obj hasnt animate) print " (providing light)";
 #Endif;
 	if(p_obj has worn && action == ##Inv) print " (worn)";
 ];
 
-[ PrintContents p_first_text p_obj p_check_workflag _obj _printed_first_text _printed_any_objects _last_obj _show_obj;
+[ PrintContents p_first_text p_obj p_check_workflag
+		_obj _printed_first_text _printed_any_objects _last_obj _show_obj _plural;
+! Print the contents of p_obj. Return true if anything was printed.
+! If any objects are printed, prefix with p_first_text.
+! If p_check_work_flag is true, only print objects which have workflag set.
+!   Special parameters:
+!   - If _p_first_text is a routine, it will be called with p_obj as argument
+!   - If p_first_text is 0, no prefix string will be printed
+!   - If p_first_text is 1, don't print anything, but return:
+!       0 if there are no printable objects in/on p_obj
+!       1 if there's exactly one printable object and it doesn't have pluralname
+!       2 if there are 2+ printable objects or one object with pluralname
+
 !   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
 !print "Considering ", (object) _obj, "...^";
@@ -443,6 +464,14 @@ else
 			! don't show concealed or scenery in the normal case (look etc.),
 			! but allow it when listing inventory.
 			if(_obj has concealed or scenery) _show_obj = false;
+		}
+
+		if(p_first_text == 1) {
+			if(_show_obj) {
+				if(_plural || _obj has pluralname) return 2;
+				_plural = 1;
+			}
+			continue;
 		}
 
 		if(_show_obj) {
@@ -464,6 +493,9 @@ else
 			_last_obj = _obj;
 		}
 	}
+	if(p_first_text == 1)
+		return _plural;
+
 	if(_last_obj) {
 		if(_printed_any_objects) print " and ";
 		_PrintContentsPrintAnObj(_last_obj);

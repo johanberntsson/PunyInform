@@ -11,6 +11,14 @@ v3.4: bug fix and new feature release
 - Fixed missing "(which is empty)" for container holding only scenery or
   concealed objects (issue 99).
 - Added grammar for "look on table" (issue 97).
+- Improved "search (supporter)" message to use is/are more correctly.
+- Improved PrintContents to use is/are more correctly for supporters.
+- Added new mode for calling PrintContents: p = PrintContents(1, obj). Returns:
+    0 if there are no printable objects in/on p_obj
+    1 if there's exactly one printable object and it doesn't have pluralname
+    2 if there are 2+ printable objects or one object with pluralname
+- New routine IsAreString(p) where p is the return value from PrintContents.
+  IsAreString returns the string " is " or " are ".
 
 =======
 v3.3: bug fix and new feature release (18 December 2021)
