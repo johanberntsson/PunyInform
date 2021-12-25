@@ -106,7 +106,7 @@ Verb 'lock'
 Verb 'look' 'l//'
 	*                                           -> Look
 	* 'at' noun                                 -> Examine
-	* 'in'/'inside' noun						-> Search;
+	* 'in'/'inside'/'on' noun                   -> Search;
 
 Verb 'open' 'uncover' 'unwrap'
 	* noun                                      -> Open

@@ -361,7 +361,8 @@ Object CarPark "Car Park"
 		initial "Wow, this is a huge car park!",
 		description [;
 			"You are in a car park in front of the library.
-			You can enter to the north. There is a river off to the east.";],
+			You can enter to the north. There is a river off to the east.
+			A table stands inexplicably in the middle of the car park.";],
 		n_to Library,
 		sw_to [; "There's an angry dragon blocking the path!"; ],
 		e_to RiverBank,
@@ -390,7 +391,8 @@ Object -> Table "table"
 
 Object -> -> "obvious plate"
 	with
-		name 'obvious' 'plate';
+		name 'obvious' 'plate',
+		article "an";
 
 Object -> -> "concealed plate"
 	with
