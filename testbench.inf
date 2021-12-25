@@ -383,6 +383,21 @@ Object CarPark "Car Park"
 	has light reactive;
 #EndIf;
 
+Object -> Table "table"
+	with
+		name 'table',
+		has supporter scenery;
+
+Object -> -> "obvious plate"
+	with
+		name 'obvious' 'plate';
+
+Object -> -> "concealed plate"
+	with
+		name 'concealed' 'plate'
+	has concealed;
+
+
 Object -> Key "key"
 	with
 		description "It's a metal key, with a keyring attached to it.",
@@ -699,6 +714,10 @@ Object -> Aquarium "aquarium"
 		article "an",
 		description "A big glass aquarium with a lid.",
 	has container open openable transparent static enterable;
+
+Object ->-> Apple "apple"
+	with name 'apple',
+   	has concealed;
 
 Object -> LargeBox "The box" ! Set the object name to the name we want on the z3 status line when we're in the box. short_name will be used for all other cases.
 	with

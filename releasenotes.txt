@@ -8,6 +8,8 @@ v3.4: bug fix and new feature release
   should be set to half the name length of the item, just the way DoMenu works
   in the standard library (issue 96)
 - Fixed bad messsage for enter action with missing preposition (issue 95)
+- Fixed missing "(which is empty)" for container holding only scenery or
+  concealed objects (issue 99).
 
 =======
 v3.3: bug fix and new feature release (18 December 2021)

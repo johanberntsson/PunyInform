@@ -417,10 +417,9 @@ else
 [ _PrintAfterEntry p_obj;
 	if(p_obj has container && P_obj hasnt open) print " (which is closed)";
 	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
-		if(child(p_obj) == nothing)
-			print " (which is empty)";
-		else
-			if(PrintContents(" (which contains ", p_obj)) print ")";
+		print " (which ";
+		if(PrintContents("contains ", p_obj)) print ")";
+		else print "is empty)";
 	}
 	if(p_obj has supporter && child(p_obj) ~= nothing) {
 		if(PrintContents(" (on which is ", p_obj)) print ")";
