@@ -663,6 +663,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #IfDef SACK_OBJECT;
 #IfTrue MSG_SACK_PUTTING < 1000;
 	MSG_SACK_PUTTING:
+	! p_arg_1 = the object being put into SACK_OBJECT.
 		"(putting ", (the) p_arg_1, " into ", (the) SACK_OBJECT, " to make room)";
 #EndIf;
 #EndIf;
@@ -694,6 +695,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Ifndef SKIP_MSG_OPEN_YOU_CANT;
 	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT,
 	MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK, MSG_WEAR_NOT_CLOTHING:
+	! p_arg_1 = the base verb for this action ('open', 'close' etc).
 		"That doesn't seem to be something you can ", (verbname) p_arg_1, ".";
 #Endif;
 #Ifndef SKIP_MSG_TAKE_ANIMATE;
@@ -702,6 +704,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #Ifndef SKIP_MSG_TAKE_PLAYER_PARENT;
 	MSG_TAKE_PLAYER_PARENT, MSG_GO_FIRST_LEAVE, MSG_EXIT_FIRST_LEAVE:
+	! p_arg_1 = the object the player has to leave to perform the action.
 		"First, you'd have to leave ", (the) p_arg_1, ".";
 #Endif;
 #Iftrue MSG_OPEN_DEFAULT < 1000;
@@ -723,6 +726,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Ifndef SKIP_MSG_CLOSE_DEFAULT;
 	MSG_CLOSE_DEFAULT, MSG_ENTER_DEFAULT, MSG_LOCK_DEFAULT,
 	MSG_UNLOCK_DEFAULT, MSG_EXIT_DEFAULT:
+	! p_arg_1 = the base verb for this action ('open', 'close' etc).
 		"You ", (verbname) p_arg_1, " ", (the) noun, ".";
 #Endif;
 #Ifndef SKIP_MSG_GIVE_DEFAULT;
@@ -731,12 +735,14 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #Ifndef SKIP_MSG_ASKFOR_DEFAULT;
 	MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT, MSG_ORDERS_WONT:
+	! p_arg_1 = the actor which the player has asked to do something.
 		print_ret (The) p_arg_1, " has better things to do.";
 #Endif;
 #Ifndef SKIP_MSG_ENTER_NOT_OPEN;
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN,
 	MSG_GO_DOOR_CLOSED, MSG_EMPTY_IS_CLOSED, MSG_REMOVE_CLOSED:
-		"You can't, since ",(the) p_arg_1, " ", (isorare) p_arg_1, " closed.";
+	! p_arg_1 = the object which is closed, thus blocking the player's action.
+		"You can't, since ", (the) p_arg_1, " ", (isorare) p_arg_1, " closed.";
 #Endif;
 #Ifndef SKIP_MSG_GIVE_PLAYER;
 	MSG_GIVE_PLAYER, MSG_TAKE_ALREADY_HAVE:
@@ -800,14 +806,17 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #Iftrue MSG_AUTO_TAKE < 1000;
 	MSG_AUTO_TAKE:
+	! p_arg_1 = the object the player automatically picks up
 	print "(first taking ", (the) p_arg_1, ")^";
 #Endif;
 #Iftrue MSG_AUTO_DISROBE < 1000;
 	MSG_AUTO_DISROBE:
+	! p_arg_1 = the object the player automatically takes off.
 		print "(first taking off ", (the) p_arg_1, ")^";
 #Endif;
 #IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;
 	MSG_PARSER_NOTHING_TO_VERB:
+	! p_arg_1 = the last word in player input + 1.
 		if(action == ##Drop or ##Insert && (parse + 2 + (p_arg_1 - 2) *4)-->0 == ALL_WORD) {
 			"You are not carrying anything.";
 		}  else {
@@ -818,16 +827,20 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #Ifndef SKIP_MSG_PARSER_NOT_HOLDING;
 	MSG_PARSER_NOT_HOLDING, MSG_WAVE_NOTHOLDING:
+	! p_arg_1 = the object which the player must be holding to perform the
+	! action but isn't.
 		print_ret "But you are not holding ", (the) p_arg_1, ".";
 #Endif;
 #IfTrue MSG_PARSER_PARTIAL_MATCH < 1000;
 	MSG_PARSER_PARTIAL_MATCH:
+	! p_arg_1 = the word number of the last word understood + 1.
 		print "I only understood you as far as ~";
 		_PrintPartialMatch(verb_wordnum, p_arg_1);
 		"~ but then you lost me.";
 #EndIf;
 #IfTrue MSG_PARSER_CANT_TALK < 1000;
 	MSG_PARSER_CANT_TALK:
+	! p_arg_1 = the object which can't be talked to.
 		print_ret "You can't talk to ", (the) p_arg_1, ".";
 #EndIf;
 #IfTrue MSG_PARSER_NO_NEED_REFER_TO < 1000;
@@ -854,6 +867,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Ifndef SKIP_MSG_CLOSE_NOT_OPEN;
 	MSG_CLOSE_NOT_OPEN, MSG_TOUCHABLE_FOUND_CLOSED,
 	MSG_PARSER_CONTAINER_ISNT_OPEN:
+	! p_arg_1 = the object which isn't open.
 		print_ret (CObjIs) p_arg_1, "n't open.";
 #Endif;
 #IfTrue MSG_CONSULT_NOTHING_INTERESTING < 1000;
@@ -866,6 +880,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #Ifndef SKIP_MSG_LOCK_ALREADY_LOCKED;
 	MSG_LOCK_ALREADY_LOCKED, MSG_UNLOCK_ALREADY_UNLOCKED:
+	! p_arg_1 = the base verb for this action ('open', 'close' etc).
 		print_ret (CObjIs) noun, " already ", (verbname) p_arg_1, "ed.";
 #Endif;
 #IfTrue MSG_LOCK_CLOSE_FIRST < 1000;
@@ -878,6 +893,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #IfTrue MSG_EXAMINE_CLOSED < 1000;
 	MSG_EXAMINE_CLOSED:
+	! p_arg_1 = the examines object (which is closed).
 		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " closed.";
 #Endif;
 #IfTrue MSG_REMOVE_NOT_HERE < 1000;
@@ -886,14 +902,16 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_SEARCH_IN_IT_ISARE < 1000;
 	MSG_SEARCH_IN_IT_ISARE:
+		! p_arg_1 = " is " or " are ", which can be used to prefix the contents
 		print (The) noun, " contains ";
 		PrintContents(0, noun);
 		".";
 #EndIf;
 #IfTrue MSG_SEARCH_ON_IT_ISARE < 1000;
 	MSG_SEARCH_ON_IT_ISARE:
-		print "On ", (the) noun, (string) p_arg_1;
-		PrintContents(0, noun);
+		! p_arg_1 = " is " or " are ", which can be used to prefix the contents
+		print "On ", (the) noun;
+		PrintContents(p_arg_1, noun);
 		".";
 #EndIf;
 #IfTrue MSG_SEARCH_EMPTY < 1000;
@@ -926,10 +944,12 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #EndIf;
 #IfTrue MSG_TAKE_BELONGS < 1000;
 	MSG_TAKE_BELONGS:
+		! p_arg_1 = the object that is held by p_arg_2
 		print_ret (The) p_arg_1, " seems to belong to ", (the) p_arg_2, ".";
 #EndIf;
 #IfTrue MSG_TAKE_PART_OF < 1000;
 	MSG_TAKE_PART_OF:
+		! p_arg_1 = the object that is part of p_arg_2
 		print_ret (The) p_arg_1, " seems to be part of ", (the) p_arg_2, ".";
 #EndIf;
 #Ifndef OPTIONAL_NO_DARKNESS;
@@ -1022,6 +1042,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #EndIf;
 #IfTrue MSG_INSERT_NOT_CONTAINER < 1000;
 	MSG_INSERT_NOT_CONTAINER:
+		! p_arg_1 = the object that can't contain things
 		print_ret (The) p_arg_1, " can't contain things.";
 #Endif;
 #IfTrue MSG_YES_OR_NO < 1000;
@@ -1035,6 +1056,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #Ifndef NO_SCORE;
 #Iftrue MSG_PARSER_NEW_SCORE < 1000;
 	MSG_PARSER_NEW_SCORE:
+		! p_arg_1 = the old score
 		print "^[The score has just gone ";
 		if(p_arg_1 < score) {
 			p_arg_2 = score - p_arg_1;
@@ -1059,6 +1081,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #EndIf;
 #IfTrue MSG_EMPTY_ALREADY_EMPTY < 1000;
 	MSG_EMPTY_ALREADY_EMPTY:
+		! p_arg_1 = the object that is already empty
 		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " empty already.";
 #EndIf;
 #IfTrue MSG_SET_DEFAULT < 1000;

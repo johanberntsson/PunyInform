@@ -415,8 +415,8 @@ else
 ];
 
 [IsAreString p_plural;
-	if(p_plural == 2) return " are ";
-	return " is ";
+	if(p_plural == 2) return ARE_STR;
+	return IS_STR;
 ];
 
 [ _PrintAfterEntry p_obj _plural;
