@@ -414,33 +414,27 @@ else
 	PrintShortName(p_obj);
 ];
 
-[IsAreString p_plural;
+[ _IsAreString p_plural;
 	if(p_plural == 2) return ARE_STR;
 	return IS_STR;
 ];
 
-[ _PrintAfterEntry p_obj _plural;
+[ _PrintAfterEntry p_obj;
 	if(p_obj has container && P_obj hasnt open) print " (which is closed)";
 	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
 		print " (which ";
 		if(PrintContents("contains ", p_obj)) print ")";
 		else print "is empty)";
 	}
-	if(p_obj has supporter && child(p_obj) ~= nothing) {
-		_plural = PrintContents(1, p_obj);
-		if(_plural) {
-			print " (on which";
-			PrintContents(IsAreString(_plural), p_obj);
-			print ")";
-		}
-	}
+	if(p_obj has supporter)
+		if(PrintContents(" (on which", p_obj, ISARE_BIT)) print ")";
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj has light && p_obj hasnt animate) print " (providing light)";
 #Endif;
 	if(p_obj has worn && action == ##Inv) print " (worn)";
 ];
 
-[ PrintContents p_first_text p_obj p_check_workflag
+[ PrintContents p_first_text p_obj p_style
 		_obj _printed_first_text _printed_any_objects _last_obj _show_obj _plural;
 ! Print the contents of p_obj. Return true if anything was printed.
 ! If any objects are printed, prefix with p_first_text.
@@ -456,10 +450,9 @@ else
 !   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
 !print "Considering ", (object) _obj, "...^";
-!if(_obj has concealed) print "Is concealed."; else print "Isnt concealed.";
 		_show_obj =
 			_obj ~= parent(player) && ! don't print container when player in it
-			(p_check_workflag == false || _obj has workflag);
+			(p_style & WORKFLAG_BIT == 0 || _obj has workflag);
 		if(action ~= ##Inv) {
 			! don't show concealed or scenery in the normal case (look etc.),
 			! but allow it when listing inventory.
@@ -483,6 +476,8 @@ else
 				else if(p_first_text ~= 0)
 					p_first_text(p_obj);
 				_printed_first_text = 1;
+				if(p_style & ISARE_BIT)
+					print (string) _IsAreString(PrintContents(1, p_obj));
 			}
 			! Push obj onto queue, printing the object that is shifted out, if any
 			if(_last_obj) {

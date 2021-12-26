@@ -902,16 +902,14 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_SEARCH_IN_IT_ISARE < 1000;
 	MSG_SEARCH_IN_IT_ISARE:
-		! p_arg_1 = " is " or " are ", which can be used to prefix the contents
 		print (The) noun, " contains ";
 		PrintContents(0, noun);
 		".";
 #EndIf;
 #IfTrue MSG_SEARCH_ON_IT_ISARE < 1000;
 	MSG_SEARCH_ON_IT_ISARE:
-		! p_arg_1 = " is " or " are ", which can be used to prefix the contents
 		print "On ", (the) noun;
-		PrintContents(p_arg_1, noun);
+		PrintContents(p_arg_1, noun, ISARE_BIT);
 		".";
 #EndIf;
 #IfTrue MSG_SEARCH_EMPTY < 1000;

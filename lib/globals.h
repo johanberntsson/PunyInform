@@ -110,6 +110,10 @@ Constant SOMEDIRECTION_STR = "(some direction)";
 Constant IS_STR = " is ";
 Constant ARE_STR = " are ";
 
+Constant WORKFLAG_BIT  $0001;       ! At top level (only), only list objects
+                                    ! which have the "workflag" attribute
+Constant ISARE_BIT     $0002;       ! Print " is" or " are" before list
+
 #Ifndef DEFAULT_CAPACITY;
 Constant DEFAULT_CAPACITY = 100;
 #Endif;

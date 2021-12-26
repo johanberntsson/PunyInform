@@ -609,19 +609,18 @@ Array _PutOnMessages -->
 	PrintMsg(MSG_RUB_DEFAULT);
 ];
 
-[ SearchSub _i _plural _is_are_string;
+[ SearchSub _i _plural;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(location == thedark) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
 #Endif;
 	if (ObjectIsUntouchable(noun)) return;
 	_plural = PrintContents(1, noun);
-	_is_are_string = IsAreString(_plural);
 
 	if(noun has supporter) {
 		if(_plural == 0)
 			PrintMsg(MSG_SEARCH_NOTHING_ON);
 		else
-			PrintMsg(MSG_SEARCH_ON_IT_ISARE, _is_are_string);
+			PrintMsg(MSG_SEARCH_ON_IT_ISARE);
 		rtrue;
 	}
 	if(noun hasnt container) { PrintMsg(MSG_SEARCH_NOTHING_SPECIAL); rtrue; }
@@ -632,7 +631,7 @@ Array _PutOnMessages -->
 	_i = MSG_SEARCH_EMPTY;
 	if(_plural)
 		_i = MSG_SEARCH_IN_IT_ISARE;
-	PrintMsg(_i, _is_are_string);
+	PrintMsg(_i);
 ];
 
 [ ShoutSub;
