@@ -1750,7 +1750,7 @@ Array guess_object-->5;
 		_score = _ParsePattern(_pattern, PHASE1);
 
 #IfDef DEBUG_PARSEANDPERFORM;
-		print "### PHASE 1: result ", _score, " phase2 ", phase2_necessary, "^";
+		print "### PHASE 1: result ", _score, " phase2 ", phase2_necessary, " wn ", wn, "^";
 #EndIf;
 		! note that _ParsePattern will never return -1 in PHASE1
 		if(_score == 0) {
@@ -1835,9 +1835,10 @@ Array guess_object-->5;
 				}
 			} else {
 				! we didn't match the pattern at all
-				if((((_best_pattern - 1 + wn*3 )-> 0) & $0f) == TT_PREPOSITION) {
+				_i = ((_best_pattern - 1 + wn*3 )-> 0) & $0f;
+				if(_i == TT_PREPOSITION or TT_OBJECT) {
 					! missing preposition
-					_PrintPatternSyntax(_best_pattern -1, noun);
+					_PrintPatternSyntax(_best_pattern -1);
 				} else {
 					! some other problem
 					PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
