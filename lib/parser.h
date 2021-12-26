@@ -32,7 +32,7 @@ System_file;
 	return _ret;
 ];
 
-[ _FixIncompleteSentenceOrComplain p_pattern _token _type _data _noun _prep _second _num_preps _num_nouns;
+[ _FixIncompleteSentenceOrComplain p_pattern _token _type _noun _prep _second _num_nouns;
 	! Called because sentence shorter than the pattern
 	! Available data: wn, parse and p_pattern_token (last matched token)
 	!
@@ -78,6 +78,13 @@ System_file;
 #EndIf;
 
 	! write an error message and return false
+	_PrintPatternSyntax(p_pattern, _noun);
+	rfalse;
+];
+
+[ _PrintPatternSyntax p_pattern p_noun _num_preps _token _type _data;
+	! write what pattern we expected, something like:
+	! "I think you wanted to say "put all in something". Please try again."
 	PrintMsg(MSG_PARSER_BAD_PATTERN_PREFIX);
 	print (verbname) verb_word;
 	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
@@ -91,7 +98,7 @@ System_file;
 			++_num_preps;
 		} else {
 			@print_char ' ';
-			if(_noun == 0) {
+			if(p_noun == 0) {
 				if(_type == TT_ROUTINE_FILTER && _data == ADirection) {
 					print (string) SOMEDIRECTION_STR;
 				} else if(second == 0) {
@@ -103,7 +110,7 @@ System_file;
 				} else print (name) second;
 			} else {
 				if(noun ~= 0) {
-					_noun = 0; ! avoid repeat (and we don't need _noun anymore)
+					p_noun = 0; ! avoid repeat (we don't need p_noun anymore)
 					if(parser_all_found) print "all"; else print (name) noun;
 				} else if(_type == TT_OBJECT && _token->2 == CREATURE_OBJECT) {
 					print (string) SOMEONE_STR;
@@ -114,7 +121,6 @@ System_file;
 		}
 	}
 	PrintMsg(MSG_PARSER_BAD_PATTERN_SUFFIX);
-	rfalse;
 ];
 
 [ _AskWhichNoun p_num_matching_nouns _i;
@@ -1466,12 +1472,7 @@ Array guess_object-->5;
 #Endif;
 				continue; ! keep parsing
 			}
-
-			! write error messages if PHASE2 as needed
-			if(pattern_pointer->0 == TOKEN_LAST_PREP or TOKEN_SINGLE_PREP) {
-				! bad preposition
-				if(p_phase == PHASE2) PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
-			} else if(parser_unknown_noun_found ~= 0) {
+			if(parser_unknown_noun_found ~= 0) {
 				if(p_phase == PHASE2) {
 					_word = parser_unknown_noun_found --> 0;
 					if(scope_routine ~= 0) {
@@ -1834,7 +1835,13 @@ Array guess_object-->5;
 				}
 			} else {
 				! we didn't match the pattern at all
-				PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
+				if((((_best_pattern - 1 + wn*3 )-> 0) & $0f) == TT_PREPOSITION) {
+					! missing preposition
+					_PrintPatternSyntax(_best_pattern -1, noun);
+				} else {
+					! some other problem
+					PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
+				}
 			}
 		}
 		action = 0;

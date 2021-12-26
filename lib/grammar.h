@@ -159,8 +159,8 @@ Verb 'show' 'display' 'present'
 	* held 'to' creature                        -> Show;
 
 Verb 'sit' 'lie'
-	* 'on' 'top' 'of' noun                      -> Enter
-	* 'on'/'in'/'inside' noun                   -> Enter;
+	* 'on'/'in'/'inside' noun                   -> Enter
+	* 'on' 'top' 'of' noun                      -> Enter;
 
 Verb 'smell' 'sniff'
 	*                                           -> Smell

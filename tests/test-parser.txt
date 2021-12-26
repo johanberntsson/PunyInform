@@ -1,6 +1,6 @@
 
 > sit ladder
-I only understood you as far as "sit" but then you lost me.
+I think you wanted to say "sit on something". Please try again.
 
 > look ladder
 I only understood you as far as "look" but then you lost me.
@@ -63,7 +63,7 @@ Her: nothing
 Them: nothing
 
 > get ladder and
-I only understood you as far as "get ladder" but then you lost me.
+I think you wanted to say "get something". Please try again.
 
 > kiss ladder
 You can only do that to something animate.
@@ -128,7 +128,7 @@ I think you wanted to say "put all in something". Please try again.
 I don't understand that sentence.
 
 > put all except in box
-I only understood you as far as "put" but then you lost me.
+I think you wanted to say "put something in something". Please try again.
 
 > put all except book in box
 electric torch: You put the electric torch into the box.

@@ -24,6 +24,7 @@ v3.4: bug fix and new feature release
   prefix the list of contents.
 - Added comments to all messages in messages.h which receive one or two
   arguments.
+- More precise error messages failing with a missing preposition.
 
 =======
 v3.3: bug fix and new feature release (18 December 2021)
