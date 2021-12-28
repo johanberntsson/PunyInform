@@ -438,7 +438,7 @@ else
 		if(pc_indent > 0)
 			PrintContents(0, p_obj);
 		else
-			if(PrintContents(" (on which", p_obj, ISARE_BIT)) print (char) ')';
+			if(PrintContents(" (on which ", p_obj, ISARE_BIT)) print (char) ')';
 	}
 ];
 

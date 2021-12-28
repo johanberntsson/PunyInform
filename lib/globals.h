@@ -107,8 +107,8 @@ Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
 Constant SOMETHING_STR = "something";
 Constant SOMEONE_STR = "someone";
 Constant SOMEDIRECTION_STR = "(some direction)";
-Constant IS_STR = " is ";
-Constant ARE_STR = " are ";
+Constant IS_STR = "is ";
+Constant ARE_STR = "are ";
 
 #Ifndef DEFAULT_CAPACITY;
 Constant DEFAULT_CAPACITY = 100;

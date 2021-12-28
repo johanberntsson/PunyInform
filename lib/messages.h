@@ -918,7 +918,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #IfTrue MSG_SEARCH_ON_IT_ISARE < 1000;
 	MSG_SEARCH_ON_IT_ISARE:
 		print "On ", (the) noun;
-		PrintContents(p_arg_1, noun, ISARE_BIT);
+		PrintContents(" ", noun, ISARE_BIT);
 		".";
 #EndIf;
 #IfTrue MSG_SEARCH_EMPTY < 1000;
