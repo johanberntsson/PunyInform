@@ -86,8 +86,14 @@ Verb 'go'
 Verb 'insert'
     * multiexcept 'in'/'into' noun              -> Insert;
 
+#Ifdef OPTIONAL_FLEXIBLE_INVENTORY;
+Verb 'inventory' 'i//'
+	* -> Inv
+	* 'tall'/'wide' -> Inv;
+#Ifnot;
 Verb 'inventory' 'i//'
 	* -> Inv;
+#Endif;
 
 Verb 'jump'
 	*                                           -> Jump
@@ -500,7 +506,14 @@ Array _InsertMessages -->
 	_MoveNounToSecond(_InsertMessages);
 ];
 
+#Ifdef OPTIONAL_FLEXIBLE_INVENTORY;
+[ InvSub _mode;
+	_mode = WordValue(num_words);
+	if(_mode == 'tall') inventory_style = 0;
+	if(_mode == 'wide') inventory_style = 1;
+#Ifnot;
 [ InvSub;
+#Endif;
     if(PrintMsg(MSG_INVENTORY_DEFAULT) == false) {
 		PrintMsg(MSG_INVENTORY_EMPTY);
 	}

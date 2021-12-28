@@ -160,16 +160,11 @@ Array TenSpaces -> "          ";
 	@get_cursor cursor_pos;
 	_current_col = cursor_pos --> 1;
 
-	if(_current_col > p_col || cursor_pos --> 0 > 1) {
+	if(_current_col > p_col || cursor_pos --> 0 > 1)
 		_MoveCursor(1, p_col);
-	} else {
-		p_col = p_col - _current_col;
-		while(p_col > 10) {
-			@print_table TenSpaces 10;
-			p_col = p_col - 10;
-		}
-		@print_table TenSpaces p_col;
-	}
+	else
+		FastSpaces(p_col - _current_col);
+
 	if(p_string)
 		print (string) p_string;
 ];
@@ -420,22 +415,35 @@ else
 ];
 
 [ _PrintAfterEntry p_obj;
-	if(p_obj has container && P_obj hasnt open) print " (which is closed)";
-	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
-		print " (which ";
-		if(PrintContents("contains ", p_obj)) print ")";
-		else print "is empty)";
-	}
-	if(p_obj has supporter)
-		if(PrintContents(" (on which", p_obj, ISARE_BIT)) print ")";
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj has light && p_obj hasnt animate) print " (providing light)";
 #Endif;
 	if(p_obj has worn && action == ##Inv) print " (worn)";
+	if(p_obj has container && p_obj hasnt open) print " (which is closed)";
+	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
+		if(PrintContents(1, p_obj) == 0) {
+			print " (which is empty)";
+		} else {
+			if(pc_indent == 0) {
+				print " (which contains ";
+			}
+			PrintContents(0, p_obj);
+			if(pc_indent == 0) {
+				print (char) ')';
+			}
+		}
+
+	}
+	if(p_obj has supporter) {
+		if(pc_indent > 0)
+			PrintContents(0, p_obj);
+		else
+			if(PrintContents(" (on which", p_obj, ISARE_BIT)) print (char) ')';
+	}
 ];
 
 [ PrintContents p_first_text p_obj p_style
-		_obj _printed_first_text _printed_any_objects _last_obj _show_obj _plural;
+		_obj _printed_any_objects _last_obj _show_obj _plural;
 ! Print the contents of p_obj. Return true if anything was printed.
 ! If any objects are printed, prefix with p_first_text.
 ! If p_check_work_flag is true, only print objects which have workflag set.
@@ -446,6 +454,14 @@ else
 !       0 if there are no printable objects in/on p_obj
 !       1 if there's exactly one printable object and it doesn't have pluralname
 !       2 if there are 2+ printable objects or one object with pluralname
+
+	if(p_first_text ~= 1) {
+		! This is a call to print something
+		if(pc_indent <= 0 && p_style & NEWLINE_BIT) { ! Non-recursive call with request to indent
+			pc_indent = 2;
+		} else if(pc_indent > 0)
+			pc_indent = pc_indent + 2;
+	}
 
 !   print "Objectlooping...^";
 	objectloop(_obj in p_obj) {
@@ -468,20 +484,17 @@ else
 		}
 
 		if(_show_obj) {
-!			(_obj.&describe == 0 || _obj notin parent(player)) &&
-!			(_obj has moved || _obj.initial == 0 || _obj notin parent(player))) {
-			if(_printed_first_text == 0) {
+			if(_last_obj == 0) {
 				if(p_first_text ofclass String)
 					print (string) p_first_text;
 				else if(p_first_text ~= 0)
 					p_first_text(p_obj);
-				_printed_first_text = 1;
 				if(p_style & ISARE_BIT)
 					print (string) _IsAreString(PrintContents(1, p_obj));
 			}
 			! Push obj onto queue, printing the object that is shifted out, if any
 			if(_last_obj) {
-				if(_printed_any_objects) print ", ";
+				if(_printed_any_objects && pc_indent <= 0) print ", ";
 				_PrintContentsPrintAnObj(_last_obj);
 				_printed_any_objects = 1;
 			}
@@ -492,14 +505,17 @@ else
 		return _plural;
 
 	if(_last_obj) {
-		if(_printed_any_objects) print " and ";
+		if(_printed_any_objects && pc_indent <= 0) print " and ";
 		_PrintContentsPrintAnObj(_last_obj);
+		_printed_any_objects = 1;
 	}
-
-	return _printed_first_text;
+	if(pc_indent > 0)
+		pc_indent = pc_indent - 2;
+	return _printed_any_objects;
 ];
 
 [ _PrintContentsPrintAnObj p_obj _inv _skip;
+	if(pc_indent > 0) { new_line; FastSpaces(pc_indent); }
 	if(p_obj.invent ~= 0) {
 		_inv = true;
 		inventory_stage = 1;
@@ -513,6 +529,22 @@ else
 		}
 		_PrintAfterEntry(p_obj);
 	}
+];
+
+[ FastSpaces p_spaces;
+#Ifv3;
+	while(p_spaces >= 6) {
+		print "      ";
+		p_spaces = p_spaces - 6;
+	}
+	for( : p_spaces > 0 : p_spaces--) @print_char ' ';
+#Ifnot;
+	while(p_spaces > 10) {
+		@print_table TenSpaces 10 1;
+		p_spaces = p_spaces - 10;
+	}
+	@print_table TenSpaces p_spaces 1;
+#Endif;
 ];
 
 [ RunRoutines p_obj p_prop p_switch;

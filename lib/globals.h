@@ -110,10 +110,6 @@ Constant SOMEDIRECTION_STR = "(some direction)";
 Constant IS_STR = " is ";
 Constant ARE_STR = " are ";
 
-Constant WORKFLAG_BIT  $0001;       ! At top level (only), only list objects
-                                    ! which have the "workflag" attribute
-Constant ISARE_BIT     $0002;       ! Print " is" or " are" before list
-
 #Ifndef DEFAULT_CAPACITY;
 Constant DEFAULT_CAPACITY = 100;
 #Endif;
@@ -428,6 +424,7 @@ Global themobj = 0;       ! The object which is currently "them"
 Global top_object;
 Global newline_flag;     ! Used by Look
 Global also_flag;        ! Used by Look
+Global inventory_style = 1;
 Global inventory_stage;
 Global phase2_necessary;
 Global receive_action;
@@ -492,6 +489,12 @@ Global PrintMsg = _PrintMsg;        ! Using a global for this saves one byte per
 Constant MAX_FLOATING_OBJECTS  32;            ! Max number of objects that have found_in property
 #Endif; ! MAX_FLOATING_OBJECTS
 Array floating_objects --> MAX_FLOATING_OBJECTS + 1;
+
+Constant WORKFLAG_BIT  $0001;       ! At top level (only), only list objects
+                                    ! which have the "workflag" attribute
+Constant ISARE_BIT     $0002;       ! Print " is" or " are" before list
+Constant NEWLINE_BIT   $0004;       ! Print newline after each entry
+Global pc_indent = 0;				! 0 means PrintContents is not running
 
 Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
 Array which_level-->MAX_WHICH_OBJECTS;        ! type of which_object

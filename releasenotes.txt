@@ -15,9 +15,10 @@ v3.4: bug fix and new feature release
 - Improved PrintContents to use is/are more correctly for supporters.
 - Changed workflag-parameter for PrintContents to be called style. Style can be
   omitted or 0, or you can add one or more bit values. The ones currently
-  supported are ISARE_BIT (print "is" or "are" before list) and WORKFLAG_BIT
-  (only print objects which have workflag set). Existing calls to PrintContents
-  don't have to be changed.
+  supported are ISARE_BIT (print "is" or "are" before list), WORKFLAG_BIT
+  (only print objects which have workflag set), and NEWLINE_BIT (print each
+  object indented, on a new line). Existing calls to PrintContents don't have
+  to be changed.
 - Added new mode for calling PrintContents: p = PrintContents(1, obj). Returns:
     0 if there are no printable objects in/on p_obj
     1 if there's exactly one printable object and it doesn't have pluralname
@@ -27,6 +28,11 @@ v3.4: bug fix and new feature release
 - Added comments to all messages in messages.h which receive one or two
   arguments.
 - More precise error messages failing with a missing preposition.
+- Game code can change the inventory format by setting inventory_format to
+  0 (tall) or 1 (wide).
+- New constant OPTIONAL_FLEXIBLE_INVENTORY enables "i tall/wide" to switch
+  inventory format.
+- New public routine FastSpaces(n) to print n space characters efficiently.
 
 =======
 v3.3: bug fix and new feature release (18 December 2021)
