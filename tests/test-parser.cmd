@@ -78,6 +78,12 @@ get blue and blue
 get blue
 take book
 n
+take bag
+put sweater in bag
+i
+i tall
+i wide
+drop all
 quit
 yes
 

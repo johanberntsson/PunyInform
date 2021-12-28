@@ -27,6 +27,7 @@ Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
 !Constant DEBUG_SCOPE;
 ! Uncomment to add optional features to PunyInform
 !Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_FLEXIBLE_INVENTORY;
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
@@ -778,7 +779,7 @@ Object -> infiniteBag "infinite bag"
 		name 'infinite' 'bag',
 		article "an",
 		description "An infinitely deep bag.",
-	has container open openable;
+	has container open openable light;
 
 Book -> GreenBook "green book"
     with
