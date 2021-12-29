@@ -13,7 +13,7 @@ v3.4: bug fix and new feature release
 - Added grammar for "look on table" (issue 97).
 - Improved "search (supporter)" message to use is/are more correctly.
 - Improved PrintContents to use is/are more correctly for supporters.
-- Changed workflag-parameter for PrintContents to be called style. Style can be
+- Changed workflag-parameter for PrintContents to be called p_style. It can be
   omitted or 0, or you can add one or more bit values. The ones currently
   supported are ISARE_BIT (print "is" or "are" before list), WORKFLAG_BIT
   (only print objects which have workflag set), and NEWLINE_BIT (print each
@@ -23,8 +23,8 @@ v3.4: bug fix and new feature release
     0 if there are no printable objects in/on p_obj
     1 if there's exactly one printable object and it doesn't have pluralname
     2 if there are 2+ printable objects or one object with pluralname
-- New routine _IsAreString(p) to return string " is " or " are ". Used by
-  PrintContents.
+- New routine _IsAreString(p) to return string "is " or "are ". Used by
+  _PrintContents. Note: Not a public routine.
 - Added comments to all messages in messages.h which receive one or two
   arguments.
 - More precise error messages failing with a missing preposition.
