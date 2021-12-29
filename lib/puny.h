@@ -424,9 +424,10 @@ else
 		if(PrintContents(1, p_obj) == 0) {
 			print " (which is empty)";
 		} else {
-			if(pc_indent == 0) {
+			if(pc_indent == 0)
 				print " (which contains ";
-			}
+			else if(p_obj has open)
+				print " (which is open)";
 			PrintContents(0, p_obj);
 			if(pc_indent == 0) {
 				print (char) ')';
