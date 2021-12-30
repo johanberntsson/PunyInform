@@ -10,7 +10,9 @@
 ! each scenery object, specify, in this order, one adjective, one noun, and one
 ! description string or a routine to print one. Instead of an adjective, you
 ! may give a synonym to the noun. If no adjective or synonym is needed,
-! use the value 1 in that position.
+! use the value 1 in that position. You can also give 2 as the adjective value
+! and give a routine which will act as a parse_name routine in the noun
+! position.
 !
 ! Note: If you want to use this library extension is a Z-code version 3 game,
 ! you must NOT declare cheap_scenery as a common property, or it will only be
@@ -56,66 +58,83 @@
 !      flying high up above.",
 !	 cheap_scenery
 !      'blue' 'water' SCN_WATER
-!      'bird' 'birds' "They seem so careless."
-!      1 'sun' SCN_SUN,
+!      'bird' 'birds' "They seem so carefree."
+!      1 'sun' SCN_SUN
+!      2 [ i; while(NextWord() == 'huge' or 'car' or 'park') i++; return i;] "Nice!",
+!
 !   has light;
 
 
 System_file;
 
-#IfnDef RUNTIME_ERRORS;
+#Ifndef RUNTIME_ERRORS;
 Constant RUNTIME_ERRORS = 2;
-#EndIf;
-#IfnDef RTE_MINIMUM;
+#Endif;
+#Ifndef RTE_MINIMUM;
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL = 1;
 Constant RTE_VERBOSE = 2;
-#EndIf;
+#Endif;
 
 Object CheapScenery "object"
 	with
 		article "an",
 		number 0,
-		parse_name [ _w1 _w2 _i _sw1 _sw2 _len;
+		parse_name [ _w1 _w2 _i _sw1 _sw2 _len _base_wn _ret;
+			_base_wn = wn;
 			_w1 = NextWordStopped();
 			_w2 = NextWordStopped();
-			_i = 0;
 			_len = location.#cheap_scenery / 2;
-#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
-			if(_len % 3 > 0)
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+			if(_len % 3 > 0) {
+	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 				"ERROR: cheap_scenery property of current location has
 					incorrect # of values!^";
-#IfNot;
-			if(_len % 3 > 0)
+	#Ifnot;
 				"ERROR: cheap_scenery #1!^";
-#EndIf;
-			while(_i < _len) {
-				_sw1 = location.&cheap_scenery-->(_i+2);
-#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
-				if(~~(_sw1 ofclass String or Routine))
-					"ERROR: Element ", _i+2, " in cheap_scenery property of
-						current location is not a string or routine!^",
-						"Element: ", (name) _sw1, "^";
-#IfNot;
-				if(~~(_sw1 ofclass String or Routine))
-					"ERROR: cheap_scenery #2!^";
-#EndIf;
-
-				_i = _i + 3;
+	#Endif;
 			}
-			_i = 0;
-#endif;
+#Endif;
 			while(_i < _len) {
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+				if(metaclass(location.&cheap_scenery-->(_i+2)) ~= String or Routine) {
+	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
+					"ERROR: Element ", _i+2, " in cheap_scenery property of
+						current location is not a string or routine!^";
+	#Ifnot;
+					"ERROR: cheap_scenery #2!^";
+	#Endif;
+				}
+#Endif;
 				_sw1 = location.&cheap_scenery-->_i;
 				_sw2 = location.&cheap_scenery-->(_i+1);
-				if(_w1 == _sw1 && _w2 == _sw2) {
-					self.number = _i;
-					return 2;
-				}
-				if(_w1 == _sw1 or _sw2) {
-					self.number = _i;
-					return 1;
+				if(_sw1 == 2) {
+					wn = _base_wn;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+					if(metaclass(_sw2) ~= Routine) {
+	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
+						"ERROR: Element ", _i+1, " in cheap_scenery property of
+							current location should be a parse_name routine but
+							isn't!^";
+	#Ifnot;
+						"ERROR: cheap_scenery #3!^";
+	#Endif;
+					}
+#Endif;
+					_ret = _sw2();
+					if(_ret > 0) {
+						self.number = _i;
+						return _ret;
+					}
+				} else {
+					if(_w1 == _sw1 && _w2 == _sw2) {
+						self.number = _i;
+						return 2;
+					}
+					if(_w1 == _sw1 or _sw2) {
+						self.number = _i;
+						return 1;
+					}
 				}
 				_i = _i + 3;
 			}

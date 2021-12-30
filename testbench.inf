@@ -355,7 +355,6 @@ Class Book
 		],
 	has openable;
 
-
 Object CarPark "Car Park"
 	with
 		!short_name [; print "In front of the library!"; rtrue; ],
@@ -363,7 +362,8 @@ Object CarPark "Car Park"
 		description [;
 			"You are in a car park in front of the library.
 			You can enter to the north. There is a river off to the east.
-			A table stands inexplicably in the middle of the car park.";],
+			A table stands inexplicably in the middle of the car park.
+			A weird smell permeats the air.";],
 		n_to Library,
 		sw_to [; "There's an angry dragon blocking the path!"; ],
 		e_to RiverBank,
@@ -374,6 +374,11 @@ Object CarPark "Car Park"
 					"^The sound of many birds comes from the east.");
 			"";
 		],
+		cheap_scenery
+			1 'library' "It's a very nice library."
+			2 [ i; while(NextWord() == 'fabulous' or 'huge' or 'car' or 'park') i++; return i;]
+				"A fabulous, huge car park!"
+			'weird' 'smell' "A bit like a skunk really.",
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** CarPark.after^"; ],
 		before [; print "*** CarPark.before^"; ],
@@ -384,6 +389,11 @@ Object CarPark "Car Park"
 #IfNot;
 	has light reactive;
 #EndIf;
+
+Object -> Blue  "blue table"
+	with
+		name 'blue' 'table',
+		has supporter scenery;
 
 Object -> Table "table"
 	with
