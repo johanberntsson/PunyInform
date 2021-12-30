@@ -1,49 +1,18 @@
 ! PunyInform: A small stdlib and parser for interactive fiction
 ! suitable for old-school computers such as the Commodore 64.
 ! Designed to be similar, but not identical, to the Inform 6 library.
-!
-! Reference documentation
-! DM: http://www.inform-fiction.org/manual/html/dm4index.html
+
+! Most public routines, as described in DM4, are available for a game
+! developer. See the manual in the documentation folder for a full list
+! of these routines, as well as additional useful routines that are
+! PunyInform only.
+
+! Reference documentation:
+! DM4: http://www.inform-fiction.org/manual/html/dm4index.html
 ! Tech: https://www.inform-fiction.org/source/tm/TechMan.txt
 ! Z-machine: https://www.inform-fiction.org/zmachine/standards/z1point1
-!
-! Public routines (described in DM, available for a game developer)
-! LIBRARY ROUTINES:
-! - CommonAncestor
-! - DrawStatusLine
-! - IndirectlyContains
-! - InScope
-! - LoopOverScope
-! - NextWord
-! - NextWordStopped
-! - NumberWord
-! - NumberWords
-! - ObjectIsUntouchable
-! - PlayerTo
-! - ParseToken
-! - PlaceInScope
-! - PronounNotice
-! - ScopeWithin
-! - SetTime
-! - TestScope
-! - TryNumber
-! - WordAddress
-! - WordLength
-! - WordValue
-! - YesOrNo
-! OTHERS:
-! - PrintOrRun
-! - RunRoutines
-! PRINT UTILITIES:
-! - CTheyreorThats
-! - ItorThem
-! - IsOrAre
-! PUNYINFORM ONLY:
-! - OnOff
-! - PrintMsg
-! - RunTimeError
 
-! comment/uncomment to restrict default debug messages behaviour
+! Comment/uncomment to restrict default debug messages behaviour
 ! (all can be overridden by adding them in the game source)
 !Constant DEBUG_SCOPE;
 !Constant DEBUG_CHECKNOUN;
