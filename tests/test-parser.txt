@@ -330,7 +330,7 @@ The blue book glows annoyingly.
 
 > i tall
 You're carrying:
-  an infinite bag (providing light)
+  an infinite bag (providing light) (which is open)
     a sweater
   a blue book (providing light)
 
