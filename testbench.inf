@@ -20,7 +20,7 @@ Constant USEINFORM;
 Statusline time;
 !Constant STATUSLINE_SCORE; Statusline score;
 
-Constant RUNTIME_ERRORS = 2; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
+Constant RUNTIME_ERRORS = 0; ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 
 #IfnDef USEINFORM;
 ! Uncomment to add optional features to PunyInform
@@ -374,11 +374,16 @@ Object CarPark "Car Park"
 					"^The sound of many birds comes from the east.");
 			"";
 		],
+		scenery_outdoors
+			CS_NO_ADJ 'air' "The air is fresh here!"
+            'soil' 'dirt' "The ground is damp after last night's rain.",
 		cheap_scenery
 			1 'library' "It's a very nice library."
 			2 [ i; while(NextWord() == 'fabulous' or 'huge' or 'car' or 'park') i++; return i;]
 				"A fabulous, huge car park!"
-			'weird' 'smell' "A bit like a skunk really.",
+			'weird' 'smell' "A bit like a skunk really."
+            'soil' 'dirt' "The ground is surprisingly dry here!"
+			CS_ADD_LIST CarPark (scenery_outdoors),
 #IfDef TEST_BEFOREAFTER;
 		after [; print "*** CarPark.after^"; ],
 		before [; print "*** CarPark.before^"; ],
@@ -478,7 +483,8 @@ Object RiverBank "River Bank"
 		cheap_scenery
 			'blue' 'water' SCN_WATER
 			'bird' 'birds' "They seem so carefree."
-			1 'sun' SCN_SUN,
+			CS_NO_ADJ 'sun' SCN_SUN
+			CS_ADD_LIST CarPark (scenery_outdoors),
 	has light;
 
 Object -> Microphone "microphone"
