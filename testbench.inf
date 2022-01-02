@@ -378,8 +378,8 @@ Object CarPark "Car Park"
 			CS_NO_ADJ 'air' "The air is fresh here!"
             'soil' 'dirt' "The ground is damp after last night's rain.",
 		cheap_scenery
-			1 'library' "It's a very nice library."
-			2 [ i; while(NextWord() == 'fabulous' or 'huge' or 'car' or 'park') i++; return i;]
+			CS_NO_ADJ 'library' "It's a very nice library."
+			CS_PARSE_NAME [ i; while(NextWord() == 'fabulous' or 'huge' or 'car' or 'park') i++; return i;]
 				"A fabulous, huge car park!"
 			'weird' 'smell' "A bit like a skunk really."
             'soil' 'dirt' "The ground is surprisingly dry here!"
