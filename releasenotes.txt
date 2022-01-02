@@ -1,5 +1,7 @@
+v3.5: bug fix and new feature release
+
 =======
-v3.4: bug fix and new feature release
+v3.4: bug fix and new feature release (2 January 2022)
 
 - _IsSentenceDivider was using dictionary words directly for 'then' and 'and'
   although there are constants to be used. Fixed.
