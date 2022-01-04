@@ -35,11 +35,15 @@ v3.4: bug fix and new feature release (2 January 2022)
 - New constant OPTIONAL_FLEXIBLE_INVENTORY enables "i tall/wide" to switch
   inventory format.
 - New public routine FastSpaces(n) to print n space characters efficiently.
-- ext_cheap_scenery has a new option: Give 2 as the adjective value and a
-  routine that works like a parse_name routine as the noun value to allow
-  for long names and names with certain rules. However, two items in the
-  cheap_scenery list can never compete - the first one that matches at least
-  one word wins.
+- ext_cheap_scenery has a new option: Give CS_PARSE_NAME (=2) as the adjective
+  value and a routine that works like a parse_name routine as the noun value
+  to allow for long names and names with certain rules. However, two items in
+  the cheap_scenery list can never compete - the first one that matches at
+  least one word wins.
+- ext_cheap_scenery has a new option: Give CS_ADD_LIST (=3) as the adjective
+  value and an object as the noun value and a property name as the description
+  value, to include a list of cheap scenery objects in the current list.
+- New optimization tip added to Game Author's Guide.
 
 =======
 v3.3: bug fix and new feature release (18 December 2021)

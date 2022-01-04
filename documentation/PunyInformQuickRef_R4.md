@@ -1,23 +1,9 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v3.3 quick reference** |
+| **PunyInform v3.4 quick reference** |
 
   
-Document Release 3. More information on last page.
-
-# Library objects
-
-## Directions **PUNY++**
-
-###### Represents all directions. The *selected_direction* variable holds the matched direction (e.g. *n_to*) or 0.
-
-## selfobj
-
-###### The default player object. It’s better to use the *player* variable which normally refers to this.
-
-## thedark
-
-###### A fake room which *location* points to when it’s dark in *real_location*. The player is never moved to *thedark*.
+Document Release 4. More information on last page.
 
 # Library variables
 
@@ -56,6 +42,10 @@ Document Release 3. More information on last page.
 ## inventory_stage
 
 ###### See *invent* property.
+
+## inventory_style
+
+###### 0 = tall, 1 = wide. Can be set by game. If *OPTIONAL_FLEXIBLE_INVENTORY* has been defined, player can change it ("inventory tall/wide").
 
 ## keep_silent
 
@@ -239,6 +229,10 @@ Document Release 3. More information on last page.
 
 ###### Enable directions NE, NW, SE, SW.
 
+## OPTIONAL_FLEXIBLE_INVENTORY **PUNY++**
+
+###### Allow player to change inventory style ("i tall/wide")
+
 ## OPTIONAL_FULL_SCORE **PUNY++**
 
 ###### Enable the *'fullscore'* verb, and optionally support for tasks (See *TASKS_PROVIDED*).
@@ -341,9 +335,13 @@ Document Release 3. More information on last page.
 
 ###### Print the statusline, in a z5 or z8 game.
 
+## FastSpaces(number) **PUNY++**
+
+###### Print *number* spaces in an efficient manner.
+
 ## IndirectlyContains(object1, object2)
 
-###### Return *true* if *object1* holds *object2*, on some level.
+###### Return *true* if *object1* holds *object2*, on some level.* *
 
 ## LoopOverScope(routine, actor)
 
@@ -389,9 +387,9 @@ Document Release 3. More information on last page.
 
 ###### Move player to *object*, which must be a room or an enterable object. If *flag* is *0* or omitted, print a long room description. If *flag* is *1*, keep quiet. If *flag* is *2*, print a room description based on the *lookmode* value.
 
-## PrintContents(text, object, flag) **PUNY++**
+## PrintContents(text, object, style) **PUNY++**
 
-###### Recursively list the contents of *object*. Hide items that have *concealed* or *scenery*, unless *action* is *##Inv*.. Print or run *text* before the first item. If *flag* is *true*, only print objects which have the *workflag* attribute set. Return *true* if any objects were listed.
+###### Recursively list contents of *object*. Hide items that have *concealed* or *scenery*, unless *action* is *##Inv*.. Print or run *text* (unless 0) before first item. If *style* has *WORKFLAG_BIT *set, only print objects which have the *workflag* attribute. If style has *ISARE_BIT* set, print "is" or "are" before list. If it has *NEWLINE_BIT* set, print each object on a new line. Return *true* if any objects were listed. Call with *text==1* to not print anything but return *0* if *object* contains no printable objects, *1* if contents can be prefixed with "is", *2* for "are". 
 
 ## PrintMsg(msg, arg1, arg2) **PUNY++**
 
@@ -574,7 +572,19 @@ circumstances stated for each routine.
 
 ###### When the parser doesn’t recognize the verb. Return a dictionary word to use as the verb instead, or *false*.
 
-## 
+# Library objects
+
+## Directions **PUNY++**
+
+###### Represents all directions. The *selected_direction* variable holds the matched direction (e.g. *n_to*) or 0.
+
+## selfobj
+
+###### The default player object. It’s better to use the *player* variable which normally refers to this.
+
+## thedark
+
+###### A fake room which *location* points to when it’s dark in *real_location*. The player is never moved to *thedark*.
 
 # Group 1 actions
 
