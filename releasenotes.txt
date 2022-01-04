@@ -1,5 +1,9 @@
 v3.5: bug fix and new feature release
 
+- Don't print the option to UNDO if the player has won the game, only if they
+  lost.
+- Don't print the option to UNDO if the interpreter says it doesn't support it.
+
 =======
 v3.4: bug fix and new feature release (2 January 2022)
 
