@@ -362,11 +362,13 @@ Object CarPark "Car Park"
 		description [;
 			"You are in a car park in front of the library.
 			You can enter to the north. There is a river off to the east.
+			Alpha Repair can be seen to the south.
 			A table stands inexplicably in the middle of the car park.
 			A weird smell permeats the air.";],
 		n_to Library,
 		sw_to [; "There's an angry dragon blocking the path!"; ],
 		e_to RiverBank,
+		s_to AlphaRepair,
 		each_turn [;
 			print (string) random(
 					"^An owl is howling nearby.",
@@ -379,8 +381,9 @@ Object CarPark "Car Park"
             'soil' 'dirt' "The ground is damp after last night's rain.",
 		cheap_scenery
 			CS_NO_ADJ 'library' "It's a very nice library."
-			CS_PARSE_NAME [ i; while(NextWord() == 'fabulous' or 'huge' or 'car' or 'park') i++; return i;]
-				"A fabulous, huge car park!"
+			CS_PARSE_NAME [ i;
+			    while(NextWord() == 'fabulous' or 'huge' or 'car' or 'park') i++; return i;]
+			  "A fabulous, huge car park!"
 			'weird' 'smell' "A bit like a skunk really."
             'soil' 'dirt' "The ground is surprisingly dry here!"
 			CS_ADD_LIST CarPark (scenery_outdoors),
@@ -550,6 +553,35 @@ Object -> paperclip "paperclip"
 	with
 	 	name 'paperclip' 'clip',
 		describe "^There is a paperclip here.";
+
+Object AlphaRepair "Alpha Repair"
+	with
+		description "You're in alpha repair. The car park lies to the north,
+			while beta repair lies to the south. The alpha repair panel and
+			the conveyor belt are the most obvious features here.",
+		n_to CarPark,
+		s_to BetaRepair,
+		repair_name 'alpha',
+		cheap_scenery
+			CS_PARSE_NAME
+				[ i;
+					while(NextWord()==self.repair_name or 'repair' or 'panel')
+						i++;
+					return i;
+				]
+				[; "The ", (address) self.repair_name, " repair panel looks ok."; ]
+			'conveyor' 'belt' "It doesn't look broken.",
+	has light;
+
+Object BetaRepair "Beta Repair"
+	with
+		description "You're in beta repair. Alpha repair lies to the north.
+			The beta repair panel and the conveyor
+			belt are the most obvious features here.",
+		n_to AlphaRepair,
+		repair_name 'beta',
+		cheap_scenery CS_ADD_LIST AlphaRepair (cheap_scenery),
+	has light;
 
 Object Toilet "The toilet"
 	with
@@ -1238,3 +1270,40 @@ Include "Grammar";
 
 Extend 'remove' first
 	* noun=NotHeld -> Take;
+
+Constant MAX_NUMS = 5;
+Array entered --> MAX_NUMS + 1;
+
+[ EnterNumGPR num count;
+	while(true) {
+		num = TryNumber(wn);
+		if(wn <= num_words && num >= 0) {
+			wn++;
+			count++;
+			if(count <= MAX_NUMS)
+				entered-->count = num;
+		} else {
+			if(count == 0) return GPR_FAIL;
+			entered-->0 = count;
+			return GPR_PREPOSITION;
+		}
+	}
+];
+
+[EnterNumbersSub i;
+	i = 0;
+#Ifdef DEBUG;
+	for(i = 1 : i <= entered-->0 : i++)
+		print "ENTERED NUM: ", entered-->i, "^";
+#Endif;
+	"That's hardly useful.";
+];
+
+[EnterTopicSub;
+	"You need to enter one or more numbers, like ENTER 123 456.";
+];
+
+
+Extend 'enter'
+	* EnterNumGPR -> EnterNumbers
+	* topic -> EnterTopic;
