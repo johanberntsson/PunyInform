@@ -1014,8 +1014,13 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 	MSG_RESTART_RESTORE_OR_QUIT:
 		print "^Would you like to RESTART, RESTORE";
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
-		if(((0->17) & 16) ~= 0 && deadflag ~= GS_WIN)
-			print ", UNDO the last move";
+	#Ifdef DEATH_MENTION_UNDO;
+			if(((HDR_GAMEFLAGS->1) & 16) ~= 0)
+				print ", UNDO the last move";
+	#Ifnot;
+			if(((HDR_GAMEFLAGS->1) & 16) ~= 0 && deadflag ~= GS_WIN)
+				print ", UNDO the last move";
+	#Endif;
 #Endif;
 #IfDef OPTIONAL_FULL_SCORE;
 		print ", give the FULL score for that game";

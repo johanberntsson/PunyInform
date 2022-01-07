@@ -2,6 +2,8 @@ v3.5: bug fix and new feature release
 
 - Don't print the option to UNDO if the player has won the game, only if they
   lost.
+- If the game defines DEATH_MENTION_UNDO, print the option to undo even if the
+  player won.
 - Don't print the option to UNDO if the interpreter says it doesn't support it.
 
 =======

@@ -68,7 +68,7 @@ Constant Headline   "^A sandbox for PunyInform development^";
 Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC (jiffies since start) can be read from $1c-->0
 #EndIf;
 
-
+Constant DEATH_MENTION_UNDO;
 Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 

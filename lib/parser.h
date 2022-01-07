@@ -1723,7 +1723,7 @@ Array guess_object-->5;
 !   print "Word 2: ", (parse + 6)-->0, "^";
 !   print "Word 3: ", (parse + 10)-->0, "^";
 	_i = 255 - (_word_data->1); ! was _verb_num
-	_verb_grammar = (HDR_STATIC_MEM-->0)-->_i;
+	_verb_grammar = (HDR_STATICMEMORY-->0)-->_i;
 
 #IfDef DEBUG_PARSEANDPERFORM;
 	print "Verb#: ",_i,", meta ",meta,".^";

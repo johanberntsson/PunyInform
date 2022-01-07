@@ -86,6 +86,41 @@ Constant Grammar__Version = 2;
 Constant INDIV_PROP_START 64;
 Constant NULL         = $ffff;
 
+! Z-code header constants
+Constant HDR_ZCODEVERSION  $00;     ! byte
+Constant HDR_TERPFLAGS     $01;     ! byte
+Constant HDR_GAMERELEASE   $02;     ! word
+Constant HDR_HIGHMEMORY    $04;     ! word
+Constant HDR_INITIALPC     $06;     ! word
+Constant HDR_DICTIONARY    $08;     ! word
+Constant HDR_OBJECTS       $0A;     ! word
+Constant HDR_GLOBALS       $0C;     ! word
+Constant HDR_STATICMEMORY  $0E;     ! word
+Constant HDR_GAMEFLAGS     $10;     ! word
+Constant HDR_GAMESERIAL    $12;     ! six ASCII characters
+Constant HDR_ABBREVIATIONS $18;     ! word
+Constant HDR_FILELENGTH    $1A;     ! word
+Constant HDR_CHECKSUM      $1C;     ! word
+Constant HDR_TERPNUMBER    $1E;     ! byte
+Constant HDR_TERPVERSION   $1F;     ! byte
+Constant HDR_SCREENHLINES  $20;     ! byte
+Constant HDR_SCREENWCHARS  $21;     ! byte
+Constant HDR_SCREENWUNITS  $22;     ! word
+Constant HDR_SCREENHUNITS  $24;     ! word
+Constant HDR_FONTWUNITS    $26;     ! byte
+Constant HDR_FONTHUNITS    $27;     ! byte
+Constant HDR_ROUTINEOFFSET $28;     ! word
+Constant HDR_STRINGOFFSET  $2A;     ! word
+Constant HDR_BGCOLOUR      $2C;     ! byte
+Constant HDR_FGCOLOUR      $2D;     ! byte
+Constant HDR_TERMCHARS     $2E;     ! word
+Constant HDR_PIXELSTO3     $30;     ! word
+Constant HDR_TERPSTANDARD  $32;     ! two bytes
+Constant HDR_ALPHABET      $34;     ! word
+Constant HDR_EXTENSION     $36;     ! word
+Constant HDR_UNUSED        $38;     ! two words
+Constant HDR_INFORMVERSION $3C;     ! four ASCII characters
+
 Constant PHASE1 = 1; ! just check if pattern matches (no side effects such as which? questions or indirect actions)
 Constant PHASE2 = 2; ! parse the given pattern with side effects
 Constant PHASE2_SUCCESS         = 0;
@@ -121,6 +156,7 @@ Message warning "*** Skipping Undo - not supported in v3 ***";
 Constant OPTIONAL_PROVIDE_UNDO_FINAL;
 #Endif;
 #Endif;
+#Ifdef DEATH_MENTION_UNDO; #Endif;
 
 
 #Ifndef OPTIONAL_NO_DARKNESS;
@@ -278,13 +314,6 @@ Array LanguageNumbers static table
     'sixteen' 16 'seventeen' 17 'eighteen' 18 'nineteen' 19 'twenty' 20;
 #EndIf;
 
-
-! Header constants
-Constant HDR_DICTIONARY      = $8;   ! Actual address
-Constant HDR_STATIC_MEM      = $e;   ! Actual address
-Constant HDR_SCREENHCHARS    = $20;
-Constant HDR_SCREENWCHARS    = $21;
-Constant HDR_FLAGS2          = $10;  ! transcript, undo etc.
 
 Constant TT_OBJECT           = 1;    ! one or more words referring to an object
                                      ! it is one of NOUN_TOKEN etc. below
