@@ -581,9 +581,12 @@ Object Directions
 #IfNot;
 		parse_name [_parse _i _w;
 #EndIf;
-			_parse = parse+4*wn-2;
-			_w = _parse-->0;
 #IfV5;
+!			_parse = parse+4*wn-2;
+			@log_shift wn 2 -> _parse; ! Multiply by 4
+			_parse = parse + _parse - 2;
+
+			_w = _parse-->0;
 			_arr = _direction_dict_words;
 			if(normal_directions_enabled) {
 				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?success;
@@ -618,6 +621,10 @@ Object Directions
 			return 1;
 #IfNot;
 			! This is V3
+
+			_parse = parse+4*wn-2;
+			_w = _parse-->0;
+
 			if(normal_directions_enabled) {
 #Ifndef OPTIONAL_SHIP_DIRECTIONS;
 				@je _w 'out' ?match_out;

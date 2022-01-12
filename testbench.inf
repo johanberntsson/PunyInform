@@ -490,6 +490,13 @@ Object RiverBank "River Bank"
 			CS_ADD_LIST CarPark (scenery_outdoors),
 	has light;
 
+Object -> ExoSkeleton "exoskeleton"
+	with
+		description "A powered exoskeleton, designed to give its user superhuman
+			strength. You can enter the exoskeleton.",
+		name 'exo' 'exoskeleton' 'skeleton',
+	has enterable transparent;
+
 Object -> Microphone "microphone"
 	with
 		name 'microphone',
