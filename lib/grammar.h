@@ -1531,7 +1531,7 @@ Global scope_cnt;
 	print "see ";
 ];
 
-[ Look _obj _top_ceil _ceil _initial_found _describe_room
+[ Look _obj _top_ceil _ceil _describe_room
 	_you_can_see_1 _you_can_see_2 _desc_prop _last_level _action;
 	PrintMsg(MSG_LOOK_BEFORE_ROOMNAME);
 	if((lookmode == 1 && location hasnt visited) || lookmode == 2) _describe_room = true;
@@ -1601,7 +1601,6 @@ Global scope_cnt;
 			give _obj workflag;
 			if(_obj.&describe) {
 				if(PrintOrRun(_obj, describe, 0)) {
-					_initial_found = true;
 					give _obj ~workflag;
 					also_flag = true;
 					continue;
@@ -1623,7 +1622,6 @@ Global scope_cnt;
 				_desc_prop = initial;
 			}
 			if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
-				_initial_found = true;
 				give _obj ~workflag;
 				@new_line;
 				PrintOrRun(_obj, _desc_prop);
