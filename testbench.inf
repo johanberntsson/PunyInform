@@ -721,6 +721,32 @@ Object Library "The Library"
 #EndIf;
 	has light;
 
+Object -> Dial "dial"
+	with
+		name 'black' 'dial',
+		initial "There's a black dial on the wall.",
+		description [;
+			print "It does from 0 to 99. It's currently set to ",
+					self.time_left, ".^";
+		],
+		time_left 0,
+		before [;
+			Turn, Push, Pull: "Try SET DIAL TO 3.";
+			SetTo:
+				if(second >= 0 && second < 100) {
+					if(HDR_GAMEFLAGS-->0 & 128) {
+						! sound effect: 3, start, full volume, once
+						print "[Can you hear the sound effect?]^^";
+						@sound_effect second 2 255 0;
+					}
+					self.time_left = second;
+					"Ok.";
+				}
+				"It only goes from 0 to 99.";
+		],
+	has static;
+
+
 Object -> LightSwitch "LightSwitch"
 	with
 		short_name "light switch",
@@ -731,9 +757,6 @@ Object -> LightSwitch "LightSwitch"
 				if(self has on) {
 					<<SwitchOff self>>;
 				} else {
-					! sound effect: 3, start, full volume, once
-					print "[Can you hear the sound effect?]^^";
-					@sound_effect 3 2 255 0;
 					<<SwitchOn self>>;
 				}
 		],
