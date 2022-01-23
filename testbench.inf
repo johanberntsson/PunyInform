@@ -728,10 +728,14 @@ Object -> LightSwitch "LightSwitch"
 		name 'light' 'switch',
 		before [;
 			Push:
-				if(self has on)
+				if(self has on) {
 					<<SwitchOff self>>;
-				else
+				} else {
+					! sound effect: 3, start, full volume, once
+					print "[Can you hear the sound effect?]^^";
+					@sound_effect 3 2 255 0;
 					<<SwitchOn self>>;
+				}
 		],
 		after[;
 			SwitchOn:
