@@ -1,0 +1,191 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+! The very first lines of the main source code file for a game can
+! contain compiler options, like the two lines above. -~S disables
+! strict error checking. This is otherwise used in z5 and z8 games by
+! default. While useful for debugging, it adds ~10 KB to the story file
+! size and it makes the game slower.
+! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
+! aren't used. This can save some space.
+
+Constant Story      "Minimal";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+! Uncomment ONE of the two following lines, to show either time or score/turns
+! Leaving both commented out makes the library bigger.
+!Constant STATUSLINE_TIME; Statusline time;
+Constant STATUSLINE_SCORE; Statusline score;
+
+! Comment out to keep track of score
+! The value is what will be shown as the score on statusline in z3
+Constant NO_SCORE = 0;
+
+! Customize the statusline in z5+ (will have no effect in z3)
+!Constant OPTIONAL_SL_NO_SCORE;
+!Constant OPTIONAL_SL_NO_MOVES;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
+Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+!Constant OPTIONAL_FLEXIBLE_INVENTORY;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
+!Constant OPTIONAL_SCORED;
+!Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_SIMPLE_DOORS;
+!Constant OPTIONAL_SHIP_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant OPTIONAL_MANUAL_REACTIVE;
+!Constant OPTIONAL_ORDERED_TIMERS;
+!Constant OPTIONAL_PROVIDE_UNDO;
+!Constant OPTIONAL_REACTIVE_PARSE_NAME;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
+! MAX_CARRIED, SACK_OBJECT,  etc.
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+! Define your own global variables here, if any
+
+! Define the entry point routines you need here, like Amusing, DarkToDark etc.
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+Include "puny.h";
+
+! Uncomment to add PunyLib extensions
+!Include "ext_waittime.h";
+
+Global num = 3;
+Global repeats = 0;
+Global volume = 255;
+Global repeats_volume = 255;
+
+Object Library "The Library"
+	with
+		description "You are in a library.";
+
+
+Object -> EffectControl "effect control"
+    with
+        name 'sound' 'effect' 'control',
+        description [;
+            print "The effects go from 0 to 99, and is currently set to ",
+                    num, ".^";
+        ],
+        time_left 0,
+        before [;
+            Turn, Push, Pull: "Try SET DIAL TO 3.";
+            SetTo:
+                if(second >= 0 && second < 256) {
+                    num = second;
+                    "Ok.";
+                }
+                "It only goes from 0 to 255.";
+        ],
+    has static;
+
+Object -> VolumeControl "volume control"
+    with
+        name 'volume' 'control',
+        description [;
+            print "The effects go from 0 to 99, and is currently set to ",
+                    volume, ".^";
+        ],
+        time_left 0,
+        before [;
+            Turn, Push, Pull: "Try SET DIAL TO 3.";
+            SetTo:
+                if(second >= 0 && second < 256) {
+                    volume = second;
+                    "Ok.";
+                }
+                "It only goes from 0 to 255.";
+        ],
+    has static;
+
+Object -> RepeatControl "repeat control"
+    with
+        name 'repeat' 'repeats' 'loop' 'loops',
+        description [;
+            print "The effects go from 0 to 99, and is currently set to ",
+                    repeats, ".^";
+        ],
+        time_left 0,
+        before [;
+            Turn, Push, Pull: "Try SET DIAL TO 3.";
+            SetTo:
+                if(second >= 0 && second < 256) {
+                    repeats = second;
+                    "Ok.";
+                }
+                "It only goes from 0 to 255.";
+        ],
+    has static;
+
+Object -> PrepareButton "prepare button"
+    with
+        name 'prepare' 'button',
+        before [;
+        Push:
+        	playsound(1); rtrue;
+		]
+	has static;
+
+Object -> StartButton "start button"
+    with
+        name 'start' 'button',
+        before [;
+        Push:
+        	playsound(2); rtrue;
+		]
+	has static;
+
+
+Object -> StopButton "stop button"
+    with
+        name 'stop' 'button',
+        before [;
+        Push:
+        	playsound(3); rtrue;
+		]
+	has static;
+
+Object -> FinishButton "finish button"
+    with
+        name 'finish' 'button',
+        before [;
+        Push:
+        	playsound(4); rtrue;
+		]
+	has static;
+
+
+[ playsound effect;
+	repeats_volume = 256 * repeats + volume;
+	print "sound_effect ", num, " ", effect, " ", repeats_volume, " 0^";
+	if(HDR_GAMEFLAGS-->0 & 128) {
+		print "[can you hear it?]^^";
+		@sound_effect num effect repeats_volume 0;
+	} else {
+		print "This terp doesn't support sound.^";
+	}
+];
+
+[Initialise;
+	print "^^And so the story begins...^^";
+];
