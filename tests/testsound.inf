@@ -71,11 +71,11 @@ Include "puny.h";
 !Include "ext_waittime.h";
 
 Global num = 3;
-Global repeats = 0;
+Global repeats = 1;
 Global volume = 255;
 Global repeats_volume = 255;
 
-Object Library "The Library"
+Object Library "Library of sounds"
 	with
 		description "You are in a library.";
 
@@ -84,12 +84,12 @@ Object -> EffectControl "effect control"
     with
         name 'sound' 'effect' 'control',
         description [;
-            print "The effects go from 0 to 99, and is currently set to ",
+            print "The effects go from 0 to 255, and is currently set to ",
                     num, ".^";
         ],
         time_left 0,
         before [;
-            Turn, Push, Pull: "Try SET DIAL TO 3.";
+            Turn, Push, Pull: "Try SET EFFECT TO 3.";
             SetTo:
                 if(second >= 0 && second < 256) {
                     num = second;
@@ -103,12 +103,12 @@ Object -> VolumeControl "volume control"
     with
         name 'volume' 'control',
         description [;
-            print "The effects go from 0 to 99, and is currently set to ",
+            print "The volume goes from 0 to 255, and is currently set to ",
                     volume, ".^";
         ],
         time_left 0,
         before [;
-            Turn, Push, Pull: "Try SET DIAL TO 3.";
+            Turn, Push, Pull: "Try SET VOLUME TO 3.";
             SetTo:
                 if(second >= 0 && second < 256) {
                     volume = second;
@@ -122,12 +122,12 @@ Object -> RepeatControl "repeat control"
     with
         name 'repeat' 'repeats' 'loop' 'loops',
         description [;
-            print "The effects go from 0 to 99, and is currently set to ",
+            print "The repeat control goes from 0 to 255, and is currently set to ",
                     repeats, ".^";
         ],
         time_left 0,
         before [;
-            Turn, Push, Pull: "Try SET DIAL TO 3.";
+            Turn, Push, Pull: "Try SET REPEAT TO 3.";
             SetTo:
                 if(second >= 0 && second < 256) {
                     repeats = second;
@@ -187,5 +187,15 @@ Object -> FinishButton "finish button"
 ];
 
 [Initialise;
-	print "^^And so the story begins...^^";
+	print "^^You can set the controls and press the start button, or you can ~PLAY 3~ to play sound effect 3.^^";
 ];
+
+[ PlaySub;
+	if(noun <= 0 || noun > 255) "You can only play sound 1-255.";
+	num = noun;
+	playsound(2);
+	"You play sound ", num, ".";
+];
+
+Verb 'play'
+	* number -> Play;
