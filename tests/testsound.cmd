@@ -1,0 +1,5 @@
+transcript
+
+quit
+yes
+
