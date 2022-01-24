@@ -1516,7 +1516,8 @@ Global scope_cnt;
 ! HELP ROUTINES
 ! ---------------------
 
-[ _ListObjsMsg;
+[ _ListObjsMsg p_parent;
+	p_parent = 0; ! Avoid warning
 	print "^You can ";
 	if(also_flag) print "also ";
 	print "see ";

@@ -6,6 +6,9 @@ v3.5: bug fix and new feature release
   player won.
 - Don't print the option to UNDO if the interpreter says it doesn't support it.
 - Slight optimization of Directions.parse_name for z5.
+- Fix routine _ListObjsMsg in grammar.h, which was called with one argument
+  but didn't have any local variables, as this caused a warning in Infocom's
+  terps for Motorola 68K platforms.
 
 =======
 v3.4: bug fix and new feature release (2 January 2022)
