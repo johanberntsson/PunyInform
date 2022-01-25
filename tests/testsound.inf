@@ -74,6 +74,18 @@ Global num = 3;
 Global repeats = 1;
 Global volume = 255;
 Global repeats_volume = 255;
+Global callback = 0;
+Global done = 0;
+
+Verb 'play'
+	* number -> Play;
+
+[ PlaySub;
+	if(noun <= 0 || noun > 255) "You can only play sound 1-255.";
+	num = noun;
+	playsound(2);
+	"You play sound ", num, ".";
+];
 
 Object Library "Library of sounds"
 	with
@@ -87,7 +99,6 @@ Object -> EffectControl "effect control"
             print "The effects go from 0 to 255, and is currently set to ",
                     num, ".^";
         ],
-        time_left 0,
         before [;
             Turn, Push, Pull: "Try SET EFFECT TO 3.";
             SetTo:
@@ -106,7 +117,6 @@ Object -> VolumeControl "volume control"
             print "The volume goes from 0 to 255, and is currently set to ",
                     volume, ".^";
         ],
-        time_left 0,
         before [;
             Turn, Push, Pull: "Try SET VOLUME TO 3.";
             SetTo:
@@ -125,7 +135,6 @@ Object -> RepeatControl "repeat control"
             print "The repeat control goes from 0 to 255, and is currently set to ",
                     repeats, ".^";
         ],
-        time_left 0,
         before [;
             Turn, Push, Pull: "Try SET REPEAT TO 3.";
             SetTo:
@@ -134,6 +143,32 @@ Object -> RepeatControl "repeat control"
                     "Ok.";
                 }
                 "It only goes from 0 to 255.";
+        ],
+    has static;
+
+Object -> CallbackControl "callback control"
+    with
+        name 'callback' 'routine' 'control',
+        description [;
+            print "The callback control is currently set to ";
+            if(callback ~= 0) {
+                print "ON";
+            } else {
+                print "OFF";
+            }
+            ".";
+        ],
+        before [;
+            Turn, Push, Pull: "Try SET CONTROL TO 1.";
+            SetTo:
+                if(second == 0) {
+                    callback = 0;
+                } else if(second == 1) {
+                    callback = playsound_callback;
+                } else {
+                    "It only goes from 0 to 1 (OFF or ON)";
+                }
+                "Ok.";
         ],
     has static;
 
@@ -174,13 +209,25 @@ Object -> FinishButton "finish button"
 		]
 	has static;
 
+#Iftrue (#version_number == 5);
+[ playsound_callback;
+    !print "Sound finished^";
+	done = 1;
+];
+#EndIf;
 
 [ playsound effect;
 	repeats_volume = 256 * repeats + volume;
-	print "sound_effect ", num, " ", effect, " ", repeats_volume, " 0^";
+	print "previous callback activated? ", done, "^";
+	done = 0;
+	print "sound_effect ", num, " ", effect, " ", repeats_volume, " ", callback, "0^";
 	if(HDR_GAMEFLAGS-->0 & 128) {
 		print "[can you hear it?]^^";
+#Iftrue (#version_number == 5);
+		@sound_effect num effect repeats_volume callback;
+#IfNot;
 		@sound_effect num effect repeats_volume 0;
+#EndIf;
 	} else {
 		print "This terp doesn't support sound.^";
 	}
@@ -190,12 +237,3 @@ Object -> FinishButton "finish button"
 	print "^^You can set the controls and press the start button, or you can ~PLAY 3~ to play sound effect 3.^^";
 ];
 
-[ PlaySub;
-	if(noun <= 0 || noun > 255) "You can only play sound 1-255.";
-	num = noun;
-	playsound(2);
-	"You play sound ", num, ".";
-];
-
-Verb 'play'
-	* number -> Play;
