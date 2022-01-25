@@ -75,7 +75,6 @@ Global repeats = 1;
 Global volume = 255;
 Global repeats_volume = 255;
 Global callback = 0;
-Global done = 0;
 
 Verb 'play'
 	* number -> Play;
@@ -211,15 +210,12 @@ Object -> FinishButton "finish button"
 
 #Iftrue (#version_number == 5);
 [ playsound_callback;
-    !print "Sound finished^";
-	done = 1;
+    print "^^[Pardon the interruption, but the sound finished playing]^^";
 ];
 #EndIf;
 
 [ playsound effect;
 	repeats_volume = 256 * repeats + volume;
-	print "previous callback activated? ", done, "^";
-	done = 0;
 	print "sound_effect ", num, " ", effect, " ", repeats_volume, " ", callback, "0^";
 	if(HDR_GAMEFLAGS-->0 & 128) {
 		print "[can you hear it?]^^";
