@@ -23,7 +23,9 @@ Constant NO_SCORE = 0;
 
 ! Customize the statusline in z5+ (will have no effect in z3)
 !Constant OPTIONAL_SL_NO_SCORE;
-!Constant OPTIONAL_SL_NO_MOVES;
+#Ifv5;
+Constant OPTIONAL_SL_NO_MOVES;
+#Endif;
 
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
@@ -71,9 +73,9 @@ Include "puny.h";
 !Include "ext_waittime.h";
 
 Global num = 3;
-Global repeats = 1;
-Global volume = 255;
-Global repeats_volume = 255;
+Global repeats = 2;
+Global volume = 8;
+Global repeats_volume;
 Global callback = 0;
 
 Verb 'play'
@@ -93,6 +95,7 @@ Object Library "Library of sounds"
 
 Object -> EffectControl "effect control"
     with
+		article "an",
         name 'sound' 'effect' 'control',
         description [;
             print "The effects go from 0 to 255, and is currently set to ",
@@ -113,17 +116,17 @@ Object -> VolumeControl "volume control"
     with
         name 'volume' 'control',
         description [;
-            print "The volume goes from 0 to 255, and is currently set to ",
+            print "The volume can be set to 0-8 or 255, and is currently set to ",
                     volume, ".^";
         ],
         before [;
             Turn, Push, Pull: "Try SET VOLUME TO 3.";
             SetTo:
-                if(second >= 0 && second < 256) {
+                if((second >= 0 && second <= 8) || second == 255) {
                     volume = second;
                     "Ok.";
                 }
-                "It only goes from 0 to 255.";
+                "It can only be set to 0 to 8 and 255.";
         ],
     has static;
 
@@ -145,6 +148,7 @@ Object -> RepeatControl "repeat control"
         ],
     has static;
 
+#Ifv5;
 Object -> CallbackControl "callback control"
     with
         name 'callback' 'routine' 'control',
@@ -170,6 +174,7 @@ Object -> CallbackControl "callback control"
                 "Ok.";
         ],
     has static;
+#Endif;
 
 Object -> PrepareButton "prepare button"
     with
@@ -208,7 +213,7 @@ Object -> FinishButton "finish button"
 		]
 	has static;
 
-#Iftrue (#version_number == 5);
+#Ifv5;
 [ playsound_callback;
     print "^^[Pardon the interruption, but the sound finished playing]^^";
 ];
@@ -219,10 +224,10 @@ Object -> FinishButton "finish button"
 	print "sound_effect ", num, " ", effect, " ", repeats_volume, " ", callback, "0^";
 	if(HDR_GAMEFLAGS-->0 & 128) {
 		print "[can you hear it?]^^";
-#Iftrue (#version_number == 5);
+#Ifv5;
 		@sound_effect num effect repeats_volume callback;
 #IfNot;
-		@sound_effect num effect repeats_volume 0;
+		@sound_effect num effect repeats_volume;
 #EndIf;
 	} else {
 		print "This terp doesn't support sound.^";
@@ -232,4 +237,3 @@ Object -> FinishButton "finish button"
 [Initialise;
 	print "^^You can set the controls and press the start button, or you can ~PLAY 3~ to play sound effect 3.^^";
 ];
-
