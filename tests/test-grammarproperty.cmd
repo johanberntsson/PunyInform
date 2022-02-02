@@ -1,5 +1,7 @@
 transcript
 
+john, take aim
+john, take take aim
 john, hello
 john, take me
 john, jump

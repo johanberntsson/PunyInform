@@ -1,3 +1,10 @@
+> john, take aim
+grammar 3 0
+"Okay, I'm aiming."
+
+> john, take take aim
+grammar 3 0
+"Okay, I'm aiming."
 
 > john, hello
 grammar 3 0
@@ -15,15 +22,15 @@ I have nothing
 
 > john, open apple
 grammar 3 0
-What do you want me to close
+Why do you want me to close the apple.
 
 > john, close apple
 grammar 3 0
-What do you want me to open
+Why do you want me to open the apple.
 
 > john, close off apple
 grammar 3 0
-I switch off
+I switch off the apple.
 
 > quit
 Are you sure you want to quit? yes

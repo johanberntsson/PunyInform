@@ -1691,11 +1691,17 @@ Array guess_object-->5;
 		verb_wordnum = wn;
 		verb_word = (parse - 2) --> (2 * verb_wordnum);
 		if(actor provides grammar) {
+			parser_one = 0;
 			_i = actor.grammar();
+			! 0 = carry on as usual
+			! 1 = grammar parsed it completely
+			! verb = use this verb's grammar instead
+			! -verb = try using this verb's grammar first, then the original
 			if((_i ~= 0 or 1) &&
+				(parser_one ~= 0 ||
 				(UnsignedCompare(_i, dict_start) < 0 ||
 				UnsignedCompare(_i, dict_end) >= 0 ||
-				(_i - dict_start) % dict_entry_size ~= 0)) {
+				(_i - dict_start) % dict_entry_size ~= 0))) {
 				! returned -'verb'
 				usual_grammar_after = verb_word;
 				_i = -_i;
@@ -1708,6 +1714,7 @@ Array guess_object-->5;
 				! _i == 'verb', so use its grammar instead
 				verb_wordnum = wn;
 				verb_word = _i;
+				!print "JB ", (address) _i, " ", (address) NextWord(), "^";
 				jump reparse2;
 			}
 		}

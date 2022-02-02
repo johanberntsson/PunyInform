@@ -58,6 +58,14 @@ Include "puny.h";
 Include "Grammar";
 #Endif;
 
+[ TakeAimSub;
+    ! Only BattleBot can be ordered to take aim, and this is handled in its
+    ! orders property, so this routine should never be executed.
+    "No.";
+];
+
+Verb 'xxx' * 'take' 'aim' -> TakeAim;
+
 Object Library "The Library"
 	with
 	    description "You are in a library.",
@@ -74,26 +82,29 @@ Object -> John "John"
 	Consult: print "consult^";
 	],
 	orders [;
-    Open: "What do you want me to open";
-    Close: "What do you want me to close";
+    Open: "Why do you want me to open ", (the) noun, ".";
+    Close: "Why do you want me to close ", (the) noun, ".";
     Jump: "I jump";
-    Unlock: "I unlock";
-    SwitchOff: "I switch off";
+    Unlock: "I unlock ", (the) noun, ".";
+    SwitchOff: "I switch off ", (the) noun, ".";
     Inv: "I have nothing";
+    TakeAim: "~Okay, I'm aiming.~";
 	],
 	grammar [;
 	    print "grammar ", verb_wordnum, " ", verb_word == 'jump', "^";
 	    if(verb_word == 'open') {
-	        verb_wordnum++;
 	        return 'close';
         }
 	    if(verb_word == 'close') {
-	        verb_wordnum++;
 	        return -'open';
         }
 	    if(verb_word == 'jump') {
 	        action = ##Inv;
 	        rtrue;
+        }
+        if(verb_word == 'take') {
+            parser_one = true;
+            return -'xxx';
         }
         rfalse;
     ],
