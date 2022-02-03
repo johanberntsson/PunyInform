@@ -3,6 +3,10 @@ all: runtests
 runtests:
 	ruby runtests.rb
 
+inform:
+	inform -v8 test-grammarproperty.inf
+	frotz test-grammarproperty.z8
+
 testbench:
 	inform +../lib -v3 testbench.inf
 	frotz testbench.z3
@@ -26,10 +30,6 @@ test-parsetoken:
 test-parser:
 	inform +../lib -v3 -s test-parser.inf
 	frotz test-parser.z3
-
-inform:
-	inform -v8 test-parser.inf
-	frotz test-parser.z8
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages

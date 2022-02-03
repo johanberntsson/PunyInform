@@ -8,6 +8,8 @@ john, jump
 john, open apple
 john, close apple
 john, close off apple
+john, eat apple
+john, drink apple
 quit
 yes
 

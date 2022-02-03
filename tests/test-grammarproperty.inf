@@ -64,7 +64,7 @@ Include "Grammar";
     "No.";
 ];
 
-Verb 'xxx' * 'take' 'aim' -> TakeAim;
+Verb 'bot,' * 'take' 'aim' -> TakeAim;
 
 Object Library "The Library"
 	with
@@ -84,6 +84,7 @@ Object -> John "John"
 	orders [;
     Open: "Why do you want me to open ", (the) noun, ".";
     Close: "Why do you want me to close ", (the) noun, ".";
+    Eat: "I eat";
     Jump: "I jump";
     Unlock: "I unlock ", (the) noun, ".";
     SwitchOff: "I switch off ", (the) noun, ".";
@@ -92,11 +93,15 @@ Object -> John "John"
 	],
 	grammar [;
 	    print "grammar ", verb_wordnum, " ", verb_word == 'jump', "^";
+	    if(verb_word == 'drink') {
+	        return 'eat';
+        }
 	    if(verb_word == 'open') {
 	        return 'close';
         }
 	    if(verb_word == 'close') {
-	        return -'open';
+            parser_one = true;
+	        return -'eat';
         }
 	    if(verb_word == 'jump') {
 	        action = ##Inv;
@@ -104,7 +109,7 @@ Object -> John "John"
         }
         if(verb_word == 'take') {
             parser_one = true;
-            return -'xxx';
+            return -'bot,';
         }
         rfalse;
     ],

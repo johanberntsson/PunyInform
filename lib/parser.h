@@ -1586,7 +1586,7 @@ Array guess_object-->5;
 	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action _verb_offset;
 	! returns
 	! 1/true: if error was found
 	! -n: if <n> words were used to find a match,
@@ -1612,6 +1612,7 @@ Array guess_object-->5;
 	consult_from = 0;
 	consult_words = 0;
 	usual_grammar_after = 0;
+	_verb_offset = 0;
 	scope_routine = 0;
 	noun_filter = 0;
 	object_token_type = -1;
@@ -1712,9 +1713,12 @@ Array guess_object-->5;
 			}
 			if(_i ~= 0) {
 				! _i == 'verb', so use its grammar instead
-				verb_wordnum = wn;
 				verb_word = _i;
-				!print "JB ", (address) _i, " ", (address) NextWord(), "^";
+				! decrease verb_wordnum to try the new grammar rule,
+				! but keep track of the offset so we can
+				! restore in case the rule fails.
+				_verb_offset = 1;
+				verb_wordnum = verb_wordnum - _verb_offset;
 				jump reparse2;
 			}
 		}
@@ -1805,6 +1809,13 @@ Array guess_object-->5;
 		print "### Skipping phase 2^";
 #EndIf;
 		jump parse_success;
+	}
+	if(_verb_offset ~= 0) {
+		! restore the normal verb_wordnum after trying a
+		! rule suggested by the NPC's grammar property
+		! which, at this point, has failed.
+		verb_wordnum = verb_wordnum + _verb_offset;
+		_verb_offset = 0;
 	}
 	if(usual_grammar_after ~= 0) {
 		! we have parsed a grammar given by the grammar property

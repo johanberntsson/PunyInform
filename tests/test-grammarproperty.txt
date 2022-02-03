@@ -4,7 +4,8 @@ grammar 3 0
 
 > john, take take aim
 grammar 3 0
-"Okay, I'm aiming."
+answer words 3 from 3
+There is no reply.
 
 > john, hello
 grammar 3 0
@@ -22,15 +23,25 @@ I have nothing
 
 > john, open apple
 grammar 3 0
-Why do you want me to close the apple.
+answer words 2 from 3
+There is no reply.
 
 > john, close apple
 grammar 3 0
-Why do you want me to open the apple.
+Why do you want me to close the apple.
 
 > john, close off apple
 grammar 3 0
 I switch off the apple.
+
+> john, eat apple
+grammar 3 0
+I eat
+
+> john, drink apple
+grammar 3 0
+answer words 2 from 3
+There is no reply.
 
 > quit
 Are you sure you want to quit? yes
