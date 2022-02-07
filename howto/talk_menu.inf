@@ -1,0 +1,185 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+
+! Compile as z8 to use Inform stdlib instead of puny (for debugging), like
+! inform6 -v8 +inform6lib,lib talk_menu.inf
+
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+Constant Story      "Talk Menu";
+Constant Headline   "^A showcase for the ext_talk_menu extension.^";
+
+! Uncomment ONE of the two following lines, to show either time or score/turns
+! Leaving both commented out makes the library bigger.
+!Constant STATUSLINE_TIME; Statusline time;
+Constant STATUSLINE_SCORE; Statusline score; #Ifdef STATUSLINE_SCORE; #Endif;
+
+! Comment out to keep track of score
+! The value is what will be shown as the score on statusline in z3
+Constant NO_SCORE = 0;
+
+! Customize the statusline in z5+ (will have no effect in z3)
+!Constant OPTIONAL_SL_NO_SCORE;
+!Constant OPTIONAL_SL_NO_MOVES;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "Verblib";
+Include "Grammar";
+#Ifnot;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
+Constant OPTIONAL_NO_DARKNESS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+!Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FLEXIBLE_INVENTORY;
+!Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
+!Constant OPTIONAL_SCORED;
+!Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_SIMPLE_DOORS;
+!Constant OPTIONAL_SHIP_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant OPTIONAL_MANUAL_REACTIVE;
+!Constant OPTIONAL_ORDERED_TIMERS;
+!Constant OPTIONAL_PROVIDE_UNDO;
+!Constant OPTIONAL_REACTIVE_PARSE_NAME;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
+! MAX_CARRIED, SACK_OBJECT,  etc.
+
+Constant INITIAL_LOCATION_VALUE = Library;
+Include "globals.h";
+#Endif;
+! Define your attributes, common properties and global variables here, if any
+
+! Define the entry point routines you need here, like Amusing, DarkToDark etc.
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+Constant FLAG_COUNT 16;
+Include "ext_flags.h";
+
+Constant F_LINDA_TALKED_ABOUT_PARIS 1;
+!Constant TM_MSG_TALK_ABOUT_WHAT "Fuck?";
+
+
+[ FunnyReply;
+	"NOOO!";
+];
+!Constant TM_NPC 1002;
+[ReActivateParis;
+	ReActivateTopic(Linda, 503);
+];
+
+Array talk_array -->
+!	TM_NPC Box
+!	0 "Box" "Box?" "Yes!"
+	TM_NPC Linda
+	0 500 "Bob's death" "What do you know about Bob's death?" "Oh not much. He was murdered I think." 501
+	0 501 "Murder" "Tell me more about the murder" "Sorry, I've told you everything I know."
+	1000 503 "Paris" "How do you like Paris?" "I love it. Especially the Louvre! But it's sad that Bob died there." 901 902 903 500
+	0 "Paris" "I like Paris. Tell me more about Paris!" "It's the captial of Love, they say." 902 F_LINDA_TALKED_ABOUT_PARIS
+	0 "The Louvre" "What about the Louvre?" "Oh I just love the artsy atmosphere here in Paris you know."
+	0 "Paris trivia" "Do you even know Paris is the capital of France?" "Well of course I do!" ReActivateParis
+	0 550 "Plates" "What do you know about plates?" "They're usually flat I guess."
+	TM_NPC Josh
+	1000 "Linda" "How do you know Linda?" "I don't really." 901
+	0 "Himself" "Are you a funny guy?" FunnyReply
+	1000 "Nothing" FunnyReply "Yes!"
+	1000 "Gorillas" "What do you know about gorillas?" "I think they live in misty locations."
+	1000 "Darwin Awards" "Tell me about the Darwin Awards!" "You can get a prize for dying, I think."
+	1000 "Polyplay" "Heard of Polyplay?" "Great little publisher, or so I'm told."
+	1000 "Apples" "What can you tell me about apples?" "They're fruits."
+	1000 "Bananas" "What can you tell me about bananas?" "They're fruits. No wait, they're berries!"
+	1000 "Commodore" "What's Commodore?" "A good old company that made computers back in the 80s." 901 902
+	0 "C64" "What about the C64?" "A lovely machine, no doubt!"
+	0 "Plus/4" "And what about the Plus/4?" "Oh, it was misunderstood. A clever machine really."
+	1000 "Spectrum" "Have you had a ZX Spectrum?" "No, I was more of a Commodore guy." 700
+	1000 "PC" "What do you know about IBM PCs?" "Boring, they're just for work." 950
+	1000 "BBC computers" "Tell me about BBC Computers!" "British, weren't they? And I think the name of the company was actually Acorn."
+	1000 "Murder" "Where were you when Bob was killed?" "I was at home, watching TV. You don't think I had anything to do with his death, do you?"
+	TM_NPC 0
+;
+
+Include "ext_talk_menu.h"; ! Requires ext_flags.h to be included too
+
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#Endif;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_waittime.h";
+
+! Use the TalkRoom class for all rooms where some conversation topics should
+! be active based on location. Using it for all rooms is OK but slower.
+
+Class TalkRoom
+	with after [;
+		Go:
+			move Linda to self;
+			print "^Linda follows in your footsteps.^^";
+			Linda.activate_topics(self);
+			rfalse;
+		Going:
+			Linda.inactivate_topics(self);
+			rfalse;
+	];
+
+TalkRoom Kitchen "Kitchen"
+	with
+		description "A modern kitchen. The library lies north of here",
+		n_to Library;
+
+
+TalkRoom Library "The Library"
+	with
+		description "You are in a library. The kitchen lies to the south.",
+		s_to Kitchen;
+
+Object -> Linda "Linda"
+	with
+		name 'linda',
+		description [;
+			if(FlagIsSet(F_LINDA_TALKED_ABOUT_PARIS))
+				print "~I've already told you that Paris is the capital of Love~, she says.";
+			else
+				print "Linda looks like she has something to say.";
+			print " The status is ", GetTopicStatus(self, 503), ".";
+			"";
+		],
+		talk_start 0,
+		activate_topics [ p_room;
+			if(p_room == Kitchen) ActivateTopic(self, 550);
+		],
+		inactivate_topics [ p_room;
+			if(p_room == Kitchen) InactivateTopic(self, 550);
+		],
+	has proper animate female;
+
+Object -> Josh "Josh"
+	with
+		name 'josh',
+		talk_start 0,
+	has proper animate;
+
+[Initialise;
+#Ifdef light;
+	give player light;
+#Endif;
+	location = Library;
+	InitTalk();
+	print "^^Try TALK TO (SOMEONE). Linda has an extra topic to talk about
+		when she's in the kitchen.^^";
+];

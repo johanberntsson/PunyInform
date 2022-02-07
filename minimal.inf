@@ -31,9 +31,9 @@ Constant NO_SCORE = 0;
 !Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
 Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-!Constant OPTIONAL_FLEXIBLE_INVENTORY;
 !Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FLEXIBLE_INVENTORY;
 !Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
 !Constant OPTIONAL_SCORED;
 !Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
@@ -55,13 +55,14 @@ Constant INITIAL_LOCATION_VALUE = Library;
 
 Include "globals.h";
 
-! Define your own global variables here, if any
+! Define your attributes, common properties and global variables here, if any
 
 ! Define the entry point routines you need here, like Amusing, DarkToDark etc.
 
 ! Uncomment to add PunyLib extensions
 !Include "ext_menu.h";
 !Include "ext_flags.h";
+!Include "ext_talk_menu.h"; ! Note: Requires ext_flags.h to be included too
 !Include "ext_quote_box.h";
 !Include "ext_cheap_scenery.h";
 
