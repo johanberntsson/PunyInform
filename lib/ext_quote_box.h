@@ -39,6 +39,8 @@
 
 System_file;
 
+Constant EXT_QUOTE_BOX = 1;
+
 #IfnDef RUNTIME_ERRORS;
 Constant RUNTIME_ERRORS = 2;
 #EndIf;

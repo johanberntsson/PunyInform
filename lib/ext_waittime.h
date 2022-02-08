@@ -33,6 +33,8 @@
 
 System_file;
 
+Constant EXT_WAITTIME = 1;
+
 Global waittime_waiting = false;
 
 #Ifndef MAX_WAIT_MOVES;

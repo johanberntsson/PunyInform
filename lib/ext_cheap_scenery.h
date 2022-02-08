@@ -75,6 +75,8 @@
 
 System_file;
 
+Constant EXT_CHEAP_SCENERY = 1;
+
 #Ifndef RUNTIME_ERRORS;
 Constant RUNTIME_ERRORS = 2;
 #Endif;
@@ -99,6 +101,10 @@ Constant CSDATA_WORD_2 = 4;
 !  CSData-->2: The index into the list
 !  CSData-->3: Word 1 in player input
 !  CSData-->4: Word 2 in player input (may not have matched anything)
+
+#Ifndef cheap_scenery;
+Property individual cheap_scenery;
+#Endif;
 
 [ _ParseCheapScenery p_obj p_prop p_base_wn _w1 _w2 _i _sw1 _sw2 _len _ret _arr;
 ! 	_base_wn = CheapScenery.inside_description;

@@ -1,4 +1,4 @@
-! ext_flags.h, a library extension for PunyInform by Fredrik Ramsberg, adapted 
+! ext_flags.h, a library extension for PunyInform by Fredrik Ramsberg, adapted
 ! from flags.h by Adam Cadre.
 
 ! This is a simple system to provide on/off flags that only take up one bit of
@@ -6,7 +6,7 @@
 ! declaring a variable such as "doneflag" or some such, allocating an entire
 ! sixteen bits to a variable that will never be anything other than 0 or 1.
 
-! Here's how to use it in your programs. After inclusing globals.h, 
+! Here's how to use it in your programs. After inclusing globals.h,
 ! set the constant FLAG_COUNT to the number of flags you need, then include
 ! ext_flags.h.
 !
@@ -31,6 +31,8 @@
 ! Naturally, you can test if a flag is clear by calling FlagIsClear instead.
 
 System_file;
+
+Constant EXT_FLAGS = 1;
 
 Array flag_powers static ->
 	$$00000001

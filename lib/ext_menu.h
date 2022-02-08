@@ -1,5 +1,3 @@
-System_file;
-
 ! This PunyInform extension offers a way to present menus that, from the
 ! programmer's perspective, work the same on any Z-machine version. The
 ! presentation on z5+ is like the DoMenu extension described in DM3 and
@@ -17,6 +15,10 @@ System_file;
 ! use the same logic for item_width as DoMenu in the standard library does.
 ! To get that behaviour, define the constant EXT_MENU_STDLIB_MODE before
 ! including the extension.
+
+System_file;
+
+Constant EXT_MENU = 1;
 
 #Ifdef EXT_MENU_STDLIB_MODE; #Endif;
 
