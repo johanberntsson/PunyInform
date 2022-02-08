@@ -12,6 +12,8 @@ v3.5: bug fix and new feature release
 - Fixed grammar property bug, where -verb responses has a bad parser offset
 - The grammar property is now checking the parser_one variable to make sure
   that -verb replies are parsed correctly regardless of memory allocation.
+- New extension: ext_talk_menu.h, for menu-driven conversations.
+- PunyInform now expects the Inform compiler to be version 6.36.
 
 =======
 v3.4: bug fix and new feature release (2 January 2022)
