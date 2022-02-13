@@ -23,27 +23,31 @@ System_file;
 ! to (b). This makes the game start a little faster and saves some bytes.
 !
 ! A talk topic has the following form:
+!
 ! STATUS [ID] TOPIC PLAYERSAYS NPCSAYS [FLAGREF|UNLOCKREF|ROUTINE]*
 !
+! [] = Optional
+! * = can be more than one
+!
 ! STATUS is either 0 ( = TM_INACTIVE = not active) or
-!   600 ( = TM_ACTIVE  = active) or 601 ( = TM_STALE, has been used).
-! ID is a number (300-500) which can be used as a reference to activate
+!   30 ( = TM_ACTIVE  = active) or 31 ( = TM_STALE, has been used).
+! ID is a number (300-600) which can be used as a reference to activate
 !   a topic in code or using an UNLOCKREF in talk_array. Note that IDs are
 !   local to the NPC - two different NPCs can use the same ID for different
 !   topics without risk of confusion.
 ! TOPIC is a string or routine for the topic name
 ! PLAYERSAYS is a string or routine for what the player says
 ! NPCSAYS is a string or routine for what the NPC replies
-! FLAGREF is a number 1-299 for a flag to be set (In order to use this,
+! FLAGREF is a number 32-299 for a flag to be set (In order to use this,
 !    you must include ext_flags.h before including ext_talk_menu.h)
 ! UNLOCKREF is either a topic ID (300-500) or a relative reference to a topic
-!    (501 to 599) that is activated by this topic. 501 means the next topic,
-!    502 the topic after that etc. The target topic has to have status
-!    TM_INACTIVE (= 0) or TM_ACTIVE (= 600) for this to work. When a topic
+!    (1 to 29) that is activated by this topic. 1 means the next topic,
+!    2 the topic after that etc. The target topic has to have status
+!    TM_INACTIVE (= 0) or TM_ACTIVE (= 30) for this to work. When a topic
 !    is used, it is set to status TM_STALE, and the only way to activate it
 !    when it's stale is to call ReActivateTopic.
 ! ROUTINE is a routine to be run. In this routine, the global variable
-!    current_talker refers to the NPC.
+!    current_talker refers to the NPC being talked to.
 !
 ! Example of an array giving Linda one active topic (Weather), which will
 ! activate the next topic (Heat) and the topic with ID 300 (Herself):
@@ -51,16 +55,26 @@ System_file;
 ! Array talk_array -->
 ! TM_NPC Linda
 ! 0 300 "Herself" "Tell me more about yourself!" "I'm just an average girl."
-! 600 "Weather" "How do you like the weather?" "It's too hot for me." 501 300
+! 30 "Weather" "How do you like the weather?" "It's too hot for me." 1 300
 ! 0 "Heat" "Say, don't you like hot weather?" "No, I prefer it cold."
 ! TM_NPC 0;
 !
-! If you find that you need more IDs, or more flags, you can define which
-! number should be the lowest one to be considered an ID (100-500, default is
+! If you find that you need more topic IDs, or more flags, you can define which
+! number should be the lowest one to be considered an ID (32-600, default is
 ! 300) by defining the constant TM_FIRST_ID, i.e. to get 100 more IDs and
 ! 100 less flags, do this before including ext_talk_menu.h:
 !
-! Constant TM_FIRST_ID = 200; ! 1-199 are now flags, and 200-500 are IDs
+! Constant TM_FIRST_ID = 200; ! 32-199 are now flags, and 200-600 are IDs
+!
+! Should you find that you need both a lot of flags and a lot of topic IDs,
+! you can:
+!
+! 1. Make sure all routines you refer to in your talk_array are defined *after*
+!    including all library files.
+! 2: Set the constant TM_LAST_ID to 2000. Instead of 300-600, you can now use
+!    300-2000 for topic IDs.
+! 3. In conjuction with this, you can also use TM_FIRST_ID to define where
+!    flags end and topic IDs begin.
 !
 ! Apart from activating topics using UNLOCKREFs in the talk_array, you can also
 ! use these routines:
@@ -102,11 +116,14 @@ Global current_talker;
 #Ifndef TM_FIRST_ID;
 Constant TM_FIRST_ID = 300;
 #Endif;
-#Iftrue TM_FIRST_ID < 100;
-Message fatalerror "*** ERROR: ext_talk_menu: TM_FIRST_ID must be in the range 100-500 ***";
+#Ifndef TM_LAST_ID;
+Constant TM_LAST_ID = 600;
 #Endif;
-#Iftrue TM_FIRST_ID > 500;
-Message fatalerror "*** ERROR: ext_talk_menu: TM_FIRST_ID must be in the range 100-500 ***";
+#Iftrue TM_FIRST_ID < 32;
+Message fatalerror "*** ERROR: ext_talk_menu: TM_FIRST_ID must be in the range 32 to TM_LAST_ID ***";
+#Endif;
+#Iftrue TM_FIRST_ID > TM_LAST_ID;
+Message fatalerror "*** ERROR: ext_talk_menu: TM_FIRST_ID must be in the range 32 to TM_LAST_ID ***";
 #Endif;
 
 
@@ -147,9 +164,9 @@ Constant TM_MSG_PAGE_OPTION "[N] Next page";
 #Endif;
 
 Constant TM_INACTIVE 0;
-Constant TM_ACTIVE 600;
-Constant TM_STALE 601;
-Constant TM_NPC 602;
+Constant TM_ACTIVE 30;
+Constant TM_STALE 31;
+Constant TM_NPC -1;
 
 [ _TMPrintMsg p_msg p_no_newline;
 	if(metaclass(p_msg) == Routine) {
@@ -165,18 +182,18 @@ Constant TM_NPC 602;
 ];
 
 [ _SetTopic p_topic p_start p_value _val _neg;
-	! p_topic is 1-99: Act on topic number P_TOPIC, counting from p_start
-	! p_topic is 300-500: Act on topic with ID = P_TOPIC.
-	! p_topic is (-500)-(-300): Act on topic with ID = -P_TOPIC. If p_value is
-	!   TM_ACTIVE, set the topic to active even if it's currently in status
-	!   TM_STALE.
+	! p_topic is 1-29: Act on topic number P_TOPIC, counting from p_start
+	! p_topic is 300-600: Act on topic with ID = P_TOPIC.
+	! p_topic is (-600)-(-300): Act on topic with ID = -P_TOPIC. If p_value is
+	!   TM_ACTIVE or TM_INACTIVE, set the topic status even if it's currently
+	!   in status TM_STALE.
 	! p_start: Start from this index in the talk_menu array and work forward,
 	!   until a TM_NPC token is found.
 	! p_value is TM_ACTIVE: Set the topic to active, if it's currently in
-	!   status TM_INACTIVE (0) or TM_ACTIVE (600). If p_topic is negative, set
+	!   status TM_INACTIVE or TM_ACTIVE. If p_topic is negative, set
 	!   it to active even if the topic is in status TM_STALE.
 	! p_value is TM_INACTIVE: Set the topic to inactive, if it's currently in
-	!   status TM_INACTIVE (0) or TM_ACTIVE (600). If p_topic is negative, set
+	!   status TM_INACTIVE or TM_ACTIVE. If p_topic is negative, set
 	!   it to inactive even if the topic is in status TM_STALE.
 	! p_value is 1: Return the current status of the topic.
 	! Return true if setting succeeded, false if not.
@@ -199,8 +216,8 @@ Constant TM_NPC 602;
 		if(_val == TM_NPC) {
 			rfalse; ! The topic wasn't found
 		}
-		if(_val ==TM_INACTIVE or TM_ACTIVE or TM_STALE) {
-			if(p_topic < 100 && p_topic > 0) {
+		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
+			if(p_topic < 30 && p_topic > 0) {
 				if(p_topic-- == 1) jump found;
 				continue;
 			}
@@ -210,10 +227,7 @@ Constant TM_NPC 602;
 .found;
 				if(p_value == 1)
 					return talk_array-->p_start;
-				if((p_value == TM_ACTIVE &&
-							(_val == TM_INACTIVE or TM_ACTIVE || _neg > 0)) ||
-						(p_value == TM_INACTIVE &&
-							(_val == TM_INACTIVE or TM_ACTIVE || _neg > 0))) {
+				if(_val ~= TM_STALE || _neg > 0) {
 					talk_array-->p_start = p_value;
 					rtrue; ! Success
 				}
@@ -290,8 +304,10 @@ Array TenDashes -> "----------";
 	! Initialise the conversation system
 	_i = 0;
 	while(true) {
+!		print "Checking #", _i,". ";
 		_val = talk_array-->_i;
-		if(_val == TM_NPC) {
+		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) _i = _i + 3;
+		else if(_val == TM_NPC) {
 			_i++;
 			_val = talk_array-->_i;
 			if(_val == 0) break;
@@ -369,6 +385,8 @@ Array TenDashes -> "----------";
 		_i++;
 		_val = talk_array-->_i;
 		if(_val == TM_NPC) break;
+		if(_val == TM_INACTIVE or TM_STALE) _i = _i + 3;
+		else
 		if(_val == TM_ACTIVE) {
 #Ifv5;
 			if(_count >= _height - 6) { _more = 1; break; }
@@ -386,7 +404,8 @@ Array TenDashes -> "----------";
 #Endif;
 			_i++;
 			_val = talk_array-->_i;
-			if(_val < TM_ACTIVE) _i++; ! An ID was found
+			if(_val <= TM_LAST_ID) _i++; ! An ID was found
+!			print "i:",_i,"!";
 			_TMCallOrPrint(_i);
 		}
 	}
@@ -446,7 +465,7 @@ Array TenDashes -> "----------";
 		}
 		if(_val == 'n' or 'N' or 130) {
 			if(_more) {
-				_offset = _offset + _height - 4;
+				_offset = _offset + _height - 6;
 				jump restart_talk;
 			}
 			else if(_offset) {
@@ -491,7 +510,7 @@ Array TenDashes -> "----------";
 			talk_array-->_i = TM_STALE;
 			_i++;
 			_val = talk_array-->_i;
-			if(_val < TM_ACTIVE) _i++; ! An ID was found
+			if(_val < TM_LAST_ID) _i++; ! An ID was found
 			_i++;
 #Ifv5;
 			@set_window 0;
@@ -517,10 +536,10 @@ Array TenDashes -> "----------";
 			! No more effects to process
 			break;
 		}
-		if(metaclass(_val) == Routine) {
-			! A routine to call
-			_TMCallOrPrint(_j, true);
-			continue;
+
+		if(_val < 30) {
+			! A relative reference to a topic to activate
+			ActivateTopic(p_npc, _val, _j);
 		}
 		#Ifdef EXT_FLAGS;
 		if(_val < TM_FIRST_ID) {
@@ -529,14 +548,14 @@ Array TenDashes -> "----------";
 			continue;
 		}
 		#Endif;
-		if(_val < 501) {
+		if(_val <= TM_LAST_ID) {
 			! An absolute ID for a topic to activate
 			ActivateTopic(p_npc, _val);
 			continue;
 		}
 		#Ifdef DEBUG;
 			#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-				if(_val >= TM_ACTIVE) {
+				if(metaclass(_val) ~= Routine) {
 					#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 						"ERROR: Talk_menu: Action ", _val, " was not understood for ", (name) p_npc, ".";
 					#Ifnot;
@@ -545,8 +564,8 @@ Array TenDashes -> "----------";
 				}
 			#Endif;
 		#Endif;
-		! A relative reference to a topic to activate
-		ActivateTopic(p_npc, _val - 500, _j);
+		! A routine to call
+		_TMCallOrPrint(_j, true);
 	}
 
 	new_line;

@@ -65,18 +65,17 @@ Include "globals.h";
 
 ! Uncomment to add PunyLib extensions
 !Include "ext_menu.h";
-Constant FLAG_COUNT 16;
+Constant FLAG_COUNT 48;
 Include "ext_flags.h";
 
-Constant F_LINDA_TALKED_ABOUT_PARIS 1;
-!Constant TM_MSG_TALK_ABOUT_WHAT "Whadda ya wanna talk about?";
+Constant TM_FIRST_ID 300;
+Constant TM_MSG_TALK_ABOUT_WHAT "Whadda ya wanna talk about?";
 
-!Constant TM_FIRST_ID = 300;
+Constant F_LINDA_TALKED_ABOUT_PARIS 32;
 
 [ FunnyReply;
 	"NOOO!";
 ];
-!Constant TM_NPC 1002;
 [ReActivateParis;
 	ReActivateTopic(Linda, 303);
 ];
@@ -87,27 +86,27 @@ Array talk_array -->
 	TM_NPC Linda
 	0 300 "Bob's death" "What do you know about Bob's death?" "Oh not much. He was murdered I think." 301
 	0 301 "Murder" "Tell me more about the murder" "Sorry, I've told you everything I know."
-	600 303 "Paris" "How do you like Paris?" "I love it. Especially the Louvre! But it's sad that Bob died there." 301 302 503 300
-	0 "Paris" "I like Paris. Tell me more about Paris!" "It's the captial of Love, they say." 502 F_LINDA_TALKED_ABOUT_PARIS
+	30 303 "Paris" "How do you like Paris?" "I love it. Especially the Louvre! But it's sad that Bob died there." 1 2 3 300
+	0 "Paris" "I like Paris. Tell me more about Paris!" "It's the captial of Love, they say." 2 F_LINDA_TALKED_ABOUT_PARIS
 	0 "The Louvre" "What about the Louvre?" "Oh I just love the artsy atmosphere here in Paris you know."
 	0 "Paris trivia" "Do you even know Paris is the capital of France?" "Well of course I do!" ReActivateParis
 	0 350 "Plates" "What do you know about plates?" "They're usually flat I guess."
 	TM_NPC Josh
-	600 "Linda" "How do you know Linda?" "I don't really." 501
+	30 "Linda" "How do you know Linda?" "I don't really." 1
 	0 "Himself" "Are you a funny guy?" FunnyReply
-	600 "Nothing" FunnyReply "Yes!"
-	600 "Gorillas" "What do you know about gorillas?" "I think they live in misty locations."
-	600 "Darwin Awards" "Tell me about the Darwin Awards!" "You can get a prize for dying, I think."
-	600 "Polyplay" "Heard of Polyplay?" "Great little publisher, or so I'm told."
-	600 "Apples" "What can you tell me about apples?" "They're fruits."
-	600 "Bananas" "What can you tell me about bananas?" "They're fruits. No wait, they're berries!"
-	600 "Commodore" "What's Commodore?" "A good old company that made computers back in the 80s." 501 502
+	30 "Nothing" FunnyReply "Yes!"
+	30 "Gorillas" "What do you know about gorillas?" "I think they live in misty locations."
+	30 "Darwin Awards" "Tell me about the Darwin Awards!" "You can get a prize for dying, I think."
+	30 "Polyplay" "Heard of Polyplay?" "Great little publisher, or so I'm told."
+	30 "Apples" "What can you tell me about apples?" "They're fruits."
+	30 "Bananas" "What can you tell me about bananas?" "They're fruits. No wait, they're berries!"
+	30 "Commodore" "What's Commodore?" "A good old company that made computers back in the 80s." 1 2
 	0 "C64" "What about the C64?" "A lovely machine, no doubt!"
 	0 "Plus/4" "And what about the Plus/4?" "Oh, it was misunderstood. A clever machine really."
-	600 "Spectrum" "Have you had a ZX Spectrum?" "No, I was more of a Commodore guy." 400
-	600 "PC" "What do you know about IBM PCs?" "Boring, they're just for work." 550
-	600 "BBC computers" "Tell me about BBC Computers!" "British, weren't they? And I think the name of the company was actually Acorn."
-	600 "Murder" "Where were you when Bob was killed?" "I was at home, watching TV. You don't think I had anything to do with his death, do you?"
+	30 "Spectrum" "Have you had a ZX Spectrum?" "No, I was more of a Commodore guy." 400
+	30 "PC" "What do you know about IBM PCs?" "Boring, they're just for work." 50
+	30 "BBC computers" "Tell me about BBC Computers!" "British, weren't they? And I think the name of the company was actually Acorn."
+	30 "Murder" "Where were you when Bob was killed?" "I was at home, watching TV. You don't think I had anything to do with his death, do you?"
 	TM_NPC 0
 ;
 
