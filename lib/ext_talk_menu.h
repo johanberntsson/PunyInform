@@ -330,7 +330,7 @@ Array TenDashes -> "----------";
 
 
 #Ifv5;
-[ RunTalk p_npc _i _j _n _val _tm_start _height _width _offset _count _more;
+[ RunTalk p_npc _i _j _n _val _tm_start _height _width _offset _count _more _has_split;
 #Ifnot;
 [ RunTalk p_npc _i _j _n _val _tm_start;
 #Endif;
@@ -357,7 +357,6 @@ Array TenDashes -> "----------";
 	else if(_height > 13) @log_shift _height (-1) -> _height; !Division by 2
 	else _height = 7;
 !	@erase_window $ffff;
-	@split_window _height;
 #Endif;
 
 	! Print all valid lines to say
@@ -371,10 +370,6 @@ Array TenDashes -> "----------";
 .restart_talk;
 
 #Ifv5;
-	@erase_window 1;
-	DrawStatusLine();
-	@set_window 1;
-	@set_cursor 2 1;
 	_count = 0;
 	_more = 0;
 #Endif;
@@ -394,7 +389,17 @@ Array TenDashes -> "----------";
 			if(_n <= _offset) continue;
 			_count++;
 !			print "Talk to ", (the) p_npc, " about:^";
-			if(_count == 1) _TMPrintMsg(TM_MSG_TALK_ABOUT_WHAT);
+			if(_count == 1) {
+				#Ifv5;
+					_has_split = true;
+					@split_window _height;
+					@erase_window 1;
+					DrawStatusLine();
+					@set_window 1;
+					@set_cursor 2 1;
+				#Endif;
+				_TMPrintMsg(TM_MSG_TALK_ABOUT_WHAT);
+			}
 			print "  ", _count % 10, ": ";
 #Ifnot;
 			_n++;
@@ -572,14 +577,16 @@ Array TenDashes -> "----------";
 	jump restart_talk_after_line;
 .end_of_talk;
 #Ifv5;
-	@erase_window 1;
-	@split_window 0;
-	@set_window 0;
-#Ifdef PUNYINFORM_MAJOR_VERSION;
-	statusline_current_height = 0;
-#Ifnot;
-	gg_statuswin_cursize = 0;
-#Endif;
+	if(_has_split) {
+		@erase_window 1;
+		@split_window 0;
+		@set_window 0;
+		#Ifdef PUNYINFORM_MAJOR_VERSION;
+			statusline_current_height = 0;
+		#Ifnot;
+			gg_statuswin_cursize = 0;
+		#Endif;
+	}
 #Endif;
 ];
 

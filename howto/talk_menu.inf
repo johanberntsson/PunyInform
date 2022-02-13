@@ -71,6 +71,19 @@ Include "ext_flags.h";
 Constant TM_FIRST_ID 300;
 Constant TM_MSG_TALK_ABOUT_WHAT "Whadda ya wanna talk about?";
 
+Include "ext_talk_menu.h"; ! Requires ext_flags.h *IF* you set flags
+
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#Endif;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_waittime.h";
+
+! Note that flags used in talk_array must have id 32-299
 Constant F_LINDA_TALKED_ABOUT_PARIS 32;
 
 [ FunnyReply;
@@ -81,8 +94,6 @@ Constant F_LINDA_TALKED_ABOUT_PARIS 32;
 ];
 
 Array talk_array -->
-!	TM_NPC Box
-!	0 "Box" "Box?" "Yes!"
 	TM_NPC Linda
 	0 300 "Bob's death" "What do you know about Bob's death?" "Oh not much. He was murdered I think." 301
 	0 301 "Murder" "Tell me more about the murder" "Sorry, I've told you everything I know."
@@ -110,17 +121,7 @@ Array talk_array -->
 	TM_NPC 0
 ;
 
-Include "ext_talk_menu.h"; ! Requires ext_flags.h *IF* you set flags
 
-!Include "ext_quote_box.h";
-!Include "ext_cheap_scenery.h";
-
-#Ifndef USEINFORM;
-Include "puny.h";
-#Endif;
-
-! Uncomment to add PunyLib extensions
-!Include "ext_waittime.h";
 
 ! Use the TalkRoom class for all rooms where some conversation topics should
 ! be active based on location. Using it for all rooms is OK but slower.
