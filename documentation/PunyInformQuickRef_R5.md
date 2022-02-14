@@ -1,9 +1,9 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v3.4 quick reference** |
+| **PunyInform v3.5 quick reference** |
 
   
-Document Release 4. More information on last page.
+Document Release 5. More information on last page.
 
 # Library variables
 
@@ -160,6 +160,10 @@ Document Release 4. More information on last page.
 ## CUSTOM_PLAYER_OBJECT = object **PUNY++**
 
 ###### The player object to use instead of *selfobj*.
+
+## DEATH_MENTION_UNDO **\~PUNY**
+
+###### Print 'undo' option even when player wins.
 
 ## DEBUG
 
