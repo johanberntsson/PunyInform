@@ -135,9 +135,9 @@ slightly less efficient program [in Python is the one written by Hugo
 Labrande](https://github.com/hlabrand/retro-scripts). Both Åsman's and
 Labrande's programs can output any number of abbreviations in Inform's
 expected format and can handle Inform 6's newest gametext format, introduced
-in version 6.35.
+in version 6.35. Currently PunyInform requires version 6.36, so these program are useful for all PunyInform developers.
 
-Starting with Inform 6.35, you can declare up to 96 abbreviations (if you don't
+You can now declare up to 96 abbreviations (if you don't
 declare any "low strings" - that is, set the compiler switches MAX_ABBREVS to
 96 and MAX_DYNAMIC_STRINGS to 0), which saves even more space. You could expect
 savings of up to 7kb on a 128kb file!

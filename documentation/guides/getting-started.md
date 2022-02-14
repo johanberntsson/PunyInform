@@ -21,7 +21,7 @@ later.
 # Step 2: Get the compiler
 PunyInform is a library for the Inform 6 programming language. To use
 it, you will need to download the compiler, called "inform" or
-"inform6". PunyInform requires at least version 6.35 of the compiler. If
+"inform6". PunyInform requires at least version 6.36 of the compiler. If
 you use Windows, it's available as a binary executable, so you can just
 download it and start to use it. Go to
 https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/
