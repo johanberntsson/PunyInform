@@ -18,7 +18,7 @@ To compile games using PunyInform, we recommend the official Inform 6
 compiler maintained by David Kinder, at
 https://github.com/DavidKinder/Inform6.  Binaries can be found at the
 [IF-Archive](https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/).
-PunyInform requires Inform v6.35.
+PunyInform requires Inform v6.36.
 
 You can also use [borogove.app](https://borogove.app/) to write PunyInform
 code and play the resulting game in your browser. Just select PunyInform from
