@@ -16,6 +16,7 @@ v3.5: bug fix and new feature release (14 February 2022)
 - The grammar property is now checking the parser_one variable to make sure
   that -verb replies are parsed correctly regardless of memory allocation.
 - New extension: ext_talk_menu.h, for menu-driven conversations.
+- New example game: howto/talk_menu.inf
 - PunyInform now expects the Inform compiler to be version 6.36.
 
 =======
