@@ -5,8 +5,8 @@ System_file;
 Constant PUNYINFORM_MAJOR_VERSION = 3;
 Constant PUNYINFORM_MINOR_VERSION = 5;
 
-#Ifndef VN_1635;
-Message fatalerror "*** The PunyInform library needs Inform v6.35 or later to work ***";
+#Ifndef VN_1636;
+Message fatalerror "*** The PunyInform library needs Inform v6.36 or later to work ***";
 #Endif; ! VN_
 
 #IfnDef CUSTOM_ABBREVIATIONS;
