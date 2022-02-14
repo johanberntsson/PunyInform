@@ -63,7 +63,7 @@ Include "globals.h";
 ! Uncomment to add PunyLib extensions
 !Include "ext_menu.h";
 !Include "ext_flags.h";
-!Include "ext_talk_menu.h"; ! Note: Requires ext_flags.h to be included too
+!Include "ext_talk_menu.h"; ! Note: Also include ext_flags.h to allow use of flags
 !Include "ext_quote_box.h";
 !Include "ext_cheap_scenery.h";
 

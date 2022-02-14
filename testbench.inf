@@ -184,6 +184,7 @@ Include "globals.h";
 #Ifndef USEINFORM;
 Include "ext_cheap_scenery.h";
 Include "ext_flags.h";
+!Include "ext_talk_menu.h";
 Constant EXT_MENU_STDLIB_MODE;
 Include "ext_menu.h";
 
