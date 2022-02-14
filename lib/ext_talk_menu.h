@@ -1,10 +1,10 @@
 System_file;
 
-! Before including this file, define a word array called talk_array.
-! For each NPC the player should be able to talk to, add a section starting
-! with TM_NPC and the NPCs object ID. Then add one or more conversation topics.
-! End the array with TM_NPC 0. Also, each NPC which the player should be able
-! to talk to must have the property talk_start.
+! To use this extension, define a word array called talk_array somewhere in
+! your source. For each NPC the player should be able to talk to, add a section
+! starting with TM_NPC and the NPCs object ID. Then add one or more conversation
+! topics. End the array with TM_NPC 0. Also, each NPC which the player should
+! be able to talk to must provide the property talk_start.
 !
 ! To initialise the system, either:
 !
@@ -40,7 +40,7 @@ System_file;
 ! NPCSAYS is a string or routine for what the NPC replies
 ! FLAGREF is a number 32-299 for a flag to be set (In order to use this,
 !    you must include ext_flags.h before including ext_talk_menu.h)
-! UNLOCKREF is either a topic ID (300-500) or a relative reference to a topic
+! UNLOCKREF is either a topic ID (300-600) or a relative reference to a topic
 !    (1 to 29) that is activated by this topic. 1 means the next topic,
 !    2 the topic after that etc. The target topic has to have status
 !    TM_INACTIVE (= 0) or TM_ACTIVE (= 30) for this to work. When a topic
@@ -64,7 +64,7 @@ System_file;
 ! 300) by defining the constant TM_FIRST_ID, i.e. to get 100 more IDs and
 ! 100 less flags, do this before including ext_talk_menu.h:
 !
-! Constant TM_FIRST_ID = 200; ! 32-199 are now flags, and 200-600 are IDs
+! Constant TM_FIRST_ID = 200; ! 32-199 are now flags, while 200-600 are IDs
 !
 ! Should you find that you need both a lot of flags and a lot of topic IDs,
 ! you can:
@@ -109,6 +109,10 @@ Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL = 1;
 Constant RTE_VERBOSE = 2;
 Constant TM_NOT_PUNY;
+#Endif;
+
+#Ifndef talk_start;
+Property individual talk_start;
 #Endif;
 
 Global current_talker;
@@ -181,7 +185,7 @@ Constant TM_NPC -1;
 	_TMPrintMsg(talk_array-->p_index, p_no_newline);
 ];
 
-[ _SetTopic p_topic p_start p_value _val _neg;
+[ _SetTopic p_topic p_start p_value _val _find_topic;
 	! p_topic is 1-29: Act on topic number P_TOPIC, counting from p_start
 	! p_topic is 300-600: Act on topic with ID = P_TOPIC.
 	! p_topic is (-600)-(-300): Act on topic with ID = -P_TOPIC. If p_value is
@@ -207,8 +211,9 @@ Constant TM_NPC -1;
 	!   _SetTopic(-301, 123, TM_ACTIVE);
 	! Inactivate topic with ID 301, starting from index 123:
 	!   _SetTopic(301, 123, TM_INACTIVE);
-
-	_neg = -p_topic;
+	_find_topic = p_topic;
+	if(_find_topic < 0)
+		_find_topic = -_find_topic;
 	p_start--;
 	while(true) {
 		p_start++;
@@ -217,17 +222,17 @@ Constant TM_NPC -1;
 			rfalse; ! The topic wasn't found
 		}
 		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
-			if(p_topic < 30 && p_topic > 0) {
-				if(p_topic-- == 1) jump found;
+			if(_find_topic < 30) {
+				if(_find_topic-- == 1) jump found;
 				continue;
 			}
 			p_start++;
-			if(talk_array-->p_start == p_topic or _neg) {
+			if(talk_array-->p_start == _find_topic) {
 				p_start--;
 .found;
 				if(p_value == 1)
 					return talk_array-->p_start;
-				if(_val ~= TM_STALE || _neg > 0) {
+				if(_val ~= TM_STALE || p_topic < 0) {
 					talk_array-->p_start = p_value;
 					rtrue; ! Success
 				}
@@ -608,10 +613,8 @@ Verb 'talk' 'converse' 'interview' 'interrogate'
 
 
 #Ifdef DEBUG;
-[ TalkSetupSub _i _len _val;
+[ TalkSetupSub _i _val;
 	! Initialise the conversation system
-	_len = talk_array-->0;
-!		print _len;
 	_i = 0;
 	while(true) {
 		_val = talk_array-->_i;
