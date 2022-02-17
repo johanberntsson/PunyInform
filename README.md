@@ -235,6 +235,11 @@ There are also categories/channels in the above forums where you can
 discuss plot, story, puzzles etc, and posts requests for beta-testers
 for your game.
 
+## Translations
+
+* [PunyInformFr](https://gitlab.com/auraes/punyinformfr) is a translation of
+  the PunyInform library to French, by auraes.
+
 ## Credits
 
 PunyInform was conceived and designed by Johan Berntsson and Fredrik
