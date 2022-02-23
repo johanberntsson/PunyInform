@@ -87,6 +87,7 @@ Include "puny.h";
 Constant F_LINDA_TALKED_ABOUT_PARIS 32;
 
 [ FunnyReply;
+	talk_menu_talking = false;
 	"NOOO!";
 ];
 [ReActivateParis;

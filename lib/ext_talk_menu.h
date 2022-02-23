@@ -49,6 +49,11 @@ System_file;
 ! ROUTINE is a routine to be run. In this routine, the global variable
 !    current_talker refers to the NPC being talked to.
 !
+! Whenever a routine is used for PLAYERSAYS, NPCSAYS or ROUTINE, it can set the
+! global talk_menu_talking to false to end the conversation after the current
+! topic. When doing this, you may want to use ROUTINE to print a suitable
+! message about why the conversation ended.
+!
 ! Example of an array giving Linda one active topic (Weather), which will
 ! activate the next topic (Heat) and the topic with ID 300 (Herself):
 !
@@ -171,6 +176,8 @@ Constant TM_INACTIVE 0;
 Constant TM_ACTIVE 30;
 Constant TM_STALE 31;
 Constant TM_NPC -1;
+
+Global talk_menu_talking = false;
 
 [ _TMPrintMsg p_msg p_no_newline;
 	if(metaclass(p_msg) == Routine) {
@@ -339,6 +346,7 @@ Array TenDashes -> "----------";
 #Ifnot;
 [ RunTalk p_npc _i _j _n _val _tm_start;
 #Endif;
+	talk_menu_talking = true;
 	current_talker = p_npc;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(~~(p_npc provides talk_start)) {
@@ -578,8 +586,10 @@ Array TenDashes -> "----------";
 		_TMCallOrPrint(_j, true);
 	}
 
-	new_line;
-	jump restart_talk_after_line;
+	if(talk_menu_talking) {
+		new_line;
+		jump restart_talk_after_line;
+	}
 .end_of_talk;
 #Ifv5;
 	if(_has_split) {
@@ -593,6 +603,8 @@ Array TenDashes -> "----------";
 		#Endif;
 	}
 #Endif;
+	talk_menu_talking = false;
+	rtrue;
 ];
 
 [ TalkSub;

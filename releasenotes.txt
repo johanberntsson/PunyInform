@@ -1,5 +1,8 @@
 v3.6: bug fix and new feature release
 
+- ext_talk_menu has a new global variable talk_menu_talking. A routine in
+  talk_array can set it to false to end the conversation prematurely.
+
 =======
 v3.5: bug fix and new feature release (14 February 2022)
 
