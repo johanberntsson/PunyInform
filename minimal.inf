@@ -9,6 +9,7 @@
 ! size and it makes the game slower.
 ! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
 ! aren't used. This can save some space.
+! $ZCODE_LESS_DICT_DATA=1 removes an empty data byte for every dictionary word.
 
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";
