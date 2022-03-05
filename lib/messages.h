@@ -1126,7 +1126,7 @@ default:
 	if (obj has pluralname) { print "them"; rtrue; }
 	if (obj has animate) {
 		if (obj has female) { print "her"; rtrue; }
-		else if (obj hasnt neuter) { print "him"; rtrue; }
+		if (obj hasnt neuter) { print "him"; rtrue; }
 	}
 	print "it";
 ];
@@ -1144,7 +1144,7 @@ default:
 	if (obj has pluralname)		{ print "They're"; return; }
 	if (obj has animate) {
 		if (obj has female)		{ print "She's"; return; }
-		else if (obj hasnt neuter) { print "He's"; return; }
+		if (obj hasnt neuter) { print "He's"; return; }
 	}
 	print "That's";
 ];
