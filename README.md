@@ -186,6 +186,14 @@ There were also nine new PunyInform games submitted to [PunyJam #1](https://ifdb
 
 * [The Job](https://fredrikr.itch.io/the-job), by Fredrik Ramsberg.
 
+And three PunyInform games were submitted to [PunyJam #2](https://ifdb.org/viewcomp?id=42jeo1n70mqwtemq):
+
+* [Morris](https://dee-cooke.itch.io/morris), by Dee Cooke.
+
+* [A Once in a Lifetime Opportunity](https://interpied.itch.io/opportunity), by Interpied.
+
+* [Face Your Fears](https://sijnstra.itch.io/face-your-fears), by Shawn Sijnstra.
+
 All of these games can be downloaded from the links above. Many of them
 are also available at [Ozmoo Online](http://microheaven.com/ozmooonline/)
 where you can create disk images for Commodore C64, C128 or Plus/4.
