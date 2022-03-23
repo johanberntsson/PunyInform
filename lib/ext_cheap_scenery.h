@@ -30,48 +30,79 @@
 ! something to a scenery object other than examining it. If it's a string, it's
 ! printed. If it's a routine it's called. If the routine prints something, it
 ! should return true, otherwise false. The routine is called with two
-! parameters - the adjective/synonym and the noun listed in the cheap_scenery
-! property which was matched.
-
+! parameters - word1 and word2. These hold:
+! * If the cheap scenery object was matched using a parse_name routine, and this
+!     routine set cs_parse_name_id = n, then word1 = CS_PARSE_NAME, word2 = n
+!     The value n should be in the range 1-600.
+! * If the cheap scenery object was matched using a parse_name routine, and this
+!     routine did not set cs_parse_name_id, word1 = CS_PARSE_NAME,
+!     word2 = routine address (If you use a named routine, the name is a
+!    constant equal to the routine address).
+! * Otherwise, word1 = adjective, word2 = noun (the values given in the cheap
+!     scenery property for the item matched).
 !
-! Example usage:
+! Example usage: (from howto/cheapscenerydemo.inf in PunyInform distribution)
 
-! [SceneryReply word1 word2 ;
-!   Push:
-!     if(location == RiverBank && word2 == 'water')
-!         "If you mean you want to swim, you should say so."
-!     "Now how would you do that?";
-!   default:
-!     rfalse;
+! ! Cheap Scenery Parse Name constants. Use values 1-600.
+! Constant CSP_LIBRARY 1;
+!
+! [ SceneryReply word1 word2;
+!   ! NOTE: If we use CS_PARSE_NAME at all in the game, we must first check
+!   ! here if word1 == CS_PARSE_NAME, or we could mistake routines for
+!   ! dictionary words!
+!   !
+!   ! We can check location, if we want different answers in different rooms
+!   if(word1 == CS_PARSE_NAME) {
+!       switch(word2) {
+!       ParseNameAir:
+!           "You need the air to breathe, that's all.";
+!       CSP_LIBRARY:
+!           "The library is super-important. Better not mess with it.";
+!       }
+!   } else {
+!       if(location == Library && word1=='book') "Leave the books to the people who care about them.";
+!   }
+!   rfalse;
 ! ];
 !
 ! Include "ext_cheap_scenery.h";
+! Include "puny.h";
 !
-! Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
-! [SCN_SUN;
-!   deadflag = 1;
-!   "As you stare right into the sun, you feel a burning sensation in your eyes.
-!     After a while, all goes black. With no eyesight, you have little hope of
-!     completing your investigations.";
+! [ ParseNameAir;
+!   if(NextWord() == 'air') return 1;
+!   rfalse;
 ! ];
 !
-! Object RiverBank "River Bank"
-!   with
-!	 description "The river is quite wide here. The sun reflects in the blue water, the birds are
-!      flying high up above.",
-!	 cheap_scenery
-!      'blue' 'water' SCN_WATER
-!      'bird' 'birds' "They seem so carefree."
-!      CS_NO_ADJ 'sun' SCN_SUN
-!      CS_PARSE_NAME [ i; while(NextWord() == 'huge' or 'car' or 'park') i++; return i;] "Nice!"
-!      'soil' 'dirt' "The soil is surprisingly dry here!",
-!      CS_ADD_LIST RiverBank outside_scenery,
-!    outside_scenery
-!      CS_NO_ADJ 'air' "The air is fresh here"
-!      'soil' 'dirt' "The soil is damp after yesterday's rain.",
+! [ WallDesc;
+!   "The walls are ",
+!       (string) random("all white", "claustrophobia-inducing", "scary",
+!           "shiny"), " here.";
+! ];
 !
+! Constant BOOKDESC "You're not interested in reading.";
+!
+! Object Library "The Library"
+!   with
+!       description "You are in a big lovely library. You can examine or try to
+!           take the books, the shelves, the library, the air, the walls and
+!           the ceiling.",
+!       cheap_scenery
+!           CS_ADD_LIST Library inside_scenery
+!           'book' 'books' BOOKDESC
+!           'shelf' 'shelves' "They're full of books."
+!           CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
+!           CS_PARSE_NAME [ _i _w;
+!               cs_parse_name_id = CSP_LIBRARY;
+!               _w = NextWord();
+!               if(_w == 'big') { _i++; _w = NextWord();}
+!               if(_w == 'lovely') { _i++; _w = NextWord();}
+!               if(_w == 'library') { _i++; return _i;}
+!               return 0;
+!           ] "It's truly glorious.",
+!       inside_scenery
+!           'wall' 'walls' WallDesc
+!           CS_NO_ADJ 'ceiling' "The ceiling is quite high up.",
 !   has light;
-
 
 System_file;
 
@@ -90,23 +121,28 @@ Constant CS_NO_ADJ = 1;
 Constant CS_PARSE_NAME = 2;
 Constant CS_ADD_LIST = 3;
 
-Array CSData --> 5;
+Array CSData --> 6;
 Constant CSDATA_OBJ = 0;
 Constant CSDATA_PROP = 1;
 Constant CSDATA_INDEX = 2;
 Constant CSDATA_WORD_1 = 3;
 Constant CSDATA_WORD_2 = 4;
+Constant CSDATA_PARSE_NAME_ID = 5;
 !  CSData-->0: The object which holds list where we found a match
 !  CSData-->1: The property where the list is stored
 !  CSData-->2: The index into the list
 !  CSData-->3: Word 1 in player input
 !  CSData-->4: Word 2 in player input (may not have matched anything)
+!  CSData-->5: The value of cs_parse_name_id when match was made
 
 #Ifndef cheap_scenery;
 Property individual cheap_scenery;
 #Endif;
 
+Global cs_parse_name_id = 0;
+
 [ _ParseCheapScenery p_obj p_prop p_base_wn _w1 _w2 _i _sw1 _sw2 _len _ret _arr;
+	cs_parse_name_id = 0;
 ! 	_base_wn = CheapScenery.inside_description;
 	_w1 = CSData-->CSDATA_WORD_1;
 	_w2 = CSData-->CSDATA_WORD_2;
@@ -169,6 +205,7 @@ Property individual cheap_scenery;
 			if(_ret > 0) {
 				jump match;
 			}
+			cs_parse_name_id = 0;
 		} else if(_w1 == _sw1 or _sw2) {
 				_ret = 1;
 				if(_w1 == _sw1 && _w2 == _sw2) {
@@ -183,6 +220,7 @@ Property individual cheap_scenery;
 	CSData-->CSDATA_OBJ = p_obj;
 	CSData-->CSDATA_PROP = p_prop;
 	CSData-->CSDATA_INDEX = _i;
+	CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
 	return _ret;
 ];
 
@@ -206,7 +244,7 @@ Object CheapScenery "object"
 			print_ret (string) _k;
 		],
 #Ifdef SceneryReply;
-		before [_i _w1;
+		before [_i _w1pos _w1 _w2;
 #Ifnot;
 		before [;
 #Endif;
@@ -217,8 +255,12 @@ Object CheapScenery "object"
 				if(SceneryReply ofclass string)
 					print_ret (string) SceneryReply;
 				_i = (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP);
-				_w1 = CSData-->CSDATA_INDEX;
-				if(SceneryReply(_i-->_w1, _i-->(_w1 + 1)))
+				_w1pos = CSData-->CSDATA_INDEX;
+				_w1 = _i-->_w1pos;
+				_w2 = CSData-->CSDATA_PARSE_NAME_ID;
+				if(_w2 == 0 || _w1 ~= CS_PARSE_NAME)
+					_w2 = _i-->(_w1pos + 1);
+				if(SceneryReply(_w1, _w2))
 					rtrue;
 #endif;
 				"No need to concern yourself with that.";

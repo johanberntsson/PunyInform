@@ -1,0 +1,87 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+Constant Story      "Cheap Scenery Demo";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+Constant NO_SCORE = 0;
+
+!Constant DEBUG;
+Constant OPTIONAL_NO_DARKNESS;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+! Cheap Scenery Parse Name constants. Use values 1-600.
+Constant CSP_LIBRARY 1;
+
+[ SceneryReply word1 word2;
+	! NOTE: If we use CS_PARSE_NAME at all in the game, we must first check
+	! here if word1 == CS_PARSE_NAME, or we could mistake routines for
+	! dictionary words!
+	!
+	! We can check location, if we want different answers in different rooms
+	if(word1 == CS_PARSE_NAME) {
+		switch(word2) {
+		ParseNameAir:
+			"You need the air to breathe, that's all.";
+		CSP_LIBRARY:
+			"The library is super-important. Better not mess with it.";
+		}
+	} else {
+		if(location == Library && word1=='book') "Leave the books to the people who care about them.";
+	}
+	rfalse;
+];
+
+Include "ext_cheap_scenery.h";
+Include "puny.h";
+
+[ ParseNameAir;
+	if(NextWord() == 'air') return 1;
+	rfalse;
+];
+
+[ WallDesc;
+	"The walls are ",
+		(string) random("all white", "claustrophobia-inducing", "scary",
+			"shiny"), " here.";
+];
+
+Constant BOOKDESC "You're not interested in reading.";
+
+Object Library "The Library"
+	with
+		description "You are in a big lovely library. You can examine or try to
+			take the books, the shelves, the library, the air, the walls and
+			the ceiling.",
+		cheap_scenery
+			CS_ADD_LIST Library inside_scenery
+			'book' 'books' BOOKDESC
+			'shelf' 'shelves' "They're full of books."
+			CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
+			CS_PARSE_NAME [ _i _w;
+				cs_parse_name_id = CSP_LIBRARY;
+				_w = NextWord();
+				if(_w == 'big') { _i++; _w = NextWord();}
+				if(_w == 'lovely') { _i++; _w = NextWord();}
+				if(_w == 'library') { _i++; return _i;}
+				return 0;
+			] "It's truly glorious.",
+		inside_scenery
+			'wall' 'walls' WallDesc
+			CS_NO_ADJ 'ceiling' "The ceiling is quite high up.";
+
+Object -> Box "box"
+	with
+		name 'box',
+		description "It's a fine box.",
+	has container open openable;
+
+[Initialise;
+	print "^^Let's do this...^^";
+];
