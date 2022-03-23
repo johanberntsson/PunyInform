@@ -4,6 +4,9 @@ v3.6: bug fix and new feature release
   talk_array can set it to false to end the conversation prematurely.
 - Added strict mode indicator for v5 (issue 104)
 - Improved 'take off' for objects not being worn (issue 103)
+- Added a way for SceneryReply routine (used with cheap scenery extension)
+  to tell different inline parse_name routines apart.
+- Added howto/cheapscenerydemo.inf to show how to use Cheap Scenery.
 
 =======
 v3.5: bug fix and new feature release (14 February 2022)
