@@ -186,7 +186,7 @@ Verb 'switch'
 
 Verb 'take' 'carry' 'hold'
 	* multi                                     -> Take
-	* 'off' worn                                -> Disrobe
+	* 'off' noun                                -> Disrobe
 	* multiinside 'from'/'off' noun             -> Remove
 	* 'inventory'                               -> Inv;
 

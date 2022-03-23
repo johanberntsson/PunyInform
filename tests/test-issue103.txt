@@ -1,0 +1,31 @@
+
+> wear hat
+(first taking the hat)
+You are now wearing the hat.
+
+> i                                                                     
+You're carrying a hat (worn).
+
+> take off hat                                                          
+You take off the hat.
+
+> take off hat                                                          
+You're not wearing the hat.
+
+> remove hat                                                            
+You're not wearing the hat.
+
+> drop hat                                                              
+Dropped.
+
+> take off hat                                                          
+You're not wearing the hat.
+
+> remove hat                                                            
+(first taking the hat)
+You're not wearing the hat.
+
+> quit
+Are you sure you want to quit? yes
+
+[Hit any key to exit.]

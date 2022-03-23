@@ -27,9 +27,9 @@ test-grammarproperty:
 	inform +../lib -v5 -s -S -D test-grammarproperty.inf
 	frotz test-grammarproperty.z5
 
-test-parser:
-	inform +../lib -v3 -s test-parser.inf
-	frotz test-parser.z3
+test-issue103:
+	inform +../lib -v3 -s test-issue103.inf
+	frotz test-issue103.z3
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages

@@ -3,6 +3,7 @@ v3.6: bug fix and new feature release
 - ext_talk_menu has a new global variable talk_menu_talking. A routine in
   talk_array can set it to false to end the conversation prematurely.
 - Added strict mode indicator for v5 (issue 104)
+- Improved 'take off' for objects not being worn (issue 103)
 
 =======
 v3.5: bug fix and new feature release (14 February 2022)
