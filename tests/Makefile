@@ -4,7 +4,7 @@ runtests:
 	ruby runtests.rb
 
 inform:
-	inform -v8 test-grammarproperty.inf
+	inform -v8 -D test-grammarproperty.inf
 	frotz test-grammarproperty.z8
 
 testbench:
@@ -23,9 +23,9 @@ large5:
 	inform +../lib -v5 largegame.inf
 	frotz largegame.z5
 
-test-parsetoken:
-	inform +../lib -v3 -s test-parsetoken.inf
-	frotz test-parsetoken.z3
+test-grammarproperty:
+	inform +../lib -v5 -s -S -D test-grammarproperty.inf
+	frotz test-grammarproperty.z5
 
 test-parser:
 	inform +../lib -v3 -s test-parser.inf
