@@ -19,22 +19,18 @@ Include "globals.h";
 ! Cheap Scenery Parse Name constants. Use values 1-600.
 Constant CSP_LIBRARY 1;
 
-[ SceneryReply word1 word2;
-	! NOTE: If we use CS_PARSE_NAME at all in the game, we must first check
-	! here if word1 == CS_PARSE_NAME, or we could mistake routines for
-	! dictionary words!
-	!
+[ SceneryReply word1 word2 routine;
 	! We can check location, if we want different answers in different rooms
-	if(word1 == CS_PARSE_NAME) {
-		switch(word2) {
-		ParseNameAir:
-			"You need the air to breathe, that's all.";
-		CSP_LIBRARY:
-			"The library is super-important. Better not mess with it.";
-		}
-	} else {
-		if(location == Library && word1=='book') "Leave the books to the people who care about them.";
+	! We can also check action, and there's even an implicit switch on action,
+	! so we can do things like: Take: "You're crazy.";
+	switch(routine) {
+	ParseNameAir:
+		"You need the air to breathe, that's all.";
+	CSP_LIBRARY:
+		"The library is super-important. Better not mess with it.";
 	}
+	if(location == Library && word1 == 'book' && word2 == 'books')
+		"Leave the books to the people who care about them.";
 	rfalse;
 ];
 

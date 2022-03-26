@@ -29,80 +29,76 @@
 ! called SceneryReply. If you do, it will be used whenever the player does
 ! something to a scenery object other than examining it. If it's a string, it's
 ! printed. If it's a routine it's called. If the routine prints something, it
-! should return true, otherwise false. The routine is called with two
-! parameters - word1 and word2. These hold:
+! should return true, otherwise false. The routine is called with three
+! parameters - word1, word2 and routine. These hold:
 ! * If the cheap scenery object was matched using a parse_name routine, and this
-!     routine set cs_parse_name_id = n, then word1 = CS_PARSE_NAME, word2 = n
-!     The value n should be in the range 1-600.
+!     routine set cs_parse_name_id = n, then word1 = CS_PARSE_NAME, word2 = 0,
+!     routine = n. The value n should be in the range 1-600.
 ! * If the cheap scenery object was matched using a parse_name routine, and this
 !     routine did not set cs_parse_name_id, word1 = CS_PARSE_NAME,
-!     word2 = routine address (If you use a named routine, the name is a
-!    constant equal to the routine address).
+!     word2 = 0 and routine = [routine address] (If you use a named routine,
+!     the name is a constant equal to the routine address).
 ! * Otherwise, word1 = adjective, word2 = noun (the values given in the cheap
-!     scenery property for the item matched).
+!     scenery property for the item matched) and routine = 0.
 !
 ! Example usage: (from howto/cheapscenerydemo.inf in PunyInform distribution)
 
 ! ! Cheap Scenery Parse Name constants. Use values 1-600.
 ! Constant CSP_LIBRARY 1;
 !
-! [ SceneryReply word1 word2;
-!   ! NOTE: If we use CS_PARSE_NAME at all in the game, we must first check
-!   ! here if word1 == CS_PARSE_NAME, or we could mistake routines for
-!   ! dictionary words!
-!   !
-!   ! We can check location, if we want different answers in different rooms
-!   if(word1 == CS_PARSE_NAME) {
-!       switch(word2) {
-!       ParseNameAir:
-!           "You need the air to breathe, that's all.";
-!       CSP_LIBRARY:
-!           "The library is super-important. Better not mess with it.";
-!       }
-!   } else {
-!       if(location == Library && word1=='book') "Leave the books to the people who care about them.";
-!   }
-!   rfalse;
+! [ SceneryReply word1 word2 routine;
+!     ! We can check location, if we want different answers in different rooms
+!     ! We can also check action, and there's even an implicit switch on action,
+!     ! so we can do things like: Take: "You're crazy.";
+!     switch(routine) {
+!     ParseNameAir:
+!         "You need the air to breathe, that's all.";
+!     CSP_LIBRARY:
+!         "The library is super-important. Better not mess with it.";
+!     }
+!     if(location == Library && word1 == 'book' && word2 == 'books')
+!         "Leave the books to the people who care about them.";
+!     rfalse;
 ! ];
 !
 ! Include "ext_cheap_scenery.h";
 ! Include "puny.h";
 !
 ! [ ParseNameAir;
-!   if(NextWord() == 'air') return 1;
-!   rfalse;
+!     if(NextWord() == 'air') return 1;
+!     rfalse;
 ! ];
 !
 ! [ WallDesc;
-!   "The walls are ",
-!       (string) random("all white", "claustrophobia-inducing", "scary",
-!           "shiny"), " here.";
+!     "The walls are ",
+!         (string) random("all white", "claustrophobia-inducing", "scary",
+!             "shiny"), " here.";
 ! ];
 !
 ! Constant BOOKDESC "You're not interested in reading.";
 !
 ! Object Library "The Library"
-!   with
-!       description "You are in a big lovely library. You can examine or try to
-!           take the books, the shelves, the library, the air, the walls and
-!           the ceiling.",
-!       cheap_scenery
-!           CS_ADD_LIST Library inside_scenery
-!           'book' 'books' BOOKDESC
-!           'shelf' 'shelves' "They're full of books."
-!           CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
-!           CS_PARSE_NAME [ _i _w;
-!               cs_parse_name_id = CSP_LIBRARY;
-!               _w = NextWord();
-!               if(_w == 'big') { _i++; _w = NextWord();}
-!               if(_w == 'lovely') { _i++; _w = NextWord();}
-!               if(_w == 'library') { _i++; return _i;}
-!               return 0;
-!           ] "It's truly glorious.",
-!       inside_scenery
-!           'wall' 'walls' WallDesc
-!           CS_NO_ADJ 'ceiling' "The ceiling is quite high up.",
-!   has light;
+!     with
+!         description "You are in a big lovely library. You can examine or try to
+!             take the books, the shelves, the library, the air, the walls and
+!             the ceiling.",
+!         cheap_scenery
+!             CS_ADD_LIST Library inside_scenery
+!             'book' 'books' BOOKDESC
+!             'shelf' 'shelves' "They're full of books."
+!             CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
+!             CS_PARSE_NAME [ _i _w;
+!                 cs_parse_name_id = CSP_LIBRARY;
+!                 _w = NextWord();
+!                 if(_w == 'big') { _i++; _w = NextWord();}
+!                 if(_w == 'lovely') { _i++; _w = NextWord();}
+!                 if(_w == 'library') { _i++; return _i;}
+!                 return 0;
+!             ] "It's truly glorious.",
+!         inside_scenery
+!             'wall' 'walls' WallDesc
+!             CS_NO_ADJ 'ceiling' "The ceiling is quite high up.",
+!     has light;
 
 System_file;
 
@@ -244,7 +240,7 @@ Object CheapScenery "object"
 			print_ret (string) _k;
 		],
 #Ifdef SceneryReply;
-		before [_i _w1pos _w1 _w2;
+		before [_i _w1pos _w1 _w2 _routine;
 #Ifnot;
 		before [;
 #Endif;
@@ -257,10 +253,14 @@ Object CheapScenery "object"
 				_i = (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP);
 				_w1pos = CSData-->CSDATA_INDEX;
 				_w1 = _i-->_w1pos;
-				_w2 = CSData-->CSDATA_PARSE_NAME_ID;
-				if(_w2 == 0 || _w1 ~= CS_PARSE_NAME)
-					_w2 = _i-->(_w1pos + 1);
-				if(SceneryReply(_w1, _w2))
+				_w2 = _i-->(_w1pos + 1);
+				if(_w1 == CS_PARSE_NAME) {
+					_routine = CSData-->CSDATA_PARSE_NAME_ID;
+					if(_routine == 0)
+						_routine = _w2;
+					_w2 = 0;
+				}
+				if(SceneryReply(_w1, _w2, _routine))
 					rtrue;
 #endif;
 				"No need to concern yourself with that.";
