@@ -59,14 +59,22 @@ Include "Grammar";
 
 Object Library "The Library"
 	with 
-	    name 'scenery' 'useless',
-	    description "You are in a library."
+	    name 'library',
+	    description "You are in a library.",
+	    in_to RestRoom
 	;
 
 Object -> Hat "hat"
 	with 
 	    name 'hat',
 	has clothing;
+
+Object Restroom "Restroom"
+	with 
+	    name 'scenery' 'useless',
+	    description "You are in a restroom.",
+	    out_to Library
+	;
 
 
 [ Initialise;

@@ -1,5 +1,7 @@
 transcript
 
+enter
+exit
 wear hat
 i                                                                     
 take off hat                                                          

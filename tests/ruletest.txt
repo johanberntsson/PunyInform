@@ -1,16 +1,16 @@
 
 > n
- *** Room 1.before: action is Go/23 noun=5 (north)
+ *** Room 1.before: action is Go/24 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
  *** Room 2.before: action is <fake action 6>/4102 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
  *** Room 1.after: action is <fake action 6>/4102 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
- *** Room 2.after: action is Go/23 noun=5 (north)
+ *** Room 2.after: action is Go/24 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
 Darkness
 It is pitch dark here!
- *** Room 2.after: action is Look/29 noun=5 (north)
+ *** Room 2.after: action is Look/30 noun=5 (north)
      consult 0/0 (going 4102, notustood 4100)
 
 > jhn, hello
@@ -20,18 +20,18 @@ I can't see who you are referring to.
 I can't see who you are referring to.
 
 > s
- *** Room 2.before: action is Go/23 noun=5 (south)
+ *** Room 2.before: action is Go/24 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
  *** Room 1.before: action is <fake action 6>/4102 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
  *** Room 1.after: action is <fake action 6>/4102 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
- *** Room 1.after: action is Go/23 noun=5 (south)
+ *** Room 1.after: action is Go/24 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
 Room 1
 
 You can see a red cube, a black cube and John here.
- *** Room 1.after: action is Look/29 noun=5 (south)
+ *** Room 1.after: action is Look/30 noun=5 (south)
      consult 0/0 (going 4102, notustood 4100)
 
 > jhn, hello
@@ -68,16 +68,16 @@ There is no reply.
 You need to be more specific.
 
 > john, get red cube
- *** John.orders: action is Take/19 noun=10 (red cube)
+ *** John.orders: action is Take/20 noun=10 (red cube)
      consult 0/0 (going 4102, notustood 4100)
- *** John.life: action is Take/19 noun=10 (red cube)
+ *** John.life: action is Take/20 noun=10 (red cube)
      consult 0/0 (going 4102, notustood 4100)
 John has better things to do.
 
 > john, examine gun
- *** John.orders: action is Examine/17 noun=13 (gun)
+ *** John.orders: action is Examine/18 noun=13 (gun)
      consult 0/0 (going 4102, notustood 4100)
- *** John.life: action is Examine/17 noun=13 (gun)
+ *** John.life: action is Examine/18 noun=13 (gun)
      consult 0/0 (going 4102, notustood 4100)
 John has better things to do.
 

@@ -48,8 +48,14 @@ Verb 'drop' 'discard' 'throw'
 Verb 'eat'
     * held                                      -> Eat;
 
+#IfDef OPTIONAL_EXTENDED_VERBSET;
+Verb 'enter'
+	*                                           -> GoIn
+	* noun                                      -> Enter;
+#IfNot;
 Verb 'enter'
 	* noun                                      -> Enter;
+#Endif;
 
 Verb 'examine' 'x//'
 	* noun -> Examine;
@@ -352,7 +358,12 @@ Verb 'wear'
 
 [ ExitSub _p;
 	_p = parent(player);
-	if(parent(_p) == 0) { PrintMsg(MSG_EXIT_ALREADY); rtrue; }
+	if(parent(_p) == 0) {
+		! player not inside, standing in the room
+		if(_p.out_to && noun == 0) <<Go FAKE_OUT_OBJ>>;
+		PrintMsg(MSG_EXIT_ALREADY); 
+		rtrue; 
+	}
 	if(noun == 0) <<Exit _p>>;
 	if(player notin noun) {
 		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE, parent(player)); rtrue; }

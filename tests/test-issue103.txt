@@ -1,4 +1,13 @@
 
+> enter
+Restroom
+You are in a restroom.
+
+> exit
+The Library
+
+You can see a hat here.
+
 > wear hat
 (first taking the hat)
 You are now wearing the hat.
