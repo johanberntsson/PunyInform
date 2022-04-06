@@ -8,6 +8,7 @@ v3.6: bug fix and new feature release
   to tell different inline parse_name routines apart.
 - Added howto/cheapscenerydemo.inf to show how to use Cheap Scenery.
 - Added 'enter' and 'exit' for in_dir, out_dir in rooms (issue 105)
+- Minor optimisations for speed and size in handling of ordered timers.
 
 =======
 v3.5: bug fix and new feature release (14 February 2022)

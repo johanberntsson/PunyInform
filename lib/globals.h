@@ -259,6 +259,10 @@ Property when_on            alias initial;
 Property daemon             alias time_out;
 Property article            alias cant_go;
 
+#Ifdef OPTIONAL_ORDERED_TIMERS;
+Property individual timer_order;
+#Endif;
+
 Constant FAKE_N_OBJ = 10001;
 Constant FAKE_S_OBJ = 10002;
 Constant FAKE_E_OBJ = 10003;

@@ -1285,7 +1285,7 @@ Object  Beard "John's beard"
 !	print "BlueBook.party is ", BlueBook.party, "^";
 !	BlueBook.party(5);
 	move Gun to John;
-	move BlueBook to John;
+!	move BlueBook to John;
 !	move Sweater to John;
 !	give Sweater worn;
 #Ifndef USEINFORM;
