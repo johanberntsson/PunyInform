@@ -126,6 +126,7 @@ Include "Grammar";
 #Endif;
 
 [Scan1Scope;
+    !print "scan1scope ", scope_stage, "^";
     switch(scope_stage) {
         1: rtrue;
         !2: PlaceInScope(RiverBank);
@@ -136,6 +137,7 @@ Include "Grammar";
 ];
 
 [Scan2Scope;
+    !print "scan2scope ", scope_stage, "^";
     switch(scope_stage) {
         1: rfalse;
         ! only paper and paperclip should be in scope

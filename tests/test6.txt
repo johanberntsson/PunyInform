@@ -1,3 +1,4 @@
+
 > what is samarkand
 Samarkand is a city in south-eastern Uzbekistan.
 
@@ -21,7 +22,7 @@ You're not something you can switch.
 You switch the light switch on.
 
 > score
-You have so far scored 0 out of a possible 0, in 5 turns.
+You have so far scored 0 out of a possible 0, in 6 turns.
 
 > quit
 Are you sure you want to quit? yes

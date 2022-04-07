@@ -916,7 +916,7 @@ System_file;
 		scope_stage = 2;
 		_UpdateScope();
 		! not a real error, just to make sure that phase2 runs
-		phase2_necessary = PHASE2_ERROR;
+		phase2_necessary = PHASE2_SCOPE;
 	} else if(_token_type == TT_PARSE_ROUTINE) {
 		! allow the 'general parsing routine' to do all instead.
 		! it returns object or GRP_FAIL, ...; just like _ParseToken
@@ -1515,7 +1515,7 @@ Array guess_object-->5;
 					} else {
 						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
 					}
-				} else {
+				} else if(phase2_necessary ~= PHASE2_SCOPE) {
 					! give higher score to unknown words matches
 					! so that for examine 'get goblin' and 'take goblin'
 					! works the same when goblin isn't in scope.
@@ -1565,8 +1565,8 @@ Array guess_object-->5;
 			if(_noun == Directions) {
 				if(noun == Directions) {
 					! This is second, and noun is already Directions.
-						if(p_phase == PHASE2)
-							PrintMsg(MSG_PARSER_NOT_MULTIPLE_DIRS);
+					if(p_phase == PHASE2)
+						PrintMsg(MSG_PARSER_NOT_MULTIPLE_DIRS);
 					phase2_necessary = PHASE2_ERROR;
 					return wn - verb_wordnum;
 				}
@@ -1769,7 +1769,7 @@ Array guess_object-->5;
 		_score = _ParsePattern(_pattern, PHASE1);
 
 #IfDef DEBUG_PARSEANDPERFORM;
-		print "### PHASE 1: result ", _score, " phase2 ", phase2_necessary, " wn ", wn, "^";
+		print "### PHASE 1: result ", _score, " phase2_necessary ", phase2_necessary, " wn ", wn, "^";
 #EndIf;
 		! note that _ParsePattern will never return -1 in PHASE1
 		if(_score == 0) {
@@ -1777,7 +1777,8 @@ Array guess_object-->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 			print "Pattern didn't match.^";
 #EndIf;
-		} else if(_score > _best_score || (
+		} else if(_score > _best_score || 
+				(
 				! we override previous best if this pattern is equally
 				! good but it doesn't require reparsing (it will
 				! produce some error message in phase 2), and
@@ -1785,14 +1786,15 @@ Array guess_object-->5;
 				_score == _best_score &&
 				_best_phase2 > 0 &&  ! if previous best requested reparsing
 				phase2_necessary == 0 &&  ! and we don't request reparsing
-				consult_from == 0)) ! and this pattern didn't include 'topic'
+				consult_from == 0) ! and this pattern didn't include 'topic'
+				)
 			{
 			_best_score = _score;
 			_best_pattern = _pattern;
 			_best_pattern_pointer = pattern_pointer;
 			_best_phase2 = phase2_necessary;
 #IfDef DEBUG_PARSEANDPERFORM;
-		print "### PHASE 1: new best pattern ", _i, " ", consult_from, "^";
+		print "### PHASE 1: new best pattern ", _i, " ", _best_phase2, "^";
 #EndIf;
 			! check if pefect match found
 			if(_best_score == 100) break;
