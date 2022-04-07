@@ -76,11 +76,11 @@ System_file;
 		second = _GuessMissingNoun(_second -> 2, _prep, 2);
 	}
 	!print scope_stage, " ", phase2_necessary, " ",_num_nouns, " ", _noun, "=", noun, ":", _second, "=", second, "^";
-	if(_num_nouns == 1 && _noun ~= 0  && (_noun == 0 || noun ~= 0)) {
+	if(_num_nouns == 1 && _noun ~= 0  && noun ~= 0) {
 		!print "message complete: ", noun, "^";
 		rtrue;
 	}
-	if(_num_nouns == 2 && _noun ~= 0 && _second ~=0 && (_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
+	if(_num_nouns == 2 && _noun ~= 0 && _second ~=0 && noun ~= 0 && second ~= 0) {
 		!print "message complete: ", noun, " ", second, "^";
 		rtrue;
 	}
