@@ -1,6 +1,7 @@
 
 transcript
 
+open
 sit ladder
 look ladder
 again me

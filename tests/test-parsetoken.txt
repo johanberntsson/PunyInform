@@ -41,19 +41,19 @@ I don't understand that sentence.
 Scanning John... Clear!
 
 > scan3 john
-I think you wanted to say "scan3 John here". Please try again.
+You're crazy!
 
 > scan4 paper
 Scanning the paper... Clear!
 
 > scan4 paper here
-You're crazy!
+I don't understand that sentence.
 
 > scan4 john here
 Scanning John... Clear!
 
 > scan4 john
-I think you wanted to say "scan4 John here". Please try again.
+You're crazy!
 
 > bang 100
 Noun is 100.

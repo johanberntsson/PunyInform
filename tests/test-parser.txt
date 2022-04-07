@@ -1,4 +1,8 @@
 
+> open
+(assuming the toilet door)
+You open the toilet door.
+
 > sit ladder
 I think you wanted to say "sit on something". Please try again.
 

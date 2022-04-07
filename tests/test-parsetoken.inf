@@ -129,6 +129,7 @@ Include "Grammar";
     switch(scope_stage) {
         1: rtrue;
         !2: PlaceInScope(RiverBank);
+        ! paper, paperclip, John and yourself in scope
         2: ScopeWithin(RiverBank);
         3: "You're crazy!";
     }
@@ -137,6 +138,7 @@ Include "Grammar";
 [Scan2Scope;
     switch(scope_stage) {
         1: rfalse;
+        ! only paper and paperclip should be in scope
         2: ScopeWithin(RiverBank); rtrue;
         3: "You're crazy!";
     }

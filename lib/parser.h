@@ -69,9 +69,18 @@ System_file;
 	! try to guess missing parts in the pattern
 	! return true if we could fix everything
 #IfDef OPTIONAL_GUESS_MISSING_NOUN;
-	if(_noun ~= 0 && noun == 0) noun = _GuessMissingNoun(_noun -> 2, 0, 1);
-	if(_second ~= 0 && second == 0) second = _GuessMissingNoun(_second -> 2, _prep, 2);
-	if(_num_nouns > 0 && _noun ~= 0 && _second ~=0 && (_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
+	if(_noun ~= 0 && noun == 0) {
+		noun = _GuessMissingNoun(_noun -> 2, 0, 1);
+	}
+	if(_second ~= 0 && second == 0) {
+		second = _GuessMissingNoun(_second -> 2, _prep, 2);
+	}
+	!print scope_stage, " ", phase2_necessary, " ",_num_nouns, " ", _noun, "=", noun, ":", _second, "=", second, "^";
+	if(_num_nouns == 1 && _noun ~= 0  && (_noun == 0 || noun ~= 0)) {
+		!print "message complete: ", noun, "^";
+		rtrue;
+	}
+	if(_num_nouns == 2 && _noun ~= 0 && _second ~=0 && (_noun == 0 || noun ~= 0) && (_second == 0 || second ~= 0)) {
 		!print "message complete: ", noun, " ", second, "^";
 		rtrue;
 	}
@@ -1333,7 +1342,6 @@ Array guess_object-->5;
 		print "(assuming ";
 		if(p_prep) {
 			print (address) (p_prep+1) --> 0, " ";
-		} else {
 		}
 		print (the) _noun, ")^";
 	}
@@ -1392,7 +1400,7 @@ Array guess_object-->5;
 						parser_unknown_noun_found = _parse_pointer + 4;
 						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
 					} else {
-						phase2_necessary = true;
+						phase2_necessary = PHASE2_ERROR;
 					}
 					return wn;
 				} else if(parse->1 > wn && ((((_parse_pointer + 4)-->0) + DICT_BYTES_FOR_WORD)->0 & 1) == 0) {
@@ -1406,7 +1414,7 @@ Array guess_object-->5;
 					if(p_phase == PHASE2) {
 						PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 					} else {
-						phase2_necessary = true;
+						phase2_necessary = PHASE2_ERROR;
 					}
 					return _current_wn;
 				} else {
@@ -1775,7 +1783,7 @@ Array guess_object-->5;
 				! produce some error message in phase 2), and
 				! the previously best pattern did.
 				_score == _best_score &&
-				_best_phase2 == 1 &&  ! if previous best requested reparsing
+				_best_phase2 > 0 &&  ! if previous best requested reparsing
 				phase2_necessary == 0 &&  ! and we don't request reparsing
 				consult_from == 0)) ! and this pattern didn't include 'topic'
 			{
@@ -1829,7 +1837,7 @@ Array guess_object-->5;
 	if(_best_score < parse->1) {
 		if(_best_score == 0) {
 			PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
-		} else if(_best_phase2 == PHASE2_ERROR) {
+		} else if(_best_phase2 > 0) {
 			! call again to generate suitable error message
 			_score = _ParsePattern(_best_pattern, PHASE2);
 		} else {
