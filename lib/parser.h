@@ -76,13 +76,15 @@ System_file;
 		second = _GuessMissingNoun(_second -> 2, _prep, 2);
 	}
 	!print scope_stage, " ", phase2_necessary, " ",_num_nouns, " ", _noun, "=", noun, ":", _second, "=", second, "^";
-	if(_num_nouns == 1 && _noun ~= 0  && noun ~= 0) {
-		!print "message complete: ", noun, "^";
-		rtrue;
-	}
-	if(_num_nouns == 2 && _noun ~= 0 && _second ~=0 && noun ~= 0 && second ~= 0) {
-		!print "message complete: ", noun, " ", second, "^";
-		rtrue;
+	if(_noun ~= 0  && noun ~= 0) {
+		if(_num_nouns == 1) {
+			!print "message complete: ", noun, "^";
+			rtrue;
+		}
+		if(_num_nouns == 2 && _second ~=0 && second ~= 0) {
+			!print "message complete: ", noun, " ", second, "^";
+			rtrue;
+		}
 	}
 #EndIf;
 
@@ -1777,7 +1779,7 @@ Array guess_object-->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 			print "Pattern didn't match.^";
 #EndIf;
-		} else if(_score > _best_score || 
+		} else if(_score > _best_score ||
 				(
 				! we override previous best if this pattern is equally
 				! good but it doesn't require reparsing (it will
