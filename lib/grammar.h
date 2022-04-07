@@ -204,7 +204,7 @@ Verb 'tie' 'attach' 'fasten' 'fix'
 	* noun                                      -> Tie
 	* noun 'to' noun                            -> Tie;
 
-Verb 'touch'
+Verb 'touch' 'feel' 'fondle' 'grope'
 	* noun                                      -> Touch;
 
 Verb 'turn' 'rotate' 'screw' 'twist' 'unscrew'
