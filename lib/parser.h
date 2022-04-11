@@ -1774,12 +1774,21 @@ Array guess_object-->5;
 		print "### PHASE 1: result ", _score, " phase2_necessary ", phase2_necessary, " wn ", wn, "^";
 #EndIf;
 		! note that _ParsePattern will never return -1 in PHASE1
+		print "  _score ", _score, ", _best_score ", _best_score, "^";
+		print "  phase2_necessary ", phase2_necessary, ", _best_phase2 ", _best_phase2, ", PHASE2_SCOPE ", PHASE2_SCOPE, "^";
 		if(_score == 0) {
 			! This pattern has failed.
 #IfDef DEBUG_PARSEANDPERFORM;
 			print "Pattern didn't match.^";
 #EndIf;
-		} else if(_score > _best_score ||
+		} else if(
+				(_score > _best_score &&
+				((_best_phase2 ~= PHASE2_SCOPE && _score ~= 100) ||
+				_score == 100)
+				)
+				|| 
+				(_score < _best_score && phase2_necessary == PHASE2_SCOPE)
+				||
 				(
 				! we override previous best if this pattern is equally
 				! good but it doesn't require reparsing (it will
@@ -1796,7 +1805,7 @@ Array guess_object-->5;
 			_best_pattern_pointer = pattern_pointer;
 			_best_phase2 = phase2_necessary;
 #IfDef DEBUG_PARSEANDPERFORM;
-		print "### PHASE 1: new best pattern ", _i, " ", _best_phase2, "^";
+		print "### PHASE 1: new best pattern ", _i, " ", _best_phase2, " ", _score, "^";
 #EndIf;
 			! check if pefect match found
 			if(_best_score == 100) break;
