@@ -590,7 +590,8 @@ System_file;
 	return 0;
 ];
 
-[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase _pluralword _i _j _k _all_found;
+[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase
+		_pluralword _i _j _k _m _all_found;
 	! try getting a noun from the <p_parse_pointer> entry in parse
 	! return:
 	!   <noun number> if found
@@ -740,14 +741,14 @@ System_file;
 #IfDef DEBUG;
 				!_PrintParseArray(parse);
 #Endif;
-				_k-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
-				if(_k-->0 == _j-->0) {
+				_m = (parse2 + 4 * _oldwn - 2)-->0;
+				parse->1 = 2;
+				if(_m == _j-->0) {
 					! don't allow repeated words (red red etc)
-					_k-->0 = 0;
+					_m = 0;
 					parse->1 = 1;
-				} else {
-					parse->1 = 2;
 				}
+				_k-->0 = _m;
 #IfDef DEBUG;
 				!_PrintParseArray(parse);
 #Endif;
@@ -759,15 +760,15 @@ System_file;
 #IfDef DEBUG;
 					!_PrintParseArray(parse);
 #Endif;
-					_k-->0 = _j-->0;
-					_j-->0 = (parse2 + 2 + 4*(_oldwn - 1))-->0;
-					if(_k-->0 == _j-->0) {
+					_m = _j-->0;
+					_j-->0 = (parse2 + 4 * _oldwn - 2)-->0;
+					parse->1 = 2;
+					if(_m == _j-->0) {
 						! don't allow repeated words (red red etc)
-						_k-->0 = 0;
+						_m = 0;
 						parse->1 = 1;
-					} else {
-						parse->1 = 2;
 					}
+					_k-->0 = _m;
 #IfDef DEBUG;
 					!_PrintParseArray(parse);
 #Endif;
