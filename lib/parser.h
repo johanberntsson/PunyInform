@@ -1774,8 +1774,6 @@ Array guess_object-->5;
 		print "### PHASE 1: result ", _score, " phase2_necessary ", phase2_necessary, " wn ", wn, "^";
 #EndIf;
 		! note that _ParsePattern will never return -1 in PHASE1
-		print "  _score ", _score, ", _best_score ", _best_score, "^";
-		print "  phase2_necessary ", phase2_necessary, ", _best_phase2 ", _best_phase2, ", PHASE2_SCOPE ", PHASE2_SCOPE, "^";
 		if(_score == 0) {
 			! This pattern has failed.
 #IfDef DEBUG_PARSEANDPERFORM;
@@ -1787,7 +1785,7 @@ Array guess_object-->5;
 				_score == 100)
 				)
 				|| 
-				(_score < _best_score && phase2_necessary == PHASE2_SCOPE)
+				(_score <= _best_score && phase2_necessary == PHASE2_SCOPE)
 				||
 				(
 				! we override previous best if this pattern is equally
