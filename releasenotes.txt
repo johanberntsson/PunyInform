@@ -12,6 +12,7 @@ v3.6: bug fix and new feature release
 - Fixed GuessMissingNoun bug for phrases with missing noun without second.
 - Added feel, fondle and grope as synonyms to touch.
 - Fixed pattern scoring bug when some patterns contained the scope token.
+- Added messages for empty inputs (issue 106)
 
 =======
 v3.5: bug fix and new feature release (14 February 2022)

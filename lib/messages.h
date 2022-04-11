@@ -126,7 +126,7 @@ Constant MSG_PARSER_NOT_MULTIPLE_DIRS "You can't use multiple directions.";
 Constant MSG_PARSER_BAD_NUMBER "I didn't understand that number.";
 #EndIf;
 #Ifndef MSG_PARSER_NO_INPUT;
-Constant MSG_PARSER_NO_INPUT "Come again?^";
+Constant MSG_PARSER_NO_INPUT "Come again?";
 #EndIf;
 #Ifndef MSG_PARSER_UNKNOWN_SENTENCE;
 Constant MSG_PARSER_UNKNOWN_SENTENCE "I don't understand that sentence.";

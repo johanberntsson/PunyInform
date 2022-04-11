@@ -1607,8 +1607,10 @@ Array guess_object-->5;
 	! 1 is returned. If the input is "open box" then
 	! the whole input is matched and 2 returned.
 
-	if(_IsSentenceDivider(parse + 2))
+	if(_IsSentenceDivider(parse + 2) || parse->1 < 1) {
+		PrintMsg(MSG_PARSER_NO_INPUT);
 		return -1;
+	}
 
 	multiple_objects-->0 = 0;
 	selected_direction_index = 0;
@@ -1626,11 +1628,6 @@ Array guess_object-->5;
 	scope_routine = 0;
 	noun_filter = 0;
 	object_token_type = -1;
-
-	if(parse->1 < 1) {
-		PrintMsg(MSG_PARSER_NO_INPUT);
-		rtrue;
-	}
 
 	verb_wordnum = 1;
 

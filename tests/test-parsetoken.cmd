@@ -1,5 +1,9 @@
 transcript
 
+.
+..
+,
+
 x john
 x beautiful
 x the beautiful john

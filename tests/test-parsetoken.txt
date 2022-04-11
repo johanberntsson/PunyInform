@@ -1,4 +1,18 @@
 
+> .
+Come again?
+
+> ..
+Come again?
+
+Come again?
+
+> ,
+Come again?
+
+> 
+Come again?
+
 > x john
 He is beautiful and he knows it.
 
