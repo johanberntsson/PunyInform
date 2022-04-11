@@ -1,9 +1,9 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v3.5 quick reference** |
+| **PunyInform v3.6 quick reference** |
 
   
-Document Release 5. More information on last page.
+Document Release 6. More information on last page.
 
 # Library variables
 
