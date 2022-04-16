@@ -4,8 +4,8 @@ runtests:
 	ruby runtests.rb
 
 inform:
-	inform -v8 -D test-parsetoken.inf
-	frotz test-parsetoken.z8
+	inform -v8 -D test-issue107.inf
+	frotz test-issue107.z8
 
 testbench:
 	inform +../lib -v3 testbench.inf
@@ -27,9 +27,9 @@ test-parsetoken:
 	inform +../lib -v5 -s -S -D test-parsetoken.inf
 	frotz test-parsetoken.z5
 
-test-issue103:
-	inform +../lib -v3 -s test-issue103.inf
-	frotz test-issue103.z3
+test-issue107:
+	inform +../lib -v3 -s test-issue107.inf
+	frotz test-issue107.z3
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages
