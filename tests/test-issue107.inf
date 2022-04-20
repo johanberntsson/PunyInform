@@ -65,14 +65,17 @@ Object Library "The Library"
 Object -> george "george"
    with name 'george',
       before [;
+         Ask: print "ask^";
          AskTo: print "before^";
       ],
       Life [;
          if (action_to_be == ##AskTo) print "Life^";
          Answer: print "Life Answer^";
+         Ask: print "Life Ask^";
       ],
       orders [;
-         if (action_to_be == ##AskTo) print "orders^";
+         if (action_to_be == ##Ask) print "orders ask^";
+         if (action_to_be == ##AskTo) print "orders askto ", consult_from, " ", consult_words, "^";
       ],
    has animate proper;
 

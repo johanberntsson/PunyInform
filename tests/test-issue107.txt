@@ -1,9 +1,14 @@
 
+> ask george about me
+ask
+Life Ask
+There is no reply.
+
 > ask george to do something
-orders
+orders askto 4 2
 Life
 Life Answer
-george has better things to do.
+There is no reply.
 
 > quit
 Are you sure you want to quit? yes

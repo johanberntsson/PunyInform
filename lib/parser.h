@@ -1454,6 +1454,7 @@ Array guess_object-->5;
 			};
 			return wn - verb_wordnum;!Fail because input ends here but not the grammar line
 		}
+
 #IfDef DEBUG_PARSEPATTERN;
 		print "Calling ParseToken: token ", pattern_pointer->0," type ", (pattern_pointer->0) & $f, ", data ", (pattern_pointer + 1) --> 0,"^";
 #EndIf;
@@ -1767,6 +1768,13 @@ Array guess_object-->5;
 		print "### PHASE 1: Pattern ",_i," address ", _pattern, "^";
 #EndIf;
 		_score = _ParsePattern(_pattern, PHASE1);
+
+		! Special rule to convert AskTo to action, topic
+		if(action == ##AskTo && _score == 100) {
+			actor = noun;
+			action = ##NotUnderstood;
+			jump parse_success;
+		}
 
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: result ", _score, " phase2_necessary ", phase2_necessary, " wn ", wn, "^";
