@@ -1321,10 +1321,13 @@ Object thedark "Darkness"
 #Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness(true);
 #Endif;
-	if(update_moved) {
+
+	if(update_moved || child(player) ~= last_player_child or 0) {
 		_NoteObjectAcquisitions();
 		update_moved = false;
+		last_player_child = child(player);
 	}
+
 ];
 
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;

@@ -1,6 +1,8 @@
 v3.7: bug fix and new feature release
 
 - Fixed 'ask actor to topic' conversion to 'actor, topic' (issue 107)
+- Library now runs _NoteObjectAcquisitions whenever child(player) has changed,
+  so forgetting to set update_moved typically doesn't cause problems.
 
 =======
 v3.6: bug fix and new feature release (12 April 2022)
