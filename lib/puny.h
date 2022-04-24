@@ -1548,6 +1548,8 @@ Object thedark "Darkness"
 			} else {
 				PrintMsg(MSG_PARSER_NOTHING_TO_AGAIN);
 			}
+		} else if(parse->1 == 0) {
+			_again_saved = 0;
 		} else {
 			! store the current buffer to 'again'
 			_again_saved = true;
