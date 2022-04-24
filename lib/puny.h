@@ -1514,13 +1514,13 @@ Object thedark "Darkness"
 		_parser_oops = parser_unknown_noun_found;
 .do_it_again;
 #Ifdef DEBUG_TIMER;
-	timer1 = 0-->2;
+		timer1 = 0-->2;
 #Endif;
 		_sentencelength = _ParseAndPerformAction();
 #Ifdef DEBUG_TIMER;
-	timer1 = 0-->2 - timer1;
-	print "[ParseAndPerformAction took ",timer1," jiffies]^";
-	timer1 = 0-->2;
+		timer1 = 0-->2 - timer1;
+		print "[ParseAndPerformAction took ",timer1," jiffies]^";
+		timer1 = 0-->2;
 #Endif;
 		if(action == ##OopsCorrection) {
 			if(_again_saved && _parser_oops > 0) {
@@ -1548,7 +1548,7 @@ Object thedark "Darkness"
 			} else {
 				PrintMsg(MSG_PARSER_NOTHING_TO_AGAIN);
 			}
-		} else if(parse->1 == 0) {
+		} else if(parse->1 == 0 || action == -1) {
 			_again_saved = 0;
 		} else {
 			! store the current buffer to 'again'
