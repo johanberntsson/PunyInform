@@ -5,6 +5,9 @@ Come again?
 > again
 You can hardly repeat that.
 
+> ask george to look
+George has better things to do.
+
 > ask george about me
 ask
 Life Ask
