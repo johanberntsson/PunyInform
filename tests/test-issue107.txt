@@ -6,6 +6,7 @@ Come again?
 You can hardly repeat that.
 
 > ask george to look
+orders look
 George has better things to do.
 
 > ask george about me

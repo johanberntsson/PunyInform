@@ -62,7 +62,7 @@ Object Library "The Library"
        description "You are in a library.",
    has light;
 
-Object -> george "george"
+Object -> george "George"
    with name 'george',
       before [;
          Ask: print "ask^";
@@ -72,8 +72,10 @@ Object -> george "george"
          if (action_to_be == ##AskTo) print "Life^";
          Answer: print "Life Answer^";
          Ask: print "Life Ask^";
+         Look: print "Life Look^";
       ],
       orders [;
+         if (action_to_be == ##Look) print "orders look^";
          if (action_to_be == ##Ask) print "orders ask^";
          if (action_to_be == ##AskTo) print "orders askto ", consult_from, " ", consult_words, "^";
       ],

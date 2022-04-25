@@ -4,6 +4,8 @@ v3.7: bug fix and new feature release
 - Library now runs _NoteObjectAcquisitions whenever child(player) has changed,
   so forgetting to set update_moved typically doesn't cause problems.
 - Stopped 'again' from triggering an endless loop after an empty input line
+- Fixed 'ask George to look' and similar to generate the <verb> order callback
+
 =======
 v3.6: bug fix and new feature release (12 April 2022)
 

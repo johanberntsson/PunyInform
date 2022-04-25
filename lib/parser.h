@@ -1771,9 +1771,9 @@ Array guess_object-->5;
 
 		! Special rule to convert AskTo to action, topic
 		if(action == ##AskTo && _score == 100) {
-			actor = noun;
-			action = ##NotUnderstood;
-			jump parse_success;
+			_noun = noun;
+			wn = consult_from;
+			jump conversation;
 		}
 
 #IfDef DEBUG_PARSEANDPERFORM;
