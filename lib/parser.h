@@ -843,7 +843,8 @@ System_file;
 [ _ImplicitGrabIfNotHeld p_noun _ks;
 	! return true if p_noun isn't held by the player at the end of the call
 	! (so that you can use it like: if(_ImplicitGrabIfNotHeld(...)) { }
-	if(actor ~= player) rfalse;
+	! Return false if actor isn't player or p_noun is 0
+	if(actor ~= player || p_noun == 0) rfalse;
 	if(p_noun in player) rfalse;
 	PrintMsg(MSG_AUTO_TAKE, p_noun);
 	PronounNotice(p_noun);
@@ -990,9 +991,17 @@ System_file;
 			if(_token_data == HELD_OBJECT && actor == player && _noun notin actor) {
 				phase2_necessary = PHASE2_ERROR;
 				if(p_phase == PHASE2) {
-					if(_noun ~= Directions && _ImplicitGrabIfNotHeld(_noun)) {
+#Ifdef DisallowTakeAnimate;
+					if(_noun hasnt scenery or static &&
+							(_noun hasnt animate || DisallowTakeAnimate(_noun) == false) &&
+							_ImplicitGrabIfNotHeld(_noun)) {
 						return GPR_FAIL;
 					}
+#Ifnot;
+					if(_noun hasnt scenery or static or animate && _ImplicitGrabIfNotHeld(_noun)) {
+						return GPR_FAIL;
+					}
+#Endif;
 				}
 			}
 			return _noun;
@@ -1790,7 +1799,7 @@ Array guess_object-->5;
 				((_best_phase2 ~= PHASE2_SCOPE && _score ~= 100) ||
 				_score == 100)
 				)
-				|| 
+				||
 				(_score <= _best_score && phase2_necessary == PHASE2_SCOPE)
 				||
 				(
@@ -1944,13 +1953,13 @@ Array guess_object-->5;
 	! prepare noun and second to point at dictionary words
 	! from the consult topic, if possible
 	if(consult_from) {
-		if(0 == noun or second) {
+		if(0 == inp1 or inp2) {
 			for(_i=0 : _i < consult_words : _i++) {
 				_noun = (parse-->(2 * (consult_from + _i) - 1));
 				if(action == ##NotUnderstood || _noun ~= 'a//' or 'an' or 'the') {
-					if(noun == 0)
+					if(inp1 == 0)
 						noun = _noun;
-					else if(second == 0)
+					else ! At this point we know that inp2 is 0
 						second = _noun;
 					break;
 				}

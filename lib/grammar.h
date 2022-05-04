@@ -243,6 +243,7 @@ Verb 'wear'
 ];
 
 [ AttackSub;
+	if(_ImplicitGrabIfNotHeld(second)) rtrue;
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
 	PrintMsg(MSG_ATTACK_DEFAULT);
@@ -272,6 +273,7 @@ Verb 'wear'
 ];
 
 [ DigSub;
+	if(_ImplicitGrabIfNotHeld(second)) rtrue;
 	PrintMsg(MSG_DIG_NO_USE);
 ];
 
@@ -296,8 +298,8 @@ Verb 'wear'
 ];
 
 [ EatSub;
-	if(ObjectIsUntouchable(noun)) return;
 	if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
+	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
 	if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
 	remove noun;
 	scope_modified = true;
@@ -361,8 +363,8 @@ Verb 'wear'
 	if(parent(_p) == 0) {
 		! player not inside, standing in the room
 		if(_p.out_to && noun == 0) <<Go FAKE_OUT_OBJ>>;
-		PrintMsg(MSG_EXIT_ALREADY); 
-		rtrue; 
+		PrintMsg(MSG_EXIT_ALREADY);
+		rtrue;
 	}
 	if(noun == 0) <<Exit _p>>;
 	if(player notin noun) {
@@ -388,7 +390,7 @@ Verb 'wear'
 
 [ GiveSub;
 	if(ObjectIsUntouchable(second)) return;
-	if (parent(noun) ~= player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
+	if (noun notin player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
 	if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
 	if (RunLife(second, ##Give) ~= 0) rfalse;
 	PrintMsg(MSG_GIVE_DEFAULT);
@@ -545,10 +547,10 @@ Array _InsertMessages -->
 
 [ LockSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (ObjectIsUntouchable(second)) return;
 	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK, 'lock'); rtrue; }
 	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED, 'lock'); rtrue; }
 	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
+	if(_ImplicitGrabIfNotHeld(second)) rtrue;
 	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun locked;
 	run_after_routines_msg = MSG_LOCK_DEFAULT;
@@ -754,6 +756,7 @@ Array _PutOnMessages -->
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK, 'unlock'); rtrue; }
 	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED, 'unlock'); rtrue; }
+	if(_ImplicitGrabIfNotHeld(second)) rtrue;
 	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun ~locked;
 	run_after_routines_msg = MSG_UNLOCK_DEFAULT;
@@ -876,10 +879,12 @@ Verb 'yes' 'y//'
 	*                                           -> Yes;
 
 [ BlowSub;
+	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
 	PrintMsg(MSG_BLOW_DEFAULT);
 ];
 
 [ BurnSub;
+	if(_ImplicitGrabIfNotHeld(second)) rtrue;
 	PrintMsg(MSG_BURN_DEFAULT);
 ];
 
