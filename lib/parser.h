@@ -1953,13 +1953,13 @@ Array guess_object-->5;
 	! prepare noun and second to point at dictionary words
 	! from the consult topic, if possible
 	if(consult_from) {
-		if(0 == inp1 or inp2) {
+		if(0 == noun or second) {
 			for(_i=0 : _i < consult_words : _i++) {
 				_noun = (parse-->(2 * (consult_from + _i) - 1));
 				if(action == ##NotUnderstood || _noun ~= 'a//' or 'an' or 'the') {
-					if(inp1 == 0)
+					if(noun == 0)
 						noun = _noun;
-					else ! At this point we know that inp2 is 0
+					else ! At this point we know that second is 0
 						second = _noun;
 					break;
 				}
