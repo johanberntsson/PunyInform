@@ -1,4 +1,4 @@
-v3.7: bug fix and new feature release
+v4.0: bug fix and new feature release
 
 - Fixed 'ask actor to topic' conversion to 'actor, topic' (issue 107)
 - Library now runs _NoteObjectAcquisitions whenever child(player) has changed,
@@ -6,6 +6,10 @@ v3.7: bug fix and new feature release
 - Stopped 'again' from triggering an endless loop after an empty input line
 - Fixed 'ask George to look' and similar to generate the <verb> order callback
 - Setting noun/second for all patterns with topic tokens regardless of action
+- Parser won't try to auto-take object for a held token, if the object has
+  static, scenery or animate, except animate objects which have been made
+  takeable through the use of a DisallowTakeAnimate routine. This allows before
+  routines to react to "eat whale", "attack troll with steamroller" etc.
 
 =======
 v3.6: bug fix and new feature release (12 April 2022)
