@@ -19,13 +19,8 @@
 
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
-!Constant CUSTOM_ABBREVIATIONS;
-!Constant OPTIONAL_FULL_DIRECTIONS;
-!Constant OPTIONAL_SHIP_DIRECTIONS;
-!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 !Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
-!Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_MANUAL_SCOPE;
@@ -418,11 +413,11 @@ Object TopOfStairs "Staircase Leading Down"
 			Go:
 				if(selected_direction==d_to) {
 					if(FlagIsClear(F_TALKED_TO_MANAGER))
-						"You have no business running around in the basement. Better go talk to the library manager instead,
-							to find out where you're needed.";
+						"You have no business running around in the basement. Better go talk to the
+							library manager instead, to find out where you're needed.";
 					if(FlagIsSet(F_BOOK_DELIVERED))
-						"You're done for today, and the library manager told you to go home. Better not go snooping around
-						 	in the basement.";
+						"You're done for today, and the library manager told you to go home. Better
+							not go snooping around in the basement.";
 					if(self hasnt general) {
 						give self general;
 						QuoteBox(quote_stairs);

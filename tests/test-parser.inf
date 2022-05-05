@@ -239,10 +239,15 @@ Include "ext_waittime.h";
 
 Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
 [SCN_SUN;
-  deadflag = 1;
-  "As you stare right into the sun, you feel a burning sensation in your eyes.
-    After a while, all goes black. With no eyesight, you have little hope of
-    completing your investigations.";
+	Examine:
+	  deadflag = 1;
+	  "As you stare right into the sun, you feel a burning sensation in your eyes.
+	    After a while, all goes black. With no eyesight, you have little hope of
+	    completing your investigations.";
+	default:
+		! Since this is a named routine, it will return true by default. Thus we
+		! have to return false for all actions we don't care about
+		rfalse;
 ];
 
 Class Book

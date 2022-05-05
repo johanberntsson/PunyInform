@@ -324,14 +324,24 @@ Verb 'scan'
 	print "Scanning ", (the) noun, "... Clear!^";
 ];
 
+Verb 'telly'
+	* number 'to' topic -> Telly;
 
+[ TellySub;
+	"You telly ", noun, " to ", (address) second, ".";
+];
 
 Constant SCN_WATER = "The water is so beautiful this time of year, all clear and glittering.";
 [SCN_SUN;
-  deadflag = 1;
-  "As you stare right into the sun, you feel a burning sensation in your eyes.
-    After a while, all goes black. With no eyesight, you have little hope of
-    completing your investigations.";
+	Examine:
+	  deadflag = 1;
+	  "As you stare right into the sun, you feel a burning sensation in your eyes.
+	    After a while, all goes black. With no eyesight, you have little hope of
+	    completing your investigations.";
+	default:
+		! Since this is a named routine, it will return true by default. Thus we
+		! have to return false for all actions we don't care about
+		rfalse;
 ];
 
 Class Book
@@ -382,7 +392,10 @@ Object CarPark "Car Park"
 			CS_NO_ADJ 'air' "The air is fresh here!"
             'soil' 'dirt' "The ground is damp after last night's rain.",
 		cheap_scenery
-			CS_NO_ADJ 'library' "It's a very nice library."
+			CS_NO_ADJ 'library' [;
+				Examine: "It's a very nice library.";
+				Burn: "Oh, better not!";
+			]
 			CS_PARSE_NAME [ i;
 			    while(NextWord() == 'fabulous' or 'huge' or 'car' or 'park') i++; return i;]
 			  "A fabulous, huge car park!"
@@ -578,7 +591,7 @@ Object AlphaRepair "Alpha Repair"
 						i++;
 					return i;
 				]
-				[; "The ", (address) self.repair_name, " repair panel looks ok."; ]
+				[; Examine: "The ", (address) self.repair_name, " repair panel looks ok."; ]
 			'conveyor' 'belt' "It doesn't look broken.",
 	has light;
 

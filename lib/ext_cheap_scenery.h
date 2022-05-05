@@ -7,8 +7,8 @@
 ! To use it, include this file after globals.h. Then add a property called
 ! cheap_scenery to the locations where you want to add cheap scenery objects.
 ! You can add up to ten cheap scenery objects to one location in this way. For
-! each scenery object, specify, in this order, one adjective, one noun, and one
-! description string or a routine to print one. Instead of an adjective, you
+! each scenery object, specify, in this order, an adjective, a noun, and a
+! reaction string/routine. Instead of an adjective, you
 ! may give a synonym to the noun. If no adjective or synonym is needed,
 ! use the value CS_NO_ADJ (=1) in that position. You can also give
 ! CS_PARSE_NAME (=2) as the adjective value and give a routine which will
@@ -20,6 +20,13 @@
 ! Note: If you want to use this library extension is a Z-code version 3 game,
 ! you must NOT declare cheap_scenery as a common property, or it will only be
 ! able to hold one scenery object instead of ten.
+!
+! The reaction can be either:
+! * a string to be used as the description of the object
+! * a routine which will act as a before routine for the object - this can be
+!     used to trap the Examine action and print a dynamic description of the
+!     object, but also to react to any other actions the player may try to
+!     perform on the object.
 !
 ! If you want to use the same description for a scenery object in several
 ! locations, declare a constant to hold that string, and refer to the constant
@@ -70,9 +77,13 @@
 ! ];
 !
 ! [ WallDesc;
-!     "The walls are ",
-!         (string) random("all white", "claustrophobia-inducing", "scary",
-!             "shiny"), " here.";
+!     Examine:
+!         "The walls are ",
+!             (string) random("all white", "claustrophobia-inducing", "scary",
+!                             "shiny"), " here.";
+!     default:
+!         ! A named routine will return true by default, so this is necessary
+!         rfalse;
 ! ];
 !
 ! Constant BOOKDESC "You're not interested in reading.";
@@ -230,40 +241,39 @@ Object CheapScenery "object"
 			CSData-->CSDATA_WORD_2 = NextWordStopped();
 			return _ParseCheapScenery(location, cheap_scenery, _base_wn);
 		],
-		description [ _k;
-			_k = (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP)-->((CSData-->CSDATA_INDEX) + 2);
+#Ifdef SceneryReply;
+		before [_i _k _w1pos _w1 _w2 _routine;
+#Ifnot;
+		before [_i _k _w1pos;
+#Endif;
+			_i = (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP);
+			_w1pos = CSData-->CSDATA_INDEX;
+			_k = _i-->(_w1pos + 2);
+			if(action == ##Examine && _k ofclass String)
+				print_ret (string) _k;
+
 			if(_k ofclass Routine) {
 				self = location;
-				_k();
-				rtrue;
-			}
-			print_ret (string) _k;
-		],
-#Ifdef SceneryReply;
-		before [_i _w1pos _w1 _w2 _routine;
-#Ifnot;
-		before [;
-#Endif;
-			Examine:
-				rfalse;
-			default:
-#ifdef SceneryReply;
-				if(SceneryReply ofclass string)
-					print_ret (string) SceneryReply;
-				_i = (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP);
-				_w1pos = CSData-->CSDATA_INDEX;
-				_w1 = _i-->_w1pos;
-				_w2 = _i-->(_w1pos + 1);
-				if(_w1 == CS_PARSE_NAME) {
-					_routine = CSData-->CSDATA_PARSE_NAME_ID;
-					if(_routine == 0)
-						_routine = _w2;
-					_w2 = 0;
-				}
-				if(SceneryReply(_w1, _w2, _routine))
+				sw__var = action;
+				if(_k())
 					rtrue;
+			}
+
+#ifdef SceneryReply;
+			if(SceneryReply ofclass string)
+				print_ret (string) SceneryReply;
+			_w1 = _i-->_w1pos;
+			_w2 = _i-->(_w1pos + 1);
+			if(_w1 == CS_PARSE_NAME) {
+				_routine = CSData-->CSDATA_PARSE_NAME_ID;
+				if(_routine == 0)
+					_routine = _w2;
+				_w2 = 0;
+			}
+			if(SceneryReply(_w1, _w2, _routine))
+				rtrue;
 #endif;
-				"No need to concern yourself with that.";
+			"No need to concern yourself with that.";
 		],
 		found_in [;
 			if(location provides cheap_scenery) rtrue;

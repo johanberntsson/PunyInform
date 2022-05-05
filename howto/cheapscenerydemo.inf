@@ -50,13 +50,24 @@ Include "puny.h";
 
 Constant BOOKDESC "You're not interested in reading.";
 
+[SCN_ATMOSPHERE;
+	Examine:
+		"There's a really nice atmosphere to the place.";
+	default:
+		! Since this is a named routine, it will return true by default. Thus we
+		! have to return false for all actions we don't care about
+		rfalse;
+];
+
+
 Object Library "The Library"
 	with
 		description "You are in a big lovely library. You can examine or try to
-			take the books, the shelves, the library, the air, the walls and
-			the ceiling.",
+			take the books, the shelves, the library, the air, the atmosphere,
+			the walls and the ceiling.",
 		cheap_scenery
 			CS_ADD_LIST Library inside_scenery
+			CS_NO_ADJ 'atmosphere' SCN_ATMOSPHERE
 			'book' 'books' BOOKDESC
 			'shelf' 'shelves' "They're full of books."
 			CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
@@ -70,7 +81,10 @@ Object Library "The Library"
 			] "It's truly glorious.",
 		inside_scenery
 			'wall' 'walls' WallDesc
-			CS_NO_ADJ 'ceiling' "The ceiling is quite high up.";
+			CS_NO_ADJ 'ceiling' [;
+				Examine: "The ceiling is quite high up.";
+				Touch: "There's no way you could reach it!";
+			];
 
 Object -> Box "box"
 	with
