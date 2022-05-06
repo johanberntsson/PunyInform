@@ -62,19 +62,44 @@ Object Library "The Library"
        description "You are in a library.",
    has light;
 
+Object -> apple "apple"
+   with name 'apple';
+
+Object -> RedKey "red key"
+   with name 'red' 'key';
+
+Object -> BlueKey "blue key"
+   with name 'blue' 'key';
+
+Object -> MyDoor "door"
+    with name 'door',
+    with_key BlueKey,
+    has openable lockable locked static;
+
+[ printnounsecond msg;
+    print (string) msg, ": ";
+    if(inp1 == 0) print "nothing"; else if(inp1 == 1) print "<number>"; else print (the) noun;
+    print "/", inp1, " "; 
+    if(inp2 == 0) print "nothing"; else if(inp2 == 1) print "<number>"; else print (the) second;
+    print "/", inp2, "^"; 
+];
+    
 Object -> george "George"
    with name 'george',
       before [;
+         printnounsecond( "before");
          Ask: print "ask^";
          AskTo: print "before^";
       ],
       Life [;
+         printnounsecond( "life");
          if (action_to_be == ##AskTo) print "Life^";
          Answer: print "Life Answer^";
          Ask: print "Life Ask^";
          Look: print "Life Look^";
       ],
       orders [;
+         printnounsecond("orders");
          if (action_to_be == ##Look) print "orders look^";
          if (action_to_be == ##Ask) print "orders ask^";
          if (action_to_be == ##AskTo) print "orders askto ", consult_from, " ", consult_words, "^";
