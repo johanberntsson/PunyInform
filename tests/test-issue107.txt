@@ -6,19 +6,54 @@ Come again?
 You can hardly repeat that.
 
 > ask george to look
+orders: nothing/0 nothing/0
 orders look
+life: nothing/0 nothing/0
 George has better things to do.
 
 > ask george about me
+before: George/13 <number>/1
 ask
+life: George/13 <number>/1
 Life Ask
 There is no reply.
 
 > ask george to do something
+orders: George/13 <number>/1
 orders askto 4 2
+before: George/13 George/13
+life: George/13 George/13
 Life
 Life Answer
 There is no reply.
+
+> eat apple
+(first taking the apple)
+That's plainly inedible.
+
+> eat apple
+That's plainly inedible.
+
+> eat george
+before: George/13 nothing/0
+I don't suppose George would care for that.
+
+> unlock door with key
+Do you mean the red key or the blue key?
+
+> red
+(first taking the red key)
+The red key doesn't seem to fit the lock.
+
+> drop all
+red key: Dropped.
+apple: Dropped.
+
+> take blue key
+Taken.
+
+> unlock door with key
+You unlock the door.
 
 > quit
 Are you sure you want to quit? yes
