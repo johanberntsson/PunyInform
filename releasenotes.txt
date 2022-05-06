@@ -10,6 +10,8 @@ v4.0: bug fix and new feature release
   static, scenery or animate, except animate objects which have been made
   takeable through the use of a DisallowTakeAnimate routine. This allows before
   routines to react to "eat whale", "attack troll with steamroller" etc.
+- Cheap scenery description routines are now reaction routines, which work like
+  before routines, allowing them to trap all actions on the object.
 
 =======
 v3.6: bug fix and new feature release (12 April 2022)
