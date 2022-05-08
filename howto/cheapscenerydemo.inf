@@ -43,9 +43,12 @@ Include "puny.h";
 ];
 
 [ WallDesc;
-	"The walls are ",
-		(string) random("all white", "claustrophobia-inducing", "scary",
-			"shiny"), " here.";
+	Examine:
+		"The walls are ",
+			(string) random("all white", "claustrophobia-inducing", "scary",
+				"shiny"), " here.";
+	default:
+		rfalse;
 ];
 
 Constant BOOKDESC "You're not interested in reading.";
