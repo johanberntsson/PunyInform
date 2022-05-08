@@ -1,0 +1,61 @@
+
+> x book
+You're not interested in reading.
+
+> push books
+Leave the books to the people who care about them.
+
+> burn book books
+That's a horrible idea.
+
+> get books book
+I think you wanted to say "get something". Please try again.
+
+> x wall
+The walls are shiny here.
+
+> push walls
+No need to concern yourself with that.
+
+> x ceiling fan
+The ceiling fan is quite high up.
+
+> touch it
+There's no way you could reach it!
+
+> turn it
+No need to concern yourself with that.
+
+> x atmosphere
+There's a really nice atmosphere to the place.
+
+> push atmosphere
+No need to concern yourself with that.
+
+> get air
+You need the air to breathe, that's all.
+
+> turn library
+The library is super-important. Better not mess with it.
+
+> x it
+It's truly glorious.
+
+> x shelf
+They're full of books.
+
+> x air
+The air is oh so thin here.
+
+> x thin air
+The air is oh so thin here.
+
+> x big library
+It's truly glorious.
+
+> x box
+It's a fine box.
+
+> quit
+Are you sure you want to quit? y
+

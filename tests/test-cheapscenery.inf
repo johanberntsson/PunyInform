@@ -1,0 +1,125 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+Constant Story      "Cheap Scenery Test";
+Constant Headline   "^Testing various aspects of the Cheap Scenery extension.^";
+Serial "220508";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+!Constant DEBUG;
+Constant OPTIONAL_EXTENDED_VERBSET;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+! Cheap Scenery Parse Name constants. Use values 1-600.
+Constant CSP_LIBRARY 1;
+
+[ SceneryReply word1 word2 routine;
+	! We can check location, if we want different answers in different rooms
+	! We can also check action, and there's even an implicit switch on action,
+	! so we can do things like: Take: "You're crazy.";
+	switch(routine) {
+	ParseNameAir:
+		"You need the air to breathe, that's all.";
+	CSP_LIBRARY:
+		"The library is super-important. Better not mess with it.";
+	}
+	if(location == Library && word1 == 'book' && word2 == 'books') {
+		if(action == ##Burn)
+			"That's a horrible idea.";
+		"Leave the books to the people who care about them.";
+	}
+	rfalse;
+];
+
+Include "ext_cheap_scenery.h";
+#Ifdef USEINFORM;
+Include "Grammar";
+#Ifnot;
+Include "puny.h";
+#EndIf;
+
+[ ParseNameAir w;
+	w = NextWord();
+	if(w == 'thin' && NextWord() == 'air') return 2;
+	if(w == 'air') return 1;
+	rfalse;
+];
+
+[ WallDesc;
+	Examine:
+		"The walls are ",
+!			(string) random("claustrophobia-inducing", "scary", "shiny"),
+	 			"shiny",
+				" here.";
+	default:
+		rfalse;
+];
+
+Constant BOOKDESC "You're not interested in reading.";
+
+[SCN_ATMOSPHERE;
+	Examine:
+		"There's a really nice atmosphere to the place.";
+	default:
+		! Since this is a named routine, it will return true by default. Thus we
+		! have to return false for all actions we don't care about
+		rfalse;
+];
+
+
+Object Library "The Library"
+	with
+		description "You are in a big lovely library. You can examine or try to
+			take the books, the shelves, the library, the air, the atmosphere,
+			the walls and the ceiling fan.",
+		cheap_scenery
+			'book' 'books' BOOKDESC
+			CS_ADD_LIST MySceneryListObject inside_scenery
+			'wall' 'walls' "Ugly walls."
+			CS_NO_ADJ 'atmosphere' SCN_ATMOSPHERE
+			'shelf' 'shelves' "They're full of books."
+			CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
+			CS_PARSE_NAME [ _i _w;
+				cs_parse_name_id = CSP_LIBRARY;
+				_w = NextWord();
+				if(_w == 'big') { _i++; _w = NextWord();}
+				if(_w == 'lovely') { _i++; _w = NextWord();}
+				if(_w == 'library') { _i++; return _i;}
+				return 0;
+			] "It's truly glorious.",
+	has light;
+
+Object -> Box "box"
+	with
+		name 'box',
+		description "It's a fine box.",
+	has container open openable;
+
+Object MySceneryListObject "Just made this to hold scenery lists"
+	with
+		inside_scenery
+			'book' 'books' "Some fine books."
+			'wall' 'walls' WallDesc
+			'ceiling' 'fan' [;
+				Examine: "The ceiling fan is quite high up.";
+				Touch: "There's no way you could reach it!";
+			];
+
+[Initialise;
+	location = Library;
+	print "^^Let's do this...^^";
+];
