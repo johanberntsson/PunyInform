@@ -846,8 +846,9 @@ System_file;
 	! Return false if actor isn't player or p_noun is 0
 	if(actor ~= player || p_noun == 0) rfalse;
 	if(p_noun in player) rfalse;
-	PrintMsg(MSG_AUTO_TAKE, p_noun);
 	PronounNotice(p_noun);
+	if(no_implicit_actions) { PrintMsg(MSG_AUTO_TAKE_NOT_HELD, p_noun); rtrue; }
+	PrintMsg(MSG_AUTO_TAKE, p_noun);
 	_ks = keep_silent;
 	keep_silent = true;
 	PerformAction(##Take, p_noun);
@@ -862,6 +863,7 @@ System_file;
 	if(actor ~= player) rfalse;
 	if(p_noun notin player || p_noun hasnt worn) rfalse;
 	PronounNotice(p_noun);
+	if(no_implicit_actions) { PrintMsg(MSG_AUTO_DISROBE_WORN, p_noun); rtrue; }
 	if(keep_silent == false)
 		PrintMsg(MSG_AUTO_DISROBE, p_noun);
 	_ks = keep_silent;

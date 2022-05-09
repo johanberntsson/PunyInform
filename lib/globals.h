@@ -467,6 +467,7 @@ Global receive_action;
 Global scope_copy_actor = 0;
 Global run_after_routines_msg;
 Global run_after_routines_arg_1;
+Global no_implicit_actions;         ! Don't implicitly do things.
 
 Global dict_start;
 Global dict_entry_size;

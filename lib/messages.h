@@ -314,6 +314,8 @@ Default MSG_PUTON_ANIMATE 131;
 Default MSG_LOOKMODE_NORMAL 132;
 Default MSG_LOOKMODE_LONG 133;
 Default MSG_LOOKMODE_SHORT 134;
+Default MSG_AUTO_TAKE_NOT_HELD = 135;
+Default MSG_AUTO_DISROBE_WORN = 136;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -578,8 +580,10 @@ Constant SKIP_MSG_SWITCH_ON_DEFAULT;
 #Endif;
 
 #Iffalse MSG_PARSER_NOT_HOLDING < 1000;
+#Iffalse MSG_AUTO_TAKE_NOT_HELD < 1000;
 #Iffalse MSG_WAVE_NOTHOLDING < 1000;
 Constant SKIP_MSG_PARSER_NOT_HOLDING;
+#Endif;
 #Endif;
 #Endif;
 
@@ -823,6 +827,11 @@ Constant SKIP_MSG_EXAMINE_DARK;
 	! p_arg_1 = the object the player automatically takes off.
 		print "(first taking off ", (the) p_arg_1, ")^";
 #Endif;
+#Iftrue MSG_AUTO_DISROBE_WORN < 1000;
+	MSG_AUTO_DISROBE_WORN:
+	! p_arg_1 = the object the player would need to take off.
+		print "But you would need to take off ", (the) p_arg_1, " first.^";
+#Endif;
 #IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;
 	MSG_PARSER_NOTHING_TO_VERB:
 	! p_arg_1 = the last word in player input + 1.
@@ -835,7 +844,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 		}
 #EndIf;
 #Ifndef SKIP_MSG_PARSER_NOT_HOLDING;
-	MSG_PARSER_NOT_HOLDING, MSG_WAVE_NOTHOLDING:
+	MSG_PARSER_NOT_HOLDING, MSG_AUTO_TAKE_NOT_HELD, MSG_WAVE_NOTHOLDING:
 	! p_arg_1 = the object which the player must be holding to perform the
 	! action but isn't.
 		print_ret "But you are not holding ", (the) p_arg_1, ".";

@@ -12,6 +12,8 @@ v4.0: bug fix and new feature release
   routines to react to "eat whale", "attack troll with steamroller" etc.
 - Cheap scenery description routines are now reaction routines, which work like
   before routines, allowing them to trap all actions on the object.
+- Support for global no_implicit_actions, to let game tell library not to use
+  implicit actions.
 
 =======
 v3.6: bug fix and new feature release (12 April 2022)
