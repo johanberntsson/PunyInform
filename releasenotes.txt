@@ -5,7 +5,7 @@ v4.0: bug fix and new feature release
   so forgetting to set update_moved typically doesn't cause problems.
 - Stopped 'again' from triggering an endless loop after an empty input line
 - Fixed 'ask George to look' and similar to generate the <verb> order callback
-- Setting noun/second for all patterns with topic tokens regardless of action
+- Bugfix: Setting second to the first word in topic for ##Tell
 - Parser won't try to auto-take object for a held token, if the object has
   static, scenery or animate, except animate objects which have been made
   takeable through the use of a DisallowTakeAnimate routine. This allows before
