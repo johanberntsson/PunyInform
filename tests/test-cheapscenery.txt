@@ -57,5 +57,6 @@ It's truly glorious.
 It's a fine box.
 
 > quit
-Are you sure you want to quit? y
+Are you sure you want to quit? yes
 
+[Hit any key to exit.]
