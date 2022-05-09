@@ -840,7 +840,7 @@ System_file;
 	return _ParseToken(p_token_type, p_token_data, -PHASE1);
 ];
 
-[ _ImplicitGrabIfNotHeld p_noun _ks;
+[ ImplicitGrabIfNotHeld p_noun _ks;
 	! return true if p_noun isn't held by the player at the end of the call
 	! (so that you can use it like: if(_ImplicitGrabIfNotHeld(...)) { }
 	! Return false if actor isn't player or p_noun is 0
@@ -857,10 +857,10 @@ System_file;
 	rfalse;
 ];
 
-[ _ImplicitDisrobeIfWorn p_noun _ks;
+[ ImplicitDisrobeIfWorn p_noun _ks;
 	! return true if p_noun isn't held by the player at the end of the call
-	! (so that you can use it like: if(_ImplicitDisrobeIfWorn(...)) { }
-	if(actor ~= player) rfalse;
+	! (so that you can use it like: if(ImplicitDisrobeIfWorn(...)) rtrue;
+	if(actor ~= player || p_noun == 0) rfalse;
 	if(p_noun notin player || p_noun hasnt worn) rfalse;
 	PronounNotice(p_noun);
 	if(no_implicit_actions) { PrintMsg(MSG_AUTO_DISROBE_WORN, p_noun); rtrue; }
@@ -996,11 +996,11 @@ System_file;
 #Ifdef DisallowTakeAnimate;
 					if(_noun hasnt scenery or static &&
 							(_noun hasnt animate || DisallowTakeAnimate(_noun) == false) &&
-							_ImplicitGrabIfNotHeld(_noun)) {
+							ImplicitGrabIfNotHeld(_noun)) {
 						return GPR_FAIL;
 					}
 #Ifnot;
-					if(_noun hasnt scenery or static or animate && _ImplicitGrabIfNotHeld(_noun)) {
+					if(_noun hasnt scenery or static or animate && ImplicitGrabIfNotHeld(_noun)) {
 						return GPR_FAIL;
 					}
 #Endif;

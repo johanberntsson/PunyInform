@@ -243,7 +243,7 @@ Verb 'wear'
 ];
 
 [ AttackSub;
-	if(_ImplicitGrabIfNotHeld(second)) rtrue;
+	if(ImplicitGrabIfNotHeld(second)) rtrue;
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
 	PrintMsg(MSG_ATTACK_DEFAULT);
@@ -273,7 +273,7 @@ Verb 'wear'
 ];
 
 [ DigSub;
-	if(_ImplicitGrabIfNotHeld(second)) rtrue;
+	if(ImplicitGrabIfNotHeld(second)) rtrue;
 	PrintMsg(MSG_DIG_NO_USE);
 ];
 
@@ -289,7 +289,7 @@ Verb 'wear'
 
 [ DropSub _p;
 	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
-	if(_ImplicitDisrobeIfWorn(noun)) rtrue;
+	if(ImplicitDisrobeIfWorn(noun)) rtrue;
 	_p = parent(player);
 	!if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
@@ -299,7 +299,7 @@ Verb 'wear'
 
 [ EatSub;
 	if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
-	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
+	if(ImplicitGrabIfNotHeld(noun)) rtrue;
 	if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
 	remove noun;
 	scope_modified = true;
@@ -438,10 +438,10 @@ Verb 'wear'
 		rtrue;
 	}
 	_msg = p_messages-->3;
-	if(_msg && noun ~=player && second ~= Directions &&  _ImplicitGrabIfNotHeld(noun)) rtrue;
+	if(_msg && noun ~=player && second ~= Directions &&  ImplicitGrabIfNotHeld(noun)) rtrue;
 
 	_msg = p_messages-->4;
-	if(_msg && _ImplicitDisrobeIfWorn(noun)) rtrue;
+	if(_msg && ImplicitDisrobeIfWorn(noun)) rtrue;
 
 	! run before on receiver
 #IfDef DEBUG;
@@ -550,7 +550,7 @@ Array _InsertMessages -->
 	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK, 'lock'); rtrue; }
 	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED, 'lock'); rtrue; }
 	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
-	if(_ImplicitGrabIfNotHeld(second)) rtrue;
+	if(ImplicitGrabIfNotHeld(second)) rtrue;
 	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun locked;
 	run_after_routines_msg = MSG_LOCK_DEFAULT;
@@ -712,9 +712,9 @@ Array _PutOnMessages -->
 ];
 
 [ ThrowAtSub;
-	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
+	if(ImplicitGrabIfNotHeld(noun)) rtrue;
 	if(ObjectIsUntouchable(second)) return;
-	if(_ImplicitDisrobeIfWorn(noun)) rtrue;
+	if(ImplicitDisrobeIfWorn(noun)) rtrue;
 	if(second > 1) {
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) second, ").before()^";
@@ -756,7 +756,7 @@ Array _PutOnMessages -->
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK, 'unlock'); rtrue; }
 	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED, 'unlock'); rtrue; }
-	if(_ImplicitGrabIfNotHeld(second)) rtrue;
+	if(ImplicitGrabIfNotHeld(second)) rtrue;
 	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
 	give noun ~locked;
 	run_after_routines_msg = MSG_UNLOCK_DEFAULT;
@@ -879,12 +879,12 @@ Verb 'yes' 'y//'
 	*                                           -> Yes;
 
 [ BlowSub;
-	if(_ImplicitGrabIfNotHeld(noun)) rtrue;
+	if(ImplicitGrabIfNotHeld(noun)) rtrue;
 	PrintMsg(MSG_BLOW_DEFAULT);
 ];
 
 [ BurnSub;
-	if(_ImplicitGrabIfNotHeld(second)) rtrue;
+	if(ImplicitGrabIfNotHeld(second)) rtrue;
 	PrintMsg(MSG_BURN_DEFAULT);
 ];
 
