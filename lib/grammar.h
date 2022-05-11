@@ -116,6 +116,7 @@ Verb 'lock'
 	* noun 'with' held                          -> Lock;
 
 Verb 'look' 'l//'
+	* noun                                      -> Examine
 	* 'at' noun                                 -> Examine
 	*                                           -> Look
 	* 'in'/'inside'/'on' noun                   -> Search;

@@ -12,8 +12,11 @@ You open the toilet door.
 > sit ladder
 I think you wanted to say "sit on something". Please try again.
 
+> look at ladder
+It's very sturdy. On the ladder is a sticker.
+
 > look ladder
-I think you wanted to say "look at something". Please try again.
+It's very sturdy. On the ladder is a sticker.
 
 > again me
 I only understood you as far as "again" but then you lost me.

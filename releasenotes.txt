@@ -18,6 +18,7 @@ v4.0: bug fix and new feature release
   and has been documented in the manual and quickref document.
 - _ImplicitDisrobeIfWorn routine has been renamed to ImplicitDisrobeIfWorn
   and has been documented in the manual and quickref document.
+- 'look north' etc. now works
 
 =======
 v3.6: bug fix and new feature release (12 April 2022)

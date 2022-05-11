@@ -5,6 +5,7 @@ look north
 x north
 open
 sit ladder
+look at ladder
 look ladder
 again me
 n
