@@ -2,8 +2,8 @@
 !
 System_file;
 
-Constant PUNYINFORM_MAJOR_VERSION = 3;
-Constant PUNYINFORM_MINOR_VERSION = 6;
+Constant PUNYINFORM_MAJOR_VERSION = 4;
+Constant PUNYINFORM_MINOR_VERSION = 0;
 
 #Ifndef VN_1636;
 Message fatalerror "*** The PunyInform library needs Inform v6.36 or later to work ***";
