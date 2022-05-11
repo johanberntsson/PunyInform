@@ -1,4 +1,6 @@
-v4.0: bug fix and new feature release
+v4.1: bug fix and new feature release
+=======
+v4.0: bug fix and new feature release (11 May 2022)
 
 - Fixed 'ask actor to topic' conversion to 'actor, topic' (issue 107)
 - Library now runs _NoteObjectAcquisitions whenever child(player) has changed,
