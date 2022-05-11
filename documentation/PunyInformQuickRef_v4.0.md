@@ -1,9 +1,9 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v3.6 quick reference** |
+| **PunyInform v4.0 quick reference** |
 
   
-Document Release 6. More information on last page.
+More information on last page.
 
 # Library variables
 
@@ -62,6 +62,10 @@ Document Release 6. More information on last page.
 ## meta
 
 ###### Is *true* if *action* is a meta action, like *##Save*.
+
+## no_implicit_actions
+
+###### Set this to *true* to disable all implicit actions.
 
 ## normal_directions_enabled **PUNY++**
 
@@ -343,13 +347,21 @@ Document Release 6. More information on last page.
 
 ###### Print *number* spaces in an efficient manner.
 
+## ImplicitDisrobeIfWorn(object) **PUNY++**
+
+###### Take off object if worn. Return false for success.
+
+## ImplicitGrabIfNotHeld(object) **PUNY++**
+
+###### Take object if not held. Return false for success.
+
 ## IndirectlyContains(object1, object2)
 
 ###### Return *true* if *object1* holds *object2*, on some level.* *
 
 ## LoopOverScope(routine, actor)
 
-###### Call *routine* once for every object in scope for *actor* (defaults to *player*), passing the object as a parameter to the routine.
+###### Call *routine* once for each object in scope for *actor* (default: *player*), passing the object as a parameter.
 
 ## MoveFloatingObjects()
 
