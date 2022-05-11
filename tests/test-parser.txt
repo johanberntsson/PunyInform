@@ -1,4 +1,10 @@
 
+> look north
+A look in that direction reveals nothing new.
+
+> x north
+A look in that direction reveals nothing new.
+
 > open
 (assuming the toilet door)
 You open the toilet door.
@@ -266,6 +272,7 @@ green book: Taken.
 red book: Taken.
 pink book: You dared taking the pink book. Bravo!
 blue book: You are carrying too many things already.
+
 The blue book glows annoyingly.
 
 > drop all
@@ -278,11 +285,13 @@ The blue book glows annoyingly.
 > take pinkish
 green book: Taken.
 pink book: You dared taking the pink book. Bravo!
+
 The blue book glows annoyingly.
 
 > drop all
 green book: Dropped.
 pink book: Dropped.
+
 The blue book glows annoyingly.
 
 > get blue and blue and blue
@@ -349,6 +358,7 @@ The blue book glows annoyingly.
 > drop all
 blue book: Dropped.
 infinite bag: Dropped.
+
 > quit
 You ain't no quitter eh? yes
 

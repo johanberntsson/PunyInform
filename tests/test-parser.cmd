@@ -1,6 +1,8 @@
 
 transcript
 
+look north
+x north
 open
 sit ladder
 look ladder

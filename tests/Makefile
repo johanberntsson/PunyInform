@@ -23,9 +23,9 @@ large5:
 	inform +../lib -v5 largegame.inf
 	frotz largegame.z5
 
-test-parsetoken:
-	inform +../lib -v5 -s -S -D test-parsetoken.inf
-	frotz test-parsetoken.z5
+test-parser:
+	inform +../lib -v5 -s -S -D test-parser.inf
+	frotz test-parser.z5
 
 test-issue107:
 	inform +../lib -v3 -s test-issue107.inf
