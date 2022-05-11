@@ -20,4 +20,3 @@ You're carrying a box (which is empty).
 > quit
 Are you sure you want to quit? yes
 
-[Hit any key to exit.]

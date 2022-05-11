@@ -352,4 +352,3 @@ infinite bag: Dropped.
 > quit
 You ain't no quitter eh? yes
 
-[Hit any key to exit.]

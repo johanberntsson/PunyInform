@@ -15,4 +15,3 @@ You're carrying a toolbox, a mounting and a battery.
 > quit
 Are you sure you want to quit? yes
 
-[Hit any key to exit.]

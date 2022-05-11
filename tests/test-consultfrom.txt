@@ -14,4 +14,3 @@ consult_from = 2
 > quit
 Are you sure you want to quit? yes
 
-[Hit any key to exit.]

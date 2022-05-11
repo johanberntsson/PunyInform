@@ -20,4 +20,3 @@ The time is now 5 minutes past 3.
 > quit
 Are you sure you want to quit? yes
 
-[Hit any key to exit.]

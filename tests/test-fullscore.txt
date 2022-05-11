@@ -88,4 +88,3 @@ In that game you scored 5 out of a possible 7, in 5 turns.
 
 Would you like to RESTART, RESTORE, give the FULL score for that game or QUIT? 
 quit
-[Hit any key to exit.]

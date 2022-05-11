@@ -67,4 +67,3 @@ AAAargh!
 In that game you scored 1 out of a possible 4, in 5 turns.
 
 Would you like to RESTART, RESTORE or QUIT? quit
-[Hit any key to exit.]

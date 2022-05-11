@@ -89,4 +89,3 @@ Default is "sdsda": dasdas
 Failed restore.
 
 Would you like to RESTART, RESTORE or QUIT? quit
-[Hit any key to exit.]

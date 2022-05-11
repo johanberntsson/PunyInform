@@ -36,4 +36,3 @@ You're carrying a table and a ball.
 > quit
 Are you sure you want to quit? yes
 
-[Hit any key to exit.]
