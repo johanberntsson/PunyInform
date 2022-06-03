@@ -93,16 +93,15 @@ Object Library "Library of sounds"
 		description "You are in a library.";
 
 
-Object -> EffectControl "effect control"
+Object -> SoundControl "sound control"
     with
-		article "an",
-        name 'sound' 'effect' 'control',
+        name 'sound' 'control',
         description [;
-            print "The effects go from 0 to 255, and is currently set to ",
+            print "The sounds go from 0 to 255, and is currently set to ",
                     num, ".^";
         ],
         before [;
-            Turn, Push, Pull: "Try SET EFFECT TO 3.";
+            Turn, Push, Pull: "Try SET SOUND TO 3.";
             SetTo:
                 if(second >= 0 && second < 256) {
                     num = second;
@@ -210,6 +209,27 @@ Object -> FinishButton "finish button"
         before [;
         Push:
         	playsound(4); rtrue;
+		]
+	has static;
+
+Object -> Queue "queue button"
+    with
+        name 'queue' 'button',
+        before [;
+        Push:
+	        if(HDR_GAMEFLAGS-->0 & 128) {
+		        print "Queuing sound 3 and 4.^";
+#Ifv5;
+		@sound_effect 3 2 8 0;
+		@sound_effect 4 2 8 0;
+#IfNot;
+		@sound_effect 3 2 8;
+		@sound_effect 4 2 8;
+#EndIf;
+            } else {
+		        print "This terp doesn't support sound.^";
+            }
+        	rtrue;
 		]
 	has static;
 
