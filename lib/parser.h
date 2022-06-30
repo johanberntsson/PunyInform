@@ -365,14 +365,16 @@ System_file;
 	return 4;
 ];
 
+Constant _CHECKNOUN_WORD_WEIGHT = 128;
+Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 
 #Ifdef ParseNoun;
 [ _CheckNoun p_parse_pointer _i _j _k _p _obj _matches
-		_which_best_level _current_word _name_array _name_array_len _best_score
+		_best_word_count _current_word _name_array _name_array_len _best_score
 		_result _stop _parse_noun_words;
 #Ifnot;
 [ _CheckNoun p_parse_pointer _i _j _k _p _obj _matches
-		_which_best_level _current_word _name_array _name_array_len _best_score
+		_best_word_count _current_word _name_array _name_array_len _best_score
 		_result _stop;
 #Endif;
 #IfDef DEBUG_CHECKNOUN;
@@ -520,55 +522,38 @@ System_file;
 #Ifdef ParseNoun;
 			_result = _result + _parse_noun_words;
 #Endif;
-			if(_result > 0 && _result  >= _best_score) {
-				_j = _CalculateObjectLevel(_obj);
+			_j = _CHECKNOUN_WORD_WEIGHT * _result + _CalculateObjectLevel(_obj);
 #Ifdef ChooseObjects;
-				! give ChooseObjects a chance to modify the level
-				_j = _j + 8*ChooseObjects(_obj, 2);
+			! give ChooseObjects a chance to modify the score
+			_j = _j + _CHECKNOUN_CHOOSEOBJ_WEIGHT *  ChooseObjects(_obj, 2);
 #Endif;
-				if(_result == _best_score) {
+
+			if(_j >= _CHECKNOUN_WORD_WEIGHT) {
+				! At least one word was matched
+				if(_j == _best_score) {
 					_matches++;
 					which_object-->_matches = _obj;
-					which_level-->_matches = _j;
-					if(_which_best_level < _j) {
-						_which_best_level = _j;
-					}
 #IfDef DEBUG_CHECKNOUN;
 					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
-				} else if(_result > _best_score) {
+				} else if(_j > _best_score) {
 #IfDef DEBUG_CHECKNOUN;
-					print "New best score ", _result, ". Old score was ", _best_score,"^";
+					print "New best score ", _j, ". Old score was ", _best_score,"^";
 #EndIf;
-					_best_score = _result;
+					_best_word_count = _result;
+					_best_score = _j;
 					_matches = 1;
 					which_object-->1 = _obj;
-					which_level-->1 = _j;
-					_which_best_level = _j;
 				}
 			}
 		}
 .not_matched;
 	}
 
-	! remove all objects that are less than _which_best_level
-	! (so that concealed/scenery are not considered if there are
-	! better non-concealed options available)
-    for(_i = 1, _j = 1 : _i <= _matches : _i++) {
-        if(which_level --> _i < _which_best_level) {
-        	continue;
-		}
-        if(_i ~= _j) {
-        	which_object --> _j = which_object --> _i;
-        }
-        _j = _j + 1;
-    }
-    _matches = _j - 1;
-
 	wn = _k;
 	which_object->0 = _matches;
-    if(_best_score > 0) {
-    	which_object->1 = _best_score;
+    if(_best_score >= _CHECKNOUN_WORD_WEIGHT) {
+    	which_object->1 = _best_word_count;
 	} else {
     	which_object->1 = 0;
 	}
@@ -582,7 +567,7 @@ System_file;
 		return _result;
 	}
 #IfDef DEBUG_CHECKNOUN;
-				print "Matches: ", _matches,", num words ", which_object->1, "^";
+		print "Matches: ", _matches,", num words ", which_object->1, "^";
 #EndIf;
 	if(_matches > 1) {
 		return -_matches;

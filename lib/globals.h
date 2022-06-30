@@ -534,7 +534,6 @@ Constant NEWLINE_BIT   $0004;       ! Print newline after each entry
 Global pc_indent = 0;				! 0 means PrintContents is not running
 
 Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
-Array which_level-->MAX_WHICH_OBJECTS;        ! type of which_object
 Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used
 
 Array buffer->(MAX_INPUT_CHARS + 3);
