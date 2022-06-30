@@ -522,14 +522,14 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 #Ifdef ParseNoun;
 			_result = _result + _parse_noun_words;
 #Endif;
-			_j = _CHECKNOUN_WORD_WEIGHT * _result + _CalculateObjectLevel(_obj);
+			if(_result > 0) {
+				! At least one word was matched
+				_j = _CHECKNOUN_WORD_WEIGHT * _result + _CalculateObjectLevel(_obj);
 #Ifdef ChooseObjects;
-			! give ChooseObjects a chance to modify the score
-			_j = _j + _CHECKNOUN_CHOOSEOBJ_WEIGHT *  ChooseObjects(_obj, 2);
+				! give ChooseObjects a chance to modify the score
+				_j = _j + _CHECKNOUN_CHOOSEOBJ_WEIGHT *  ChooseObjects(_obj, 2);
 #Endif;
 
-			if(_j >= _CHECKNOUN_WORD_WEIGHT) {
-				! At least one word was matched
 				if(_j == _best_score) {
 					_matches++;
 					which_object-->_matches = _obj;
