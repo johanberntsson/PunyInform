@@ -1,4 +1,6 @@
 v4.1: bug fix and new feature release
+
+- _CheckNoun routine has been made smaller and faster.
 =======
 v4.0: bug fix and new feature release (11 May 2022)
 
