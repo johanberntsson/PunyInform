@@ -1,6 +1,10 @@
 
 transcript
 
+feed door with torch
+feed sweater with ladder
+feed sweater with ladder
+drop all
 look north
 x north
 open

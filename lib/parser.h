@@ -1522,6 +1522,12 @@ Array guess_object-->5;
 					phase2_necessary = PHASE2_ERROR;
 					wn = wn + 1;
 				}
+			} else {
+				if(p_phase == PHASE2) {
+					if(pattern_pointer->0 == TOKEN_SINGLE_PREP) {
+						PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+					}
+				}
 			}
 			return wn - verb_wordnum; ! pattern didn't match
 		GPR_PREPOSITION:

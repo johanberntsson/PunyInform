@@ -1,6 +1,9 @@
 v4.1: bug fix and new feature release
 
 - _CheckNoun routine has been made smaller and faster.
+- Fixed a bug where patterns containing prepositions that didn't match
+  at all didn't produce any response from the parser.
+
 =======
 v4.0: bug fix and new feature release (11 May 2022)
 

@@ -1,4 +1,17 @@
 
+> feed door with torch
+I don't understand that sentence.
+
+> feed sweater with ladder
+(first taking the sweater)
+I don't understand that sentence.
+
+> feed sweater with ladder
+I think you wanted to say "feed something to someone". Please try again.
+
+> drop all
+sweater: Dropped.
+
 > look north
 A look in that direction reveals nothing new.
 
