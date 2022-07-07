@@ -261,7 +261,9 @@ Property daemon             alias time_out;
 Property article            alias cant_go;
 
 #Ifdef OPTIONAL_ORDERED_TIMERS;
+#Ifndef timer_order;
 Property individual timer_order;
+#Endif;
 #Endif;
 
 Constant FAKE_N_OBJ = 10001;
