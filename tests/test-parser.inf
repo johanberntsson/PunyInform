@@ -1,8 +1,5 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
-!% $MAX_STATIC_DATA=60000
-!% $MAX_LABELS=5000
-!% $MAX_ZCODE_SIZE=50000
 
 Switches e;
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
