@@ -52,10 +52,10 @@ noun-related token (`NOUN_OBJECT`, `CREATURE_OBJECT`, `HELD_OBJECT`,
 `MULTI*_OBJECT`) to parse a noun phrase. It also handles preposition
 handling.
 
-`_GetNextNoun` relies on `_CheckNoun` to try parsing a noun phrase, but
+`_GetNextNoun` relies on `_ParseNounPhrase` to try parsing a noun phrase, but
 adds checks for pronouns and plurals, and disambiguates if needed.
 
-`_CheckNoun` checks if objects in scope match words in the input string,
+`_ParseNounPhrase` checks if objects in scope match words in the input string,
 either by using its `name` property or its `parse_name` routine. More
 than one object could match if the input is incomplete, which is
 reported back using the `which_object` global array, and used in
@@ -250,7 +250,7 @@ pronoun, a suitable objects has been referred to before so the parser
 knows who or what to refer to, and that object is still in scope, then
 the routine returns the object associated with the pronoun.
 
-`_GetNextNoun` now calls `_CheckNoun` to get a list of objects in scope
+`_GetNextNoun` now calls `_ParseNounPhrase` to get a list of objects in scope
 that match the current input. The matching words have their plural flag
 checked, and if the noun phrase indicated plurals (e.g. "books", "all
 birds") then `parser_action` is set to `##PluralFound`.
@@ -263,16 +263,16 @@ disambiguate ("Do you mean the blue book or the red book?"). If the new
 input doesn't help then an error message is printed and the routine
 returns the error code.
 
-### `_CheckNoun(p_parse_pointer)`
+### `_ParseNounPhrase(p_parse_pointer)`
 
-`_CheckNoun` takes the current input position, and returns the object
+`_ParseNounPhrase` takes the current input position, and returns the object
 that matches one or more words. In addition to the return value, it
 updates the `which_object` global array, which contains a list of
 objects that matches (since there could be more than one), the number of
 objects that matches, and the number of words parsed against these
 object(s). It can also modify the wn variable to skip words such as 'the' and 'an'. If the routine is successful it will leave wn pointing to the first word of the found noun phrase.
 
-`_CheckNoun` loops over all objects in scope, trying to parse each of
+`_ParseNounPhrase` loops over all objects in scope, trying to parse each of
 them against the words in the input, first using the `ParseNoun` routine,
 if defined. If there is no `ParseNoun`, or if this routine declines to make
 a decision, the object's `parse_name` routine is checked. If `parse_name`
@@ -283,7 +283,7 @@ There is additional logic to handle debugging verbs that need to try to match
 against any object, regardless of the normal scoping rules. This is only
 enabled if the DEBUG compiler flag is used.
 
-`_CheckNoun` also takes into account if the object is concealed or in
+`_ParseNounPhrase` also takes into account if the object is concealed or in
 the open, by keeping track of a object level score. This is calculated
 by `_CalculateObjectLevel` and stored in the `which_level` array, which
 shadows `which_object`. Concealed objects will dropped if there are any
