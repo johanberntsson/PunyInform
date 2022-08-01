@@ -280,7 +280,7 @@ System_file;
 	}
 ];
 
-[ _CheckPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
+[ _PrintGrammarPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
 	! action number is the first two bytes
 	_action_number = p_pattern-->0;
 	p_pattern = p_pattern + 2;
@@ -305,8 +305,8 @@ System_file;
 #EndIf;
 
 
-! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to _CheckNoun,
-! since they will typically be called from parse_name routines, which are called from _CheckNoun
+! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to _ParseNounPhrase,
+! since they will typically be called from parse_name routines, which are called from _ParseNounPhrase
 
 [ WordAddress p_wordnum;    ! Absolute addr of 'wordnum' string in buffer
 	return buffer + parse->(p_wordnum*4+1);
@@ -369,16 +369,16 @@ Constant _CHECKNOUN_WORD_WEIGHT = 128;
 Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 
 #Ifdef ParseNoun;
-[ _CheckNoun p_parse_pointer _i _j _k _p _obj _matches
+[ _ParseNounPhrase p_parse_pointer _i _j _k _p _obj _matches
 		_best_word_count _current_word _name_array _name_array_len _best_score
 		_result _stop _parse_noun_words;
 #Ifnot;
-[ _CheckNoun p_parse_pointer _i _j _k _p _obj _matches
+[ _ParseNounPhrase p_parse_pointer _i _j _k _p _obj _matches
 		_best_word_count _current_word _name_array _name_array_len _best_score
 		_result _stop;
 #Endif;
 #IfDef DEBUG_CHECKNOUN;
-	print "Entering _CheckNoun!^";
+	print "Entering _ParseNounPhrase!^";
 #EndIf;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
@@ -648,10 +648,10 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 
 	! not a pronoun, continue
 #IfDef DEBUG_GETNEXTNOUN;
-	print "Calling _CheckNoun(",p_parse_pointer,");^";
+	print "Calling _ParseNounPhrase(",p_parse_pointer,");^";
 	if(p_parse_pointer-->0 > 2000) print (address) p_parse_pointer-->0, " ", _pluralword, "^";
 #Endif;
-	_noun = _CheckNoun(p_parse_pointer);
+	_noun = _ParseNounPhrase(p_parse_pointer);
 	_num_words_in_nounphrase = which_object -> 1;
 
 	! check if the noun phrase contains a plural word
@@ -703,9 +703,9 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 			! processing "take transparent". If the player responds
 			! 'box' then we don't know if it is the transparent or
 			! opqaue box unless we also add the 'transparent' word
-			! before calling _CheckNoun
+			! before calling _ParseNounPhrase
 
-			_oldwn = wn; ! wn is used in _CheckNoun, so save it
+			_oldwn = wn; ! wn is used in _ParseNounPhrase, so save it
 
 			! add the original words to the new input. For example,
 			! if the input was 'take book' and we added 'red'
@@ -738,7 +738,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 				!_PrintParseArray(parse);
 #Endif;
 				wn = 1;
-				_noun = _CheckNoun(_j);
+				_noun = _ParseNounPhrase(_j);
 				if(_noun <= 0) {
 					! the normal word order didn't work. Try the other way
 					!print "testing other word order^";
@@ -758,15 +758,15 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 					!_PrintParseArray(parse);
 #Endif;
 					wn = 1;
-					_noun = _CheckNoun(_j);
+					_noun = _ParseNounPhrase(_j);
 				}
 				if(_noun == Directions && which_object->1 < parse->1) {
-					! _CheckNoun only matched a direction and
+					! _ParseNounPhrase only matched a direction and
 					! should be treated as new input instead
 					parse->1 = which_object->1;
 					return -1;
 				}
-				wn = _oldwn; ! restore wn after the _CheckNoun calls
+				wn = _oldwn; ! restore wn after the _ParseNounPhrase calls
 				if(_noun > 0) {
 					! we have successfully disambiguated the noun phrase.
 					! now we need to restore the length of the
@@ -1672,7 +1672,7 @@ Array guess_object-->5;
 			rtrue;
 		}
 		! not a direction, check if beginning of a command
-		_noun = _CheckNoun(parse+2);
+		_noun = _ParseNounPhrase(parse+2);
 		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now
 			! check if comma afterwards
@@ -1756,7 +1756,7 @@ Array guess_object-->5;
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _verb_grammar->0: _i++) {
 		print "############ Pattern ",_i," ",_pattern,"^";
-		_pattern = _CheckPattern(_pattern);
+		_pattern = _PrintGrammarPattern(_pattern);
 	}
 	@new_line;
 #EndIf;
