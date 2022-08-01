@@ -1,5 +1,4 @@
 !% $OMIT_UNUSED_ROUTINES=1
-!% $MAX_STATIC_DATA=65000
 ! -- % -~S
 
 ! The very first lines of the main source code file for a game can
