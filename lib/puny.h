@@ -343,8 +343,54 @@ else
 	@inc p_obj; ! Just to get rid of warning that p_obj isn't used
 	rfalse;
 ];
-#EndIf;
-#EndIf;
+#Endif;
+#Endif;
+
+#Ifdef OPTIONAL_ENGLISH_NUMBER;
+
+[ EnglishNumber n f;
+    if (n == 0)    { print "zero"; rfalse; }
+    if (n < 0)     { print "minus "; n = -n; }
+    if (n >= 1000) { print (EnglishNumber) n/1000, " thousand"; n = n%1000; f = 1; }
+    if (n >= 100)  {
+        if (f == 1) print ", ";
+        print (EnglishNumber) n/100, " hundred"; n = n%100; f = 1;
+    }
+    if (n == 0) rfalse;
+    #Ifdef DIALECT_US;
+    if (f == 1) print " ";
+    #Ifnot;
+    if (f == 1) print " and ";
+    #Endif;
+#Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+#IfV3;
+	if(n < 13 || n == 20)
+		print (address) LanguageNumbers-->(2 * n - 1);
+	else if(n < 20)
+		print (string) LanguageNumberStrings-->(n - 13);
+	else {
+		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
+        if (n%10 ~= 0) print "-", (EnglishNumber) n%10;
+	}
+#Ifnot;
+	if(n < 21)
+		print (address) LanguageNumbers-->(2 * n - 1);
+	else {
+		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
+        if (n%10 ~= 0) print "-", (EnglishNumber) n%10;
+	}
+#Endif;
+#Ifnot;
+	if(n < 20)
+		print (string) LanguageNumberStrings-->(n - 1);
+	else {
+		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
+        if (n%10 ~= 0) print "-", (EnglishNumber) n%10;
+	}
+#Endif;
+];
+#Endif;
+
 
 [ PrintShortName o;
     if (o == 0) { print "nothing"; rtrue; }
@@ -384,70 +430,290 @@ else
 ];
 
 [ _PrintAfterEntry p_obj;
+!	print "PRINTAFTERENTRY:",p_obj;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj has light && p_obj hasnt animate) print " (providing light)";
 #Endif;
 	if(p_obj has worn && action == ##Inv) print " (worn)";
 	if(p_obj has container && p_obj hasnt open) print " (which is closed)";
 	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
-		if(PrintContents(1, p_obj) == 0) {
+		if(PrintContentsFromR(1, child(p_obj)) == 0) {
 			print " (which is empty)";
 		} else {
-			if(pc_indent == 0)
+			if(c_style & NEWLINE_BIT == 0)
 				print " (which contains ";
 			else if(p_obj has open)
 				print " (which is open)";
-			PrintContents(0, p_obj);
-			if(pc_indent == 0) {
+			PrintContentsFromR(0, child(p_obj));
+			if(c_style & NEWLINE_BIT == 0) {
 				print (char) ')';
 			}
 		}
 
 	}
 	if(p_obj has supporter) {
-		if(pc_indent > 0)
-			PrintContents(0, p_obj);
+		if(c_style & NEWLINE_BIT)
+			PrintContentsFromR(0, child(p_obj));
 		else
-			if(PrintContents(" (on which ", p_obj, ISARE_BIT)) print (char) ')';
+			if(PrintContentsFromR(" (on which ", child(p_obj), ISARE_BIT)) print (char) ')';
 	}
 ];
 
+#Ifdef OPTIONAL_LIST_TOGETHER;
+! Not complete, and not yet used
+[ListTogetherOrderOk p_obj _obj _val _past_first _last_val;
+	_obj = child(p_obj);
+	for(::_obj = sibling(_obj), _last_val = _val) {
+		if(_obj == 0)
+			rtrue;
+		_val = RunRoutines(_obj, list_together);
+		if(_past_first == false) {
+			_past_first = true;
+			continue;
+		}
+		if(_val == _last_val)
+			continue;
+		if(_val ~= 0 && _last_val == 0)
+			rfalse;
+	}
+
+
+];
+
+[SortForListTogether p_obj
+	_obj _val _val2 _temp _next _first_obj _last_obj _ret;
+	_obj = child(p_obj);
+	while(_obj) {
+!	if (p_prop >= INDIV_PROP_START && p_obj.&p_prop == 0) rfalse;
+#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
+		_val = _val = _obj.list_together;
+#Ifnot;
+		_val = 0;
+		if(_obj provides list_together)
+			_val = _obj.list_together;
+#Endif;
+		if(_val == 0 || _PrintContentsShowObj(_obj) == false) {
+			_temp = _obj;
+			_obj = sibling(_obj);
+			move _temp to DummyContainer;
+			continue;
+		}
+		! This object is the first that has this list_together value
+		_next = 0;
+		_first_obj = _obj;
+		while(_obj) {
+#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
+			_val2 = _obj.list_together;
+#Ifnot;
+			_val2 = 0;
+			if(_obj provides list_together)
+				_val2 = _obj.list_together;
+#Endif;
+			if(_val2 ~= _val || _PrintContentsShowObj(_obj) == false) {
+				if(_next == 0)
+					_next = _obj;
+				_obj = sibling(_obj);
+				continue;
+			}
+			! This object has the list_together value we're looking for
+			_last_obj = _obj;
+			_temp = sibling(_obj);
+			move _obj to Directions;
+			_obj = _temp;
+		}
+
+		! If group of objects holds a single object, consider it a normal object
+		if(_first_obj == _last_obj)
+			move _first_obj to DummyContainer;
+
+		_obj = _next;
+	}
+	_next = child(Directions);
+	while(_next) {
+!		print "(groupmove ",(name) _next, ")";
+		move _next to p_obj;
+		_next = child(Directions);
+	}
+	_ret = child(p_obj);
+	_next = child(DummyContainer);
+	while(_next) {
+!		print "(move ",(name) _next, ")";
+		move _next to p_obj;
+		_next = child(DummyContainer);
+	}
+	return _ret;
+];
+
+[_PrintContentsFindLastInLTGroup p_obj p_base_val _last_obj  _val;
+	while(true) {
+		p_obj = sibling(p_obj);
+		if(p_obj == 0)
+			break;
+#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
+		_val = p_obj.list_together;
+#Ifnot;
+		_val = 0;
+		if(p_obj provides list_together)
+			_val = p_obj.list_together;
+#Endif;
+		if(_val ~= p_base_val)
+			break;
+		_last_obj = p_obj;
+	}
+	return _last_obj;
+];
+
+[_PrintContentsPrintLTGroup p_obj _LT_value _count _obj _last_obj;
+#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
+	_LT_value = p_obj.list_together;
+#Ifnot;
+	_LT_value = 0;
+	if(_obj provides list_together)
+		_LT_value = p_obj.list_together;
+#Endif;
+
+	if(_LT_value ofclass String) {
+!					if(_list_together_value ~= _last_list_together_value) {
+			_last_obj = _PrintContentsFindLastInLTGroup(p_obj, _LT_value);
+
+			_count = 1;
+			for(_obj = p_obj: _obj ~= _last_obj : _obj = sibling(_obj), _count++);
+
+			if(c_style & NEWLINE_BIT) {
+				new_line;
+				FastSpaces(pc_indent);
+			}
+#Ifdef OPTIONAL_ENGLISH_NUMBER;
+			EnglishNumber(_count);
+#Ifnot;
+			print _count;
+#Endif;
+			print " ", (string) _LT_value;
+			if(c_style & NEWLINE_BIT)
+				print ":";
+			else
+				print " (";
+!						pc_indent = pc_indent + 2;
+
+
+			PrintContentsFromR(0, p_obj, _count);
+!			_obj = _last_value;
+			if(c_style & NEWLINE_BIT == 0)
+				print ")";
+
+!					}
+	}
+!				_last_list_together_value = _list_together_value;
+
+];
+
+#Endif;
+
 [ PrintContents p_first_text p_obj p_style
-		_obj _printed_any_objects _last_obj _show_obj _plural;
+		_bak_style _ret _bak_depth _bak_indent;
 ! Print the contents of p_obj. Return true if anything was printed.
 ! If any objects are printed, prefix with p_first_text.
-! If p_check_work_flag is true, only print objects which have workflag set.
+! If p_style has WORKFLAG_BIT set, only print objects which have workflag set.
+! If p_style has NEWLINE_BIT set, print each object on a new line, indented.
+! If p_style has ISARE_BIT set, print is/are before list.
 !   Special parameters:
-!   - If _p_first_text is a routine, it will be called with p_obj as argument
+!   - If p_first_text is a routine, it will be called with p_obj as argument
+!   - If p_first_text is 0, no prefix string will be printed
+!   - If p_first_text is 1, don't print anything, but return:
+!       0 if there are no printable objects in/on p_obj
+!       1 if there's exactly one printable object and it doesn't have pluralname
+!       2 if there are 2+ printable objects or one object with pluralname
+	_bak_style = c_style; _bak_depth = pc_depth; _bak_indent = pc_indent;
+	c_style = p_style; pc_depth = pc_initial_depth - 1; pc_indent = 2 + 2 * pc_depth;
+
+	_ret = PrintContentsFromR(p_first_text, child(p_obj));
+
+	c_style = _bak_style; pc_depth = _bak_depth; pc_indent = _bak_indent;
+	return _ret;
+];
+
+#Ifdef OPTIONAL_LIST_TOGETHER;
+[ PrintContentsFromR p_first_text p_obj p_max_count ! p_style
+		_obj _printed_any_objects _last_obj _show_obj _plural
+		_first_LT_obj _LT_mode
+		_LT_value _LT_special _last_obj_was_LT_special;
+#Ifnot;
+[ PrintContentsFromR p_first_text p_obj p_max_count ! p_style
+		_obj _printed_any_objects _last_obj _show_obj _plural;
+#Endif;
+
+! Print the contents of p_obj. Return true if anything was printed.
+! If any objects are printed, prefix with p_first_text.
+! If p_style has WORKFLAG_BIT set, only print objects which have workflag set.
+! If p_style has NEWLINE_BIT set, print each object on a new line, indented.
+! If p_style has ISARE_BIT set, print is/are before list.
+!   Special parameters:
+!   - If p_first_text is a routine, it will be called with p_obj as argument
 !   - If p_first_text is 0, no prefix string will be printed
 !   - If p_first_text is 1, don't print anything, but return:
 !       0 if there are no printable objects in/on p_obj
 !       1 if there's exactly one printable object and it doesn't have pluralname
 !       2 if there are 2+ printable objects or one object with pluralname
 
+	if(p_obj == 0) rfalse;
+
+	if(p_obj == child(parent(p_obj)))
+		pc_depth++;
+
 	if(p_first_text ~= 1) {
+!		print "%%", (name) p_obj,"^";
 		! This is a call to print something
-		if(pc_indent <= 0 && p_style & NEWLINE_BIT) { ! Non-recursive call with request to indent
-			pc_indent = 2;
-		} else if(pc_indent > 0)
-			pc_indent = pc_indent + 2;
+		pc_indent = pc_indent + 2;
+!		if(pc_indent <= 0 && c_style & NEWLINE_BIT) { ! Non-recursive call with request to indent
+!			pc_indent = 2;
+!		} else if(pc_indent > 0)
+!			pc_indent = pc_indent + 2;
+		if(p_obj == child(parent(p_obj)) && p_max_count == 0) {
+!			pc_depth++;
+#Ifdef OPTIONAL_LIST_TOGETHER;
+			_first_LT_obj = SortForListTogether(parent(p_obj));
+			p_obj = child(parent(p_obj));
+!			print "***", (name) _first_LT_obj,"^";
+#Endif;
+		}
 	}
 
+	if(p_max_count == 0)
+		p_max_count = 10000;
 !   print "Objectlooping...^";
-	objectloop(_obj in p_obj) {
+	for(_obj = p_obj: _obj ~= 0 && p_max_count-- ~= 0: _obj = sibling(_obj)) {
 !print "Considering ", (object) _obj, "...^";
-		_show_obj =
-			_obj ~= parent(player) && ! don't print container when player in it
-			(p_style & WORKFLAG_BIT == 0 || _obj has workflag);
-		if(action ~= ##Inv) {
-			! don't show concealed or scenery in the normal case (look etc.),
-			! but allow it when listing inventory.
-			if(_obj has concealed or scenery) _show_obj = false;
-		}
+#Ifdef OPTIONAL_LIST_TOGETHER;
+		if(_obj == _first_LT_obj)
+			_LT_mode = true;
+		if(_LT_mode) {
+			_LT_special = false;
+			_show_obj = true; ! Has already been checked
+! Trust objects to provide list_together in this context?
+#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
+			_LT_value = _obj.list_together;
+#Ifnot;
+			_LT_value = 0;
+			if(_obj provides list_together)
+				_LT_value = _obj.list_together;
+#Endif;
+			if(_LT_value ofclass String ||
+					_LT_value ofclass Routine)
+				_LT_special = true;
+		} else
+			_show_obj = _PrintContentsShowObj(_obj);
+#Ifnot;
+		_show_obj = _PrintContentsShowObj(_obj);
+#Endif;
 
 		if(p_first_text == 1) {
+!			print "FT1,_obj=",(name)_obj,"_LT_mode=",_LT_mode,"^";
 			if(_show_obj) {
-				if(_plural || _obj has pluralname) return 2;
+!				print "SO^";
+				if(_LT_mode || _plural || _obj has pluralname) {
+					pc_depth--;
+					return 2;
+				}
 				_plural = 1;
 			}
 			continue;
@@ -459,33 +725,69 @@ else
 					print (string) p_first_text;
 				else if(p_first_text ~= 0)
 					p_first_text(p_obj);
-				if(p_style & ISARE_BIT)
-					print (string) _IsAreString(PrintContents(1, p_obj));
+				if(c_style & ISARE_BIT)
+					print (string) _IsAreString(PrintContentsFromR(1, p_obj));
 			}
 			! Push obj onto queue, printing the object that is shifted out, if any
 			if(_last_obj) {
-				if(_printed_any_objects && pc_indent <= 0) print ", ";
+				if(_printed_any_objects ~= 0 && c_style & NEWLINE_BIT == 0) print ", ";
+#Ifdef OPTIONAL_LIST_TOGETHER;
+				if(_last_obj_was_LT_special)
+					_PrintContentsPrintLTGroup(_last_obj);
+				else
+					_PrintContentsPrintAnObj(_last_obj);
+#Ifnot;
 				_PrintContentsPrintAnObj(_last_obj);
+#Endif;
 				_printed_any_objects = 1;
 			}
 			_last_obj = _obj;
+#Ifdef OPTIONAL_LIST_TOGETHER;
+			_last_obj_was_LT_special = _LT_special;
+			if(_last_obj_was_LT_special) {
+				_obj = _PrintContentsFindLastInLTGroup(_last_obj, _LT_value);
+			}
+#Endif;
 		}
 	}
-	if(p_first_text == 1)
+	if(p_first_text == 1) {
+		pc_depth--;
 		return _plural;
+	}
 
 	if(_last_obj) {
-		if(_printed_any_objects && pc_indent <= 0) print " and ";
+		if(_printed_any_objects ~= 0 && c_style & NEWLINE_BIT == 0) print " and ";
+#Ifdef OPTIONAL_LIST_TOGETHER;
+		if(_last_obj_was_LT_special)
+			_PrintContentsPrintLTGroup(_last_obj);
+		else
+			_PrintContentsPrintAnObj(_last_obj);
+#Ifnot;
 		_PrintContentsPrintAnObj(_last_obj);
+#Endif;
 		_printed_any_objects = 1;
 	}
-	if(pc_indent > 0)
-		pc_indent = pc_indent - 2;
+	pc_depth--;
+	pc_indent = pc_indent - 2;
+!	if(pc_indent > 0)
+!		pc_indent = pc_indent - 2;
 	return _printed_any_objects;
 ];
 
+[ _PrintContentsShowObj p_obj;
+!	print "PCSO:",(name)p_obj,",par=",parent(player),",dep=",pc_depth,",wfb=",c_style & WORKFLAG_BIT,
+!		",wf=",p_obj has workflag,",action=",(DebugAction)action,",conc=",p_obj has concealed,",scen=",p_obj has scenery,"^";
+	! Return true if object should be shown in list, false if not
+	if(p_obj ~= parent(player) && ! don't print container when player in it
+			(pc_depth > 0 || c_style & WORKFLAG_BIT == 0 || p_obj has workflag) &&
+	! Hide concealed and scenery unless taking inventory
+			(action == ##Inv || (p_obj hasnt concealed && p_obj hasnt scenery)))
+		rtrue;
+	rfalse;
+];
+
 [ _PrintContentsPrintAnObj p_obj _inv _skip;
-	if(pc_indent > 0) { new_line; FastSpaces(pc_indent); }
+	if(c_style & NEWLINE_BIT) { new_line; FastSpaces(pc_indent); }
 	if(p_obj.invent ~= 0) {
 		_inv = true;
 		inventory_stage = 1;
@@ -660,7 +962,6 @@ else
 ];
 
 [ _LookForLightInObj p_obj p_ceiling _o;
-!	print "_LookForLightInObj, Examining: ", (the) p_obj, "^";
 	if(p_obj has light) rtrue;
 	if(p_obj == p_ceiling || p_obj has transparent || p_obj has supporter || (p_obj has container && p_obj has open))
 		objectloop(_o in p_obj)

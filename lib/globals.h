@@ -260,6 +260,13 @@ Property when_on            alias initial;
 Property daemon             alias time_out;
 Property article            alias cant_go;
 
+#Ifdef OPTIONAL_LIST_TOGETHER;
+#Ifndef list_together;
+Property list_together;
+#Endif;
+Constant LIST_TOGETHER_PROP_ID = list_together;
+#Endif;
+
 #Ifdef OPTIONAL_ORDERED_TIMERS;
 #Ifndef timer_order;
 Property individual timer_order;
@@ -320,6 +327,52 @@ Array LanguageNumbers static table
     'eleven' 11 'twelve' 12 'thirteen' 13 'fourteen' 14 'fifteen' 15
     'sixteen' 16 'seventeen' 17 'eighteen' 18 'nineteen' 19 'twenty' 20;
 #EndIf;
+
+#Ifdef OPTIONAL_ENGLISH_NUMBER;
+#Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+#IfV3;
+Array LanguageNumberStrings static -->
+    "thirteen"
+    "fourteen"
+    "fifteen"
+    "sixteen"
+    "seventeen"
+    "eighteen"
+    "nineteen";
+#Endif;
+#Ifnot; ! Not OPTIONAL_ALLOW_WRITTEN_NUMBERS
+Array LanguageNumberStrings static -->
+	"one"
+	"two"
+	"three"
+    "four"
+    "five"
+    "six"
+    "seven"
+    "eight"
+    "nine"
+    "ten"
+    "eleven"
+    "twelve"
+    "thirteen"
+    "fourteen"
+    "fifteen"
+    "sixteen"
+    "seventeen"
+    "eighteen"
+    "nineteen";
+#Endif; ! Not OPTIONAL_ALLOW_WRITTEN_NUMBERS
+
+Array LanguageNumberTensStrings static -->
+	"twenty"
+    "thirty"
+    "forty"
+    "fifty"
+    "sixty"
+    "seventy"
+    "eighty"
+    "ninety";
+#Endif; ! OPTIONAL_ENGLISH_NUMBER
 
 
 Constant TT_OBJECT           = 1;    ! one or more words referring to an object
@@ -529,12 +582,14 @@ Constant MAX_FLOATING_OBJECTS  32;            ! Max number of objects that have 
 #Endif; ! MAX_FLOATING_OBJECTS
 Array floating_objects --> MAX_FLOATING_OBJECTS + 1;
 
+Global c_style = 0;
 Constant WORKFLAG_BIT  $0001;       ! At top level (only), only list objects
                                     ! which have the "workflag" attribute
 Constant ISARE_BIT     $0002;       ! Print " is" or " are" before list
 Constant NEWLINE_BIT   $0004;       ! Print newline after each entry
+Global pc_initial_depth = 0;		! Used to send a depth parameter to PrintContents
 Global pc_indent = 0;				! 0 means PrintContents is not running
-
+Global pc_depth = 0;				! 0 means PrintContents is not running
 Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
 Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used
 
@@ -703,3 +758,7 @@ has scenery
 		reactive
 #Endif;
 ;
+
+#Ifdef OPTIONAL_LIST_TOGETHER;
+Object DummyContainer;
+#Endif;
