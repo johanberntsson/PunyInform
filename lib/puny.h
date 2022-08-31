@@ -571,21 +571,24 @@ else
 	return _last_obj;
 ];
 
-[_PrintContentsPrintLTGroup p_obj _LT_value _count _obj _last_obj _bak_lt _bak_lt_val;
+[_PrintContentsPrintLTGroup p_obj _count _obj _last_obj
+		_bak_lt _bak_lt_val _bak_style;
+
+	_bak_lt_val = lt_value;
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
-	_LT_value = p_obj.list_together;
+	lt_value = p_obj.list_together;
 #Ifnot;
-	_LT_value = _GetIndividualLTValue(p_obj);
+	lt_value = _GetIndividualLTValue(p_obj);
 #Endif;
 
+!	_last_obj = _PrintContentsFindLastInLTGroup(p_obj, lt_value);
 	_count = 1;
-	for(_obj = p_obj: _obj ~= _last_obj : _obj = sibling(_obj), _count++);
+	for(_obj = p_obj: _obj ~= 0: _obj = NextEntry(_obj, pc_depth), _count++);
 
-	if(_LT_value ofclass String) {
-		_last_obj = _PrintContentsFindLastInLTGroup(p_obj, _LT_value);
+!	for(_obj = p_obj: _obj ~= _last_obj: _obj = sibling(_obj), _count++);
 
+	if(lt_value ofclass String) {
 		if(c_style & NEWLINE_BIT) {
-			new_line;
 			FastSpaces(pc_indent);
 		}
 #Ifdef OPTIONAL_ENGLISH_NUMBER;
@@ -593,13 +596,12 @@ else
 #Ifnot;
 		print _count;
 #Endif;
-		print " ", (string) _LT_value;
+		print " ", (string) lt_value;
 		if(c_style & NEWLINE_BIT)
-			print ":";
+			print ":^";
 		else
 			print " (";
 !						pc_indent = pc_indent + 2;
-
 
 		PrintContentsFromR(0, p_obj, _count);
 !			_obj = _last_value;
@@ -607,35 +609,35 @@ else
 			print ")";
 	} else {
 		_bak_lt = listing_together;
-		_bak_lt_val = lt_value;
+		_bak_style = c_style;
 		! list_together is a routine
 		inventory_stage = 1;
 		parser_one = p_obj;
 		parser_two = pc_depth;
 		listing_together = p_obj;
-		lt_value = p_obj.list_together;
 		if(c_style & NEWLINE_BIT) {
 			FastSpaces(pc_indent);
 		}
-		if(p_obj.list_together()) {
-			inventory_stage = 0;
-			listing_together = _bak_lt;
-			lt_value = _bak_lt_val;
-			return;
-		}
-		if(c_style & NEWLINE_BIT) {
-			pc_skip_next_indent = true;
-		}
-		PrintContentsFromR(0, p_obj, _count);
+		if(p_obj.list_together() == false) {
+			if(c_style & NEWLINE_BIT) {
+				pc_skip_next_indent = true;
+			}
+			PrintContentsFromR(0, p_obj, _count);
 
-		inventory_stage = 2;
-		parser_one = p_obj;
-		parser_two = pc_depth;
-		p_obj.list_together();
+			inventory_stage = 2;
+			parser_one = p_obj;
+			parser_two = pc_depth;
+			p_obj.list_together();
+!			if(_bak_style & NEWLINE_BIT) {
+!				new_line;
+!			}
+		}
+
 		inventory_stage = 0;
 		listing_together = _bak_lt;
-		lt_value = _bak_lt_val;
+		c_style = _bak_style;
 	}
+	lt_value = _bak_lt_val;
 ];
 
 [ NextEntry p_obj
