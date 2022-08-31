@@ -568,7 +568,7 @@ else
 	_LT_value = p_obj.list_together;
 #Ifnot;
 	_LT_value = 0;
-	if(_obj provides list_together)
+	if(p_obj provides list_together)
 		_LT_value = p_obj.list_together;
 #Endif;
 
