@@ -686,8 +686,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 			p_arg_2 = NEWLINE_BIT;
 		}
 		if(PrintContents(p_arg_1, player, p_arg_2)) {
-			if(inventory_style) print (char) '.';
-			new_line;
+			if(inventory_style) print ".^";
 			rtrue;
 		}
 		rfalse;

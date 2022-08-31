@@ -500,7 +500,8 @@ Global parser_check_multiple;    ! parser should check if multiheld/multiinside
 Global parser_unknown_noun_found;! parser should report unknown word
 Global parser_all_found;! parser encountered 'all'
 Global parser_all_except_object; ! used to filter all but/except patterns
-GLobal parser_one; ! Used to pass extra information from user code to parser
+Global parser_one; ! Used to pass extra information between user code and parser
+Global parser_two; ! Used to pass extra information between user code and parser
 Global usual_grammar_after; ! needed for grammar property parsing
 Global deadflag;
 Global scope_modified;   ! true if daemons, each_turn etc has invalidated scope
@@ -589,7 +590,15 @@ Constant ISARE_BIT     $0002;       ! Print " is" or " are" before list
 Constant NEWLINE_BIT   $0004;       ! Print newline after each entry
 Global pc_initial_depth = 0;		! Used to send a depth parameter to PrintContents
 Global pc_indent = 0;				! 0 means PrintContents is not running
+Global pc_skip_next_indent = 0;
 Global pc_depth = 0;				! 0 means PrintContents is not running
+
+#Ifdef OPTIONAL_LIST_TOGETHER;
+Global listing_together; ! The first object# in the group when listing together
+Global lt_value;
+#Endif;
+
+
 Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
 Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used
 

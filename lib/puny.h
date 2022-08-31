@@ -439,24 +439,32 @@ else
 	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
 		if(PrintContentsFromR(1, child(p_obj)) == 0) {
 			print " (which is empty)";
+			if(c_style & NEWLINE_BIT)
+				new_line;
 		} else {
 			if(c_style & NEWLINE_BIT == 0)
 				print " (which contains ";
-			else if(p_obj has open)
-				print " (which is open)";
+			else {
+				if(p_obj has open)
+					print " (which is open)";
+				new_line;
+			}
+!			print "XYZ:",(c_style & NEWLINE_BIT),".^";
 			PrintContentsFromR(0, child(p_obj));
 			if(c_style & NEWLINE_BIT == 0) {
 				print (char) ')';
 			}
+!				else
+!				new_line;
 		}
 
-	}
-	if(p_obj has supporter) {
+	} else if(p_obj has supporter) {
 		if(c_style & NEWLINE_BIT)
 			PrintContentsFromR(0, child(p_obj));
 		else
 			if(PrintContents(" (on which ", p_obj, ISARE_BIT)) print (char) ')';
-	}
+	} else if(c_style & NEWLINE_BIT)
+		new_line;
 ];
 
 #Ifdef OPTIONAL_LIST_TOGETHER;
@@ -563,7 +571,7 @@ else
 	return _last_obj;
 ];
 
-[_PrintContentsPrintLTGroup p_obj _LT_value _count _obj _last_obj;
+[_PrintContentsPrintLTGroup p_obj _LT_value _count _obj _last_obj _bak_lt _bak_lt_val;
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 	_LT_value = p_obj.list_together;
 #Ifnot;
@@ -572,39 +580,83 @@ else
 		_LT_value = p_obj.list_together;
 #Endif;
 
+	_count = 1;
+	for(_obj = p_obj: _obj ~= _last_obj : _obj = sibling(_obj), _count++);
+
 	if(_LT_value ofclass String) {
-!					if(_list_together_value ~= _last_list_together_value) {
-			_last_obj = _PrintContentsFindLastInLTGroup(p_obj, _LT_value);
+		_last_obj = _PrintContentsFindLastInLTGroup(p_obj, _LT_value);
 
-			_count = 1;
-			for(_obj = p_obj: _obj ~= _last_obj : _obj = sibling(_obj), _count++);
-
-			if(c_style & NEWLINE_BIT) {
-				new_line;
-				FastSpaces(pc_indent);
-			}
+		if(c_style & NEWLINE_BIT) {
+			new_line;
+			FastSpaces(pc_indent);
+		}
 #Ifdef OPTIONAL_ENGLISH_NUMBER;
-			EnglishNumber(_count);
+		EnglishNumber(_count);
 #Ifnot;
-			print _count;
+		print _count;
 #Endif;
-			print " ", (string) _LT_value;
-			if(c_style & NEWLINE_BIT)
-				print ":";
-			else
-				print " (";
+		print " ", (string) _LT_value;
+		if(c_style & NEWLINE_BIT)
+			print ":";
+		else
+			print " (";
 !						pc_indent = pc_indent + 2;
 
 
-			PrintContentsFromR(0, p_obj, _count);
+		PrintContentsFromR(0, p_obj, _count);
 !			_obj = _last_value;
-			if(c_style & NEWLINE_BIT == 0)
-				print ")";
+		if(c_style & NEWLINE_BIT == 0)
+			print ")";
+	} else {
+		_bak_lt = listing_together;
+		_bak_lt_val = lt_value;
+		! list_together is a routine
+		inventory_stage = 1;
+		parser_one = p_obj;
+		parser_two = pc_depth;
+		listing_together = p_obj;
+		lt_value = p_obj.list_together;
+		if(c_style & NEWLINE_BIT) {
+			FastSpaces(pc_indent);
+		}
+		if(p_obj.list_together()) {
+			inventory_stage = 0;
+			listing_together = _bak_lt;
+			lt_value = _bak_lt_val;
+			return;
+		}
+		if(c_style & NEWLINE_BIT) {
+			pc_skip_next_indent = true;
+		}
+		PrintContentsFromR(0, p_obj, _count);
 
-!					}
+		inventory_stage = 2;
+		parser_one = p_obj;
+		parser_two = pc_depth;
+		p_obj.list_together();
+		inventory_stage = 0;
+		listing_together = _bak_lt;
+		lt_value = _bak_lt_val;
 	}
-!				_last_list_together_value = _list_together_value;
+];
 
+[ NextEntry p_obj
+	p_depth
+	_LT_value_2 _obj;
+	_obj = sibling(p_obj);
+	if(_obj == 0 || _obj has concealed or scenery ||
+			(_obj hasnt workflag && c_style | WORKFLAG_BIT && p_depth == 0))
+		rfalse;
+#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
+	_LT_value_2 = _obj.list_together;
+#Ifnot;
+	_LT_value_2 = 0;
+	if(_obj provides list_together)
+		_LT_value_2 = _obj.list_together;
+#Endif;
+	if(_LT_value_2 == lt_value)
+		return _obj;
+	rfalse;
 ];
 
 #Endif;
@@ -697,8 +749,7 @@ else
 			if(_obj provides list_together)
 				_LT_value = _obj.list_together;
 #Endif;
-			if(_LT_value ofclass String ||
-					_LT_value ofclass Routine)
+			if(metaclass(_LT_value) == String or Routine)
 				_LT_special = true;
 		} else
 			_show_obj = _PrintContentsShowObj(_obj);
@@ -735,6 +786,7 @@ else
 					p_first_text(parent(p_obj));
 				if(c_style & ISARE_BIT)
 					print (string) _IsAreString(PrintContentsFromR(1, p_obj));
+				if(p_first_text && c_style & NEWLINE_BIT ~= 0) new_line;
 			}
 			! Push obj onto queue, printing the object that is shifted out, if any
 			if(_last_obj) {
@@ -795,7 +847,10 @@ else
 ];
 
 [ _PrintContentsPrintAnObj p_obj _inv _skip;
-	if(c_style & NEWLINE_BIT) { new_line; FastSpaces(pc_indent); }
+	if(pc_skip_next_indent)
+		pc_skip_next_indent = false;
+	else if(c_style & NEWLINE_BIT)
+		FastSpaces(pc_indent);
 	if(p_obj.invent ~= 0) {
 		_inv = true;
 		inventory_stage = 1;
@@ -847,7 +902,7 @@ else
 	if (p_obj.#p_prop > WORDSIZE || _val ofclass Routine) return RunRoutines(p_obj, p_prop);
 	if(_val ofclass String) {
 		print (string) p_obj.p_prop;
-		if(p_no_string_newline == 0) @new_line;
+		if(p_no_string_newline == 0) new_line;
 	}
 ];
 
