@@ -496,9 +496,7 @@ else
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 		_val = _val = _obj.list_together;
 #Ifnot;
-		_val = 0;
-		if(_obj provides list_together)
-			_val = _obj.list_together;
+		_val = _GetIndividualLTValue(_obj);
 #Endif;
 		if(_val == 0 || _PrintContentsShowObj(_obj) == false) {
 			_temp = _obj;
@@ -513,9 +511,7 @@ else
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 			_val2 = _obj.list_together;
 #Ifnot;
-			_val2 = 0;
-			if(_obj provides list_together)
-				_val2 = _obj.list_together;
+			_val2 = _GetIndividualLTValue(_obj);
 #Endif;
 			if(_val2 ~= _val || _PrintContentsShowObj(_obj) == false) {
 				if(_next == 0)
@@ -552,6 +548,12 @@ else
 	return _ret;
 ];
 
+[ _GetIndividualLTValue p_obj;
+	if(p_obj provides list_together)
+		return p_obj.list_together;
+	rfalse;
+];
+
 [_PrintContentsFindLastInLTGroup p_obj p_base_val _last_obj  _val;
 	while(true) {
 		p_obj = sibling(p_obj);
@@ -560,9 +562,7 @@ else
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 		_val = p_obj.list_together;
 #Ifnot;
-		_val = 0;
-		if(p_obj provides list_together)
-			_val = p_obj.list_together;
+		_val = _GetIndividualLTValue(p_obj);
 #Endif;
 		if(_val ~= p_base_val)
 			break;
@@ -575,9 +575,7 @@ else
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 	_LT_value = p_obj.list_together;
 #Ifnot;
-	_LT_value = 0;
-	if(p_obj provides list_together)
-		_LT_value = p_obj.list_together;
+	_LT_value = _GetIndividualLTValue(p_obj);
 #Endif;
 
 	_count = 1;
@@ -650,9 +648,7 @@ else
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 	_LT_value_2 = _obj.list_together;
 #Ifnot;
-	_LT_value_2 = 0;
-	if(_obj provides list_together)
-		_LT_value_2 = _obj.list_together;
+	_LT_value_2 = _GetIndividualLTValue(_obj);
 #Endif;
 	if(_LT_value_2 == lt_value)
 		return _obj;
@@ -745,9 +741,7 @@ else
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 			_LT_value = _obj.list_together;
 #Ifnot;
-			_LT_value = 0;
-			if(_obj provides list_together)
-				_LT_value = _obj.list_together;
+			_LT_value = _GetIndividualLTValue(_obj);
 #Endif;
 			if(metaclass(_LT_value) == String or Routine)
 				_LT_special = true;
