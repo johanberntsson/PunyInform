@@ -554,24 +554,24 @@ else
 	rfalse;
 ];
 
-[_PrintContentsFindLastInLTGroup p_obj p_base_val _last_obj  _val;
-	while(true) {
-		p_obj = sibling(p_obj);
-		if(p_obj == 0)
-			break;
-#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
-		_val = p_obj.list_together;
-#Ifnot;
-		_val = _GetIndividualLTValue(p_obj);
-#Endif;
-		if(_val ~= p_base_val)
-			break;
-		_last_obj = p_obj;
-	}
-	return _last_obj;
-];
+![_PrintContentsFindLastInLTGroup p_obj p_base_val _last_obj  _val;
+!	while(true) {
+!		p_obj = sibling(p_obj);
+!		if(p_obj == 0)
+!			break;
+!#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
+!		_val = p_obj.list_together;
+!#Ifnot;
+!		_val = _GetIndividualLTValue(p_obj);
+!#Endif;
+!		if(_val ~= p_base_val)
+!			break;
+!		_last_obj = p_obj;
+!	}
+!	return _last_obj;
+!];
 
-[_PrintContentsPrintLTGroup p_obj _count _obj _last_obj
+[_PrintContentsPrintLTGroup p_obj _count _obj
 		_bak_lt _bak_lt_val _bak_style;
 
 	_bak_lt_val = lt_value;
@@ -582,8 +582,10 @@ else
 #Endif;
 
 !	_last_obj = _PrintContentsFindLastInLTGroup(p_obj, lt_value);
+!	print "START^";
 	_count = 0;
-	for(_obj = p_obj: _obj ~= 0: _obj = NextEntry(_obj, pc_depth), _count++);
+	for(_obj = p_obj: _obj ~= 0: _obj = NextEntry(_obj, pc_depth)) _count++;
+!	print "END^";
 
 !	for(_obj = p_obj: _obj ~= _last_obj: _obj = sibling(_obj), _count++);
 
@@ -644,16 +646,27 @@ else
 	p_depth
 	_LT_value_2 _obj;
 	_obj = sibling(p_obj);
+!	print "NE ",(name) p_obj;
+!	print " -> ",(name) _obj, "^";
+!	if(_obj > 0)
+!		print (_obj has concealed), ",",
+!			(_obj has scenery), ",",
+!			(_obj hasnt workflag), ",",
+!			(c_style & WORKFLAG_BIT), ",",
+!			p_depth, "* ";
 	if(_obj == 0 || _obj has concealed or scenery ||
-			(_obj hasnt workflag && c_style | WORKFLAG_BIT && p_depth == 0))
+			(_obj hasnt workflag && c_style & WORKFLAG_BIT ~= 0 && p_depth == 0))
 		rfalse;
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 	_LT_value_2 = _obj.list_together;
 #Ifnot;
 	_LT_value_2 = _GetIndividualLTValue(_obj);
 #Endif;
-	if(_LT_value_2 == lt_value)
+!	print "MAYBE...";
+	if(_LT_value_2 == lt_value) {
+!		print "YAY!";
 		return _obj;
+	}
 	rfalse;
 ];
 
@@ -801,7 +814,11 @@ else
 #Ifdef OPTIONAL_LIST_TOGETHER;
 			_last_obj_was_LT_special = _LT_special;
 			if(_last_obj_was_LT_special) {
-				_obj = _PrintContentsFindLastInLTGroup(_last_obj, _LT_value);
+				_show_obj = lt_value;
+				lt_value = _LT_value;
+				for(_plural = sibling(_last_obj): _plural ~= 0: _plural = NextEntry(_plural, pc_depth)) _obj = _plural;
+				lt_value = _show_obj;
+!				_obj = _PrintContentsFindLastInLTGroup(_last_obj, _LT_value);
 			}
 #Endif;
 		}
