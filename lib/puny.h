@@ -710,10 +710,18 @@ else
 !			print "FT1,_obj=",(name)_obj,"_LT_mode=",_LT_mode,"^";
 			if(_show_obj) {
 !				print "SO^";
+#Ifdef OPTIONAL_LIST_TOGETHER;
 				if(_LT_mode || _plural || _obj has pluralname) {
 					pc_depth--;
 					return 2;
 				}
+#Ifnot;
+				if(_plural || _obj has pluralname) {
+					pc_depth--;
+					return 2;
+				}
+#Endif;
+
 				_plural = 1;
 			}
 			continue;
