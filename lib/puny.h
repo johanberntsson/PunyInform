@@ -582,7 +582,7 @@ else
 #Endif;
 
 !	_last_obj = _PrintContentsFindLastInLTGroup(p_obj, lt_value);
-	_count = 1;
+	_count = 0;
 	for(_obj = p_obj: _obj ~= 0: _obj = NextEntry(_obj, pc_depth), _count++);
 
 !	for(_obj = p_obj: _obj ~= _last_obj: _obj = sibling(_obj), _count++);
