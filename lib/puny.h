@@ -732,7 +732,7 @@ else
 				if(p_first_text ofclass String)
 					print (string) p_first_text;
 				else if(p_first_text ~= 0)
-					p_first_text(p_obj);
+					p_first_text(parent(p_obj));
 				if(c_style & ISARE_BIT)
 					print (string) _IsAreString(PrintContentsFromR(1, p_obj));
 			}
