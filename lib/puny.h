@@ -455,7 +455,7 @@ else
 		if(c_style & NEWLINE_BIT)
 			PrintContentsFromR(0, child(p_obj));
 		else
-			if(PrintContentsFromR(" (on which ", child(p_obj), ISARE_BIT)) print (char) ')';
+			if(PrintContents(" (on which ", p_obj, ISARE_BIT)) print (char) ')';
 	}
 ];
 
