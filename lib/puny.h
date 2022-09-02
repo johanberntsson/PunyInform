@@ -419,7 +419,6 @@ else
 			else
 				print "a ";
 		}
-		! print " "; ! not ok, adds space in room name
 	}
 	PrintShortName(p_obj);
 ];
@@ -430,7 +429,6 @@ else
 ];
 
 [ _PrintAfterEntry p_obj;
-!	print "PRINTAFTERENTRY:",p_obj;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj has light && p_obj hasnt animate) print " (providing light)";
 #Endif;
@@ -449,13 +447,10 @@ else
 					print " (which is open)";
 				new_line;
 			}
-!			print "XYZ:",(c_style & NEWLINE_BIT),".^";
 			PrintContentsFromR(0, child(p_obj));
 			if(c_style & NEWLINE_BIT == 0) {
 				print (char) ')';
 			}
-!				else
-!				new_line;
 		}
 
 	} else if(p_obj has supporter) {
@@ -468,31 +463,11 @@ else
 ];
 
 #Ifdef OPTIONAL_LIST_TOGETHER;
-! Not complete, and not yet used
-[ListTogetherOrderOk p_obj _obj _val _past_first _last_val;
-	_obj = child(p_obj);
-	for(::_obj = sibling(_obj), _last_val = _val) {
-		if(_obj == 0)
-			rtrue;
-		_val = RunRoutines(_obj, list_together);
-		if(_past_first == false) {
-			_past_first = true;
-			continue;
-		}
-		if(_val == _last_val)
-			continue;
-		if(_val ~= 0 && _last_val == 0)
-			rfalse;
-	}
 
-
-];
-
-[SortForListTogether p_obj
+[_SortForListTogether p_obj
 	_obj _val _val2 _temp _next _first_obj _last_obj _ret;
 	_obj = child(p_obj);
 	while(_obj) {
-!	if (p_prop >= INDIV_PROP_START && p_obj.&p_prop == 0) rfalse;
 #Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
 		_val = _val = _obj.list_together;
 #Ifnot;
@@ -534,14 +509,12 @@ else
 	}
 	_next = child(Directions);
 	while(_next) {
-!		print "(groupmove ",(name) _next, ")";
 		move _next to p_obj;
 		_next = child(Directions);
 	}
 	_ret = child(p_obj);
 	_next = child(DummyContainer);
 	while(_next) {
-!		print "(move ",(name) _next, ")";
 		move _next to p_obj;
 		_next = child(DummyContainer);
 	}
@@ -554,23 +527,6 @@ else
 	rfalse;
 ];
 
-![_PrintContentsFindLastInLTGroup p_obj p_base_val _last_obj  _val;
-!	while(true) {
-!		p_obj = sibling(p_obj);
-!		if(p_obj == 0)
-!			break;
-!#Iftrue LIST_TOGETHER_PROP_ID < INDIV_PROP_START;
-!		_val = p_obj.list_together;
-!#Ifnot;
-!		_val = _GetIndividualLTValue(p_obj);
-!#Endif;
-!		if(_val ~= p_base_val)
-!			break;
-!		_last_obj = p_obj;
-!	}
-!	return _last_obj;
-!];
-
 [_PrintContentsPrintLTGroup p_obj _count _obj
 		_bak_lt _bak_lt_val _bak_style;
 
@@ -581,13 +537,8 @@ else
 	lt_value = _GetIndividualLTValue(p_obj);
 #Endif;
 
-!	_last_obj = _PrintContentsFindLastInLTGroup(p_obj, lt_value);
-!	print "START^";
 	_count = 0;
 	for(_obj = p_obj: _obj ~= 0: _obj = NextEntry(_obj, pc_depth)) _count++;
-!	print "END^";
-
-!	for(_obj = p_obj: _obj ~= _last_obj: _obj = sibling(_obj), _count++);
 
 	if(lt_value ofclass String) {
 		if(c_style & NEWLINE_BIT) {
@@ -603,10 +554,8 @@ else
 			print ":^";
 		else
 			print " (";
-!						pc_indent = pc_indent + 2;
 
 		PrintContentsFromR(0, p_obj, _count);
-!			_obj = _last_value;
 		if(c_style & NEWLINE_BIT == 0)
 			print ")";
 	} else {
@@ -630,9 +579,6 @@ else
 			parser_one = p_obj;
 			parser_two = pc_depth;
 			p_obj.list_together();
-!			if(_bak_style & NEWLINE_BIT) {
-!				new_line;
-!			}
 		}
 
 		inventory_stage = 0;
@@ -646,14 +592,6 @@ else
 	p_depth
 	_LT_value_2 _obj;
 	_obj = sibling(p_obj);
-!	print "NE ",(name) p_obj;
-!	print " -> ",(name) _obj, "^";
-!	if(_obj > 0)
-!		print (_obj has concealed), ",",
-!			(_obj has scenery), ",",
-!			(_obj hasnt workflag), ",",
-!			(c_style & WORKFLAG_BIT), ",",
-!			p_depth, "* ";
 	if(_obj == 0 || _obj has concealed or scenery ||
 			(_obj hasnt workflag && c_style & WORKFLAG_BIT ~= 0 && p_depth == 0))
 		rfalse;
@@ -662,18 +600,16 @@ else
 #Ifnot;
 	_LT_value_2 = _GetIndividualLTValue(_obj);
 #Endif;
-!	print "MAYBE...";
-	if(_LT_value_2 == lt_value) {
-!		print "YAY!";
+	if(_LT_value_2 == lt_value)
 		return _obj;
-	}
 	rfalse;
 ];
 
 #Endif;
 
 [ PrintContents p_first_text p_obj p_style
-		_bak_style _ret _bak_depth _bak_indent;
+		_bak_style _ret _bak_depth _bak_indent
+		_bak_inv_stage;
 ! Print the contents of p_obj. Return true if anything was printed.
 ! If any objects are printed, prefix with p_first_text.
 ! If p_style has WORKFLAG_BIT set, only print objects which have workflag set.
@@ -687,11 +623,13 @@ else
 !       1 if there's exactly one printable object and it doesn't have pluralname
 !       2 if there are 2+ printable objects or one object with pluralname
 	_bak_style = c_style; _bak_depth = pc_depth; _bak_indent = pc_indent;
+	_bak_inv_stage = inventory_stage;
 	c_style = p_style; pc_depth = pc_initial_depth - 1; pc_indent = 2 + 2 * pc_depth;
 
 	_ret = PrintContentsFromR(p_first_text, child(p_obj));
 
 	c_style = _bak_style; pc_depth = _bak_depth; pc_indent = _bak_indent;
+	inventory_stage = _bak_inv_stage;
 	return _ret;
 ];
 
@@ -705,18 +643,9 @@ else
 		_obj _printed_any_objects _last_obj _show_obj _plural;
 #Endif;
 
-! Print the contents of p_obj. Return true if anything was printed.
+! Print p_obj and its siblings, but no more than p_max_count objects.
+! Return true if anything was printed.
 ! If any objects are printed, prefix with p_first_text.
-! If p_style has WORKFLAG_BIT set, only print objects which have workflag set.
-! If p_style has NEWLINE_BIT set, print each object on a new line, indented.
-! If p_style has ISARE_BIT set, print is/are before list.
-!   Special parameters:
-!   - If p_first_text is a routine, it will be called with p_obj as argument
-!   - If p_first_text is 0, no prefix string will be printed
-!   - If p_first_text is 1, don't print anything, but return:
-!       0 if there are no printable objects in/on p_obj
-!       1 if there's exactly one printable object and it doesn't have pluralname
-!       2 if there are 2+ printable objects or one object with pluralname
 
 	if(p_obj == 0) rfalse;
 
@@ -724,28 +653,19 @@ else
 		pc_depth++;
 
 	if(p_first_text ~= 1) {
-!		print "%%", (name) p_obj,"^";
 		! This is a call to print something
 		pc_indent = pc_indent + 2;
-!		if(pc_indent <= 0 && c_style & NEWLINE_BIT) { ! Non-recursive call with request to indent
-!			pc_indent = 2;
-!		} else if(pc_indent > 0)
-!			pc_indent = pc_indent + 2;
-		if(p_obj == child(parent(p_obj)) && p_max_count == 0) {
-!			pc_depth++;
 #Ifdef OPTIONAL_LIST_TOGETHER;
-			_first_LT_obj = SortForListTogether(parent(p_obj));
+		if(p_obj == child(parent(p_obj)) && p_max_count == 0) {
+			_first_LT_obj = _SortForListTogether(parent(p_obj));
 			p_obj = child(parent(p_obj));
-!			print "***", (name) _first_LT_obj,"^";
-#Endif;
 		}
+#Endif;
 	}
 
 	if(p_max_count == 0)
 		p_max_count = 10000;
-!   print "Objectlooping...^";
 	for(_obj = p_obj: _obj ~= 0 && p_max_count-- ~= 0: _obj = sibling(_obj)) {
-!print "Considering ", (object) _obj, "...^";
 #Ifdef OPTIONAL_LIST_TOGETHER;
 		if(_obj == _first_LT_obj)
 			_LT_mode = true;
@@ -767,9 +687,7 @@ else
 #Endif;
 
 		if(p_first_text == 1) {
-!			print "FT1,_obj=",(name)_obj,"_LT_mode=",_LT_mode,"^";
 			if(_show_obj) {
-!				print "SO^";
 #Ifdef OPTIONAL_LIST_TOGETHER;
 				if(_LT_mode || _plural || _obj has pluralname) {
 					pc_depth--;
@@ -781,7 +699,6 @@ else
 					return 2;
 				}
 #Endif;
-
 				_plural = 1;
 			}
 			continue;
@@ -818,7 +735,6 @@ else
 				lt_value = _LT_value;
 				for(_plural = sibling(_last_obj): _plural ~= 0: _plural = NextEntry(_plural, pc_depth)) _obj = _plural;
 				lt_value = _show_obj;
-!				_obj = _PrintContentsFindLastInLTGroup(_last_obj, _LT_value);
 			}
 #Endif;
 		}
@@ -842,14 +758,10 @@ else
 	}
 	pc_depth--;
 	pc_indent = pc_indent - 2;
-!	if(pc_indent > 0)
-!		pc_indent = pc_indent - 2;
 	return _printed_any_objects;
 ];
 
 [ _PrintContentsShowObj p_obj;
-!	print "PCSO:",(name)p_obj,",par=",parent(player),",dep=",pc_depth,",wfb=",c_style & WORKFLAG_BIT,
-!		",wf=",p_obj has workflag,",action=",(DebugAction)action,",conc=",p_obj has concealed,",scen=",p_obj has scenery,"^";
 	! Return true if object should be shown in list, false if not
 	if(p_obj ~= parent(player) && ! don't print container when player in it
 			(pc_depth > 0 || c_style & WORKFLAG_BIT == 0 || p_obj has workflag) &&
