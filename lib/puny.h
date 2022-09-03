@@ -454,9 +454,10 @@ else
 		}
 
 	} else if(p_obj has supporter) {
-		if(c_style & NEWLINE_BIT)
+		if(c_style & NEWLINE_BIT) {
+			new_line;
 			PrintContentsFromR(0, child(p_obj));
-		else
+		} else
 			if(PrintContents(" (on which ", p_obj, ISARE_BIT)) print (char) ')';
 	} else if(c_style & NEWLINE_BIT)
 		new_line;
