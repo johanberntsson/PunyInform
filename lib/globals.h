@@ -662,11 +662,11 @@ Object Directions
 			_w = _parse-->0;
 			_arr = _direction_dict_words;
 			if(normal_directions_enabled) {
-				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?success;
+				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?_matched_word_in_list;
 #Ifndef OPTIONAL_SHIP_DIRECTIONS;
 				if(_w == 'floor' or 'ground') {
 					selected_direction_index = DIRECTION_COUNT - 2;
-	        		jump match2;
+	        		jump _matched_and_have_set_dir_index;
 				}
 #Endif;
 			}
@@ -674,22 +674,22 @@ Object Directions
 #IfDef OPTIONAL_SHIP_DIRECTIONS;
 			_arr = _ship_direction_dict_words;
 			if(ship_directions_enabled)
-				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?success;
+				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?_matched_word_in_list;
 			if((normal_directions_enabled || ship_directions_enabled) &&
 					_w == 'floor' or 'ground') {
 				selected_direction_index = DIRECTION_COUNT - 2;
-        		jump match2;
+        		jump _matched_and_have_set_dir_index;
 			}
 #EndIf;
 			! no match
 !			selected_direction_index = 0;
 !			selected_direction = 0;
 			return 0;
-.success;
+._matched_word_in_list;
 			_i = _i - _arr;
 			@log_shift _i (-1) -> _i; ! Divide by 2
 			selected_direction_index = (_i % DIRECTION_COUNT) + 1;
-.match2;
+._matched_and_have_set_dir_index;
 			selected_direction = direction_properties_array -> selected_direction_index;
 			return 1;
 #IfNot;
@@ -700,38 +700,38 @@ Object Directions
 
 			if(normal_directions_enabled) {
 #Ifndef OPTIONAL_SHIP_DIRECTIONS;
-				@je _w 'out' ?match_out;
-				@je _w 'in' ?match_in;
-				@je _w 'd//' 'down' ?match_d;
-				@je _w 'floor' 'ground' ?match_d;
-				@je _w 'u//' 'up' ?match_u;
+				@je _w 'out' ?_matched_out;
+				@je _w 'in' ?_matched_in;
+				@je _w 'd//' 'down' ?_matched_d;
+				@je _w 'floor' 'ground' ?_matched_d;
+				@je _w 'u//' 'up' ?_matched_u;
 #Endif;
 #Ifdef OPTIONAL_FULL_DIRECTIONS;
-				@je _w 'se' 'southeast' ?match_se;
-				@je _w 'sw' 'southwest' ?match_sw;
-				@je _w 'ne' 'northeast' ?match_ne;
-				@je _w 'nw' 'northwest' ?match_nw;
+				@je _w 'se' 'southeast' ?_matched_se;
+				@je _w 'sw' 'southwest' ?_matched_sw;
+				@je _w 'ne' 'northeast' ?_matched_ne;
+				@je _w 'nw' 'northwest' ?_matched_nw;
 #Endif;
-				@je _w 'e//' 'east' ?match_e;
-				@je _w 'w//' 'west' ?match_w;
-				@je _w 's//' 'south' ?match_s;
-				@je _w 'n//' 'north' ?match_n;
+				@je _w 'e//' 'east' ?_matched_e;
+				@je _w 'w//' 'west' ?_matched_w;
+				@je _w 's//' 'south' ?_matched_s;
+				@je _w 'n//' 'north' ?_matched_n;
 			}
 
 #Ifdef OPTIONAL_SHIP_DIRECTIONS;
 			if(normal_directions_enabled || ship_directions_enabled) {
-				@je _w 'out' ?match_out;
-				@je _w 'in' ?match_in;
-				@je _w 'd//' 'down' ?match_d;
-				@je _w 'floor' 'ground' ?match_d;
-				@je _w 'u//' 'up' ?match_u;
+				@je _w 'out' ?_matched_out;
+				@je _w 'in' ?_matched_in;
+				@je _w 'd//' 'down' ?_matched_d;
+				@je _w 'floor' 'ground' ?_matched_d;
+				@je _w 'u//' 'up' ?_matched_u;
 			}
 
 			if(ship_directions_enabled) {
-				@je _w 'sb' 'starboard' ?match_e;
-				@je _w 'p//' 'port' ?match_w;
-				@je _w 'a//' 'aft' ?match_s;
-				@je _w 'f//' 'fore' ?match_n;
+				@je _w 'sb' 'starboard' ?_matched_e;
+				@je _w 'p//' 'port' ?_matched_w;
+				@je _w 'a//' 'aft' ?_matched_s;
+				@je _w 'f//' 'fore' ?_matched_n;
 			}
 
 #Endif; ! OPTIONAL_SHIP_DIRECTIONS
@@ -740,24 +740,22 @@ Object Directions
 !			selected_direction = 0;
 			return 0;
 
-.match_out; @inc _i;
-.match_in; @inc _i;
-.match_d; @inc _i;
-.match_u; @inc _i;
+._matched_out; @inc _i;
+._matched_in; @inc _i;
+._matched_d; @inc _i;
+._matched_u; @inc _i;
 #Ifdef OPTIONAL_FULL_DIRECTIONS;
-.match_sw; @inc _i;
-.match_se; @inc _i;
-.match_nw; @inc _i;
-.match_ne; @inc _i;
+._matched_sw; @inc _i;
+._matched_se; @inc _i;
+._matched_nw; @inc _i;
+._matched_ne; @inc _i;
 #Endif;
-.match_w; @inc _i;
-.match_e; @inc _i;
-.match_s; @inc _i;
-.match_n; @inc _i;
+._matched_w; @inc _i;
+._matched_e; @inc _i;
+._matched_s; @inc _i;
+._matched_n; @inc _i;
 
-.match;
 			selected_direction_index = _i;
-.match2;
 			selected_direction = direction_properties_array -> selected_direction_index;
 			return 1;
 #EndIf;
@@ -769,5 +767,5 @@ has scenery
 ;
 
 #Ifdef OPTIONAL_LIST_TOGETHER;
-Object DummyContainer;
+Object _PunyObj;
 #Endif;

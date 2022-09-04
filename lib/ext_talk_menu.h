@@ -230,13 +230,13 @@ Global talk_menu_talking = false;
 		}
 		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
 			if(_find_topic < 30) {
-				if(_find_topic-- == 1) jump found;
+				if(_find_topic-- == 1) jump _tm_found_topic;
 				continue;
 			}
 			p_start++;
 			if(talk_array-->p_start == _find_topic) {
 				p_start--;
-.found;
+._tm_found_topic;
 				if(p_value == 1)
 					return talk_array-->p_start;
 				if(_val ~= TM_STALE || p_topic < 0) {
@@ -247,7 +247,6 @@ Global talk_menu_talking = false;
 			}
 		}
 	}
-	rfalse; ! Fail
 ];
 
 [ ActivateTopic p_npc p_topic p_start;
@@ -374,13 +373,13 @@ Array TenDashes -> "----------";
 
 	! Print all valid lines to say
 
-.restart_talk_after_line;
+._tm_restart_talk_after_line;
 
 #Ifv5;
 	_offset = 0;
 #Endif;
 
-.restart_talk;
+._tm_restart_talk;
 
 #Ifv5;
 	_count = 0;
@@ -438,7 +437,7 @@ Array TenDashes -> "----------";
 !			"With that, you politely end the conversation.";
 		_TMPrintMsg(_val);
 #Ifv5;
-		jump end_of_talk;
+		jump _tm_end_of_talk;
 #Ifnot;
 		rtrue;
 #Endif;
@@ -479,16 +478,16 @@ Array TenDashes -> "----------";
 			@set_window 0;
 			_TMPrintMsg(TM_MSG_EXIT);
 !			"With that, you politely end the conversation.";
-			jump end_of_talk;
+			jump _tm_end_of_talk;
 		}
 		if(_val == 'n' or 'N' or 130) {
 			if(_more) {
 				_offset = _offset + _height - 6;
-				jump restart_talk;
+				jump _tm_restart_talk;
 			}
 			else if(_offset) {
 				_offset = 0;
-				jump restart_talk;
+				jump _tm_restart_talk;
 			}
 		}
 		_j = _val - 48;
@@ -588,9 +587,9 @@ Array TenDashes -> "----------";
 
 	if(talk_menu_talking) {
 		new_line;
-		jump restart_talk_after_line;
+		jump _tm_restart_talk_after_line;
 	}
-.end_of_talk;
+._tm_end_of_talk;
 #Ifv5;
 	if(_has_split) {
 		@erase_window 1;

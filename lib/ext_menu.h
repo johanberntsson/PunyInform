@@ -31,7 +31,7 @@ Global menu_nesting;
 [ DoMenu menu_choices EntryR ChoiceR lines main_title i j;
 	menu_choices = 0; ! Avoid warning
 	menu_nesting++;
-.LKRD;
+._v3_redisplay_menu;
 	menu_item = 0;
 	lines = indirect(EntryR);
 	main_title = item_name;
@@ -59,7 +59,7 @@ Global menu_nesting;
 
        _ReadPlayerInput(true);
 		j = parse->1; ! number of words
-		if (j == 0) jump LKRD;
+		if (j == 0) jump _v3_redisplay_menu;
 		i = parse-->1;
 		if(i == 'q//') {
 			menu_nesting--; if (menu_nesting > 0) rfalse;
@@ -72,7 +72,7 @@ Global menu_nesting;
 		j = indirect(EntryR);
 		print "^--- "; print (string) item_name; print " ---^^";
 		j = indirect(ChoiceR);
-		if (j == 2) jump LKRD;
+		if (j == 2) jump _v3_redisplay_menu;
 		if (j == 3) rfalse;
 	}
 ];
@@ -100,7 +100,7 @@ Constant QKEY2__KY      = 'q';
 	main_title = item_name; main_wid = item_width;
 	cl = 7;
 
-.ReDisplay;
+._redisplay_menu;
 
 	oldcl = 0;
 	@erase_window $ffff;
@@ -177,11 +177,11 @@ Constant QKEY2__KY      = 'q';
 			style roman; @set_window 0; new_line;
 
 			i = ChoiceR.call();
-			if (i == 2) jump ReDisplay;
+			if (i == 2) jump _redisplay_menu;
 			if (i == 3) break;
 
 			print "^[Please press SPACE.]";
-			@read_char 1 -> pkey; jump ReDisplay;
+			@read_char 1 -> pkey; jump _redisplay_menu;
 		}
 	}
 	menu_nesting--; if (menu_nesting > 0) rfalse;

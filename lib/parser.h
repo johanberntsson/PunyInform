@@ -236,13 +236,13 @@ System_file;
     ! this uses Horner's algorithm: 2421 = 10*(10*(10*(2)+4)+2)+1
     for (_i=0: _i<_len: _i++) {
         _digit = _num->_i;
-        if(_digit < '0' || _digit > '9') jump baddigit;
+        if(_digit < '0' || _digit > '9') jump _trynumber_baddigit;
         _d = _digit - '0';
         if(_len <=4) _tot = _tot*10 + _d;
     }
    	if (_len > 4) return 10000;
     return _tot;
-.baddigit;
+._trynumber_baddigit;
 	return -1000;
 ];
 
@@ -434,7 +434,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 #Ifdef ParseNoun;
 			_result = ParseNoun(_obj);
 			if(_result >= 0) {
-				jump register_candidate;
+				jump _register_candidate;
 			}
 			else if(wn > _k) {
 				_parse_noun_words = wn - _k;
@@ -476,7 +476,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 				wn = _k;
 #Endif;
 				if(_result >= 0) {
-					jump register_candidate;
+					jump _register_candidate;
 				}
 			}
 
@@ -500,16 +500,16 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 #EndIf;
 				while(_IsSentenceDivider(_p) == false) {
 #IfV5;
-					@scan_table _current_word _name_array _name_array_len -> _j ?success;
+					@scan_table _current_word _name_array _name_array_len -> _j ?_word_found_in_name_prop;
 #IfNot;
 					_j = 0;
-.next_word_in_name_prop;
+._next_word_in_name_prop;
 					@loadw _name_array _j -> sp;
-					@je sp _current_word ?success;
-					@inc_chk _j _name_array_len ?~next_word_in_name_prop;
+					@je sp _current_word ?_word_found_in_name_prop;
+					@inc_chk _j _name_array_len ?~_next_word_in_name_prop;
 #EndIf;
-					jump register_candidate;
-.success;
+					jump _register_candidate;
+._word_found_in_name_prop;
 #IfDef DEBUG_CHECKNOUN;
 					print " - matched ", (address) _current_word,"^";
 #EndIf;
@@ -518,7 +518,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 					_current_word = _p-->0;
 				}
 			}
-.register_candidate;
+._register_candidate;
 #Ifdef ParseNoun;
 			_result = _result + _parse_noun_words;
 #Endif;
@@ -547,7 +547,6 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 				}
 			}
 		}
-.not_matched;
 	}
 
 	wn = _k;
@@ -662,7 +661,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 		if(_j && (_j-> #dict_par1) & 4) _pluralword = true;
 	}
 
-.recheck_noun;
+._getnextnoun_recheck_noun;
 	if(_noun < 0) {
 		if(_pluralword || _all_found) {
 			! we don't have to ask here, because the input was
@@ -776,7 +775,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 					_CopyInputArray(buffer2, buffer);
 					_CopyParseArray(parse2, parse);
                     num_words = parse -> 1;
-					jump recheck_noun;
+					jump _getnextnoun_recheck_noun;
 				}
 			}
 			PrintMsg(MSG_PARSER_CANT_DISAMBIGUATE);
@@ -1635,9 +1634,9 @@ Array guess_object-->5;
 		return -1;
 	}
 
-.reparse;
+._perform_reparse;
 	verb_word = (parse - 2) --> (2 * verb_wordnum);
-.reparse2;
+._perform_reparse_2;
 	if(UnsignedCompare(verb_word, (HDR_DICTIONARY-->0)) == -1) {
 		! Not a verb. Try the entry point routine before giving up
 		verb_word = UnknownVerb(verb_word);
@@ -1646,7 +1645,7 @@ Array guess_object-->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 			print "Case 1, Word ", verb_word, "^";
 #EndIf;
-			jump first_word_unknown;
+			jump _first_word_unknown;
 		}
 	}
 
@@ -1665,7 +1664,7 @@ Array guess_object-->5;
 				action = ##Go;
 				noun = Directions;
 				inp1 = Directions;
-				jump parse_success;
+				jump _parsing_was_successful;
 			}
 			! bad direction command, such as "n n"
 			PrintMsg(MSG_PARSER_PARTIAL_MATCH, _i);
@@ -1679,20 +1678,20 @@ Array guess_object-->5;
 			wn = wn + which_object->1;
 			_pattern = NextWord();
 			if(_pattern == comma_word) {
-				jump conversation;
+				jump _this_is_conversation;
 			}
 		}
 		! fall through to first_word_unknown below
 		!jump first_word_unknown;
 
-.first_word_unknown;
-		if(actor ~= player) jump treat_bad_line_as_conversation;
+._first_word_unknown;
+		if(actor ~= player) jump _treat_bad_line_as_conversation;
 		if(parse-->3 == ',//') { PrintMsg(MSG_PARSER_UNKNOWN_PERSON); rtrue; }
 		PrintMsg(MSG_PARSER_UNKNOWN_VERB);
 		rtrue;
 
 
-.conversation;
+._this_is_conversation;
 		if(_noun hasnt animate && _noun hasnt talkable) {
 			PrintMsg(MSG_PARSER_CANT_TALK, _noun);
 			rtrue;
@@ -1720,7 +1719,7 @@ Array guess_object-->5;
 			}
 			if(_i == 1) {
 				++wn; ! to account for the correctly parsed verb
-				jump parse_success;
+				jump _parsing_was_successful;
 			}
 			if(_i ~= 0) {
 				! _i == 'verb', so use its grammar instead
@@ -1730,10 +1729,10 @@ Array guess_object-->5;
 				! restore in case the rule fails.
 				_verb_offset = 1;
 				verb_wordnum = verb_wordnum - _verb_offset;
-				jump reparse2;
+				jump _perform_reparse_2;
 			}
 		}
-		jump reparse;
+		jump _perform_reparse;
 	}
 
 	! Now it is known word, and it is not a direction, in the first position
@@ -1775,7 +1774,7 @@ Array guess_object-->5;
 		if(action == ##AskTo && _score == 100) {
 			_noun = noun;
 			wn = consult_from;
-			jump conversation;
+			jump _this_is_conversation;
 		}
 
 #IfDef DEBUG_PARSEANDPERFORM;
@@ -1835,7 +1834,7 @@ Array guess_object-->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### Skipping phase 2^";
 #EndIf;
-		jump parse_success;
+		jump _parsing_was_successful;
 	}
 	if(_verb_offset ~= 0) {
 		! restore the normal verb_wordnum after trying a
@@ -1850,9 +1849,9 @@ Array guess_object-->5;
 		! grammar instead.
 		verb_word = usual_grammar_after;
 		usual_grammar_after = 0;
-		jump reparse2;
+		jump _perform_reparse_2;
 	}
-	if(player ~= actor) jump treat_bad_line_as_conversation;
+	if(player ~= actor) jump _treat_bad_line_as_conversation;
 	if(_best_score < parse->1) {
 		if(_best_score == 0) {
 			PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
@@ -1905,11 +1904,11 @@ Array guess_object-->5;
 	print "### PHASE 2: result ", _score, "^";
 #EndIf;
 	if(_score == -1) rfalse; ! force a complete reparse
-	if(_score == 100) jump parse_success;
+	if(_score == 100) jump _parsing_was_successful;
 	action = -1; ! to stop each_turn etc.
 	rtrue; ! ParsePattern wrote some error message
 
-.treat_bad_line_as_conversation;
+._treat_bad_line_as_conversation;
 	! this is used when not understood and the actor is an NPC
 	action = ##NotUnderstood;
 	consult_from = verb_wordnum; ! usually 3 (<person> , <command>)
@@ -1920,7 +1919,7 @@ Array guess_object-->5;
 	special_word = NextWord();
 	! fall through to jump parse_success;
 
-.parse_success;
+._parsing_was_successful;
 	! we want to return how long the successfully sentence was
 	! but wn can be destroyed by action routines, so store in _i
 

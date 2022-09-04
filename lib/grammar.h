@@ -1163,11 +1163,11 @@ Verb meta 'quit' 'q//'
 
 #IfV3;
 [ RestoreSub;
-	@restore ?restore_success; ! can't use @restore because of compiler test
+	@restore ?_restore_was_successful; ! can't use @restore because of compiler test
 	verb_word = 'restore';
 	PrintMsg(MSG_RESTORE_FAILED);
 	rtrue;
-.restore_success; ! This is never reached, since a successful restore continues after save opcode.
+._restore_was_successful; ! This is never reached, since a successful restore continues after save opcode.
 #IfNot;
 [ RestoreSub _flag;
 	@restore -> _flag;
@@ -1178,10 +1178,10 @@ Verb meta 'quit' 'q//'
 
 #IfV3;
 [ SaveSub;
-	@save ?save_success;
+	@save ?_save_was_successful;
 	PrintMsg(MSG_SAVE_FAILED);
 	rtrue;
-.save_success;
+._save_was_successful;
     PrintMsg(MSG_SAVE_DEFAULT);
 #IfNot;
 [ SaveSub _result;
@@ -1352,12 +1352,10 @@ Verb meta 'verify'
 ];
 
 [ VerifySub;
-	@verify ?Vmaybe;
-	jump Vwrong;
-.Vmaybe;
-	"The game file has verified as intact.";
-.Vwrong;
+	@verify ?_verify_was_maybe_ok;
 	"The game file did not verify as intact, and may be corrupt.";
+._verify_was_maybe_ok;
+	"The game file has verified as intact.";
 ];
 
 
@@ -1597,7 +1595,7 @@ Global scope_cnt;
 	if(location == thedark) {
 		@new_line;
 		PrintOrRun(location, description);
-		jump EndOfLook;
+		jump _EndOfLookRoutine;
 	}
 #Endif;
 	_obj = parent(player);
@@ -1686,7 +1684,7 @@ Global scope_cnt;
 		! Descend one level
 		_ceil = ScopeCeiling(player, _ceil);
 	} ! while
-.EndOfLook;
+._EndOfLookRoutine;
 	! finally, call the optional library entry routine
 	LookRoutine();
 	_action = action; action = ##Look;
@@ -1716,10 +1714,10 @@ Global scope_cnt;
 	print "  ";
 	_n = p_m;
 	if(_n < 0)    { _n = -p_m; _n = _n*10; }
-	if(_n < 10)   { print "   "; jump Panuml; }
-	if(_n < 100)  { print "  "; jump Panuml; }
+	if(_n < 10)   { print "   "; jump _Panuml; }
+	if(_n < 100)  { print "  "; jump _Panuml; }
 	if(_n < 1000) { print " "; }
-.Panuml;
+._Panuml;
 	print p_m, " ";
 ];
 #EndIf;

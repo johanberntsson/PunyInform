@@ -146,12 +146,12 @@ Constant MAX_WAIT_MINUTES 1440;
 			_hr = 0;
 			_mn = 0;
 			_loop = 0;
-.tw_diglph;
+._tw_diglph;
 			_dig = _j->_loop;
 			_loop++;
 			if(_dig >= '0' && _dig <= '9') {
 				_hr = 10 * _hr + _dig - '0';
-				jump tw_diglph;
+				jump _tw_diglph;
 			}
 			if (_dig ~= ':')
 				return GPR_FAIL;

@@ -76,9 +76,9 @@ System_file;
 #EndIf;
 	if(p_risk_duplicate == 0) {
 #IfV5;
-		@scan_table p_obj scope scope_objects -> _i ?~not_found;
+		@scan_table p_obj scope scope_objects -> _i ?~_object_wasnt_found;
 		return;
-.not_found;
+._object_wasnt_found;
 #IfNot;
 		for(_i = 0: _i < scope_objects: _i++) {
 			if(scope-->_i == p_obj) return;
@@ -190,9 +190,9 @@ System_file;
 #IfNot;
 		if(scope_objects) {
 			_max = scope_objects - 1;
-.copy_next_entry;
+._copy_next_entry;
 			scope_copy-->_i = scope-->_i;
-			@inc_chk _i _max ?~copy_next_entry;
+			@inc_chk _i _max ?~_copy_next_entry;
 		}
 #EndIf;
 		scope_copy_actor = p_actor;
@@ -269,9 +269,9 @@ Constant AddToScope = _PutInScope;
 
 	_UpdateScope(p_actor);
 #IfV5;
-	@scan_table p_obj scope scope_objects -> _i ?~failed;
+	@scan_table p_obj scope scope_objects -> _i ?~_object_wasnt_found;
 	rtrue;
-.failed;
+._object_wasnt_found;
 #IfNot;
 	for(_i = 0: _i < scope_objects: _i++) {
 		if(scope-->_i == p_obj) rtrue;
@@ -357,9 +357,9 @@ Constant AddToScope = _PutInScope;
 #IfV5;
 		_k = _j.#add_to_scope;
 		@log_shift _k (-1) -> _k;
-		@scan_table p_obj _l _k -> _m ?~failed;
+		@scan_table p_obj _l _k -> _m ?~_object_wasnt_found;
 		return _j;
-.failed;
+._object_wasnt_found;
 #IfNot;
 		_k = (_j.#add_to_scope)/WORDSIZE;
 		for (_m=0 : _m<_k : _m++) if (_l-->_m == p_obj) return _j;

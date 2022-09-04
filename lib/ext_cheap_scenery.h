@@ -210,7 +210,7 @@ Global cs_parse_name_id = 0;
 			self = location;
 			_ret = _sw2();
 			if(_ret > 0) {
-				jump match;
+				jump _cs_found_a_match;
 			}
 			cs_parse_name_id = 0;
 		} else if(_w1 == _sw1 or _sw2) {
@@ -218,12 +218,12 @@ Global cs_parse_name_id = 0;
 				if(_w1 == _sw1 && _w2 == _sw2) {
 					_ret = 2;
 				}
-				jump match;
+				jump _cs_found_a_match;
 		}
 		_i = _i + 3;
 	}
 	return 0;
-.match;
+._cs_found_a_match;
 	CSData-->CSDATA_OBJ = p_obj;
 	CSData-->CSDATA_PROP = p_prop;
 	CSData-->CSDATA_INDEX = _i;

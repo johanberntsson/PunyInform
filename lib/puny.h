@@ -477,7 +477,7 @@ else
 		if(_val == 0 || _PrintContentsShowObj(_obj) == false) {
 			_temp = _obj;
 			_obj = sibling(_obj);
-			move _temp to DummyContainer;
+			move _temp to _PunyObj;
 			continue;
 		}
 		! This object is the first that has this list_together value
@@ -504,7 +504,7 @@ else
 
 		! If group of objects holds a single object, consider it a normal object
 		if(_first_obj == _last_obj)
-			move _first_obj to DummyContainer;
+			move _first_obj to _PunyObj;
 
 		_obj = _next;
 	}
@@ -514,10 +514,10 @@ else
 		_next = child(Directions);
 	}
 	_ret = child(p_obj);
-	_next = child(DummyContainer);
+	_next = child(_PunyObj);
 	while(_next) {
 		move _next to p_obj;
-		_next = child(DummyContainer);
+		_next = child(_PunyObj);
 	}
 	return _ret;
 ];
@@ -844,19 +844,19 @@ else
 			_j = _obj.&found_in;
 #IfV5;
 			@log_shift _len (-1) -> _len;
-			@scan_table real_location _j _len -> _present ?~no_success; ! The position is only a throw-away value here.
+			@scan_table real_location _j _len -> _present ?~_location_wasnt_found; ! The position is only a throw-away value here.
 			_present = 1;
-.no_success;
+._location_wasnt_found;
 #IfNot;
 			_len = _len / 2;
 			_len = _len - 1;
-.next_value;
+._check_next_value;
 				if(_j-->_len == real_location) {
 					_present = 1;
-					jump after_loop;
+					jump _did_find_location;
 				}
-			@dec_chk _len 0 ?~next_value;
-.after_loop;
+			@dec_chk _len 0 ?~_check_next_value;
+._did_find_location;
 #EndIf;
 
 		}
@@ -882,7 +882,7 @@ else
 #Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness();
 #Endif;
-.recheck_vc;
+._recheck_visibility_ceil;
 	_old_vc = visibility_ceiling;
 #Ifdef OPTIONAL_NO_DARKNESS;
 	_vc = ScopeCeiling(player);
@@ -901,7 +901,7 @@ else
 			_old_parent = parent(player);
 			location.initial();
 			if(parent(player) ~= _old_parent)
-				jump recheck_vc;
+				jump _recheck_visibility_ceil;
 		}
 #Ifdef OPTIONAL_NO_DARKNESS;
 		RunEntryPointRoutine(NewRoom);
@@ -999,7 +999,7 @@ Include "parser.h";
 
 	if(_scope_count) {
 		_max = _scope_count - 1;
-.next_entry;
+._each_turn_next_item;
 		if(deadflag >= GS_DEAD) rtrue;
 		_obj = scope_copy-->_i;
 		if(_obj has reactive && _obj.&each_turn ~= 0) {
@@ -1010,7 +1010,7 @@ Include "parser.h";
 #EndIf;
 			RunRoutines(_obj, each_turn);
 		}
-		@inc_chk _i _max ?~next_entry;
+		@inc_chk _i _max ?~_each_turn_next_item;
 	}
 ];
 
@@ -1052,7 +1052,7 @@ Include "parser.h";
 
 	if(_scope_count) {
 		_max = _scope_count - 1;
-.next_entry;
+._react_before_next_item;
 		_obj = scope_copy-->_i;
 		if (_obj has reactive && _obj.&react_before ~= 0) {
 #IfDef DEBUG;
@@ -1064,7 +1064,7 @@ Include "parser.h";
 				rtrue;
 			}
 		}
-		@inc_chk _i _max ?~next_entry;
+		@inc_chk _i _max ?~_react_before_next_item;
 	}
 #IfDef DEBUG;
 #IfV3;
@@ -1094,7 +1094,7 @@ Include "parser.h";
 
 	if(_scope_count) {
 		_max = _scope_count - 1;
-.next_entry;
+._react_after_next_item;
 		_obj = scope_copy-->_i;
 		if (_obj has reactive && _obj.&react_after ~= 0) {
 #IfDef DEBUG;
@@ -1104,7 +1104,7 @@ Include "parser.h";
 #EndIf;
 			if(RunRoutines(_obj, react_after)) rtrue;
 		}
-		@inc_chk _i _max ?~next_entry;
+		@inc_chk _i _max ?~_react_after_next_item;
 	}
 #IfDef DEBUG;
 #IfV3;
@@ -1295,9 +1295,9 @@ Include "parser.h";
 	if(p_array_val == 0)
 		p_array_val = WORD_HIGHBIT + p_obj;
 	for (_i=0 : _i<active_timers : _i++)
-		if (the_timers-->_i == p_array_val) jump FoundTSlot4;
+		if (the_timers-->_i == p_array_val) jump _FoundTSlot4;
 	rfalse;
-.FoundTSlot4;
+._FoundTSlot4;
 #IfDef DEBUG;
 	if(debug_flag & 4) {
 		print "[ Stopping ";
@@ -1787,7 +1787,7 @@ Object thedark "Darkness"
 			if(parse-->1 == 'undo') {
 				PerformUndo();
 				@new_line;
-				jump abort_input;
+				jump _abort_current_input;
 			}
 			@save_undo _i;
 			undo_flag = 2;
@@ -1797,12 +1797,12 @@ Object thedark "Darkness"
 				! undo has just been issued
 				PrintMsg(MSG_UNDO_DONE);
 				@new_line;
-				jump abort_input;
+				jump _abort_current_input;
 			}
 #Endif;
 		}
 		_parser_oops = parser_unknown_noun_found;
-.do_it_again;
+._try_same_command_again;
 #Ifdef DEBUG_TIMER;
 		timer1 = 0-->2;
 #Endif;
@@ -1819,7 +1819,7 @@ Object thedark "Darkness"
 				num_words = parse -> 1;
 				_parser_oops-->0 = special_word;
 				_again_saved = false;
-				jump do_it_again;
+				jump _try_same_command_again;
 			} else {
 				PrintMsg(MSG_PARSER_CANT_OOPS);
 			}
@@ -1834,7 +1834,7 @@ Object thedark "Darkness"
 				_CopyInputArray(buffer2, buffer);
 				_CopyParseArray(parse2, parse);
 				num_words = parse -> 1;
-				jump do_it_again;
+				jump _try_same_command_again;
 			} else {
 				PrintMsg(MSG_PARSER_NOTHING_TO_AGAIN);
 			}
@@ -1891,7 +1891,7 @@ Object thedark "Darkness"
 	print "[After ParseAndPerformAction took ",timer1," jiffies]^";
 #Endif;
 		continue;
-.abort_input;
+._abort_current_input;
 		! skip all processing and force new input
 		parse->1 = 0;
 		_sentencelength = 0;
