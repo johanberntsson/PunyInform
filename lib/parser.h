@@ -1599,7 +1599,7 @@ Array guess_object-->5;
 	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action _verb_offset;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action _verb_offset _selected_direction _selected_direction_index;
 	! returns
 	! 1/true: if error was found
 	! -n: if <n> words were used to find a match,
@@ -2008,6 +2008,8 @@ Array guess_object-->5;
 		} else {
 			_score = 0;
 			_action = action;
+			_selected_direction = selected_direction;
+			_selected_direction_index = selected_direction_index;
 			for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
 				action = _action; ! This may have been altered by a previous interation for multitokens
 				inp1 = multiple_objects --> _noun;
@@ -2048,6 +2050,15 @@ Array guess_object-->5;
 				! however, if this is the only object then allow it to
 				! get the 'you already have it' message.
                 !if(action == ##Take && noun in player && (multiple_objects --> 0 > 1 || parser_all_found)) continue;
+
+                ! make sure that selected_direction* is only active when
+                ! the processed noun (or second) is a direction
+                if(noun == Directions || second == Directions) {
+                	selected_direction = _selected_direction;
+                	selected_direction_index = _selected_direction_index;
+				} else {
+					selected_direction = 0; selected_direction_index = 0;
+				}
 
 				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
 				if(inp1 > 1) PronounNotice(noun);

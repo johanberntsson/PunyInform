@@ -73,6 +73,7 @@ g
 push john
 s
 drop all
+take car and east
 get blue and all books
 drop all
 get blue book and all books but blue

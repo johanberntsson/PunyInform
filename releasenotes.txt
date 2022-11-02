@@ -6,6 +6,8 @@ v4.1: bug fix and new feature release
   at all didn't produce any response from the parser.
 - Allow author to define timer_order as a common property if they want, when
   using OPTIONAL_ORDERED_TIMERS.  
+- Fixed a bug where directions were incorrectly set for non-directional
+  nouns when processing a list of objects.
 
 =======
 v4.0: bug fix and new feature release (11 May 2022)

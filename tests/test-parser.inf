@@ -287,6 +287,9 @@ Object CarPark "Car Park"
 		after [; print "*** CarPark.after^"; ],
 		before [; print "*** CarPark.before^"; ],
 #EndIf;
+        before [;
+        Take: if(selected_direction) "You cant pick that up!";
+        ],
 		cant_go "Without a car the only viable exit is to the north.",
 #IfDef OPTIONAL_FULL_SCORE;
 	has scored light reactive;

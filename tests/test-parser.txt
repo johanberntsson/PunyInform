@@ -249,6 +249,10 @@ pink book: Dropped.
 sweater: Dropped.
 red book: Dropped.
 
+> take car and east
+little red car: That's fixed in place.
+east: You cant pick that up!
+
 > get blue and all books
 blue book: The blue box starts ticking...
 pink book: You dared taking the pink book. Bravo!
