@@ -1,0 +1,29 @@
+
+> w
+Cloakroom
+The walls of this small room were clearly once lined with hooks, though now only
+one remains. The exit is a door to the east.
+
+> take off cloak
+You take off the velvet cloak.
+
+> put cloak on hook
+You put the velvet cloak on the small brass hook.
+
+[The score has just gone up by 1 point.]
+
+> e
+Foyer of the Opera House
+
+> s
+Foyer bar
+The bar, much rougher than you'd have guessed after the opulence of the foyer to
+the north, is completely empty. There seems to be some sort of message scrawled
+in the sawdust on the floor.
+
+> x floor
+There is a message here.
+
+> quit
+Are you sure you want to quit? yes
+
