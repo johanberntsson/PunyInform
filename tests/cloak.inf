@@ -64,7 +64,7 @@ Object  foyer "Foyer of the Opera House"
 			seems to be getting worse.",
   has   light;
 
-Object -> east_statue "west statue"
+Object -> west_statue "west statue"
 	with
 		description "A pretty statue of Medusa.",
 		name 'west' 'statue' 'medusa',
