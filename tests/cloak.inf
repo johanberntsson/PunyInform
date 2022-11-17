@@ -1,11 +1,21 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+! The very first lines of the main source code file for a game can
+! contain compiler options, like the lines above. -~S disables
+! strict error checking. This is otherwise used in z5 and z8 games by
+! default. While useful for debugging, it adds ~10 KB to the story file
+! size and it makes the game slower.
+! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
+! aren't used. This can save some space.
 
 ! ============================================================================ !
 !   Cloak of Darkness - a simple demonstration of Interactive Fiction
 !	   This version for INFORM written by Roger Firth on 17Sep99
 ! ============================================================================ !
 
+! When compiling to z8, use the standard library instead
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
 Constant MANUAL_PRONOUNS;
@@ -16,20 +26,27 @@ Constant Headline   "^A basic IF demonstration.^";
 Constant MAX_SCORE  2;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 
-Release 2;
-Serial "210920";
+Release 3;
+Serial "221116";
 
 Constant STATUSLINE_SCORE; Statusline score;
+Constant INITIAL_LOCATION_VALUE = foyer;
 
 [ DeathMessage; print "You have lost"; ];
 
+
 #Ifndef USEINFORM;
+
 Include "globals.h";
 Include "puny.h";
+
 #Endif;
+
 #Ifdef USEINFORM;
+
 Include "Parser";
 Include "VerbLib";
+
 #Endif;
 
 ! ============================================================================ !
@@ -38,13 +55,34 @@ Object  foyer "Foyer of the Opera House"
   with  description
 		   "You are standing in a spacious hall, splendidly decorated in red
 			and gold, with glittering chandeliers overhead. The entrance from
-			the street is to the north, and there are doorways south and west.",
+			the street is to the north, and there are doorways south and west.^^
+			A statue is standing in the west part of the room.",
 		s_to  bar,
 		w_to  cloakroom,
 		n_to
 		   "You've only just arrived, and besides, the weather outside
 			seems to be getting worse.",
   has   light;
+
+Object -> east_statue "west statue"
+	with
+		description "A pretty statue of Medusa.",
+		name 'west' 'statue' 'medusa',
+		! parse_name to allow any combination of "west" "medusa" "statue" in that order
+		parse_name [ _w _n;
+			_w = NextWord();
+			if(_w == 'west'){ _n++; _w = NextWord(); }
+			if(_w == 'medusa'){ _n++; _w = NextWord(); }
+			if(_w == 'statue')_n++;
+			return _n;
+		],
+		before [;
+			Examine: rfalse;
+			PushDir: 
+				"You try to push the statue ", (name) Directions, ", but to no avail!";
+			default: "Better leave the statue alone!";
+		],
+	has static scenery;
 
 Object  cloakroom "Cloakroom"
   with  description
@@ -137,7 +175,9 @@ Object  message "scrawled message" bar
   has   scenery;
 
 [ Initialise;
+#Ifdef USEINFORM; ! The location is set with INITIAL_LOCATION_VALUE in PunyInform
 	location = foyer;
+#Endif;
 	move cloak to player;
 	give cloak worn;
    "^^Hurrying through the rainswept November night, you're glad to see the
