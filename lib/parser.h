@@ -344,25 +344,32 @@ System_file;
 	return NextWord();
 ];
 
-[ _CalculateObjectLevel p_obj;
+[ _CalculateObjectLevel p_obj _score;
 	! set priority levels for inclusion in which?
 	! queries. Low level objects will only be
 	! considered if there are no higher levels in play
 	if(meta == true) {
 		! if meta then add all matching objects
-		return 5;
+		return 50;
 	}
-	if (p_obj has concealed) return 1;
-	if(p_obj has scenery) return 2;
-	if(action == ##Take && p_obj in actor) {
+	if (p_obj has concealed) return 10;
+
+	_score = 40;
+
+	if(p_obj has scenery) _score = 20;
+	else if(action == ##Take && p_obj in actor) {
 		! take gives low priority for already held objects
-		return 3;
+		_score = 30;
 	}
-	if(object_token_type == HELD_OBJECT or MULTIHELD_OBJECT && p_obj notin actor) {
+	else if(object_token_type == HELD_OBJECT or MULTIHELD_OBJECT && p_obj notin actor) {
 		! low priority for not held objects
-		return 3;
+		_score = 30;
 	}
-	return 4;
+
+	if(p_obj ~= Directions)
+		_score = _score + 1;
+	
+	return _score;
 ];
 
 Constant _CHECKNOUN_WORD_WEIGHT = 128;

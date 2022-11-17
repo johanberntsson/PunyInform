@@ -8,6 +8,9 @@ v4.1: bug fix and new feature release
   using OPTIONAL_ORDERED_TIMERS.  
 - Fixed a bug where directions were incorrectly set for non-directional
   nouns when processing a list of objects.
+- Added option to support list_together (but not indistinguishable objects).
+- Improved differentiation between directions and objects that caused a bug
+  in the Cloak of Darkness game ("x floor" referred both to down and floor)
 
 =======
 v4.0: bug fix and new feature release (11 May 2022)
