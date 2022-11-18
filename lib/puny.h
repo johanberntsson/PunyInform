@@ -346,15 +346,15 @@ else
 #Endif;
 #Endif;
 
-#Ifdef OPTIONAL_ENGLISH_NUMBER;
+#Ifdef OPTIONAL_LANGUAGE_NUMBER;
 
-[ EnglishNumber n f;
+[ LanguageNumber n f;
     if (n == 0)    { print "zero"; rfalse; }
     if (n < 0)     { print "minus "; n = -n; }
-    if (n >= 1000) { print (EnglishNumber) n/1000, " thousand"; n = n%1000; f = 1; }
+    if (n >= 1000) { print (LanguageNumber) n/1000, " thousand"; n = n%1000; f = 1; }
     if (n >= 100)  {
         if (f == 1) print ", ";
-        print (EnglishNumber) n/100, " hundred"; n = n%100; f = 1;
+        print (LanguageNumber) n/100, " hundred"; n = n%100; f = 1;
     }
     if (n == 0) rfalse;
     #Ifdef DIALECT_US;
@@ -370,14 +370,14 @@ else
 		print (string) LanguageNumberStrings-->(n - 13);
 	else {
 		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
-        if (n%10 ~= 0) print "-", (EnglishNumber) n%10;
+        if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
 	}
 #Ifnot;
 	if(n < 21)
 		print (address) LanguageNumbers-->(2 * n - 1);
 	else {
 		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
-        if (n%10 ~= 0) print "-", (EnglishNumber) n%10;
+        if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
 	}
 #Endif;
 #Ifnot;
@@ -385,10 +385,11 @@ else
 		print (string) LanguageNumberStrings-->(n - 1);
 	else {
 		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
-        if (n%10 ~= 0) print "-", (EnglishNumber) n%10;
+        if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
 	}
 #Endif;
 ];
+
 #Endif;
 
 
@@ -545,8 +546,8 @@ else
 		if(c_style & NEWLINE_BIT) {
 			FastSpaces(pc_indent);
 		}
-#Ifdef OPTIONAL_ENGLISH_NUMBER;
-		EnglishNumber(_count);
+#Ifdef OPTIONAL_LANGUAGE_NUMBER;
+		LanguageNumber(_count);
 #Ifnot;
 		print _count;
 #Endif;

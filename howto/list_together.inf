@@ -17,8 +17,8 @@ Constant NO_SCORE = 0;
 !Property individual list_together; 
 
 Constant OPTIONAL_LIST_TOGETHER;
-Constant OPTIONAL_ENGLISH_NUMBER; ! Use this to have list_together print english numbers
-!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS; ! Cheaper to add when OPTIONAL_ENGLISH_NUMBER is defined
+Constant OPTIONAL_LANGUAGE_NUMBER; ! Use this to have list_together print numbers using words
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS; ! Cheaper to add when OPTIONAL_LANGUAGE_NUMBER is defined
 
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;

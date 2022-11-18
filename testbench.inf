@@ -1,13 +1,7 @@
 !% -~S
+!% -e
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
-!!% $MAX_STATIC_DATA=60000
-!!% $MAX_LABELS=5000
-!!% $MAX_ZCODE_SIZE=50000
-
-
-
-Switches e;
 
 ! Testbench - a platform for trying things out in PunyInform
 
@@ -31,6 +25,8 @@ Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_FLEXIBLE_INVENTORY;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_LANGUAGE_NUMBER;
+!Constant OPTIONAL_LIST_TOGETHER;
 Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
 Constant OPTIONAL_SCORED;
 Constant OPTIONAL_FULL_SCORE;
@@ -678,7 +674,7 @@ Object -> Goblin "Goblin"
 					"Wise call.";
 				}
 
-				rtrue;
+!				rtrue;
 		],
 	has animate;
 

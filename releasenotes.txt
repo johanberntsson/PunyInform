@@ -9,7 +9,7 @@ v4.1: bug fix and new feature release
 - Fixed a bug where direction variables were incorrectly set for 
   non-directional nouns when the parser was perfoming an action for a list 
   of objects, i.e. "TAKE EAST AND BOOK".
-- Added OPTIONAL_ENGLISH_NUMBER to support the routine EnglishNumber(n), to
+- Added OPTIONAL_LANGUAGE_NUMBER to support the routine LanguageNumber(n), to
   print e.g. "twenty-five".
 - Added OPTIONAL_LIST_TOGETHER to support list_together property (but 
   indistinguishable objects are still not supported).

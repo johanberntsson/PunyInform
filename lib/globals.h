@@ -328,7 +328,7 @@ Array LanguageNumbers static table
     'sixteen' 16 'seventeen' 17 'eighteen' 18 'nineteen' 19 'twenty' 20;
 #EndIf;
 
-#Ifdef OPTIONAL_ENGLISH_NUMBER;
+#Ifdef OPTIONAL_LANGUAGE_NUMBER;
 #Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 #IfV3;
 Array LanguageNumberStrings static -->
@@ -372,7 +372,7 @@ Array LanguageNumberTensStrings static -->
     "seventy"
     "eighty"
     "ninety";
-#Endif; ! OPTIONAL_ENGLISH_NUMBER
+#Endif; ! OPTIONAL_LANGUAGE_NUMBER
 
 
 Constant TT_OBJECT           = 1;    ! one or more words referring to an object
