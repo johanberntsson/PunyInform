@@ -6,9 +6,14 @@ v4.1: bug fix and new feature release
   at all didn't produce any response from the parser.
 - Allow author to define timer_order as a common property if they want, when
   using OPTIONAL_ORDERED_TIMERS.  
-- Fixed a bug where directions were incorrectly set for non-directional
-  nouns when processing a list of objects.
-- Added option to support list_together (but not indistinguishable objects).
+- Fixed a bug where direction variables were incorrectly set for 
+  non-directional nouns when the parser was perfoming an action for a list 
+  of objects, i.e. "TAKE EAST AND BOOK".
+- Added OPTIONAL_ENGLISH_NUMBER to support the routine EnglishNumber(n), to
+  print e.g. "twenty-five".
+- Added OPTIONAL_LIST_TOGETHER to support list_together property (but 
+  indistinguishable objects are still not supported).
+- Added howto/list_together.inf
 - Improved differentiation between directions and objects that caused a bug
   in the Cloak of Darkness game ("x floor" referred both to down and floor)
 

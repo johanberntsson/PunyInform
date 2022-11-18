@@ -1,0 +1,163 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+Constant Story      "List Together";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+Constant NO_SCORE = 0;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+! Declare list_together as individual if you prefer it to be individual (slower)
+!Property individual list_together; 
+
+Constant OPTIONAL_LIST_TOGETHER;
+Constant OPTIONAL_ENGLISH_NUMBER; ! Use this to have list_together print english numbers
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS; ! Cheaper to add when OPTIONAL_ENGLISH_NUMBER is defined
+
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+Constant OPTIONAL_FLEXIBLE_INVENTORY;
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+Include "puny.h";
+
+Class Stone
+	with
+		name 'stones//p' 'stonez//p',
+		dummyprop 1,
+		list_together [ _obj;
+			if(inventory_stage == 1) {
+				print "a bunch of stones (";
+				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) {
+					if(_obj ~= parser_one) print ", ";
+					print (address) (_obj.&name-->0);
+				}
+				print ")";
+				if(c_style & NEWLINE_BIT)
+					new_line;
+				rtrue;
+			}
+		];
+
+Class Tool
+	with
+		name 'tools//p' 'toolz//p',
+		newl false,
+		list_together [ ;
+			if(inventory_stage == 1) {
+				print "some tools (";
+				if(c_style & NEWLINE_BIT) {
+					self.newl = true;
+					c_style = c_style - NEWLINE_BIT;
+				} else
+					self.newl = false;
+			} else if(inventory_stage == 2) {
+				print ")";
+				if(self.newl)
+					new_line;
+			}
+		],
+		short_name [;
+			if(listing_together) {
+				if(self provides cool_name) {
+					print (string) self.cool_name;
+					rtrue;
+				}
+			}
+		];
+
+Class Book
+	with
+		name 'books//p',
+		list_together "books";
+
+Class Spice
+	with
+		name 'spices//p',
+		list_together 7
+	has pluralname;
+
+Object Library "The Library"
+	with
+		description "You are in a library."
+	has light;
+
+Stone -> BlackStone "black stone"
+	with
+		name 'black' 'stone';
+
+Book -> PinkBook "pink book"
+	with
+		name 'pink';
+
+Spice -> Salt "salt"
+	with
+		name 'salt';
+
+Stone -> PurpleStone "purple stone"
+	with
+		name 'purple' 'stone';
+
+Stone -> RedStone "red stone"
+	with
+		name 'red' 'stone';
+
+Object -> Box "box"
+	with
+		name 'box',
+		inside_description "It feels so nice, standing in the box.",
+	has container open openable enterable;
+
+Spice -> -> Cinnamon "cinnamon"
+	with
+		name 'cinnamon';
+
+Tool -> -> Screwdriver "screwdriver"
+	with
+		name 'screwdriver' 'cute',
+		cool_name "cute screwdriver";
+
+Object -> -> Flower "flower"
+	with
+		name 'flower';
+
+Tool -> -> Hammer "hammer"
+	with
+		name 'hammer' 'lovely',
+		cool_name "lovely hammer";
+
+Stone -> GreenStone "green stone"
+	with
+		name 'green' 'stone';
+
+Book -> WhiteBook "white book"
+	with
+		name 'white';
+
+Spice -> Pepper "pepper"
+	with
+		name 'pepper';
+
+Stone -> BlueStone "blue stone"
+	with
+		name 'blue' 'stone';
+
+Object -> Hat "hat"
+	with
+		name 'hat';
+
+[Initialise; ! i;
+	BlackStone.dummyprop++;
+	print "^^Similar items are listed together in this demo. 
+			Try both INVENTORY TALL and INVENTORY WIDE after picking things up.
+			Of course, you use GET STONES to take all stones etc.^^";
+];
