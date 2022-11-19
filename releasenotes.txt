@@ -1,6 +1,7 @@
-v4.1: bug fix and new feature release
+v4.1: bug fix and new feature release (19 November 2022)
 
-- _CheckNoun, _CheckPatterns renamed to _ParseNounPhrase, _PrintGrammarPattern
+- Routines _CheckNoun, _CheckPatterns renamed to _ParseNounPhrase, 
+  _PrintGrammarPattern.
 - _ParseNounPhrase routine has been made smaller and faster.
 - Fixed a bug where patterns containing prepositions that didn't match
   at all didn't produce any response from the parser.

@@ -219,7 +219,7 @@ More information on last page.
 
 ## OBJECT_SCORE = number
 
-###### The score for each object with the *scored* attribute the player picks up (default 4). Requires *OPTIONAL_SCORED*.
+###### The score for objects with *scored* attribute the player picks up (default 4). Requires *OPTIONAL_SCORED*.
 
 ## OPTIONAL_ALLOW_WRITTEN_NUMBERS **PUNY++**
 
@@ -249,17 +249,25 @@ More information on last page.
 
 ###### Make the parser fill in missing parts in player input.
 
+## OPTIONAL_LANGUAGE_NUMBER **PUNY++**
+
+###### Define the *LanguageNumber(n)* routine.
+
+## OPTIONAL_LIST_TOGETHER **PUNY++**
+
+###### Support the *list_together* property.
+
 ## OPTIONAL_MANUAL_REACTIVE **PUNY++**
 
 ###### The author takes responsibility for setting the *reactive* attribute on the right objects.
 
 ## OPTIONAL_MANUAL_SCOPE **PUNY++**
 
-###### The author takes responsibility for setting *scope_modified = true* when doing something in code which may affect scope.
+###### The author takes responsibility for setting *scope_modified = true* when doing something in code which may affect what's in scope.
 
 ## OPTIONAL_NO_DARKNESS **PUNY++**
 
-###### Assume there is always light. Don’t define the *light* attribute.
+###### Rooms are always lit. Don’t define the *light* attribute.
 
 ## OPTIONAL_ORDERED_TIMERS **PUNY++**
 
@@ -329,11 +337,11 @@ More information on last page.
 
 ## Achieved(number)
 
-###### Complete scoring task *number*. Requires *TASKS_PROVIDED*.
+###### Complete task *number*. Requires *TASKS_PROVIDED*.
 
 ## Banner()
 
-###### Print the game name, release, serial number etc. If *Initialise* returns *2*, this information isn't printed at game start, and you can call *Banner* later to print it.
+###### Print the game name, serial# etc. To skip this at game start, return 2 from *Initialise* and call *Banner* later.
 
 ## CommonAncestor(object1, object2)
 
@@ -359,6 +367,10 @@ More information on last page.
 
 ###### Return *true* if *object1* holds *object2*, on some level.* *
 
+## LanguageNumber(number)
+
+###### Print *number* using words. Requires *OPTIONAL_LANGUAGE_NUMBER*.* *
+
 ## LoopOverScope(routine, actor)
 
 ###### Call *routine* once for each object in scope for *actor* (default: *player*), passing the object as a parameter.
@@ -369,7 +381,7 @@ More information on last page.
 
 ## NextWord()
 
-###### Read word at position *wn* in player input and increment *wn*. If no word read or word not in dictionary, return false. Otherwise, return the word.
+###### Read word at position *wn* in player input and increment *wn*. Return the word, or false if empty or unrecognized.
 
 ## NextWordStopped()
 
@@ -405,7 +417,7 @@ More information on last page.
 
 ## PrintContents(text, object, style) **PUNY++**
 
-###### Recursively list contents of *object*. Hide items that have *concealed* or *scenery*, unless *action* is *##Inv*.. Print or run *text* (unless 0) before first item. If *style* has *WORKFLAG_BIT *set, only print objects which have the *workflag* attribute. If style has *ISARE_BIT* set, print "is" or "are" before list. If it has *NEWLINE_BIT* set, print each object on a new line. Return *true* if any objects were listed. Call with *text==1* to not print anything but return *0* if *object* contains no printable objects, *1* if contents can be prefixed with "is", *2* for "are". 
+###### Recursively list contents of *object*. Hide items that have *concealed* or *scenery*, unless *action* is *##Inv*. Print or run *text* (unless 0) before first item. If *style* has *WORKFLAG_BIT *set, only print objects which have the *workflag* attribute. If it has *ISARE_BIT* set, print "is" or "are" before list. If it has *NEWLINE_BIT* set, print each object on a new line. Return *true* if any objects were listed. Call with *text==1* to not print anything but return *0* if *object* contains no printable objects, *1* if contents can be prefixed with "is", *2* for "are". 
 
 ## PrintMsg(msg, arg1, arg2) **PUNY++**
 
@@ -971,6 +983,10 @@ from a class which also defines the property, it gets both values.
 ## life \[OBJ\] (+)
 
 ###### For *animate* objects: Works like a *before* routine, but receives only person-to-person actions (*Answer*, *Ask*, *Attack*, *Give*, *Kiss*, *Order*, *Show*, *Tell*, *ThrowAt*, *WakeOther*). Can be a string instead of a routine.
+
+## list_together \[OBJ\] **\~PUNY**
+
+###### Objects that have the same value are listed together in object listings. Set to a low number to print them adjacent to each other, a string to print them as a group, or (advanced) a routine to handle the printing yourself. Can't handle identical objects. Requires *OPTIONAL_LIST_TOGETHER*. 
 
 ## n_to \[ROOM\]
 
