@@ -1,7 +1,7 @@
 !% -~S
+!% -e
 !% $OMIT_UNUSED_ROUTINES=1
 
-Switches e;
 ! compile as z8 to use Inform stdlib instead of puny (for debugging)
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
@@ -441,8 +441,6 @@ Object -> Goblin "Goblin"
 				} else {
 					"Wise call.";
 				}
-
-				rtrue;
 		],
 	has animate;
 
