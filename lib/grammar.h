@@ -1471,7 +1471,7 @@ Global scope_cnt;
 [TreeSubHelper p_parent p_indent _x _i;
 	objectloop(_x in p_parent) {
 		for(_i = 0 : _i < p_indent : _i++) print "  ";
-		print (name) _x, "^";
+		print (name) _x, " (", _x, ")^";
 		if(child(_x)) TreeSubHelper(_x, p_indent + 1);
 	}
 ];

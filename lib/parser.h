@@ -348,32 +348,33 @@ System_file;
 	! set priority levels for inclusion in which?
 	! queries. Low level objects will only be
 	! considered if there are no higher levels in play
+	! This routine should return a value between 0 and 990.
+	! The last digit of the return value must be 0.
 	if(meta == true) {
 		! if meta then add all matching objects
-		return 50;
+		return 900;
 	}
-	if (p_obj has concealed) return 10;
+	if (p_obj has concealed) return 200;
 
-	_score = 40;
+	_score = 500;
 
-	if(p_obj has scenery) _score = 20;
+	if(p_obj has scenery) _score = 300;
 	else if(action == ##Take && p_obj in actor) {
 		! take gives low priority for already held objects
-		_score = 30;
+		_score = 400;
 	}
 	else if(object_token_type == HELD_OBJECT or MULTIHELD_OBJECT && p_obj notin actor) {
 		! low priority for not held objects
-		_score = 30;
+		_score = 400;
 	}
 
 	if(p_obj ~= Directions)
-		_score = _score + 1;
+		_score = _score + 10;
 	
 	return _score;
 ];
 
-Constant _CHECKNOUN_WORD_WEIGHT = 128;
-Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
+Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 
 #Ifdef ParseNoun;
 [ _ParseNounPhrase p_parse_pointer _i _j _k _p _obj _matches
@@ -529,23 +530,23 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 #Ifdef ParseNoun;
 			_result = _result + _parse_noun_words;
 #Endif;
-			if(_result > 0) {
-				! At least one word was matched
-				_j = _CHECKNOUN_WORD_WEIGHT * _result + _CalculateObjectLevel(_obj);
+			if(_result ~= 0 && _result >= _best_word_count) {
+				! This object is matched with at least as many words as the longest matches this far
+				_j = _CalculateObjectLevel(_obj);
 #Ifdef ChooseObjects;
 				! give ChooseObjects a chance to modify the score
 				_j = _j + _CHECKNOUN_CHOOSEOBJ_WEIGHT *  ChooseObjects(_obj, 2);
 #Endif;
 
-				if(_j == _best_score) {
+				if(_j == _best_score && _result == _best_word_count) {
 					_matches++;
 					which_object-->_matches = _obj;
 #IfDef DEBUG_CHECKNOUN;
-					print "Same best score ", _best_score, ". Matches are now ", _matches,"^";
+					print "Same best result: word count ", _result, ", score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
-				} else if(_j > _best_score) {
+				} else if(_j > _best_score || _result > _best_word_count) {
 #IfDef DEBUG_CHECKNOUN;
-					print "New best score ", _j, ". Old score was ", _best_score,"^";
+					print "New best result: word count ", _result, ", score ", _j , "^";
 #EndIf;
 					_best_word_count = _result;
 					_best_score = _j;
@@ -558,11 +559,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 8;
 
 	wn = _k;
 	which_object->0 = _matches;
-    if(_best_score >= _CHECKNOUN_WORD_WEIGHT) {
-    	which_object->1 = _best_word_count;
-	} else {
-    	which_object->1 = 0;
-	}
+	which_object->1 = _best_word_count;
 
 	if(_matches == 1) {
 		_result = which_object-->1;
