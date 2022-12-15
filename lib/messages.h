@@ -1175,6 +1175,7 @@ Constant ERR_INVALID_DIR_PROP 5;
 Constant ERR_TOO_MANY_FLOATING 6;
 Constant ERR_NOT_DIR_PROP 7;
 Constant ERR_NOT_FAKE_OBJ 8;
+Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 
 [RunTimeError p_err;
 	print "[Puny error: ";
@@ -1199,6 +1200,8 @@ Constant ERR_NOT_FAKE_OBJ 8;
 			print "DirPropToFakeObj called with non-dirprop";
 		ERR_NOT_FAKE_OBJ:
 			print "FakeObjToDirProp called with non-fakeobj";
+		ERR_ILLEGAL_CHOOSEOBJNO:
+			print "ChooseObjectFinal_(Pick or Discard) called with nonexistent array index.";
 		default:
 			print "Unknown error (", p_err, ")";
 		}

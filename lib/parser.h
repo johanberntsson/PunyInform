@@ -362,9 +362,11 @@ System_file;
 	else if(action == ##Take && p_obj in actor) {
 		! take gives low priority for already held objects
 		_score = 400;
-	}
-	else if(object_token_type == HELD_OBJECT or MULTIHELD_OBJECT && p_obj notin actor) {
+	} else if(object_token_type == HELD_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT && p_obj notin actor) {
 		! low priority for not held objects
+		_score = 400;
+	} else if(object_token_type == MULTIINSIDE_OBJECT && parent(p_obj) == location or actor) {
+		! low priority for objects directly in location
 		_score = 400;
 	}
 
@@ -557,6 +559,15 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 		}
 	}
 
+#Ifdef ChooseObjectsFinal;
+	if(_matches > 1) {
+		! ChooseObjectsFinal may call ChooseObjectsPick(n) or ChooseObjectsDiscard(n) to modify the array.
+		parser_one = _matches;
+		ChooseObjectsFinal(which_object + 2, _matches);
+		_matches = parser_one;
+	}
+#Endif;
+
 	wn = _k;
 	which_object->0 = _matches;
 	which_object->1 = _best_word_count;
@@ -577,6 +588,28 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 	}
 	return 0;
 ];
+
+#Ifdef ChooseObjectsFinal;
+! ChooseObjectsFinal may call ChooseObjectsPick(n) or ChooseObjectsDiscard(n) to modify the array.
+[ ChooseObjectsFinal_Pick p_n;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(p_n < 0 || p_n > parser_one - 1)
+		RunTimeError(ERR_ILLEGAL_CHOOSEOBJNO);
+#EndIf;
+	which_object-->0 = which_object-->p_n;
+	parser_one = 1;
+];
+[ ChooseObjectsFinal_Discard p_n _i;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(p_n < 0 || p_n > parser_one - 1)
+		RunTimeError(ERR_ILLEGAL_CHOOSEOBJNO);
+#EndIf;
+	parser_one = parser_one - 1;
+	for(_i=p_n: _i<parser_one: _i++)
+		which_object-->_i = which_object-->(_i+1);
+];
+#Endif; !Ifdef ChooseObjectsFinal
+
 
 [ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase
 		_pluralword _i _j _k _m _all_found;
