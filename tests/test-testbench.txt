@@ -1,0 +1,17 @@
+
+> open box
+You open the box, revealing a red book and a brown book.
+
+[The score has just gone up by 3 points.]
+
+> take book from box
+Do you mean the red book or the brown book?
+
+> brown
+Yay, got rid of the brown book!
+
+[The score has just gone down by 1 point.]
+
+> quit
+You ain't no quitter eh? yes
+
