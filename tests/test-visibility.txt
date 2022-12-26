@@ -1,0 +1,28 @@
+
+> turn torch on
+You switch the torch on.
+The Library
+You are in a library.
+
+> drop torch
+Dropped.
+
+> n
+*** OnEnterDarkness *** called.
+Darkness
+It is pitch dark here!
+
+> s
+The Library
+
+You can see a torch (providing light) here.
+
+> n
+
+*** OnEnterDarkness *** called.
+Darkness
+It is pitch dark here!
+
+> quit
+Are you sure you want to quit? yes
+
