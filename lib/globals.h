@@ -547,8 +547,6 @@ Global clr_bgstatus          = 2;
 Global clr_fgstatus          = 8;
 #endif;
 
-Global visibility_ceiling;
-
 Global normal_directions_enabled = true;
 #Ifdef OPTIONAL_SHIP_DIRECTIONS;
 Global ship_directions_enabled = true;

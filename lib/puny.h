@@ -253,13 +253,6 @@ Constant ONE_SPACE_STRING = " ";
 	_MoveCursor(1, 1); ! This also sets the upper window as active.
 	if(_width > 66) @print_char ' ';
 
-!     _MoveCursor(1, 2);
-!     if (location == thedark) {
-!         print (name) location;
-!     }
-!     else {
-!         FindVisibilityLevels();
-!         if (visibility_ceiling == location)
 	_visibility_ceiling = ScopeCeiling(player);
 ! print (object) _visibility_ceiling;
 #Ifdef OPTIONAL_NO_DARKNESS;
@@ -872,10 +865,23 @@ else
 	scope_modified = true;
 ];
 
+[ CalculateVisibilityCeiling;
+#Ifdef OPTIONAL_NO_DARKNESS;
+	return ScopeCeiling(player);
+#Ifnot;
+	if(location == thedark)
+		return thedark;
+	else {
+		return ScopeCeiling(player);
+	}
+#Endif;
+];
+
 [ PlayerTo p_loc p_flag _old_loc _old_real_loc _old_lookmode _old_parent _vc _old_vc;
 !	print "PlayerTo, moving player to ", (the) p_loc, ".^";
 	_old_loc = location;
 	_old_real_loc = real_location;
+	_old_vc = CalculateVisibilityCeiling();
 	move Player to p_loc;
 	real_location = superparent(p_loc);
 	location = real_location;
@@ -884,20 +890,9 @@ else
 	_UpdateDarkness();
 #Endif;
 ._recheck_visibility_ceil;
-	_old_vc = visibility_ceiling;
-#Ifdef OPTIONAL_NO_DARKNESS;
-	_vc = ScopeCeiling(player);
-#Ifnot;
-	if(location == thedark)
-		_vc = thedark;
-	else {
-		_vc = ScopeCeiling(player);
-	}
-#Endif;
-	if(_vc == location)
-		visibility_ceiling = _vc;
+	_vc = CalculateVisibilityCeiling();
 
-	if(visibility_ceiling == location && visibility_ceiling ~= _old_vc) {
+	if(_vc == location && _vc ~= _old_vc) {
 		if(location provides initial) {
 			_old_parent = parent(player);
 			location.initial();

@@ -8,6 +8,7 @@ You are in a library.
 Dropped.
 
 > n
+
 *** OnEnterDarkness *** called.
 Darkness
 It is pitch dark here!

@@ -2,6 +2,8 @@ v4.2
 
 - Added entry point routine ChooseObjectsFinal, letting the programmer
   influence the final choice of object.
+- Fixed visibility_ceiling bug which prevented correct calls in PlayerTo
+  and removed the visiblity_ceiling global.
 
 =======
 v4.1: bug fix and new feature release (19 November 2022)
