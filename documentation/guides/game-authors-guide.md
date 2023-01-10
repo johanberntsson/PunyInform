@@ -413,6 +413,17 @@ the player can refer to), you probably want to define
 `OPTIONAL_MANUAL_REACTIVE`, you will also need to set the `reactive`
 attribute for all objects that provide the `parse_name` property.
 
+### Initialize the talk_menu extension manually
+
+This makes the game start faster, and saves some bytes.
+
+1. Compile the game in DEBUG mode
+2. Run the game and type "TALK SETUP"
+3. Enter the printed values into the talk_start property for each NPC
+4. Comment out the call to InitTalk() which you probably had in your Initialise routine up to now
+5. Define the constant NO_INITTALK to tell the library not to define the InitTalk routine, as it won't be needed.
+6. If you add or remove any values in talk_array, comment out the NO_INITTALK constant and go to step 1 again.
+
 ### Move arrays to static memory
 
 If you have arrays whose contents never change, you can place them in
