@@ -5,7 +5,7 @@ You open the box, revealing a red book and a brown book.
 [The score has just gone up by 3 points.]
 
 > put book in box
-Do you mean the the blue book, the green book or the pink book?
+Do you mean the blue book, the green book or the pink book?
 
 > i
 You are empty handed.

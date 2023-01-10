@@ -365,6 +365,10 @@ System_file;
 	} else if(object_token_type == HELD_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT && p_obj notin actor) {
 		! low priority for not held objects
 		_score = 400;
+		if(object_token_type == MULTIEXCEPT_OBJECT && p_obj in second) {
+			! lower priority for object in/on the second object
+			_score = _score - 10;
+		}
 	} else if(object_token_type == MULTIINSIDE_OBJECT && parent(p_obj) == location or actor) {
 		! low priority for objects directly in location
 		_score = 400;
@@ -1396,7 +1400,6 @@ Array guess_object-->5;
 	pattern_pointer = p_pattern - 1;
 	num_noun_groups = 0;
 	noun = 0;
-	second = 0;
 	consult_from = 0;
 	consult_words = 0;
 	inp1 = 0;
@@ -1636,7 +1639,7 @@ Array guess_object-->5;
 	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
 ];
 
-[ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_pattern_pointer _best_phase2 _action _verb_offset _selected_direction _selected_direction_index;
+[ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_phase2 _best_second _action _verb_offset _selected_direction _selected_direction_index;
 	! returns
 	! 1/true: if error was found
 	! -n: if <n> words were used to find a match,
@@ -1844,8 +1847,8 @@ Array guess_object-->5;
 			{
 			_best_score = _score;
 			_best_pattern = _pattern;
-			_best_pattern_pointer = pattern_pointer;
 			_best_phase2 = phase2_necessary;
+			_best_second = second; ! need to save for multiexcept in phase 2
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: new best pattern ", _i, " ", _best_phase2, " ", _score, "^";
 #EndIf;
@@ -1894,6 +1897,7 @@ Array guess_object-->5;
 			PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 		} else if(_best_phase2 > 0) {
 			! call again to generate suitable error message
+			second = _best_second;
 			_score = _ParsePattern(_best_pattern, PHASE2);
 		} else {
 			! parser_unknown_word is set when we tried to parse
