@@ -6,6 +6,8 @@ v4.2
   and removed the visiblity_ceiling global.
 - Improved parsing of multiexcept so disambiguation doesn't give the same
   priority to objects in/on the second noun phrase in the grammar.
+- Added the option to add a suffix to the library version number, e.g. "dev"
+  for a development version which is newer than the released version.
 
 =======
 v4.1: bug fix and new feature release (19 November 2022)

@@ -1221,6 +1221,9 @@ Verb meta 'quit' 'q//'
 	print " / Inform v";
 	inversion;
 	print " PunyInform v", PUNYINFORM_MAJOR_VERSION, (char) '.', PUNYINFORM_MINOR_VERSION;
+#Ifdef PUNYINFORM_VERSION_SUFFIX;
+	print (string) PUNYINFORM_VERSION_SUFFIX;
+#EndIf;
 	_i = 0;
 #IfDef STRICT_MODE;
 	#IfV5;
