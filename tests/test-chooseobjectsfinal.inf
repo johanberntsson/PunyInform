@@ -2,11 +2,12 @@ Constant Story      "ChooseObjectsFinal demo";
 Constant Headline   "^A sample game which uses PunyInform.^";
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant INITIAL_LOCATION_VALUE = Pub;
+Constant DEBUG;
 
 include "globals";
 
 [ ChooseObjectsFinal p_arr p_len _i _o;
-    print "*** ChooseObjects, object count is ", p_len, ": ^";
+    print "*** ChooseObjectsFinal, action is ",(DebugAction) action,", object count is ", p_len, ": ^";
     for(_i = 0: _i < p_len: _i++) {
         _o = p_arr-->_i;
         print "  Object# ", _o, ": ", (the) _o;
@@ -24,8 +25,11 @@ Object Pub "The Pub"
         description "You are in a pub."
     has light;
 
+Object -> Table "table"
+	with name 'table'
+	has supporter;
 
-Object -> RedBall "red ball"
+Object -> -> RedBall "red ball"
     with
         name 'red' 'ball';
 
