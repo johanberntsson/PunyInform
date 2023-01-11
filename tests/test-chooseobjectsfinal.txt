@@ -1,0 +1,11 @@
+
+> take ball from box
+*** ChooseObjects, object count is 2: 
+  Object# 9: the red ball in the The Pub
+  Object# 11: the green ball in the box
+*** End of list
+Removed.
+
+> quit
+Are you sure you want to quit? yes
+

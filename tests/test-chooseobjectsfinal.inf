@@ -1,0 +1,50 @@
+Constant Story      "ChooseObjectsFinal demo";
+Constant Headline   "^A sample game which uses PunyInform.^";
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant INITIAL_LOCATION_VALUE = Pub;
+
+include "globals";
+
+[ ChooseObjectsFinal p_arr p_len _i _o;
+    print "*** ChooseObjects, object count is ", p_len, ": ^";
+    for(_i = 0: _i < p_len: _i++) {
+        _o = p_arr-->_i;
+        print "  Object# ", _o, ": ", (the) _o;
+        if(parent(_o))
+            print " in ",(the) parent(_o);
+        new_line;
+    }
+    "*** End of list";
+];
+
+include "puny";
+
+Object Pub "The Pub"
+    with
+        description "You are in a pub."
+    has light;
+
+
+Object -> RedBall "red ball"
+    with
+        name 'red' 'ball';
+
+Object -> Box "box"
+    with
+        name 'box',
+        inside_description "It feels so nice, standing in the box.",
+    has container open openable enterable;
+
+Object -> -> GreenBall "green ball"
+    with
+        name 'green' 'ball';
+
+Object PinkBall "pink ball"
+    with
+        name 'pink' 'ball';
+
+
+[Initialise;
+    move PinkBall to player;
+    "This game shows which objects ChooseObjectsFinal gets to choose from.";
+];
