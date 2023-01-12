@@ -597,7 +597,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 ];
 
 #Ifdef ChooseObjectsFinal;
-! ChooseObjectsFinal may call ChooseObjectsPick(n) or ChooseObjectsDiscard(n) to modify the array.
+! ChooseObjectsFinal may call ChooseObjectsFinal_Pick(n) or ChooseObjectsFinal_Discard(n) to modify the array.
 [ ChooseObjectsFinal_Pick p_n;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(p_n < 0 || p_n > parser_one - 1)
