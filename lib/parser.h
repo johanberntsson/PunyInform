@@ -372,6 +372,9 @@ System_file;
 	} else if(object_token_type == MULTIINSIDE_OBJECT && parent(p_obj) == location or actor) {
 		! low priority for objects directly in location
 		_score = 400;
+	} else if(object_token_type == MULTIINSIDE_OBJECT && second ~= 0 && parent(p_obj) ~= second) {
+		! lower priority for objects not inside the object
+		_score = 400;
 	}
 
 	if(p_obj ~= Directions)

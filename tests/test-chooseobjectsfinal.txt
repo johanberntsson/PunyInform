@@ -1,5 +1,13 @@
 
 > take ball from box
+*** ChooseObjectsFinal, action is Take, object count is 2: 
+  Object# 10: the red ball in the table
+  Object# 12: the green ball in the box
+*** End of list
+*** ChooseObjectsFinal, action is Remove, object count is 2: 
+  Object# 10: the red ball in the table
+  Object# 12: the green ball in the box
+*** End of list
 Removed.
 
 > quit

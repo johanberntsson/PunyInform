@@ -3,6 +3,13 @@ Constant Headline   "^A sample game which uses PunyInform.^";
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant INITIAL_LOCATION_VALUE = Pub;
 Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
 
 include "globals";
 

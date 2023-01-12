@@ -85,7 +85,7 @@ small blue ball: You put the small blue ball into the red box.
 small red ball: You put the small red ball into the transparent box.
 
 > get all balls from transparent
-small red ball: Removed.
+Removed.
 
 > get all from transparent
 There are no things available that match "get all from transparent".

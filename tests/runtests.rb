@@ -37,7 +37,7 @@ def runtest(filename, version, inform_args)
     begin
         result = %x[#{inform_cmd}]
         File.open(compileroutput_file, 'w') { |file| file.write(result) }
-        if result.include?("(no output)") || result.include?("Warning") then
+        if result.include?("(no output)") || result.include?("Warning") || result.include?("Error") then
             puts result
             raise Errno::ENOENT
         end
