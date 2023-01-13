@@ -383,7 +383,7 @@ System_file;
 	return _score;
 ];
 
-Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
+Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 
 #Ifdef ParseNoun;
 [ _ParseNounPhrase p_parse_pointer _i _j _k _p _obj _matches
@@ -394,7 +394,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 		_best_word_count _current_word _name_array _name_array_len _best_score
 		_result _stop;
 #Endif;
-#IfDef DEBUG_CHECKNOUN;
+#IfDef DEBUG_PARSENOUNPHRASE;
 	print "Entering _ParseNounPhrase!^";
 #EndIf;
 	! return 0 if no noun matches
@@ -444,7 +444,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 #Ifdef ParseNoun;
 		_parse_noun_words = 0;
 #Endif;
-#IfDef DEBUG_CHECKNOUN;
+#IfDef DEBUG_PARSENOUNPHRASE;
 		print "Testing ", (the) _obj, "...^";
 #EndIf;
 		if((noun_filter == 0 || _UserFilter(_obj) ~= 0)) {
@@ -509,7 +509,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 #IfNot;
 				@div _name_array_len 2 -> _name_array_len;
 #EndIf;
-#IfDef DEBUG_CHECKNOUN;
+#IfDef DEBUG_PARSENOUNPHRASE;
 				print "Trying to find ", (address) _current_word," in name (length ",_name_array_len,").^";
 #EndIf;
 #IfV3;
@@ -527,7 +527,7 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 #EndIf;
 					jump _register_candidate;
 ._word_found_in_name_prop;
-#IfDef DEBUG_CHECKNOUN;
+#IfDef DEBUG_PARSENOUNPHRASE;
 					print " - matched ", (address) _current_word,"^";
 #EndIf;
 					_result++;
@@ -544,17 +544,17 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 				_j = _CalculateObjectLevel(_obj);
 #Ifdef ChooseObjects;
 				! give ChooseObjects a chance to modify the score
-				_j = _j + _CHECKNOUN_CHOOSEOBJ_WEIGHT *  ChooseObjects(_obj, 2);
+				_j = _j + _PARSENP_CHOOSEOBJ_WEIGHT * ChooseObjects(_obj, 2);
 #Endif;
 
 				if(_j == _best_score && _result == _best_word_count) {
 					_matches++;
 					which_object-->_matches = _obj;
-#IfDef DEBUG_CHECKNOUN;
+#IfDef DEBUG_PARSENOUNPHRASE;
 					print "Same best result: word count ", _result, ", score ", _best_score, ". Matches are now ", _matches,"^";
 #EndIf;
 				} else if(_j > _best_score || _result > _best_word_count) {
-#IfDef DEBUG_CHECKNOUN;
+#IfDef DEBUG_PARSENOUNPHRASE;
 					print "New best result: word count ", _result, ", score ", _j , "^";
 #EndIf;
 					_best_word_count = _result;
@@ -581,13 +581,13 @@ Constant _CHECKNOUN_CHOOSEOBJ_WEIGHT = 1000;
 
 	if(_matches == 1) {
 		_result = which_object-->1;
-#IfDef DEBUG_CHECKNOUN;
+#IfDef DEBUG_PARSENOUNPHRASE;
 		print "Matched a single object: ", (the) _result,
 			", num words ", which_object->1, ", wn ", wn, "^";
 #EndIf;
 		return _result;
 	}
-#IfDef DEBUG_CHECKNOUN;
+#IfDef DEBUG_PARSENOUNPHRASE;
 		print "Matches: ", _matches,", num words ", which_object->1, "^";
 #EndIf;
 	if(_matches > 1) {

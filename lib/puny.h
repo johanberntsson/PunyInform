@@ -14,12 +14,12 @@
 
 ! Comment/uncomment to restrict default debug messages behaviour
 ! (all can be overridden by adding them in the game source)
-!Constant DEBUG_SCOPE;
-!Constant DEBUG_CHECKNOUN;
-!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_PARSEANDPERFORM;
 !Constant DEBUG_PARSETOKEN;
 !Constant DEBUG_PARSEPATTERN;
-!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSENOUNPHRASE;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
 
 System_file;
 
