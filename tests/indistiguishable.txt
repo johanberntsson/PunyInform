@@ -1,0 +1,59 @@
+
+> get darts
+*** ChooseObjectsFinal, action is Take, object count is 3: 
+dart: Taken.
+dart: Taken.
+dart: Taken.
+
+> throw dart at board
+*** ChooseObjectsFinal, action is ThrowAt, object count is 3: 
+You hit the board, yay!
+
+> look
+The Pub
+You are in a pub.
+
+A cool dartboard hangs on the wall, with a dart protruding from it.
+
+You can also see a box (which is empty) here.
+
+> throw dart at board
+*** ChooseObjectsFinal, action is ThrowAt, object count is 2: 
+You hit the board, yay!
+
+> look
+The Pub
+You are in a pub.
+
+A cool dartboard hangs on the wall, with two darts protruding from it.
+
+You can also see a box (which is empty) here.
+
+> throw dart at board
+You hit the board, yay!
+
+> look
+The Pub
+You are in a pub.
+
+A cool dartboard hangs on the wall, with three darts protruding from it.
+
+You can also see a box (which is empty) here.
+
+> take all darts
+*** ChooseObjectsFinal, action is Take, object count is 3: 
+dart: Taken.
+dart: Taken.
+dart: Taken.
+
+> look
+The Pub
+You are in a pub.
+
+A cool dartboard hangs on the wall.
+
+You can also see a box (which is empty) here.
+
+> quit
+Are you sure you want to quit? yes
+
