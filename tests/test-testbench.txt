@@ -1,4 +1,45 @@
 
+> get books and dial
+green book: John says, "Oh no! That's mine!"
+dial: That's fixed in place.
+
+> get dial and books
+dial: That's fixed in place.
+blue book: The blue book starts ticking...
+green book: John says, "Oh no! That's mine!"
+pink book: You dared taking the pink book. Bravo!
+
+> get books and dial
+green book: John says, "Oh no! That's mine!"
+dial: That's fixed in place.
+
+The blue book ticks loudly.
+
+> restart
+Are you sure you want to restart? yes
+
+
+tried out. Don't expect much of a game here. Currently, you can win by putting
+stuff in the box, or lose by checking out the sun by the river or by pushing
+John around.
+
+Testbench
+
+Huge library
+You are in an old and deserted library. There is an exit leading south and a
+toilet to the east.
+
+There's a black dial on the wall.
+
+A blue book is standing on a shelf. Looking at the blue book makes you dizzy.
+
+An old and torn green book is here.
+
+You can also see a light switch, a sweater, an aquarium (which is empty), a box
+(which is closed), a shelf (on which are a pair of boots), a ladder (on which is
+a sticker), John, an infinite bag (which is empty), that stupid old pink book
+and an electric torch (Ugly as sin) here.
+
 > open box
 You open the box, revealing a red book and a brown book.
 
