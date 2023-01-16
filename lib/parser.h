@@ -395,7 +395,11 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		_result _stop;
 #Endif;
 #IfDef DEBUG_PARSENOUNPHRASE;
-	print "Entering _ParseNounPhrase!^";
+	print "Entering _ParseNounPhrase, first word is ";
+	_i = WordValue(wn);
+	if(_i == 0) print "[Unknown]";
+	else print (address) _i;
+	new_line;
 #EndIf;
 	! return 0 if no noun matches
 	! return -n if more n matches found (n > 1)
@@ -566,8 +570,13 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		}
 	}
 
+	for(_i = p_parse_pointer + (_best_word_count - 1) * 4: _i >= p_parse_pointer: _i = _i - 4) {
+		_j = _i-->0;
+		if(_j && (_j-> #dict_par1) & 4) parser_action = ##PluralFound;
+	}
+
 #Ifdef ChooseObjectsFinal;
-	if(_matches > 1) {
+	if(_matches > 1 && parser_action ~= ##PluralFound && parser_all_found == 0) {
 		! ChooseObjectsFinal may call ChooseObjectsPick(n) or ChooseObjectsDiscard(n) to modify the array.
 		parser_one = _matches;
 		ChooseObjectsFinal(which_object + 2, _matches);
@@ -700,10 +709,6 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! check if the noun phrase contains a plural word
 	_pluralword = false;
 	if(parser_action == ##PluralFound) _pluralword = true;
-	for(_i = p_parse_pointer + (_num_words_in_nounphrase - 1) * 4: _i >= p_parse_pointer: _i = _i - 4) {
-		_j = _i-->0;
-		if(_j && (_j-> #dict_par1) & 4) _pluralword = true;
-	}
 
 ._getnextnoun_recheck_noun;
 	if(_noun < 0) {
