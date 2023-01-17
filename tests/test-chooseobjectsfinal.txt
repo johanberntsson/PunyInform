@@ -1,6 +1,30 @@
 
+> l
+The Pub
+You are in a pub.
+
+You can see a table (on which is a red ball) and a box (which contains a green
+ball) here.
+
 > take ball from box
+*** ChooseObjectsFinal, action is Take, object count is 2: 
+  Object# 10: the red ball in the table
+  Object# 12: the green ball in the box
+*** End of list
+*** ChooseObjectsFinal, action is Remove, object count is 2: 
+  Object# 10: the red ball in the table
+  Object# 12: the green ball in the box
+*** End of list
 Removed.
+
+> i
+You're carrying a green ball and a pink ball.
+
+> look
+The Pub
+You are in a pub.
+
+You can see a table (on which is a red ball) and a box (which is empty) here.
 
 > quit
 Are you sure you want to quit? yes
