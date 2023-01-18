@@ -32,29 +32,36 @@ Include "globals.h";
 ];
 
 
-[ ChooseObjectsFinal p_arr p_len _i _j _o _o2 _sg _d;
+[ ChooseObjectsFinal p_arr p_len _i _j _o _o2 _sg _d _other_group_present;
+#Ifdef DEBUG;
     print "*** ChooseObjectsFinal, action is ",(DebugAction) action,", object count is ", p_len, ": ^";
 !	rfalse;
+#Endif;
 	for(_i = 0: _i < p_len: _i++) {
 		_o = p_arr-->_i;
-		if(_o provides same_group && _o.matched_plural == false) {
+		if(_o provides same_group) {
 			_sg = _o.same_group;
 			_d = ObjDepth(_o);
 			for(_j = p_len - 1: _j > _i: _j--) {
 				_o2 = p_arr-->_j;
-				if(_o2 provides same_group && _o2.same_group == _sg) {
-					if(ObjDepth(_o2) < _d) {
-						! Prefer more shallow oject, so swap main obj and this
-						_o = _o2;
-						_o2 = p_arr-->_i;
-						p_arr-->_j = _o2;
-						p_arr-->_i = _o;
-						_d = ObjDepth(_o);
-					} 
-					ChooseObjectsFinal_Discard(_j);
-					p_len--;
+				if(_o2 provides same_group) {
+					if(_o2.same_group == _sg) {
+						if(ObjDepth(_o2) < _d) {
+							! Prefer more shallow oject, so swap main obj and this
+							_o = _o2;
+							_o2 = p_arr-->_i;
+							p_arr-->_j = _o2;
+							p_arr-->_i = _o;
+							_d = ObjDepth(_o);
+						} 
+						ChooseObjectsFinal_Discard(_j);
+						p_len--;
+					} else
+						_other_group_present = true;
 				}
 			}
+			if(_other_group_present == false)
+				return; ! There's indistinguishable objects from a single group present, and we already handled this group
 		}
 	}	
 ];
@@ -65,16 +72,12 @@ Include "puny.h";
 Class Dart
 	with
 		same_group 1,
-		matched_plural false,
 		short_name "dart",
 		parse_name [ _w;
 			_w = NextWord();
-			if(_w == 'dart') {
-				self.matched_plural = false;
+			if(_w == 'dart')
 				return 1;
-			}
 			if(_w == 'darts//p') {
-				self.matched_plural = true;
 				parser_action = ##PluralFound;
 				return 1;
 			}
