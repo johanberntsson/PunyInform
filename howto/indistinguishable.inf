@@ -1,0 +1,148 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+Constant Story      "Indistinguishable";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+Constant NO_SCORE = 0;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+!Constant DEBUG_CHECKNOUN;
+Constant RUNTIME_ERRORS = 2; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+Constant OPTIONAL_LIST_TOGETHER;
+Constant OPTIONAL_LANGUAGE_NUMBER; ! Use this to have list_together print numbers using words
+Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS; ! Cheaper to add when OPTIONAL_LANGUAGE_NUMBER is defined
+
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+Constant OPTIONAL_FLEXIBLE_INVENTORY;
+
+Constant INITIAL_LOCATION_VALUE = Pub;
+
+Include "globals.h";
+
+[ ObjDepth p_obj _i;
+	while(p_obj) { p_obj = parent(p_obj); _i++; }
+	return _i;
+];
+
+
+[ ChooseObjectsFinal p_arr p_len _i _j _o _o2 _sg _d _d2 _other_group_present;
+#Ifdef DEBUG;
+    print "*** ChooseObjectsFinal, action is ",(DebugAction) action,", object count is ", p_len, ": ^";
+!	rfalse;
+#Endif;
+	for(_i = 0: _i < p_len: _i++) {
+		_o = p_arr-->_i;
+		if(_o provides same_group) {
+			_sg = _o.same_group;
+			_d = ObjDepth(_o);
+			for(_j = p_len - 1: _j > _i: _j--) {
+				_o2 = p_arr-->_j;
+				if(_o2 provides same_group) {
+					if(_o2.same_group == _sg) {
+						_d2 = ObjDepth(_o2);
+						if( _d2 < _d) {
+							! Prefer more shallow oject, so swap main obj and this
+							_o = _o2;
+							p_arr-->_j = p_arr-->_i;
+							p_arr-->_i = _o;
+							_d = _d2;
+						} 
+						ChooseObjectsFinal_Discard(_j);
+						p_len--;
+					} else
+						_other_group_present = true;
+				}
+			}
+			if(_other_group_present == false)
+				return; ! There's indistinguishable objects from a single group present, and we already handled this group
+		}
+	}	
+];
+
+Include "puny.h";
+
+Class Dart
+	with
+		same_group 1,
+		short_name "dart",
+		parse_name [ _w;
+			_w = NextWord();
+			if(_w == 'dart')
+				return 1;
+			if(_w == 'darts//p') {
+				parser_action = ##PluralFound;
+				return 1;
+			}
+		],
+		list_together [ _obj _n;
+			if(inventory_stage == 1) {
+				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
+				print (LanguageNumber) _n, " darts";
+				if(c_style & NEWLINE_BIT)
+					new_line;
+				rtrue;
+			}
+		];
+
+Object Pub "The Pub"
+	with
+		description "You are in a pub."
+	has light;
+
+Object -> Dartboard "dartboard"
+	with
+		describe [ _i;
+			print "^A cool dartboard hangs on the wall";
+			_i = children(self);
+			if(_i) {
+				print ", with ";
+				if(_i == 1) print "a dart";
+				else print (LanguageNumber) _i, " darts";
+				print " protruding from it";
+			}
+			".";
+		],
+		parse_name [ _w;
+			! Can only be referred to as "dartboard" or "dart board" or "board"
+			_w = NextWord();
+			if(_w == 'dartboard' or 'board') return 1;
+			if(_w == 'dart' && NextWord() == 'board') return 2;
+		],
+		before [;
+			Receive:
+				if(noun ofclass Dart) <<ThrowAt noun self>>;
+				"The dartboard is only made for throwing darts at!";
+			ThrownAt: 
+				if(noun ofclass Dart) {
+					move noun to self;
+					"You hit the board, yay!";
+				}
+		],
+	has static supporter;
+
+Dart -> Dart1;
+Dart -> Dart2;
+
+Object -> Box "box"
+	with
+		name 'box',
+		inside_description "It feels so nice, standing in the box.",
+	has container open openable enterable;
+
+Dart -> -> Dart3;
+
+
+[Initialise; ! i;
+	print "^^Indistinguishable item are listed together in this demo. Things to try:^ 
+			INVENTORY TALL^
+			INVENTORY WIDE^
+			GET DARTS^
+			^^";
+];
