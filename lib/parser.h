@@ -1122,13 +1122,12 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 								wn = wn + 1;
 							}
 						}
-						! check if get [all] Xs and (or ,) Y...
+						! check if get [all] Xs (and|,) Y...
 						if(_PeekAtNextWord() == comma_word or AND_WORD) {
 							! check the next word after "and" or comma
 							if((wn + 1) > parse->1) {
-								! there is no word, so the pattern fails
-								pattern_pointer = pattern_pointer + 3;
 								!print "and followed by nothing^";
+								! there is no word, so the pattern fails
 								return GPR_FAIL;
 							}
 							_i = (_parse_plus_2 + 4*wn ) --> 0; ! Word value
@@ -1208,14 +1207,12 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 					multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 					multiple_objects --> (multiple_objects --> 0) = _noun;
 				}
-				! check if we should continue: and or comma
-				! not followed by a verb
+				! check if we should continue: and or comma followed by a noun
 				if(_PeekAtNextWord() == comma_word or AND_WORD) {
 					! check the next word after "and" or comma
 					if((wn + 1) > parse->1) {
-						! there is no word, so the pattern fails
-						pattern_pointer = pattern_pointer + 3;
 						!print "and followed by nothing^";
+						! there is no word, so the pattern fails
 						return GPR_FAIL;
 					}
 					_i = (_parse_plus_2 + 4*wn ) --> 0; ! Word value
