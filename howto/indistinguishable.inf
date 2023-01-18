@@ -48,7 +48,7 @@ Include "globals.h";
 					if(_o2.same_group == _sg) {
 						_d2 = ObjDepth(_o2);
 						if( _d2 < _d) {
-							! Prefer more shallow oject, so swap main obj and this
+							! Prefer more shallow object, so swap main obj and this
 							_o = _o2;
 							p_arr-->_j = p_arr-->_i;
 							p_arr-->_i = _o;
