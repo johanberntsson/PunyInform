@@ -1,13 +1,15 @@
 
 > get books and dial
+blue book: The blue book starts ticking...
 green book: John says, "Oh no! That's mine!"
+pink book: You dared taking the pink book. Bravo!
 dial: That's fixed in place.
 
 > get dial and books
 dial: That's fixed in place.
-blue book: The blue book starts ticking...
 green book: John says, "Oh no! That's mine!"
-pink book: You dared taking the pink book. Bravo!
+
+The blue book ticks loudly.
 
 > get books and dial
 green book: John says, "Oh no! That's mine!"

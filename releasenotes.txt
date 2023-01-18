@@ -8,6 +8,7 @@ v4.2
   priority to objects in/on the second noun phrase in the grammar.
 - Added the option to add a suffix to the library version number, e.g. "dev"
   for a development version which is newer than the released version.
+- Fixed bad parsing of 'get Xs and Y' patterns
 
 =======
 v4.1: bug fix and new feature release (19 November 2022)

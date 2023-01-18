@@ -1042,6 +1042,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			return _noun;
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
+				!print "jb10 ", wn, ", ", parser_all_found, "^";
 				_old_wn = wn;
 				_noun = _GetNextNoun(p_parse_pointer, p_phase);
 				if(_noun == -2) {
@@ -1121,6 +1122,28 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 								wn = wn + 1;
 							}
 						}
+						! check if get [all] Xs and (or ,) Y...
+						if(_PeekAtNextWord() == comma_word or AND_WORD) {
+							! check the next word after "and" or comma
+							if((wn + 1) > parse->1) {
+								! there is no word, so the pattern fails
+								pattern_pointer = pattern_pointer + 3;
+								!print "and followed by nothing^";
+								return GPR_FAIL;
+							}
+							_i = (_parse_plus_2 + 4*wn ) --> 0; ! Word value
+							if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
+								! this is not a verb so we assume it is a list
+								! of nouns instead. Continue to parse
+								++wn;
+								p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+								!print "and followed by a noun^";
+								parser_all_found = false;
+								continue;
+							}
+							!print "and followed by a verb^";
+						}
+
 						return GPR_MULTIPLE;
 					}
 					if(p_parse_pointer-->0 == ALL_WORD) {
@@ -1458,6 +1481,7 @@ Array guess_object-->5;
 					! neither a verb nor a direction, so probably a list
 					! of nouns without a matching multi token
 					if(p_phase == PHASE2) {
+						!print "jb^";
 						PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 					} else {
 						phase2_necessary = PHASE2_ERROR;

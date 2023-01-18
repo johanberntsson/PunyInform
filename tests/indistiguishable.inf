@@ -10,7 +10,7 @@ Constant STATUSLINE_SCORE; Statusline score;
 Constant NO_SCORE = 0;
 
 ! Uncomment to add optional features to PunyInform
-!Constant DEBUG;
+Constant DEBUG;
 !Constant DEBUG_CHECKNOUN;
 Constant RUNTIME_ERRORS = 2; ! 0, 1 or 2. 0 = smallest file, 2 = most info
 

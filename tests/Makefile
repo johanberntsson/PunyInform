@@ -7,9 +7,9 @@ inform:
 	inform -v8 -D test-issue107.inf
 	frotz test-issue107.z8
 
-testbench:
-	inform +../lib -v3 testbench.inf
-	frotz testbench.z3
+test-testbench:
+	inform +../lib -v3 test-testbench.inf
+	frotz test-testbench.z3
 
 ruletest:
 	inform +../lib -v3 ruletest.inf
