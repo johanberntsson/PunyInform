@@ -31,7 +31,6 @@ Include "globals.h";
 	return _i;
 ];
 
-
 [ ChooseObjectsFinal p_arr p_len _i _j _o _o2 _sg _d _d2 _other_group_present;
 #Ifdef DEBUG;
     print "*** ChooseObjectsFinal, action is ",(DebugAction) action,", object count is ", p_len, ": ^";
@@ -53,7 +52,7 @@ Include "globals.h";
 							p_arr-->_j = p_arr-->_i;
 							p_arr-->_i = _o;
 							_d = _d2;
-						} 
+						}
 						ChooseObjectsFinal_Discard(_j);
 						p_len--;
 					} else

@@ -607,22 +607,27 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 
 #Ifdef ChooseObjectsFinal;
 ! ChooseObjectsFinal may call ChooseObjectsFinal_Pick(n) or ChooseObjectsFinal_Discard(n) to modify the array.
-[ ChooseObjectsFinal_Pick p_n;
+
+[ ChooseObjectsFinal_Pick p_n _arr;
+	_arr = which_object + 2;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(p_n < 0 || p_n > parser_one - 1)
 		RunTimeError(ERR_ILLEGAL_CHOOSEOBJNO);
 #EndIf;
-	which_object-->0 = which_object-->p_n;
+	_arr-->0 = _arr-->p_n;
 	parser_one = 1;
 ];
-[ ChooseObjectsFinal_Discard p_n _i;
+
+[ ChooseObjectsFinal_Discard p_n _i _arr;
+	_arr = which_object + 2;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(p_n < 0 || p_n > parser_one - 1)
 		RunTimeError(ERR_ILLEGAL_CHOOSEOBJNO);
 #EndIf;
-	parser_one = parser_one - 1;
-	for(_i=p_n: _i<parser_one: _i++)
-		which_object-->_i = which_object-->(_i+1);
+	parser_one--;
+	for(_i=p_n: _i<parser_one: _i++) {
+		_arr-->_i = _arr-->(_i+1);
+	}
 ];
 #Endif; !Ifdef ChooseObjectsFinal
 
