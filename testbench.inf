@@ -50,7 +50,7 @@ Constant INITIAL_LOCATION_VALUE = Library;
 !Constant DEBUG_PARSEANDPERFORM;
 !Constant DEBUG_PARSEPATTERN;
 !Constant DEBUG_PARSETOKEN;
-!Constant DEBUG_CHECKNOUN;
+!Constant DEBUG_PARSENOUNPHRASE;
 !Constant DEBUG_GETNEXTNOUN;
 !Constant DEBUG_SCOPE;
 !Constant DEBUG_TIMER; ! requires special Ozmoo

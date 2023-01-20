@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v4.1 quick reference** |
+| **PunyInform v4.2 quick reference** |
 
   
 More information on last page.
@@ -153,7 +153,7 @@ More information on last page.
 
 # Library constants
 
-###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined. *PUNYINFORM_MAJOR_VERSION* and *PUNYINFORM_MINOR_VERSION* hold the library version.
+###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined. *PUNYINFORM_MAJOR_VERSION* , *PUNYINFORM_MINOR_VERSION* and *PUNYINFORM_VERSION\_SUFFIX* hold the library version.
 
 # User-defined constants
 
@@ -343,6 +343,14 @@ More information on last page.
 
 ###### Print the game name, serial# etc. To skip this at game start, return 2 from *Initialise* and call *Banner* later.
 
+## ChooseObjectsFinal_Discard(number) **PUNY++**
+
+###### Call from entry point routine *ChooseObjectsFinal *to remove option *number* (0 or higher).
+
+## ChooseObjectsFinal_Pick(number) **PUNY++**
+
+###### Call from entry point routine *ChooseObjectsFinal *to pick option *number* (0 or higher).
+
 ## CommonAncestor(object1, object2)
 
 ###### Return the nearest object that contains both *object1* and *object2* on some level, or *false*.
@@ -471,8 +479,6 @@ More information on last page.
 
 ###### Wait for the player to type something. Return *true* if they typed yes, *false* if they typed no, or ask again.
 
-# 
-
 # Printing rules
 
 A printing rule is used to print something based on one argument,
@@ -527,6 +533,10 @@ circumstances stated for each routine.
 ## ChooseObjects(obj, code)
 
 ###### If *code* is 2, return a score 0-9 for how good a fit *obj* is for action *action_to_be*. Code 0 and 1 means player has typed ALL and parser means to exclude (0) or include (1) the object. Return 0 to don't interfere, 1 to force inclusion, 2 to force exclusion.
+
+## ChooseObjectsFinal(array, length) **PUNY++**
+
+###### Called just before having to ask the player which object they mean. *array* holds the address of a word array holding object numbers, *length* holds the number of objects. Use *ChooseObjectsFinal_Pick* and/or *ChooseObjectsFinal_Discard *to either pick an object or discard options. You may rearrange the array.
 
 ## DarkToDark()
 
@@ -612,7 +622,7 @@ circumstances stated for each routine.
 
 ## thedark
 
-###### A fake room which *location* points to when it’s dark in *real_location*. The player is never moved to *thedark*.
+###### Fake room. When *real_location *is dark, *location* points here. The player is never moved to *thedark*.
 
 # Group 1 actions
 
@@ -632,9 +642,8 @@ TimersOn, Tree*
 
 # Group 2 actions
 
-These are actions which the library knows how to perform. They change
-something in the game world or prints important information about it.
-They run both *before* and *after* routines.
+These actions change something in the game world or print information
+about it. They run *before* and *after* routines.
 
 *Close* "CLOSE (noun)"  
 *Disrobe* "TAKE OFF (noun)"  
@@ -669,8 +678,8 @@ OPTIONAL_EXTENDED_VERBSET adds:
 
 # Group 3 actions
 
-These actions normally don’t do anything, except print a standard
-message. They run *before* routines but not *after* routines.
+These actions normally just print a standard message. They run *before*
+routines but not *after* routines.
 
 *Answer* "ANSWER (topic) TO (second)"  
 *Ask* "ASK (noun) ABOUT (topic)"  
@@ -725,8 +734,6 @@ OPTIONAL_EXTENDED_VERBSET adds:
 *WakeOther* "WAKE UP (noun)"  
 *Wave* "WAVE"  
 *Yes* "YES"  
-
-# 
 
 # Fake actions
 

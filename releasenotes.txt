@@ -1,14 +1,23 @@
-v4.2
+v4.2: bug fix and new feature release (21 January 2023)
 
 - Added entry point routine ChooseObjectsFinal, letting the programmer
   influence the final choice of object.
+- Added a demo game howto/indistinguishable.inf to show how a game can
+  have (a small number of) indistinguishable objects.
 - Fixed visibility_ceiling bug which prevented correct calls in PlayerTo
   and removed the visiblity_ceiling global.
 - Improved parsing of multiexcept so disambiguation doesn't give the same
   priority to objects in/on the second noun phrase in the grammar.
-- Added the option to add a suffix to the library version number, e.g. "dev"
-  for a development version which is newer than the released version.
-- Fixed bad parsing of 'get Xs and Y' patterns
+- Fixed bad parsing of 'get Xs and Y' patterns, i.e. where the Xs is a word
+  in plural form, possibly referring to several objects. 
+- Fixed warnings and confusing text in test programs.
+- Changed weight of ChooseObjects score to make it always trump library score.
+  This is how it works in the standard library too.
+- Added an optional suffix to the library version, e.g. "dev" for v4.1dev.
+- Added suggestion to Game Author's Guide to initialize the talk_menu 
+  extension manually.
+- Internal routine _CheckNoun was renamed to _ParseNounPhrase. The constant
+  to make it print debug information was renamed to DEBUG_PARSENOUNPHRASE.
 
 =======
 v4.1: bug fix and new feature release (19 November 2022)
