@@ -60,7 +60,8 @@ Include "globals.h";
 				}
 			}
 			if(_other_group_present == false)
-				return; ! There's indistinguishable objects from a single group present, and we already handled this group
+				return; ! The group of indistinguishable objects we just handled was the last one
+			_other_group_present = false; ! Let's hope the next one is the last one
 		}
 	}	
 ];
