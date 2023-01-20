@@ -576,11 +576,15 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	}
 
 #Ifdef ChooseObjectsFinal;
-	if(parser_phase == PHASE2 && _matches > 1 && parser_action ~= ##PluralFound && parser_all_found == 0) {
-		! ChooseObjectsFinal may call ChooseObjectsPick(n) or ChooseObjectsDiscard(n) to modify the array.
-		parser_one = _matches;
-		ChooseObjectsFinal(which_object + 2, _matches);
-		_matches = parser_one;
+	if(_matches > 1 && parser_action ~= ##PluralFound && parser_all_found == 0) {
+		if(parser_phase == PHASE1) {
+			phase2_necessary = true;
+		} else {
+			! ChooseObjectsFinal may call ChooseObjectsPick(n) or ChooseObjectsDiscard(n) to modify the array.
+			parser_one = _matches;
+			ChooseObjectsFinal(which_object + 2, _matches);
+			_matches = parser_one;
+		}
 	}
 #Endif;
 
