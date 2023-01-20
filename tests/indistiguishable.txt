@@ -5,8 +5,6 @@ dart: Taken.
 dart: Taken.
 
 > throw dart at board
-*** ChooseObjectsFinal, action is Drop, object count is 3: 
-*** ChooseObjectsFinal, action is Insert, object count is 3: 
 *** ChooseObjectsFinal, action is ThrowAt, object count is 3: 
 You hit the board, yay!
 
@@ -19,8 +17,6 @@ A cool dartboard hangs on the wall, with a dart protruding from it.
 You can also see a box (which is empty) here.
 
 > throw dart at board
-*** ChooseObjectsFinal, action is Drop, object count is 2: 
-*** ChooseObjectsFinal, action is Insert, object count is 2: 
 *** ChooseObjectsFinal, action is ThrowAt, object count is 2: 
 You hit the board, yay!
 

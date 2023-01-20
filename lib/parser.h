@@ -576,7 +576,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	}
 
 #Ifdef ChooseObjectsFinal;
-	if(_matches > 1 && parser_action ~= ##PluralFound && parser_all_found == 0) {
+	if(parser_phase == PHASE2 && _matches > 1 && parser_action ~= ##PluralFound && parser_all_found == 0) {
 		! ChooseObjectsFinal may call ChooseObjectsPick(n) or ChooseObjectsDiscard(n) to modify the array.
 		parser_one = _matches;
 		ChooseObjectsFinal(which_object + 2, _matches);
@@ -1702,6 +1702,7 @@ Array guess_object-->5;
 	object_token_type = -1;
 
 	verb_wordnum = 1;
+	parser_phase = PHASE1;
 
 	if(_IsSentenceDivider(parse + 2) || parse->1 < 1) {
 		PrintMsg(MSG_PARSER_NO_INPUT);
@@ -1901,6 +1902,7 @@ Array guess_object-->5;
 	! skip phase 2 if last pattern matched perfectly
 	! (since all data is then already setup and there
 	! are no side effects to consider)
+	parser_phase = PHASE2;
 #IfDef DEBUG_PARSEANDPERFORM;
 	print "### After phase 1, _best_score = ", _best_score, ", _best_phase2 = ", _best_phase2, "^";
 #EndIf;
