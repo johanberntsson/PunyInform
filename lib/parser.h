@@ -1502,7 +1502,7 @@ Array guess_object-->5;
 				return 100; ! pattern matched
 			}
 			! Fail because the grammar line ends here but not the input
-			if(parser_phase == 2) {
+			if(parser_phase == PHASE2) {
 				! last resort when no other error message printed
 				PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 			}
