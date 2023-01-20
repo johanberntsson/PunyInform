@@ -578,7 +578,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 #Ifdef ChooseObjectsFinal;
 	if(_matches > 1 && parser_action ~= ##PluralFound && parser_all_found == 0) {
 		if(parser_phase == PHASE1) {
-			phase2_necessary = true;
+			phase2_necessary = PHASE2_SUCCESS;
 		} else {
 			! ChooseObjectsFinal may call ChooseObjectsPick(n) or ChooseObjectsDiscard(n) to modify the array.
 			parser_one = _matches;
