@@ -90,6 +90,58 @@ Class Dart
 			}
 		];
 
+Class Coin
+	with
+		name ',//',
+		parse_name [ _w _n;
+			_w = NextWord();
+			if(_w == self.name) { ! Matches 'silver' or 'gold'
+				_w = NextWord();
+				_n++;
+			}
+			if(_w == 'coin')
+				_n++;
+			else if(_w == 'coins//p') {
+				parser_action = ##PluralFound;
+				_n++;
+			}
+			return _n;
+		],
+		;
+
+Class SilverCoin
+	class Coin,
+	with
+		same_group 2,
+		name 'silver',
+		short_name "silver coin",
+		list_together [ _obj _n;
+			if(inventory_stage == 1) {
+				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
+				print (LanguageNumber) _n, " silver coins";
+				if(c_style & NEWLINE_BIT)
+					new_line;
+				rtrue;
+			}
+		];
+
+Class GoldCoin
+	class Coin
+	with
+		same_group 3,
+		name 'gold',
+		short_name "gold coin",
+		list_together [ _obj _n;
+			if(inventory_stage == 1) {
+				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
+				print (LanguageNumber) _n, " gold coins";
+				if(c_style & NEWLINE_BIT)
+					new_line;
+				rtrue;
+			}
+		];
+
+
 Object Pub "The Pub"
 	with
 		description "You are in a pub."
@@ -129,19 +181,35 @@ Object -> Dartboard "dartboard"
 Dart -> Dart1;
 Dart -> Dart2;
 
+SilverCoin -> SilverCoin1;
+
+Object -> Table "table"
+	with
+		name 'table',
+	has supporter open openable enterable;
+
+SilverCoin -> -> SilverCoin2;
+SilverCoin -> -> SilverCoin3;
+GoldCoin -> -> GoldCoin1;
+Dart -> -> Dart3;
+
+GoldCoin -> GoldCoin2;
+GoldCoin -> GoldCoin3;
+GoldCoin -> GoldCoin4;
+
 Object -> Box "box"
 	with
 		name 'box',
 		inside_description "It feels so nice, standing in the box.",
 	has container open openable enterable;
 
-Dart -> -> Dart3;
+GoldCoin -> -> GoldCoin5;
 
 
 [Initialise; ! i;
 	print "^^Indistinguishable item are listed together in this demo. Things to try:^ 
 			INVENTORY TALL^
 			INVENTORY WIDE^
-			GET DARTS^
+			GET COIN^
 			^^";
 ];
