@@ -90,7 +90,9 @@ These are the most important state variables in the parser
 ## Handling Errors
 
 The parser uses a two phase approach to matching grammar templates to
-user input. In phase 1 the parser is testing several patterns to give
+user input. The current phase is stored in the global variable `parser_phase` and is either 1 or 2.
+
+In phase 1 the parser is testing several patterns to give
 them a score on how well they match the input. In this phase no messages
 are printed.
 
@@ -133,10 +135,10 @@ needs to add new input.
 `_ParseAndPerformAction` firsts determines which verb the input uses. It
 then checks each pattern to see if it matches the input. This is done by
 calling `_ParsePattern` which takes p_pattern (the current pattern to
-check) and p_phase (set to 1). `_ParsePattern` returns a score that
-indicates how well the pattern matches the input.  During phase 1 this
-match will be done silently, so no error messages are printed even if
-the pattern fails to match the input.
+check). `_ParsePattern` returns a score that indicates how well the 
+pattern matches the input.  During phase 1 this match will be done
+silently, so no error messages are printed even if the pattern fails
+to match the input.
 
 The score is 100 if a perfect match was found, or the number of words
 matches by the pattern if it failed to match. This means that only part
@@ -156,7 +158,7 @@ object.
 
 However, if no perfect score was found then the highest score is used.
 If `phase2_necessary` is set to PHASE2_ERROR, then `_ParsePattern` will
-be called again with this pattern and `p_phase` set to 2. In phase 2
+be called again with this pattern and `parser_phase` set to 2. In phase 2
 `_ParsePattern` will print the error messages that were surpressed
 during phase 1. If the match failed and `phase2_necessary` wasn't set if
 means that there wasn't enough input to match the pattern, and a message
@@ -167,12 +169,12 @@ Another possibility is that the pattern seems to match but the noun
 phrase is ambiguous. In this case the pattern returns a score as if the
 pattern matched the noun phrase, but sets `phase2_necessary` to
 PHASE2_DISAMBIGUATION, and - like for PHASE2_ERROR - `_ParsePattern` is
-called again with `p_phase` set to 2. `_ParsePattern/_GetNextNoun` will
+called again with `parser_phase` set to 2. `_ParsePattern/_GetNextNoun` will
 then call `_AskWhichNoun` to prompt the user for additional information
 ("Do you mean the blue or the red book?"), and return 100 if the noun
 phrase is successfully parsed.
 
-### `_ParsePattern(p_pattern, p_phase)`
+### `_ParsePattern(p_pattern)`
 
 `_ParsePattern` takes a pattern and the current phase, and returns a
 score that indicated how many words could be successfully parsed using
@@ -199,15 +201,14 @@ state variables.
 `_ParsePattern` also detects bad input (words that are not in the
 dictionary) and prints error messages if in phase 2.
 
-### `_ParseToken(p_token_type, p_token_data, p_phase)`
+### `_ParseToken(p_token_type, p_token_data)`
 
 The format of `_ParseToken` is compatible with `ParseToken` for Inform 6
-compatibility, but takes an extra argument, p_phase, to indicate the
-current phase. `ParseToken` is mentioned in DM4 and can be used by games
+compatibility. `ParseToken` is mentioned in DM4 and can be used by games
 to provide custom parsning, so keeping the same format allows also
 PunyGames to offer this functionality.
 
-The first two arguments are the same as `ParseToken`: token type and
+The two arguments are the same as `ParseToken`: token type and
 token data. The routine returns the object number or a failure code
 (`GPR_FAIL`, `GPR_MULTIPLE`, `GPR_NUMBER`, `GPR_REPARSE` or
 `GPR_PREPOSITION`).
@@ -237,9 +238,9 @@ handle lists of noun phrases separated by commas or "and". It also
 detects the "all but X" pattern, and sets `parser_all_except_object` if
 found.
 
-### `_GetNextNoun(p_parse_pointer, p_phase)`
+### `_GetNextNoun(p_parse_pointer)`
 
-`_GetNextNoun` takes the current input position and phase, and returns
+`_GetNextNoun` takes the current input position, and returns
 the object number for the next noun if no problem occurred. In addition
 ot the return value it will also update `parser_action`.
 
