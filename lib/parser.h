@@ -632,7 +632,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 #Endif; !Ifdef ChooseObjectsFinal
 
 
-[ _GetNextNoun p_parse_pointer p_phase _noun _oldwn _num_words_in_nounphrase
+[ _GetNextNoun p_parse_pointer _noun _oldwn _num_words_in_nounphrase
 		_pluralword _i _j _k _m _all_found;
 	! try getting a noun from the <p_parse_pointer> entry in parse
 	! return:
@@ -684,13 +684,13 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		}
 		if(_noun == 0) {
 			phase2_necessary = PHASE2_ERROR;
-			if(p_phase == PHASE2) {
+			if(parser_phase == PHASE2) {
 				print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
 				return -2;
 			}
 		} else if(TestScope(_noun) == false) {
 			phase2_necessary = PHASE2_ERROR;
-			if(p_phase == PHASE2) {
+			if(parser_phase == PHASE2) {
 				print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^";
 				return -2;
 			}
@@ -725,7 +725,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			wn = wn + _num_words_in_nounphrase;
 			return 0;
 		}
-		if(p_phase == PHASE1) {
+		if(parser_phase == PHASE1) {
 			phase2_necessary = PHASE2_DISAMBIGUATION;
 			wn = wn + _num_words_in_nounphrase;
 			return 1; ! a random noun in phase 1 just to avoid which? question
@@ -870,14 +870,6 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	rfalse;
 ];
 
-[ ParseToken p_token_type p_token_data;
-	! DM defines ParseToken as ParseToken(tokentype,tokendata)
-	! ParseToken is similar to a general parse routine,
-	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
-	! GPR_PREPOSITION, GPR_REPARSE or the object number
-	return _ParseToken(p_token_type, p_token_data, -PHASE1);
-];
-
 [ ImplicitGrabIfNotHeld p_noun _ks;
 	! return true if p_noun isn't held by the player at the end of the call
 	! (so that you can use it like: if(_ImplicitGrabIfNotHeld(...)) { }
@@ -912,7 +904,15 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	rfalse;
 ];
 
-[ _ParseToken p_pattern_pointer p_parse_pointer p_phase _noun _i _token
+[ ParseToken p_token_type p_token_data;
+	! DM defines ParseToken as ParseToken(tokentype,tokendata)
+	! ParseToken is similar to a general parse routine,
+	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
+	! GPR_PREPOSITION, GPR_REPARSE or the object number
+	return _ParseToken(p_token_type, p_token_data, -1);
+];
+
+[ _ParseToken p_pattern_pointer p_parse_pointer _noun _i _token
 		_token_type _token_data _old_wn _j _k _parse_plus_2 _num_already_added;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
@@ -923,9 +923,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! when the calling routine already has them at hand)
 	object_token_type = -1;
 	_parse_plus_2 = parse + 2;
-	if(p_phase < 0) {
+	if(_noun < 0) {
 		! called from ParseToken (DM library API)
-		p_phase = -p_phase;
+		! since third argument is -1 instead of default 0
 		_token = p_pattern_pointer;
 		_token_data = p_parse_pointer;
 		p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
@@ -1003,12 +1003,12 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 			if(_PeekAtNextWord() == ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
 				! we don't accept all/all-but with held or creature
-				if(scope_stage == 2 && p_phase == PHASE2) {
+				if(scope_stage == 2 && parser_phase == PHASE2) {
 					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 				}
 				return GPR_FAIL;
 			}
-			_noun = _GetNextNoun(p_parse_pointer, p_phase);
+			_noun = _GetNextNoun(p_parse_pointer);
 			if(_noun == -2) {
 				return GPR_FAIL;
 			}
@@ -1022,7 +1022,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {
 				phase2_necessary = PHASE2_ERROR;
-				if(p_phase == PHASE2) {
+				if(parser_phase == PHASE2) {
 					PronounNotice(_noun);
 					PrintMsg(MSG_PARSER_ONLY_TO_ANIMATE);
 				}
@@ -1030,7 +1030,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			}
 			if(_token_data == HELD_OBJECT && actor == player && _noun notin actor) {
 				phase2_necessary = PHASE2_ERROR;
-				if(p_phase == PHASE2) {
+				if(parser_phase == PHASE2) {
 #Ifdef DisallowTakeAnimate;
 					if(_noun hasnt scenery or static &&
 							(_noun hasnt animate || DisallowTakeAnimate(_noun) == false) &&
@@ -1049,7 +1049,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			for(::) {
 				!print "jb10 ", wn, ", ", parser_all_found, "^";
 				_old_wn = wn;
-				_noun = _GetNextNoun(p_parse_pointer, p_phase);
+				_noun = _GetNextNoun(p_parse_pointer);
 				if(_noun == -2) {
 					return GPR_FAIL;
 				}
@@ -1098,10 +1098,10 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 							for(_noun = 0: _noun < multiple_objects --> 0 : _noun++) {
 								scope-->_noun = multiple_objects-->(_noun + 1);
 							}
-							_noun = _GetNextNoun(p_parse_pointer + 4, p_phase);
+							_noun = _GetNextNoun(p_parse_pointer + 4);
 							scope_modified = true; ! restore scope
 							if(_noun <= 0) {
-								if(p_phase == PHASE2) {
+								if(parser_phase == PHASE2) {
 									PrintMsg(MSG_PARSER_NOTHING_TO_VERB, wn);
 								}
 								return GPR_FAIL;
@@ -1160,7 +1160,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						p_parse_pointer = _parse_plus_2 + 4 * (wn - 2);
 						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
 							!print "take all but^";
-							if(p_phase == PHASE2) {
+							if(parser_phase == PHASE2) {
 								PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 							}
 							return GPR_FAIL;
@@ -1178,7 +1178,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						_AddMultipleNouns(_token_data);
 						parser_all_found = true;
 						if(multiple_objects --> 0 == 0) {
-							if(p_phase == PHASE2) {
+							if(parser_phase == PHASE2) {
 								PrintMsg(MSG_PARSER_NOTHING_TO_VERB, wn);
 								return GPR_FAIL;
 							}
@@ -1422,7 +1422,7 @@ Array guess_object-->5;
 
 #EndIf;
 
-[ _ParsePattern p_pattern p_phase _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index;
+[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1467,7 +1467,7 @@ Array guess_object-->5;
 					! uknown word, so probably an unknown word in a
 					! list matching the multi token, such as
 					! 'get box and SDASDASD'
-					if(p_phase == PHASE2) {
+					if(parser_phase == PHASE2) {
 						parser_unknown_noun_found = _parse_pointer + 4;
 						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
 					} else {
@@ -1482,7 +1482,7 @@ Array guess_object-->5;
 					}
 					! neither a verb nor a direction, so probably a list
 					! of nouns without a matching multi token
-					if(p_phase == PHASE2) {
+					if(parser_phase == PHASE2) {
 						!print "jb^";
 						PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 					} else {
@@ -1502,7 +1502,7 @@ Array guess_object-->5;
 				return 100; ! pattern matched
 			}
 			! Fail because the grammar line ends here but not the input
-			if(p_phase == 2) {
+			if(parser_phase == 2) {
 				! last resort when no other error message printed
 				PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 			}
@@ -1514,7 +1514,7 @@ Array guess_object-->5;
 #IfDef DEBUG_PARSEPATTERN;
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
-			if(p_phase == PHASE2) {
+			if(parser_phase == PHASE2) {
 				!print "You need to be more specific.^";
 				if(_FixIncompleteSentenceOrComplain(p_pattern - 1)) {
 					! sentence was corrected
@@ -1529,14 +1529,14 @@ Array guess_object-->5;
 #EndIf;
 		_current_wn = wn;
 		_old_dir_index = selected_direction_index;
-		_noun = _ParseToken(pattern_pointer, _parse_pointer, p_phase);
+		_noun = _ParseToken(pattern_pointer, _parse_pointer);
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse + 2 + 4 * (wn - 1);
 
 		switch(_noun) {
 		GPR_FAIL:
 			if(_type == TT_PARSE_ROUTINE) {
-				if(p_phase == PHASE2) {
+				if(parser_phase == PHASE2) {
 				    if(scope_stage == 2) {
 						scope_stage = 3;
 						indirect(scope_routine);
@@ -1554,7 +1554,7 @@ Array guess_object-->5;
 				continue; ! keep parsing
 			}
 			if(parser_unknown_noun_found ~= 0) {
-				if(p_phase == PHASE2) {
+				if(parser_phase == PHASE2) {
 					_word = parser_unknown_noun_found --> 0;
 					if(scope_routine ~= 0) {
 						scope_stage = 3;
@@ -1596,7 +1596,7 @@ Array guess_object-->5;
 					wn = wn + 1;
 				}
 			} else {
-				if(p_phase == PHASE2) {
+				if(parser_phase == PHASE2) {
 					if(pattern_pointer->0 == TOKEN_SINGLE_PREP) {
 						PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 					}
@@ -1631,7 +1631,7 @@ Array guess_object-->5;
 		GPR_NUMBER:
 			! parsed_number contains the new number
 			if(parsed_number == -1000)  {
-				if(p_phase == PHASE2) {
+				if(parser_phase == PHASE2) {
 					PrintMsg(MSG_PARSER_BAD_NUMBER);
 				}
 				return wn - verb_wordnum; ! bad match
@@ -1644,7 +1644,7 @@ Array guess_object-->5;
 			if(_noun == Directions) {
 				if(noun == Directions) {
 					! This is second, and noun is already Directions.
-					if(p_phase == PHASE2)
+					if(parser_phase == PHASE2)
 						PrintMsg(MSG_PARSER_NOT_MULTIPLE_DIRS);
 					phase2_necessary = PHASE2_ERROR;
 					return wn - verb_wordnum;
@@ -1702,7 +1702,6 @@ Array guess_object-->5;
 	object_token_type = -1;
 
 	verb_wordnum = 1;
-	parser_phase = PHASE1;
 
 	if(_IsSentenceDivider(parse + 2) || parse->1 < 1) {
 		PrintMsg(MSG_PARSER_NO_INPUT);
@@ -1838,12 +1837,13 @@ Array guess_object-->5;
 	! Phase 1: look for best pattern without side effects
 	_best_score = 0;
 	_best_pattern = 0;
+	parser_phase = PHASE1;
 	_pattern = _verb_grammar + 1;
 	for(_i = 0 : _i < _verb_grammar->0 : _i++) {
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: Pattern ",_i," address ", _pattern, "^";
 #EndIf;
-		_score = _ParsePattern(_pattern, PHASE1);
+		_score = _ParsePattern(_pattern);
 
 		! Special rule to convert AskTo to action, topic
 		if(action == ##AskTo && _score == 100) {
@@ -1934,7 +1934,7 @@ Array guess_object-->5;
 		} else if(_best_phase2 > 0) {
 			! call again to generate suitable error message
 			second = _best_second;
-			_score = _ParsePattern(_best_pattern, PHASE2);
+			_score = _ParsePattern(_best_pattern);
 		} else {
 			! parser_unknown_word is set when we tried to parse
 			! a noun but were found a word that was didn't match
@@ -1976,7 +1976,7 @@ Array guess_object-->5;
 #IfDef DEBUG_PARSEANDPERFORM;
 	print "### PHASE 2: Pattern address ", _best_pattern, "^";
 #EndIf;
-	_score = _ParsePattern(_best_pattern, PHASE2);
+	_score = _ParsePattern(_best_pattern);
 #IfDef DEBUG_PARSEANDPERFORM;
 	print "### PHASE 2: result ", _score, "^";
 #EndIf;
