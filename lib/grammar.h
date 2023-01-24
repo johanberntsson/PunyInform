@@ -309,6 +309,12 @@ Verb 'wear'
 
 [ EnterSub _door_dir;
 	if(noun has door) {
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+		if(~~(noun provides door_to && noun provides door_dir)) {
+			RuntimeError(ERR_INCOMPLETE_DOOR, noun);
+			rtrue;
+		}
+#EndIf;
 #IfDef OPTIONAL_SIMPLE_DOORS;
 		if(noun.#door_dir > 2) {
 			! This is a Simple Door, where door_dir is an array
@@ -401,7 +407,7 @@ Verb 'wear'
 	! when called Directions have been set properly
 	_prop = selected_direction;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if(_prop == 0) return RuntimeError(ERR_INVALID_DIR_PROP);
+	if(_prop == 0) { RuntimeError(ERR_INVALID_DIR_PROP); rtrue; }
 #EndIf;
 
 	GoDir(_prop);
@@ -1828,6 +1834,12 @@ Global scope_cnt;
 			_new_location = 0;
 		else {
 			if(_new_location hasnt open) { PrintMsg(MSG_GO_DOOR_CLOSED, _new_location); rtrue; }
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+			if(~~(_new_location provides door_to && _new_location provides door_dir)) {
+				RuntimeError(ERR_INCOMPLETE_DOOR, _new_location);
+				rtrue;
+			}
+#EndIf;
 			_door_to = _new_location.door_to;
 #IfDef OPTIONAL_SIMPLE_DOORS;
 			if(_door_to == 0) {

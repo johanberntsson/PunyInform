@@ -1176,8 +1176,9 @@ Constant ERR_TOO_MANY_FLOATING 6;
 Constant ERR_NOT_DIR_PROP 7;
 Constant ERR_NOT_FAKE_OBJ 8;
 Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
+Constant ERR_INCOMPLETE_DOOR 10;
 
-[RunTimeError p_err;
+[RunTimeError p_err p_obj _parent;
 	print "[Puny error: ";
 	if(p_err ofclass string)
 		print (string) p_err;
@@ -1202,6 +1203,8 @@ Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 			print "FakeObjToDirProp called with non-fakeobj";
 		ERR_ILLEGAL_CHOOSEOBJNO:
 			print "ChooseObjectFinal_(Pick or Discard) called with nonexistent array index.";
+		ERR_INCOMPLETE_DOOR:
+			print "Door lacks door_to or door_dir.";
 		default:
 			print "Unknown error (", p_err, ")";
 		}
@@ -1209,5 +1212,12 @@ Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 		print p_err;
 #EndIf;
 	}
-	"]";
+	print "]^";
+#IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+	if(p_obj ofclass object) {
+		_parent = parent(p_obj);
+		print "Offending object: ", (the) p_obj, " (", p_obj, ") in ", (name) _parent, " (", _parent, ")^"; 
+	}
+#EndIf;
+	rtrue;
 ];
