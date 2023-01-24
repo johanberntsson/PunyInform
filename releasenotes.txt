@@ -1,3 +1,10 @@
+Upcoming release:
+
+- Non-existent constants MSG_LOCK_YOU_CANT, MSG_UNLOCK_YOU_CANT and 
+  MSG_WEAR_YOU_CANT were mistakenly referred to in messages.h, instead of the
+  constants that should have been used.
+
+=======
 v4.2: bug fix and new feature release (21 January 2023)
 
 - Added entry point routine ChooseObjectsFinal, letting the programmer
