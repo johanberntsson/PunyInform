@@ -4,6 +4,10 @@ Upcoming release:
   MSG_WEAR_YOU_CANT were mistakenly referred to in messages.h, instead of the
   constants that should have been used.
 - Added runtime error for when a door fails to define door_to or door_dir.
+- Error message when you try to start a timer and the object lacks the
+  time_out property now prints the offending object.
+- Routine RunTimeError was renamed to _RunTimeError, to reflect that it's
+  not a routine game programmers are likely to call.
 
 =======
 v4.2: bug fix and new feature release (21 January 2023)

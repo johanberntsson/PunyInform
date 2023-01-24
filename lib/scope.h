@@ -47,7 +47,7 @@ System_file;
 	while(p_obj) {
 		if(scope_objects >= MAX_SCOPE) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-			RunTimeError(ERR_SCOPE_FULL);
+			_RunTimeError(ERR_SCOPE_FULL);
 #EndIf;
 			return;
 		}
@@ -88,7 +88,7 @@ System_file;
 	! Check if there is room
 	if(scope_objects >= MAX_SCOPE) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-		RunTimeError(ERR_SCOPE_FULL);
+		_RunTimeError(ERR_SCOPE_FULL);
 #EndIf;
 		return;
 	}
@@ -247,7 +247,7 @@ Constant AddToScope = _PutInScope;
 	! ! add it
 	! if(scope_objects >= MAX_SCOPE) {
 ! #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-		! RunTimeError(ERR_SCOPE_FULL);
+		! _RunTimeError(ERR_SCOPE_FULL);
 ! #EndIf;
 		! return;
 	! }

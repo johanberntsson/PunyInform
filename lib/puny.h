@@ -1239,12 +1239,12 @@ Include "parser.h";
 		if (the_timers-->_i == p_array_val) rfalse;
 	_i = active_timers++;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if (_i >= MAX_TIMERS) RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
+	if (_i >= MAX_TIMERS) _RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
 #EndIf;
 	if (p_timer > 0) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
-			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return;
+			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj); return;
 		}
 #EndIf;
 		p_obj.time_left = p_timer;
@@ -1307,7 +1307,8 @@ Include "parser.h";
 	if (p_obj == p_array_val) { ! This is a timer, not a daemon
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
-			RunTimeError(ERR_OBJECT_HASNT_PROPERTY); return;
+			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj); 
+			return;
 		}
 #EndIf;
 		p_obj.time_left = 0;
@@ -1656,7 +1657,7 @@ Object thedark "Darkness"
 [ DirPropToFakeObj p_dir_prop;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(p_dir_prop < N_TO_CONST || p_dir_prop > OUT_TO_CONST)
-		RunTimeError(ERR_NOT_DIR_PROP);
+		_RunTimeError(ERR_NOT_DIR_PROP);
 #EndIf;
 	return p_dir_prop - N_TO_CONST + FAKE_N_OBJ;
 ];
@@ -1664,7 +1665,7 @@ Object thedark "Darkness"
 [ FakeObjToDirProp p_fake_obj;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(p_fake_obj < FAKE_N_OBJ || p_fake_obj > FAKE_OUT_OBJ)
-		RunTimeError(ERR_NOT_FAKE_OBJ);
+		_RunTimeError(ERR_NOT_FAKE_OBJ);
 #EndIf;
 	return p_fake_obj - FAKE_N_OBJ + N_TO_CONST;
 ];
@@ -1686,7 +1687,7 @@ Object thedark "Darkness"
 		if(_i.&found_in) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 			if(_k >= MAX_FLOATING_OBJECTS) {
-				RunTimeError(ERR_TOO_MANY_FLOATING);
+				_RunTimeError(ERR_TOO_MANY_FLOATING);
 				rtrue;
 			}
 #EndIf;

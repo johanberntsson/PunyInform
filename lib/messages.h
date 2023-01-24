@@ -1121,7 +1121,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 
 default:
 		! No code found. Print an error message.
-		RuntimeError(ERR_UNKNOWN_MSGNO);
+		_RuntimeError(ERR_UNKNOWN_MSGNO);
 	}
 ];
 
@@ -1176,10 +1176,9 @@ Constant ERR_TOO_MANY_FLOATING 6;
 Constant ERR_NOT_DIR_PROP 7;
 Constant ERR_NOT_FAKE_OBJ 8;
 Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
-Constant ERR_INCOMPLETE_DOOR 10;
 
-[RunTimeError p_err p_obj _parent;
-	print "[Puny error: ";
+[_RunTimeError p_err p_obj _parent;
+	print "[PunyInform error: ";
 	if(p_err ofclass string)
 		print (string) p_err;
 	else {
@@ -1188,7 +1187,7 @@ Constant ERR_INCOMPLETE_DOOR 10;
 		ERR_TOO_MANY_TIMERS_DAEMONS:
 			print "Too many timers/daemons";
 		ERR_OBJECT_HASNT_PROPERTY:
-			print "Object lacks that property";
+			print "Object lacks required property";
 		ERR_SCOPE_FULL:
 			print "Scope full";
 		ERR_UNKNOWN_MSGNO:
@@ -1203,8 +1202,6 @@ Constant ERR_INCOMPLETE_DOOR 10;
 			print "FakeObjToDirProp called with non-fakeobj";
 		ERR_ILLEGAL_CHOOSEOBJNO:
 			print "ChooseObjectFinal_(Pick or Discard) called with nonexistent array index.";
-		ERR_INCOMPLETE_DOOR:
-			print "Door lacks door_to or door_dir.";
 		default:
 			print "Unknown error (", p_err, ")";
 		}
