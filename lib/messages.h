@@ -1121,7 +1121,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 
 default:
 		! No code found. Print an error message.
-		_RuntimeError(ERR_UNKNOWN_MSGNO);
+		_RunTimeError(ERR_UNKNOWN_MSGNO);
 	}
 ];
 

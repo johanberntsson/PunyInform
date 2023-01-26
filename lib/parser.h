@@ -616,7 +616,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	_arr = which_object + 2;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(p_n < 0 || p_n > parser_one - 1)
-		RunTimeError(ERR_ILLEGAL_CHOOSEOBJNO);
+		_RunTimeError(ERR_ILLEGAL_CHOOSEOBJNO);
 #EndIf;
 	_arr-->0 = _arr-->p_n;
 	parser_one = 1;
@@ -626,7 +626,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	_arr = which_object + 2;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(p_n < 0 || p_n > parser_one - 1)
-		RunTimeError(ERR_ILLEGAL_CHOOSEOBJNO);
+		_RunTimeError(ERR_ILLEGAL_CHOOSEOBJNO);
 #EndIf;
 	parser_one--;
 	for(_i=p_n: _i<parser_one: _i++) {
