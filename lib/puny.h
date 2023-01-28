@@ -783,7 +783,9 @@ else
 			if(PrintOrRun(p_obj, invent, true)) rtrue;
 		}
 		_PrintAfterEntry(p_obj);
-	}
+	} else if(c_style & NEWLINE_BIT) 
+		new_line;
+
 ];
 
 [ FastSpaces p_spaces;
