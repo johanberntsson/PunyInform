@@ -8,6 +8,18 @@ Upcoming release:
   time_out property now prints the offending object.
 - Routine RunTimeError was renamed to _RunTimeError, to reflect that it's
   not a routine game programmers are likely to call.
+- Updated library messages to reflect when the noun has pluralname:
+  - That's hardly portable => That's/They're hardly portable
+  - That's not something you can open/close/enter/lock/unlock/wear => You 
+    can't [verb] that/those
+  - That's fixed in place => That's/They're fixed in place
+  - That's plainly inedible => That's/They're plainly inedible 
+  - It's already open => It's/They're already open
+  - It seems to be locked => It's/They're locked
+  - You can't put things on top of that => You can't put things on top of 
+    that/those
+
+
 
 =======
 v4.2: bug fix and new feature release (21 January 2023)

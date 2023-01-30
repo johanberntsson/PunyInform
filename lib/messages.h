@@ -11,20 +11,11 @@ System_file;
 #Ifndef MSG_TAKE_YOURSELF;
 Constant MSG_TAKE_YOURSELF "You are always self-possessed.";
 #EndIf;
-#Ifndef MSG_TAKE_SCENERY;
-Constant MSG_TAKE_SCENERY "That's hardly portable.";
-#EndIf;
-#Ifndef MSG_TAKE_STATIC;
-Constant MSG_TAKE_STATIC "That's fixed in place.";
-#EndIf;
 #Ifndef MSG_TAKE_NO_CAPACITY;
 Constant MSG_TAKE_NO_CAPACITY "You are carrying too many things already.";
 #EndIf;
 #Ifndef MSG_TAKE_DEFAULT;
 Constant MSG_TAKE_DEFAULT "Taken.";
-#EndIf;
-#Ifndef MSG_EAT_INEDIBLE;
-Constant MSG_EAT_INEDIBLE "That's plainly inedible.";
 #EndIf;
 #Ifndef MSG_DRINK_NOTHING_SUITABLE;
 Constant MSG_DRINK_NOTHING_SUITABLE "There's nothing suitable to drink here.";
@@ -32,12 +23,6 @@ Constant MSG_DRINK_NOTHING_SUITABLE "There's nothing suitable to drink here.";
 #Ifndef MSG_DROP_DROPPED;
 Constant MSG_DROP_DROPPED "Dropped.";
 #EndIf;
-#Ifndef MSG_OPEN_ALREADY;
-Constant MSG_OPEN_ALREADY "It's already open.";
-#Endif;
-#Ifndef MSG_OPEN_LOCKED;
-Constant MSG_OPEN_LOCKED "It seems to be locked.";
-#Endif;
 #Ifndef MSG_THROW_ANIMATE;
 Constant MSG_THROW_ANIMATE "Futile.";
 #Endif;
@@ -79,9 +64,6 @@ Constant MSG_SAVE_DEFAULT "Ok.";
 #Endif;
 #Ifndef MSG_INSERT_ITSELF;
 Constant MSG_INSERT_ITSELF "You can't put something inside itself.";
-#Endif;
-#Ifndef MSG_PUTON_NOT_SUPPORTER;
-Constant MSG_PUTON_NOT_SUPPORTER "You can't put things on top of that.";
 #Endif;
 #Ifndef MSG_PUTON_ITSELF;
 Constant MSG_PUTON_ITSELF "You can't put something on itself.";
@@ -316,6 +298,12 @@ Default MSG_LOOKMODE_LONG 133;
 Default MSG_LOOKMODE_SHORT 134;
 Default MSG_AUTO_TAKE_NOT_HELD = 135;
 Default MSG_AUTO_DISROBE_WORN = 136;
+Default MSG_TAKE_SCENERY = 137;
+Default MSG_TAKE_STATIC = 138;
+Default MSG_EAT_INEDIBLE = 139;
+Default MSG_OPEN_ALREADY = 140;
+Default MSG_OPEN_LOCKED = 141;
+Default MSG_PUTON_NOT_SUPPORTER = 142;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -415,7 +403,9 @@ Constant SKIP_MSG_PUSH_DEFAULT;
 #Iffalse MSG_PUSH_STATIC < 1000;
 #Iffalse MSG_PULL_STATIC < 1000;
 #Iffalse MSG_TURN_STATIC < 1000;
+#Iffalse MSG_TAKE_STATIC < 1000;
 Constant SKIP_MSG_PUSH_STATIC;
+#Endif;
 #Endif;
 #Endif;
 #Endif;
@@ -652,12 +642,16 @@ Constant SKIP_MSG_EXAMINE_DARK;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
+#Iftrue MSG_TAKE_SCENERY < 1000;
+	MSG_TAKE_SCENERY:
+		print_ret (CTheyreorThats) noun, " hardly portable.";
+#EndIf;
 #Ifndef SKIP_MSG_PUSH_DEFAULT;
 	MSG_PUSH_DEFAULT, MSG_PULL_DEFAULT, MSG_TURN_DEFAULT:
 		"Nothing obvious happens.";
 #Endif;
 #Ifndef SKIP_MSG_PUSH_STATIC;
-	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC:
+	MSG_PUSH_STATIC, MSG_PULL_STATIC, MSG_TURN_STATIC, MSG_TAKE_STATIC:
 		print_ret (CTheyreorThats) noun, " fixed in place.";
 #Endif;
 #Ifndef SKIP_MSG_PUSH_SCENERY;
@@ -708,8 +702,24 @@ Constant SKIP_MSG_EXAMINE_DARK;
 	MSG_OPEN_YOU_CANT, MSG_CLOSE_YOU_CANT, MSG_ENTER_YOU_CANT,
 	MSG_LOCK_NOT_A_LOCK, MSG_UNLOCK_NOT_A_LOCK, MSG_WEAR_NOT_CLOTHING:
 	! p_arg_1 = the base verb for this action ('open', 'close' etc).
-		"That doesn't seem to be something you can ", (verbname) p_arg_1, ".";
+		"You can't ", (verbname) p_arg_1, " ", (ThatorThose) noun, ".";
 #Endif;
+#IfTrue MSG_EAT_INEDIBLE < 1000;
+	MSG_EAT_INEDIBLE:
+		print_ret (CTheyreorThats) noun, " plainly inedible.";
+#EndIf;
+#IfTrue MSG_OPEN_ALREADY < 1000;
+	MSG_OPEN_ALREADY:
+		print_ret (CTheyreorIts) noun, " already open.";
+#EndIf;
+#IfTrue MSG_OPEN_LOCKED < 1000;
+	MSG_OPEN_LOCKED:
+		print_ret (CTheyreorIts) noun, " locked.";
+#EndIf;
+#IfTrue MSG_PUTON_NOT_SUPPORTER < 1000;
+	MSG_PUTON_NOT_SUPPORTER:
+		"You can't put things on top of ", (ThatorThose) second, ".";
+#EndIf;
 #Ifndef SKIP_MSG_TAKE_ANIMATE;
 	MSG_TAKE_ANIMATE, MSG_EAT_ANIMATE:
 		"I don't suppose ", (the) noun, " would care for that.";
@@ -1155,6 +1165,14 @@ default:
 		if (obj hasnt neuter) { print "He's"; return; }
 	}
 	print "That's";
+];
+
+[ CTheyreorIts p_obj;
+	if(p_obj ~= player && p_obj hasnt pluralname && p_obj hasnt animate) {
+		print "It's";
+		return;
+	}
+	CTheyreorThats(p_obj);
 ];
 
 [OnOff obj;
