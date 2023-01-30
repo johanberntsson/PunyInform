@@ -62,7 +62,7 @@ You need to be more specific.
 You can't go that way.
 
 > go sweater
-That doesn't seem to be something you can enter.
+You can't enter that.
 
 > go
 I think you wanted to say "go (some direction)". Please try again.

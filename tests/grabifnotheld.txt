@@ -1,7 +1,7 @@
 
 > pry box with gizmo
 (first taking gizmo)
-That doesn't seem to be something you can unlock.
+You can't unlock that.
 
 > i
 You're carrying gizmo.
@@ -40,7 +40,7 @@ You are not carrying anything.
 
 > put on gizmo
 (first taking gizmo)
-That doesn't seem to be something you can wear.
+You can't wear that.
 
 > i
 You're carrying gizmo.

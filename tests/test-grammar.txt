@@ -1,6 +1,6 @@
 
 > open apple
-That doesn't seem to be something you can open.
+You can't open that.
 
 > close apple
 I don't understand that sentence.
