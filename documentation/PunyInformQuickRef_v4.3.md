@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v4.2 quick reference** |
+| **PunyInform v4.3 quick reference** |
 
   
 More information on last page.
@@ -427,6 +427,10 @@ More information on last page.
 
 ###### Recursively list contents of *object*. Hide items that have *concealed* or *scenery*, unless *action* is *##Inv*. Print or run *text* (unless 0) before first item. If *style* has *WORKFLAG_BIT *set, only print objects which have the *workflag* attribute. If it has *ISARE_BIT* set, print "is" or "are" before list. If it has *NEWLINE_BIT* set, print each object on a new line. Return *true* if any objects were listed. Call with *text==1* to not print anything but return *0* if *object* contains no printable objects, *1* if contents can be prefixed with "is", *2* for "are". 
 
+## PrintContentsFromR(text, object) **PUNY++**
+
+###### Like PrintContents, but list *object and its siblings *+ contents, retaining current style and indentation. 
+
 ## PrintMsg(msg, arg1, arg2) **PUNY++**
 
 ###### Print library message *msg* . Some messages need an argument or two, use *arg1* and *arg2* for this.
@@ -442,10 +446,6 @@ More information on last page.
 ## RunRoutines(object, property, switch)
 
 ###### If *object.property* holds a routine or list of routines, run each routine until one of them returns a non-zero value. Return the return value of the last routine run. If *switch* has a non-zero value, the routines can have switch-clauses to match this value, otherwise they can have switch-clauses to match *action*.
-
-## RunTimeError(number) **PUNY++**
-
-###### Print a runtime error.
 
 ## ScopeWithin(object)
 
@@ -489,6 +489,10 @@ typically an object. Example of use:
 
 ###### Prints "The (object) ", and "is" or "are" (see *IsOrAre*).
 
+## CTheyreorIts **PUNY++**
+
+###### Prints "It's" or "They're" or "He's" etc.
+
 ## CTheyreorThats
 
 ###### Prints "That's" or "They're" or "He's" etc.
@@ -505,7 +509,7 @@ typically an object. Example of use:
 
 ###### Prints "on" or "off", based on *on*.
 
-## ThatOrThose
+## ThatorThose
 
 ###### Prints "that" or "those" based on *pluralname*.
 

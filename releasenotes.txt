@@ -1,4 +1,4 @@
-Upcoming release:
+v4.3: bug fix and new feature release (2 February 2023)
 
 - Non-existent constants MSG_LOCK_YOU_CANT, MSG_UNLOCK_YOU_CANT and 
   MSG_WEAR_YOU_CANT were mistakenly referred to in messages.h, instead of the
@@ -18,8 +18,7 @@ Upcoming release:
   - It seems to be locked => It's/They're locked
   - You can't put things on top of that => You can't put things on top of 
     that/those
-
-
+- Fixed a lot of minor issues in the manual.
 
 =======
 v4.2: bug fix and new feature release (21 January 2023)

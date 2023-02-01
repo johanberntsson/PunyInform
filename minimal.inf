@@ -23,7 +23,7 @@ Constant STATUSLINE_SCORE; Statusline score;
 ! The value is what will be shown as the score on statusline in z3
 Constant NO_SCORE = 0;
 
-! Customize the statusline in z5+ (will have no effect in z3)
+! Customize the statusline in z5+ (has no effect in z3)
 !Constant OPTIONAL_SL_NO_SCORE;
 !Constant OPTIONAL_SL_NO_MOVES;
 
@@ -33,7 +33,10 @@ Constant NO_SCORE = 0;
 !Constant CUSTOM_ABBREVIATIONS;
 !Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
 Constant OPTIONAL_NO_DARKNESS;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_SHIP_DIRECTIONS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
 !Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_EXTENDED_VERBSET;
 !Constant OPTIONAL_FLEXIBLE_INVENTORY;
@@ -42,10 +45,7 @@ Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
 !Constant OPTIONAL_SCORED;
 !Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
-!Constant OPTIONAL_FULL_DIRECTIONS;
 !Constant OPTIONAL_SIMPLE_DOORS;
-!Constant OPTIONAL_SHIP_DIRECTIONS;
-!Constant OPTIONAL_GUESS_MISSING_NOUN;
 !Constant OPTIONAL_MANUAL_SCOPE;
 !Constant OPTIONAL_MANUAL_REACTIVE;
 !Constant OPTIONAL_ORDERED_TIMERS;
