@@ -18,13 +18,12 @@ To compile games using PunyInform, we recommend the official Inform 6
 compiler maintained by David Kinder, at
 https://github.com/DavidKinder/Inform6.  Binaries can be found at the
 [IF-Archive](https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/).
-PunyInform requires at least Inform v6.36. The recommended version is v6.40.
+PunyInform requires at least Inform v6.36. We recommended using the latest
+version.
 
 You can also use [borogove.app](https://borogove.app/) to write PunyInform
 code and play the resulting game in your browser. Just select PunyInform from
-the dropdown menu under Inform 6 and press the arrow next to it. It's meant
-for desktop use only though, so don't expect to do development work on your
-phone.
+the dropdown menu under Inform 6 and press the arrow next to it.
 
 ![A minimal game in PunyInform](https://github.com/johanberntsson/PunyInform/blob/master/documentation/screenshots/simplegame.png?raw=true)
 
@@ -117,7 +116,9 @@ The biggest differences between the standard library and PunyInform are:
 
 * PunyInform doesn't support identical objects. You can have very
   similar objects like a small green book and a small red book, but the
-  player must be able to say which one (s)he means.
+  player must be able to say which one (s)he means. It *is* possible to
+  hack/tweak the library into handling identical objects, see the file
+  howto/indistinguishable.inf for an example of how to do this.
 
 * PunyInform doesn't have the versatile routine `WriteListFrom`, for
   printing what's in a location or in/on an object. Instead, it has a
@@ -186,17 +187,25 @@ There were also nine new PunyInform games submitted to [PunyJam #1](https://ifdb
 
 * [The Job](https://fredrikr.itch.io/the-job), by Fredrik Ramsberg.
 
-And three PunyInform games were submitted to [PunyJam #2](https://ifdb.org/viewcomp?id=42jeo1n70mqwtemq):
-
 * [Morris](https://dee-cooke.itch.io/morris), by Dee Cooke.
 
 * [A Once in a Lifetime Opportunity](https://interpied.itch.io/opportunity), by Interpied.
 
 * [Face Your Fears](https://sijnstra.itch.io/face-your-fears), by Shawn Sijnstra.
 
+* [Carpathian Vampire](https://warrigal.itch.io/carpathian-vampire), by Garry Francis.
+
+* [Alchemist's Gold](https://warrigal.itch.io/alchemists-gold), by Garry Francis.
+
+* [Kenny Koala's Bushfire Survival Plan](https://warrigal.itch.io/kenny-koala), by Garry Francis.
+
+* [Never Ending Story](https://csdb.dk/release/?id=224111&show=summary), by Parcaran.
+
+* [Construction Cancellation Order](https://royerson.itch.io/construction-cancellation-order-if), by Royerson.
+
 All of these games can be downloaded from the links above. Many of them
 are also available at [Ozmoo Online](http://microheaven.com/ozmooonline/)
-where you can create disk images for Commodore C64, C128 or Plus/4.
+where you can create disk images for Commodore C64, C128, Plus/4 and MEGA65.
 
 ## Articles
 
@@ -254,9 +263,9 @@ PunyInform was conceived and designed by Johan Berntsson and Fredrik
 Ramsberg. Coding by Johan Berntsson, Fredrik Ramsberg, Pablo Martinez
 and Tomas Öberg. Includes code from the Inform 6 standard library, by
 Graham Nelson. Thanks to Stefan Vogt, Jason Compton, John Wilson, Hugo
-Labrande, Richard Fairweather, Adam Sommerfield, auraes and Hannesss for
-issue reporting, advice, testing, code contributions and promotion.
-Thanks to David Kinder and Andrew Plotkin for helping out with compiler
-issues and sharing their deep knowledge of the compiler. Huge thanks to
-Graham Nelson for creating the Inform 6 compiler and library in the
-first place.
+Labrande, Richard Fairweather, Adam Sommerfield, auraes, Hannesss and
+Garry Francis for issue reporting, advice, testing, code contributions 
+and promotion. Thanks to David Kinder and Andrew Plotkin for helping 
+out with compiler issues and sharing their deep knowledge of the 
+compiler. Huge thanks to Graham Nelson for creating the Inform 6 
+compiler and library in the first place.
