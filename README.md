@@ -1,5 +1,7 @@
 # PunyInform
 
+**BREAKING NEWS: Join us for [PunyJam #3](https://itch.io/jam/punyjam-3) 3 Feb to 26 Feb 2023. Newbies and veterans are welcome!**
+
 PunyInform is a library written in Inform 6 which allows people to
 create text adventure games / interactive fiction using the Z-machine
 virtual machine, to be played on 8-bit computers as well as newer
@@ -166,8 +168,6 @@ These games are known to use PunyInform:
 * [Hibernated 1, Director's Cut](https://8bitgames.itch.io/hibernated1), by Stefan Vogt.
 
 * [Craverly Heights](https://github.com/johanberntsson/Craverly-Heights_PunyInform), ported by Johan Berntsson from the original game written by Ryan Veeder.
-
-There were also nine new PunyInform games submitted to [PunyJam #1](https://ifdb.org/viewcomp?id=z913f8kco23t5dz4):
 
 * [Captain Cutter's Treasure](https://warrigal.itch.io/captain-cutters-treasure), by Garry Francis.
 
