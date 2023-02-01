@@ -310,7 +310,7 @@ Verb 'wear'
 [ EnterSub _door_dir;
 	if(noun has door) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(noun.&door_to == 0 || noun.&door_dir == 0) {
+		if(noun.&door_dir == 0) { ! door_to will be checked by Go action anyway
 			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, noun);
 			rtrue;
 		}
@@ -1835,10 +1835,17 @@ Global scope_cnt;
 		else {
 			if(_new_location hasnt open) { PrintMsg(MSG_GO_DOOR_CLOSED, _new_location); rtrue; }
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+#Ifdef OPTIONAL_SIMPLE_DOORS;
+			if(_new_location.&door_dir == 0 || (_new_location.&door_to == 0 && (_new_location.&found_in == 0 || _new_location.#found_in ~= 4))) {
+				_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, _new_location);
+				rtrue;
+			}
+#Ifnot;
 			if(_new_location.&door_to == 0 || _new_location.&door_dir == 0) {
 				_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, _new_location);
 				rtrue;
 			}
+#EndIf;
 #EndIf;
 			_door_to = _new_location.door_to;
 #IfDef OPTIONAL_SIMPLE_DOORS;
