@@ -1,3 +1,10 @@
+Upcoming release:
+
+- Replace some veneer routines with shorter versions (optimized and not 
+  printing error messages) when building a game without DEBUG or Strict mode,
+  and with RUNTIME_ERRORS set to 0.
+
+=======
 v4.3: bug fix and new feature release (2 February 2023)
 
 - Non-existent constants MSG_LOCK_YOU_CANT, MSG_UNLOCK_YOU_CANT and 

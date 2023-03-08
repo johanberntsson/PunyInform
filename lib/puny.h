@@ -1355,6 +1355,449 @@ Include "parser.h";
 	}
 ];
 
+
+#Ifndef DEBUG;
+#Ifndef STRICT_MODE;
+#IfTrue RUNTIME_ERRORS == RTE_MINIMUM;
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Replace some veneer routines with smaller versions
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+!   Print__PName: Print the name of a property.
+
+[ Print__PName; ];
+
+!   WV__Pr:  write a value to the property for the given
+!			 object having the given identifier
+
+[ WV__Pr obj identifier value x;
+ x = obj..&identifier;
+ if (x==0) { 
+	!RT__Err(\"write to\", obj, identifier); 
+	return; 
+ }
+ !#ifdef INFIX;
+ !if (obj has infix__watching || (debug_flag & 15)) RT__TrPS(obj,identifier,value);
+ !#ifnot; 
+ !#ifdef DEBUG;
+ !if (debug_flag & 15) RT__TrPS(obj,identifier,value);
+ !#endif; #endif;
+ x-->0 = value;
+];
+
+!   RV__Pr:  read a value from the property for the given
+!	 		 object having the given identifier
+
+[ RV__Pr obj identifier x;
+ x = obj..&identifier;
+ if (x==0) {   
+	!if (identifier >= 1 && identifier < 64 && obj.#identifier <= 2)
+		 @get_prop obj identifier -> sp;
+		 @ret_popped;
+		 !return obj.identifier;
+	 !RT__Err(\"read\", obj, identifier); return; 
+ }
+ #IFV3;
+ !if (obj..#identifier > 2) RT__Err(\"read\", obj, identifier);
+ #IFNOT;
+ !if (obj..#identifier > 2) RT__Err(\"read\", obj, identifier, 2);
+ #ENDIF;
+ return x-->0;
+];
+
+#IfV5;
+
+!   CA__Pr:  call, that is, print-or-run-or-read, a property:
+!			 this exactly implements obj..prop(...).  Note that
+!			 classes (members of Class) have 5 built-in properties
+!			 inherited from Class: create, recreate, destroy,
+!			 remaining and copy.  Implementing these here prevents
+!			 the need for a full metaclass inheritance scheme.
+
+[ CA__Pr obj id a b c d e f x y z s s2 n m;
+ if (obj < 1 || obj > #largest_object-255)
+ {   switch(Z__Region(obj))
+	 { 2: if (id == call) { 
+			s = sender; 
+		    sender = self; 
+			self = obj;
+			#ifdef action;
+			sw__var=action;
+			#endif;
+			x = indirect(obj, a, b, c, d, e, f);
+			self = sender; 
+			sender = s; 
+			return x; 
+		  }
+		  jump Call__Error;
+	   3: if (id == print) { 
+			@print_paddr obj; 
+			rtrue; 
+		  }
+		  if (id == print_to_array) { 
+			@output_stream 3 a; 
+			@print_paddr obj; 
+			@output_stream -3;
+			return a-->0; 
+		  }
+		  jump Call__Error;
+	 }
+	 jump Call__Error;
+ }
+ @check_arg_count 3 ?~A__x;y++;@check_arg_count 4 ?~A__x;y++;
+ @check_arg_count 5 ?~A__x;y++;@check_arg_count 6 ?~A__x;y++;
+ @check_arg_count 7 ?~A__x;y++;@check_arg_count 8 ?~A__x;y++;.A__x;
+ !#ifdef INFIX;if (obj has infix__watching) n=1;#endif;
+ !#ifdef DEBUG;if (debug_flag & 1 ~= 0) n=1;#endif;
+ !if (n==1) {
+	!#ifdef DEBUG;n=debug_flag & 1; debug_flag=debug_flag-n;#endif;
+	!print \"[ ~\", (name) obj, \"~.\", (property) id, \"(\";
+	!switch(y) 
+	!{ 1: print a; 
+	  !2: print a,\",\",b; 
+	  !3: print a,\",\",b,\",\",c;
+	  !4: print a,\",\",b,\",\",c,\",\",d;
+	  !5: print a,\",\",b,\",\",c,\",\",d,\",\",e;
+	  !6: print a,\",\",b,\",\",c,\",\",d,\",\",e,\",\",f; 
+	!}
+	!print \") ]^\";
+   !#ifdef DEBUG;debug_flag = debug_flag + n;#endif;
+ !}
+ if (id > 0 && id < 64) { 
+	!x = obj.&id; 
+	@get_prop_addr obj id -> x;
+	if (x==0) { 
+		x=$000a-->0 + 2*(id-1); 
+		n=2; 
+	} else 
+		!n = obj.#id;
+		@get_prop_len x -> n;
+ } else { 
+	if (id>=64 && id<69 && obj in Class)
+		return Cl__Ms(obj,id,y,a,b,c,d);
+	x = obj..&id;
+	if (x == 0) { 
+		.Call__Error;
+		!RT__Err(\"send message\", obj, id); 
+		return; 
+	}
+	n = 0->(x-1);
+	if (id&$C000==$4000)
+		switch (n&$C0) 
+			{   0: n=1; 
+			  $40: n=2; 
+			  $80: n=n&$3F; 
+			}
+ }
+ for (:2*m<n:m++)
+ {  if (x-->m==$ffff) rfalse;
+	switch(Z__Region(x-->m))
+	{ 2: s = sender; 
+		 sender = self; 
+		 self = obj; 
+		 s2 = sw__var;
+	     #ifdef LibSerial;
+	     if (id==life) sw__var=reason_code; else sw__var=action;
+	     #endif;
+		 switch(y) 
+			{ 0: z = indirect(x-->m); 
+			  1: z = indirect(x-->m, a);
+			  2: z = indirect(x-->m, a, b); 
+			  3: z = indirect(x-->m, a, b, c);
+			  4: z = indirect(x-->m, a, b, c, d); 
+			  5: z = indirect(x-->m, a, b, c, d, e);
+			  6: z = indirect(x-->m, a, b, c, d, e, f); 
+			}
+		 self = sender; 
+		 sender = s; 
+		 sw__var = s2;
+		 if (z ~= 0) return z;
+	  3: print_ret (string) x-->m;
+	  default: return x-->m;
+	}
+ }
+ rfalse;
+];
+
+[ Cl__Ms obj id y a b c d x;
+ switch(id)
+ {   create:
+		 if (children(obj)<=1) rfalse; 
+		 x=child(obj);
+		 remove x; 
+		 if (x provides create) { 
+			if (y==0) x.create();
+			if (y==1) x.create(a); 
+			if (y==2) x.create(a,b);
+			!if (y>3) RT__Err(1,obj); 
+			if (y>=3) x.create(a,b,c);
+		 }
+		 return x;
+	 recreate:
+		 if (~~(a ofclass obj)) { 
+			!RT__Err(\"recreate\", a, -obj); 
+			rfalse;
+ 		 }
+		 Copy__Primitive(a, child(obj));
+		 if (a provides create) { 
+			if (y==1) a.create();
+			if (y==2) a.create(b); 
+			if (y==3) a.create(b,c);
+			!if (y>4) RT__Err(1,obj); 
+			if (y>=4) a.create(b,c,d);
+		 } 
+		 rfalse;
+	 destroy:
+		 if (~~(a ofclass obj)) { 
+			!RT__Err(\"destroy\", a, -obj); 
+			rfalse; 
+		 }
+		 if (a provides destroy) a.destroy();
+		 Copy__Primitive(a, child(obj));
+		 move a to obj; 
+		 rfalse;
+	 remaining:
+		 return children(obj)-1;
+	 copy:
+		 if (~~(a ofclass obj)) { 
+			!RT__Err(\"copy\", a, -obj); 
+			rfalse;
+		 }
+		 if (~~(b ofclass obj)) { 
+			!RT__Err(\"copy\", b, -obj); 
+			rfalse; 
+		 }
+		 Copy__Primitive(a, b); 
+		 rfalse;
+ }
+];
+
+#Endif; ! IfV5
+
+!   IB__Pr:  ++(individual property)
+
+[ IB__Pr obj identifier x;
+ x = obj..&identifier;
+ if (x==0) { 
+	!RT__Err(\"increment\", obj, identifier); 
+	return; 
+ }
+ !#ifdef INFIX;
+ !if (obj has infix__watching || (debug_flag & 15)) RT__TrPS(obj,identifier,(x-->0)+1);
+ !#ifnot; #ifdef DEBUG;
+ !if (debug_flag & 15) RT__TrPS(obj,identifier,(x-->0)+1);
+ !#endif; #endif;
+ return ++(x-->0);
+];
+
+!   IA__Pr:  (individual property)++
+
+[ IA__Pr obj identifier x;
+ x = obj..&identifier;
+ if (x==0) { 
+	!RT__Err(\"increment\", obj, identifier); 
+	return; 
+ }
+ !#ifdef INFIX;
+ !if (obj has infix__watching || (debug_flag & 15))
+ !RT__TrPS(obj,identifier,(x-->0)+1);
+ !#ifnot; #ifdef DEBUG;
+ !if (debug_flag & 15) RT__TrPS(obj,identifier,(x-->0)+1);
+ !#endif; #endif;
+ return (x-->0)++;
+];
+
+!   DB__Pr:  --(individual property)
+
+[ DB__Pr obj identifier x;
+ x = obj..&identifier;
+ if (x==0) { 
+	!RT__Err(\"decrement\", obj, identifier); 
+	return; 
+ }
+ !#ifdef INFIX;
+ !if (obj has infix__watching || (debug_flag & 15)) RT__TrPS(obj,identifier,(x-->0)-1);
+ !#ifnot; #ifdef DEBUG;
+ !if (debug_flag & 15) RT__TrPS(obj,identifier,(x-->0)-1);
+ !#endif; #endif;
+ return --(x-->0);
+];
+
+!   DA__Pr:  (individual property)--
+
+[ DA__Pr obj identifier x;
+ x = obj..&identifier;
+ if (x==0) { 
+	!RT__Err(\"decrement\", obj, identifier); 
+	return; 
+ }
+ !#ifdef INFIX;
+ !if (obj has infix__watching || (debug_flag & 15)) RT__TrPS(obj,identifier,(x-->0)-1);
+ !#ifnot; #ifdef DEBUG;
+ !if (debug_flag & 15) RT__TrPS(obj,identifier,(x-->0)-1);
+ !#endif; #endif;
+ return (x-->0)--;
+];
+
+!   RA__Pr:  read the address of a property value for a given object,
+!			 returning 0 if it doesn't provide this individual
+!			 property
+
+[ RA__Pr obj identifier i otherid cla;
+ if (obj==0) rfalse;
+ if (identifier<64 && identifier>0) {
+	 !return obj.&identifier;
+	 @get_prop_addr obj identifier -> sp;
+	 @ret_popped;
+ }
+ if (identifier & $8000 ~= 0)
+ {   cla = #classes_table-->(identifier & $ff);
+	 if (cla.&3 == 0) rfalse;
+	 if (~~(obj ofclass cla)) rfalse;
+	 identifier = (identifier & $7f00) / $100;
+	 i = cla.3;
+	 while (identifier>0)
+	 {   identifier--;
+		 i = i + i->2 + 3;
+	 }
+	 return i+3;
+ }
+ if (identifier & $4000 ~= 0)
+ {   cla = #classes_table-->(identifier & $ff);
+	 identifier = (identifier & $3f00) / $100;
+	 if (~~(obj ofclass cla)) rfalse; i=0-->5;
+	 if (cla == 2) return i+2*identifier-2;
+	 i = 0-->((i+124+cla*14)/2);
+	 i = CP__Tab(i + 2*(0->i) + 1, -1)+6;
+	 return CP__Tab(i, identifier);
+ }
+ if (obj.&3 == 0) rfalse;
+ if (obj in 1)
+ {  	 if (identifier<64 || identifier>=72) rfalse;
+ }
+ if (self == obj)
+	 otherid = identifier | $8000;
+ i = obj.3;
+ while (i-->0 ~= 0)
+ {    if (i-->0 == identifier or otherid)
+		return i+3;
+	 i = i + i->2 + 3;
+ }
+ rfalse;
+];
+
+!   RL__Pr:  read the property length of an individual property value,
+!		 	 returning 0 if it isn't provided by the given object
+
+[ RL__Pr obj identifier x;
+ if (identifier<64 && identifier>0) {
+	!return obj.#identifier;
+	@get_prop_addr obj identifier -> x;
+	@get_prop_len x -> sp;
+	@ret_popped;
+ }
+ x = obj..&identifier;
+ if (x==0) rfalse;
+ if (identifier&$C000==$4000)
+	 switch (((x-1)->0)&$C0)
+	 {    0: return 1;  
+		$40: return 2;  
+		$80: return ((x-1)->0)&$3F; 
+	 }
+ return (x-1)->0;
+];
+
+!   RA__Sc:  implement the "superclass" (::) operator,
+!			 returning an identifier
+
+[ RA__Sc cla identifier otherid i j k;
+ if (cla notin 1 && cla > 4)
+ {   
+	!RT__Err(\"be a '::' superclass\", cla, -1); 
+	rfalse; 
+ }
+ if (self ofclass cla) otherid = identifier | $8000;
+ for (j=0: #classes_table-->j ~= 0: j++)
+ {   if (cla==#classes_table-->j)
+	 {   if (identifier < 64) return $4000 + identifier*$100 + j;
+		 if (cla.&3 == 0) break;
+		 i = cla.3;
+		 while (i-->0 ~= 0)
+		 {   if (i-->0 == identifier or otherid)
+				 return $8000 + k*$100 + j;
+			 i = i + i->2 + 3;
+			 k++;
+		 }
+		 break;
+	 }
+ }
+ !RT__Err(\"make use of\", cla, identifier);
+ rfalse;
+ ];
+
+!   OP__Pr:  test whether or not given object provides individual
+!			 property with the given identifier code
+
+[ OP__Pr obj identifier x;
+ if (obj<1 || obj > (#largest_object-255))
+ {   if (identifier ~= print or print_to_array or call) rfalse;
+	 switch(Z__Region(obj))
+	 {   2: if (identifier == call) rtrue;
+		 3: if (identifier == print or print_to_array) rtrue;
+	 }
+	 rfalse;
+ }
+ if (identifier<64)
+ {   @get_prop_addr obj identifier -> x;
+	 if (x ~= 0) rtrue;
+	 !if (obj.&identifier ~= 0) rtrue;
+	 rfalse;
+ }
+ if (obj..&identifier ~= 0) rtrue;
+ if (identifier<72 && obj in 1) rtrue;
+ rfalse;
+];
+
+!   OC__Cl:  test whether or not given object is of the given class
+
+[ OC__Cl obj cla j a n;
+ if (obj<1 || obj > (#largest_object-255))
+ {   if (cla ~= 3 or 4) rfalse;
+	 if (Z__Region(obj) == cla-1) rtrue;
+	 rfalse;
+ }
+ if (cla == 1) {
+	 if (obj<=4) rtrue;
+	 if (obj in 1) rtrue;
+	 rfalse;
+ } else if (cla == 2) {
+	 if (obj<=4) rfalse;
+	 if (obj in 1) rfalse;
+	 rtrue;
+ } else if (cla == 3 or 4) {
+	 rfalse;
+ }
+ if (cla notin 1) { 
+	!RT__Err(\"apply 'ofclass' for\", cla, -1);
+	rfalse;
+ }
+ @get_prop_addr obj 2 -> a;
+ if (a==0) rfalse;
+ @get_prop_len a -> n;
+ for (j=0: j<n/2: j++) {   
+	if (a-->j == cla) rtrue;
+ }
+ rfalse;
+];
+
+
+#Endif;
+#Endif;
+#Endif;
+
+
 #IfV3;
 ! These routines are implemented by Veneer, but the default implementations give compile errors for z3
 
@@ -1478,7 +1921,10 @@ Include "parser.h";
 	} else {
 		if (id>=64 && id<69 && obj in Class) {
 !     print "CA_Pr ERROR0 obj = ", obj,", id = ", id,", a = ", a, "^";
-			RT__Err("Class create etc", obj, id); return;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+			RT__Err("Class create etc", obj, id); 
+#Endif;
+			return;
 !     return Cl__Ms(obj,id,y,a,b,c);
 		}
 !   print "CA_Pr(2.1) obj = ", obj,", id = ", id,", n = ", n, "^";
@@ -1487,7 +1933,10 @@ Include "parser.h";
 		if (x == 0) {
 !     print "CA_Pr ERROR1 obj = ", obj,", id = ", id,", a = ", a, "^";
 			.Call__Error;
-			RT__Err("send message", obj, id); return;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+			RT__Err("send message", obj, id); 
+#Endif;
+			return;
 		}
 !   print "Reading n at ", x-1,": ", 0->(x-1), "^";
 		n = 0->(x-1);
