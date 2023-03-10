@@ -665,8 +665,8 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		return 0;
 	}
 
-	! skip 'the', 'all' etc
-	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an' or ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
+	! skip 'all' etc
+	while(p_parse_pointer --> 0 == ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
 		if(p_parse_pointer --> 0 == ALL_WORD) {
 			parser_all_found = true; !TODO: do we really need the global?
 			_all_found = true;

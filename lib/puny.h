@@ -124,7 +124,7 @@ Array cursor_pos --> 2;
 Array TenSpaces -> "          ";
 
 [ _PrintSpacesOrMoveBack p_col p_string _current_col;
-	p_col = (HDR_SCREENWCHARS->0) - p_col;
+	p_col = screen_width - p_col;
 
 	@get_cursor cursor_pos;
 	_current_col = cursor_pos --> 1;
@@ -140,10 +140,10 @@ Array TenSpaces -> "          ";
 
 Constant ONE_SPACE_STRING = " ";
 
-[ _PrintStatusLineTime p_width _h _pm;
-	if (p_width > 29) {
-		if (p_width > 39) {
-			if (p_width > 66) {
+[ _PrintStatusLineTime _h _pm;
+	if (screen_width > 29) {
+		if (screen_width > 39) {
+			if (screen_width > 66) {
 				! Width is 67-, print "Time: 12:34 pm" with some space to the right
 				_PrintSpacesOrMoveBack(20, TIME__TX);
 			} else {
@@ -173,31 +173,30 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
-[ _PrintStatusLineScore p_width _pos;
-	_pos = p_width; ! Just to get rid of warnings
+[ _PrintStatusLineScore;
 #Ifdef OPTIONAL_SL_NO_SCORE;
 #Ifndef OPTIONAL_SL_NO_MOVES;
 	! Show moves only
-	if (p_width > 25) {
-		if (p_width < 30) {
+	if (screen_width > 25) {
+		if (screen_width < 30) {
 			! Width is 25-29, only print moves as "0"
 			_PrintSpacesOrMoveBack(4, ONE_SPACE_STRING);
 		} else {
 			! Width is 30-, print "Moves: 0"
-			_pos = 11;
-			if (p_width > 52) {
+			if (screen_width > 52) {
 				! Width is 53+, leave some space to the right
-				_pos = 15;
+				_PrintSpacesOrMoveBack(15, MOVES__TX);
+			} else {
+				_PrintSpacesOrMoveBack(11, MOVES__TX);
 			}
-			_PrintSpacesOrMoveBack(_pos, MOVES__TX);
 		}
 		print status_field_2;
 	}
 #Endif; ! Ifndef NO_MOVES
 #Ifnot;
 	! Show score and maybe moves
-	if (p_width > 24) {
-		if (p_width < 30) {
+	if (screen_width > 24) {
+		if (screen_width < 30) {
 			! Width is 25-29, only print score as "0", no moves
 			_PrintSpacesOrMoveBack(3, ONE_SPACE_STRING);
 			print status_field_1;
@@ -205,19 +204,20 @@ Constant ONE_SPACE_STRING = " ";
 #Ifdef OPTIONAL_SL_NO_MOVES;
 	! Show score only
 			! Width is 30-, print "Score: 0"
-			_pos = 13;
-			if(p_width < 55) _pos = 10;
-			_PrintSpacesOrMoveBack(_pos, SCORE__TX);
+			if(screen_width < 55)
+				_PrintSpacesOrMoveBack(10, SCORE__TX);
+			else
+				_PrintSpacesOrMoveBack(13, SCORE__TX);
 			print status_field_1;
 #Ifnot;
 	! Show score + moves
-			if (p_width > 66) {
+			if (screen_width > 66) {
 				! Width is 67-, print "Score: 0 Moves: 0"
 				_PrintSpacesOrMoveBack(28, SCORE__TX);
 				print status_field_1;
 				_PrintSpacesOrMoveBack(14, MOVES__TX);
 			} else {
-				if (p_width > 36) {
+				if (screen_width > 36) {
 					! Width is 37-66, print "Score: 0/0"
 					_PrintSpacesOrMoveBack(15, SCORE__TX);
 				} else {
@@ -234,7 +234,7 @@ Constant ONE_SPACE_STRING = " ";
 #Endif;
 ];
 
-[ DrawStatusLine _width _visibility_ceiling;
+[ DrawStatusLine _visibility_ceiling;
 	! For wide screens (67+ columns):
 	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right.
 	! * Room names up to 39 characters are never truncated.
@@ -247,36 +247,34 @@ Constant ONE_SPACE_STRING = " ";
 	if (location == nothing || parent(player) == nothing)
 		return;
 
-	_width = HDR_SCREENWCHARS->0;
-
 	_StatusLineHeight(statusline_height);
 	_MoveCursor(1, 1); ! This also sets the upper window as active.
-	if(_width > 66) @print_char ' ';
+	if(screen_width > 66) @print_char ' ';
 
 	_visibility_ceiling = ScopeCeiling(player);
 ! print (object) _visibility_ceiling;
 #Ifdef OPTIONAL_NO_DARKNESS;
 	if (_visibility_ceiling == location)
-		_PrintObjName(location); ! If it's light, location == real_location
-else
-	print (The) _visibility_ceiling;
+		PrintShortName(location); ! If it's light, location == real_location
+	else
+		print (The) _visibility_ceiling;
 #Ifnot;
 	if (location == thedark || _visibility_ceiling == location)
-		_PrintObjName(location); ! If it's light, location == real_location
-else
-	print (The) _visibility_ceiling;
+		PrintShortName(location); ! If it's light, location == real_location
+	else
+		print (The) _visibility_ceiling;
 #Endif;
 
 #Ifdef STATUSLINE_TIME;
-	_PrintStatusLineTime(_width);
+	_PrintStatusLineTime();
 #Ifnot;
 	#Ifdef STATUSLINE_SCORE;
-		_PrintStatusLineScore(_width);
+		_PrintStatusLineScore();
 	#Ifnot;
 		if (sys_statusline_flag) {
-			_PrintStatusLineTime(_width);
+			_PrintStatusLineTime();
 		} else {
-			_PrintStatusLineScore(_width);
+			_PrintStatusLineScore();
 		}
 	#Endif;
 #Endif;
@@ -2159,6 +2157,9 @@ Object thedark "Darkness"
 #Ifnot;
 [ main _i _j _copylength _sentencelength _parsearraylength _score _again_saved _parser_oops _disallow_complex_again;
 #Endif;
+#IfV5;
+	screen_width = HDR_SCREENWCHARS->0;
+#EndIf;
 	dict_start = HDR_DICTIONARY-->0;
 	dict_entry_size = dict_start->(dict_start->0 + 1);
 	dict_start = dict_start + dict_start->0 + 4;
@@ -2216,6 +2217,9 @@ Object thedark "Darkness"
 #Ifdef DEBUG_TIMER;
 	timer1 = 0-->2;
 #Endif;
+#IfV5;
+		screen_width = HDR_SCREENWCHARS->0;
+#EndIf;
 
 		_UpdateScoreOrTime();
 		if(_sentencelength > 0) @new_line;

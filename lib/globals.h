@@ -539,6 +539,7 @@ Global timer1 = 0;
 Global timer2 = 0;
 #EndIf;
 #IfV5;
+Global screen_width;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
 Global statuswin_current     = false;
