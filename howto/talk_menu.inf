@@ -69,9 +69,26 @@ Constant FLAG_COUNT 48;
 Include "ext_flags.h";
 
 Constant TM_FIRST_ID 300;
-Constant TM_MSG_TALK_ABOUT_WHAT "Whadda ya wanna talk about?";
+
+! We can customize the messages printed by talk_menu, using either strings or routines.
+
+Constant TM_MSG_NO_TOPICS "Now? You have no idea what to talk about.";
+Constant TM_MSG_TALK_ABOUT_WHAT "What would you like to talk about?";
+Constant TM_MSG_TOPICS_DEPLETED "With that, the conversation comes to a natural end.";
+! The routine for TM_MSG_EXIT uses a glboal defined by ext_talk_menu, so it 
+! has to be defined *after* including the extension, but we need to define the
+! constant *before* including the extension. This is how we do it.
+Constant TM_MSG_EXIT = TM_MSG_EXIT_Routine;
+Constant TM_MSG_EXIT_OPTION "[ENTER] Bye for now";
+Constant TM_MSG_PAGE_OPTION "[N] More topics";
 
 Include "ext_talk_menu.h"; ! Requires ext_flags.h *IF* you set flags
+
+[ TM_MSG_EXIT_Routine;
+	if(current_talker == Linda)
+		"~Excuse me Linda, I really need to go. I hope to catch up with you later!~";
+	"With a brief nod, you thank ", (the) current_talker, " for the conversation.";
+];
 
 !Include "ext_quote_box.h";
 !Include "ext_cheap_scenery.h";

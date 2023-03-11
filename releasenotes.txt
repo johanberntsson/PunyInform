@@ -1,8 +1,16 @@
 Upcoming release:
 
-- Replace some veneer routines with shorter versions (optimized and not 
+- Replaced some veneer routines with shorter versions (optimized and not 
   printing error messages) when building a game without DEBUG or Strict mode,
   and with RUNTIME_ERRORS set to 0.
+- Optimized DrawStatusline, making it 9% faster and a few bytes smaller.
+- Minor optimization in parser, making it a little faster and smaller.
+- Fixed serious bug in talk menu extension - if you specified a routine to be
+  run if a certain option was selected, and the story file was larger than 
+  half the maximum story file size for the Z-code version, it would result
+  in runtime errors.
+- Extended howto/talk_menu.inf to demostrate how to customize the messages
+  printed by the talk_menu extension.
 
 =======
 v4.3: bug fix and new feature release (2 February 2023)

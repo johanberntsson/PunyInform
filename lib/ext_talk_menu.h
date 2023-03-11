@@ -554,21 +554,23 @@ Array TenDashes -> "----------";
 			break;
 		}
 
-		if(_val < 30) {
-			! A relative reference to a topic to activate
-			ActivateTopic(p_npc, _val, _j);
-		}
-		#Ifdef EXT_FLAGS;
-		if(_val < TM_FIRST_ID) {
-			! A flag to set
-			SetFlag(_val);
-			continue;
-		}
-		#Endif;
-		if(_val <= TM_LAST_ID) {
-			! An absolute ID for a topic to activate
-			ActivateTopic(p_npc, _val);
-			continue;
+		if(_val > 0) {
+			if(_val < 30) {
+				! A relative reference to a topic to activate
+				ActivateTopic(p_npc, _val, _j);
+			}
+			#Ifdef EXT_FLAGS;
+			if(_val < TM_FIRST_ID) {
+				! A flag to set
+				SetFlag(_val);
+				continue;
+			}
+			#Endif;
+			if(_val <= TM_LAST_ID) {
+				! An absolute ID for a topic to activate
+				ActivateTopic(p_npc, _val);
+				continue;
+			}
 		}
 		#Ifdef DEBUG;
 			#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
