@@ -300,7 +300,7 @@ Global talk_menu_talking = false;
 
 
 #Ifv5;
-Array TenDashes -> "----------";
+Array TenDashes static -> "----------";
 [ FastDashes p_dashes;
 	while(p_dashes > 10) {
 		@print_table TenDashes 10 1;
