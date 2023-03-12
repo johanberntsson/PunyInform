@@ -54,9 +54,9 @@ Include "globals.h";
 
 ! Define your attributes, common properties and global variables here, if any
 Constant FLAG_COUNT = 100;
-Constant FLAG1 = 1;
-Constant FLAG2 = 2;
-Constant FLAG3 = 3;
+Constant FLAG1 = 7;
+Constant FLAG2 = 8;
+Constant FLAG3 = 15;
 
 ! Define the entry point routines you need here, like Amusing, DarkToDark etc.
 
@@ -99,6 +99,8 @@ Object Library "The Library"
             if(FlagIsClear(FLAG3,FLAG1)) print "Pass"; else print "Err";
             if(FlagIsSet(FLAG1,FLAG3)) print "Err"; else print "Pass";
             if(FlagIsClear(FLAG2,FLAG1,FLAG3)) print "Pass"; else print "Err";
+            if(FlagIsSet(100)) print "Err"; else print "Pass";
+            if(FlagIsSet(101)) print "Err"; else print "Pass";
             "";
         ],
 	;
