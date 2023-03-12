@@ -50,6 +50,7 @@ Constant RTE_VERBOSE = 2;
 Constant TM_NOT_PUNY;
 #Endif;
 
+#Ifv3;
 Array flag_powers static ->
 	$$00000001
 	$$00000010
@@ -59,11 +60,12 @@ Array flag_powers static ->
 	$$00100000
 	$$01000000
 	$$10000000;
+#Endif;
 
 Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-[ VerifyFlag p_x;
+[ IncorrectFlagNumber p_x;
 #Ifdef DEBUG;
 		if(p_x == 0) {
 	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
@@ -81,45 +83,55 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 		"ERROR: Flags #1!";
 #Endif;
 	}
+	rfalse;
 ];
 #Endif;
 
 [ SetFlag p_x p_y p_z _val;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-	VerifyFlag(p_x);
+	if(IncorrectFlagNumber(p_x)) rfalse;
 #Endif;
 #IfV5;
 	@log_shift p_x (-3) -> _val;
+	p_x = p_x & 7;
+	@log_shift 1 p_x -> p_x;
+	game_flags -> _val = game_flags -> _val | p_x;
 #IfNot;
 	_val = p_x / 8;
-#EndIf;
 	game_flags -> _val = game_flags -> _val | flag_powers -> (p_x & 7);
+#EndIf;
 	if(p_y) SetFlag(p_y, p_z);
 ];
 
 [ ClearFlag p_x p_y p_z _val;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-	VerifyFlag(p_x);
+	if(IncorrectFlagNumber(p_x)) rfalse;
 #Endif;
 #IfV5;
 	@log_shift p_x (-3) -> _val;
+	p_x = p_x & 7;
+	@log_shift 1 p_x -> p_x;
+	game_flags -> _val = game_flags -> _val & ~ p_x;
 #IfNot;
 	_val = p_x / 8;
-#EndIf;
 	game_flags -> _val = game_flags -> _val & ~ flag_powers -> (p_x & 7);
+#EndIf;
 	if(p_y) ClearFlag(p_y, p_z);
 ];
 
 [ FlagIsSet p_x p_y p_z _val;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-	VerifyFlag(p_x);
+	if(IncorrectFlagNumber(p_x)) rfalse;
 #Endif;
 #IfV5;
 	@log_shift p_x (-3) -> _val;
+	p_x = p_x & 7;
+	@log_shift 1 p_x -> p_x;
+	_val = game_flags -> _val & p_x;
 #IfNot;
 	_val = p_x / 8;
-#EndIf;
 	_val = game_flags -> _val & flag_powers -> (p_x & 7);
+#EndIf;
 	if(_val == 0) rfalse;
 	if(p_y) return FlagIsSet(p_y, p_z);
 	rtrue;
@@ -127,14 +139,17 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 
 [ FlagIsClear p_x p_y p_z _val;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-	VerifyFlag(p_x);
+	if(IncorrectFlagNumber(p_x)) rfalse;
 #Endif;
 #IfV5;
 	@log_shift p_x (-3) -> _val;
+	p_x = p_x & 7;
+	@log_shift 1 p_x -> p_x;
+	_val = game_flags -> _val & p_x;
 #IfNot;
 	_val = p_x / 8;
-#EndIf;
 	_val = game_flags -> _val & flag_powers -> (p_x & 7);
+#EndIf;
 	if(_val) rfalse;
 	if(p_y) return FlagIsClear(p_y, p_z);
 	rtrue;
