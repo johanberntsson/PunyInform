@@ -1,0 +1,110 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+
+Constant Story      "Flags";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+! Uncomment ONE of the two following lines, to show either time or score/turns
+! Leaving both commented out makes the library bigger.
+!Constant STATUSLINE_TIME; Statusline time;
+Constant STATUSLINE_SCORE; Statusline score;
+
+! Comment out to keep track of score
+! The value is what will be shown as the score on statusline in z3
+Constant NO_SCORE = 0;
+
+! Customize the statusline in z5+ (will have no effect in z3)
+!Constant OPTIONAL_SL_NO_SCORE;
+!Constant OPTIONAL_SL_NO_MOVES;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+!Constant DIALECT_US ! Affects OPTIONAL_ENGLISH_NUMBER
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
+!Constant OPTIONAL_NO_DARKNESS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FLEXIBLE_INVENTORY;
+!Constant OPTIONAL_LANGUAGE_NUMBER;
+!Constant OPTIONAL_LIST_TOGETHER;
+!Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
+!Constant OPTIONAL_SCORED;
+!Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_SIMPLE_DOORS;
+!Constant OPTIONAL_SHIP_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant OPTIONAL_MANUAL_REACTIVE;
+!Constant OPTIONAL_ORDERED_TIMERS;
+!Constant OPTIONAL_PROVIDE_UNDO;
+!Constant OPTIONAL_REACTIVE_PARSE_NAME;
+Constant RUNTIME_ERRORS = 2; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
+! MAX_CARRIED, SACK_OBJECT,  etc.
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+! Define your attributes, common properties and global variables here, if any
+Constant FLAG_COUNT = 100;
+Constant FLAG1 = 1;
+Constant FLAG2 = 2;
+Constant FLAG3 = 3;
+
+! Define the entry point routines you need here, like Amusing, DarkToDark etc.
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+Include "ext_flags.h";
+!Include "ext_talk_menu.h"; ! Note: Also include ext_flags.h to allow use of flags
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+Include "puny.h";
+
+! Uncomment to add PunyLib extensions
+!Include "ext_waittime.h";
+
+Object Library "The Library"
+	with
+        description "You are in a library.",
+        before [;
+        Listen:
+            ClearFlag(FLAG1, FLAG2, FLAG3);
+            SetFlag(FLAG2);
+            if(FlagIsSet(FLAG1)) print "Err"; else print "Pass";
+            if(FlagIsClear(FLAG2)) print "Err"; else print "Pass";
+            if(FlagIsSet(FLAG3)) print "Err"; else print "Pass";
+            if(FlagIsSet(FLAG1,FLAG2)) print "Err"; else print "Pass";
+            if(FlagIsSet(FLAG2,FLAG3)) print "Err"; else print "Pass";
+            if(FlagIsClear(FLAG1,FLAG3)) print "Pass"; else print "Err";
+            SetFlag(FLAG2,FLAG3);
+            if(FlagIsSet(FLAG1)) print "Err"; else print "Pass";
+            if(FlagIsClear(FLAG2)) print "Err"; else print "Pass";
+            if(FlagIsClear(FLAG3)) print "Err"; else print "Pass";
+            if(FlagIsSet(FLAG1,FLAG2)) print "Err"; else print "Pass";
+            if(FlagIsSet(FLAG2,FLAG3)) print "Pass"; else print "Err";
+            if(FlagIsClear(FLAG1,FLAG3)) print "Err"; else print "Pass";
+            ClearFlag(FLAG1,FLAG2,FLAG3);
+            if(FlagIsSet(FLAG1)) print "Err"; else print "Pass";
+            if(FlagIsClear(FLAG2)) print "Pass"; else print "Err";
+            if(FlagIsClear(FLAG3)) print "Pass"; else print "Err";
+            if(FlagIsClear(FLAG3,FLAG1)) print "Pass"; else print "Err";
+            if(FlagIsSet(FLAG1,FLAG3)) print "Err"; else print "Pass";
+            if(FlagIsClear(FLAG2,FLAG1,FLAG3)) print "Pass"; else print "Err";
+            "";
+        ],
+	;
+
+
+[Initialise;
+
+];
+
