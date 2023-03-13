@@ -2230,7 +2230,7 @@ Object thedark "Darkness"
 #Endif;
 #Ifdef DEBUG_TIMER;
 	timer1 = 0-->2 - timer1;
-	print "[Before ReadPlayerInput took ",timer1," jiffies]^";
+	print "[Before ReadPlayerInput: ",timer1," jf]^";
 #Endif;
 		if(parse->1 == 0) {
 			_ReadPlayerInput();
@@ -2261,7 +2261,7 @@ Object thedark "Darkness"
 		_sentencelength = _ParseAndPerformAction();
 #Ifdef DEBUG_TIMER;
 		timer1 = 0-->2 - timer1;
-		print "[ParseAndPerformAction took ",timer1," jiffies]^";
+		print "[ParseAndPerformAction: ",timer1," jf]^";
 		timer1 = 0-->2;
 #Endif;
 		if(action == ##OopsCorrection) {
@@ -2340,7 +2340,7 @@ Object thedark "Darkness"
 		}
 #Ifdef DEBUG_TIMER;
 	timer1 = 0-->2 - timer1;
-	print "[After ParseAndPerformAction took ",timer1," jiffies]^";
+	print "[After ParseAndPerformAction: ",timer1," jf]^";
 #Endif;
 		continue;
 ._abort_current_input;
