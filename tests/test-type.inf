@@ -1,0 +1,93 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+! The very first lines of the main source code file for a game can
+! contain compiler options, like the lines above. -~S disables
+! strict error checking. This is otherwise used in z5 and z8 games by
+! default. While useful for debugging, it adds ~10 KB to the story file
+! size and it makes the game slower.
+! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
+! aren't used. This can save some space.
+! $ZCODE_LESS_DICT_DATA=1 removes an empty data byte for every dictionary word.
+
+Constant Story      "Minimal";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+! Uncomment ONE of the two following lines, to show either time or score/turns
+! Leaving both commented out makes the library bigger.
+!Constant STATUSLINE_TIME; Statusline time;
+Constant STATUSLINE_SCORE; Statusline score;
+
+! Comment out to keep track of score
+! The value is what will be shown as the score on statusline in z3
+Constant NO_SCORE = 0;
+
+! Customize the statusline in z5+ (will have no effect in z3)
+!Constant OPTIONAL_SL_NO_SCORE;
+!Constant OPTIONAL_SL_NO_MOVES;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
+Constant OPTIONAL_NO_DARKNESS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FLEXIBLE_INVENTORY;
+!Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
+!Constant OPTIONAL_SCORED;
+!Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_SIMPLE_DOORS;
+!Constant OPTIONAL_SHIP_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant OPTIONAL_MANUAL_REACTIVE;
+!Constant OPTIONAL_ORDERED_TIMERS;
+!Constant OPTIONAL_PROVIDE_UNDO;
+!Constant OPTIONAL_REACTIVE_PARSE_NAME;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
+! MAX_CARRIED, SACK_OBJECT,  etc.
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+! Define your attributes, common properties and global variables here, if any
+
+! Define the entry point routines you need here, like Amusing, DarkToDark etc.
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_talk_menu.h"; ! Note: Also include ext_flags.h to allow use of flags
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+Include "puny.h";
+
+! Uncomment to add PunyLib extensions
+!Include "ext_waittime.h";
+
+Object Library "The Library"
+	with
+		description "You are in a library.";
+
+Object -> Box "box"
+	with
+		name 'box',
+		inside_description "It feels so nice, standing in the box.",
+	has container open openable enterable;
+
+[Initialise;
+	print "^^And so the story begins...^^";
+];
+
+[ TypeSub;
+];
+
+Verb 'type' * special 'into'/'in' noun -> Type;
