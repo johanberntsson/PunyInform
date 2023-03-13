@@ -16,6 +16,7 @@ Upcoming release:
   if(FlagIsSet(F_BOB, F_STEVE, F_LINDA)) returns true if all three flags are
   set. To make this work, flag number 0 has been deprecated. Old code using
   flag 0 will still work, but will produce a warning in debug mode.
+- Fixed a bug in _PrintPatternSyntax to handle patterns with routine calls
 
 =======
 v4.3: bug fix and new feature release (2 February 2023)
