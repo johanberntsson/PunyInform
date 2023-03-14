@@ -185,7 +185,7 @@ System_file;
 
 	if(scope_copy_actor ~= p_actor) {
 #IfV5;
-		_i = scope_objects * 2;
+		@log_shift scope_objects 1 -> _i; ! _i = scope_objects * 2
 		@copy_table scope scope_copy _i;
 #IfNot;
 		if(scope_objects) {
