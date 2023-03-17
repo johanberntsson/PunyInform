@@ -1,4 +1,4 @@
-v4.4: bug fix and new feature release (18 Mars 2023)
+v4.4: bug fix and new feature release (18 March 2023)
 
 - Replaced some veneer routines with shorter versions (optimized and not 
   printing error messages) when building a game without DEBUG or Strict mode,
