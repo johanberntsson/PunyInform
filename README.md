@@ -103,8 +103,8 @@ most out of the z3 format, and authors who want to do everything to
 deliver the best possible player experience on 8-bit computers.
 
 The QuickRef document is an index of all constants, variables, routines
-etc that you need to know about as an author. It's not meant to teach
-new author's but to provide a very brief documentation of the library
+etc that you need to know about as an author. It's not meant to be a learning
+resource for new authors, but to provide a very brief documentation
 for authors who are reasonably aquainted with the library.
 
 As you start trying out examples, or start writing your own game, and
@@ -164,7 +164,7 @@ The biggest differences between the standard library and PunyInform are:
 
 ## Games Using PunyInform
 
-40+ games using Inform have been released. You can find just about all of them
+40+ PunyInform games have been released. You can find just about all of them
 in this [list of PunyInform games](https://ifdb.org/search?searchfor=tag%3Apunyinform&sortby=&pg=all).
 
 If you want to see the source code of PunyInform games, you should look at
@@ -226,8 +226,8 @@ for your game.
 
 ## Credits
 
-PunyInform was conceived and designed by Johan Berntsson and Fredrik
-Ramsberg. Coding by Johan Berntsson and Fredrik Ramsberg. 
+PunyInform was conceived, designed and coded by Johan Berntsson and Fredrik
+Ramsberg. 
 
 Additional coding by Pablo Martinez and Tomas Öberg. PunyInform includes 
 code from the Inform 6 standard library, by Graham Nelson. 
