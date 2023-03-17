@@ -1,7 +1,5 @@
 # PunyInform
 
-**BREAKING NEWS: Join us for [PunyJam #3](https://itch.io/jam/punyjam-3) 3 Feb to 26 Feb 2023. Newbies and veterans are welcome!**
-
 PunyInform is a library written in Inform 6 which allows people to
 create text adventure games / interactive fiction using the Z-machine
 virtual machine, to be played on 8-bit computers as well as newer
@@ -40,7 +38,7 @@ target is to make it suitable for games on the Commodore 64 using
 
 ## Status
 
-PunyInform is fully working and has been used for multiple games. We
+PunyInform is fully working and has been used to write several games. We
 carefully add and change features and fix bugs as they are found. Please
 check releasenotes.txt for more details.
 
@@ -56,7 +54,9 @@ There is also a Game Author's Guide (under Documentation) with various
 tips for authors writing a game using PunyInform. It's not intended to
 teach the entire library, but more to give some tips you may find useful
 when you have a working knowledge of the library and you've started
-developing a game which you think you will release.
+developing a game which you think you will release. All but the chapter on
+optimization is really required reading for all authors planning to release
+a game.
 
 You can see what tasks we're currently working on, tasks we've done and
 tasks coming up on our Trello board:
@@ -86,6 +86,26 @@ Inform Designer's Manual, 4th Edition, or DM4 for short (see links
 above). You can assume that everything in it also goes for PunyInform
 (but read the short list stating the biggest differences just below the
 next paragraph!).
+
+Additionally, there are two more important documents in the PunyInform 
+distribution:
+
+* **PunyInform Game Author's Guide:
+  [PDF version](https://github.com/johanberntsson/PunyInform/tree/master/documentation)**
+
+* **PunyInform QuickRef document:
+  [PDF version](https://github.com/johanberntsson/PunyInform/tree/master/documentation)**
+
+The Game Author's Guide lists some concepts that are often overlooked by new 
+authors, leading to games with errors and problems. There's also a chapter
+on optimization, which is very useful for authors trying to squeeze the
+most out of the z3 format, and authors who want to do everything to
+deliver the best possible player experience on 8-bit computers.
+
+The QuickRef document is an index of all constants, variables, routines
+etc that you need to know about as an author. It's not meant to teach
+new author's but to provide a very brief documentation of the library
+for authors who are reasonably aquainted with the library.
 
 As you start trying out examples, or start writing your own game, and
 there's something which you don't get to work, you should check the
@@ -144,66 +164,13 @@ The biggest differences between the standard library and PunyInform are:
 
 ## Games Using PunyInform
 
-These games are known to use PunyInform:
+40+ games using Inform have been released. You can find just about all of them
+in this [list of PunyInform games](https://ifdb.org/search?searchfor=tag%3Apunyinform&sortby=&pg=all).
 
-* [Tristam Island](https://hlabrande.itch.io/tristam-island), by Hugo Labrande.
+If you want to see the source code of PunyInform games, you should look at
+the [list of PunyInform games which provide source code](https://ifdb.org/search?searchfor=tag:PunyInform%20source%20available&pg=all). 
 
-* [Calypso](http://microheaven.com/ozmoo/games/calypso/calypso.z3)
-  ([src](https://github.com/dave-f/calypso)), by Dave Footitt
-
-* [Behind Closed Doors 9B](http://www.zenobi.co.uk/2020/07/punyinfom-enters-fray.html),
-  by John Wilson.
-
-* [Alien Research Centre 3](https://ifdb.tads.org/viewgame?id=cf9x7zhfnohedim),
-  by John Wilson.
-
-* [Return to the Castle](https://ifdb.tads.org/viewgame?id=5bo8vhrguyr1d11s),
-  by John Wilson.
-
-* [The Fishing-Trip - Brown Trout and Goblins](https://ifdb.tads.org/viewgame?id=fqhoqlh01ex5wwvo),
-  by John Wilson.
-
-* [Ghost Mountain](https://compdelta.itch.io/ghost-mountain), by Michael Cox.
-
-* [Hibernated 1, Director's Cut](https://8bitgames.itch.io/hibernated1), by Stefan Vogt.
-
-* [Craverly Heights](https://github.com/johanberntsson/Craverly-Heights_PunyInform), ported by Johan Berntsson from the original game written by Ryan Veeder.
-
-* [Captain Cutter's Treasure](https://warrigal.itch.io/captain-cutters-treasure), by Garry Francis.
-
-* [Djinn on the Rocks](https://captainedgecase.itch.io/djinn-on-the-rocks), by Joshua Wilson.
-
-* [Pub Hubbub](https://christopherdrum.itch.io/pub-hubbub), by Christopher Drum.
-
-* [Death Number 4](https://themeteorstorm.itch.io/deathnumber4), by Dave Footitt.
-
-* [Pub Adventure](https://electrotrains.itch.io/pub-adventure), by Tom and Robin Edwards.
-
-* [Closet of Mystery](https://compdelta.itch.io/closet-of-mystery), by Michael Cox.
-
-* [Arthur's day out](https://waulok.itch.io/arthurs-day-out), by Jason Oakley.
-
-* [Buccaneer's Cache](https://frodewin.itch.io/buccaneers-cache), by Wilfried Elmenreich.
-
-* [The Job](https://fredrikr.itch.io/the-job), by Fredrik Ramsberg.
-
-* [Morris](https://dee-cooke.itch.io/morris), by Dee Cooke.
-
-* [A Once in a Lifetime Opportunity](https://interpied.itch.io/opportunity), by Interpied.
-
-* [Face Your Fears](https://sijnstra.itch.io/face-your-fears), by Shawn Sijnstra.
-
-* [Carpathian Vampire](https://warrigal.itch.io/carpathian-vampire), by Garry Francis.
-
-* [Alchemist's Gold](https://warrigal.itch.io/alchemists-gold), by Garry Francis.
-
-* [Kenny Koala's Bushfire Survival Plan](https://warrigal.itch.io/kenny-koala), by Garry Francis.
-
-* [Never Ending Story](https://csdb.dk/release/?id=224111&show=summary), by Parcaran.
-
-* [Construction Cancellation Order](https://royerson.itch.io/construction-cancellation-order-if), by Royerson.
-
-All of these games can be downloaded from the links above. Many of them
+Most of these games can be downloaded from the links above. Many of them
 are also available at [Ozmoo Online](http://microheaven.com/ozmooonline/)
 where you can create disk images for Commodore C64, C128, Plus/4 and MEGA65.
 
@@ -260,9 +227,12 @@ for your game.
 ## Credits
 
 PunyInform was conceived and designed by Johan Berntsson and Fredrik
-Ramsberg. Coding by Johan Berntsson, Fredrik Ramsberg, Pablo Martinez
-and Tomas Öberg. Includes code from the Inform 6 standard library, by
-Graham Nelson. Thanks to Stefan Vogt, Jason Compton, John Wilson, Hugo
+Ramsberg. Coding by Johan Berntsson and Fredrik Ramsberg. 
+
+Additional coding by Pablo Martinez and Tomas Öberg. PunyInform includes 
+code from the Inform 6 standard library, by Graham Nelson. 
+
+Thanks to Stefan Vogt, Jason Compton, John Wilson, Hugo
 Labrande, Richard Fairweather, Adam Sommerfield, auraes, Hannesss and
 Garry Francis for issue reporting, advice, testing, code contributions 
 and promotion. Thanks to David Kinder and Andrew Plotkin for helping 
