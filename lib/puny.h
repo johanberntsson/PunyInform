@@ -863,6 +863,7 @@ Constant ONE_SPACE_STRING = " ";
 	! It's not certain that scope has been modified, but PlayerTo relies on it
 	! being set.
 	scope_modified = true;
+!	print "MFO done!^";
 ];
 
 [ CalculateVisibilityCeiling;
@@ -983,33 +984,6 @@ Include "parser.h";
 	return _ret_val;
 ];
 
-[ RunEachTurn _i _obj _scope_count _max;
-	! Run all each_turn routines for location and all objects in scope.
-#IfDef DEBUG;
-#IfV3;
-	if(debug_flag & 1 && location has reactive && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
-#EndIf;
-#EndIf;
-	_scope_count = GetScopeCopy();
-	RunRoutines(location, each_turn);
-
-	if(_scope_count) {
-		_max = _scope_count - 1;
-._each_turn_next_item;
-		if(deadflag >= GS_DEAD) rtrue;
-		_obj = scope_copy-->_i;
-		if(_obj has reactive && _obj.&each_turn ~= 0) {
-#IfDef DEBUG;
-#IfV3;
-			if(debug_flag & 1) print "(", (name) _obj, ").each_turn()^";
-#EndIf;
-#EndIf;
-			RunRoutines(_obj, each_turn);
-		}
-		@inc_chk _i _max ?~_each_turn_next_item;
-	}
-];
-
 [ _NoteObjectAcquisitions _i;
 	objectloop(_i in player) {
 		if(_i hasnt moved) {
@@ -1026,10 +1000,70 @@ Include "parser.h";
 	}
 ];
 
-[ BeforeRoutines _i _obj _scope_count _max;
-	! react_before - Loops over the scope to find possible react_before routines
-	! to run in each object, if it's found stop the action by returning true
-	_scope_count = GetScopeCopy();
+
+[ _RunReact p_property p_break _i _obj _max _any;
+
+	! Loop over the scope to find possible react_before/after routines
+	! to run in each object. Return:
+	! * false if no routines were found
+	! * true if routines were found, p_break was true, and a routine didn't return false
+	! * Otherwise:
+	!    * if OPTIONAL_MANUAL_SCOPE_BOOST is defined, return 2
+	!    * if not, return false
+
+	if(scope_copy_objects == 0) rfalse;
+	_max = scope_copy_objects - 1;
+._RunReactNext;
+	_obj = scope_copy-->_i;
+	if (_obj has reactive && _obj.&p_property ~= 0 && ( _obj.#p_property > 2 || _obj.p_property ~= NULL or 0)) {
+#Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
+		_any = 2;
+#EndIf;
+#IfDef DEBUG;
+#IfV3;
+		if(debug_flag & 1) print "(", (name) _obj, ").",(property) p_property,"()^";
+#EndIf;
+#EndIf;
+		if(RunRoutines(_obj, p_property) && p_break) {
+			rtrue;
+		}
+	}
+	@inc_chk _i _max ?~_RunReactNext;
+	return _any;
+];
+
+[ RunEachTurn;
+	! Run all each_turn routines for location and all objects in scope.
+
+	GetScopeCopy(); ! later used by _RunReact
+
+#IfDef DEBUG;
+#IfV3;
+	if(debug_flag & 1 && location has reactive && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
+#EndIf;
+#EndIf;
+	RunRoutines(location, each_turn);
+
+#Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
+
+#Ifdef DEBUG_MANUAL_SCOPE_BOOST;
+	if(each_turn_in_scope == false)
+		print "SKIPPING EACH_TURN^";
+	else
+		print "PERFORMING EACH_TURN^";
+#EndIf;
+
+	if(each_turn_in_scope == false) rtrue;
+	each_turn_in_scope = _RunReact(each_turn);
+#Ifnot;
+	_RunReact(each_turn);
+#Endif;
+];
+
+[ BeforeRoutines;
+
+	GetScopeCopy(); ! later used by _RunReact
+
 #IfDef GamePreRoutine;
 #IfDef DEBUG;
 #IfV3;
@@ -1046,22 +1080,23 @@ Include "parser.h";
 #EndIf;
 	if(RunRoutines(player, orders)) rtrue;
 
-	if(_scope_count) {
-		_max = _scope_count - 1;
-._react_before_next_item;
-		_obj = scope_copy-->_i;
-		if (_obj has reactive && _obj.&react_before ~= 0) {
-#IfDef DEBUG;
-#IfV3;
-			if(debug_flag & 1) print "(", (name) _obj, ").react_before()^";
+#Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
+
+#Ifdef DEBUG_MANUAL_SCOPE_BOOST;
+	if(react_before_in_scope == false)
+		print "SKIPPING REACT_BEFORE^";
+	else
+		print "PERFORMING REACT_BEFORE^";
 #EndIf;
-#EndIf;
-			if(RunRoutines(_obj, react_before)) {
-				rtrue;
-			}
-		}
-		@inc_chk _i _max ?~_react_before_next_item;
+
+	if(react_before_in_scope) {
+		react_before_in_scope = _RunReact(react_before, true);
+		if(react_before_in_scope == true) rtrue;
 	}
+#Ifnot;
+	if(_RunReact(react_before, true) == true) rtrue;
+#Endif;
+
 #IfDef DEBUG;
 #IfV3;
 	if(debug_flag & 1) print "(", (name) real_location, ").before()^";
@@ -1083,25 +1118,29 @@ Include "parser.h";
 	rfalse;
 ];
 
-[ AfterRoutines _i _obj _scope_count _max;
+[ AfterRoutines;
 	! react_after - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
-	_scope_count = GetScopeCopy();
 
-	if(_scope_count) {
-		_max = _scope_count - 1;
-._react_after_next_item;
-		_obj = scope_copy-->_i;
-		if (_obj has reactive && _obj.&react_after ~= 0) {
-#IfDef DEBUG;
-#IfV3;
-			if(debug_flag & 1) print "(", (name) _obj, ").react_after()^";
+	GetScopeCopy(); ! later used by _RunReact
+
+#Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
+
+#Ifdef DEBUG_MANUAL_SCOPE_BOOST;
+	if(react_after_in_scope == false)
+		print "SKIPPING REACT_AFTER^";
+	else
+		print "PERFORMING REACT_AFTER^";
 #EndIf;
-#EndIf;
-			if(RunRoutines(_obj, react_after)) rtrue;
-		}
-		@inc_chk _i _max ?~_react_after_next_item;
+
+	if(react_after_in_scope) {
+		react_after_in_scope = _RunReact(react_after, true);
+		if(react_after_in_scope == true) rtrue;
 	}
+#Ifnot;
+	if(_RunReact(react_after, true) == true) rtrue;
+#Endif;
+
 #IfDef DEBUG;
 #IfV3;
 	if(debug_flag & 1) print "(", (name) real_location, ").after()^";

@@ -508,6 +508,8 @@ Global usual_grammar_after; ! needed for grammar property parsing
 Global deadflag;
 Global scope_modified;   ! true if daemons, each_turn etc has invalidated scope
 Global scope_objects;
+Global scope_copy_objects;
+Global scope_copy_actor = 0;
 Global scope_routine;    ! for scope=Routine grammar
 Global scope_stage;      ! for scope=Routine grammar: 1, 2 then 3
 Global keep_silent;
@@ -522,10 +524,14 @@ Global inventory_style = 1;
 Global inventory_stage;
 Global phase2_necessary;
 Global receive_action;
-Global scope_copy_actor = 0;
 Global run_after_routines_msg;
 Global run_after_routines_arg_1;
 Global no_implicit_actions;         ! Don't implicitly do things.
+#Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
+Global react_before_in_scope;
+Global react_after_in_scope;
+Global each_turn_in_scope;
+#Endif;
 
 Global dict_start;
 Global dict_entry_size;

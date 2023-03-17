@@ -17,6 +17,9 @@ Upcoming release:
   set. To make this work, flag number 0 has been deprecated. Old code using
   flag 0 will still work, but will produce a warning in debug mode.
 - Fixed a bug in _PrintPatternSyntax to handle patterns with routine calls
+- New optional feature OPTIONAL_MANUAL_SCOPE_BOOST, speeding up turns for
+  games with manual scope updates, where the player will often have many 
+  non-reactive objects in scope. More info in the manual. 
 
 =======
 v4.3: bug fix and new feature release (2 February 2023)

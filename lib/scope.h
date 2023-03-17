@@ -113,6 +113,17 @@ System_file;
 	_start_pos = ScopeCeiling(p_actor);
 	scope_objects = 0;
 
+#Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
+	if(p_actor == player) {
+#Ifdef DEBUG_MANUAL_SCOPE_BOOST;
+		print "UPDATING PLAYER SCOPE, RESET BOOST^";
+#EndIf;
+		react_before_in_scope = true;
+		react_after_in_scope = true;
+		each_turn_in_scope = true;
+	}
+#Endif;
+
 	if(scope_stage == 2) {
 		cached_scope_routine = scope_routine;
 		! call scope_routine to add objects, then abort if it returns true
@@ -197,7 +208,8 @@ System_file;
 #EndIf;
 		scope_copy_actor = p_actor;
 	}
-	return scope_objects;
+	scope_copy_objects = scope_objects;
+	return scope_copy_objects;
 ];
 
 [ ScopeCeiling p_actor p_stop_before _parent;
