@@ -568,7 +568,7 @@ Default MAX_WHICH_OBJECTS     10;
 Default MAX_MULTIPLE_OBJECTS  32;
 Default MAX_INPUT_CHARS       78;
 Default MAX_INPUT_WORDS       20;
-Default MAX_SCOPE             32;
+Default MAX_SCOPE             50;
 
 Global cached_scope_pov;        ! Whose POV the cached scope is from (usually the player)
 Global cached_scope_routine;    ! Which scope routine the cached scope is for

@@ -22,6 +22,7 @@ Upcoming release:
   non-reactive objects in scope. More info in the manual. 
 - Fixed a bug where a wide list would print "which contains is ..." for
   a container placed on a supporter.
+- Default value of MAX_SCOPE is changed from 32 to 50.
 
 =======
 v4.3: bug fix and new feature release (2 February 2023)
