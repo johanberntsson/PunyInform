@@ -1,0 +1,7 @@
+
+transcript
+
+look
+quit
+yes
+

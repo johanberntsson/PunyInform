@@ -1,6 +1,11 @@
 
-> type box
-I think you wanted to say "type something into something". Please try again.
+> type1 box
+I think you wanted to say "type1 something into something". Please try again.
+
+> type2 box
+I think you wanted to say "type2 something into something". Please try again.
+
+> type3 box in sdas
 
 > quit
 Are you sure you want to quit? yes

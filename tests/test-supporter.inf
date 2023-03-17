@@ -77,11 +77,20 @@ Object Library "The Library"
 	with
 		description "You are in a library.";
 
-Object -> Box "box"
+Object -> Table "table"
 	with
-		name 'box',
-		inside_description "It feels so nice, standing in the box.",
-	has container open openable enterable;
+		name 'table',
+	has supporter;
+
+Object -> -> BellJar "bell jar"
+	with
+		name 'belljar',
+	has container transparent;
+
+Object -> -> -> Celery "head of celery"
+	with
+		name 'celery',
+	;
 
 [Initialise;
 	print "^^And so the story begins...^^";
