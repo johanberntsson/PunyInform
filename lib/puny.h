@@ -439,6 +439,7 @@ Constant ONE_SPACE_STRING = " ";
 					print " (which is open)";
 				new_line;
 			}
+			c_style = c_style & ~ISARE_BIT;
 			PrintContentsFromR(0, child(p_obj));
 			if(c_style & NEWLINE_BIT == 0) {
 				print (char) ')';

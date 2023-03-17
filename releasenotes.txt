@@ -20,6 +20,8 @@ Upcoming release:
 - New optional feature OPTIONAL_MANUAL_SCOPE_BOOST, speeding up turns for
   games with manual scope updates, where the player will often have many 
   non-reactive objects in scope. More info in the manual. 
+- Fixed a bug where a wide list would print "which contains is ..." for
+  a container placed on a supporter.
 
 =======
 v4.3: bug fix and new feature release (2 February 2023)
