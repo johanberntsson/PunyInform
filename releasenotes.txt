@@ -23,6 +23,8 @@ Upcoming release:
 - Fixed a bug where a wide list would print "which contains is ..." for
   a container placed on a supporter.
 - Default value of MAX_SCOPE is changed from 32 to 50.
+- Game author's guide has been updated and content reordered. *Every* author
+  should read chapter 1-3.
 
 =======
 v4.3: bug fix and new feature release (2 February 2023)

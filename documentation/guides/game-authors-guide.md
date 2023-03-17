@@ -10,6 +10,14 @@ author: Written by Fredrik Ramsberg and Hugo Labrande
 This document is intended to provide some guidance as well as various
 tips and tricks for anyone writing a PunyInform game.
 
+The chapters _Testing & Debugging_ and _Before Release_ are essential 
+reading for anyone who intends to release a PunyInform game.
+
+The _Optimizations_ chapter is for when you see the need to make the
+game smaller and/or faster, typically because you want to make the game
+fit z3 limitations and/or because you want to provide the best possible
+user experience.
+
 # Testing & Debugging
 
 Here are some advice on finding and fixing problems in your game.
@@ -51,7 +59,8 @@ Consider saving a list of commands needed to play the game from start to
 finish. When playing on a modern interpreter for a modern OS, you can
 type _recording on_ to start saving all commands to a file, and
 _recording off_ to stop. To read a command file and execute all commands
-in it, type _replay_.
+in it, type _replay_. Note that you need to define 
+`OPTIONAL_EXTENDED_METAVERBS` in your game code to enable these commands.
 
 Having a command file like this makes it easy to check that it's still
 possible to win the game, whenever you have made changes. You can also
@@ -81,6 +90,127 @@ some forum, such as the one at https://intfiction.org/ .
 
 And of course, make sure you give credit to your testers, as well as
 others who have somehow helped out with your game.
+
+# Before release
+
+These are some tips you may find helpful when your game can be played
+from beginning to end, and you feel it's soon ready to be released to
+the public.
+
+## Create an IFID
+
+There's a standard for identifying text adventures, and it's part of The
+Treaty of Babel (See https://babel.ifarchive.org/ ). Each game gets an
+IFID - a unique identifier which can be used to look up data about the
+game. It's a good idea to include an IFID in your PunyInform game.
+Somewhere in your source code, you write a section like this:
+
+```
+Array UUID_ARRAY string "UUID://XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX//";
+#Ifdef UUID_ARRAY;#Endif;
+```
+
+Instead of all the Xs you put your unqique identifier consisting of the
+characters 0-9 and A-F, which you obtain from
+https://www.tads.org/ifidgen/ifidgen .
+
+The IFID remains the same when you release updated versions of your
+game. If the game is ported to a new system (say from PunyInform to
+Twine or Inform 7), it gets a new IFID. Also, if the game is translated
+to another language (say French), it gets a new IFID as well.
+
+## Set Release and Serial
+
+When you start developing a game, you don't need to set the Release
+number and Serial number. They will get reasonable defaults. As you
+release a game, you want to have control over these constants, as this
+helps identifying which version of the game is available at a certain
+web site, or which version a certain player is running when they
+encounter a bug. So, you add something like this near the top of your
+source code file:
+
+```
+Release 1;
+Serial "210131";
+```
+
+The recommended way to use the release number is to set it to 1 for the
+initial release, then increase it by one for each new release you make.
+The serial number is typically set to the date when the release is made,
+in the format YYMMDD.
+
+## Check limits
+
+PunyInform has a number of limits which have been set to reasonable
+values, but some games will need to raise some of these limits. Read
+about these limits at
+
+https://github.com/johanberntsson/PunyInform/wiki/Manual#parameters
+
+The limits which you have to be particulary careful with are:
+
+MAX_TIMERS (default 32): If there is any chance that there could be more
+than 32 timers or daemons active at the same time, raise this limit. If,
+on the other hand, you know that you only have say 3 daemons and no
+timers in your game, you can set MAX_TIMERS to 3 to save a bit of
+dynamic memory. Also search through any extensions you use to check that
+they're not using timers or daemons before you start lowering this
+limit.
+
+MAX_SCOPE (default 50): How many objects can be in scope at the same
+time. Imagine the player picking up all movable objects and placing them
+in the location with the most static objects. Add any actors, their
+possessions, the player's body parts if any, etc. MAX_SCOPE should be
+higher than this number of objects. If there's a situation in the game
+where MAX_SCOPE is too low for all objects that should be in scope, some
+objects will quietly be ignored, meaning some objects can't be
+referenced and if they have an each_turn routine it won't be executed.
+If the game has been compiled in debug mode, an error message is printed
+when this happens.
+
+## Check articles
+
+PunyInform has a simple mechanism for printing the indefinite article of
+an object:
+
+1. If the object has the `proper` attribute, its name is a proper name
+   (like "John") and it has no article.
+2. If the object has the `pluralname` attribute, the article is "some".
+3. Otherwise, the article is "a".
+
+This works well for most objects. However, sometimes you want to use a
+different article, such as "an" or "a bunch of" (Of course "a bunch of"
+isn't an article, strictly speaking, but we can use it as one in
+PunyInform.). To do this, you add the `article` property to the object,
+and give it a string or routine as its value. As object names are more
+often printed with their definite article, it's easy to miss that some
+objects may have the wrong indefinite article. Before you release your
+game, make sure you go through all your objects and check the articles.
+In particular:
+
+* Check that objects which start with a vowel sound (like airplane, egg
+  and umbrella but not unicorn) have article "an".
+
+* Check that plural objects either sound fine with the article "some",
+  or have another article specified. I.e. trousers may have article "a
+  pair of", bees may have article "a swarm of" etc.
+
+If you want to see the article of an object in action, compile the game
+in debug mode, _purloin_ the object and check your inventory.
+
+## Turn off DEBUG
+
+While the DEBUG mode is invaluable during development, make sure you
+turn it off when compiling a game for release, or it will allow players
+to cheat, plus it looks like a rather sloppy release. Note that when the
+game is compiled in DEBUG mode, a "D" is printed after the library
+verion when the game starts, like "PunyInform v4.4 D".
+
+Additionally, it's generally advicable to set `RUNTIME_ERRORS` to 0 when 
+making a proper release. This means the library will keep quiet about problems
+it spots which don't make the game crash. This makes the game file smaller
+and stops the library from breaking player immersion with complaints about
+programming errors.
 
 # Optimizations
 
@@ -385,6 +515,17 @@ Object Button "button"
   has static;
 ```
 
+### Consider using Manual Scope Boost
+
+This is another optimization for speed. In short, you define 
+`OPTIONAL_MANUAL_SCOPE_BOOST` and the library tries to avoid looking for
+`react_before`, `react_after` and `each_turn` routines to run, when there
+weren't any routines of a certain type last turn, and what's in scope 
+hasn't changed since then. See the full documentation for this feature at:
+
+https://github.com/johanberntsson/PunyInform/wiki/Manual#manual-scope-boost
+
+
 ### Use manual setting of reactive attribute
 
 This is an optimization you can perform to make your game start faster.
@@ -437,117 +578,3 @@ This makes dynamic memory smaller, which means save and restore get
 faster. Since static memory can also be swapped out, it means gameplay
 can be smoother in sections of the game where the arrays aren't used.
 
-# Before release
-
-These are some tips you may find helpful when your game can be played
-from beginning to end, and you feel it's soon ready to be released to
-the public.
-
-## Create an IFID
-
-There's a standard for identifying text adventures, and it's part of The
-Treaty of Babel (See https://babel.ifarchive.org/ ). Each game gets an
-IFID - a unique identifier which can be used to look up data about the
-game. It's a good idea to include an IFID in your PunyInform game.
-Somewhere in your source code, you write a section like this:
-
-```
-Array UUID_ARRAY string "UUID://XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX//";
-#Ifdef UUID_ARRAY;#Endif;
-```
-
-Instead of all the Xs you put your unqique identifier consisting of the
-characters 0-9 and A-F, which you obtain from
-https://www.tads.org/ifidgen/ifidgen .
-
-The IFID remains the same when you release updated versions of your
-game. If the game is ported to a new system (say from PunyInform to
-Twine or Inform 7), it gets a new IFID. Also, if the game is translated
-to another language (say French), it gets a new IFID as well.
-
-## Set Release and Serial
-
-When you start developing a game, you don't need to set the Release
-number and Serial number. They will get reasonable defaults. As you
-release a game, you want to have control over these constants, as this
-helps identifying which version of the game is available at a certain
-web site, or which version a certain player is running when they
-encounter a bug. So, you add something like this near the top of your
-source code file:
-
-```
-Release 1;
-Serial "210131";
-```
-
-The recommended way to use the release number is to set it to 1 for the
-initial release, then increase it by one for each new release you make.
-The serial number is typically set to the date when the release is made,
-in the format YYMMDD.
-
-## Check limits
-
-PunyInform has a number of limits which have been set to reasonable
-values, but some games will need to raise some of these limits. Read
-about these limits at
-
-https://github.com/johanberntsson/PunyInform/wiki/Manual#parameters
-
-The limits which you have to be particulary careful with are:
-
-MAX_TIMERS (default 32): If there is any chance that there could be more
-than 32 timers or daemons active at the same time, raise this limit. If,
-on the other hand, you know that you only have say 3 daemons and no
-timers in your game, you can set MAX_TIMERS to 3 to save a bit of
-dynamic memory. Also search through any extensions you use to check that
-they're not using timers or daemons before you start lowering this
-limit.
-
-MAX_SCOPE (default 32): How many objects can be in scope at the same
-time. Imagine the player picking up all movable objects and placing them
-in the location with the most static objects. Add any actors, their
-possessions, the player's body parts if any, etc. MAX_SCOPE should be
-higher than this number of objects. If there's a situation in the game
-where MAX_SCOPE is too low for all objects that should be in scope, some
-objects will quietly be ignored, meaning some objects can't be
-referenced and if they have an each_turn routine it won't be executed.
-If the game has been compiled in debug mode, an error message is printed
-when this happens.
-
-## Check articles
-
-PunyInform has a simple mechanism for printing the indefinite article of
-an object:
-
-1. If the object has the `proper` attribute, its name is a proper name
-   (like "John") and it has no article.
-2. If the object has the `pluralname` attribute, the article is "some".
-3. Otherwise, the article is "a".
-
-This works well for most objects. However, sometimes you want to use a
-different article, such as "an" or "a bunch of" (Of course "a bunch of"
-isn't an article, strictly speaking, but we can use it as one in
-PunyInform.). To do this, you add the `article` property to the object,
-and give it a string or routine as its value. As object names are more
-often printed with their definite article, it's easy to miss that some
-objects may have the wrong indefinite article. Before you release your
-game, make sure you go through all your objects and check the articles.
-In particular:
-
-* Check that objects which start with a vowel sound (like airplane, egg
-  and umbrella but not unicorn) have article "an".
-
-* Check that plural objects either sound fine with the article "some",
-  or have another article specified. I.e. trousers may have article "a
-  pair of", bees may have article "a swarm of" etc.
-
-If you want to see the article of an object in action, compile the game
-in debug mode, _purloin_ the object and check your inventory.
-
-## Turn off DEBUG
-
-While the DEBUG mode is invaluable during development, make sure you
-turn it off when compiling a game for release, or it will allow players
-to cheat, plus it looks like a rather sloppy release. Note that when the
-game is compiled in DEBUG mode, a "D" is printed after the library
-verion when the game starts, like "PunyInform v1.9 D".
