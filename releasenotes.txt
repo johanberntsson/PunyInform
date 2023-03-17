@@ -1,4 +1,4 @@
-Upcoming release:
+v4.4: bug fix and new feature release (18 Mars 2023)
 
 - Replaced some veneer routines with shorter versions (optimized and not 
   printing error messages) when building a game without DEBUG or Strict mode,
@@ -17,6 +17,8 @@ Upcoming release:
   set. To make this work, flag number 0 has been deprecated. Old code using
   flag 0 will still work, but will produce a warning in debug mode.
 - Fixed a bug in _PrintPatternSyntax to handle patterns with routine calls
+- Optimized code to run react_before, react_after and each_turn, making it
+  100+ bytes smaller.
 - New optional feature OPTIONAL_MANUAL_SCOPE_BOOST, speeding up turns for
   games with manual scope updates, where the player will often have many 
   non-reactive objects in scope. More info in the manual. 
