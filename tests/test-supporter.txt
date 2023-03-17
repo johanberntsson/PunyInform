@@ -3,8 +3,57 @@
 The Library
 You are in a library.
 
-You can see a table (on which is a bell jar (which is closed) (which contains a
-head of celery)) here.
+You can see a tray (on which are a plate, a bell jar (which is closed) (which
+contains a head of celery) and a spoon) here.
+
+> get tray
+Taken.
+
+> i
+You're carrying a tray (on which are a plate, a bell jar (which is closed)
+(which contains a head of celery) and a spoon).
+
+> i tall
+You're carrying:
+  a tray
+    a plate
+    a bell jar (which is closed)
+      a head of celery
+    a spoon
+
+> put tray in jar
+You can't put something inside itself.
+
+> get jar
+Taken.
+
+> put tray in jar
+You can't, since the bell jar is closed.
+
+> open jar
+You open the bell jar.
+
+> put tray in jar
+You put the tray into the bell jar.
+
+> i
+You're carrying:
+  a bell jar (which is open)
+    a tray
+      a plate
+      a spoon
+    a head of celery
+
+> i wide
+You're carrying a bell jar (which contains a tray (on which are a plate and a
+spoon) and a head of celery).
+
+> get spoon
+Taken.
+
+> i
+You're carrying a spoon and a bell jar (which contains a tray (on which is a
+plate) and a head of celery).
 
 > quit
 Are you sure you want to quit? yes
