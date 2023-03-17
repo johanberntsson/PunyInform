@@ -35,7 +35,7 @@ Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_EXTENDED_VERBSET;
-!Constant OPTIONAL_FLEXIBLE_INVENTORY;
+Constant OPTIONAL_FLEXIBLE_INVENTORY;
 !Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
 !Constant OPTIONAL_SCORED;
 !Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
@@ -77,20 +77,28 @@ Object Library "The Library"
 	with
 		description "You are in a library.";
 
-Object -> Table "table"
+Object -> Tray "tray"
 	with
-		name 'table',
+		name 'tray',
+	has supporter;
+
+Object -> -> Plate "plate"
+	with
+		name 'plate',
 	has supporter;
 
 Object -> -> BellJar "bell jar"
 	with
-		name 'belljar',
-	has container transparent;
+		name 'belljar' 'bell' 'jar',
+	has container transparent openable;
 
 Object -> -> -> Celery "head of celery"
 	with
-		name 'celery',
-	;
+		name 'celery';
+
+Object -> -> Spoon "spoon"
+	with
+		name 'spoon';
 
 [Initialise;
 	print "^^And so the story begins...^^";
