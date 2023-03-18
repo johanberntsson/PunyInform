@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v4.3 quick reference** |
+| **PunyInform v4.4 quick reference** |
 
   
 More information on last page.
@@ -195,7 +195,7 @@ More information on last page.
 
 ## MAX_SCOPE = number **PUNY++**
 
-###### The maximum number of objects that can be in scope at one time (default 32).
+###### How many objects can be in scope at once (default 50).
 
 ## MAX_SCORE = number
 
@@ -265,6 +265,10 @@ More information on last page.
 
 ###### The author takes responsibility for setting *scope_modified = true* when doing something in code which may affect what's in scope.
 
+## OPTIONAL_MANUAL_SCOPE_BOOST **PUNY++**
+
+###### Avoid running *react_before*, *react_after* and *each_turn* steps whenever possible, for performance.
+
 ## OPTIONAL_NO_DARKNESS **PUNY++**
 
 ###### Rooms are always lit. Don’t define the *light* attribute.
@@ -332,6 +336,8 @@ More information on last page.
 ## TASKS_PROVIDED
 
 ###### Use tasks for scoring. Also define *NUMBER_TASKS*, byte array *task_scores* and entry point routine *PrintTaskName*.
+
+## 
 
 # Library routines
 
