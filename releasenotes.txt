@@ -1,3 +1,8 @@
+Upcoming release:
+
+- An R is added after the library version in the banner if RUNTIME_ERRORS > 0.
+
+=======
 v4.4: bug fix and new feature release (18 March 2023)
 
 - Replaced some veneer routines with shorter versions (optimized and not 

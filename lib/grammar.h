@@ -1240,6 +1240,11 @@ Verb meta 'quit' 'q//'
 #IfDef DEBUG;
 	if(_i == 0) print " ";
 	print "D";
+    _i = 1;
+#EndIf;
+#IfTrue RUNTIME_ERRORS > 0;
+	if(_i == 0) print " ";
+	print "R";
 #EndIf;
 	@new_line;
 ];
