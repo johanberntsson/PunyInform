@@ -1,6 +1,19 @@
 Upcoming release:
 
 - An R is added after the library version in the banner if RUNTIME_ERRORS > 0.
+- Fixed talk_menu bug: activating a relative topic# would also set the flag
+  with that number.
+- Fixed talk_menu bug where talk menu could behave erratically for games 
+  larger than half the allowed size for the Z-code version.
+- talk_menu now allows a topic to have multiple IDs
+- talk_menu functions can now match multiple topics. For maximum performance,
+  authors can turn this off at any time with talk_menu_multi_mode = false;
+  When reading the current status of a topic, the status of the first
+  matching topic will be returned.
+- Change in functionality: talk_menu will no longer consider it an error if
+  it tries to activate a topic and it turns out the topic is stale. Not 
+  finding a topic is still an error.
+  
 
 =======
 v4.4: bug fix and new feature release (18 March 2023)

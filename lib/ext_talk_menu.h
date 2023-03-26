@@ -24,7 +24,7 @@ System_file;
 !
 ! A talk topic has the following form:
 !
-! STATUS [ID] TOPIC PLAYERSAYS NPCSAYS [FLAGREF|UNLOCKREF|ROUTINE]*
+! STATUS [ID]* TOPIC PLAYERSAYS NPCSAYS [FLAGREF|UNLOCKREF|ROUTINE]*
 !
 ! [] = Optional
 ! * = can be more than one
@@ -101,7 +101,11 @@ System_file;
 ! will be notified whenever a problem is detected. As usual, use
 ! RUNTIME_ERRORS = 2 to get the maximum amount of information. (This is the
 ! default when compiling in DEBUG mode)
-
+!
+! By default, you can assign the same ID to multiple topics and use this to
+! activate or inactivate multiple topics at once. If you're not using this 
+! option, you can set talk_menu_multi_mode to false, and gain some 
+! performance.
 
 Constant EXT_TALK_MENU = 1;
 
@@ -178,6 +182,7 @@ Constant TM_STALE 31;
 Constant TM_NPC -1;
 
 Global talk_menu_talking = false;
+Global talk_menu_multi_mode = true;
 
 [ _TMPrintMsg p_msg p_no_newline;
 	if(metaclass(p_msg) == Routine) {
@@ -192,7 +197,7 @@ Global talk_menu_talking = false;
 	_TMPrintMsg(talk_array-->p_index, p_no_newline);
 ];
 
-[ _SetTopic p_topic p_start p_value _val _find_topic;
+[ _SetTopic p_topic p_start p_value _val _find_topic _base _curr_id _success;
 	! p_topic is 1-29: Act on topic number P_TOPIC, counting from p_start
 	! p_topic is 300-600: Act on topic with ID = P_TOPIC.
 	! p_topic is (-600)-(-300): Act on topic with ID = -P_TOPIC. If p_value is
@@ -226,24 +231,37 @@ Global talk_menu_talking = false;
 		p_start++;
 		_val = talk_array-->p_start;
 		if(_val == TM_NPC) {
-			rfalse; ! The topic wasn't found
+			return _success; ! The topic wasn't found, or we are in multi mode
 		}
 		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
 			if(_find_topic < 30) {
 				if(_find_topic-- == 1) jump _tm_found_topic;
 				continue;
 			}
-			p_start++;
-			if(talk_array-->p_start == _find_topic) {
-				p_start--;
-._tm_found_topic;
-				if(p_value == 1)
-					return talk_array-->p_start;
-				if(_val ~= TM_STALE || p_topic < 0) {
-					talk_array-->p_start = p_value;
-					rtrue; ! Success
+			_base = p_start;
+			while(true) { ! Loop over a list of topic IDs
+				p_start++;
+				_curr_id = talk_array-->p_start;
+				if(_curr_id < TM_FIRST_ID || _curr_id > TM_LAST_ID) {
+					p_start = p_start + 2; ! This is a string or routine, no more IDs here
+					break;
 				}
-				rfalse;
+				if(_curr_id == _find_topic) {
+					_success = true;
+					p_start = _base;
+._tm_found_topic;
+					if(p_value == 1)
+						return talk_array-->p_start;
+					if(_val ~= TM_STALE || p_topic < 0) {
+						talk_array-->p_start = p_value;
+					}
+					if(_find_topic < 30 || talk_menu_multi_mode == false) {
+						rtrue;
+					}
+					p_start = p_start + 3;
+					break;
+					
+				}
 			}
 		}
 	}
@@ -317,7 +335,7 @@ Array TenDashes static -> "----------";
 	while(true) {
 !		print "Checking #", _i,". ";
 		_val = talk_array-->_i;
-		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) _i = _i + 3;
+		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) _i = _i + 3; ! Only to speed it up
 		else if(_val == TM_NPC) {
 			_i++;
 			_val = talk_array-->_i;
@@ -421,7 +439,11 @@ Array TenDashes static -> "----------";
 #Endif;
 			_i++;
 			_val = talk_array-->_i;
-			if(_val <= TM_LAST_ID) _i++; ! An ID was found
+			while(_val >= TM_FIRST_ID && _val <= TM_LAST_ID) {
+				! An ID was found
+				_i++;
+				_val = talk_array-->_i;
+			}
 !			print "i:",_i,"!";
 			_TMCallOrPrint(_i);
 		}
@@ -527,7 +549,11 @@ Array TenDashes static -> "----------";
 			talk_array-->_i = TM_STALE;
 			_i++;
 			_val = talk_array-->_i;
-			if(_val < TM_LAST_ID) _i++; ! An ID was found
+			while(_val >= TM_FIRST_ID && _val <= TM_LAST_ID) {
+				! An ID was found
+				_i++;
+				_val = talk_array-->_i;
+			}
 			_i++;
 #Ifv5;
 			@set_window 0;
@@ -558,6 +584,7 @@ Array TenDashes static -> "----------";
 			if(_val < 30) {
 				! A relative reference to a topic to activate
 				ActivateTopic(p_npc, _val, _j);
+				continue;
 			}
 			#Ifdef EXT_FLAGS;
 			if(_val < TM_FIRST_ID) {
