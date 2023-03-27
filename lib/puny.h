@@ -1038,12 +1038,14 @@ Include "parser.h";
 
 	GetScopeCopy(); ! later used by _RunReact
 
+	if(location has reactive && location.&each_turn ~= 0) {
 #IfDef DEBUG;
 #IfV3;
-	if(debug_flag & 1 && location has reactive && location.&each_turn ~= 0) print "(", (name) location, ").each_turn()^";
+		if(debug_flag & 1) print "(", (name) location, ").each_turn()^";
 #EndIf;
 #EndIf;
-	RunRoutines(location, each_turn);
+		RunRoutines(location, each_turn);
+	}
 
 #Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
 
