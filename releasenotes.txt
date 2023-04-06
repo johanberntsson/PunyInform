@@ -13,7 +13,9 @@ Upcoming release:
 - Change in functionality: talk_menu will no longer consider it an error if
   it tries to activate a topic and it turns out the topic is stale. Not 
   finding a topic is still an error.
-  
+- Made DEBUG REACTIVE command return a lot less false positives (i.e.
+  locations which provide an exit that's an alias of one of the reactive
+  properties, like react_before.
 
 =======
 v4.4: bug fix and new feature release (18 March 2023)

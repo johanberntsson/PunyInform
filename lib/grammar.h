@@ -1490,6 +1490,15 @@ Global scope_cnt;
 	}
 ];
 
+[ MayBeRoutine p_obj p_prop _val;
+	_val = p_obj.&p_prop;
+	if(_val == 0) rfalse;
+	_val = _val-->0;
+	if(_val == 0 or NULL || metaclass(_val) == Routine) rtrue;
+	rfalse;
+];
+	
+
 [DebugSub _w _o;
 	wn = num_words;
 	_w = NextWord();
@@ -1502,28 +1511,38 @@ Global scope_cnt;
 			print "Probably give reactive to these objects (see notes about ~reactive~ in manual) :^";
 			objectloop(_o) {
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-				if(_o hasnt reactive && (_o.&react_before ~= 0 ||
-						_o.&react_after ~= 0 || _o.&each_turn ~= 0 ||
-						_o.&add_to_scope ~= 0 || _o.&parse_name ~= 0))
+				if(_o hasnt reactive && (
+						MayBeRoutine(_o, react_before) ||
+						MayBeRoutine(_o, react_after) ||
+						MayBeRoutine(_o, parse_name) ||
+						_o.&add_to_scope ~= 0 ||
+						_o.&each_turn ~= 0))
 					print "(",_o,") ", (name) _o, "^";
 #Ifnot;
-				if(_o hasnt reactive && (_o.&react_before ~= 0 ||
-						_o.&react_after ~= 0 || _o.&each_turn ~= 0 ||
-						_o.&add_to_scope ~= 0))
+				if(_o hasnt reactive && (
+						MayBeRoutine(_o, react_before) ||
+						MayBeRoutine(_o, react_after) ||
+						_o.&add_to_scope ~= 0 ||
+						_o.&each_turn ~= 0))
 					print "(",_o,") ", (name) _o, "^";
 #Endif;
 			}
 			print "^Remove reactive from these objects:^";
 			objectloop(_o) {
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-				if(_o has reactive && _o.&react_before == 0 &&
-						_o.&react_after == 0 && _o.&each_turn == 0 &&
-						_o.&add_to_scope == 0 && _o.&parse_name == 0)
+				if(_o has reactive && (
+						MayBeRoutine(_o, react_before) == false &&
+						MayBeRoutine(_o, react_after) == false &&
+						MayBeRoutine(_o, parse_name) == false &&
+						_o.&add_to_scope == 0 &&
+						_o.&each_turn == 0))
 					print "(",_o,") ", (name) _o, "^";
 #Ifnot;
-				if(_o has reactive && _o.&react_before == 0 &&
-						_o.&react_after == 0 && _o.&each_turn == 0 &&
-						_o.&add_to_scope == 0)
+				if(_o has reactive && (
+						MayBeRoutine(_o, react_before) == false &&
+						MayBeRoutine(_o, react_after) == false &&
+						_o.&add_to_scope == 0 &&
+						_o.&each_turn == 0))
 					print "(",_o,") ", (name) _o, "^";
 #Endif;
 			}
