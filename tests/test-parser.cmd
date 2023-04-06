@@ -1,6 +1,8 @@
 
 transcript
 
+say test
+say test to john
 feed door with torch
 feed sweater with ladder
 feed sweater with ladder

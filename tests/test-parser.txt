@@ -1,4 +1,13 @@
 
+> say test
+(assuming to John)
+Rule life, action Answer, noun 0, second John, consult 2 1, special_number 0
+John ignores your question.
+
+> say test to john
+Rule life, action Answer, noun 0, second John, consult 2 1, special_number 0
+John ignores your question.
+
 > feed door with torch
 I don't understand that sentence.
 
