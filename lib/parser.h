@@ -75,7 +75,7 @@ System_file;
 	if(_second ~= 0 && second == 0) {
 		second = _GuessMissingNoun(_second -> 2, _prep, 2);
 	}
-	!print scope_stage, " ", phase2_necessary, " ",_num_nouns, " ", _noun, "=", noun, ":", _second, "=", second, "^";
+	!print scope_stage, " ", phase2_necessary, " num_nouns ",_num_nouns, " noun ", _noun, "=", noun, ": second ", _second, "=", second, "^";
 	if(_noun ~= 0  && noun ~= 0) {
 		if(_num_nouns == 1) {
 			!print "message complete: ", noun, "^";
@@ -85,6 +85,10 @@ System_file;
 			!print "message complete: ", noun, " ", second, "^";
 			rtrue;
 		}
+	} else if(_num_nouns == 2 && _second ~=0 && second ~= 0) {
+		! for example: "say hello" (assuming X) -> noun = 0, second = X
+		!print "message complete: ", noun, " ", second, "^";
+		rtrue;
 	}
 #EndIf;
 

@@ -1490,6 +1490,7 @@ Global scope_cnt;
 	}
 ];
 
+#Ifdef OPTIONAL_MANUAL_REACTIVE;
 [ MayBeRoutine p_obj p_prop _val;
 	_val = p_obj.&p_prop;
 	if(_val == 0) rfalse;
@@ -1497,6 +1498,7 @@ Global scope_cnt;
 	if(_val == 0 or NULL || metaclass(_val) == Routine) rtrue;
 	rfalse;
 ];
+#Endif;
 
 [DebugSub _w _o;
 	wn = num_words;
@@ -1505,7 +1507,6 @@ Global scope_cnt;
 		'reactive':
 #Ifndef OPTIONAL_MANUAL_REACTIVE;
 			_o = 1;
-			MayBeRoutine(_o, react_before); ! avoid compiler warning
 			"Define OPTIONAL_MANUAL_REACTIVE and recompile.";
 #Ifnot;
 			print "Probably give reactive to these objects (see notes about ~reactive~ in manual) :^";

@@ -16,6 +16,8 @@ Upcoming release:
 - Made DEBUG REACTIVE command return a lot less false positives (i.e.
   locations which provide an exit that's an alias of one of the reactive
   properties, like react_before.
+- Fixed _FixIncompleteSentenceOrComplain bug when completing sentences that
+  match patterns that include the topic token
 
 =======
 v4.4: bug fix and new feature release (18 March 2023)
