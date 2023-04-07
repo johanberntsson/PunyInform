@@ -1403,6 +1403,8 @@ Array guess_object-->5;
 	CREATURE_OBJECT:
 		if(_creature_count == 1)
 			_noun = guess_object-->GUESS_CREATURE;
+	TOPIC_OBJECT:
+		! we can't guess anything when parsing a topic
 	default:
 		if(_noun == 0 && _container_count == 1 &&
 			action == ##Open or ##Close) {
