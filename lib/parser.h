@@ -85,7 +85,7 @@ System_file;
 			!print "message complete: ", noun, " ", second, "^";
 			rtrue;
 		}
-	} else if(_num_nouns == 2 && _second ~=0 && second ~= 0) {
+	} else if(_num_nouns == 2 && _second ~=0 && second ~= 0 && _noun->2 == TOPIC_OBJECT) {
 		! for example: "say hello" (assuming X) -> noun = 0, second = X
 		!print "message complete: ", noun, " ", second, "^";
 		rtrue;

@@ -95,6 +95,9 @@ i
 i tall
 i wide
 drop all
+feed
+feed john
+feed ladder
 quit
 yes
 

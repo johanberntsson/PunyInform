@@ -386,6 +386,19 @@ The blue book glows annoyingly.
 blue book: Dropped.
 infinite bag: Dropped.
 
+> feed
+(assuming to John)
+I think you wanted to say "feed something to someone". Please try again.
+
+> feed john
+I think you wanted to say "feed John something". Please try again.
+
+> feed ladder
+(first taking the ladder)
+(assuming to John)
+Rule life, action Give, noun the ladder, second John, special_number 0
+John doesn't appear to be interested.
+
 > quit
 You ain't no quitter eh? yes
 
