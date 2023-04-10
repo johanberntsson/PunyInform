@@ -1,19 +1,34 @@
 ! ext_cheap_scenery.h, a library extension for PunyInform by Fredrik Ramsberg
 !
 ! This library extension provides a way to implement simple scenery objects
-! which can only be examined, using just a single object for the entire game.
-! This helps keep both the object count and the dynamic memory usage down.
+! using just a single object for the entire game. This helps keep both the 
+! object count and the dynamic memory usage down.
 !
 ! To use it, include this file after globals.h. Then add a property called
 ! cheap_scenery to the locations where you want to add cheap scenery objects.
-! You can add up to ten cheap scenery objects to one location in this way. For
-! each scenery object, specify, in this order, an adjective, a noun, and a
-! reaction string/routine. Instead of an adjective, you
-! may give a synonym to the noun. If no adjective or synonym is needed,
-! use the value CS_NO_ADJ (=1) in that position. You can also give
-! CS_PARSE_NAME (=2) as the adjective value and give a routine which will
-! act as a parse_name routine in the noun position. Finally, you can give
-! CS_ADD_LIST (=3) as the adjective value and then an object ID and a
+! You can add up to ten cheap scenery objects to one location in this way. 
+!
+! For each scenery object, you provide an adjective, a noun, and a
+! reaction string/routine. Instead of an adjective, you may give a synonym 
+! to the noun. These will be matched if the player types only the adjective,
+! only the noun, or the adjective followed by the noun.
+!
+! If no adjective or synonym is needed, use the value CS_NO_ADJ (=1) in 
+! that position. 
+!
+! There is a more flexible option, which allows you to specify up to nine 
+! adjectives and nine nouns: You give a value (10 * adjectives + nouns), 
+! followed by the adjectives and nouns, e.g: 
+! 21 'small' 'green' 'bug' - this means there are two adjectives and one noun, 
+! and this will match "small green bug", "green small bug", "small bug", 
+! "green bug", "bug", and nothing else, i.e. at least one of the nouns, 
+! optionally preceded by one or more of the adjectives. When using this
+! option, typing only adjectives isn't considered a match.
+!
+! You can also give CS_PARSE_NAME as the adjective value and give a routine 
+! which will act as a parse_name routine in the noun position. 
+!
+! Finally, you can give CS_ADD_LIST as the adjective value and then an object ID and a
 ! property name, to include the cheap scenery list held in that property in
 ! the object in the current list.
 !
@@ -125,8 +140,8 @@ Constant RTE_VERBOSE = 2;
 #Endif;
 
 Constant CS_NO_ADJ = 1;
-Constant CS_PARSE_NAME = 2;
-Constant CS_ADD_LIST = 3;
+Constant CS_PARSE_NAME = 100;
+Constant CS_ADD_LIST = 101;
 
 Array CSData --> 6;
 Constant CSDATA_OBJ = 0;
@@ -148,6 +163,17 @@ Property individual cheap_scenery;
 
 Global cs_parse_name_id = 0;
 
+[_MatchNameListCS p_arr p_count _w _matched _base _i;
+    _w = NextWord();
+    if(p_count == 0) return 0;
+    while(true) {
+        _base = _matched;
+        for(_i = 0 : _i < p_count : _i++)
+            if(_w == p_arr-->_i) { _matched++; _w = NextWord(); break; }
+        if(_matched == _base) return _matched;
+    }
+];
+
 [ _ParseCheapScenery p_obj p_prop p_base_wn _w1 _w2 _i _sw1 _sw2 _len _ret _arr;
 	cs_parse_name_id = 0;
 ! 	_base_wn = CheapScenery.inside_description;
@@ -155,37 +181,29 @@ Global cs_parse_name_id = 0;
 	_w2 = CSData-->CSDATA_WORD_2;
 	_arr = p_obj.&p_prop;
 	_len = p_obj.#p_prop / 2;
-#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if(_len % 3 > 0) {
-#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-		"ERROR: cheap_scenery property of ", (name) p_obj,
-			" has incorrect # of values!^";
-#Ifnot;
-		"ERROR: cheap_scenery #1!^";
-#Endif;
-	}
-#Endif;
 	while(_i < _len) {
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if(_arr-->_i == CS_ADD_LIST &&
 				(_arr-->(_i+1) < 2 || _arr-->(_i+1) > top_object)) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			"ERROR: Element ", _i+1, " in cheap_scenery property of ", (name) p_obj,
+			print "ERROR: Element ", _i+1, " in cheap_scenery property of ", (name) p_obj,
 				" is part of a CS_ADD_LIST entry and should be a valid
-				object ID but is ", _arr-->(_i+1), "!^" ;
+				object ID but is ", _arr-->(_i+1), "!^^" ;
 #Ifnot;
-			"ERROR: cheap_scenery #2!^";
+			print "ERROR: cheap_scenery #2!^^";
 #Endif;
+			rfalse;
 		}
 #Endif;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(_arr-->_i ~= CS_ADD_LIST && metaclass(_arr-->(_i+2)) ~= String or Routine) {
+		if(_arr-->_i < 1 || _arr-->_i > CS_ADD_LIST && metaclass(_arr-->(_i+2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			"ERROR: Element ", _i+2, " in cheap_scenery property of ",
-				(name) p_obj, " is not a string or routine!^";
+			print "ERROR: Element ", _i+2, " in cheap_scenery property of ",
+				(name) p_obj, " is not a string or routine!^^";
 #Ifnot;
-			"ERROR: cheap_scenery #3!^";
+			print "ERROR: cheap_scenery #3!^^";
 #Endif;
+			rfalse;
 		}
 #Endif;
 		_sw1 = _arr-->_i;
@@ -199,12 +217,13 @@ Global cs_parse_name_id = 0;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 			if(metaclass(_sw2) ~= Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-				"ERROR: Element ", _i+1, " in cheap_scenery property of
+				print "ERROR: Element ", _i+1, " in cheap_scenery property of
 					current location should be a parse_name routine but
-					isn't!^";
+					isn't!^^";
 #Ifnot;
-				"ERROR: cheap_scenery #4!^";
+				print "ERROR: cheap_scenery #4!^^";
 #Endif;
+				rfalse;
 			}
 #Endif;
 			self = location;
@@ -213,6 +232,36 @@ Global cs_parse_name_id = 0;
 				jump _cs_found_a_match;
 			}
 			cs_parse_name_id = 0;
+		} else if(_sw1 > 0 && _sw1 < 100) {
+			wn = p_base_wn;
+			_sw2 = _sw1 / 10; ! Repurposing _sw2 as a temp var
+			_i++; ! Start of adjectives
+			_ret = 0;
+			if(_sw2 > 0) {
+				_ret = _MatchNameListCS(_arr + _i + _i, _sw2);
+				_i = _i + _sw2;
+				wn--;
+			}
+			_sw2 = _sw1 % 10;
+			_sw1 = _MatchNameListCS(_arr + _i + _i, _sw2);
+			_i = _i + _sw2 - 2;
+
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+		if(metaclass(_arr-->(_i+2)) ~= String or Routine) {
+#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
+			print "ERROR: Element ", _i+2, " in cheap_scenery property of ",
+				(name) p_obj, " is not a string or routine!^^";
+#Ifnot;
+			print "ERROR: cheap_scenery #3!^^";
+#Endif;
+			rfalse;
+		}
+#Endif;
+
+			if(_sw1) {
+				_ret = _ret + _sw1;
+				jump _cs_found_a_match;
+			}
 		} else if(_w1 == _sw1 or _sw2) {
 				_ret = 1;
 				if(_w1 == _sw1 && _w2 == _sw2) {
@@ -222,6 +271,17 @@ Global cs_parse_name_id = 0;
 		}
 		_i = _i + 3;
 	}
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(_i > _len) {
+#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
+		print "ERROR: Cheap_scenery property of ",
+			(name) p_obj, " extends beyond property length - check entries with 3+ words!^^";
+#Ifnot;
+		print "ERROR: cheap_scenery #1!^^";
+#Endif;
+		rfalse;
+	}
+#Endif;
 	return 0;
 ._cs_found_a_match;
 	CSData-->CSDATA_OBJ = p_obj;

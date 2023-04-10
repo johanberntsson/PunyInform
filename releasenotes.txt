@@ -18,6 +18,9 @@ Upcoming release:
   properties, like react_before.
 - Fixed _FixIncompleteSentenceOrComplain bug when completing sentences that
   match patterns that include the topic token
+- You can now specify up to 9 adjectives + 9 nouns for a cheap scenery object,
+  by entering 10*adjectives+nouns and then the words, e.g. 
+  23 'small' 'green 'ant' 'insect' 'animal' "It's so small!".  
 
 =======
 v4.4: bug fix and new feature release (18 March 2023)
