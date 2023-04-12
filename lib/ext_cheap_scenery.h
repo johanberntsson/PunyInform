@@ -174,7 +174,45 @@ Global cs_parse_name_id = 0;
     }
 ];
 
-[ _ParseCheapScenery p_obj p_prop p_base_wn _w1 _w2 _i _sw1 _sw2 _len _ret _arr;
+[ _CSGetArr;
+	return (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP) + 2 * (CSData-->CSDATA_INDEX);
+];
+
+[ _CSFindInArr p_value p_array p_count _i;
+	for(_i = 0 : _i < p_count : _i++)
+		if(p_array-->_i == p_value)
+			rtrue;
+	rfalse;
+];
+
+[ CSHasAdjective p_word _arr _w1;
+	_arr = _CSGetArr();
+	_w1 = _arr-->0;
+	if(_w1 < 1 || _w1 > 99) {
+		if(_w1 == p_word)
+			rtrue;
+		rfalse;
+	}
+	return _CSFindInArr(p_word, _arr + 2, _w1 / 10);
+];
+
+[ CSHasNoun p_word _arr _w1;
+	_arr = _CSGetArr();
+	_w1 = _arr-->0;
+	if(_w1 < 1 || _w1 > 99) {
+		if(_arr-->1 == p_word)
+			rtrue;
+		rfalse;
+	}
+	return _CSFindInArr(p_word, _arr + 2 + 2 * (_w1 / 10), _w1 % 10);
+];
+
+[ CSHasWord p_word;
+	return CSHasAdjective(p_word) | CSHasNoun(p_word);
+];
+
+
+[ _ParseCheapScenery p_obj p_prop p_base_wn _w1 _w2 _i _j _sw1 _sw2 _len _ret _arr;
 	cs_parse_name_id = 0;
 ! 	_base_wn = CheapScenery.inside_description;
 	_w1 = CSData-->CSDATA_WORD_1;
@@ -182,13 +220,26 @@ Global cs_parse_name_id = 0;
 	_arr = p_obj.&p_prop;
 	_len = p_obj.#p_prop / 2;
 	while(_i < _len) {
+		_sw1 = _arr-->_i;
+		_sw2 = _arr-->(_i+1);
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(_arr-->_i == CS_ADD_LIST &&
-				(_arr-->(_i+1) < 2 || _arr-->(_i+1) > top_object)) {
+		if(_sw1 == 0) {
+#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
+			print "ERROR: Element ", _i, " in cheap_scenery property of ", (name) p_obj,
+				" should be a value 1-99, or a vocabulary word, but is 0!^^" ;
+#Ifnot;
+			print "ERROR: cheap_scenery #5!^^";
+#Endif;
+			rfalse;
+		}
+#Endif;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+		if(_sw1 == CS_ADD_LIST &&
+				(_sw2 < 2 || _sw2 > top_object)) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print "ERROR: Element ", _i+1, " in cheap_scenery property of ", (name) p_obj,
 				" is part of a CS_ADD_LIST entry and should be a valid
-				object ID but is ", _arr-->(_i+1), "!^^" ;
+				object ID but is ", _sw2, "!^^" ;
 #Ifnot;
 			print "ERROR: cheap_scenery #2!^^";
 #Endif;
@@ -196,7 +247,7 @@ Global cs_parse_name_id = 0;
 		}
 #Endif;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(_arr-->_i < 1 || _arr-->_i > CS_ADD_LIST && metaclass(_arr-->(_i+2)) ~= String or Routine) {
+		if(_sw1 < 1 || _sw1 > CS_ADD_LIST && metaclass(_arr-->(_i+2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print "ERROR: Element ", _i+2, " in cheap_scenery property of ",
 				(name) p_obj, " is not a string or routine!^^";
@@ -206,8 +257,6 @@ Global cs_parse_name_id = 0;
 			rfalse;
 		}
 #Endif;
-		_sw1 = _arr-->_i;
-		_sw2 = _arr-->(_i+1);
 		if(_sw1 == CS_ADD_LIST) {
 			_ret = _ParseCheapScenery(_sw2, _arr-->(_i+2), p_base_wn);
 			if(_ret)
@@ -235,21 +284,20 @@ Global cs_parse_name_id = 0;
 		} else if(_sw1 > 0 && _sw1 < 100) {
 			wn = p_base_wn;
 			_sw2 = _sw1 / 10; ! Repurposing _sw2 as a temp var
-			_i++; ! Start of adjectives
+			_j = _i + 1; ! Start of adjectives
 			_ret = 0;
 			if(_sw2 > 0) {
-				_ret = _MatchNameListCS(_arr + _i + _i, _sw2);
-				_i = _i + _sw2;
+				_ret = _MatchNameListCS(_arr + _j + _j, _sw2);
+				_j = _j + _sw2;
 				wn--;
 			}
 			_sw2 = _sw1 % 10;
-			_sw1 = _MatchNameListCS(_arr + _i + _i, _sw2);
-			_i = _i + _sw2 - 2;
+			_sw1 = _MatchNameListCS(_arr + _j + _j, _sw2);
 
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(metaclass(_arr-->(_i+2)) ~= String or Routine) {
+		if(metaclass(_arr-->(_j + _sw2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			print "ERROR: Element ", _i+2, " in cheap_scenery property of ",
+			print "ERROR: Element ", _j + _sw2, " in cheap_scenery property of ",
 				(name) p_obj, " is not a string or routine!^^";
 #Ifnot;
 			print "ERROR: cheap_scenery #3!^^";
@@ -262,6 +310,7 @@ Global cs_parse_name_id = 0;
 				_ret = _ret + _sw1;
 				jump _cs_found_a_match;
 			}
+			_i = _j + _sw2 - 2;
 		} else if(_w1 == _sw1 or _sw2) {
 				_ret = 1;
 				if(_w1 == _sw1 && _w2 == _sw2) {
@@ -306,9 +355,13 @@ Object CheapScenery "object"
 #Ifnot;
 		before [_i _k _w1pos;
 #Endif;
-			_i = (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP);
-			_w1pos = CSData-->CSDATA_INDEX;
-			_k = _i-->(_w1pos + 2);
+			_i = _CSGetArr();
+			_k = _i-->0;
+			if(_k > 0 && _k < 100)
+				_k = 1 + (_k / 10) + (_k % 10);
+			else
+				_k = 2;
+			_k = _i-->_k;
 			if(action == ##Examine && _k ofclass String)
 				print_ret (string) _k;
 
@@ -329,6 +382,12 @@ Object CheapScenery "object"
 				if(_routine == 0)
 					_routine = _w2;
 				_w2 = 0;
+			} else if(_w1 > 0 && _w1 < 100) {
+				_k = _w1 / 10;
+				_w1 = 0;
+				if(_k) ! There is at least one adjective
+					_w1 = _w2;
+				_w2 = _i-->(_w1pos + 1 + _k);
 			}
 			if(SceneryReply(_w1, _w2, _routine))
 				rtrue;
@@ -343,3 +402,4 @@ Object CheapScenery "object"
 		reactive
 #Endif;
 ;
+

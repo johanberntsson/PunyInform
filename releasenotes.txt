@@ -20,7 +20,19 @@ Upcoming release:
   match patterns that include the topic token
 - You can now specify up to 9 adjectives + 9 nouns for a cheap scenery object,
   by entering 10*adjectives+nouns and then the words, e.g. 
-  23 'small' 'green 'ant' 'insect' 'animal' "It's so small!".  
+  23 'small' 'green 'ant' 'insect' 'animal' "It's so small!".
+- SceneryReply gets the first adjective and the first noun for the matched
+  cheap scenery object as parameters word1 and word2.
+- Breaks backward compatibility: A cheap scenery object having the value
+  CS_NO_ADJ ( =1 ) as its first value, would get word1 = 1 when SceneryReply
+  was called. It will now get word1 = 0, to make the behaviour coherent with
+  when the first value is 2-9 (object has multiple nouns but no adjectives).
+- New cheap scenery routines, meant to be used in SceneryReply: 
+  CSHasAdjective(x) returns true if x is one the adjectives for the last
+  matched cheap scenery object. CSHasNoun(x) does the same thing for nouns.
+  CSHasWord(x) returns true if x is either an adjective or noun for the
+  object. Programmers can use values 200-600 as markers to trigger certain
+  behaviours in SceneryReply.
 
 =======
 v4.4: bug fix and new feature release (18 March 2023)
