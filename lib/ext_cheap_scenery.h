@@ -163,15 +163,8 @@ Property individual cheap_scenery;
 
 Global cs_parse_name_id = 0;
 
-[_MatchNameListCS p_arr p_count _w _matched _base _i;
-    _w = NextWord();
-    if(p_count == 0) return 0;
-    while(true) {
-        _base = _matched;
-        for(_i = 0 : _i < p_count : _i++)
-            if(_w == p_arr-->_i) { _matched++; _w = NextWord(); break; }
-        if(_matched == _base) return _matched;
-    }
+[ helloz;
+	print "Hejeje";
 ];
 
 [ _CSGetArr;
@@ -183,6 +176,19 @@ Global cs_parse_name_id = 0;
 		if(p_array-->_i == p_value)
 			rtrue;
 	rfalse;
+];
+
+[_CSMatchNameList p_arr p_count _w _matched _base _i;
+    _w = NextWord();
+    if(p_count == 0) return 0;
+    while(true) {
+        _base = _matched;
+		if(_CSFindInArr(_w, p_arr, p_count)) { 
+			_matched++; 
+			_w = NextWord();
+		} else
+			return _matched;
+    }
 ];
 
 [ CSHasAdjective p_word _arr _w1;
@@ -210,7 +216,6 @@ Global cs_parse_name_id = 0;
 [ CSHasWord p_word;
 	return CSHasAdjective(p_word) | CSHasNoun(p_word);
 ];
-
 
 [ _ParseCheapScenery p_obj p_prop p_base_wn _w1 _w2 _i _j _sw1 _sw2 _len _ret _arr;
 	cs_parse_name_id = 0;
@@ -287,12 +292,12 @@ Global cs_parse_name_id = 0;
 			_j = _i + 1; ! Start of adjectives
 			_ret = 0;
 			if(_sw2 > 0) {
-				_ret = _MatchNameListCS(_arr + _j + _j, _sw2);
+				_ret = _CSMatchNameList(_arr + _j + _j, _sw2);
 				_j = _j + _sw2;
 				wn--;
 			}
 			_sw2 = _sw1 % 10;
-			_sw1 = _MatchNameListCS(_arr + _j + _j, _sw2);
+			_sw1 = _CSMatchNameList(_arr + _j + _j, _sw2);
 
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if(metaclass(_arr-->(_j + _sw2)) ~= String or Routine) {
