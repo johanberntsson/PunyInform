@@ -163,10 +163,6 @@ Property individual cheap_scenery;
 
 Global cs_parse_name_id = 0;
 
-[ helloz;
-	print "Hejeje";
-];
-
 [ _CSGetArr;
 	return (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP) + 2 * (CSData-->CSDATA_INDEX);
 ];
