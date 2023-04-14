@@ -174,7 +174,7 @@ Global cs_parse_name_id = 0;
 	rfalse;
 ];
 
-[_CSMatchNameList p_arr p_count _w _matched _base _i;
+[_CSMatchNameList p_arr p_count _w _matched _base;
     _w = NextWord();
     if(p_count == 0) return 0;
     while(true) {
