@@ -181,6 +181,11 @@ Constant TM_ACTIVE 30;
 Constant TM_STALE 31;
 Constant TM_NPC -1;
 
+Constant TM_NO_LINE 1; ! Can be used instead of a player's line or an actor's line ONLY!
+Constant TM_ADD_BEFORE 2; ! Can be used directly after subject
+Constant TM_ADD_AFTER 3; ! Can be used directly after subject
+Constant TM_ADD_BEFORE_AND_AFTER 4; ! Can be used directly after subject
+
 Global talk_menu_talking = false;
 Global talk_menu_multi_mode = true;
 
@@ -328,6 +333,20 @@ Array TenDashes static -> "----------";
 ];
 #Endif;
 
+#Ifndef TMPrintLine;
+[TMPrintLine p_actor p_line;
+	if(talk_array-->p_line == TM_NO_LINE) 
+		rfalse;
+	if(p_actor == player)
+		_TMPrintMsg(TM_MSG_YOU, true);
+	else
+		print (The) p_actor;
+	print ": ";
+	_TMCallOrPrint(p_line); ! Can be called as _TMCallOrPrint(p_line, true); if you don't want it to print the newline
+];
+#Endif;
+	
+
 #Ifndef NO_INITTALK;
 [ InitTalk _i _val;
 	! Initialise the conversation system
@@ -359,9 +378,9 @@ Array TenDashes static -> "----------";
 
 
 #Ifv5;
-[ RunTalk p_npc _i _j _n _val _tm_start _height _width _offset _count _more _has_split;
+[ RunTalk p_npc _i _j _n _val _tm_start _height _width _offset _count _more _has_split _add_msg;
 #Ifnot;
-[ RunTalk p_npc _i _j _n _val _tm_start;
+[ RunTalk p_npc _i _j _n _val _tm_start _add_msg;
 #Endif;
 	talk_menu_talking = true;
 	current_talker = p_npc;
@@ -558,15 +577,26 @@ Array TenDashes static -> "----------";
 #Ifv5;
 			@set_window 0;
 #Endif;
-			_TMPrintMsg(TM_MSG_YOU, true);
-			print ": ";
-			_TMCallOrPrint(_i);
+			_add_msg = talk_array-->_i;
+			if(_add_msg < TM_ADD_BEFORE || _add_msg > TM_ADD_BEFORE_AND_AFTER)
+				_add_msg = 0;
+			else
+				_i++;
+			if(_add_msg == TM_ADD_BEFORE or TM_ADD_BEFORE_AND_AFTER) {
+				_TMCallOrPrint(_i);
+				_i++;
+			}
+			TMPrintLine(player, _i);
 			_i++;
-			print (The) p_npc, ": ";
-			_TMCallOrPrint(_i);
+			if(_add_msg == TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER) {
+				_TMCallOrPrint(_i);
+				_i++;
+			}
+			TMPrintLine(p_npc, _i);
 			break;
 		}
 	}
+!	print "DONE^";
 
 	! Apply effects
 
@@ -601,7 +631,7 @@ Array TenDashes static -> "----------";
 		}
 		#Ifdef DEBUG;
 			#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-				if(metaclass(_val) ~= Routine) {
+				if(metaclass(_val) ~= Routine or String) {
 					#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 						"ERROR: Talk_menu: Action ", _val, " was not understood for ", (name) p_npc, ".";
 					#Ifnot;
@@ -610,7 +640,7 @@ Array TenDashes static -> "----------";
 				}
 			#Endif;
 		#Endif;
-		! A routine to call
+		! A routine to call or a string to print
 		_TMCallOrPrint(_j, true);
 	}
 
