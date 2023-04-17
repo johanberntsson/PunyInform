@@ -176,6 +176,21 @@ Constant TM_MSG_EXIT_OPTION "[ENTER] End conversation";
 Constant TM_MSG_PAGE_OPTION "[N] Next page";
 #Endif;
 
+#Ifndef TMPrintLine;
+[TMPrintLine p_actor p_line;
+	if(talk_array-->p_line == TM_NO_LINE) 
+		rfalse;
+	if(p_actor == player)
+		_TMPrintMsg(TM_MSG_YOU, true);
+	else
+		print (The) p_actor;
+	print ": ";
+	_TMCallOrPrint(p_line); ! Can be called as _TMCallOrPrint(p_line, true); if you don't want it to print the newline
+];
+#Endif;
+	
+
+
 Constant TM_INACTIVE 0;
 Constant TM_ACTIVE 30;
 Constant TM_STALE 31;
@@ -333,19 +348,6 @@ Array TenDashes static -> "----------";
 ];
 #Endif;
 
-#Ifndef TMPrintLine;
-[TMPrintLine p_actor p_line;
-	if(talk_array-->p_line == TM_NO_LINE) 
-		rfalse;
-	if(p_actor == player)
-		_TMPrintMsg(TM_MSG_YOU, true);
-	else
-		print (The) p_actor;
-	print ": ";
-	_TMCallOrPrint(p_line); ! Can be called as _TMCallOrPrint(p_line, true); if you don't want it to print the newline
-];
-#Endif;
-	
 
 #Ifndef NO_INITTALK;
 [ InitTalk _i _val;
@@ -583,20 +585,19 @@ Array TenDashes static -> "----------";
 			else
 				_i++;
 			if(_add_msg == TM_ADD_BEFORE or TM_ADD_BEFORE_AND_AFTER) {
-				_TMCallOrPrint(_i);
+				_TMCallOrPrint(_i, true);
 				_i++;
 			}
 			TMPrintLine(player, _i);
 			_i++;
 			if(_add_msg == TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER) {
-				_TMCallOrPrint(_i);
+				_TMCallOrPrint(_i, true);
 				_i++;
 			}
 			TMPrintLine(p_npc, _i);
 			break;
 		}
 	}
-!	print "DONE^";
 
 	! Apply effects
 
@@ -654,10 +655,10 @@ Array TenDashes static -> "----------";
 		@erase_window 1;
 		@split_window 0;
 		@set_window 0;
-		#Ifdef PUNYINFORM_MAJOR_VERSION;
-			statusline_current_height = 0;
-		#Ifnot;
+		#Ifdef TM_NOT_PUNY;
 			gg_statuswin_cursize = 0;
+		#Ifnot;
+			statusline_current_height = 0;
 		#Endif;
 	}
 #Endif;

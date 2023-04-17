@@ -33,6 +33,17 @@ Upcoming release:
   CSHasWord(x) returns true if x is either an adjective or noun for the
   object. Programmers can use values 200-600 as markers to trigger certain
   behaviours in SceneryReply.
+- New talk menu routine: TMPrintLine, prints a line spoken by the player or 
+  an NPC. Author can define their own version before including talk menu.
+- talk menu: Author can add a string or routine before and/or after the 
+  player's line, to convey non-verbal events and reactions. Add one of the
+  following constnants just after the topic: TM_ADD_BEFORE, TM_ADD_AFTER,
+  TM_ADD_BEFORE_AND_AFTER, then add the strings/routines before and/or after
+  the player's line.
+- talk_menu: A string can now be used as an effect of a topic.
+- talk_menu: To mute a line by the player or an NPC, replace it with
+  TM_NO_LINE.
+
 
 =======
 v4.4: bug fix and new feature release (18 March 2023)
