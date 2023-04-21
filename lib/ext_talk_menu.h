@@ -74,7 +74,7 @@ System_file;
 ! 0 300 "Herself" "Tell me more about yourself!" "I'm just an average girl."
 ! 30 "Weather" "How do you like the weather?" "It's too hot for me." 1 300
 ! 0 "Heat" "Say, don't you like hot weather?" TM_NO_LINE EnoughTalk 
-!          "Linda looks upset and turns away.^"
+!          "Linda looks upset and turns away."
 ! TM_NPC 0;
 !
 ! If you find that you need more topic IDs, or more flags, you can define which
@@ -656,7 +656,7 @@ Array TenDashes static -> "----------";
 			#Endif;
 		#Endif;
 		! A routine to call or a string to print
-		_TMCallOrPrint(_j, true);
+		_TMCallOrPrint(_j);
 	}
 
 	if(talk_menu_talking) {
