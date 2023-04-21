@@ -24,7 +24,7 @@ System_file;
 !
 ! A talk topic has the following form:
 !
-! STATUS [ID]* TOPIC PLAYERSAYS NPCSAYS [FLAGREF|UNLOCKREF|ROUTINE]*
+! STATUS [ID]* TOPIC PLAYERSAYS NPCSAYS [FLAGREF|UNLOCKREF|ROUTINE|STRING]*
 !
 ! [] = Optional
 ! * = can be more than one
@@ -36,18 +36,27 @@ System_file;
 !   local to the NPC - two different NPCs can use the same ID for different
 !   topics without risk of confusion.
 ! TOPIC is a string or routine for the topic name
-! PLAYERSAYS is a string or routine for what the player says
-! NPCSAYS is a string or routine for what the NPC replies
+! PLAYERSAYS can be on any of these forms (ROUTSTR means a routine or string):
+!    * ROUTSTR
+!    * TM_ADD_BEFORE ROUTSTR ROUTSTR
+!    * TM_ADD_AFTER ROUTSTR ROUTSTR
+!    * TM_ADD_BEFORE_AND_AFTER ROUTSTR ROUTSTR ROUTSTR
+!    I.e. you can add a routine or string to run/print BEFORE the player's 
+!    line, AFTER the player's line, or both. To mute the player's line, give 
+!    it the value TM_NO_LINE
+! NPCSAYS is a string or routine for what the NPC replies. To mute it, give
+!    it the value TM_NO_LINE
 ! FLAGREF is a number 32-299 for a flag to be set (In order to use this,
 !    you must include ext_flags.h before including ext_talk_menu.h)
 ! UNLOCKREF is either a topic ID (300-600) or a relative reference to a topic
 !    (1 to 29) that is activated by this topic. 1 means the next topic,
 !    2 the topic after that etc. The target topic has to have status
 !    TM_INACTIVE (= 0) or TM_ACTIVE (= 30) for this to work. When a topic
-!    is used, it is set to status TM_STALE, and the only way to activate it
-!    when it's stale is to call ReActivateTopic.
+!    is chosen in a conversation, it is set to status TM_STALE, and the only 
+!    way to activate it when it's stale is to call ReActivateTopic.
 ! ROUTINE is a routine to be run. In this routine, the global variable
 !    current_talker refers to the NPC being talked to.
+! STRING is a string to be printed.
 !
 ! Whenever a routine is used for PLAYERSAYS, NPCSAYS or ROUTINE, it can set the
 ! global talk_menu_talking to false to end the conversation after the current
@@ -55,13 +64,17 @@ System_file;
 ! message about why the conversation ended.
 !
 ! Example of an array giving Linda one active topic (Weather), which will
-! activate the next topic (Heat) and the topic with ID 300 (Herself):
+! activate the next topic (Heat) and the topic with ID 300 (Herself), and if
+! you ask about Heat, she'll just end the conversation without answering.
+!
+! [ EnoughTalk; talk_menu_talking = false; ];
 !
 ! Array talk_array -->
 ! TM_NPC Linda
 ! 0 300 "Herself" "Tell me more about yourself!" "I'm just an average girl."
 ! 30 "Weather" "How do you like the weather?" "It's too hot for me." 1 300
-! 0 "Heat" "Say, don't you like hot weather?" "No, I prefer it cold."
+! 0 "Heat" "Say, don't you like hot weather?" TM_NO_LINE EnoughTalk 
+!          "Linda looks upset and turns away.^"
 ! TM_NPC 0;
 !
 ! If you find that you need more topic IDs, or more flags, you can define which
@@ -178,6 +191,7 @@ Constant TM_MSG_PAGE_OPTION "[N] Next page";
 
 #Ifndef TMPrintLine;
 [TMPrintLine p_actor p_line;
+	! Routine to print a line, by the player or an NPC. Define your own version as needed.
 	if(talk_array-->p_line == TM_NO_LINE) 
 		rfalse;
 	if(p_actor == player)
@@ -580,18 +594,18 @@ Array TenDashes static -> "----------";
 			@set_window 0;
 #Endif;
 			_add_msg = talk_array-->_i;
-			if(_add_msg < TM_ADD_BEFORE || _add_msg > TM_ADD_BEFORE_AND_AFTER)
-				_add_msg = 0;
-			else
+			if(_add_msg == TM_ADD_BEFORE or TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER)
+!				_add_msg = 0;
+!			else
 				_i++;
 			if(_add_msg == TM_ADD_BEFORE or TM_ADD_BEFORE_AND_AFTER) {
-				_TMCallOrPrint(_i, true);
+				_TMCallOrPrint(_i);
 				_i++;
 			}
 			TMPrintLine(player, _i);
 			_i++;
 			if(_add_msg == TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER) {
-				_TMCallOrPrint(_i, true);
+				_TMCallOrPrint(_i);
 				_i++;
 			}
 			TMPrintLine(p_npc, _i);

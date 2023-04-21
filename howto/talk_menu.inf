@@ -126,9 +126,10 @@ Constant F_LINDA_TALKED_ABOUT_PARIS 32;
 
 Array talk_array -->
 	TM_NPC Linda
-	30 "Monkeys" TM_ADD_BEFORE_AND_AFTER "Loudly, you clear your throat...^" "What do you know about monkeys?" "You stare at her intensely, watching for any sign that she registered the question.^" TM_NO_LINE "She just looks at you, flabbergasted.^"
-	30 "Elephants" TM_ADD_AFTER TM_NO_LINE "You open your mouth, but Linda knows what you're about to ask and cuts you short.^" "Everyone loves elephants, right?"
-	30 "Dogs" TM_ADD_BEFORE "You bring out your wallet and show Linda a picure of your puppy.^" "What do you think about dogs?" "They make great companions!" "Linda snickers to herself.^"
+	30 "Monkeys" TM_ADD_BEFORE_AND_AFTER "Loudly, you clear your throat..." "What do you know about monkeys?" 
+			"You stare at her intensely, watching for any sign that she registered the question." TM_NO_LINE "She just looks at you, flabbergasted.^"
+	30 "Elephants" TM_ADD_AFTER TM_NO_LINE "You open your mouth, but Linda knows what you're about to ask and cuts you short." "Everyone loves elephants, right?"
+	30 "Dogs" TM_ADD_BEFORE "You bring out your wallet and show Linda a picure of your puppy." "What do you think about dogs?" "They make great companions!" "Linda snickers to herself.^"
 	0 300 "Bob's death" "What do you know about Bob's death?" "Oh not much. He was murdered I think." 301
 	0 301 "Murder" "Tell me more about the murder" "Sorry, I've told you everything I know."
 	30 303 "Paris" "How do you like Paris?" "I love it. Especially the Louvre! But it's sad that Bob died there." 1 2 3 300
