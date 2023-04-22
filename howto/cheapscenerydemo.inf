@@ -25,12 +25,17 @@ Constant CSP_LIBRARY 1;
 	! so we can do things like: Take: "You're crazy.";
 	switch(routine) {
 	PARSE_NAME_AIR:
+		! We don't use word2 for anything in this routine. We set it here, to avoid
+		! a warning that it's unused
+		word2 = 1;
 		"You need the air to breathe, that's all.";
 	CSP_LIBRARY:
 		"The library is super-important. Better not mess with it.";
 	}
-	if(location == Library && word1 == 'old' && word2 == 'book')
+	if(CSHasNoun('book'))
 		"Leave the books to the people who care about them.";
+	if(location == Library && word1 == 'shelf')
+		"You're not supposed to touch the shelves.";
 	rfalse;
 ];
 
@@ -100,11 +105,13 @@ Object -> Box "box"
 Object ReadingRoom "Reading Room"
 	with
 		description "This is the reading room. The air feels different here.
+			There's a single book sitting on one of the tables.
 			You can examine or try to take the tables, the reading room,
 			the air, the atmosphere, the walls and the ceiling. The library lies west.",
 		w_to Library,
 		cheap_scenery
 			CS_PARSE_NAME PARSE_NAME_AIR "The air is thicker here than in the library."
+			'single' 'book' "It's the classic ~Gone With the Wind~ by Margaret Mitchell."
 			'table' 'tables' [;
 				Examine: "Quite sturdy.";
 				Take, Remove, Turn, Pull, Push: "You decide it's better to leave the tables where they are.";
