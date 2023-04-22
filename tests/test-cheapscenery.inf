@@ -2,27 +2,19 @@
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
 
-#Iftrue (#version_number == 8);
-Constant USEINFORM;
-#Endif;
-
-Constant Story      "Cheap Scenery Test";
-Constant Headline   "^Testing various aspects of the Cheap Scenery extension.^";
-Serial "220508";
+Constant Story      "Cheap Scenery Demo";
+Constant Headline   "^A sample game which uses PunyInform.^";
 
 Constant STATUSLINE_SCORE; Statusline score;
+Constant NO_SCORE = 0;
 
 !Constant DEBUG;
-Constant OPTIONAL_EXTENDED_VERBSET;
-Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_NO_DARKNESS;
 !Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant INITIAL_LOCATION_VALUE = Library;
 
-#Ifdef USEINFORM;
-Include "Parser";
-Include "VerbLib";
-#IfNot;
 Include "globals.h";
-#EndIf;
 
 ! Cheap Scenery Parse Name constants. Use values 1-600.
 Constant CSP_LIBRARY 1;
@@ -32,39 +24,35 @@ Constant CSP_LIBRARY 1;
 	! We can also check action, and there's even an implicit switch on action,
 	! so we can do things like: Take: "You're crazy.";
 	switch(routine) {
-	ParseNameAir:
+	PARSE_NAME_AIR:
+		! We don't use word2 for anything in this routine. We set it here, to avoid
+		! a warning that it's unused
+		word2 = 1;
 		"You need the air to breathe, that's all.";
 	CSP_LIBRARY:
 		"The library is super-important. Better not mess with it.";
 	}
-	if(location == Library && word1 == 'book' && word2 == 'books') {
-		if(action == ##Burn)
-			"That's a horrible idea.";
+	if(CSHasNoun('book'))
 		"Leave the books to the people who care about them.";
-	}
+	if(location == Library && word1 == 'shelf')
+		"You're not supposed to touch the shelves.";
 	rfalse;
 ];
 
 Include "ext_cheap_scenery.h";
-#Ifdef USEINFORM;
-Include "Grammar";
-#Ifnot;
 Include "puny.h";
-#EndIf;
 
-[ ParseNameAir w;
-	w = NextWord();
-	if(w == 'thin' && NextWord() == 'air') return 2;
-	if(w == 'air') return 1;
+[ PARSE_NAME_AIR;
+	! There is no actual need for a parse_name routine here. It's just here for demonstration purposes
+	if(NextWord() == 'air') return 1;
 	rfalse;
 ];
 
-[ WallDesc;
+[ WALL_DESC;
 	Examine:
 		"The walls are ",
-!			(string) random("claustrophobia-inducing", "scary", "shiny"),
-	 			"shiny",
-				" here.";
+			(string) random("all white", "claustrophobia-inducing", "scary",
+				"shiny"), " here.";
 	default:
 		rfalse;
 ];
@@ -81,18 +69,15 @@ Constant BOOKDESC "You're not interested in reading.";
 ];
 
 
-Object Library "The Library"
+Object Library "Library"
 	with
 		description "You are in a big lovely library. You can examine or try to
-			take the books, the shelves, the library, the air, the atmosphere,
-			the walls and the ceiling fan.",
+			take the old books, the shelves, the library, the air, the atmosphere,
+			the walls and the ceiling. The reading room lies east.",
+		e_to ReadingRoom,
 		cheap_scenery
-			'book' 'books' BOOKDESC
-			CS_ADD_LIST MySceneryListObject inside_scenery
-			'wall' 'walls' "Ugly walls."
-			CS_NO_ADJ 'atmosphere' SCN_ATMOSPHERE
+			14 'old' 'book' 'books' 'volume' 'volumes' BOOKDESC
 			'shelf' 'shelves' "They're full of books."
-			CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
 			CS_PARSE_NAME [ _i _w;
 				cs_parse_name_id = CSP_LIBRARY;
 				_w = NextWord();
@@ -100,8 +85,16 @@ Object Library "The Library"
 				if(_w == 'lovely') { _i++; _w = NextWord();}
 				if(_w == 'library') { _i++; return _i;}
 				return 0;
-			] "It's truly glorious.",
-	has light;
+			] "It's truly glorious."
+			CS_ADD_LIST Library (inside_scenery),
+		inside_scenery
+			CS_PARSE_NAME PARSE_NAME_AIR "The air is oh so thin here."
+			1 'atmosphere' SCN_ATMOSPHERE
+			'wall' 'walls' WALL_DESC
+			1 'ceiling' [;
+				Examine: "The ceiling is quite high up.";
+				Touch: "There's no way you could reach it!";
+			];
 
 Object -> Box "box"
 	with
@@ -109,17 +102,24 @@ Object -> Box "box"
 		description "It's a fine box.",
 	has container open openable;
 
-Object MySceneryListObject "Just made this to hold scenery lists"
+Object ReadingRoom "Reading Room"
 	with
-		inside_scenery
-			'book' 'books' "Some fine books."
-			'wall' 'walls' WallDesc
-			'ceiling' 'fan' [;
-				Examine: "The ceiling fan is quite high up.";
-				Touch: "There's no way you could reach it!";
-			];
+		description "This is the reading room. The air feels different here.
+			There's a single book sitting on one of the tables.
+			You can examine or try to take the tables, the reading room,
+			the air, the atmosphere, the walls and the ceiling. The library lies west.",
+		w_to Library,
+		cheap_scenery
+			CS_PARSE_NAME PARSE_NAME_AIR "The air is thicker here than in the library."
+			'single' 'book' "It's the classic ~Gone With the Wind~ by Margaret Mitchell."
+			'table' 'tables' [;
+				Examine: "Quite sturdy.";
+				Take, Remove, Turn, Pull, Push: "You decide it's better to leave the tables where they are.";
+			]
+			'reading' 'room' "It's a very peaceful place."
+			CS_ADD_LIST Library (inside_scenery);
 
 [Initialise;
-	location = Library;
 	print "^^Let's do this...^^";
+	lookmode = 2;
 ];
