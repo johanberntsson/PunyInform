@@ -1,4 +1,4 @@
-Upcoming release:
+v4.5: bug fix and new feature release (22 April 2023)
 
 - An R is added after the library version in the banner if RUNTIME_ERRORS > 0.
 - Fixed talk_menu bug: activating a relative topic# would also set the flag
@@ -43,7 +43,6 @@ Upcoming release:
 - talk_menu: A string can now be used as an effect of a topic.
 - talk_menu: To mute a line by the player or an NPC, replace it with
   TM_NO_LINE.
-
 
 =======
 v4.4: bug fix and new feature release (18 March 2023)
