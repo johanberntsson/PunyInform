@@ -24,12 +24,12 @@ Constant CSP_LIBRARY 1;
 	! We can also check action, and there's even an implicit switch on action,
 	! so we can do things like: Take: "You're crazy.";
 	switch(routine) {
-	ParseNameAir:
+	PARSE_NAME_AIR:
 		"You need the air to breathe, that's all.";
 	CSP_LIBRARY:
 		"The library is super-important. Better not mess with it.";
 	}
-	if(location == Library && word1 == 'book' && word2 == 'books')
+	if(location == Library && word1 == 'old' && word2 == 'book')
 		"Leave the books to the people who care about them.";
 	rfalse;
 ];
@@ -37,12 +37,13 @@ Constant CSP_LIBRARY 1;
 Include "ext_cheap_scenery.h";
 Include "puny.h";
 
-[ ParseNameAir;
+[ PARSE_NAME_AIR;
+	! There is no actual need for a parse_name routine here. It's just here for demonstration purposes
 	if(NextWord() == 'air') return 1;
 	rfalse;
 ];
 
-[ WallDesc;
+[ WALL_DESC;
 	Examine:
 		"The walls are ",
 			(string) random("all white", "claustrophobia-inducing", "scary",
@@ -63,17 +64,15 @@ Constant BOOKDESC "You're not interested in reading.";
 ];
 
 
-Object Library "The Library"
+Object Library "Library"
 	with
 		description "You are in a big lovely library. You can examine or try to
-			take the books, the shelves, the library, the air, the atmosphere,
-			the walls and the ceiling.",
+			take the old books, the shelves, the library, the air, the atmosphere,
+			the walls and the ceiling. The reading room lies east.",
+		e_to ReadingRoom,
 		cheap_scenery
-			CS_ADD_LIST Library inside_scenery
-			CS_NO_ADJ 'atmosphere' SCN_ATMOSPHERE
-			'book' 'books' BOOKDESC
+			14 'old' 'book' 'books' 'volume' 'volumes' BOOKDESC
 			'shelf' 'shelves' "They're full of books."
-			CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
 			CS_PARSE_NAME [ _i _w;
 				cs_parse_name_id = CSP_LIBRARY;
 				_w = NextWord();
@@ -81,10 +80,13 @@ Object Library "The Library"
 				if(_w == 'lovely') { _i++; _w = NextWord();}
 				if(_w == 'library') { _i++; return _i;}
 				return 0;
-			] "It's truly glorious.",
+			] "It's truly glorious."
+			CS_ADD_LIST Library (inside_scenery),
 		inside_scenery
-			'wall' 'walls' WallDesc
-			CS_NO_ADJ 'ceiling' [;
+			CS_PARSE_NAME PARSE_NAME_AIR "The air is oh so thin here."
+			1 'atmosphere' SCN_ATMOSPHERE
+			'wall' 'walls' WALL_DESC
+			1 'ceiling' [;
 				Examine: "The ceiling is quite high up.";
 				Touch: "There's no way you could reach it!";
 			];
@@ -95,6 +97,22 @@ Object -> Box "box"
 		description "It's a fine box.",
 	has container open openable;
 
+Object ReadingRoom "Reading Room"
+	with
+		description "This is the reading room. The air feels different here.
+			You can examine or try to take the tables, the reading room,
+			the air, the atmosphere, the walls and the ceiling. The library lies west.",
+		w_to Library,
+		cheap_scenery
+			CS_PARSE_NAME PARSE_NAME_AIR "The air is thicker here than in the library."
+			'table' 'tables' [;
+				Examine: "Quite sturdy.";
+				Take, Remove, Turn, Pull, Push: "You decide it's better to leave the tables where they are.";
+			]
+			'reading' 'room' "It's a very peaceful place."
+			CS_ADD_LIST Library (inside_scenery);
+
 [Initialise;
 	print "^^Let's do this...^^";
+	lookmode = 2;
 ];
