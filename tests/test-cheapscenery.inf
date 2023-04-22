@@ -10,8 +10,9 @@ Constant NO_SCORE = 0;
 
 !Constant DEBUG;
 Constant OPTIONAL_NO_DARKNESS;
-!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
 Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
 Constant INITIAL_LOCATION_VALUE = Library;
 
 Include "globals.h";
@@ -36,7 +37,7 @@ Constant CSP_LIBRARY 1;
 		"Leave the books to the people who care about them.";
 	if(location == Library && word1 == 'shelf')
 		"You're not supposed to touch the shelves.";
-	rfalse;
+	"Remember you're in a library. There's no need to touch everything.";
 ];
 
 Include "ext_cheap_scenery.h";
@@ -93,7 +94,7 @@ Object Library "Library"
 			'wall' 'walls' WALL_DESC
 			1 'ceiling' [;
 				Examine: "The ceiling is quite high up.";
-				Touch: "There's no way you could reach it!";
+				default: "There's no way you could reach it!";
 			];
 
 Object -> Box "box"

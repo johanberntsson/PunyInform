@@ -1,25 +1,27 @@
 
 transcript
 
-x book
-push books
-burn book books
-get books book
-x wall
-push walls
-x ceiling fan
-touch it
-turn it
-x atmosphere
-push atmosphere
-get air
-turn library
-x it
+x volume
+get old book
 x shelf
+push shelves
+x the big library
+push the library
 x air
-x thin air
-x big library
-x box
+get air
+x atmosphere
+pull walls
+x ceiling
+push ceiling
+e
+x book
+get the single book
+push table
+x tables
+x room
+turn reading room
+x air
+push air
 quit
 yes
 
