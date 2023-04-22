@@ -354,7 +354,7 @@ Object CheapScenery "object"
 #Ifdef SceneryReply;
 		before [_i _k _w1pos _w1 _w2 _routine;
 #Ifnot;
-		before [_i _k _w1pos;
+		before [_i _k;
 #Endif;
 			_i = _CSGetArr();
 			_k = _i-->0;
