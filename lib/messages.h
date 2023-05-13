@@ -1219,7 +1219,7 @@ Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 		ERR_NOT_FAKE_OBJ:
 			print "FakeObjToDirProp called with non-fakeobj";
 		ERR_ILLEGAL_CHOOSEOBJNO:
-			print "ChooseObjectFinal_(Pick or Discard) called with nonexistent array index.";
+			print "ChooseObjectsFinal_(Pick or Discard) called with nonexistent array index.";
 		default:
 			print "Unknown error (", p_err, ")";
 		}

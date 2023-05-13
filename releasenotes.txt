@@ -1,3 +1,10 @@
+Upcoming release:
+
+- Fixed bug where time_left wasn't set correctly and runtime error check to
+  see if timer object provides time_left wasn't performed if timer was set
+  to 0.
+
+=======
 v4.5: bug fix and new feature release (22 April 2023)
 
 - An R is added after the library version in the banner if RUNTIME_ERRORS > 0.

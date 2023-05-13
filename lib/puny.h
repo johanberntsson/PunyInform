@@ -1283,7 +1283,7 @@ Include "parser.h";
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if (_i >= MAX_TIMERS) _RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
 #EndIf;
-	if (p_timer > 0) {
+	if (p_array_val > 0) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
 			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj); return;
@@ -1346,7 +1346,7 @@ Include "parser.h";
 		print (DebugParameter) p_obj, "]^";
 	}
 #EndIf;
-	if (p_obj == p_array_val) { ! This is a timer, not a daemon
+	if (p_array_val > 0) { ! This is a timer, not a daemon
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
 			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj); 
