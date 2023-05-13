@@ -1200,7 +1200,9 @@ Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 	if(p_err ofclass string)
 		print (string) p_err;
 	else {
+		print p_err;
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
+		print " - ";
 		switch(p_err) {
 		ERR_TOO_MANY_TIMERS_DAEMONS:
 			print "Too many timers/daemons";
@@ -1221,10 +1223,8 @@ Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 		ERR_ILLEGAL_CHOOSEOBJNO:
 			print "ChooseObjectsFinal_(Pick or Discard) called with nonexistent array index.";
 		default:
-			print "Unknown error (", p_err, ")";
+			print "Unknown error";
 		}
-#IfNot;
-		print p_err;
 #EndIf;
 	}
 	print "]^";

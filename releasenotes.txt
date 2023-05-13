@@ -3,6 +3,9 @@ Upcoming release:
 - Fixed bug where time_left wasn't set correctly and runtime error check to
   see if timer object provides time_left wasn't performed if timer was set
   to 0.
+- Runtime errors now include the error number + text message when 
+  RUNTIME_ERRORS is set to 2. This should make it easier to refer to the
+  error, and find it in the documentation.
 
 =======
 v4.5: bug fix and new feature release (22 April 2023)
