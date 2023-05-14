@@ -49,6 +49,10 @@ Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL = 1;
 Constant RTE_VERBOSE = 2;
 #EndIf;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+Constant QB_ERR = "Quote_box error #";
+#Endif;
+
 
 Constant QUOTE_MAX_LENGTH = 80;
 
@@ -85,11 +89,11 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
 	if(_quote_width > QUOTE_MAX_LENGTH) {
-		"ERROR: quote_box: Tried to print quote wider than ", QUOTE_MAX_LENGTH, " characters!^";
+		print_ret (string) QB_ERR,"1: Tried to print quote wider than ", QUOTE_MAX_LENGTH, " characters!";
 	}
 #IfNot;
 	if(_quote_width > QUOTE_MAX_LENGTH) {
-		"ERROR: quote_box #1!^";
+		print_ret (string) QB_ERR,"1!";
 	}
 #EndIf;
 #EndIf;

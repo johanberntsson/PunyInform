@@ -1205,25 +1205,25 @@ Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 		print " - ";
 		switch(p_err) {
 		ERR_TOO_MANY_TIMERS_DAEMONS:
-			print "Too many timers/daemons";
+			print "Too many timers/daemons!";
 		ERR_OBJECT_HASNT_PROPERTY:
-			print "Object lacks required property";
+			print "Object lacks required property!";
 		ERR_SCOPE_FULL:
-			print "Scope full";
+			print "Scope full!";
 		ERR_UNKNOWN_MSGNO:
-			print "Unknown message#";
+			print "Unknown message#!";
 		ERR_INVALID_DIR_PROP:
-			print "Invalid direction prop in GoSub";
+			print "Invalid direction prop in GoSub!";
 		ERR_TOO_MANY_FLOATING:
-			print "Too many floating objects";
+			print "Too many floating objects!";
 		ERR_NOT_DIR_PROP:
-			print "DirPropToFakeObj called with non-dirprop";
+			print "DirPropToFakeObj called with non-dirprop!";
 		ERR_NOT_FAKE_OBJ:
-			print "FakeObjToDirProp called with non-fakeobj";
+			print "FakeObjToDirProp called with non-fakeobj!";
 		ERR_ILLEGAL_CHOOSEOBJNO:
-			print "ChooseObjectsFinal_(Pick or Discard) called with nonexistent array index.";
+			print "ChooseObjectsFinal_(Pick or Discard) called with nonexistent array index!";
 		default:
-			print "Unknown error";
+			print "Unknown error!";
 		}
 #EndIf;
 	}

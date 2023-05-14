@@ -49,6 +49,9 @@ Constant RTE_NORMAL = 1;
 Constant RTE_VERBOSE = 2;
 Constant TM_NOT_PUNY;
 #Endif;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+Constant FL_ERR = "Flags error #";
+#Endif;
 
 #Ifv3;
 Array flag_powers static ->
@@ -69,18 +72,18 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 #Ifdef DEBUG;
 		if(p_x == 0) {
 	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			"WARNING: Flags: Use of flag 0 is deprecated, and will not work as second or third argument to flag functions.";
+			print (string) FL_ERR,"2: Warning: Use of flag 0 is deprecated, and will not work as second or third argument to flag functions!^";
 	#Ifnot;
-			"WARNING: Flags #2!";
+			print (string) FL_ERR,"2 (warning)!^";
 	#Endif;
 		}
 #Endif;
 	if(p_x < 0 || p_x > FLAG_COUNT) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-		"ERROR: Flags: Tried to use flag ", p_x, 
+		print_ret (string) FL_ERR,"1: Tried to use flag ", p_x, 
 			", but the highest flag number is ", FLAG_COUNT, "!";
 #Ifnot;
-		"ERROR: Flags #1!";
+		print_ret (string) FL_ERR,"1!";
 #Endif;
 	}
 	rfalse;

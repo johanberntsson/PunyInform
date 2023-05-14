@@ -6,6 +6,10 @@ Upcoming release:
 - Runtime errors now include the error number + text message when 
   RUNTIME_ERRORS is set to 2. This should make it easier to refer to the
   error, and find it in the documentation.
+- In DEBUG mode, the flags extension would print a warning about using flag 0,
+  but treat it as an error and abort the operation.
+- Consolidated runtime error messages in extensions, making builds with
+  RUNTIME_ERRORS smaller, and the error messages adhere to the same form. 
 
 =======
 v4.5: bug fix and new feature release (22 April 2023)
