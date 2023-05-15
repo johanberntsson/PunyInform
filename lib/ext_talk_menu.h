@@ -133,7 +133,7 @@ Constant RTE_VERBOSE = 2;
 Constant TM_NOT_PUNY;
 #Endif;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-Constant TM_ERR = "Talk_menu error #";
+Constant TM_ERR = "^[Talk_menu error #";
 #Endif;
 
 #Ifndef talk_start;
@@ -311,9 +311,9 @@ Global talk_menu_multi_mode = true;
 	#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if(p_start == 0) {
 	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			print (string) TM_ERR,"3: Could not activate topic ", p_topic, " for NPC ", (name) p_npc, "!^";
+			print (string) TM_ERR,"3: Could not activate topic ", p_topic, " for NPC ", (name) p_npc, "]^";
 	#Ifnot;
-			print (string) TM_ERR,"3!^";
+			print (string) TM_ERR,"3]^";
 	#Endif;
 			rfalse;
 		}
@@ -333,9 +333,9 @@ Global talk_menu_multi_mode = true;
 	#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if(p_start == 0) {
 	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			print (string) TM_ERR,"3: Could not inactivate topic ", p_topic, " for NPC ", (name) p_npc, "!^";
+			print (string) TM_ERR,"3: Could not inactivate topic ", p_topic, " for NPC ", (name) p_npc, "]^";
 	#Ifnot;
-			print (string) TM_ERR,"3!^";
+			print (string) TM_ERR,"3]^";
 	#Endif;
 			rfalse;
 		}
@@ -382,9 +382,9 @@ Array TenDashes static -> "----------";
 			if(~~(_val provides talk_start)) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 				print_ret (string) TM_ERR,"1: Object ", _val, " (", (name) _val, "), which has
-					talk topics in talk_array, doesn't provide talk_start!";
+					talk topics in talk_array, doesn't provide talk_start]";
 #Ifnot;
-				print_ret (string) TM_ERR,"1!";
+				print_ret (string) TM_ERR,"1]";
 #Endif;
 			}
 #Endif;
@@ -406,9 +406,9 @@ Array TenDashes static -> "----------";
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(~~(p_npc provides talk_start)) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-		print_ret (string) TM_ERR,"1: Object ", p_npc, " (", (name) p_npc, ") doesn't provide talk_start!";
+		print_ret (string) TM_ERR,"1: Object ", p_npc, " (", (name) p_npc, ") doesn't provide talk_start]";
 #Ifnot;
-		print_ret (string) TM_ERR,"1!";
+		print_ret (string) TM_ERR,"1]";
 #Endif;
 	}
 #Endif;
@@ -651,9 +651,9 @@ Array TenDashes static -> "----------";
 			#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 				if(metaclass(_val) ~= Routine or String) {
 					#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-						print_ret (string) TM_ERR,"2: Action ", _val, " was not understood for ", (name) p_npc, "!";
+						print_ret (string) TM_ERR,"2: Action ", _val, " was not understood for ", (name) p_npc, "]";
 					#Ifnot;
-						print_ret (string) TM_ERR,"2!";
+						print_ret (string) TM_ERR,"2]";
 					#Endif;
 				}
 			#Endif;
@@ -714,9 +714,9 @@ Verb 'talk' 'converse' 'interview' 'interrogate'
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 				print (string) TM_ERR,"1: Object ", _val, " (", (name) _val,
 					"), which has talk topics in talk_array, doesn't
-					provide talk_start!^";
+					provide talk_start]^";
 #Ifnot;
-				print (string) TM_ERR,"1!^";
+				print (string) TM_ERR,"1]^";
 #Endif;
 			}
 			print "Object ", _val, " (", (name) _val, "): talk_start = ", _i + 1, "^";

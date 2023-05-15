@@ -139,7 +139,7 @@ Constant RTE_NORMAL = 1;
 Constant RTE_VERBOSE = 2;
 #Endif;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-Constant CS_ERR = "Cheap_scenery error #";
+Constant CS_ERR = "^[Cheap_scenery error #";
 #Endif;
 
 
@@ -232,9 +232,9 @@ Global cs_parse_name_id = 0;
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print (string) CS_ERR, "5: First element of entry, at position ", _i, 
 				" in a cheap scenery property of ", (name) p_obj,
-				" should be a value 1-99, or a vocabulary word, but is 0!^" ;
+				" should be a value 1-99, or a vocabulary word, but is 0]^" ;
 #Ifnot;
-			print (string) CS_ERR, "5!^";
+			print (string) CS_ERR, "5]^";
 #Endif;
 			rfalse;
 		}
@@ -245,9 +245,9 @@ Global cs_parse_name_id = 0;
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print (string) CS_ERR,"2: Element ", _i+1, " in a cheap scenery property of ", (name) p_obj,
 				" is part of a CS_ADD_LIST entry and should be a valid
-				object ID but isn't!^" ;
+				object ID but isn't]^" ;
 #Ifnot;
-			print (string) CS_ERR, "2!^";
+			print (string) CS_ERR, "2]^";
 #Endif;
 			rfalse;
 		}
@@ -256,9 +256,9 @@ Global cs_parse_name_id = 0;
 		if(_sw1 < 1 || _sw1 > CS_ADD_LIST && metaclass(_arr-->(_i+2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print (string) CS_ERR,"3: Element ", _i+2, " in a cheap scenery property of ",
-				(name) p_obj, " is not a string or routine!^";
+				(name) p_obj, " is not a string or routine]^";
 #Ifnot;
-			print (string) CS_ERR,"3!^";
+			print (string) CS_ERR,"3]^";
 #Endif;
 			rfalse;
 		}
@@ -273,9 +273,9 @@ Global cs_parse_name_id = 0;
 			if(metaclass(_sw2) ~= Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 				print (string) CS_ERR,"4: Element ", _i+1, " in a cheap scenery property of ",
-				(name) p_obj, " should be a parse_name routine but isn't!^";
+				(name) p_obj, " should be a parse_name routine but isn't]^";
 #Ifnot;
-				print (string) CS_ERR,"4!^";
+				print (string) CS_ERR,"4]^";
 #Endif;
 				rfalse;
 			}
@@ -303,9 +303,9 @@ Global cs_parse_name_id = 0;
 		if(metaclass(_arr-->(_j + _sw2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print (string) CS_ERR,"3: Element ", _j + _sw2, " in a cheap scenery property of ",
-				(name) p_obj, " is not a string or routine!^";
+				(name) p_obj, " is not a string or routine]^";
 #Ifnot;
-			print (string) CS_ERR,"3!^";
+			print (string) CS_ERR,"3]^";
 #Endif;
 			rfalse;
 		}
@@ -329,9 +329,9 @@ Global cs_parse_name_id = 0;
 	if(_i > _len) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 		print (string) CS_ERR,"1: A cheap scenery property of ", (name) p_obj, 
-			" extends beyond property length - check entries with 3+ words!^";
+			" extends beyond property length - check entries with 3+ words]^";
 #Ifnot;
-		print (string) CS_ERR,"1!^";
+		print (string) CS_ERR,"1]^";
 #Endif;
 		rfalse;
 	}

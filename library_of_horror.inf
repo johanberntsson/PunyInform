@@ -26,7 +26,7 @@ Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant OPTIONAL_REACTIVE_PARSE_NAME;
 ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
-Constant RUNTIME_ERRORS = 0;
+!Constant RUNTIME_ERRORS = 0;
 
 Constant INITIAL_LOCATION_VALUE = GloomyStreet;
 
@@ -34,8 +34,8 @@ Constant STATUSLINE_SCORE; Statusline score;
 
 Constant Story	  "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game, by Pablo Martinez and Fredrik Ramsberg.^";
-Release 7;
-Serial "210920";
+Release 8;
+Serial "230515";
 
 ! Get your own unique IFID for your game at https://www.tads.org/ifidgen/ifidgen
 Array UUID_ARRAY string "UUID://43E00AEE-DEAF-40D9-8306-11BC80779320//"; #Ifdef UUID_ARRAY; #Endif;
@@ -49,6 +49,9 @@ Constant TASK_GIVE_BOOK = 1;
 Constant TASK_BLOCK_ROBOT = 2;
 Constant TASK_BURN_BOOK = 3;
 Constant TASK_LEAVE = 4;
+
+Constant MAX_SCOPE = 10;
+Constant MAX_TIMERS = 2;
 
 ! ====================================
 ! Include globals.h
@@ -100,11 +103,11 @@ Include "globals.h";
 ! Setup flags
 ! ====================================
 Constant FLAG_COUNT = 5;
-Constant F_TALKED_TO_MANAGER = 0;
-Constant F_FRANK_BLOCKED_BY_BOX = 1;
-Constant F_BOOK_DELIVERED = 2;
-Constant F_STARTED_FIRE = 3;
-Constant F_FRANK_HAS_SEEN_BOOK = 4;
+Constant F_TALKED_TO_MANAGER = 1;
+Constant F_FRANK_BLOCKED_BY_BOX = 2;
+Constant F_BOOK_DELIVERED = 3;
+Constant F_STARTED_FIRE = 4;
+Constant F_FRANK_HAS_SEEN_BOOK = 5;
 Include "ext_flags.h";
 
 ! ====================================

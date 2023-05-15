@@ -1279,18 +1279,22 @@ Include "parser.h";
 		p_array_val = WORD_HIGHBIT + p_obj;
 	for (_i=0 : _i<active_timers : _i++)
 		if (the_timers-->_i == p_array_val) rfalse;
-	_i = active_timers++;
+	if (active_timers >= MAX_TIMERS) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if (_i >= MAX_TIMERS) _RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
+		_RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);
 #EndIf;
+		return;
+	}
 	if (p_array_val > 0) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
-			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj); return;
+			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj); 
+			return;
 		}
 #EndIf;
 		p_obj.time_left = p_timer;
 	}
+	_i = active_timers++;
 #IfDef DEBUG;
 	if(debug_flag & 4) {
 		print "[ Starting ";
