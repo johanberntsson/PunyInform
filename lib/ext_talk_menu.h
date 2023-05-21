@@ -135,6 +135,11 @@ Constant TM_NOT_PUNY;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 Constant TM_ERR = "^[Talk_menu error #";
 #Endif;
+#Ifdef DEBUG;
+	#Ifndef TM_ERR;
+	Constant TM_ERR = "^[Talk_menu error #";
+	#Endif;
+#Endif;
 
 #Ifndef talk_start;
 Property individual talk_start;
