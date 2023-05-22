@@ -94,11 +94,10 @@ Array cursor_pos --> 2;
 [ _MoveCursor line column;  ! 1-based postion on text grid
 	if (~~statuswin_current) {
 		@set_window 1;
-		if (clr_on && clr_bgstatus > 1) {
-			@set_colour clr_fgstatus clr_bgstatus;
-		} else {
-			style reverse;
+		if (clr_on && clr_fgstatus > 1) {
+			@set_colour clr_fgstatus clr_bg;
 		}
+		style reverse;
 	}
 	if (line == 0) {
 		line = 1;
@@ -110,11 +109,10 @@ Array cursor_pos --> 2;
 
 [ _MainWindow;
 	if (statuswin_current) {
-		if (clr_on && clr_bgstatus > 1) {
+		if (clr_on && clr_fgstatus > 1) {
 			@set_colour clr_fg clr_bg;
-		} else {
-			style roman;
 		}
+		style roman;
 		@set_window 0;
 	}
 	statuswin_current = false;

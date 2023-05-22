@@ -12,6 +12,12 @@ Upcoming release:
   RUNTIME_ERRORS smaller, and the error messages adhere to the same form.
 - Changed so check if maximum # of timers/daemons is about to be exceeded is
   performed even when RUNTIME_ERRORS is 0, to avoid array overrun.
+- Cleaned up support for coloured text.
+- _ReadPlayerInput() now supports two arguments: p_no_prompt (not new) stops
+  the routine from printing a prompt, and p_no_statusline (new) stops the
+  routine from printing the statusline under z5 (It's safe to call it
+  with this parameter even under z3 though).
+- The YesOrNo() routine no longer causes the statusline to be redrawn.
 
 =======
 v4.5: bug fix and new feature release (22 April 2023)

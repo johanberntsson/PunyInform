@@ -9,7 +9,7 @@ System_file;
 
 [ YesOrNo;
     for (::) {
-        _ReadPlayerInput(true);
+        _ReadPlayerInput(true, true);
         if(parse -> 1 == 1) {
         	! one word reply
             if(parse --> 1 == 'yes' or 'y//') rtrue;
@@ -180,10 +180,11 @@ System_file;
 	}
 ];
 
-[ _ReadPlayerInput p_no_prompt _result;
-! #IfV5;
-!   print "Width: ", HDR_SCREENWCHARS->0,"^";
-! #EndIf;
+#Ifv5;
+[ _ReadPlayerInput p_no_prompt p_no_statusline _result;
+#Ifnot;
+[ _ReadPlayerInput p_no_prompt _result; ! NOTE: Must have at least 2 vars, so calls with 2 params don't break!
+#EndIf;
 #IfV5;
 	style roman;
 	@buffer_mode 0;
@@ -192,10 +193,16 @@ System_file;
 	! library entry routine
 	RunEntryPointRoutine(AfterPrompt);
 #IfV5;
-	DrawStatusLine();
+	if(p_no_statusline == false) DrawStatusLine();
 	buffer->1 = 0;
+	if (clr_on && clr_fginput > 1) {
+		@set_colour clr_fginput clr_bg;
+	}
 	@aread buffer parse -> _result;
 	@buffer_mode 1;
+	if (clr_on && clr_fginput > 1) {
+		@set_colour clr_fg clr_bg;
+	}
 #IfNot;
 	@sread buffer parse;
 #EndIf;
