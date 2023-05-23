@@ -23,7 +23,13 @@ Include "puny.h";
 
 Object Library "The Library"
 	with
-		description "You are in a library.";
+		description [;
+			print "You are ";
+			ChangeFgColour(CLR_WHITE);
+			print "in ";
+			ChangeFgColour(CLR_CYAN);
+			"a library.";
+		];
 
 Object -> Box "box"
 	with
@@ -41,9 +47,8 @@ Object -> Box "box"
 			clr_bg = CLR_BLACK;
 			clr_fginput = CLR_YELLOW; ! Don't set this, or set it to CLR_CURRENT, to keep input in same colour as normal text
 			clr_fgstatus = CLR_RED; ! Don't set this, or set it to CLR_CURRENT, to keep statusline in same colour as normal text
-			@set_colour clr_fg clr_bg;
 		}
-		@erase_window 0;
+		ClearScreen(WIN_ALL);
 	}
 #Endif;
 	print "^^And so the story begins...^^";

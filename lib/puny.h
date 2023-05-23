@@ -81,6 +81,24 @@ Include "grammar.h";
 
 #IfV5;
 
+[ ClearScreen window;
+	if (clr_on) {
+		@set_colour clr_fg clr_bg;
+	}
+    switch (window) {
+      WIN_ALL:    @erase_window -1;
+      WIN_STATUS: @erase_window 1;
+      WIN_MAIN:   @erase_window 0;
+    }
+];
+
+[ ChangeFgColour p_colour;
+	clr_fg = p_colour;
+	if (clr_on) {
+		@set_colour clr_fg CLR_CURRENT;
+	}
+];
+
 Array cursor_pos --> 2;
 
 [ _StatusLineHeight p_height;

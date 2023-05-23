@@ -18,6 +18,11 @@ Upcoming release:
   routine from printing the statusline under z5 (It's safe to call it
   with this parameter even under z3 though).
 - The YesOrNo() routine no longer causes the statusline to be redrawn.
+- New library procedure for z5: ClearScreen(window); where window can be
+  WIN_ALL (default), WIN_MAIN or WIN_STATUS.
+- New library procedure for z5: ChangeFgColour(colour); Changes the foreground
+  colour variable clr_fg and, if clr_on is true, instructs the interpreter to
+  change the foreground colour accordingly.
 
 =======
 v4.5: bug fix and new feature release (22 April 2023)
