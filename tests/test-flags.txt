@@ -1,8 +1,7 @@
 
 > listen
-
-PassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassERROR:
-Flags: Tried to use flag 101, but the highest flag number is 100!
+PassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPass
+[Flags error #1: Tried to use flag 101, but the highest flag number is 100]
 Pass
 
 > quit
