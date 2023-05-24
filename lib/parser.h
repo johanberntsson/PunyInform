@@ -7,10 +7,12 @@
 
 System_file;
 
-[ YesOrNo;
+[ YesOrNo n;
     for (::) {
         _ReadPlayerInput(true, true);
-        if(parse -> 1 == 1) {
+		n = parse -> 1;
+		parse -> 1 = 0;
+        if(n == 1) {
         	! one word reply
             if(parse --> 1 == 'yes' or 'y//') rtrue;
             if(parse --> 1 == 'no' or 'n//') rfalse;
