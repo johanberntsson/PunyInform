@@ -21,26 +21,17 @@ Include "globals.h";
 
 Include "puny.h";
 
-#Ifv5;
-! For z5, declare the colour constants we need to conveniently switch colours during the game
+! Declare the colour constants we need to conveniently switch colours during the game
 Constant MY_DEFAULT_FG = CLR_CYAN;
 Constant MY_EMPHASIS_FG = CLR_WHITE;
-#Ifnot;
-! For z3, provide dummy values for the colour constants declared above
-Constant MY_DEFAULT_FG = 0; 
-Constant MY_EMPHASIS_FG = 0;
-! The ChangeFgColour procedure is created by the library in z5. Declare it for
-! z3 so it can be called even in z3 version. It does nothing in z3 of course.
-[ ChangeFgColour p_colour; p_colour = 1; ];
-#Endif;
 
 Object Library "The Library"
 	with
 		description [;
 			print "You are ";
-			ChangeFgColour(MY_EMPHASIS_FG);
+			ChangeFgColour(MY_EMPHASIS_FG); ! This has no effect unless colours are active
 			print "in ";
-			ChangeFgColour(MY_DEFAULT_FG);
+			ChangeFgColour(MY_DEFAULT_FG); ! This has no effect unless colours are active
 			"a library.";
 		];
 

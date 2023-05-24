@@ -79,6 +79,12 @@ Include "grammar.h";
     return 0;
 ];
 
+#Ifv3;
+[ ChangeFgColour p_colour;
+	p_colour = 1; ! Avoid warning
+];
+#Endif;
+
 #IfV5;
 
 [ ClearScreen window;
