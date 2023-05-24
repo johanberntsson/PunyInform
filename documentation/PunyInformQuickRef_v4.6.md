@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v4.5 quick reference** |
+| **PunyInform v4.6 quick reference** |
 
   
 More information on last page.
@@ -18,6 +18,26 @@ More information on last page.
 ## buffer
 
 ###### The array where player input is kept.
+
+## clr_bg
+
+###### z5+ only: Background colour.
+
+## clr_fg
+
+###### z5+ only: Foreground colour.
+
+## clr_fginput **PUNY++**
+
+###### z5+ only: Player input colour.
+
+## clr_fgstatus
+
+###### z5+ only: Status line colour.
+
+## clr_on
+
+###### z5+ only: Set to true to enable colours.
 
 ## consult_from
 
@@ -337,8 +357,6 @@ More information on last page.
 
 ###### Use tasks for scoring. Also define *NUMBER_TASKS*, byte array *task_scores* and entry point routine *PrintTaskName*.
 
-## 
-
 # Library routines
 
 ## Achieved(number)
@@ -349,6 +367,10 @@ More information on last page.
 
 ###### Print the game name, serial# etc. To skip this at game start, return 2 from *Initialise* and call *Banner* later.
 
+## ChangeFgColour(colour) **PUNY++**
+
+###### Change the foreground colour, if game is in z5+ format and colour has been enabled. 
+
 ## ChooseObjectsFinal_Discard(number) **PUNY++**
 
 ###### Call from entry point routine *ChooseObjectsFinal *to remove option *number* (0 or higher).
@@ -356,6 +378,10 @@ More information on last page.
 ## ChooseObjectsFinal_Pick(number) **PUNY++**
 
 ###### Call from entry point routine *ChooseObjectsFinal *to pick option *number* (0 or higher).
+
+## ClearScreen(window) **\~PUNY**
+
+###### z5+ only. Call with argument *WIN_MAIN*, *WIN_STATUS* or *WIN_ALL *to set colours (if *clr_on* is *true*) and clear main and/or status window. 
 
 ## CommonAncestor(object1, object2)
 
@@ -633,6 +659,8 @@ circumstances stated for each routine.
 ## thedark
 
 ###### Fake room. When *real_location *is dark, *location* points here. The player is never moved to *thedark*.
+
+## 
 
 # Group 1 actions
 

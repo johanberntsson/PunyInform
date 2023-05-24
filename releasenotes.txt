@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v4.6: bug fix and new feature release (24 May 2023)
+
 - Fixed bug where time_left wasn't set correctly and runtime error check to
   see if timer object provides time_left wasn't performed if timer was set
   to 0.
@@ -18,11 +21,13 @@ Upcoming release:
   routine from printing the statusline under z5 (It's safe to call it
   with this parameter even under z3 though).
 - The YesOrNo() routine no longer causes the statusline to be redrawn.
-- New library procedure for z5: ClearScreen(window); where window can be
-  WIN_ALL (default), WIN_MAIN or WIN_STATUS.
-- New library procedure for z5: ChangeFgColour(colour); Changes the foreground
+- New library routine for z5: ClearScreen(window); where window can be
+  WIN_ALL (default), WIN_MAIN or WIN_STATUS. Also sets colours if clr_on is
+  set to true.
+- New library procedure: ChangeFgColour(colour); Changes the foreground
   colour variable clr_fg and, if clr_on is true, instructs the interpreter to
-  change the foreground colour accordingly.
+  change the foreground colour accordingly. For z3, this routine exists but
+  does nothing.
 
 =======
 v4.5: bug fix and new feature release (22 April 2023)
