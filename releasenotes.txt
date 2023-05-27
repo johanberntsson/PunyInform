@@ -3,6 +3,8 @@ Upcoming release:
 - The default message in the cheap scenery extension can now be changed by
   setting CS_DEFAULT_MSG to a string before including the extension. This
   is mainly to support extensions that need to replace it.
+- Moved two more messages from parser.h to messages.h, so they can be
+  customized: MSG_PARSER_NO_IT and MSG_PARSER_CANT_SEE_IT.
 
 =======
 v4.6: bug fix and new feature release (24 May 2023)

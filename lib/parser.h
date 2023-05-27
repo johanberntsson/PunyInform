@@ -702,13 +702,15 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		if(_noun == 0) {
 			phase2_necessary = PHASE2_ERROR;
 			if(parser_phase == PHASE2) {
-				print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
+				PrintMsg(MSG_PARSER_NO_IT, p_parse_pointer --> 0);
+!				print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
 				return -2;
 			}
 		} else if(TestScope(_noun) == false) {
 			phase2_necessary = PHASE2_ERROR;
 			if(parser_phase == PHASE2) {
-				print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^";
+				PrintMsg(MSG_PARSER_CANT_SEE_IT, p_parse_pointer --> 0, _noun);
+!				print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^";
 				return -2;
 			}
 	 	}

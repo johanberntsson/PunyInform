@@ -304,6 +304,8 @@ Default MSG_EAT_INEDIBLE = 139;
 Default MSG_OPEN_ALREADY = 140;
 Default MSG_OPEN_LOCKED = 141;
 Default MSG_PUTON_NOT_SUPPORTER = 142;
+Default MSG_PARSER_NO_IT = 143;
+Default MSG_PARSER_CANT_SEE_IT = 144;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -332,7 +334,7 @@ Constant MSG_BUY_DEFAULT "Nothing is on sale.";
 Constant MSG_EMPTY_WOULDNT_ACHIEVE "That would scarcely empty anything.";
 #EndIf;
 #Ifndef MSG_RHETORICAL_QUESTION;
-Constant	MSG_RHETORICAL_QUESTION "That was a rhetorical question.";
+Constant MSG_RHETORICAL_QUESTION "That was a rhetorical question.";
 #EndIf;
 #Ifndef MSG_PRAY_DEFAULT;
 Constant MSG_PRAY_DEFAULT "Nothing practical results from your prayer.";
@@ -890,6 +892,14 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #IfTrue MSG_PARSER_BAD_PATTERN_SUFFIX < 1000;
 	MSG_PARSER_BAD_PATTERN_SUFFIX:
 		"~. Please try again.";
+#EndIf;
+#IfTrue MSG_PARSER_NO_IT < 1000;
+	MSG_PARSER_NO_IT:
+		"I don't know what ~",(address) p_arg_1, "~ refers to.";
+#EndIf;
+#IfTrue MSG_PARSER_CANT_SEE_IT < 1000;
+	MSG_PARSER_CANT_SEE_IT:
+		"You can't see ~",(address) p_arg_1, "~ (", (name) p_arg_2, ") at the moment.";
 #EndIf;
 #Ifndef SKIP_MSG_CLOSE_NOT_OPEN;
 	MSG_CLOSE_NOT_OPEN, MSG_TOUCHABLE_FOUND_CLOSED,
