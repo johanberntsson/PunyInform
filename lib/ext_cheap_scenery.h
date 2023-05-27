@@ -142,6 +142,9 @@ Constant RTE_VERBOSE = 2;
 Constant CS_ERR = "^[Cheap_scenery error #";
 #Endif;
 
+#Ifndef CS_DEFAULT_MSG;
+Constant CS_DEFAULT_MSG "No need to concern yourself with that.";
+#Endif;
 
 Constant CS_NO_ADJ = 1;
 Constant CS_PARSE_NAME = 100;
@@ -397,7 +400,7 @@ Object CheapScenery "object"
 			if(SceneryReply(_w1, _w2, _routine))
 				rtrue;
 #endif;
-			"No need to concern yourself with that.";
+			print_ret (string) CS_DEFAULT_MSG;
 		],
 		found_in [;
 			if(location provides cheap_scenery) rtrue;
