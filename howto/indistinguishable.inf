@@ -93,10 +93,9 @@ Class Dart
 
 Class Coin
 	with
-		name ',//',
 		parse_name [ _w _n;
 			_w = NextWord();
-			if(_w == self.name) { ! Matches 'silver' or 'gold'
+			if(_w == self.&name-->0) { ! Matches 'silver' or 'gold'
 				_w = NextWord();
 				_n++;
 			}
