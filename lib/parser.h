@@ -1035,8 +1035,23 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				return GPR_REPARSE;
 			}
 			if(_noun == 0) {
-				parser_unknown_noun_found = p_parse_pointer;
-				return GPR_FAIL;
+				! Here we got a list of nouns when we only expected
+				! one. Let's give ChooseObjectsFinal a chance
+				! to reduce the numbers before failing
+#Ifdef ChooseObjectsFinal;
+				parser_one = which_object -> 0;
+				if(parser_one > 1) {
+					ChooseObjectsFinal(which_object + 2, parser_one);
+				}
+				if(parser_one == 1) {
+					_noun = which_object --> 1;
+				} else {
+#Endif;
+					parser_unknown_noun_found = p_parse_pointer;
+					return GPR_FAIL;
+#Ifdef ChooseObjectsFinal;
+				}
+#Endif;
 			}
 			p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {
@@ -1066,7 +1081,6 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			return _noun;
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
-				!print "jb10 ", wn, ", ", parser_all_found, "^";
 				_old_wn = wn;
 				_noun = _GetNextNoun(p_parse_pointer);
 				if(_noun == -2) {
@@ -1504,7 +1518,6 @@ Array guess_object-->5;
 					! neither a verb nor a direction, so probably a list
 					! of nouns without a matching multi token
 					if(parser_phase == PHASE2) {
-						!print "jb^";
 						PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 					} else {
 						phase2_necessary = PHASE2_ERROR;

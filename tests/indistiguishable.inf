@@ -10,7 +10,7 @@ Constant STATUSLINE_SCORE; Statusline score;
 Constant NO_SCORE = 0;
 
 ! Uncomment to add optional features to PunyInform
-Constant DEBUG;
+!Constant DEBUG;
 !Constant DEBUG_CHECKNOUN;
 Constant RUNTIME_ERRORS = 2; ! 0, 1 or 2. 0 = smallest file, 2 = most info
 
@@ -31,12 +31,7 @@ Include "globals.h";
 	return _i;
 ];
 
-
-[ ChooseObjectsFinal p_arr p_len _i _j _o _o2 _sg _d _other_group_present;
-#Ifdef DEBUG;
-    print "*** ChooseObjectsFinal, action is ",(DebugAction) action,", object count is ", p_len, ": ^";
-!	rfalse;
-#Endif;
+[ ChooseObjectsFinal p_arr p_len _i _j _o _o2 _sg _d _d2 _other_group_present;
 	for(_i = 0: _i < p_len: _i++) {
 		_o = p_arr-->_i;
 		if(_o provides same_group) {
@@ -46,14 +41,14 @@ Include "globals.h";
 				_o2 = p_arr-->_j;
 				if(_o2 provides same_group) {
 					if(_o2.same_group == _sg) {
-						if(ObjDepth(_o2) < _d) {
-							! Prefer more shallow oject, so swap main obj and this
+						_d2 = ObjDepth(_o2);
+						if( _d2 < _d) {
+							! Prefer more shallow object, so swap main obj and this
 							_o = _o2;
-							_o2 = p_arr-->_i;
-							p_arr-->_j = _o2;
+							p_arr-->_j = p_arr-->_i;
 							p_arr-->_i = _o;
-							_d = ObjDepth(_o);
-						} 
+							_d = _d2;
+						}
 						ChooseObjectsFinal_Discard(_j);
 						p_len--;
 					} else
@@ -61,11 +56,11 @@ Include "globals.h";
 				}
 			}
 			if(_other_group_present == false)
-				return; ! There's indistinguishable objects from a single group present, and we already handled this group
+				return; ! The group of indistinguishable objects we just handled was the last one
+			_other_group_present = false; ! Let's hope the next one is the last one
 		}
 	}	
 ];
-
 
 Include "puny.h";
 
@@ -82,11 +77,64 @@ Class Dart
 				return 1;
 			}
 		],
-!			'dart' 'darts//p',
+		description "The darts look all alike.",
+		before [;
+		Search: "The darts are solid - no hidden compartments.";
+		],
 		list_together [ _obj _n;
 			if(inventory_stage == 1) {
 				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
 				print (LanguageNumber) _n, " darts";
+				if(c_style & NEWLINE_BIT)
+					new_line;
+				rtrue;
+			}
+		];
+
+Class Coin
+	with
+		parse_name [ _w _n;
+			_w = NextWord();
+			if(_w == self.&name-->0) { ! Matches 'silver' or 'gold'
+				_w = NextWord();
+				_n++;
+			}
+			if(_w == 'coin')
+				_n++;
+			else if(_w == 'coins//p') {
+				parser_action = ##PluralFound;
+				_n++;
+			}
+			return _n;
+		],
+		;
+
+Class SilverCoin
+	class Coin,
+	with
+		same_group 2,
+		name 'silver',
+		short_name "silver coin",
+		list_together [ _obj _n;
+			if(inventory_stage == 1) {
+				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
+				print (LanguageNumber) _n, " silver coins";
+				if(c_style & NEWLINE_BIT)
+					new_line;
+				rtrue;
+			}
+		];
+
+Class GoldCoin
+	class Coin
+	with
+		same_group 3,
+		name 'gold',
+		short_name "gold coin",
+		list_together [ _obj _n;
+			if(inventory_stage == 1) {
+				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
+				print (LanguageNumber) _n, " gold coins";
 				if(c_style & NEWLINE_BIT)
 					new_line;
 				rtrue;
@@ -133,6 +181,21 @@ Object -> Dartboard "dartboard"
 Dart -> Dart1;
 Dart -> Dart2;
 
+SilverCoin -> SilverCoin1;
+
+Object -> Table "table"
+	with
+		name 'table',
+	has supporter open openable enterable;
+
+SilverCoin -> -> SilverCoin2;
+SilverCoin -> -> SilverCoin3;
+GoldCoin -> -> GoldCoin1;
+Dart -> -> Dart3;
+
+GoldCoin -> GoldCoin2;
+GoldCoin -> GoldCoin3;
+GoldCoin -> GoldCoin4;
 
 Object -> Box "box"
 	with
@@ -140,13 +203,14 @@ Object -> Box "box"
 		inside_description "It feels so nice, standing in the box.",
 	has container open openable enterable;
 
-Dart -> -> Dart3;
+GoldCoin -> -> GoldCoin5;
 
 
 [Initialise; ! i;
 	print "^^Indistinguishable item are listed together in this demo. Things to try:^ 
 			INVENTORY TALL^
 			INVENTORY WIDE^
-			GET DARTS^
+			GET COIN^
+			EXAMINE DARTS^
 			^^";
 ];

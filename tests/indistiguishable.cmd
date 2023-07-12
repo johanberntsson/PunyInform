@@ -1,6 +1,14 @@
-
 transcript
 
+look
+take silver
+take silver coins
+take gold coin
+take coins
+x dart
+x darts
+search dart
+search darts
 get darts
 throw dart at board
 look

@@ -7,6 +7,10 @@ Upcoming release:
   customized: MSG_PARSER_NO_IT and MSG_PARSER_CANT_SEE_IT.
 - New file: howto/adjectives.inf, with a class to add adjectives and many 
   synonyms to objects in all Z-code versions.
+- Added an optional call to ChooseObjectsFinal when a noun token matches
+  a list of indistinguishable objects. If ChooseObjectsFinal reduces this
+  to a single match, then it is accepted. In effect this means that we
+  pick and use one random item from a set of indistinguishable objects.
 
 =======
 v4.6: bug fix and new feature release (24 May 2023)
