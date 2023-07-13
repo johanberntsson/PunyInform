@@ -11,9 +11,9 @@ test-parser:
 	inform +../lib -v3 test-parser.inf
 	frotz test-parser.z3
 
-ruletest:
-	inform +../lib -v3 ruletest.inf
-	frotz ruletest.z3
+indistiguishable:
+	inform +../lib -v3 indistiguishable.inf
+	frotz indistiguishable.z3
 
 large3:
 	inform +../lib -v3 largegame.inf

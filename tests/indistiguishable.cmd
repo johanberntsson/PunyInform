@@ -1,6 +1,10 @@
 transcript
 
 look
+x coin
+silver
+x coins
+gold
 take silver
 take silver coins
 take gold coin

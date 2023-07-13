@@ -398,12 +398,37 @@ System_file;
 
 Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 
+#Ifdef ChooseObjectsFinal;
+[ _ParseNounPhrase p_parse_pointer p_expecting_single_noun _noun;
+	! if p_expecting_single_noun is true, then try calling ChooseObjectsFinal
+	! to reduce a set of indistiguishable nouns to a single one.
+	_noun = _ParseNounPhraseBody(p_parse_pointer);
+	if(_noun < 0 && p_expecting_single_noun) {
+		parser_one = which_object -> 0;
+ 		ChooseObjectsFinal(which_object + 2, parser_one);
+		parser_action = 0; ! we expect a single object, so no plural
+		if(parser_one == 1) {
+			_noun = which_object --> 1;
+		} else {
+			_noun = -parser_one;
+		}
+	}
+	return _noun;
+];
+#ifnot;
+[ _ParseNounPhrase p_parse_pointer p_expecting_single_noun;
+	! using p_expecting_single_noun to avoid a compiler warning. This is
+	! safe since _i in _ParseNounPhraseBody and is always set before use
+	return _ParseNounPhraseBody(p_parse_pointer, p_expecting_single_noun);
+];
+#endif;
+
 #Ifdef ParseNoun;
-[ _ParseNounPhrase p_parse_pointer _i _j _k _p _obj _matches
+[ _ParseNounPhraseBody p_parse_pointer _i _j _k _p _obj _matches
 		_best_word_count _current_word _name_array _name_array_len _best_score
 		_result _stop _parse_noun_words;
 #Ifnot;
-[ _ParseNounPhrase p_parse_pointer _i _j _k _p _obj _matches
+[ _ParseNounPhraseBody p_parse_pointer _i _j _k _p _obj _matches
 		_best_word_count _current_word _name_array _name_array_len _best_score
 		_result _stop;
 #Endif;
@@ -649,8 +674,8 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 #Endif; !Ifdef ChooseObjectsFinal
 
 
-[ _GetNextNoun p_parse_pointer _noun _oldwn _num_words_in_nounphrase
-		_pluralword _i _j _k _m _all_found;
+[ _GetNextNoun p_parse_pointer p_expecting_single_noun _noun _oldwn
+		_num_words_in_nounphrase _pluralword _i _j _k _m _all_found;
 	! try getting a noun from the <p_parse_pointer> entry in parse
 	! return:
 	!   <noun number> if found
@@ -727,7 +752,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	print "Calling _ParseNounPhrase(",p_parse_pointer,");^";
 	if(p_parse_pointer-->0 > 2000) print (address) p_parse_pointer-->0, " ", _pluralword, "^";
 #Endif;
-	_noun = _ParseNounPhrase(p_parse_pointer);
+	_noun = _ParseNounPhrase(p_parse_pointer, p_expecting_single_noun);
 	_num_words_in_nounphrase = which_object -> 1;
 
 	! check if the noun phrase contains a plural word
@@ -810,7 +835,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				!_PrintParseArray(parse);
 #Endif;
 				wn = 1;
-				_noun = _ParseNounPhrase(_j);
+				_noun = _ParseNounPhrase(_j, p_expecting_single_noun);
 				if(_noun <= 0) {
 					! the normal word order didn't work. Try the other way
 					!print "testing other word order^";
@@ -830,7 +855,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 					!_PrintParseArray(parse);
 #Endif;
 					wn = 1;
-					_noun = _ParseNounPhrase(_j);
+					_noun = _ParseNounPhrase(_j, p_expecting_single_noun);
 				}
 				if(_noun == Directions && which_object->1 < parse->1) {
 					! _ParseNounPhrase only matched a direction and
@@ -1027,7 +1052,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				}
 				return GPR_FAIL;
 			}
-			_noun = _GetNextNoun(p_parse_pointer);
+			_noun = _GetNextNoun(p_parse_pointer, true);
 			if(_noun == -2) {
 				return GPR_FAIL;
 			}
@@ -1082,7 +1107,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		} else if(_token_data == MULTI_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT or MULTIINSIDE_OBJECT) {
 			for(::) {
 				_old_wn = wn;
-				_noun = _GetNextNoun(p_parse_pointer);
+				_noun = _GetNextNoun(p_parse_pointer, false);
 				if(_noun == -2) {
 					return GPR_FAIL;
 				}
@@ -1131,7 +1156,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 							for(_noun = 0: _noun < multiple_objects --> 0 : _noun++) {
 								scope-->_noun = multiple_objects-->(_noun + 1);
 							}
-							_noun = _GetNextNoun(p_parse_pointer + 4);
+							_noun = _GetNextNoun(p_parse_pointer + 4, false);
 							scope_modified = true; ! restore scope
 							if(_noun <= 0) {
 								if(parser_phase == PHASE2) {
@@ -1779,7 +1804,7 @@ Array guess_object-->5;
 			rtrue;
 		}
 		! not a direction, check if beginning of a command
-		_noun = _ParseNounPhrase(parse+2);
+		_noun = _ParseNounPhrase(parse+2, false);
 		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now
 			! check if comma afterwards

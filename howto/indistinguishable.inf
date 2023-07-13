@@ -9,9 +9,14 @@ Constant STATUSLINE_SCORE; Statusline score;
 
 Constant NO_SCORE = 0;
 
+!Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_PARSENOUNPHRASE;
+
 ! Uncomment to add optional features to PunyInform
-!Constant DEBUG;
-!Constant DEBUG_CHECKNOUN;
 Constant RUNTIME_ERRORS = 2; ! 0, 1 or 2. 0 = smallest file, 2 = most info
 
 Constant OPTIONAL_LIST_TOGETHER;
@@ -119,6 +124,7 @@ Class SilverCoin
 		same_group 2,
 		name 'silver',
 		short_name "silver coin",
+		description "The silver coins look all alike.",
 		list_together [ _obj _n;
 			if(inventory_stage == 1) {
 				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
@@ -135,6 +141,7 @@ Class GoldCoin
 		same_group 3,
 		name 'gold',
 		short_name "gold coin",
+		description "The gold coins look all alike.",
 		list_together [ _obj _n;
 			if(inventory_stage == 1) {
 				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
