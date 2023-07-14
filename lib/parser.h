@@ -398,39 +398,14 @@ System_file;
 
 Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 
-#Ifdef ChooseObjectsFinal;
-[ _ParseNounPhrase p_parse_pointer p_expecting_single_noun _noun;
-	! if p_expecting_single_noun is true, then try calling ChooseObjectsFinal
-	! to reduce a set of indistiguishable nouns to a single one.
-	_noun = _ParseNounPhraseBody(p_parse_pointer);
-	if(_noun < 0 && p_expecting_single_noun) {
-		parser_one = which_object -> 0;
- 		ChooseObjectsFinal(which_object + 2, parser_one);
-		parser_action = 0; ! we expect a single object, so no plural
-		if(parser_one == 1) {
-			_noun = which_object --> 1;
-		} else {
-			_noun = -parser_one;
-		}
-	}
-	return _noun;
-];
-#ifnot;
-[ _ParseNounPhrase p_parse_pointer p_expecting_single_noun;
-	! using p_expecting_single_noun to avoid a compiler warning. This is
-	! safe since _i in _ParseNounPhraseBody and is always set before use
-	return _ParseNounPhraseBody(p_parse_pointer, p_expecting_single_noun);
-];
-#endif;
-
 #Ifdef ParseNoun;
-[ _ParseNounPhraseBody p_parse_pointer _i _j _k _p _obj _matches
-		_best_word_count _current_word _name_array _name_array_len _best_score
-		_result _stop _parse_noun_words;
+[ _ParseNounPhrase p_parse_pointer p_expecting_single_noun
+		_i _j _k _p _obj _matches _best_word_count _current_word
+		_name_array _name_array_len _best_score _result _parse_noun_words;
 #Ifnot;
-[ _ParseNounPhraseBody p_parse_pointer _i _j _k _p _obj _matches
-		_best_word_count _current_word _name_array _name_array_len _best_score
-		_result _stop;
+[ _ParseNounPhrase p_parse_pointer p_expecting_single_noun
+		_i _j _k _p _obj _matches _best_word_count _current_word
+		_name_array _name_array_len _best_score _result;
 #Endif;
 #IfDef DEBUG_PARSENOUNPHRASE;
 	print "Entering _ParseNounPhrase, first word is ";
@@ -468,15 +443,14 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 
 #IfDef DEBUG;
 	if(meta) {
-		_name_array_len = Directions; _stop = top_object + 1;
+		_name_array_len = Directions; parser_one = top_object + 1;
 	} else {
-		_name_array_len = 0; _stop = scope_objects;
+		_name_array_len = 0; parser_one = scope_objects;
 	}
-	for(_i = _name_array_len: _i < _stop: _i++) {
+	for(_i = _name_array_len: _i < parser_one: _i++) {
 		if(meta) _obj = _i; else _obj = scope-->_i;
 #IfNot;
-	_stop = scope_objects;
-	for(_i = 0: _i < _stop: _i++) {
+	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
 #Endif;
 		if(parser_check_multiple && _obj == Directions && selected_direction ~= 0) continue;
@@ -629,6 +603,19 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	wn = _k;
 	which_object->0 = _matches;
 	which_object->1 = _best_word_count;
+
+	if(p_expecting_single_noun) {
+#Ifdef ChooseObjectsFinal;
+		! if p_expecting_single_noun is true, then try calling ChooseObjectsFinal
+		! to reduce a set of indistiguishable nouns to a single one.
+		if(_matches > 1) {
+			parser_one = which_object -> 0;
+ 			ChooseObjectsFinal(which_object + 2, parser_one);
+			parser_action = 0; ! we expect a single object, so no plural
+			_matches = parser_one;
+		}
+#EndIf;
+	}
 
 	if(_matches == 1) {
 		_result = which_object-->1;
