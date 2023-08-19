@@ -849,38 +849,34 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
-[ MoveFloatingObjects _i _j _len _obj _present;
+[ MoveFloatingObjects _i _j _o _len _obj;
 	while((_obj = floating_objects-->_i) ~= 0) {
 		_len = _obj.#found_in;
 		if(_obj has absent)
-			_present = 0;
+			jump _isnt_present;
 		else if(_len == 2 && UnsignedCompare(_obj.found_in, top_object) > 0) {
-			_present = RunRoutines(_obj, found_in);
+			if(RunRoutines(_obj, found_in))
+				jump _is_present;
+			jump _isnt_present;
 		} else {
-			_present = 0;
 			_j = _obj.&found_in;
-#IfV5;
-			@log_shift _len (-1) -> _len;
-			@scan_table location _j _len -> _present ?~_location_wasnt_found; ! The position is only a throw-away value here.
-			_present = 1;
-._location_wasnt_found;
-#IfNot;
 			_len = _len / 2;
 			_len = _len - 1;
 ._check_next_value;
-				if(_j-->_len == location) {
-					_present = 1;
-					jump _did_find_location;
-				}
+				_o = _j-->_len;
+				if(_o in Class) {
+					if(location ofclass _o)
+						jump _is_present;
+				} else if(_o == location)
+					jump _is_present;
 			@dec_chk _len 0 ?~_check_next_value;
-._did_find_location;
-#EndIf;
-
-		}
-		if(_present)
-			move _obj to location;
-		else
+._isnt_present;
 			remove _obj;
+			jump _done_loop;
+._is_present;
+			move _obj to location;
+		}
+._done_loop;
 		_i++;
 	}
 	! It's not certain that scope has been modified, but PlayerTo relies on it
