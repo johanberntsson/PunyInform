@@ -874,7 +874,8 @@ Constant ONE_SPACE_STRING = " ";
 			remove _obj;
 			jump _done_loop;
 ._is_present;
-			move _obj to location;
+			if(_obj notin location)
+				move _obj to location;
 		}
 ._done_loop;
 		_i++;

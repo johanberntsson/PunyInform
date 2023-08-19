@@ -24,6 +24,9 @@ Upcoming release:
 - Added functionality in MoveFloatingObjects to accept a regular object in a
   found_in array, and if this object's parent is location, the floating object
   should also be present.
+- Changed MoveFloatingObjects to only move an object to location if it's not 
+  already there, in order not to disturb the order of the objects more than 
+  necessary. 
 
 =======
 v4.6: bug fix and new feature release (24 May 2023)
