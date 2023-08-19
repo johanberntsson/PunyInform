@@ -867,7 +867,7 @@ Constant ONE_SPACE_STRING = " ";
 				if(_o in Class) {
 					if(location ofclass _o)
 						jump _is_present;
-				} else if(_o == location)
+				} else if(_o == location || _o in location)
 					jump _is_present;
 			@dec_chk _len 0 ?~_check_next_value;
 ._isnt_present;

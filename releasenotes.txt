@@ -21,6 +21,9 @@ Upcoming release:
 - Added functionality in MoveFloatingObjects to accept a class ID in a 
   found_in array, i.e. if location belongs to this class, the object is 
   present.
+- Added functionality in MoveFloatingObjects to accept a regular object in a
+  found_in array, and if this object's parent is location, the floating object
+  should also be present.
 
 =======
 v4.6: bug fix and new feature release (24 May 2023)
