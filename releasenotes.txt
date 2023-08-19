@@ -16,6 +16,8 @@ Upcoming release:
   PUNYINFORM_PATCH_VERSION. It is normally 0, but if we need to make a
   patch release between major/minor releases, we set this to a number > 0.
   If it's 0, it is not printed in the banner.
+- Changed MoveFloatingObjects to use location rather than real_location, i.e.
+  floating objects can also exist in the thedark location.
 
 =======
 v4.6: bug fix and new feature release (24 May 2023)

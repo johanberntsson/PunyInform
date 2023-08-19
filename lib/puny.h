@@ -861,14 +861,14 @@ Constant ONE_SPACE_STRING = " ";
 			_j = _obj.&found_in;
 #IfV5;
 			@log_shift _len (-1) -> _len;
-			@scan_table real_location _j _len -> _present ?~_location_wasnt_found; ! The position is only a throw-away value here.
+			@scan_table location _j _len -> _present ?~_location_wasnt_found; ! The position is only a throw-away value here.
 			_present = 1;
 ._location_wasnt_found;
 #IfNot;
 			_len = _len / 2;
 			_len = _len - 1;
 ._check_next_value;
-				if(_j-->_len == real_location) {
+				if(_j-->_len == location) {
 					_present = 1;
 					jump _did_find_location;
 				}
@@ -878,7 +878,7 @@ Constant ONE_SPACE_STRING = " ";
 
 		}
 		if(_present)
-			move _obj to real_location;
+			move _obj to location;
 		else
 			remove _obj;
 		_i++;
