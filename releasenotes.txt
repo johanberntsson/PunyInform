@@ -11,6 +11,11 @@ Upcoming release:
   a list of indistinguishable objects. If ChooseObjectsFinal reduces this
   to a single match, then it is accepted. In effect this means that we
   pick and use one random item from a set of indistinguishable objects.
+- In addition to the PUNYINFORM_MAJOR_VERSION and PUNYINFORM_MINOR_VERSION
+  constants, there is now a third version constant for PunyInform: 
+  PUNYINFORM_PATCH_VERSION. It is normally 0, but if we need to make a
+  patch release between major/minor releases, we set this to a number > 0.
+  If it's 0, it is not printed in the banner.
 
 =======
 v4.6: bug fix and new feature release (24 May 2023)
