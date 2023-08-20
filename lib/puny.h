@@ -56,11 +56,11 @@ Include "grammar.h";
 
 [ IndirectlyContains p_o1 p_o2;
 	! Does o1 indirectly contain o2?  (Same as testing if o1 is one of the ancestors of o2.)
-	while (p_o2 ~= 0) {
-		if (p_o1 == p_o2) rtrue;
-		!        if (p_o2 ofclass Class) rfalse;
-		p_o2 = parent(p_o2);
-	}
+	@jz p_o2 ?rfalse;
+.recheck;
+	if (p_o1 == p_o2) rtrue;
+	p_o2 = parent(p_o2);
+	@jz p_o2 ?~recheck;
 	rfalse;
 ];
 
@@ -849,8 +849,10 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
-[ MoveFloatingObjects _i _j _o _len _obj;
+[ MoveFloatingObjects _i _j _o _len _obj;	
 	while((_obj = floating_objects-->_i) ~= 0) {
+		if(IndirectlyContains(player, _obj))
+			jump _continue_loop;
 		_len = _obj.#found_in;
 		if(_obj has absent)
 			jump _isnt_present;
@@ -872,12 +874,12 @@ Constant ONE_SPACE_STRING = " ";
 			@dec_chk _len 0 ?~_check_next_value;
 ._isnt_present;
 			remove _obj;
-			jump _done_loop;
+			jump _continue_loop;
 ._is_present;
 			if(_obj notin location)
 				move _obj to location;
 		}
-._done_loop;
+._continue_loop;
 		_i++;
 	}
 	! It's not certain that scope has been modified, but PlayerTo relies on it

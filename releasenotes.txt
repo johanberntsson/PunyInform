@@ -17,16 +17,18 @@ Upcoming release:
   patch release between major/minor releases, we set this to a number > 0.
   If it's 0, it is not printed in the banner.
 - Changed MoveFloatingObjects to use location rather than real_location, i.e.
-  floating objects can also exist in the thedark location.
+  floating objects can also exist in the thedark location (like in I6lib).
 - Added functionality in MoveFloatingObjects to accept a class ID in a 
   found_in array, i.e. if location belongs to this class, the object is 
-  present.
+  present (like in I6lib).
 - Added functionality in MoveFloatingObjects to accept a regular object in a
   found_in array, and if this object's parent is location, the floating object
-  should also be present.
+  should also be present (like in I6lib).
 - Changed MoveFloatingObjects to only move an object to location if it's not 
   already there, in order not to disturb the order of the objects more than 
-  necessary. 
+  necessary (like in I6lib). 
+- Added functionality in MoveFloatingObjects so a floating object that is held
+  by the player is no longer considered to be floating (like in I6lib).
 
 =======
 v4.6: bug fix and new feature release (24 May 2023)
