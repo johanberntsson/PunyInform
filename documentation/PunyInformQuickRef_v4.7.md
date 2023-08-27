@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v4.6 quick reference** |
+| **PunyInform v4.7 quick reference** |
 
   
 More information on last page.
@@ -173,7 +173,7 @@ More information on last page.
 
 # Library constants
 
-###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined. *PUNYINFORM_MAJOR_VERSION* , *PUNYINFORM_MINOR_VERSION* and *PUNYINFORM_VERSION\_SUFFIX* hold the library version.
+###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined. *PUNYINFORM_MAJOR_VERSION* , *PUNYINFORM_MINOR_VERSION*,* PUNYINFORM_PATCH_VERSION* and *PUNYINFORM_VERSION\_SUFFIX* hold the library version.
 
 # User-defined constants
 
