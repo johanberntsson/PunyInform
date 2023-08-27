@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v4.7: bug fix and new feature release (27 Aug 2023)
+
 - The default message in the cheap scenery extension can now be changed by
   setting CS_DEFAULT_MSG to a string before including the extension. This
   is mainly to support extensions that need to replace it.
