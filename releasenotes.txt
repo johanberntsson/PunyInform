@@ -29,6 +29,7 @@ Upcoming release:
   necessary (like in I6lib). 
 - Added functionality in MoveFloatingObjects so a floating object that is held
   by the player is no longer considered to be floating (like in I6lib).
+- Optimized IndirectlyContains function for speed.
 - Improved pattern matching so that shorter patterns are preferred, which
   provides better responses when using OPTIONAL_GUESS_MISSING_NOUN (issue 112)
 
