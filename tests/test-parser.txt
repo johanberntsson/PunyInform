@@ -77,7 +77,7 @@ You can't enter that.
 I think you wanted to say "go (some direction)". Please try again.
 
 > get
-I think you wanted to say "get out of something". Please try again.
+I think you wanted to say "get something". Please try again.
 
 > x orb
 There is nothing special about the Orb.
@@ -131,13 +131,13 @@ I think you wanted to say "inventory". Please try again.
 You can't use multiple objects with that verb.
 
 > put all
-You are not carrying anything.
+There are no things available that match "put all".
 
 > take torch.
 Taken.
 
 > put all
-I think you wanted to say "put all in something". Please try again.
+I think you wanted to say "put all on something". Please try again.
 
 > take torch and john
 electric torch: You already have it.
@@ -157,13 +157,13 @@ red book: Yay, got rid of the red book!
 You're carrying a red book and an electric torch (Ugly as sin).
 
 > put all
-I think you wanted to say "put all in something". Please try again.
+I think you wanted to say "put all on something". Please try again.
 
 > put all except
 I don't understand that sentence.
 
 > put all except in box
-I think you wanted to say "put something in something". Please try again.
+I think you wanted to say "put something on something". Please try again.
 
 > put all except book in box
 electric torch: You put the electric torch into the box.

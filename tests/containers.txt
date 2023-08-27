@@ -1,3 +1,4 @@
+
 > wait sasfas
 I didn't understand that number.
 
@@ -11,7 +12,7 @@ The time is: 0:4
 Let's go!
 
 > wait until xyzzy
-You can't see any such thing.
+I only understood you as far as "wait until" but then you lost me.
 The time is: 0:5
 
 > wait xyzzy

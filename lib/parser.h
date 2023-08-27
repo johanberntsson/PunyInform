@@ -280,6 +280,18 @@ System_file;
 		p_dst_parse_array->_i = p_src_parse_array->_i;
 ];
 
+[ _PatternLength p_pattern _i;
+    ! return the length of a pattern
+	p_pattern = p_pattern + 2;
+	for(_i = 0: : _i++) {
+		if(p_pattern->0 == TT_END) {
+            ! print "- ", parser_phase, " ", wn, " ", _i, "^";
+            return _i;
+        }
+		p_pattern = p_pattern + 3;
+	}
+];
+
 #IfDef DEBUG;
 
 [ _PrintParseArray p_parse_array _i;
@@ -1923,7 +1935,17 @@ Array guess_object-->5;
 				_score == _best_score &&
 				_best_phase2 > 0 &&  ! if previous best requested reparsing
 				phase2_necessary == 0 &&  ! and we don't request reparsing
-				consult_from == 0) ! and this pattern didn't include 'topic'
+				consult_from == 0 ! and this pattern didn't include 'topic'
+				)
+				||
+				(
+				! we override previous best if this pattern is equally
+				! good but shorter, so that for example get without a
+				! noun picks "get multi" instead of "get 'out' 'off' noun"
+				_score == _best_score && _best_pattern ~= 0 &&
+				action_reverse == 0 && 
+				_PatternLength(_pattern) < _PatternLength(_best_pattern)
+				)
 				)
 			{
 			_best_score = _score;
