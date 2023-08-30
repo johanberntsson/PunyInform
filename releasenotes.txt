@@ -1,5 +1,8 @@
 Upcoming release:
 
+v4.8: bug fix and new feature release
+- Improved _PatternLength to count preposition alternatives correctly.
+
 =======
 v4.7: bug fix and new feature release (27 Aug 2023)
 

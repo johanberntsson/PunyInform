@@ -281,13 +281,17 @@ System_file;
 ];
 
 [ _PatternLength p_pattern _i;
-    ! return the length of a pattern
+	! return the length of a pattern
 	p_pattern = p_pattern + 2;
-	for(_i = 0: : _i++) {
+	for(_i = 0: : ) {
 		if(p_pattern->0 == TT_END) {
-            ! print "- ", parser_phase, " ", wn, " ", _i, "^";
-            return _i;
-        }
+			return _i;
+		} else if(p_pattern->0 ~= TT_PREPOSITION) {
+			! TT_PREPOSITION should be skipped since they are the 
+			! alternative prepositions. All other tokens should add
+			! to the length
+			++_i;
+		}
 		p_pattern = p_pattern + 3;
 	}
 ];
