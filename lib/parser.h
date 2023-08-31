@@ -280,16 +280,22 @@ System_file;
 		p_dst_parse_array->_i = p_src_parse_array->_i;
 ];
 
-[ _PatternLength p_pattern _i;
-	! return the length of a pattern
+[ _BiasedPatternLength p_pattern _i;
+	! Return the length of a pattern:
+	! this is used to select more basic patterns in some situations,
+	! and since when the parsning fails but there are two possible
+	! patterns, once with preposition and one with basic object slots,
+	! then give bias to the more basic form (without prepositions).
+	! This gives better error messages.
 	p_pattern = p_pattern + 2;
 	for(_i = 0: : ) {
 		if(p_pattern->0 == TT_END) {
 			return _i;
-		} else if(p_pattern->0 ~= TT_PREPOSITION) {
-			! TT_PREPOSITION should be skipped since they are the 
-			! alternative prepositions. All other tokens should add
-			! to the length
+		} else if(p_pattern->0 == TOKEN_SINGLE_PREP or TOKEN_FIRST_PREP) {
+			_i = _i + 2; ! give bias to patterns without prepositions
+		} else if(p_pattern->0 ~= TOKEN_MIDDLE_PREP or TOKEN_LAST_PREP) {
+			! Alternative prepositions should be skipped, and all other
+			! tokens should add to the length
 			++_i;
 		}
 		p_pattern = p_pattern + 3;
@@ -1948,7 +1954,7 @@ Array guess_object-->5;
 				! noun picks "get multi" instead of "get 'out' 'off' noun"
 				_score == _best_score && _best_pattern ~= 0 &&
 				action_reverse == 0 && 
-				_PatternLength(_pattern) < _PatternLength(_best_pattern)
+				_BiasedPatternLength(_pattern) < _BiasedPatternLength(_best_pattern)
 				)
 				)
 			{
