@@ -280,8 +280,8 @@ System_file;
 		p_dst_parse_array->_i = p_src_parse_array->_i;
 ];
 
-[ _BiasedPatternLength p_pattern _i;
-	! Return the length of a pattern:
+[ _PatternRanking p_pattern _i;
+	! Return a biased pattern ranking:
 	! this is used to select more basic patterns in some situations,
 	! and since when the parsning fails but there are two possible
 	! patterns, once with preposition and one with basic object slots,
@@ -1954,7 +1954,7 @@ Array guess_object-->5;
 				! noun picks "get multi" instead of "get 'out' 'off' noun"
 				_score == _best_score && _best_pattern ~= 0 &&
 				action_reverse == 0 && 
-				_BiasedPatternLength(_pattern) < _BiasedPatternLength(_best_pattern)
+				_PatternRanking(_pattern) < _PatternRanking(_best_pattern)
 				)
 				)
 			{
