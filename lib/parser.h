@@ -287,8 +287,9 @@ System_file;
 	! patterns, once with preposition and one with basic object slots,
 	! then give bias to the more basic form (without prepositions).
 	! This gives better error messages.
+	_i = (p_pattern-->0 & $400); ! give bias to action_reverse
 	p_pattern = p_pattern + 2;
-	for(_i = 0: : ) {
+	for(::) {
 		if(p_pattern->0 == TT_END) {
 			return _i;
 		} else if(p_pattern->0 == TOKEN_SINGLE_PREP or TOKEN_FIRST_PREP) {
@@ -1953,7 +1954,6 @@ Array guess_object-->5;
 				! good but shorter, so that for example get without a
 				! noun picks "get multi" instead of "get 'out' 'off' noun"
 				_score == _best_score && _best_pattern ~= 0 &&
-				action_reverse == 0 && 
 				_PatternRanking(_pattern) < _PatternRanking(_best_pattern)
 				)
 				)
