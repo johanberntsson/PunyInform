@@ -588,7 +588,7 @@ Array TenDashes static -> "----------";
 		if(_val > 0) {
 			if(_val < 30) {
 				! A relative reference to a topic to activate
-				ActivateTopic(p_npc, _val, _array + 2 * _j);
+				ActivateTopic(p_npc, _val, _array + _j + _j);
 				continue;
 			}
 			#Ifdef EXT_FLAGS;

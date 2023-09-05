@@ -24,6 +24,7 @@ Changes:
 - Change in talk menu: The debug action TalkSetup has been removed, along with
   the grammar to activate it.
 - Updated howto/talk_menu.inf to reflect the changes in talk menu.
+- Optimized word matching in cheap scenery extension for z5.
 
 =======
 v4.7: bug fix and new feature release (27 Aug 2023)

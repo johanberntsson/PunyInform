@@ -175,10 +175,16 @@ Global cs_parse_name_id = 0;
 ];
 
 [ _CSFindInArr p_value p_array p_count _i;
+#Ifv5;
+	@scan_table p_value p_array p_count -> _i ?~rfalse;
+	rtrue;
+!._didnt_match_word_in_array;
+#Ifnot;
 	for(_i = 0 : _i < p_count : _i++)
 		if(p_array-->_i == p_value)
 			rtrue;
 	rfalse;
+#Endif;
 ];
 
 [_CSMatchNameList p_arr p_count _w _matched _base;
