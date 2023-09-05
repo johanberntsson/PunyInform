@@ -6,7 +6,7 @@
 !
 ! To use it, include this file after globals.h. Then add a property called
 ! cheap_scenery to the locations where you want to add cheap scenery objects.
-! You can add up to ten cheap scenery objects to one location in this way. 
+! You can add any number of cheap scenery objects to one location in this way.
 !
 ! For each scenery object, you provide an adjective, a noun, and a
 ! reaction string/routine. Instead of an adjective, you may give a synonym 
@@ -28,9 +28,13 @@
 ! You can also give CS_PARSE_NAME as the adjective value and give a routine 
 ! which will act as a parse_name routine in the noun position. 
 !
-! Finally, you can give CS_ADD_LIST as the adjective value and then an object ID and a
-! property name, to include the cheap scenery list held in that property in
-! the object in the current list.
+! Finally, you can give CS_ADD_LIST as the adjective value and then an object
+! ID and a property name, to include the cheap scenery list held in that 
+! property in the object in the current list.
+!
+! If multiple cheap scenery objects are matched, the one matching the highest
+! number of words in player input is the match that is used. If there's a tie,
+! the first one matching this number of words is used.
 !
 ! Note: If you want to use this library extension is a Z-code version 3 game,
 ! you must NOT declare cheap_scenery as a common property, or it will only be
@@ -150,11 +154,12 @@ Constant CS_NO_ADJ = 1;
 Constant CS_PARSE_NAME = 100;
 Constant CS_ADD_LIST = 101;
 
-Array CSData --> 4;
+Array CSData --> 5;
 Constant CSDATA_OBJ = 0;
 Constant CSDATA_PROP = 1;
 Constant CSDATA_INDEX = 2;
 Constant CSDATA_PARSE_NAME_ID = 3;
+Constant CSDATA_MATCH_LENGTH = 4;
 !  CSData-->0: The object which holds list where we found a match
 !  CSData-->1: The property where the list is stored
 !  CSData-->2: The index into the list
@@ -222,10 +227,16 @@ Global cs_parse_name_id = 0;
 	return CSHasAdjective(p_word) | CSHasNoun(p_word);
 ];
 
-[ _ParseCheapScenery p_obj p_prop p_base_wn _i _j _sw1 _sw2 _len _ret _arr;
+[ _ParseCheapScenery p_obj p_prop p_base_wn _i _j _sw1 _sw2 _len _ret _arr _longest _next_i;
+	_longest = CSData-->CSDATA_MATCH_LENGTH;
 	cs_parse_name_id = 0;
 	_arr = p_obj.&p_prop;
-	_len = p_obj.#p_prop / 2;
+	_len = p_obj.#p_prop;
+#ifv5;
+	@log_shift _len (-1) -> _len; ! Divide by 2
+#Ifnot;
+	_len = _len / 2;
+#Endif;
 	while(_i < _len) {
 		_sw1 = _arr-->_i;
 		_sw2 = _arr-->(_i+1);
@@ -267,8 +278,11 @@ Global cs_parse_name_id = 0;
 #Endif;
 		if(_sw1 == CS_ADD_LIST) {
 			_ret = _ParseCheapScenery(_sw2, _arr-->(_i+2), p_base_wn);
-			if(_ret)
-				return _ret;
+	_longest = CSData-->CSDATA_MATCH_LENGTH;
+			! if(_ret > _longest)
+				! _longest = _ret;
+!			if(_ret > _longest)
+!				return _ret;
 		} else if(_sw1 == CS_PARSE_NAME) {
 			wn = p_base_wn;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
@@ -284,9 +298,8 @@ Global cs_parse_name_id = 0;
 #Endif;
 			self = location;
 			_ret = _sw2();
-			if(_ret > 0) {
+			if(_ret > _longest)
 				jump _cs_found_a_match;
-			}
 			cs_parse_name_id = 0;
 		} else if(_sw1 > 0 && _sw1 < 100) {
 			wn = p_base_wn;
@@ -313,16 +326,28 @@ Global cs_parse_name_id = 0;
 		}
 #Endif;
 
-			if(_sw1) {
-				_ret = _ret + _sw1;
+			_ret = _ret + _sw1;
+			_next_i = _j + _sw2 - 2;
+			if(_ret > _longest) {
 				jump _cs_found_a_match;
 			}
-			_i = _j + _sw2 - 2;
 		} else {
 			wn = p_base_wn;
 			_ret = _CSMatchNameList(_arr + _i + _i, 2);
-			if(_ret)
-				jump _cs_found_a_match;
+			if(_ret > _longest) {
+._cs_found_a_match;
+				_longest = _ret;
+				CSData-->CSDATA_OBJ = p_obj;
+				CSData-->CSDATA_PROP = p_prop;
+				CSData-->CSDATA_INDEX = _i;
+				CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
+				CSData-->CSDATA_MATCH_LENGTH = _longest;
+			}
+!				jump _cs_found_a_match;
+		}
+		if(_next_i) {
+			_i = _next_i;
+			_next_i = 0;
 		}
 		_i = _i + 3;
 	}
@@ -337,13 +362,7 @@ Global cs_parse_name_id = 0;
 		rfalse;
 	}
 #Endif;
-	return 0;
-._cs_found_a_match;
-	CSData-->CSDATA_OBJ = p_obj;
-	CSData-->CSDATA_PROP = p_prop;
-	CSData-->CSDATA_INDEX = _i;
-	CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
-	return _ret;
+	return _longest;
 ];
 
 
@@ -351,6 +370,7 @@ Object CheapScenery "object"
 	with
 		article "an",
 		parse_name [;
+			CSData-->CSDATA_MATCH_LENGTH = 0;
 			return _ParseCheapScenery(location, cheap_scenery, wn);
 		],
 #Ifdef SceneryReply;
