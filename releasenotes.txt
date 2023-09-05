@@ -1,7 +1,29 @@
 Upcoming release:
 
-v4.8: bug fix and new feature release
+Important to note when upgrading:
+- If you use talk menu: Split up your talk_array into one array per actor. End
+  each array with TM_END. Instead of giving each actor a talk_start property, 
+  give them a talk_array property, with the name of their own talk array as 
+  the value.
+- If you use talk_menu, remove any calls to InitTalk(), as they are no longer
+  needed.
+- If you use talk menu and have replaced the TMPrintLine routine, copy the 
+  latest version from ext_talk_menu.h and modify it to your liking.
+
+Changes:
 - Improved _PatternLength to count preposition alternatives correctly.
+- Change in talk menu: Split up talk_array into one array per actor. End each 
+  array with TM_END. Instead of giving each actor a talk_start property, give 
+  them a talk_array property, with their own talk array as the value.
+- Change in talk menu: The user definable routine TMPRintLine takes different
+  arguments than before, the code has changed, and it now prints quote marks
+  around lines by default.
+- Change in talk menu: Routines _TMCallOrPrint, _SetTopic, ActivateTopic,
+  InActivateTopic, GetTopicStatus, RunTalk and TalkSub have been altered.
+- Change in talk menu: Routine InitTalk has been removed.
+- Change in talk menu: The debug action TalkSetup has been removed, along with
+  the grammar to activate it.
+- Updated howto/talk_menu.inf to reflect the changes in talk menu.
 
 =======
 v4.7: bug fix and new feature release (27 Aug 2023)

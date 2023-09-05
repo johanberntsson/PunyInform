@@ -59,13 +59,14 @@ Constant OPTIONAL_NO_DARKNESS;
 Constant INITIAL_LOCATION_VALUE = Library;
 Include "globals.h";
 #Endif;
+Property talk_array;
 ! Define your attributes, common properties and global variables here, if any
 
 ! Define the entry point routines you need here, like Amusing, DarkToDark etc.
 
 ! Uncomment to add PunyLib extensions
 !Include "ext_menu.h";
-Constant FLAG_COUNT 48;
+Constant FLAG_COUNT 50;
 Include "ext_flags.h";
 
 Constant TM_FIRST_ID 300;
@@ -81,18 +82,16 @@ Constant TM_MSG_TOPICS_DEPLETED "With that, the conversation comes to a natural 
 Constant TM_MSG_EXIT = TM_MSG_EXIT_Routine;
 Constant TM_MSG_EXIT_OPTION "[ENTER] Bye for now";
 Constant TM_MSG_PAGE_OPTION "[N] More topics";
-
-[TMPrintLine p_actor p_line;
+[TMPrintLine p_actor p_talk_actor p_line;
 	! Routine to print a line, by the player or an NPC. Define your own version as needed.
-	if(talk_array-->p_line == TM_NO_LINE) 
+	if((p_talk_actor.talk_array)-->p_line == TM_NO_LINE) 
 		rfalse;
 	if(p_actor == player)
 		_TMPrintMsg(TM_MSG_YOU, true);
 	else
 		print (The) p_actor;
-	print ": ~";
-	_TMCallOrPrint(p_line, true); ! ,true means "don't print a newline at the end"
-	"~";
+	print ": ";
+	_TMCallOrPrint(p_talk_actor, p_line);
 ];
 
 Include "ext_talk_menu.h"; ! Requires ext_flags.h *IF* you set flags
@@ -124,8 +123,7 @@ Constant F_LINDA_TALKED_ABOUT_PARIS 32;
 	ReActivateTopic(Linda, 303);
 ];
 
-Array talk_array -->
-	TM_NPC Linda
+Array talk_array_linda -->
 	30 "Monkeys" TM_ADD_BEFORE_AND_AFTER "Loudly, you clear your throat..." "What do you know about monkeys?" 
 			"You stare at her intensely, watching for any sign that she registered the question." TM_NO_LINE "She just looks at you, flabbergasted."
 	30 "Elephants" TM_ADD_AFTER TM_NO_LINE "You open your mouth, but Linda knows what you're about to ask and cuts you short." "Everyone loves elephants, right?"
@@ -137,7 +135,9 @@ Array talk_array -->
 	0 "The Louvre" "What about the Louvre?" "Oh I just love the artsy atmosphere here in Paris you know."
 	0 "Paris trivia" "Do you even know Paris is the capital of France?" "Well of course I do!" ReActivateParis
 	0 350 "Plates" "What do you know about plates?" "They're usually flat I guess."
-	TM_NPC Josh
+	TM_END;
+	
+Array talk_array_josh -->
 	30 "Linda" "How do you know Linda?" "I don't really." 1
 	0 "Himself" "Are you a funny guy?" FunnyReply
 	30 "Nothing" FunnyReply "Yes!"
@@ -153,8 +153,7 @@ Array talk_array -->
 	30 "PC" "What do you know about IBM PCs?" "Boring, they're just for work." 50
 	30 "BBC computers" "Tell me about BBC Computers!" "British, weren't they? And I think the name of the company was actually Acorn."
 	30 "Murder" "Where were you when Bob was killed?" "I was at home, watching TV. You don't think I had anything to do with his death, do you?"
-	TM_NPC 0
-;
+	TM_END;
 
 
 
@@ -195,7 +194,7 @@ Object -> Linda "Linda"
 			print " The status is ", GetTopicStatus(self, 303), ".";
 			"";
 		],
-		talk_start 0,
+		talk_array talk_array_linda,
 		activate_topics [ p_room;
 			if(p_room == Kitchen) ActivateTopic(self, 350);
 		],
@@ -207,7 +206,7 @@ Object -> Linda "Linda"
 Object -> Josh "Josh"
 	with
 		name 'josh',
-		talk_start 0,
+		talk_array talk_array_josh,
 	has proper animate;
 
 [Initialise;
@@ -215,7 +214,6 @@ Object -> Josh "Josh"
 	give player light;
 #Endif;
 	location = Library;
-	InitTalk();
 	print "^^Try TALK TO (SOMEONE). Linda has an extra topic to talk about
 		when she's in the kitchen.^^";
 ];
