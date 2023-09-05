@@ -9,6 +9,9 @@ Important to note when upgrading:
   needed.
 - If you use talk menu and have replaced the TMPrintLine routine, copy the 
   latest version from ext_talk_menu.h and modify it to your liking.
+- Cheap scenery entries that use the standard form of adjective + noun will 
+  now match any combination of these words, e.g. noun adjective noun. Make
+  sure your existing cheap scenery entries still work the way they should.
 
 Changes:
 - Improved _PatternLength to count preposition alternatives correctly.
@@ -25,6 +28,9 @@ Changes:
   the grammar to activate it.
 - Updated howto/talk_menu.inf to reflect the changes in talk menu.
 - Optimized word matching in cheap scenery extension for z5.
+- Optimized the cheap scenery extension for code size.
+- Changed the standard adjective + noun form for cheap scenery entries to
+  match any combination of these words.
 
 =======
 v4.7: bug fix and new feature release (27 Aug 2023)

@@ -10,8 +10,8 @@
 !
 ! For each scenery object, you provide an adjective, a noun, and a
 ! reaction string/routine. Instead of an adjective, you may give a synonym 
-! to the noun. These will be matched if the player types only the adjective,
-! only the noun, or the adjective followed by the noun.
+! to the noun. This cheap scenery entry will be matched if the player types
+! any combination of the adjective and noun
 !
 ! If no adjective or synonym is needed, use the value CS_NO_ADJ (=1) in 
 ! that position. 
@@ -150,19 +150,15 @@ Constant CS_NO_ADJ = 1;
 Constant CS_PARSE_NAME = 100;
 Constant CS_ADD_LIST = 101;
 
-Array CSData --> 6;
+Array CSData --> 4;
 Constant CSDATA_OBJ = 0;
 Constant CSDATA_PROP = 1;
 Constant CSDATA_INDEX = 2;
-Constant CSDATA_WORD_1 = 3;
-Constant CSDATA_WORD_2 = 4;
-Constant CSDATA_PARSE_NAME_ID = 5;
+Constant CSDATA_PARSE_NAME_ID = 3;
 !  CSData-->0: The object which holds list where we found a match
 !  CSData-->1: The property where the list is stored
 !  CSData-->2: The index into the list
-!  CSData-->3: Word 1 in player input
-!  CSData-->4: Word 2 in player input (may not have matched anything)
-!  CSData-->5: The value of cs_parse_name_id when match was made
+!  CSData-->3: The value of cs_parse_name_id when match was made
 
 #Ifndef cheap_scenery;
 Property individual cheap_scenery;
@@ -226,11 +222,8 @@ Global cs_parse_name_id = 0;
 	return CSHasAdjective(p_word) | CSHasNoun(p_word);
 ];
 
-[ _ParseCheapScenery p_obj p_prop p_base_wn _w1 _w2 _i _j _sw1 _sw2 _len _ret _arr;
+[ _ParseCheapScenery p_obj p_prop p_base_wn _i _j _sw1 _sw2 _len _ret _arr;
 	cs_parse_name_id = 0;
-! 	_base_wn = CheapScenery.inside_description;
-	_w1 = CSData-->CSDATA_WORD_1;
-	_w2 = CSData-->CSDATA_WORD_2;
 	_arr = p_obj.&p_prop;
 	_len = p_obj.#p_prop / 2;
 	while(_i < _len) {
@@ -325,11 +318,10 @@ Global cs_parse_name_id = 0;
 				jump _cs_found_a_match;
 			}
 			_i = _j + _sw2 - 2;
-		} else if(_w1 == _sw1 or _sw2) {
-				_ret = 1;
-				if(_w1 == _sw1 && _w2 == _sw2) {
-					_ret = 2;
-				}
+		} else {
+			wn = p_base_wn;
+			_ret = _CSMatchNameList(_arr + _i + _i, 2);
+			if(_ret)
 				jump _cs_found_a_match;
 		}
 		_i = _i + 3;
@@ -358,11 +350,8 @@ Global cs_parse_name_id = 0;
 Object CheapScenery "object"
 	with
 		article "an",
-		parse_name [ _base_wn;
-			_base_wn = wn;
-			CSData-->CSDATA_WORD_1 = NextWordStopped();
-			CSData-->CSDATA_WORD_2 = NextWordStopped();
-			return _ParseCheapScenery(location, cheap_scenery, _base_wn);
+		parse_name [;
+			return _ParseCheapScenery(location, cheap_scenery, wn);
 		],
 #Ifdef SceneryReply;
 		before [_i _k _w1pos _w1 _w2 _routine;
