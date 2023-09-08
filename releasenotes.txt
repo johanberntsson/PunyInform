@@ -44,6 +44,8 @@ Changes:
   moving to a new room, e.g. "x window. e. open it"
 - New cheap scenery feature: CS_MAYBE_ADD_LIST [function] [object] [propery]
   adds the list if the function returns true.
+- New debug verb for cheap scenery: 'cstest'. Checks the integrity of all
+  cheap_scenery arrays in the game.
 
 =======
 v4.7: bug fix and new feature release (27 Aug 2023)

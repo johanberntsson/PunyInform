@@ -487,3 +487,122 @@ Object CheapScenery "object"
 #Endif;
 ;
 
+#Ifdef DEBUG;
+
+!			if(CSDebugIsWord(_val
+!			(UnsignedCompare(_i, dict_start) < 0 ||
+
+[CSDebugIsDictWord p_val;
+    if (UnsignedCompare(p_val, dict_start) >= 0 &&
+            UnsignedCompare(p_val, dict_end) < 0 &&
+            (p_val - dict_start) % dict_entry_size == 0)
+		rtrue;
+	rfalse;
+];
+
+[ CSDebugPrintObjRef p_obj p_prop p_index;
+	new_line;
+	print (The) p_obj, " (", p_obj, "), ";
+	if(p_prop == (cheap_scenery))
+		print "cheap scenery property"; 
+	else
+		print "property ", p_prop; 
+	print ", element ", p_index, ": ";
+];
+
+[ CSDebugHelper p_obj p_prop _arr _len _i _j _val _val2 _done;
+	_arr = p_obj.&p_prop;
+	_len = p_obj.#p_prop / 2;
+	_i = -1;
+	while(++_i < _len) {
+		_done = false;
+		_val = _arr-->_i;
+		if(_val == CS_THEM) {
+			_val = _arr-->++_i;
+			if(_val == CS_ADD_LIST or CS_MAYBE_ADD_LIST) {
+				CSDebugPrintObjRef(p_obj, p_prop, _i);
+				"Element following CS_THEM can't be CS_ADD_LIST or CS_MAYBE_ADD_LIST.";
+			}
+		}
+		if(_val == CS_MAYBE_ADD_LIST) {
+			_val = _arr-->++_i;
+			if(~~(_val ofclass Routine)) {
+				CSDebugPrintObjRef(p_obj, p_prop, _i);
+				"Element following CS_MAYBE_ADD_LIST must be a routine.";
+				
+			}
+			_val = CS_ADD_LIST; ! Check the rest as if it was a CS_ADD_LIST entry
+		}
+		if(_val == CS_ADD_LIST) {
+			_val = _arr-->++_i;
+			if(_val < 2 || _val > top_object) {
+				CSDebugPrintObjRef(p_obj, p_prop, _i);
+				"Element following CS_ADD_LIST or CS_MAYBE_ADD_LIST must be an object ID.";
+			}
+			_val2 = _arr-->++_i;
+			CSDebugHelper(_val, _val2);
+			_done = true;
+		}
+		if(_done == false && _val == CS_PARSE_NAME) {
+			_val = _arr-->++_i;
+			if(~~(_val ofclass Routine)) {
+				CSDebugPrintObjRef(p_obj, p_prop, _i);
+				"Element following CS_PARSE_NAME must be a routine.";
+			}
+			_val = _arr-->++_i;
+			if(~~(_val ofclass String) && ~~(_val ofclass Routine)) {
+				CSDebugPrintObjRef(p_obj, p_prop, _i);
+				"Expected a reaction string or routine in this position.";
+			}
+			_done = true;
+		}
+		if(_done == false && CSDebugIsDictWord(_val)) {
+			_i--;
+			_val = 2; ! Let the generic 1-99 clause handle it
+		}
+		if(_done == false && _val > 0 && _val < 100) {
+			_val = _val / 10 + _val % 10;
+			for(_j = 1: _j <= _val : _j++) {
+				_val2 = _arr-->(_i + _j);
+				if(CSDebugIsDictWord(_val2)==false) {
+					CSDebugPrintObjRef(p_obj, p_prop, _i + _j);
+					"Expected a dictionary word in this position.";
+				}
+			}
+			_i = _i + _val + 1;
+			_val = _arr-->_i;
+			if((~~(_val ofclass String)) && ~~(_val ofclass Routine)) {
+				CSDebugPrintObjRef(p_obj, p_prop, _i);
+				"Expected a reaction string or routine in this position.";
+			}
+			_done = true;
+		}
+		
+		
+		if(_done == false) {
+			CSDebugPrintObjRef(p_obj, p_prop, _i);
+			"Unknown element in this position.";
+		}
+	}
+	if(_i > _len) {
+		CSDebugPrintObjRef(p_obj, p_prop, _i);
+		"Element(s) missing at end of list?";
+	}
+	print "#";
+];
+
+[ DebugCheapScenerySub _obj;
+	print "Testing all cheap_scenery arrays in game:^";
+	objectloop(_obj provides cheap_scenery) {
+		if(parent(_obj)) {
+			print (The) _obj, "(", _obj, ") provides cheap_scenery, but doesn't appear to be a location.^";
+			continue;
+		}
+		CSDebugHelper(_obj, (cheap_scenery));
+	}
+	"^Cheap scenery test complete.";
+];
+
+Verb meta 'cstest'
+	* -> DebugCheapScenery;
+#Endif;
