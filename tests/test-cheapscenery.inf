@@ -88,7 +88,10 @@ Object Library "Library"
 				if(_w == 'library') { _i++; return _i;}
 				return 0;
 			] "It's truly glorious."
+			CS_MAYBE_ADD_LIST [; if(LightSwitch has on) rtrue; ] Library (switch_scenery)
 			CS_ADD_LIST Library (inside_scenery),
+		switch_scenery
+			1 'light' "It's like real sunlight.",
 		inside_scenery
 			1 'hello' SCN_ATMOSPHERE
 			CS_PARSE_NAME PARSE_NAME_AIR "The air is oh so thin here."
@@ -99,6 +102,10 @@ Object Library "Library"
 				default: "There's no way you could reach it!";
 			]
 			'wall' 'ceiling' "It's just a regular wall-ceiling!";
+
+Object -> LightSwitch "switch"
+	with name 'switch',
+	has static switchable;
 
 Object -> Box "box"
 	with

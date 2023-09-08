@@ -2,35 +2,40 @@
 !
 ! This library extension provides a way to implement simple scenery objects
 ! using just a single object for the entire game. This helps keep both the 
-! object count and the dynamic memory usage down.
+! object count and the dynamic memory usage down. Games are also faster
+! when fewer objects are in scope.
 !
 ! To use it, include this file after globals.h. Then add a property called
 ! cheap_scenery to the locations where you want to add cheap scenery objects.
 ! You can add any number of cheap scenery objects to one location in this way.
 !
-! For each scenery object, you provide an adjective, a noun, and a
-! reaction string/routine. Instead of an adjective, you may give a synonym 
-! to the noun. This cheap scenery entry will be matched if the player types
-! any combination of the adjective and noun
+! For each scenery object, you provide an entry in the list, typically 
+! consisting of two dictionary words (called word1 and word2), and a
+! reaction string/routine. This cheap scenery entry will be matched if the 
+! player types any combination of word1 and word2
 !
-! If no adjective or synonym is needed, use the value CS_NO_ADJ (=1) in 
-! that position. 
+! If only one word is needed, use the value 1 for word1. 
 !
 ! There is a more flexible option, which allows you to specify up to nine 
 ! adjectives and nine nouns: You give a value (10 * adjectives + nouns), 
 ! followed by the adjectives and nouns, e.g: 
 ! 21 'small' 'green' 'bug' - this means there are two adjectives and one noun, 
 ! and this will match "small green bug", "green small bug", "small bug", 
-! "green bug", "bug", and nothing else, i.e. at least one of the nouns, 
-! optionally preceded by one or more of the adjectives. When using this
-! option, typing only adjectives isn't considered a match.
+! "green bug" and "bug", but not "small" or "small green" - at least one of 
+! the nouns must be used by the player, optionally preceded by one or more of 
+! the adjectives.
 !
-! You can also give CS_PARSE_NAME as the adjective value and give a routine 
-! which will act as a parse_name routine in the noun position. 
+! Alternatively, an entry can start with CS_PARSE_NAME and then a routine 
+! which will act as a parse_name routine. 
 !
-! Finally, you can give CS_ADD_LIST as the adjective value and then an object
+! Additionally, you can start an entry with CS_ADD_LIST and then an object
 ! ID and a property name, to include the cheap scenery list held in that 
-! property in the object in the current list.
+! property in the object.
+!
+! Finally, you can use the value CS_MAYBE_ADD_LIST, then a function, an 
+! object ID and a property name, to say that if the function returns true,
+! you want to include the cheap scenery list held in that property in the 
+! object.
 !
 ! If multiple cheap scenery objects are matched, the one matching the highest
 ! number of words in player input is the match that is used. If there's a tie,
@@ -64,8 +69,8 @@
 !     routine did not set cs_parse_name_id, word1 = CS_PARSE_NAME,
 !     word2 = 0 and routine = [routine address] (If you use a named routine,
 !     the name is a constant equal to the routine address).
-! * Otherwise, word1 = adjective, word2 = noun (the values given in the cheap
-!     scenery property for the item matched) and routine = 0.
+! * Otherwise, word1 and word2 hold the two dictionary words specified for the
+!     matched cheap scenery object, and routine = 0.
 !
 ! Example usage: (from howto/cheapscenerydemo.inf in PunyInform distribution)
 
@@ -113,9 +118,10 @@
 !             take the books, the shelves, the library, the air, the walls and
 !             the ceiling.",
 !         cheap_scenery
-!             CS_ADD_LIST Library inside_scenery
-!             'book' 'books' BOOKDESC
-!             'shelf' 'shelves' "They're full of books."
+!             CS_ADD_LIST Library (inside_scenery)
+!             CS_MAYBE_ADD_LIST [; if(LightSwitch has on) rtrue; ] Library (light_scenery)
+!             'book' 'books//p' BOOKDESC
+!             'shelf' 'shelves//p' "They're full of books."
 !             CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
 !             CS_PARSE_NAME [ _i _w;
 !                 cs_parse_name_id = CSP_LIBRARY;
@@ -125,9 +131,11 @@
 !                 if(_w == 'library') { _i++; return _i;}
 !                 return 0;
 !             ] "It's truly glorious.",
+!         light_scenery
+!             1 'light' "The light is just stunning to watch.",
 !         inside_scenery
-!             'wall' 'walls' WallDesc
-!             CS_NO_ADJ 'ceiling' "The ceiling is quite high up.",
+!             'wall' 'walls//p' WallDesc
+!             1 'ceiling' "The ceiling is quite high up.",
 !     has light;
 
 System_file;
@@ -153,9 +161,10 @@ Constant CS_DEFAULT_MSG "No need to concern yourself with that.";
 Constant CS_NO_ADJ = 1;
 Constant CS_PARSE_NAME = 100;
 Constant CS_ADD_LIST = 101;
+Constant CS_MAYBE_ADD_LIST = 102;
 
-Constant CS_IT = 102;
-Constant CS_THEM = 103;
+Constant CS_IT = 103;
+Constant CS_THEM = 104;
 
 Array CSData --> 7;
 Constant CSDATA_OBJ = 0;
@@ -167,8 +176,11 @@ Constant CSDATA_PRONOUN = 5;
 Constant CSDATA_PRONOUN_TEMP = 6;
 !  CSData-->0: The object which holds list where we found a match
 !  CSData-->1: The property where the list is stored
-!  CSData-->2: The index into the list
+!  CSData-->2: The index into the list for the best match
 !  CSData-->3: The value of cs_parse_name_id when match was made
+!  CSData-->4: The length of the best match
+!  CSData-->5: The pronoun for the match (CS_IT or CS_THEM)
+!  CSData-->6: Used to pass a pronoun value between routines
 
 #Ifndef cheap_scenery;
 Property individual cheap_scenery;
@@ -265,20 +277,21 @@ Global cs_parse_name_id = 0;
 		}
 #Endif;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(_sw1 == CS_ADD_LIST &&
-				(_sw2 < 2 || _sw2 > top_object)) {
+		if((_sw1 == CS_ADD_LIST &&
+				(_sw2 < 2 || _sw2 > top_object)) ||
+			(_sw1 == CS_MAYBE_ADD_LIST &&
+				(_arr-->(_i+2) < 2 || _arr-->(_i+2) > top_object))	) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
+			if(_sw1 == CS_MAYBE_ADD_LIST) _i++;
 			print (string) CS_ERR,"2: Element ", _i+1, " in a cheap scenery property of ", (name) p_obj,
-				" is part of a CS_ADD_LIST entry and should be a valid
+				" is part of a CS_ADD_LIST or CS_MAYBE_ADD_LIST entry and should be a valid
 				object ID but isn't]^" ;
 #Ifnot;
 			print (string) CS_ERR, "2]^";
 #Endif;
 			rfalse;
 		}
-#Endif;
-#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(_sw1 < 1 || _sw1 > CS_ADD_LIST && metaclass(_arr-->(_i+2)) ~= String or Routine) {
+		if(_sw1 < 1 || _sw1 > CS_MAYBE_ADD_LIST && metaclass(_arr-->(_i+2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print (string) CS_ERR,"3: Element ", _i+2, " in a cheap scenery property of ",
 				(name) p_obj, " is not a string or routine]^";
@@ -289,13 +302,14 @@ Global cs_parse_name_id = 0;
 		}
 #Endif;
 		
-		if(_sw1 == CS_ADD_LIST) {
+		if(_sw1 == CS_ADD_LIST or CS_MAYBE_ADD_LIST) {
+			if(_sw1 == CS_MAYBE_ADD_LIST) {
+				_i++;
+				if(_sw2() == false) jump _no_list;
+				_sw2 = _arr-->(_i+1);
+			}
 			_ret = _ParseCheapScenery(_sw2, _arr-->(_i+2), p_base_wn);
-	_longest = CSData-->CSDATA_MATCH_LENGTH;
-			! if(_ret > _longest)
-				! _longest = _ret;
-!			if(_ret > _longest)
-!				return _ret;
+			_longest = CSData-->CSDATA_MATCH_LENGTH;
 		} else if(_sw1 == CS_PARSE_NAME) {
 			wn = p_base_wn;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
@@ -361,6 +375,7 @@ Global cs_parse_name_id = 0;
 			}
 !				jump _cs_found_a_match;
 		}
+._no_list;
 		if(_next_i) {
 			_i = _next_i;
 			_next_i = 0;
