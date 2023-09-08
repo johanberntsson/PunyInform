@@ -78,7 +78,7 @@ Object Library "Library"
 		e_to ReadingRoom,
 		s_to Kitchen,
 		cheap_scenery
-			14 'old' 'book' 'books//p' 'volume' 'volumes//p' BOOKDESC
+			CS_THEM 14 'old' 'book' 'books//p' 'volume' 'volumes//p' BOOKDESC
 			'shelf' 'shelves//p' "They're full of books."
 			CS_PARSE_NAME [ _i _w;
 				cs_parse_name_id = CSP_LIBRARY;
@@ -94,11 +94,11 @@ Object Library "Library"
 			CS_PARSE_NAME PARSE_NAME_AIR "The air is oh so thin here."
 			1 'atmosphere' SCN_ATMOSPHERE
 			'wall' 'walls//p' WALL_DESC
-			'wall' 'ceiling' "It's just a regular wall-ceiling!"
 			1 'ceiling' [;
 				Examine: "The ceiling is quite high up.";
 				default: "There's no way you could reach it!";
-			];
+			]
+			'wall' 'ceiling' "It's just a regular wall-ceiling!";
 
 Object -> Box "box"
 	with
