@@ -38,7 +38,8 @@ Changes:
   consecutive words in player input) is used, rather than the first match. In 
   case of a tie, the first match of this length is used.
 - Changed cheap scenery so "them" will refer to the cheap scenery object if
-  a plural word was used, e.g. "x shelves", or if entry begins with CS_THEM.
+  a plural word was used, e.g. "x shelves", or if entry begins with CS_THEM,
+  or if it has a parse_name routine which sets parser_action = ##PluralFound.
 - Bugfix: You could refer to the cheap scenery object with "it" even after 
   moving to a new room, e.g. "x window. e. open it"
 - New cheap scenery feature: CS_MAYBE_ADD_LIST [function] [object] [propery]

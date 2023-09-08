@@ -28,6 +28,14 @@
 ! Alternatively, an entry can start with CS_PARSE_NAME and then a routine 
 ! which will act as a parse_name routine. 
 !
+! Optionally, you can precede an entry with CS_THEM to say that this cheap
+! scenery object should be considered a "them"-object by the parser. E.g.
+! the player can type "EXAMINE CURTAINS.TAKE THEM". Another option is to
+! mark some of the words with the plural flag, e.g. 'doors//p'. If a plural
+! word is matched, the object is considered a "them"-object. For objects
+! with a parse_name routine, the routine can set parser_action = ##PluralFound
+! to signal that a plural word was matched.
+!
 ! Additionally, you can start an entry with CS_ADD_LIST and then an object
 ! ID and a property name, to include the cheap scenery list held in that 
 ! property in the object.
@@ -135,6 +143,7 @@
 !             1 'light' "The light is just stunning to watch.",
 !         inside_scenery
 !             'wall' 'walls//p' WallDesc
+!              CS_THEM 'curtain' 'curtains' "The curtains are lovely."
 !             1 'ceiling' "The ceiling is quite high up.",
 !     has light;
 
@@ -325,10 +334,16 @@ Global cs_parse_name_id = 0;
 #Endif;
 			_self_bak = self;
 			self = location;
+			parser_action = 0;
 			_ret = _sw2();
 			self = _self_bak;
-			if(_ret > _longest)
+			if(_ret > _longest) {
+				_sw2 = CS_IT;
+				if(parser_action == ##PluralFound)
+					_sw2 = CS_THEM;
+				CSDATA-->CSDATA_PRONOUN_TEMP = _sw2;	
 				jump _cs_found_a_match;
+			}
 			cs_parse_name_id = 0;
 		} else if(_sw1 > 0 && _sw1 < 100) {
 			wn = p_base_wn;
