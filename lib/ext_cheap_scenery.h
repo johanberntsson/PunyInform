@@ -154,12 +154,17 @@ Constant CS_NO_ADJ = 1;
 Constant CS_PARSE_NAME = 100;
 Constant CS_ADD_LIST = 101;
 
-Array CSData --> 5;
+Constant CS_IT = 0;
+Constant CS_THEM = 1;
+
+Array CSData --> 7;
 Constant CSDATA_OBJ = 0;
 Constant CSDATA_PROP = 1;
 Constant CSDATA_INDEX = 2;
 Constant CSDATA_PARSE_NAME_ID = 3;
 Constant CSDATA_MATCH_LENGTH = 4;
+Constant CSDATA_PRONOUN = 5;
+Constant CSDATA_PRONOUN_TEMP = 6;
 !  CSData-->0: The object which holds list where we found a match
 !  CSData-->1: The property where the list is stored
 !  CSData-->2: The index into the list
@@ -193,8 +198,9 @@ Global cs_parse_name_id = 0;
     if(p_count == 0) return 0;
     while(true) {
         _base = _matched;
-		if(_CSFindInArr(_w, p_arr, p_count)) { 
+		if(_CSFindInArr(_w, p_arr, p_count)) {
 			_matched++; 
+			if((_w-> #dict_par1) & 4) CSDATA-->CSDATA_PRONOUN_TEMP = CS_THEM;
 			_w = NextWord();
 		} else
 			return _matched;
@@ -227,7 +233,7 @@ Global cs_parse_name_id = 0;
 	return CSHasAdjective(p_word) | CSHasNoun(p_word);
 ];
 
-[ _ParseCheapScenery p_obj p_prop p_base_wn _i _j _sw1 _sw2 _len _ret _arr _longest _next_i;
+[ _ParseCheapScenery p_obj p_prop p_base_wn _i _j _sw1 _sw2 _len _ret _arr _longest _next_i _self_bak;
 	_longest = CSData-->CSDATA_MATCH_LENGTH;
 	cs_parse_name_id = 0;
 	_arr = p_obj.&p_prop;
@@ -238,6 +244,7 @@ Global cs_parse_name_id = 0;
 	_len = _len / 2;
 #Endif;
 	while(_i < _len) {
+		CSDATA-->CSDATA_PRONOUN_TEMP = CS_IT;
 		_sw1 = _arr-->_i;
 		_sw2 = _arr-->(_i+1);
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
@@ -296,8 +303,10 @@ Global cs_parse_name_id = 0;
 				rfalse;
 			}
 #Endif;
+			_self_bak = self;
 			self = location;
 			_ret = _sw2();
+			self = _self_bak;
 			if(_ret > _longest)
 				jump _cs_found_a_match;
 			cs_parse_name_id = 0;
@@ -342,6 +351,7 @@ Global cs_parse_name_id = 0;
 				CSData-->CSDATA_INDEX = _i;
 				CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
 				CSData-->CSDATA_MATCH_LENGTH = _longest;
+				CSDATA-->CSDATA_PRONOUN = CSDATA-->CSDATA_PRONOUN_TEMP;
 			}
 !				jump _cs_found_a_match;
 		}
@@ -369,14 +379,22 @@ Global cs_parse_name_id = 0;
 Object CheapScenery "object"
 	with
 		article "an",
-		parse_name [;
+		parse_name [ _ret;
 			CSData-->CSDATA_MATCH_LENGTH = 0;
-			return _ParseCheapScenery(location, cheap_scenery, wn);
+			_ret = _ParseCheapScenery(location, cheap_scenery, wn);
+			if(CSDATA-->CSDATA_PRONOUN == CS_THEM) {
+				give self pluralname;
+				if(itobj == self) itobj = 0;
+			} else {
+				give self ~pluralname;
+				if(themobj == self) themobj = 0;
+			}
+			return _ret;
 		],
 #Ifdef SceneryReply;
-		before [_i _k _w1pos _w1 _w2 _routine;
+		before [_i _k _w1pos _w1 _w2 _routine _self_bak;
 #Ifnot;
-		before [_i _k;
+		before [_i _k _self_bak;
 #Endif;
 			_i = _CSGetArr();
 			_k = _i-->0;
@@ -389,10 +407,12 @@ Object CheapScenery "object"
 				print_ret (string) _k;
 
 			if(_k ofclass Routine) {
+				_self_bak = self;
 				self = location;
 				sw__var = action;
 				if(_k())
 					rtrue;
+				self = _self_bak;
 			}
 
 #ifdef SceneryReply;
@@ -416,6 +436,11 @@ Object CheapScenery "object"
 				rtrue;
 #endif;
 			print_ret (string) CS_DEFAULT_MSG;
+		],
+		react_after [;
+			Go:
+				if(itobj == self) itobj = 0;
+				if(themobj == self) themobj = 0;
 		],
 		found_in [;
 			if(location provides cheap_scenery) rtrue;
