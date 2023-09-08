@@ -154,8 +154,8 @@ Constant CS_NO_ADJ = 1;
 Constant CS_PARSE_NAME = 100;
 Constant CS_ADD_LIST = 101;
 
-Constant CS_IT = 0;
-Constant CS_THEM = 1;
+Constant CS_IT = 102;
+Constant CS_THEM = 103;
 
 Array CSData --> 7;
 Constant CSDATA_OBJ = 0;
@@ -246,6 +246,11 @@ Global cs_parse_name_id = 0;
 	while(_i < _len) {
 		CSDATA-->CSDATA_PRONOUN_TEMP = CS_IT;
 		_sw1 = _arr-->_i;
+		if(_sw1 == CS_THEM) {
+			CSDATA-->CSDATA_PRONOUN_TEMP = CS_THEM;
+			_i++;
+			_sw1 = _arr-->_i;	
+		}
 		_sw2 = _arr-->(_i+1);
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if(_sw1 == 0) {
@@ -283,6 +288,7 @@ Global cs_parse_name_id = 0;
 			rfalse;
 		}
 #Endif;
+		
 		if(_sw1 == CS_ADD_LIST) {
 			_ret = _ParseCheapScenery(_sw2, _arr-->(_i+2), p_base_wn);
 	_longest = CSData-->CSDATA_MATCH_LENGTH;
