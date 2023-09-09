@@ -73,13 +73,13 @@ Constant BOOKDESC "You're not interested in reading.";
 Object Library "Library"
 	with
 		description "You are in a big lovely library. You can examine or try to
-			take the old books, the shelves, the library, the air, the atmosphere,
+			take the old books, the papers, the library, the air, the atmosphere,
 			the walls and the ceiling. The reading room lies east.",
 		e_to ReadingRoom,
 		s_to Kitchen,
 		cheap_scenery
 			CS_THEM 14 'old' 'book' 'books//p' 'volume' 'volumes//p' BOOKDESC
-			'shelf' 'shelves//p' "They're full of books."
+			'paper' 'papers//p' "The papers are all dusty."
 			CS_PARSE_NAME [ _i _w;
 				cs_parse_name_id = CSP_LIBRARY;
 				_w = NextWord();

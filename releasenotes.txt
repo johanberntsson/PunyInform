@@ -46,6 +46,9 @@ Changes:
   adds the list if the function returns true.
 - New debug verb for cheap scenery: 'cstest'. Checks the integrity of all
   cheap_scenery arrays in the game.
+- Improved error printing in cheap scenery: The property name is now printed
+  as well (useful when including extra lists of cheap scenery, not necessarily
+  stored in the cheap_scenery property).
 
 =======
 v4.7: bug fix and new feature release (27 Aug 2023)

@@ -277,7 +277,7 @@ Global cs_parse_name_id = 0;
 		if(_sw1 == 0) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print (string) CS_ERR, "5: First element of entry, at position ", _i, 
-				" in a cheap scenery property of ", (name) p_obj,
+				" in property ", (property) p_prop, " of ", (name) p_obj,
 				" should be a value 1-99, or a vocabulary word, but is 0]^" ;
 #Ifnot;
 			print (string) CS_ERR, "5]^";
@@ -292,7 +292,7 @@ Global cs_parse_name_id = 0;
 				(_arr-->(_i+2) < 2 || _arr-->(_i+2) > top_object))	) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			if(_sw1 == CS_MAYBE_ADD_LIST) _i++;
-			print (string) CS_ERR,"2: Element ", _i+1, " in a cheap scenery property of ", (name) p_obj,
+			print (string) CS_ERR,"2: Element ", _i+1, " in property ", (property) p_prop, " of ", (name) p_obj,
 				" is part of a CS_ADD_LIST or CS_MAYBE_ADD_LIST entry and should be a valid
 				object ID but isn't]^" ;
 #Ifnot;
@@ -302,7 +302,7 @@ Global cs_parse_name_id = 0;
 		}
 		if(_sw1 < 1 || _sw1 > CS_MAYBE_ADD_LIST && metaclass(_arr-->(_i+2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			print (string) CS_ERR,"3: Element ", _i+2, " in a cheap scenery property of ",
+			print (string) CS_ERR,"3: Element ", _i+2, " in property ", (property) p_prop, " of ",
 				(name) p_obj, " is not a string or routine]^";
 #Ifnot;
 			print (string) CS_ERR,"3]^";
@@ -324,7 +324,7 @@ Global cs_parse_name_id = 0;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 			if(metaclass(_sw2) ~= Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-				print (string) CS_ERR,"4: Element ", _i+1, " in a cheap scenery property of ",
+				print (string) CS_ERR,"4: Element ", _i+1, " in property ", (property) p_prop, " of ",
 				(name) p_obj, " should be a parse_name routine but isn't]^";
 #Ifnot;
 				print (string) CS_ERR,"4]^";
@@ -361,7 +361,7 @@ Global cs_parse_name_id = 0;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if(metaclass(_arr-->(_j + _sw2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			print (string) CS_ERR,"3: Element ", _j + _sw2, " in a cheap scenery property of ",
+			print (string) CS_ERR,"3: Element ", _j + _sw2, " in property ", (property) p_prop, " of ",
 				(name) p_obj, " is not a string or routine]^";
 #Ifnot;
 			print (string) CS_ERR,"3]^";
@@ -400,7 +400,7 @@ Global cs_parse_name_id = 0;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(_i > _len) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-		print (string) CS_ERR,"1: A cheap scenery property of ", (name) p_obj, 
+		print (string) CS_ERR,"1: Property ", (property) p_prop, " of ", (name) p_obj, 
 			" extends beyond property length - check entries with 3+ words]^";
 #Ifnot;
 		print (string) CS_ERR,"1]^";
@@ -503,10 +503,7 @@ Object CheapScenery "object"
 [ CSDebugPrintObjRef p_obj p_prop p_index;
 	new_line;
 	print (The) p_obj, " (", p_obj, "), ";
-	if(p_prop == (cheap_scenery))
-		print "cheap scenery property"; 
-	else
-		print "property ", p_prop; 
+	print (property) p_prop, " property";
 	print ", element ", p_index, ": ";
 ];
 
