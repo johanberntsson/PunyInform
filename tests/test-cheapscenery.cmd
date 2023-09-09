@@ -3,8 +3,9 @@ transcript
 
 x volume
 get old book
-x shelf
-push shelves
+x paper
+push papers
+x them
 x the big library
 push the library
 x air

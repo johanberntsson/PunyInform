@@ -5,11 +5,14 @@ You're not interested in reading.
 > get old book
 Leave the books to the people who care about them.
 
-> x shelf
-They're full of books.
+> x paper
+The papers are all dusty.
 
-> push shelves
-You're not supposed to touch the shelves.
+> push papers
+Remember you're in a library. There's no need to touch everything.
+
+> x them
+The papers are all dusty.
 
 > x the big library
 It's truly glorious.
