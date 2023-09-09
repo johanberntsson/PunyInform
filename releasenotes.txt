@@ -34,9 +34,9 @@ Changes:
 - Optimized the cheap scenery extension for code size.
 - Changed the standard adjective + noun form for cheap scenery entries to
   match any combination of these words.
-- Changed cheap scenery so the longest match ( = matcing the highest number of
-  consecutive words in player input) is used, rather than the first match. In 
-  case of a tie, the first match of this length is used.
+- Changed cheap scenery so the longest match ( = matching the highest number
+  of consecutive words in player input) is used, rather than the first match.
+  In case of a tie, the first match of this length is used.
 - Changed cheap scenery so "them" will refer to the cheap scenery object if
   a plural word was used, e.g. "x shelves", or if entry begins with CS_THEM,
   or if it has a parse_name routine which sets parser_action = ##PluralFound.

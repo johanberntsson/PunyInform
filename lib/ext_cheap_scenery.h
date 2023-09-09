@@ -558,6 +558,11 @@ Object CheapScenery "object"
 			_val = 2; ! Let the generic 1-99 clause handle it
 		}
 		if(_done == false && _val > 0 && _val < 100) {
+			if(_val % 10 == 0) {
+				CSDebugPrintObjRef(p_obj, p_prop, _i + _j);
+				"This value (", _val, ") indicates that there are no nouns,
+					which means this entry can never be matched.";
+			}
 			_val = _val / 10 + _val % 10;
 			for(_j = 1: _j <= _val : _j++) {
 				_val2 = _arr-->(_i + _j);
