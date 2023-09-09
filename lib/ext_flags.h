@@ -35,6 +35,10 @@
 ! ClearFlag(F_FED_PARROT, F_TICKET_OK, F_SAVED_CAT) clears all three flags
 ! if(FlagIsSet(F_FED_PARROT, F_TICKET_OK, F_SAVED_CAT)) returns true if all three flags are set
 ! if(FlagIsClear(F_TICKET_OK, F_SAVED_CAT)) returns true if both flags are clear
+!
+! There are also functions to check if any of two or three flags are set or clear:
+! if(AnyFlagIsSet(F_FED_PARROT, F_TICKET_OK, F_SAVED_CAT)) returns true if any of the three flags are set
+! if(AnyFlagIsClear(F_FED_PARROT, F_TICKET_OK, F_SAVED_CAT)) returns true if any of the three flags are clear
 
 System_file;
 
@@ -122,38 +126,51 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 	if(p_y) ClearFlag(p_y, p_z);
 ];
 
-[ FlagIsSet p_x p_y p_z _val;
-#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if(IncorrectFlagNumber(p_x)) rfalse;
-#Endif;
+[ _FlagValue p_x _val;
 #IfV5;
 	@log_shift p_x (-3) -> _val;
 	p_x = p_x & 7;
 	@log_shift 1 p_x -> p_x;
-	_val = game_flags -> _val & p_x;
+	return game_flags -> _val & p_x;
 #IfNot;
 	_val = p_x / 8;
-	_val = game_flags -> _val & flag_powers -> (p_x & 7);
+	return game_flags -> _val & flag_powers -> (p_x & 7);
 #EndIf;
-	if(_val == 0) rfalse;
+];
+
+[ FlagIsSet p_x p_y p_z;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(IncorrectFlagNumber(p_x)) rfalse;
+#Endif;
+	if(_FlagValue(p_x) == 0) rfalse;
 	if(p_y) return FlagIsSet(p_y, p_z);
 	rtrue;
 ];
 
-[ FlagIsClear p_x p_y p_z _val;
+[ AnyFlagIsSet p_x p_y p_z;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(IncorrectFlagNumber(p_x)) rfalse;
 #Endif;
-#IfV5;
-	@log_shift p_x (-3) -> _val;
-	p_x = p_x & 7;
-	@log_shift 1 p_x -> p_x;
-	_val = game_flags -> _val & p_x;
-#IfNot;
-	_val = p_x / 8;
-	_val = game_flags -> _val & flag_powers -> (p_x & 7);
-#EndIf;
-	if(_val) rfalse;
+	if(_FlagValue(p_x)) rtrue;
+	if(p_y) return AnyFlagIsSet(p_y, p_z);
+	rfalse;
+];
+
+[ FlagIsClear p_x p_y p_z;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(IncorrectFlagNumber(p_x)) rfalse;
+#Endif;
+	if(_FlagValue(p_x)) rfalse;
 	if(p_y) return FlagIsClear(p_y, p_z);
 	rtrue;
 ];
+
+[ AnyFlagIsClear p_x p_y p_z;
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(IncorrectFlagNumber(p_x)) rfalse;
+#Endif;
+	if(_FlagValue(p_x) == 0) rtrue;
+	if(p_y) return AnyFlagIsClear(p_y, p_z);
+	rfalse;
+];
+

@@ -49,6 +49,11 @@ Changes:
 - Improved error printing in cheap scenery: The property name is now printed
   as well (useful when including extra lists of cheap scenery, not necessarily
   stored in the cheap_scenery property).
+- Made flags functions FlagIsSet and FlagIsClear slightly shorter.
+- New function in flags extension: AnyFlagIsSet(flag1, flag2, flag3) - 
+  returns true if any of two or three flags are set.
+- New function in flags extension: AnyFlagIsClear(flag1, flag2, flag3) - 
+  returns true if any of two or three flags are clear.
 
 =======
 v4.7: bug fix and new feature release (27 Aug 2023)
