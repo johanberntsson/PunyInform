@@ -13,7 +13,9 @@ x atmosphere
 pull walls
 x ceiling
 push ceiling
+x it
 e
+x it
 x book
 get the single book
 push table

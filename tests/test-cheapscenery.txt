@@ -35,12 +35,18 @@ The ceiling is quite high up.
 > push ceiling
 There's no way you could reach it!
 
+> x it
+The ceiling is quite high up.
+
 > e
 Reading Room
 This is the reading room. The air feels different here. There's a single book
 sitting on one of the tables. You can examine or try to take the tables, the
 reading room, the air, the atmosphere, the walls and the ceiling. The library
 lies west.
+
+> x it
+I don't know what "it" refers to.
 
 > x book
 It's the classic "Gone With the Wind" by Margaret Mitchell.
