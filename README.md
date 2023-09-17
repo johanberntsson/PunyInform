@@ -179,21 +179,21 @@ where you can create disk images for Commodore C64, C128, Plus/4 and MEGA65.
 Fredrik Ramsberg has written a few articles describing PunyInform for
 beginners:
 
-* [PunyInform, a new library for writing text adventures for old computers](https://vintageisthenewold.com/punyinform-a-new-library-for-writing-text-adventures-for-old-computers/)
+* [PunyInform, a new library for writing text adventures for old computers](https://vitno.org/punyinform-a-new-library-for-writing-text-adventures-for-old-computers/)
   gives a general overview and introduction.
 
-* [PunyInform: Installing the tools and compiling a game](https://vintageisthenewold.com/punyinform-installing-the-tools-and-compiling-a-game/)
+* [PunyInform: Installing the tools and compiling a game](https://vitno.org/punyinform-installing-the-tools-and-compiling-a-game/)
   goes more into detail on how to setup an environment with PunyInform
   and the inform compiler on Windows, and getting started on a simple
   game.
 
-* [PunyInform Coding 1: The Basics](https://vintageisthenewold.com/punyinform-coding-1-the-basics/)
+* [PunyInform Coding 1: The Basics](https://vitno.org/punyinform-coding-1-the-basics/)
   covers the fundamentals of developing a game using PunyInform.
 
-* [PunyInform Coding 2: Objects and Actions](https://vintageisthenewold.com/punyinform-coding-2-objects-and-actions/)
+* [PunyInform Coding 2: Objects and Actions](https://vitno.org/punyinform-coding-2-objects-and-actions/)
   covers more of verbs, actions and adding code to objects in PunyInform.
 
-* [PunyInform Coding 3: Daemons and Describing Objects](https://vintageisthenewold.com/punyinform-coding-3-daemons-and-describing-objects/)
+* [PunyInform Coding 3: Daemons and Describing Objects](https://vitno.org/punyinform-coding-3-daemons-and-describing-objects/)
   covers daemons, some techniques for affecting how objects are described,
   fake actions and performing actions in code.
 
@@ -224,6 +224,13 @@ for your game.
 * [PunyInformFr](https://gitlab.com/auraes/punyinformfr) is a translation of
   the PunyInform library to French, by auraes.
 
+* [PunyInformFr](https://github.com/hlabrand/PunyInformFr) is a alternate translation of
+  the PunyInform library to French, by Hugo Labrande.
+
+* [PunyInform - DE](https://github.com/smartgrids-aau/punyinformde) is a translation of
+  the PunyInform library to German, by Lea Santner, A. Pulvermacher.
+
+https://github.com/smartgrids-aau/punyinformde/tree/main
 ## Credits
 
 PunyInform was conceived, designed and coded by Johan Berntsson and Fredrik
