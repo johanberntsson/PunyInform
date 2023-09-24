@@ -372,7 +372,7 @@ Global cs_parse_name_id = 0;
 
 			_ret = _ret + _sw1;
 			_next_i = _j + _sw2 - 2;
-			if(_ret > _longest) {
+			if(_sw1 && _ret > _longest) {
 				jump _cs_found_a_match;
 			}
 		} else {

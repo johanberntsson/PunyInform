@@ -1,5 +1,7 @@
 Upcoming release:
 
+- Bugfix: Cheap scenery would match adjectives without a noun following them.
+
 =======
 v5.0: bug fix and new feature release (10 Sep 2023)
 
