@@ -1,6 +1,12 @@
 Upcoming release:
 
+=======
+v5.0.1: bug fix release (25 Sep 2023)
+
 - Bugfix: Cheap scenery would match adjectives without a noun following them.
+- Modified library_of_horror.inf to use the recently added cheap scenery
+  option to mark some objects or words as "them"-words.
+- Optimized library_of_horror.inf to produce a smaller Z-code file.
 
 =======
 v5.0: bug fix and new feature release (10 Sep 2023)

@@ -1,6 +1,9 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
+!% $MAX_ABBREVS=96
+!% $ZCODE_MAX_INLINE_STRING=9999    ! Requires Inform 6.42
+!!!!!% $OMIT_SYMBOL_TABLE=1             ! Requires Inform 6.42
 
 ! The very first lines of the main source code file for a game can
 ! contain compiler options, like the lines above. -~S disables
@@ -9,6 +12,115 @@
 ! size and it makes the game slower.
 ! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
 ! aren't used. This can save some space.
+! ZCODE_LESS_DICT_DATA=1 removes one empty data byte for each dictionary word
+! $MAX_ABBREVS=96 increases the maximum number of abreviations from 64 to 96,
+! by removing the option to use 32 dynamic strings
+! @ZCODE_MAX_INLINE_STRING=9999 makes the compiler place all strings used in
+! code inline with the code, rather than placing longer strings in the high
+! memory string area. This saves some bytes. 
+
+! Unless compiling in DEBUG mode, one can also define $OMIT_SYMBOL_TABLE=1 to
+! tell the compiler not to include names of properties, attributes and more,
+! thus saving some space.
+
+! Abbreviations created with ZAbbrevMaker 0.9 - https://github.com/heasm66/ZAbbrevMaker
+Constant CUSTOM_ABBREVIATIONS;
+Abbreviate "hen you're short of";
+Abbreviate "by Maurice Sendak.";
+Abbreviate "cardboard box";
+Abbreviate "understand";
+Abbreviate "You can't ";
+Abbreviate " from the ";
+Abbreviate " already ";
+Abbreviate " you can ";
+Abbreviate "something";
+Abbreviate "basement";
+Abbreviate "irection";
+Abbreviate "nothing ";
+Abbreviate " of the ";
+Abbreviate " manager";
+Abbreviate " to the ";
+Abbreviate "building";
+Abbreviate "candles";
+Abbreviate "Inform ";
+Abbreviate "library";
+Abbreviate "flames";
+Abbreviate " with ";
+Abbreviate " your ";
+Abbreviate " light";
+Abbreviate "inside";
+Abbreviate " there";
+Abbreviate " about";
+Abbreviate "stairs";
+Abbreviate " that ";
+Abbreviate " black";
+Abbreviate "which";
+Abbreviate " like";
+Abbreviate "have ";
+Abbreviate " you ";
+Abbreviate "thing";
+Abbreviate " and ";
+Abbreviate "Frank";
+Abbreviate " the ";
+Abbreviate "ould ";
+Abbreviate "start";
+Abbreviate "walls";
+Abbreviate ", sir";
+Abbreviate "There";
+Abbreviate "look";
+Abbreviate "book";
+Abbreviate " of ";
+Abbreviate "dark";
+Abbreviate "You'";
+Abbreviate "his ";
+Abbreviate "here";
+Abbreviate "The ";
+Abbreviate " to ";
+Abbreviate "n't ";
+Abbreviate "You ";
+Abbreviate "ing ";
+Abbreviate " you";
+Abbreviate " is ";
+Abbreviate "room";
+Abbreviate "tion";
+Abbreviate "not ";
+Abbreviate " are";
+Abbreviate "ound";
+Abbreviate "able";
+Abbreviate " co";
+Abbreviate " I ";
+Abbreviate "hat";
+Abbreviate "for";
+Abbreviate "ed.";
+Abbreviate "all";
+Abbreviate " be";
+Abbreviate "ly ";
+Abbreviate " on";
+Abbreviate "ed ";
+Abbreviate "ear";
+Abbreviate "rea";
+Abbreviate "see";
+Abbreviate "re ";
+Abbreviate "lea";
+Abbreviate " in";
+Abbreviate "ing";
+Abbreviate "est";
+Abbreviate "ver";
+Abbreviate "ome";
+Abbreviate "out";
+Abbreviate "urn";
+Abbreviate "'s ";
+Abbreviate "the";
+Abbreviate " it";
+Abbreviate "ter";
+Abbreviate " a ";
+Abbreviate "and";
+Abbreviate "! ";
+Abbreviate ", ";
+Abbreviate "It";
+Abbreviate "e.";
+Abbreviate "^^";
+Abbreviate ". ";
 
 ! Library_of_horror.inf - a sample game which uses PunyInform
 
@@ -26,7 +138,7 @@ Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_MANUAL_SCOPE;
 Constant OPTIONAL_REACTIVE_PARSE_NAME;
 ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
-!Constant RUNTIME_ERRORS = 0;
+Constant RUNTIME_ERRORS = 0;
 
 Constant INITIAL_LOCATION_VALUE = GloomyStreet;
 
@@ -34,8 +146,8 @@ Constant STATUSLINE_SCORE; Statusline score;
 
 Constant Story	  "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game, by Pablo Martinez and Fredrik Ramsberg.^";
-Release 8;
-Serial "230515";
+Release 9;
+Serial "230925";
 
 ! Get your own unique IFID for your game at https://www.tads.org/ifidgen/ifidgen
 Array UUID_ARRAY string "UUID://43E00AEE-DEAF-40D9-8306-11BC80779320//"; #Ifdef UUID_ARRAY; #Endif;
@@ -286,8 +398,8 @@ Object GloomyStreet "Gloomy Street"
 				In front of you, to the south, is the strangely well preserved and beautiful
 				library building where you have to work.",
 		cheap_scenery
-			'windows' 'doors' "Remains of a distant and mysterious tragedy!"
-			'houses' 'street' "Creepy and abandoned."
+			CS_THEM 'windows' 'doors' "Remains of a distant and mysterious tragedy!"
+			'houses//p' 'street' "Creepy and abandoned."
 			1 'library' "It's a beautiful building. Looks like 19th century Art Nouveau architecture to you.",
 		s_to Library,
 		cant_go "Your work is to the south, though you are tempted to go home and forget all about it.",
@@ -330,8 +442,8 @@ Object Library "The Library"
 			^^To the east, it is possible to go deeper into the building. To the north is the exit to the outside.";
 		],
 		cheap_scenery
-			'volumes' 'books' "One could spend a lifetime reading only a fraction of the books in this room."
-			'shelf' 'shelves' "Full of every conceivable book in this world."
+			CS_THEM 'volumes' 'books' "One could spend a lifetime reading only a fraction of the books in this room."
+			CS_THEM 'shelf' 'shelves' "Full of every conceivable book in this world."
 			1 'library' "It's a beautiful old library.",
 		n_to GloomyStreet,
 		e_to TopOfStairs,
@@ -409,9 +521,9 @@ Object TopOfStairs "Staircase Leading Down"
 		],
 		cheap_scenery
 			'beam' 'light' "The light beam stands out clearly in the darkness of the room."
-			'box' 'boxes' "The boxes are full of books waiting to be placed on their shelves. There's
+			'box' 'boxes//p' "The boxes are full of books waiting to be placed on their shelves. There's
 							nothing here that would interest you."
-			1 'stairs' "The stairs lead towars the darkness of the basement.",
+			1 'stairs//p' "The stairs lead towars the darkness of the basement.",
 		before [;
 			Go:
 				if(selected_direction==d_to) {
@@ -446,7 +558,7 @@ Object BottomOfStairs "Basement, Near Staircase"
 	has light;
 
 ! Data that Frank needs to print where he came from.
-#IfDef OPTION_FULL_DIRECTIONS;
+#IfDef OPTIONAL_FULL_DIRECTIONS;
 Array opposite_directions static table "south" "north" "west" "east" "southwest" "southeast" "northwest" "northeast"
 	"down" "up" "out" "in";
 #IfNot;
@@ -578,7 +690,7 @@ Object Hallway "Hallway"
 			"A wide hallway leads from the stairs to the west to another room to the south. There
 				are some dusty doors along the walls, but they have all been nailed shut a long time ago.";
 		],
-		cheap_scenery 'door' 'doors' "Regular doors, but old and worn, with some cobweb on them.",
+		cheap_scenery 'door' 'doors//p' "Regular doors, but old and worn, with some cobweb on them.",
 		w_to BottomOfStairs,
 		s_to StorageRoom,
 	has light;
@@ -617,7 +729,7 @@ Object RepairShop "Repair Shop"
 		],
 		cheap_scenery
 			'bench' 'workbench' "It's an old and worn workbench."
-			'specialized' 'tools' "The tools are for repairing books, you can tell that much (but not much else than that).",
+			CS_THEM 'specialized' 'tools' "The tools are for repairing books, you can tell that much (but not much else than that).",
 		e_to StorageRoom,
 	has light;
 
@@ -655,8 +767,8 @@ Object DarkChamber "Dark chamber"
 				burning wax. The only exit is towards the west.";
 		],
 		cheap_scenery
-			'wall' 'walls' "The walls absorb so much light, it almost looks like the golden symbols float in a void."
-			'strange' 'symbols' "These symbols might be letters in some ancient script. You wouldn't know."
+			'wall' 'walls//p' "The walls absorb so much light, it almost looks like the golden symbols float in a void."
+			CS_THEM 'strange' 'symbols' "These symbols might be letters in some ancient script. You wouldn't know."
 			'velvet' 'tablecloth' "It's heavy and all black.",
 		w_to StorageRoom,
 	has light;
