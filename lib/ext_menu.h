@@ -57,7 +57,7 @@ Global menu_nesting;
 		print "^Select 1 to ", lines, " or ENTER to show the options again.^";
 		print "> ";
 
-       _ReadPlayerInput(true);
+		_ReadPlayerInput(true);
 		j = parse->1; ! number of words
 		if (j == 0) jump _v3_redisplay_menu;
 		i = parse-->1;
@@ -79,7 +79,7 @@ Global menu_nesting;
 #IfNot;
 ! v5+
 
-Constant NKEY__TX       = "N = next subject";
+Constant NKEY__TX	   = "N = next subject";
 Constant PKEY__TX       = "P = previous";
 Constant QKEY1__TX      = "  Q = resume game";
 Constant QKEY2__TX      = "Q = previous menu";
@@ -93,7 +93,7 @@ Constant QKEY1__KY      = 'Q';
 Constant QKEY2__KY      = 'q';
 
 [ DoMenu menu_choices EntryR ChoiceR
-         lines main_title main_wid cl i j oldcl pkey ch y x;
+		 lines main_title main_wid cl i j oldcl pkey ch y x;
 	menu_nesting++;
 	menu_item = 0;
 	lines = indirect(EntryR);

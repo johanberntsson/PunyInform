@@ -124,7 +124,7 @@ Constant MAX_WAIT_MINUTES 1440;
 	if (sys_statusline_flag == false) return GPR_FAIL;
 
 	_i = NextWord();
-	if (_i == 'midday' or 'noon' or 'midnight') {    ! then case (e) applies
+	if (_i == 'midday' or 'noon' or 'midnight') {   ! then case (e) applies
 		if (_i == 'midnight')
 			_hr = 0;
 		else
@@ -240,20 +240,20 @@ Constant MAX_WAIT_MINUTES 1440;
 		* 'for' number 'move'/'moves'/'turn'/'turns' -> WaitMoves
 		* 'for' number 'minute'/'minutes'            -> WaitMinutes
 		* 'for' number 'hour'/'hours'                -> WaitHours
-	    * number 'minute'/'minutes'                  -> WaitMinutes
-	    * number 'hour'/'hours'                      -> WaitHours
+		* number 'minute'/'minutes'                  -> WaitMinutes
+		* number 'hour'/'hours'                      -> WaitHours
 		* number 'move'/'moves'/'turn'/'turns'       -> WaitMoves
 		* number                                     -> WaitMoves;
 #Ifnot;
 	Extend 'wait'
-	    * 'until' parsetime                          -> WaitUntil
-	    * 'til' parsetime                            -> WaitUntil
-	    * 'till' parsetime                           -> WaitUntil
+		* 'until' parsetime                          -> WaitUntil
+		* 'til' parsetime                            -> WaitUntil
+		* 'till' parsetime                           -> WaitUntil
 		* 'for' number 'move'/'moves'/'turn'/'turns' -> WaitMoves
 		* 'for' number 'minute'/'minutes'            -> WaitMinutes
 		* 'for' number 'hour'/'hours'                -> WaitHours
-	    * number 'minute'/'minutes'                  -> WaitMinutes
-	    * number 'hour'/'hours'                      -> WaitHours
+		* number 'minute'/'minutes'                  -> WaitMinutes
+		* number 'hour'/'hours'                      -> WaitHours
 		* number 'move'/'moves'/'turn'/'turns'       -> WaitMoves
 		* number                                     -> WaitMoves;
 #Endif;

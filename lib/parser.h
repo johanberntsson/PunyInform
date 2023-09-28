@@ -8,28 +8,28 @@
 System_file;
 
 [ YesOrNo n;
-    for (::) {
-        _ReadPlayerInput(true, true);
+	for (::) {
+		_ReadPlayerInput(true, true);
 		n = parse -> 1;
 		parse -> 1 = 0;
-        if(n == 1) {
-        	! one word reply
-            if(parse --> 1 == 'yes' or 'y//') rtrue;
-            if(parse --> 1 == 'no' or 'n//') rfalse;
-        }
-        PrintMsg(MSG_YES_OR_NO);
-    }
+		if(n == 1) {
+			! one word reply
+			if(parse --> 1 == 'yes' or 'y//') rtrue;
+			if(parse --> 1 == 'no' or 'n//') rfalse;
+		}
+		PrintMsg(MSG_YES_OR_NO);
+	}
 ];
 
 [ _UserFilter _obj _noun _ret;
 	!  UserFilter consults the user's filter (or checks on attribute)
 	!  to see what already-accepted nouns are acceptable
-    if(noun_filter > 0 && noun_filter < 49) {
-        if (_obj has (noun_filter-1)) rtrue;
-        rfalse;
-    }
+	if(noun_filter > 0 && noun_filter < 49) {
+		if (_obj has (noun_filter-1)) rtrue;
+		rfalse;
+	}
 	_noun = noun; noun = _obj;
-    _ret = indirect(noun_filter);
+	_ret = indirect(noun_filter);
 	noun = _noun;
 	return _ret;
 ];
@@ -157,11 +157,11 @@ System_file;
 
 [ _CreatureTest obj;
 	! Will this obj do for a "creature" token?
-    if (actor ~= player) rtrue;
-    if (obj has animate) rtrue;
-    if (obj has talkable && action == ##Ask or ##Answer or ##Tell or ##AskFor)
+	if (actor ~= player) rtrue;
+	if (obj has animate) rtrue;
+	if (obj has talkable && action == ##Ask or ##Answer or ##Tell or ##AskFor)
 		rtrue;
-    rfalse;
+	rfalse;
 ];
 
 [ _ParseTopic p_wn p_parse_pointer p_preposition;
@@ -221,11 +221,11 @@ System_file;
 
 #Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 [ NumberWord p_o _i _n;
-    ! try to parse  "one" up to "twenty".
-    _n = LanguageNumbers-->0;
-    for(_i = 1 : _i <= _n : _i = _i + 2)
-        if (p_o == LanguageNumbers-->_i) return LanguageNumbers-->(_i+1);
-    return 0;
+	! try to parse  "one" up to "twenty".
+	_n = LanguageNumbers-->0;
+	for(_i = 1 : _i <= _n : _i = _i + 2)
+		if (p_o == LanguageNumbers-->_i) return LanguageNumbers-->(_i+1);
+	return 0;
 ];
 #Endif;
 
@@ -233,28 +233,28 @@ System_file;
 	!  Takes word number p_wordnum and tries to parse it as an
 	! unsigned decimal number, returning
 	!
-	!  -1000                if it is not a number
-	!  the number           if it has between 1 and 4 digits
-	!  10000                if it has 5 or more digits.
-    _i = wn; wn = p_wordnum; _j = NextWord(); wn = _i;
+	!  -1000				if it is not a number
+	!  the number		   if it has between 1 and 4 digits
+	!  10000				if it has 5 or more digits.
+	_i = wn; wn = p_wordnum; _j = NextWord(); wn = _i;
 #Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-    _j = NumberWord(_j); if (_j >= 1) return _j;
+	_j = NumberWord(_j); if (_j >= 1) return _j;
 #Endif;
 
-    _i = p_wordnum*4+1; _j = parse->_i; _num = _j+buffer; _len = parse->(_i-1);
+	_i = p_wordnum*4+1; _j = parse->_i; _num = _j+buffer; _len = parse->(_i-1);
 
-    ! allow for a entry point routine to override normal parsing
-    _tot = ParseNumber(_num, _len); if(_tot ~= 0) return _tot;
+	! allow for a entry point routine to override normal parsing
+	_tot = ParseNumber(_num, _len); if(_tot ~= 0) return _tot;
 
-    ! this uses Horner's algorithm: 2421 = 10*(10*(10*(2)+4)+2)+1
-    for (_i=0: _i<_len: _i++) {
-        _digit = _num->_i;
-        if(_digit < '0' || _digit > '9') jump _trynumber_baddigit;
-        _d = _digit - '0';
-        if(_len <=4) _tot = _tot*10 + _d;
-    }
+	! this uses Horner's algorithm: 2421 = 10*(10*(10*(2)+4)+2)+1
+	for (_i=0: _i<_len: _i++) {
+		_digit = _num->_i;
+		if(_digit < '0' || _digit > '9') jump _trynumber_baddigit;
+		_d = _digit - '0';
+		if(_len <=4) _tot = _tot*10 + _d;
+	}
    	if (_len > 4) return 10000;
-    return _tot;
+	return _tot;
 ._trynumber_baddigit;
 	return -1000;
 ];
@@ -344,20 +344,20 @@ System_file;
 ! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to _ParseNounPhrase,
 ! since they will typically be called from parse_name routines, which are called from _ParseNounPhrase
 
-[ WordAddress p_wordnum;    ! Absolute addr of 'wordnum' string in buffer
+[ WordAddress p_wordnum;	! Absolute addr of 'wordnum' string in buffer
 	return buffer + parse->(p_wordnum*4+1);
 ];
 
-[ WordLength p_wordnum;     ! Length of 'wordnum' string in buffer
+[ WordLength p_wordnum;	 ! Length of 'wordnum' string in buffer
 	return parse->(p_wordnum*4);
 ];
 
-[ WordValue p_wordnum;      ! Dictionary value of 'wordnum' string in buffer
-    return parse-->(p_wordnum*2-1);
+[ WordValue p_wordnum;	  ! Dictionary value of 'wordnum' string in buffer
+	return parse-->(p_wordnum*2-1);
 ];
 
-[ NumberWords;              ! Number of parsed strings in buffer
-    return parse->1;
+[ NumberWords;			  ! Number of parsed strings in buffer
+	return parse->1;
 ];
 
 [ _PeekAtNextWord _i;
@@ -415,7 +415,7 @@ System_file;
 
 	if(p_obj ~= Directions)
 		_score = _score + 10;
-	
+
 	return _score;
 ];
 
@@ -443,9 +443,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! side effects:
 	! - uses parser_check_multiple
 	! - which_object
-	!     - stores number of objects in -> 0
-	!     - stores number of words consumed in -> 1
-	!     - stores all matching nouns if more than one in -->1 ...
+	!	 - stores number of objects in -> 0
+	!	 - stores number of words consumed in -> 1
+	!	 - stores all matching nouns if more than one in -->1 ...
 
 	! don't check if wn out of range
 	if(wn > num_words) return 0;
@@ -691,12 +691,12 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	!   <noun number> if found
 	!   0  if no noun found (but we didn't write an error message)
 	!   -1 if we should give up parsing completely (because
-	!      the player has entered a new command line).
+	!	  the player has entered a new command line).
 	!   -2 if parsing failed, and error message written
 	!
 	! Side effects:
 	! - if found, then wn will be set to the first word in the noun phrase,
-	!       skipping any articles
+	!	   skipping any articles
 	! - if plural matched, then parser_action set to ##PluralFound
 	!
 	! NOTE: you need to update parse_pointer after calling _GetNextNoun since
@@ -882,7 +882,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 					! don't forget to restore the old arrays
 					_CopyInputArray(buffer2, buffer);
 					_CopyParseArray(parse2, parse);
-                    num_words = parse -> 1;
+					num_words = parse -> 1;
 					jump _getnextnoun_recheck_noun;
 				}
 			}
@@ -1606,12 +1606,12 @@ Array guess_object-->5;
 		GPR_FAIL:
 			if(_type == TT_PARSE_ROUTINE) {
 				if(parser_phase == PHASE2) {
-				    if(scope_stage == 2) {
+					if(scope_stage == 2) {
 						scope_stage = 3;
 						indirect(scope_routine);
-                    } else {
-                        PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
-                    }
+					} else {
+						PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+					}
 				}
 				return _current_wn - 1;
 			}
@@ -2139,10 +2139,10 @@ Array guess_object-->5;
 			inp2 = actor;
 			if(BeforeRoutines()) rtrue;
 			if(RunLife(actor, action)) rtrue;
-		    PrintMsg(MSG_ASK_DEFAULT);
+			PrintMsg(MSG_ASK_DEFAULT);
 		} else {
 			if(RunLife(actor, ##Order)) rtrue;
-		    PrintMsg(MSG_ORDERS_WONT, actor);
+			PrintMsg(MSG_ORDERS_WONT, actor);
 		}
 		if(num_words_parsed < 0) return -num_words_parsed;
 		return num_words_parsed;
@@ -2157,9 +2157,9 @@ Array guess_object-->5;
 		! (a) check the multiple list isn't empty;
 		! (b) warn the player if it has been cut short because too long;
 		! (c) generate a sequence of actions from the list
-		!     (stopping in the event of death or movement away).
+		!	 (stopping in the event of death or movement away).
 		if(parser_check_multiple == MULTIINSIDE_OBJECT && second has container && second hasnt open) {
-        	PrintMsg(MSG_PARSER_CONTAINER_ISNT_OPEN, second);
+			PrintMsg(MSG_PARSER_CONTAINER_ISNT_OPEN, second);
 		} else {
 			_score = 0;
 			_action = action;
@@ -2204,13 +2204,13 @@ Array guess_object-->5;
 				! don't pick up held objects if other objects available
 				! however, if this is the only object then allow it to
 				! get the 'you already have it' message.
-                !if(action == ##Take && noun in player && (multiple_objects --> 0 > 1 || parser_all_found)) continue;
+				!if(action == ##Take && noun in player && (multiple_objects --> 0 > 1 || parser_all_found)) continue;
 
-                ! make sure that selected_direction* is only active when
-                ! the processed noun (or second) is a direction
-                if(noun == Directions || second == Directions) {
-                	selected_direction = _selected_direction;
-                	selected_direction_index = _selected_direction_index;
+				! make sure that selected_direction* is only active when
+				! the processed noun (or second) is a direction
+				if(noun == Directions || second == Directions) {
+					selected_direction = _selected_direction;
+					selected_direction_index = _selected_direction_index;
 				} else {
 					selected_direction = 0; selected_direction_index = 0;
 				}

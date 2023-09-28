@@ -1,7 +1,7 @@
 ! ext_cheap_scenery.h, a library extension for PunyInform by Fredrik Ramsberg
 !
 ! This library extension provides a way to implement simple scenery objects
-! using just a single object for the entire game. This helps keep both the 
+! using just a single object for the entire game. This helps keep both the
 ! object count and the dynamic memory usage down. Games are also faster
 ! when fewer objects are in scope.
 !
@@ -9,24 +9,24 @@
 ! cheap_scenery to the locations where you want to add cheap scenery objects.
 ! You can add any number of cheap scenery objects to one location in this way.
 !
-! For each scenery object, you provide an entry in the list, typically 
+! For each scenery object, you provide an entry in the list, typically
 ! consisting of two dictionary words (called word1 and word2), and a
-! reaction string/routine. This cheap scenery entry will be matched if the 
+! reaction string/routine. This cheap scenery entry will be matched if the
 ! player types any combination of word1 and word2
 !
-! If only one word is needed, use the value 1 for word1. 
+! If only one word is needed, use the value 1 for word1.
 !
-! There is a more flexible option, which allows you to specify up to nine 
-! adjectives and nine nouns: You give a value (10 * adjectives + nouns), 
-! followed by the adjectives and nouns, e.g: 
-! 21 'small' 'green' 'bug' - this means there are two adjectives and one noun, 
-! and this will match "small green bug", "green small bug", "small bug", 
-! "green bug" and "bug", but not "small" or "small green" - at least one of 
-! the nouns must be used by the player, optionally preceded by one or more of 
+! There is a more flexible option, which allows you to specify up to nine
+! adjectives and nine nouns: You give a value (10 * adjectives + nouns),
+! followed by the adjectives and nouns, e.g:
+! 21 'small' 'green' 'bug' - this means there are two adjectives and one noun,
+! and this will match "small green bug", "green small bug", "small bug",
+! "green bug" and "bug", but not "small" or "small green" - at least one of
+! the nouns must be used by the player, optionally preceded by one or more of
 ! the adjectives.
 !
-! Alternatively, an entry can start with CS_PARSE_NAME and then a routine 
-! which will act as a parse_name routine. 
+! Alternatively, an entry can start with CS_PARSE_NAME and then a routine
+! which will act as a parse_name routine.
 !
 ! Optionally, you can precede an entry with CS_THEM to say that this cheap
 ! scenery object should be considered a "them"-object by the parser. E.g.
@@ -37,12 +37,12 @@
 ! to signal that a plural word was matched.
 !
 ! Additionally, you can start an entry with CS_ADD_LIST and then an object
-! ID and a property name, to include the cheap scenery list held in that 
+! ID and a property name, to include the cheap scenery list held in that
 ! property in the object.
 !
-! Finally, you can use the value CS_MAYBE_ADD_LIST, then a function, an 
+! Finally, you can use the value CS_MAYBE_ADD_LIST, then a function, an
 ! object ID and a property name, to say that if the function returns true,
-! you want to include the cheap scenery list held in that property in the 
+! you want to include the cheap scenery list held in that property in the
 ! object.
 !
 ! If multiple cheap scenery objects are matched, the one matching the highest
@@ -215,17 +215,17 @@ Global cs_parse_name_id = 0;
 ];
 
 [_CSMatchNameList p_arr p_count _w _matched _base;
-    _w = NextWord();
-    if(p_count == 0) return 0;
-    while(true) {
-        _base = _matched;
+	_w = NextWord();
+	if(p_count == 0) return 0;
+	while(true) {
+		_base = _matched;
 		if(_CSFindInArr(_w, p_arr, p_count)) {
-			_matched++; 
+			_matched++;
 			if((_w-> #dict_par1) & 4) CSDATA-->CSDATA_PRONOUN_TEMP = CS_THEM;
 			_w = NextWord();
 		} else
 			return _matched;
-    }
+	}
 ];
 
 [ CSHasAdjective p_word _arr _w1;
@@ -270,13 +270,13 @@ Global cs_parse_name_id = 0;
 		if(_sw1 == CS_THEM) {
 			CSDATA-->CSDATA_PRONOUN_TEMP = CS_THEM;
 			_i++;
-			_sw1 = _arr-->_i;	
+			_sw1 = _arr-->_i;
 		}
 		_sw2 = _arr-->(_i+1);
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if(_sw1 == 0) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			print (string) CS_ERR, "5: First element of entry, at position ", _i, 
+			print (string) CS_ERR, "5: First element of entry, at position ", _i,
 				" in property ", (property) p_prop, " of ", (name) p_obj,
 				" should be a value 1-99, or a vocabulary word, but is 0]^" ;
 #Ifnot;
@@ -310,7 +310,7 @@ Global cs_parse_name_id = 0;
 			rfalse;
 		}
 #Endif;
-		
+
 		if(_sw1 == CS_ADD_LIST or CS_MAYBE_ADD_LIST) {
 			if(_sw1 == CS_MAYBE_ADD_LIST) {
 				_i++;
@@ -341,7 +341,7 @@ Global cs_parse_name_id = 0;
 				_sw2 = CS_IT;
 				if(parser_action == ##PluralFound)
 					_sw2 = CS_THEM;
-				CSDATA-->CSDATA_PRONOUN_TEMP = _sw2;	
+				CSDATA-->CSDATA_PRONOUN_TEMP = _sw2;
 				jump _cs_found_a_match;
 			}
 			cs_parse_name_id = 0;
@@ -400,7 +400,7 @@ Global cs_parse_name_id = 0;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(_i > _len) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-		print (string) CS_ERR,"1: Property ", (property) p_prop, " of ", (name) p_obj, 
+		print (string) CS_ERR,"1: Property ", (property) p_prop, " of ", (name) p_obj,
 			" extends beyond property length - check entries with 3+ words]^";
 #Ifnot;
 		print (string) CS_ERR,"1]^";
@@ -493,9 +493,9 @@ Object CheapScenery "object"
 !			(UnsignedCompare(_i, dict_start) < 0 ||
 
 [CSDebugIsDictWord p_val;
-    if (UnsignedCompare(p_val, dict_start) >= 0 &&
-            UnsignedCompare(p_val, dict_end) < 0 &&
-            (p_val - dict_start) % dict_entry_size == 0)
+	if (UnsignedCompare(p_val, dict_start) >= 0 &&
+			UnsignedCompare(p_val, dict_end) < 0 &&
+			(p_val - dict_start) % dict_entry_size == 0)
 		rtrue;
 	rfalse;
 ];
@@ -526,7 +526,7 @@ Object CheapScenery "object"
 			if(~~(_val ofclass Routine)) {
 				CSDebugPrintObjRef(p_obj, p_prop, _i);
 				"Element following CS_MAYBE_ADD_LIST must be a routine.";
-				
+
 			}
 			_val = CS_ADD_LIST; ! Check the rest as if it was a CS_ADD_LIST entry
 		}
@@ -579,8 +579,8 @@ Object CheapScenery "object"
 			}
 			_done = true;
 		}
-		
-		
+
+
 		if(_done == false) {
 			CSDebugPrintObjRef(p_obj, p_prop, _i);
 			"Unknown element in this position.";

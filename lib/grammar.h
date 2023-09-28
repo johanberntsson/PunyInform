@@ -5,7 +5,7 @@
 ! ---------------------
 
 Verb 'answer' 'say' 'speak'
-    * topic 'to' creature                       -> Answer;
+	* topic 'to' creature                       -> Answer;
 
 Verb 'ask'
 	* creature 'about' topic                    -> Ask
@@ -14,10 +14,10 @@ Verb 'ask'
 	* 'that' creature topic                     -> AskTo;
 
 Verb 'attack' 'break' 'crack' 'destroy'
-     'fight' 'hit' 'kill' 'murder' 'punch'
-     'smash' 'thump' 'torture' 'wreck'
-    * noun                                      -> Attack
-    * noun 'with' held                          -> Attack;
+		'fight' 'hit' 'kill' 'murder' 'punch'
+		'smash' 'thump' 'torture' 'wreck'
+	* noun                                      -> Attack
+	* noun 'with' held                          -> Attack;
 
 Verb 'climb' 'scale'
 	* noun                                      -> Climb
@@ -38,7 +38,7 @@ Verb 'dig'
 	* noun 'with' held                          -> Dig;
 
 Verb 'drink' 'sip' 'swallow'
-    * noun                                      -> Drink;
+	* noun                                      -> Drink;
 
 Verb 'drop' 'discard' 'throw'
 	* multiheld                                 -> Drop
@@ -46,7 +46,7 @@ Verb 'drop' 'discard' 'throw'
 	* held 'at'/'against'/'on'/'onto' noun      -> ThrowAt;
 
 Verb 'eat'
-    * held                                      -> Eat;
+	* held                                      -> Eat;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 Verb 'enter'
@@ -68,12 +68,12 @@ Verb 'fill'
 	* noun                                      -> Fill;
 
 Verb 'get'
-  * 'out'/'off'/'up' 'of'/'from' noun         -> Exit
-  * 'up'/'out'/'off'                          -> Exit
-  * multi                                     -> Take
-  * 'in'/'into'/'on'/'onto' noun              -> Enter
-  * 'off' noun                                -> GetOff
-  * multiinside 'from'/'off' noun             -> Remove;
+	* 'out'/'off'/'up' 'of'/'from' noun         -> Exit
+	* 'up'/'out'/'off'                          -> Exit
+	* multi                                     -> Take
+	* 'in'/'into'/'on'/'onto' noun              -> Enter
+	* 'off' noun                                -> GetOff
+	* multiinside 'from'/'off' noun             -> Remove;
 
 Verb 'give' 'feed' 'offer' 'pay'
 	* held 'to' creature                        -> Give
@@ -90,7 +90,7 @@ Verb 'go'
 	* noun                                      -> Enter;
 
 Verb 'insert'
-    * multiexcept 'in'/'into' noun              -> Insert;
+	* multiexcept 'in'/'into' noun              -> Insert;
 
 #Ifdef OPTIONAL_FLEXIBLE_INVENTORY;
 Verb 'inventory' 'i//'
@@ -130,17 +130,17 @@ Verb 'pick'
 	* multi 'up'                                -> Take;
 
 Verb 'pull' 'drag'
-    * noun                                      -> Pull;
+	* noun                                      -> Pull;
 
 Verb 'push' 'clear' 'move' 'press' 'shift'
-    * noun                                      -> Push
-    * noun noun=ADirection                      -> PushDir
-    * noun 'to' noun                            -> Transfer;
+	* noun                                      -> Push
+	* noun noun=ADirection                      -> PushDir
+	* noun 'to' noun                            -> Transfer;
 
 Verb 'put' 'place'
 	* multiexcept 'in'/'inside'/'into' noun     -> Insert
 	* multiexcept 'on'/'onto' noun              -> PutOn
-	* 'on' held									-> Wear;
+	* 'on' held                                 -> Wear;
 
 Verb 'read'
 	* noun                                      -> Examine
@@ -162,8 +162,8 @@ Verb 'shed' 'disrobe' 'doff'
 	* held                                      -> Disrobe;
 
 Verb 'shout' 'scream' 'yell'
-    * topic 'to'/'at' creature                  -> Answer
-    * 'to'/'at' noun                            -> ShoutAt
+	* topic 'to'/'at' creature                  -> Answer
+	* 'to'/'at' noun                            -> ShoutAt
 	* topic                                     -> Shout
 	*                                           -> Shout;
 
@@ -219,10 +219,10 @@ Verb 'unlock'
 	* noun 'with' held                          -> Unlock;
 
 Verb 'wait' 'z'
-    *                                           -> Wait;
+	*                                           -> Wait;
 
 Verb 'wear'
-	* held										-> Wear;
+	* held                                      -> Wear;
 
 [ AnswerSub;
 	if (second > 1 && RunLife(second,##Answer) ~= 0) rfalse;
@@ -279,8 +279,8 @@ Verb 'wear'
 ];
 
 [ DisrobeSub;
-    if (noun notin player || noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
-    give noun ~worn;
+	if (noun notin player || noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
+	give noun ~worn;
 	run_after_routines_msg = MSG_DISROBE_DEFAULT;
 ];
 
@@ -351,15 +351,15 @@ Verb 'wear'
 		rtrue;
 	}
 #Endif;
-    if (noun.description == 0) {
-        if (noun has container) {
-            if (noun has open or transparent) <<Search noun>>;
-            else { PrintMsg(MSG_EXAMINE_CLOSED, noun); rtrue;	}
+	if (noun.description == 0) {
+		if (noun has container) {
+			if (noun has open or transparent) <<Search noun>>;
+			else { PrintMsg(MSG_EXAMINE_CLOSED, noun); rtrue;	}
 		}
-        if (noun has switchable) { PrintMsg(MSG_EXAMINE_ONOFF); rtrue; }
+		if (noun has switchable) { PrintMsg(MSG_EXAMINE_ONOFF); rtrue; }
 		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
 		rtrue;
-    }
+	}
 	x = PrintOrRun(noun, description);
 	if (x == 0 && noun has switchable) PrintMsg(MSG_EXAMINE_ONOFF);
 	run_after_routines_msg = 1; ! Run after routines, don't print a msg
@@ -534,7 +534,7 @@ Array _InsertMessages -->
 #Ifnot;
 [ InvSub;
 #Endif;
-    if(PrintMsg(MSG_INVENTORY_DEFAULT) == false) {
+	if(PrintMsg(MSG_INVENTORY_DEFAULT) == false) {
 		PrintMsg(MSG_INVENTORY_EMPTY);
 	}
 	run_after_routines_msg = 1; ! Run after routines, don't print a msg
@@ -549,7 +549,7 @@ Array _InsertMessages -->
 ];
 
 [ ListenSub;
-    PrintMsg(MSG_LISTEN_DEFAULT);
+	PrintMsg(MSG_LISTEN_DEFAULT);
 ];
 
 [ LockSub;
@@ -818,7 +818,7 @@ Verb 'in' 'inside'
 	*                                           -> GoIn;
 
 Verb 'kiss' 'embrace' 'hug'
-    * creature                                  -> Kiss;
+	* creature                                  -> Kiss;
 
 Verb 'no'
 	*                                           -> No;
@@ -828,7 +828,7 @@ Verb 'peel'
 	* 'off' noun                                -> Take;
 
 Verb 'pray'
-    *                                           -> Pray;
+	*                                           -> Pray;
 
 Verb 'pry' 'prise' 'prize' 'lever' 'jemmy' 'force'
 	* noun 'with' held                          -> Unlock
@@ -872,11 +872,11 @@ Verb 'transfer'
 	* noun 'to' noun                            -> Transfer;
 
 Verb 'wake' 'awake' 'awaken'
-    *                                           -> Wake
-    * 'up'                                      -> Wake
-    * creature                                  -> WakeOther
-    * creature 'up'                             -> WakeOther
-    * 'up' creature                             -> WakeOther;
+	*                                           -> Wake
+	* 'up'                                      -> Wake
+	* creature                                  -> WakeOther
+	* creature 'up'                             -> WakeOther
+	* 'up' creature                             -> WakeOther;
 
 Verb 'wave'
 	*                                           -> WaveHands
@@ -930,10 +930,10 @@ Verb 'yes' 'y//'
 ];
 
 [ KissSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (RunLife(noun, ##Kiss) ~= 0) rfalse;
-    if (noun == player) { PrintMsg(MSG_KISS_PLAYER); rtrue; }
-    PrintMsg(MSG_KISS_DEFAULT);
+	if (ObjectIsUntouchable(noun)) return;
+	if (RunLife(noun, ##Kiss) ~= 0) rfalse;
+	if (noun == player) { PrintMsg(MSG_KISS_PLAYER); rtrue; }
+	PrintMsg(MSG_KISS_DEFAULT);
 ];
 
 [ MildSub;
@@ -996,18 +996,18 @@ Verb 'yes' 'y//'
 ];
 
 [ WakeSub;
-    PrintMsg(MSG_WAKE_DEFAULT);
+	PrintMsg(MSG_WAKE_DEFAULT);
 ];
 
 [ WakeOtherSub;
-    if (ObjectIsUntouchable(noun)) return;
-    if (RunLife(noun, ##WakeOther) ~= 0) rfalse;
-    PrintMsg(MSG_WAKEOTHER_DEFAULT);
+	if (ObjectIsUntouchable(noun)) return;
+	if (RunLife(noun, ##WakeOther) ~= 0) rfalse;
+	PrintMsg(MSG_WAKEOTHER_DEFAULT);
 ];
 
 [ WaveSub;
-    if(parent(noun) ~= player) { PrintMsg(MSG_WAVE_NOTHOLDING, noun); rtrue; }
-    PrintMsg(MSG_WAVE_DEFAULT);
+	if(parent(noun) ~= player) { PrintMsg(MSG_WAVE_NOTHOLDING, noun); rtrue; }
+	PrintMsg(MSG_WAVE_DEFAULT);
 ];
 
 [ WaveHandsSub;
@@ -1025,15 +1025,15 @@ Verb 'yes' 'y//'
 ! ---------------------
 
 Verb meta 'again' 'g//'
-    *                                           -> Again;
+	*                                           -> Again;
 
 Verb meta 'brief' 'normal'
 	*                                           -> LookModeNormal;
 
 #Ifdef OPTIONAL_FULL_SCORE;
 Verb meta 'fullscore' 'full'
-    *                                           -> FullScore
-    * 'score'                                   -> FullScore;
+	*                                           -> FullScore
+	* 'score'                                   -> FullScore;
 #Endif;
 
 #Ifndef NO_SCORE;
@@ -1044,8 +1044,8 @@ Verb meta 'notify'
 #Endif;
 
 Verb meta 'oops'
-    *                                           -> Oops
-    * special                                   -> OopsCorrection;
+	*                                           -> Oops
+	* special                                   -> OopsCorrection;
 
 Verb meta 'restart'
 	*                                           -> Restart;
@@ -1057,7 +1057,7 @@ Verb meta 'save'
 	*                                           -> Save;
 
 Verb meta 'score'
-    *                                           -> Score;
+	*                                           -> Score;
 
 Verb meta 'superbrief' 'short'
 	*                                           -> LookModeShort;
@@ -1160,10 +1160,10 @@ Verb meta 'quit' 'q//'
 ];
 
 [ RestartSub;
-    PrintMsg(MSG_RESTART_CONFIRM);
+	PrintMsg(MSG_RESTART_CONFIRM);
 	if(YesOrNo()) {
 		@restart;
-        PrintMsg(MSG_RESTART_FAILED);
+		PrintMsg(MSG_RESTART_FAILED);
 	}
 ];
 
@@ -1188,7 +1188,7 @@ Verb meta 'quit' 'q//'
 	PrintMsg(MSG_SAVE_FAILED);
 	rtrue;
 ._save_was_successful;
-    PrintMsg(MSG_SAVE_DEFAULT);
+	PrintMsg(MSG_SAVE_DEFAULT);
 #IfNot;
 [ SaveSub _result;
 	@save -> _result;
@@ -1235,14 +1235,14 @@ Verb meta 'quit' 'q//'
 	_i = 0;
 #IfDef STRICT_MODE;
 	#IfV5;
-    print " S";
-    _i = 1;
-    #EndIf;
+	print " S";
+	_i = 1;
+	#EndIf;
 #EndIf;
 #IfDef DEBUG;
 	if(_i == 0) print " ";
 	print "D";
-    _i = 1;
+	_i = 1;
 #EndIf;
 #IfTrue RUNTIME_ERRORS > 0;
 	if(_i == 0) print " ";
@@ -1383,7 +1383,7 @@ Verb meta 'verify'
 
 #IfDef DEBUG;
 Verb meta 'pronoun' 'pronouns'
-    *                                           -> Pronouns;
+	*                                           -> Pronouns;
 
 Verb meta 'random'
 	*                                           -> RandomSeed
@@ -1395,14 +1395,14 @@ Verb meta 'scope'
 	* noun                                      -> Scope;
 
 Verb meta 'purloin'
-	* noun										-> Purloin;
+	* noun                                      -> Purloin;
 
 Verb meta 'tree'
-	*											-> Tree
-	* noun										-> Tree;
+	*                                           -> Tree
+	* noun                                      -> Tree;
 
 Verb meta 'gonear'
-	* noun										-> GoNear;
+	* noun                                      -> GoNear;
 
 Verb meta 'debug'
 	*                                           -> Debug
@@ -1740,10 +1740,10 @@ Global scope_cnt;
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef TASKS_PROVIDED;
 [ Achieved num;
-    if (task_done->num == 0) {
-        task_done->num = 1;
-        score = score + task_scores->num;
-    }
+	if (task_done->num == 0) {
+		task_done->num = 1;
+		score = score + task_scores->num;
+	}
 ];
 #EndIf;
 [ PANum p_m _n;
@@ -1759,23 +1759,23 @@ Global scope_cnt;
 #EndIf;
 
 [ TryToTakeNoun _i _k _ancestor _after_recipient;
-    ! Try to transfer the given item to the player: return false
-    ! if successful, true if unsuccessful, printing a suitable message
-    ! in the latter case. Return value 2 means it was a success, and a "Taken"
+	! Try to transfer the given item to the player: return false
+	! if successful, true if unsuccessful, printing a suitable message
+	! in the latter case. Return value 2 means it was a success, and a "Taken"
 	! message has been printed.
-    ! People cannot ordinarily be taken.
-    if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
+	! People cannot ordinarily be taken.
+	if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
 #Ifdef DisallowTakeAnimate;
 	if(noun has animate && DisallowTakeAnimate(noun)) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
 #Ifnot;
-    if(noun has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
+	if(noun has animate) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
 #Endif;
 	_ancestor = CommonAncestor(player, noun);
 
-    if (_ancestor == 0) {
-        _i = _ObjectScopedBySomething(noun);
-        if (_i) _ancestor = CommonAncestor(player, _i);
-    }
+	if (_ancestor == 0) {
+		_i = _ObjectScopedBySomething(noun);
+		if (_i) _ancestor = CommonAncestor(player, _i);
+	}
 
 	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
 	if(ObjectIsUntouchable(noun, false, true)) rtrue;
@@ -1783,24 +1783,24 @@ Global scope_cnt;
 
 	! The item is now known to be accessible.
 
-    ! Consult the immediate possessor of the item, if it's in a container
-    ! which the actor is not in.
+	! Consult the immediate possessor of the item, if it's in a container
+	! which the actor is not in.
 
-    _i = parent(noun);
-    if (_i && _i ~= _ancestor && (_i has container or supporter)) {
-        _after_recipient = _i;
+	_i = parent(noun);
+	if (_i && _i ~= _ancestor && (_i has container or supporter)) {
+		_after_recipient = _i;
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) _i, ").before()^";
 #EndIf;
-        _k = action; action = ##LetGo;
-        if (RunRoutines(_i, before)) { action = _k; rtrue; }
-        action = _k;
-    }
+		_k = action; action = ##LetGo;
+		if (RunRoutines(_i, before)) { action = _k; rtrue; }
+		action = _k;
+	}
 
 	if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
-    if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
+	if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
 
-    if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
+	if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
 	move noun to player;
 	give noun ~concealed;
@@ -1908,7 +1908,7 @@ Global scope_cnt;
 			PrintOrRun(real_location, cant_go);
 			rtrue;
 		}
-        PrintMsg(MSG_GO_CANT_GO);
+		PrintMsg(MSG_GO_CANT_GO);
 		rtrue;
 	}
 

@@ -215,25 +215,25 @@ System_file;
 [ ScopeCeiling p_actor p_stop_before _parent;
 	! this routine is in I6 stdlib, but not in DM
 	!
-    for(:: p_actor = _parent) {
-        _parent = parent(p_actor);
-        !   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
-        if(_parent == 0 or p_stop_before || (p_actor has container && p_actor hasnt transparent or open)) {
-            return p_actor;
-        }
-    }
+	for(:: p_actor = _parent) {
+		_parent = parent(p_actor);
+		!   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
+		if(_parent == 0 or p_stop_before || (p_actor has container && p_actor hasnt transparent or open)) {
+			return p_actor;
+		}
+	}
 ];
 
 [ TouchCeiling p_actor _parent;
 	! this routine is in I6 stdlib, but not in DM
 	!
-    for(:: p_actor = _parent) {
-        _parent = parent(p_actor);
-        !   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
-        if(_parent == 0 || (p_actor has container && p_actor hasnt open)) {
-            return p_actor;
-        }
-    }
+	for(:: p_actor = _parent) {
+		_parent = parent(p_actor);
+		!   print "Examining ", p_actor, "(", (object) p_actor, ") whose parent is ", _parent, "(", (object) _parent, ")...^";
+		if(_parent == 0 || (p_actor has container && p_actor hasnt open)) {
+			return p_actor;
+		}
+	}
 ];
 
 Constant PlaceInScope = _PutInScope;
@@ -297,9 +297,9 @@ Constant AddToScope = _PutInScope;
 [ _FindBarrier p_ancestor p_obj p_dontprint;
 	while (p_obj ~= p_ancestor) {
 		if (_g_check_take && p_obj hasnt container && p_obj hasnt supporter) {
-                        ! We're going to return true here, we just need to write the correct message
-                        ! But if we don't need to print anything, just return now
-                        if (p_dontprint) rtrue;
+						! We're going to return true here, we just need to write the correct message
+						! But if we don't need to print anything, just return now
+						if (p_dontprint) rtrue;
 
 			if (p_obj has animate) {
 				PrintMsg(MSG_TAKE_BELONGS, _g_item, p_obj); rtrue;
@@ -351,7 +351,7 @@ Constant AddToScope = _PutInScope;
 			rtrue;
 		}
 		_g_check_take = p_checktake;
-    }
+	}
 
 	! Second, a barrier between the item and the ancestor.  The item can
 	! be carried by someone, part of a piece of machinery, in or on top
@@ -359,7 +359,7 @@ Constant AddToScope = _PutInScope;
 	if (p_item ~= _ancestor && _FindBarrier(_ancestor, parent(p_item), p_dontprint)) {
 		rtrue;
 	}
-    rfalse;
+	rfalse;
 ];
 
 [ _ObjectScopedBySomething p_obj _j _k _l _m;

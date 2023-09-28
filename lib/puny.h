@@ -65,18 +65,18 @@ Include "grammar.h";
 ];
 
 [ CommonAncestor p_o1 p_o2 _i _j;
-    ! Find the nearest object indirectly containing o1 and o2,
-    ! or return 0 if there is no common ancestor.
-    _i = p_o1;
-    while (_i) {
-        _j = p_o2;
-        while (_j) {
-            if (_j == _i) return _i;
-            _j = parent(_j);
-        }
-        _i = parent(_i);
-    }
-    return 0;
+	! Find the nearest object indirectly containing o1 and o2,
+	! or return 0 if there is no common ancestor.
+	_i = p_o1;
+	while (_i) {
+		_j = p_o2;
+		while (_j) {
+			if (_j == _i) return _i;
+			_j = parent(_j);
+		}
+		_i = parent(_i);
+	}
+	return 0;
 ];
 
 #Ifv3;
@@ -91,11 +91,11 @@ Include "grammar.h";
 	if (clr_on) {
 		@set_colour clr_fg clr_bg;
 	}
-    switch (window) {
-      WIN_ALL:    @erase_window -1;
-      WIN_STATUS: @erase_window 1;
-      WIN_MAIN:   @erase_window 0;
-    }
+	switch (window) {
+	  WIN_ALL:	@erase_window -1;
+	  WIN_STATUS: @erase_window 1;
+	  WIN_MAIN:   @erase_window 0;
+	}
 ];
 
 [ ChangeFgColour p_colour;
@@ -314,11 +314,11 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 [ _AtFullCapacity p_s _obj _k;
-    if (p_s == player) {
-        objectloop (_obj in p_s)
-            if (_obj hasnt worn) _k++;
-    } else
-        _k = children(p_s);
+	if (p_s == player) {
+		objectloop (_obj in p_s)
+			if (_obj hasnt worn) _k++;
+	} else
+		_k = children(p_s);
 #IfDef SACK_OBJECT;
 	if (_k < ObjectCapacity(p_s) || (p_s == player && _RoomInSack())) rfalse;
 #IfNot;
@@ -328,25 +328,25 @@ Constant ONE_SPACE_STRING = " ";
 
 #IfDef SACK_OBJECT;
 [ _RoomInSack _obj _ks;
-    if (SACK_OBJECT in player) {
-        for (_obj=youngest(player) : _obj : _obj=elder(_obj)) {
+	if (SACK_OBJECT in player) {
+		for (_obj=youngest(player) : _obj : _obj=elder(_obj)) {
 #Ifdef OPTIONAL_NO_DARKNESS;
-            if (_obj ~= SACK_OBJECT && _obj hasnt worn) {
+			if (_obj ~= SACK_OBJECT && _obj hasnt worn) {
 #Ifnot;
-            if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
+			if (_obj ~= SACK_OBJECT && _obj hasnt worn or light) {
 #Endif;
-                _ks = keep_silent;
-                keep_silent = 1;
-                <Insert _obj SACK_OBJECT>;
-                keep_silent = _ks;
-                if (_obj in SACK_OBJECT) {
-                    if (keep_silent == 0) PrintMsg(MSG_SACK_PUTTING, _obj);
-                    rtrue;
-                }
-            }
+				_ks = keep_silent;
+				keep_silent = 1;
+				<Insert _obj SACK_OBJECT>;
+				keep_silent = _ks;
+				if (_obj in SACK_OBJECT) {
+					if (keep_silent == 0) PrintMsg(MSG_SACK_PUTTING, _obj);
+					rtrue;
+				}
+			}
 		}
-    }
-    rfalse;
+	}
+	rfalse;
 ];
 #EndIf;
 
@@ -362,19 +362,19 @@ Constant ONE_SPACE_STRING = " ";
 #Ifdef OPTIONAL_LANGUAGE_NUMBER;
 
 [ LanguageNumber n f;
-    if (n == 0)    { print "zero"; rfalse; }
-    if (n < 0)     { print "minus "; n = -n; }
-    if (n >= 1000) { print (LanguageNumber) n/1000, " thousand"; n = n%1000; f = 1; }
-    if (n >= 100)  {
-        if (f == 1) print ", ";
-        print (LanguageNumber) n/100, " hundred"; n = n%100; f = 1;
-    }
-    if (n == 0) rfalse;
-    #Ifdef DIALECT_US;
-    if (f == 1) print " ";
-    #Ifnot;
-    if (f == 1) print " and ";
-    #Endif;
+	if (n == 0)	{ print "zero"; rfalse; }
+	if (n < 0)	 { print "minus "; n = -n; }
+	if (n >= 1000) { print (LanguageNumber) n/1000, " thousand"; n = n%1000; f = 1; }
+	if (n >= 100)  {
+		if (f == 1) print ", ";
+		print (LanguageNumber) n/100, " hundred"; n = n%100; f = 1;
+	}
+	if (n == 0) rfalse;
+	#Ifdef DIALECT_US;
+	if (f == 1) print " ";
+	#Ifnot;
+	if (f == 1) print " and ";
+	#Endif;
 #Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 #IfV3;
 	if(n < 13 || n == 20)
@@ -383,14 +383,14 @@ Constant ONE_SPACE_STRING = " ";
 		print (string) LanguageNumberStrings-->(n - 13);
 	else {
 		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
-        if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
+		if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
 	}
 #Ifnot;
 	if(n < 21)
 		print (address) LanguageNumbers-->(2 * n - 1);
 	else {
 		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
-        if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
+		if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
 	}
 #Endif;
 #Ifnot;
@@ -398,7 +398,7 @@ Constant ONE_SPACE_STRING = " ";
 		print (string) LanguageNumberStrings-->(n - 1);
 	else {
 		print (string) LanguageNumberTensStrings-->(n / 10 - 2);
-        if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
+		if (n%10 ~= 0) print "-", (LanguageNumber) n%10;
 	}
 #Endif;
 ];
@@ -407,14 +407,14 @@ Constant ONE_SPACE_STRING = " ";
 
 
 [ PrintShortName o;
-    if (o == 0) { print "nothing"; rtrue; }
-    switch (metaclass(o)) {
-      Routine:  print "<routine ", o, ">"; rtrue;
-      String:   print "<string ~", (string) o, "~>"; rtrue;
-      nothing:  print "<illegal object number ", o, ">"; rtrue;
-    }
-    if (o.short_name ~= 0 && PrintOrRun(o, short_name, true) ~= 0) rtrue;
-    print (object) o;
+	if (o == 0) { print "nothing"; rtrue; }
+	switch (metaclass(o)) {
+	  Routine:  print "<routine ", o, ">"; rtrue;
+	  String:   print "<string ~", (string) o, "~>"; rtrue;
+	  nothing:  print "<illegal object number ", o, ">"; rtrue;
+	}
+	if (o.short_name ~= 0 && PrintOrRun(o, short_name, true) ~= 0) rtrue;
+	print (object) o;
 ];
 
 [ _PrintObjName p_obj p_form;
@@ -635,9 +635,9 @@ Constant ONE_SPACE_STRING = " ";
 !   - If p_first_text is a routine, it will be called with p_obj as argument
 !   - If p_first_text is 0, no prefix string will be printed
 !   - If p_first_text is 1, don't print anything, but return:
-!       0 if there are no printable objects in/on p_obj
-!       1 if there's exactly one printable object and it doesn't have pluralname
-!       2 if there are 2+ printable objects or one object with pluralname
+!	   0 if there are no printable objects in/on p_obj
+!	   1 if there's exactly one printable object and it doesn't have pluralname
+!	   2 if there are 2+ printable objects or one object with pluralname
 	_bak_style = c_style; _bak_depth = pc_depth; _bak_indent = pc_indent;
 	_bak_inv_stage = inventory_stage;
 	c_style = p_style; pc_depth = pc_initial_depth - 1; pc_indent = 2 + 2 * pc_depth;
@@ -804,7 +804,7 @@ Constant ONE_SPACE_STRING = " ";
 			if(PrintOrRun(p_obj, invent, true)) rtrue;
 		}
 		_PrintAfterEntry(p_obj);
-	} else if(c_style & NEWLINE_BIT) 
+	} else if(c_style & NEWLINE_BIT)
 		new_line;
 
 ];
@@ -849,7 +849,7 @@ Constant ONE_SPACE_STRING = " ";
 	}
 ];
 
-[ MoveFloatingObjects _i _j _o _len _obj;	
+[ MoveFloatingObjects _i _j _o _len _obj;
 	while((_obj = floating_objects-->_i) ~= 0) {
 		if(IndirectlyContains(player, _obj))
 			jump _continue_loop;
@@ -1030,8 +1030,8 @@ Include "parser.h";
 	! * false if no routines were found
 	! * true if routines were found, p_break was true, and a routine didn't return false
 	! * Otherwise:
-	!    * if OPTIONAL_MANUAL_SCOPE_BOOST is defined, return 2
-	!    * if not, return false
+	!	* if OPTIONAL_MANUAL_SCOPE_BOOST is defined, return 2
+	!	* if not, return false
 
 	if(scope_copy_objects == 0) rfalse;
 	_max = scope_copy_objects - 1;
@@ -1200,7 +1200,7 @@ Include "parser.h";
 	if(debug_flag & 1 && p_actor provides life) print "(", (name) p_actor, ").life()^";
 #EndIf;
 #EndIf;
-    return RunRoutines(p_actor, life, p_reason);
+	return RunRoutines(p_actor, life, p_reason);
 ];
 
 [ _SetDirectionIfIsFakeDir p_obj p_noun_no _idx;
@@ -1225,24 +1225,24 @@ Include "parser.h";
 ];
 
 [ DebugParameter p_w;
-    print p_w;
-    if (p_w >= 1 && p_w <= top_object) print " (", (name) p_w, ")";
-    if (UnsignedCompare(p_w, dict_start) >= 0 &&
-            UnsignedCompare(p_w, dict_end) < 0 &&
-            (p_w - dict_start) % dict_entry_size == 0)
-        print " ('", (address) p_w, "')";
+	print p_w;
+	if (p_w >= 1 && p_w <= top_object) print " (", (name) p_w, ")";
+	if (UnsignedCompare(p_w, dict_start) >= 0 &&
+			UnsignedCompare(p_w, dict_end) < 0 &&
+			(p_w - dict_start) % dict_entry_size == 0)
+		print " ('", (address) p_w, "')";
 ];
 
 [ DebugAction p_a _anames;
-    if (p_a >= 4096) { print "<fake action ", p_a-4096, ">"; return; }
-    _anames = #identifiers_table;
-    _anames = _anames + 2*(_anames-->0) + 2*48;
-    print (string) _anames-->p_a;
+	if (p_a >= 4096) { print "<fake action ", p_a-4096, ">"; return; }
+	_anames = #identifiers_table;
+	_anames = _anames + 2*(_anames-->0) + 2*48;
+	print (string) _anames-->p_a;
 ];
 
 [ TraceAction;
 	print "[ Action ", (DebugAction) action;
-    if (noun ~= 0) {
+	if (noun ~= 0) {
 		print " with noun ";
 		if(inp1 == 1) print noun;
 		else print (DebugParameter) noun;
@@ -1252,7 +1252,7 @@ Include "parser.h";
 			else print (DebugParameter) second;
 		}
 	}
-    print "]^";
+	print "]^";
 ];
 
 #EndIf;
@@ -1309,7 +1309,7 @@ Include "parser.h";
 	if (p_array_val > 0) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
-			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj); 
+			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj);
 			return;
 		}
 #EndIf;
@@ -1374,7 +1374,7 @@ Include "parser.h";
 	if (p_array_val > 0) { ! This is a timer, not a daemon
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if (p_obj.&time_left == 0) {
-			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj); 
+			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_obj);
 			return;
 		}
 #EndIf;
@@ -1439,13 +1439,13 @@ Include "parser.h";
 
 [ WV__Pr obj identifier value x;
  x = obj..&identifier;
- if (x==0) { 
-	!RT__Err(\"write to\", obj, identifier); 
-	return; 
+ if (x==0) {
+	!RT__Err(\"write to\", obj, identifier);
+	return;
  }
  !#ifdef INFIX;
  !if (obj has infix__watching || (debug_flag & 15)) RT__TrPS(obj,identifier,value);
- !#ifnot; 
+ !#ifnot;
  !#ifdef DEBUG;
  !if (debug_flag & 15) RT__TrPS(obj,identifier,value);
  !#endif; #endif;
@@ -1457,12 +1457,12 @@ Include "parser.h";
 
 [ RV__Pr obj identifier x;
  x = obj..&identifier;
- if (x==0) {   
+ if (x==0) {
 	!if (identifier >= 1 && identifier < 64 && obj.#identifier <= 2)
 		 @get_prop obj identifier -> sp;
 		 @ret_popped;
 		 !return obj.identifier;
-	 !RT__Err(\"read\", obj, identifier); return; 
+	 !RT__Err(\"read\", obj, identifier); return;
  }
  #IFV3;
  !if (obj..#identifier > 2) RT__Err(\"read\", obj, identifier);
@@ -1484,28 +1484,28 @@ Include "parser.h";
 [ CA__Pr obj id a b c d e f x y z s s2 n m;
  if (obj < 1 || obj > #largest_object-255)
  {   switch(Z__Region(obj))
-	 { 2: if (id == call) { 
-			s = sender; 
-		    sender = self; 
+	 { 2: if (id == call) {
+			s = sender;
+			sender = self;
 			self = obj;
 			#ifdef action;
 			sw__var=action;
 			#endif;
 			x = indirect(obj, a, b, c, d, e, f);
-			self = sender; 
-			sender = s; 
-			return x; 
+			self = sender;
+			sender = s;
+			return x;
 		  }
 		  jump Call__Error;
-	   3: if (id == print) { 
-			@print_paddr obj; 
-			rtrue; 
+	   3: if (id == print) {
+			@print_paddr obj;
+			rtrue;
 		  }
-		  if (id == print_to_array) { 
-			@output_stream 3 a; 
-			@print_paddr obj; 
+		  if (id == print_to_array) {
+			@output_stream 3 a;
+			@print_paddr obj;
 			@output_stream -3;
-			return a-->0; 
+			return a-->0;
 		  }
 		  jump Call__Error;
 	 }
@@ -1519,64 +1519,64 @@ Include "parser.h";
  !if (n==1) {
 	!#ifdef DEBUG;n=debug_flag & 1; debug_flag=debug_flag-n;#endif;
 	!print \"[ ~\", (name) obj, \"~.\", (property) id, \"(\";
-	!switch(y) 
-	!{ 1: print a; 
-	  !2: print a,\",\",b; 
+	!switch(y)
+	!{ 1: print a;
+	  !2: print a,\",\",b;
 	  !3: print a,\",\",b,\",\",c;
 	  !4: print a,\",\",b,\",\",c,\",\",d;
 	  !5: print a,\",\",b,\",\",c,\",\",d,\",\",e;
-	  !6: print a,\",\",b,\",\",c,\",\",d,\",\",e,\",\",f; 
+	  !6: print a,\",\",b,\",\",c,\",\",d,\",\",e,\",\",f;
 	!}
 	!print \") ]^\";
    !#ifdef DEBUG;debug_flag = debug_flag + n;#endif;
  !}
- if (id > 0 && id < 64) { 
-	!x = obj.&id; 
+ if (id > 0 && id < 64) {
+	!x = obj.&id;
 	@get_prop_addr obj id -> x;
-	if (x==0) { 
-		x=$000a-->0 + 2*(id-1); 
-		n=2; 
-	} else 
+	if (x==0) {
+		x=$000a-->0 + 2*(id-1);
+		n=2;
+	} else
 		!n = obj.#id;
 		@get_prop_len x -> n;
- } else { 
+ } else {
 	if (id>=64 && id<69 && obj in Class)
 		return Cl__Ms(obj,id,y,a,b,c,d);
 	x = obj..&id;
-	if (x == 0) { 
+	if (x == 0) {
 		.Call__Error;
-		!RT__Err(\"send message\", obj, id); 
-		return; 
+		!RT__Err(\"send message\", obj, id);
+		return;
 	}
 	n = 0->(x-1);
 	if (id&$C000==$4000)
-		switch (n&$C0) 
-			{   0: n=1; 
-			  $40: n=2; 
-			  $80: n=n&$3F; 
+		switch (n&$C0)
+			{   0: n=1;
+			  $40: n=2;
+			  $80: n=n&$3F;
 			}
  }
  for (:2*m<n:m++)
  {  if (x-->m==$ffff) rfalse;
 	switch(Z__Region(x-->m))
-	{ 2: s = sender; 
-		 sender = self; 
-		 self = obj; 
+	{ 2: s = sender;
+		 sender = self;
+		 self = obj;
 		 s2 = sw__var;
-	     #ifdef LibSerial;
-	     if (id==life) sw__var=reason_code; else sw__var=action;
-	     #endif;
-		 switch(y) 
-			{ 0: z = indirect(x-->m); 
+		 #ifdef LibSerial;
+		 if (id==life) sw__var=reason_code; else sw__var=action;
+		 #endif;
+		 switch(y)
+			{ 0: z = indirect(x-->m);
 			  1: z = indirect(x-->m, a);
-			  2: z = indirect(x-->m, a, b); 
+			  2: z = indirect(x-->m, a, b);
 			  3: z = indirect(x-->m, a, b, c);
-			  4: z = indirect(x-->m, a, b, c, d); 
+			  4: z = indirect(x-->m, a, b, c, d);
 			  5: z = indirect(x-->m, a, b, c, d, e);
-			  6: z = indirect(x-->m, a, b, c, d, e, f); 
+			  6: z = indirect(x-->m, a, b, c, d, e, f);
 			}
-		 self = sender; 
-		 sender = s; 
+		 self = sender;
+		 sender = s;
 		 sw__var = s2;
 		 if (z ~= 0) return z;
 	  3: print_ret (string) x-->m;
@@ -1589,52 +1589,52 @@ Include "parser.h";
 [ Cl__Ms obj id y a b c d x;
  switch(id)
  {   create:
-		 if (children(obj)<=1) rfalse; 
+		 if (children(obj)<=1) rfalse;
 		 x=child(obj);
-		 remove x; 
-		 if (x provides create) { 
+		 remove x;
+		 if (x provides create) {
 			if (y==0) x.create();
-			if (y==1) x.create(a); 
+			if (y==1) x.create(a);
 			if (y==2) x.create(a,b);
-			!if (y>3) RT__Err(1,obj); 
+			!if (y>3) RT__Err(1,obj);
 			if (y>=3) x.create(a,b,c);
 		 }
 		 return x;
 	 recreate:
-		 if (~~(a ofclass obj)) { 
-			!RT__Err(\"recreate\", a, -obj); 
+		 if (~~(a ofclass obj)) {
+			!RT__Err(\"recreate\", a, -obj);
 			rfalse;
  		 }
 		 Copy__Primitive(a, child(obj));
-		 if (a provides create) { 
+		 if (a provides create) {
 			if (y==1) a.create();
-			if (y==2) a.create(b); 
+			if (y==2) a.create(b);
 			if (y==3) a.create(b,c);
-			!if (y>4) RT__Err(1,obj); 
+			!if (y>4) RT__Err(1,obj);
 			if (y>=4) a.create(b,c,d);
-		 } 
+		 }
 		 rfalse;
 	 destroy:
-		 if (~~(a ofclass obj)) { 
-			!RT__Err(\"destroy\", a, -obj); 
-			rfalse; 
+		 if (~~(a ofclass obj)) {
+			!RT__Err(\"destroy\", a, -obj);
+			rfalse;
 		 }
 		 if (a provides destroy) a.destroy();
 		 Copy__Primitive(a, child(obj));
-		 move a to obj; 
+		 move a to obj;
 		 rfalse;
 	 remaining:
 		 return children(obj)-1;
 	 copy:
-		 if (~~(a ofclass obj)) { 
-			!RT__Err(\"copy\", a, -obj); 
+		 if (~~(a ofclass obj)) {
+			!RT__Err(\"copy\", a, -obj);
 			rfalse;
 		 }
-		 if (~~(b ofclass obj)) { 
-			!RT__Err(\"copy\", b, -obj); 
-			rfalse; 
+		 if (~~(b ofclass obj)) {
+			!RT__Err(\"copy\", b, -obj);
+			rfalse;
 		 }
-		 Copy__Primitive(a, b); 
+		 Copy__Primitive(a, b);
 		 rfalse;
  }
 ];
@@ -1645,9 +1645,9 @@ Include "parser.h";
 
 [ IB__Pr obj identifier x;
  x = obj..&identifier;
- if (x==0) { 
-	!RT__Err(\"increment\", obj, identifier); 
-	return; 
+ if (x==0) {
+	!RT__Err(\"increment\", obj, identifier);
+	return;
  }
  !#ifdef INFIX;
  !if (obj has infix__watching || (debug_flag & 15)) RT__TrPS(obj,identifier,(x-->0)+1);
@@ -1661,9 +1661,9 @@ Include "parser.h";
 
 [ IA__Pr obj identifier x;
  x = obj..&identifier;
- if (x==0) { 
-	!RT__Err(\"increment\", obj, identifier); 
-	return; 
+ if (x==0) {
+	!RT__Err(\"increment\", obj, identifier);
+	return;
  }
  !#ifdef INFIX;
  !if (obj has infix__watching || (debug_flag & 15))
@@ -1678,9 +1678,9 @@ Include "parser.h";
 
 [ DB__Pr obj identifier x;
  x = obj..&identifier;
- if (x==0) { 
-	!RT__Err(\"decrement\", obj, identifier); 
-	return; 
+ if (x==0) {
+	!RT__Err(\"decrement\", obj, identifier);
+	return;
  }
  !#ifdef INFIX;
  !if (obj has infix__watching || (debug_flag & 15)) RT__TrPS(obj,identifier,(x-->0)-1);
@@ -1694,9 +1694,9 @@ Include "parser.h";
 
 [ DA__Pr obj identifier x;
  x = obj..&identifier;
- if (x==0) { 
-	!RT__Err(\"decrement\", obj, identifier); 
-	return; 
+ if (x==0) {
+	!RT__Err(\"decrement\", obj, identifier);
+	return;
  }
  !#ifdef INFIX;
  !if (obj has infix__watching || (debug_flag & 15)) RT__TrPS(obj,identifier,(x-->0)-1);
@@ -1746,7 +1746,7 @@ Include "parser.h";
 	 otherid = identifier | $8000;
  i = obj.3;
  while (i-->0 ~= 0)
- {    if (i-->0 == identifier or otherid)
+ {	if (i-->0 == identifier or otherid)
 		return i+3;
 	 i = i + i->2 + 3;
  }
@@ -1767,9 +1767,9 @@ Include "parser.h";
  if (x==0) rfalse;
  if (identifier&$C000==$4000)
 	 switch (((x-1)->0)&$C0)
-	 {    0: return 1;  
-		$40: return 2;  
-		$80: return ((x-1)->0)&$3F; 
+	 {	0: return 1;
+		$40: return 2;
+		$80: return ((x-1)->0)&$3F;
 	 }
  return (x-1)->0;
 ];
@@ -1779,9 +1779,9 @@ Include "parser.h";
 
 [ RA__Sc cla identifier otherid i j k;
  if (cla notin 1 && cla > 4)
- {   
-	!RT__Err(\"be a '::' superclass\", cla, -1); 
-	rfalse; 
+ {
+	!RT__Err(\"be a '::' superclass\", cla, -1);
+	rfalse;
  }
  if (self ofclass cla) otherid = identifier | $8000;
  for (j=0: #classes_table-->j ~= 0: j++)
@@ -1844,14 +1844,14 @@ Include "parser.h";
  } else if (cla == 3 or 4) {
 	 rfalse;
  }
- if (cla notin 1) { 
+ if (cla notin 1) {
 	!RT__Err(\"apply 'ofclass' for\", cla, -1);
 	rfalse;
  }
  @get_prop_addr obj 2 -> a;
  if (a==0) rfalse;
  @get_prop_len a -> n;
- for (j=0: j<n/2: j++) {   
+ for (j=0: j<n/2: j++) {
 	if (a-->j == cla) rtrue;
  }
  rfalse;
@@ -1897,9 +1897,9 @@ Include "parser.h";
 		! if(_prop_id == 0) break;
 		! if(_prop_id & 32767 == p_property) break;
 		! ! print (hex) x-->0, " (", (property) x-->0, ")  length ", x->2, ": ";
-		! !       for (n = 0: n< (x->2)/2: n++)
-		! !           print (hex) (x+3)-->n, " ";
-		! !       @new_line;
+		! !	   for (n = 0: n< (x->2)/2: n++)
+		! !		   print (hex) (x+3)-->n, " ";
+		! !	   @new_line;
 		! _x = _x + _x->2 + 3;
 	! }
 	! return _x;
@@ -1927,14 +1927,14 @@ Include "parser.h";
 	! rfalse;
 ! ];
 
-!      CA__Pr:  call, that is, print-or-run-or-read, a property:
-!                      this exactly implements obj..prop(...).  Note that
-!                      classes (members of Class) have 5 built-in properties
-!                      inherited from Class: create, recreate, destroy,
-!                      remaining and copy.  Implementing these here prevents
-!                      the need for a full metaclass inheritance scheme.      */
+!	  CA__Pr:  call, that is, print-or-run-or-read, a property:
+!					  this exactly implements obj..prop(...).  Note that
+!					  classes (members of Class) have 5 built-in properties
+!					  inherited from Class: create, recreate, destroy,
+!					  remaining and copy.  Implementing these here prevents
+!					  the need for a full metaclass inheritance scheme.	  */
 
-[ CA__Pr obj id a    x z s s2 n m;
+[ CA__Pr obj id a	x z s s2 n m;
 ! print "CA_Pr obj = ", obj,", id = ", id,", a = ", a, "^";
 	if (obj < 1 || obj > #largest_object-255) {
 		switch(Z__Region(obj)) {
@@ -1963,19 +1963,19 @@ Include "parser.h";
 !   #ifdef INFIX;if (obj has infix__watching) n=1;#endif;
 	#ifdef DEBUG;if (debug_flag & 1 ~= 0) n=1;#endif;
 !   if (n==1) {
-!     n=debug_flag & 1; debug_flag=debug_flag-n;
-!     print "[ ~", (name) obj, "~.", (property) id, "(";
-!     switch(y) {
-!     1:
-!       print a; 2: print a,",",b; 3: print a,",",b,",",c;
-!     4:
-!       print a,",",b,",",c,",",d;
-!     5:
-!       print a,",",b,",",c,",",d,",",e;
-!     6:
-!       print a,",",b,",",c,",",d,",",e,",",f;
-!     }
-!     print ") ]^"; debug_flag = debug_flag + n;
+!	 n=debug_flag & 1; debug_flag=debug_flag-n;
+!	 print "[ ~", (name) obj, "~.", (property) id, "(";
+!	 switch(y) {
+!	 1:
+!	   print a; 2: print a,",",b; 3: print a,",",b,",",c;
+!	 4:
+!	   print a,",",b,",",c,",",d;
+!	 5:
+!	   print a,",",b,",",c,",",d,",",e;
+!	 6:
+!	   print a,",",b,",",c,",",d,",",e,",",f;
+!	 }
+!	 print ") ]^"; debug_flag = debug_flag + n;
 !   }
 	if (id > 0 && id < INDIV_PROP_START) {
 !   print "CA_Pr OK obj = ", obj,", id = ", id,", a = ", a, "^";
@@ -1985,21 +1985,21 @@ Include "parser.h";
 		} else n = obj.#id;
 	} else {
 		if (id>=64 && id<69 && obj in Class) {
-!     print "CA_Pr ERROR0 obj = ", obj,", id = ", id,", a = ", a, "^";
+!	 print "CA_Pr ERROR0 obj = ", obj,", id = ", id,", a = ", a, "^";
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-			RT__Err("Class create etc", obj, id); 
+			RT__Err("Class create etc", obj, id);
 #Endif;
 			return;
-!     return Cl__Ms(obj,id,y,a,b,c);
+!	 return Cl__Ms(obj,id,y,a,b,c);
 		}
 !   print "CA_Pr(2.1) obj = ", obj,", id = ", id,", n = ", n, "^";
 		x = obj..&id;
 !   print "CA_Pr(2.2) obj = ", obj,", id = ", id,", x = ", x, "^";
 		if (x == 0) {
-!     print "CA_Pr ERROR1 obj = ", obj,", id = ", id,", a = ", a, "^";
+!	 print "CA_Pr ERROR1 obj = ", obj,", id = ", id,", a = ", a, "^";
 			.Call__Error;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-			RT__Err("send message", obj, id); 
+			RT__Err("send message", obj, id);
 #Endif;
 			return;
 		}
@@ -2015,22 +2015,22 @@ Include "parser.h";
 		switch(Z__Region(x-->m)) {
 		2:
 			s = sender; sender = self; self = obj; s2 = sw__var;
-!       switch(y) {
-!       0:
-!         z = indirect(x-->m);
-!       1:
+!	   switch(y) {
+!	   0:
+!		 z = indirect(x-->m);
+!	   1:
 			z = indirect(x-->m, a);
-!       2:
-!         z = indirect(x-->m, a, b);
-!       3:
-!       z = indirect(x-->m, a, b, c);
-!       4:
-!         z = indirect(x-->m, a, b, c, d);
-!       5:
-!         z = indirect(x-->m, a, b, c, d, e);
-!       6:
-!         z = indirect(x-->m, a, b, c, d, e, f);
-!       }
+!	   2:
+!		 z = indirect(x-->m, a, b);
+!	   3:
+!	   z = indirect(x-->m, a, b, c);
+!	   4:
+!		 z = indirect(x-->m, a, b, c, d);
+!	   5:
+!		 z = indirect(x-->m, a, b, c, d, e);
+!	   6:
+!		 z = indirect(x-->m, a, b, c, d, e, f);
+!	   }
 			self = sender; sender = s; sw__var = s2;
 			if (z ~= 0) return z;
 		3:
@@ -2234,9 +2234,9 @@ Object thedark "Darkness"
 
 	parse->0 = MAX_INPUT_WORDS;
 #IfV5;
-    buffer->0 = MAX_INPUT_CHARS;
+	buffer->0 = MAX_INPUT_CHARS;
 #IfNot;
-    buffer->0 = MAX_INPUT_CHARS - 1;
+	buffer->0 = MAX_INPUT_CHARS - 1;
 #EndIf;
 
 	top_object = #largest_object-255;
@@ -2347,8 +2347,8 @@ Object thedark "Darkness"
 			! restore from the 'again' buffers and reparse
 			if(_disallow_complex_again) {
 				PrintMsg(MSG_PARSER_COMPLEX_AGAIN);
-		        parse->1 = 0;
-		        continue;
+				parse->1 = 0;
+				continue;
 			} else if(_again_saved) {
 				_CopyInputArray(buffer2, buffer);
 				_CopyParseArray(parse2, parse);
@@ -2376,12 +2376,12 @@ Object thedark "Darkness"
 		}
 		if(action >= 0 && meta == false && _sentencelength>0) {
 			EndTurnSequence();
-        }
+		}
 
-        if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {
-        	! we died somehow, use entry routine to give
-        	! a chance of resurrection
-        	RunEntryPointRoutine(AfterLife);
+		if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {
+			! we died somehow, use entry routine to give
+			! a chance of resurrection
+			RunEntryPointRoutine(AfterLife);
 		}
 
 #Ifndef NO_SCORE;
@@ -2455,23 +2455,23 @@ Object thedark "Darkness"
 ! Routines marked NO are not supported in Puny, usually
 ! because the implementations differ too much.
 !
-#Stub AfterLife       0;
-#Stub AfterPrompt     0;
-#Stub Amusing         0;
+#Stub AfterLife	   0;
+#Stub AfterPrompt	 0;
+#Stub Amusing		 0;
 #Stub BeforeParsing   0;
-#Stub DeathMessage    0;
+#Stub DeathMessage	0;
 #Stub GamePostRoutine 0;
 #Stub GamePreRoutine  0;
-#Stub InScope         1;
-#Stub LookRoutine     0;
-#Stub NewRoom         0;
-#Stub ParseNumber     2;
+#Stub InScope		 1;
+#Stub LookRoutine	 0;
+#Stub NewRoom		 0;
+#Stub ParseNumber	 2;
 #Stub PrintTaskName   1;
-#Stub PrintVerb       1;
-#Stub TimePasses      0;
-#Stub UnknownVerb     1;
-!NO #Stub ChooseObjects   2;
-!NO #Stub ParserError     1;
+#Stub PrintVerb	   1;
+#Stub TimePasses	  0;
+#Stub UnknownVerb	 1;
+!#Stub ChooseObjects   2; ! No need for stub
+!NO #Stub ParserError	 1;
 #Ifndef OPTIONAL_NO_DARKNESS;
-#Stub DarkToDark      0;
+#Stub DarkToDark	  0;
 #Endif;

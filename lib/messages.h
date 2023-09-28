@@ -1241,7 +1241,7 @@ Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
 	if(p_obj ofclass object) {
 		_parent = parent(p_obj);
-		print "Offending object: ", (the) p_obj, " (", p_obj, ") in ", (name) _parent, " (", _parent, ")^"; 
+		print "Offending object: ", (the) p_obj, " (", p_obj, ") in ", (name) _parent, " (", _parent, ")^";
 	}
 #Ifnot;
 	_parent = p_obj; ! Avoid compiler warning

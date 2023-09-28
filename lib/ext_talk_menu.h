@@ -1,7 +1,7 @@
 System_file;
 
 ! To use this extension, define a word array for each actor that should have
-! topics to talk about. Add 0 or more topics to the array, and end it with 
+! topics to talk about. Add 0 or more topics to the array, and end it with
 ! the value TM_END. Give each talkable NPC a property talk_array with the
 ! name of their array as the value.
 !
@@ -24,8 +24,8 @@ System_file;
 !    * TM_ADD_BEFORE ROUTSTR ROUTSTR
 !    * TM_ADD_AFTER ROUTSTR ROUTSTR
 !    * TM_ADD_BEFORE_AND_AFTER ROUTSTR ROUTSTR ROUTSTR
-!    I.e. you can add a routine or string to run/print BEFORE the player's 
-!    line, AFTER the player's line, or both. To mute the player's line, give 
+!    I.e. you can add a routine or string to run/print BEFORE the player's
+!    line, AFTER the player's line, or both. To mute the player's line, give
 !    it the value TM_NO_LINE
 ! NPCSAYS is a string or routine for what the NPC replies. To mute it, give
 !    it the value TM_NO_LINE
@@ -35,7 +35,7 @@ System_file;
 !    (1 to 29) that is activated by this topic. 1 means the next topic,
 !    2 the topic after that etc. The target topic has to have status
 !    TM_INACTIVE (= 0) or TM_ACTIVE (= 30) for this to work. When a topic
-!    is chosen in a conversation, it is set to status TM_STALE, and the only 
+!    is chosen in a conversation, it is set to status TM_STALE, and the only
 !    way to activate it when it's stale is to call ReActivateTopic.
 ! ROUTINE is a routine to be run. In this routine, the global variable
 !    current_talker refers to the NPC being talked to.
@@ -56,7 +56,7 @@ System_file;
 ! TM_NPC Linda
 ! 0 300 "Herself" "Tell me more about yourself!" "I'm just an average girl."
 ! 30 "Weather" "How do you like the weather?" "It's too hot for me." 1 300
-! 0 "Heat" "Say, don't you like hot weather?" TM_NO_LINE EnoughTalk 
+! 0 "Heat" "Say, don't you like hot weather?" TM_NO_LINE EnoughTalk
 !          "Linda looks upset and turns away."
 ! TM_NPC 0;
 !
@@ -96,8 +96,8 @@ System_file;
 ! default when compiling in DEBUG mode)
 !
 ! By default, you can assign the same ID to multiple topics and use this to
-! activate or inactivate multiple topics at once. If you're not using this 
-! option, you can set talk_menu_multi_mode to false, and gain some 
+! activate or inactivate multiple topics at once. If you're not using this
+! option, you can set talk_menu_multi_mode to false, and gain some
 ! performance.
 
 Constant EXT_TALK_MENU = 1;
@@ -180,7 +180,7 @@ Constant TM_MSG_PAGE_OPTION "[N] Next page";
 #Ifndef TMPrintLine;
 [TMPrintLine p_actor p_talk_actor p_line;
 	! Routine to print a line, by the player or an NPC. Define your own version as needed.
-	if((p_talk_actor.talk_array)-->p_line == TM_NO_LINE) 
+	if((p_talk_actor.talk_array)-->p_line == TM_NO_LINE)
 		rfalse;
 	if(p_actor == player)
 		_TMPrintMsg(TM_MSG_YOU, true);
@@ -191,7 +191,7 @@ Constant TM_MSG_PAGE_OPTION "[N] Next page";
 	"~";
 ];
 #Endif;
-	
+
 
 
 Constant TM_INACTIVE 0;
@@ -283,7 +283,7 @@ Global talk_menu_multi_mode = true;
 					}
 					_index = _index + 3;
 					break;
-					
+
 				}
 			}
 		}
@@ -653,5 +653,5 @@ Array TenDashes static -> "----------";
 ];
 
 Verb 'talk' 'converse' 'interview' 'interrogate'
-    *       'to'/'with' creature             ->Talk
-    *       creature                         ->Talk;
+	* 'to'/'with' creature                      ->Talk
+	* creature                                  ->Talk;

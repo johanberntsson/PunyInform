@@ -84,7 +84,7 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 #Endif;
 	if(p_x < 0 || p_x > FLAG_COUNT) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-		print_ret (string) FL_ERR,"1: Tried to use flag ", p_x, 
+		print_ret (string) FL_ERR,"1: Tried to use flag ", p_x,
 			", but the highest flag number is ", FLAG_COUNT, "]";
 #Ifnot;
 		print_ret (string) FL_ERR,"1]";

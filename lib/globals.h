@@ -139,7 +139,7 @@ Constant EXCEPT_WORD2 = 'except';
 Constant AND_WORD     = 'and';
 Constant THEN1__WD    = 'then';
 Constant comma_word   = 'comma,';  ! An "untypeable word" used to substitute
-                                   ! for commas in parse buffers
+								   ! for commas in parse buffers
 
 ! Isolating words and punctuation for reuse and potential translation
 Constant SOMETHING_STR = "something";
@@ -211,7 +211,7 @@ Property additive life   $ffff;
 Property initial;
 Property description;
 Property cant_go;
-Property found_in;         !  For fiddly reasons this can't alias
+Property found_in;		 !  For fiddly reasons this can't alias
 Property time_left;
 Property additive time_out $ffff;
 Property short_name 0;
@@ -324,61 +324,61 @@ Constant DIRECTION_COUNT = 8;
 
 #IfDef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Array LanguageNumbers static table
-    'one' 1 'two' 2 'three' 3 'four' 4 'five' 5
-    'six' 6 'seven' 7 'eight' 8 'nine' 9 'ten' 10
-    'eleven' 11 'twelve' 12 'thirteen' 13 'fourteen' 14 'fifteen' 15
-    'sixteen' 16 'seventeen' 17 'eighteen' 18 'nineteen' 19 'twenty' 20;
+	'one' 1 'two' 2 'three' 3 'four' 4 'five' 5
+	'six' 6 'seven' 7 'eight' 8 'nine' 9 'ten' 10
+	'eleven' 11 'twelve' 12 'thirteen' 13 'fourteen' 14 'fifteen' 15
+	'sixteen' 16 'seventeen' 17 'eighteen' 18 'nineteen' 19 'twenty' 20;
 #EndIf;
 
 #Ifdef OPTIONAL_LANGUAGE_NUMBER;
 #Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 #IfV3;
 Array LanguageNumberStrings static -->
-    "thirteen"
-    "fourteen"
-    "fifteen"
-    "sixteen"
-    "seventeen"
-    "eighteen"
-    "nineteen";
+	"thirteen"
+	"fourteen"
+	"fifteen"
+	"sixteen"
+	"seventeen"
+	"eighteen"
+	"nineteen";
 #Endif;
 #Ifnot; ! Not OPTIONAL_ALLOW_WRITTEN_NUMBERS
 Array LanguageNumberStrings static -->
 	"one"
 	"two"
 	"three"
-    "four"
-    "five"
-    "six"
-    "seven"
-    "eight"
-    "nine"
-    "ten"
-    "eleven"
-    "twelve"
-    "thirteen"
-    "fourteen"
-    "fifteen"
-    "sixteen"
-    "seventeen"
-    "eighteen"
-    "nineteen";
+	"four"
+	"five"
+	"six"
+	"seven"
+	"eight"
+	"nine"
+	"ten"
+	"eleven"
+	"twelve"
+	"thirteen"
+	"fourteen"
+	"fifteen"
+	"sixteen"
+	"seventeen"
+	"eighteen"
+	"nineteen";
 #Endif; ! Not OPTIONAL_ALLOW_WRITTEN_NUMBERS
 
 Array LanguageNumberTensStrings static -->
 	"twenty"
-    "thirty"
-    "forty"
-    "fifty"
-    "sixty"
-    "seventy"
-    "eighty"
-    "ninety";
+	"thirty"
+	"forty"
+	"fifty"
+	"sixty"
+	"seventy"
+	"eighty"
+	"ninety";
 #Endif; ! OPTIONAL_LANGUAGE_NUMBER
 
 
 Constant TT_OBJECT           = 1;    ! one or more words referring to an object
-                                     ! it is one of NOUN_TOKEN etc. below
+									 ! it is one of NOUN_TOKEN etc. below
 Constant TT_PREPOSITION      = 2;    ! e.g. 'into'
 Constant TT_ROUTINE_FILTER   = 3;    ! e.g. noun=CagedCreature
 Constant TT_ATTR_FILTER      = 4;    ! e.g. edible
@@ -689,7 +689,7 @@ Object Directions
 #Ifndef OPTIONAL_SHIP_DIRECTIONS;
 				if(_w == 'floor' or 'ground') {
 					selected_direction_index = DIRECTION_COUNT - 2;
-	        		jump _matched_and_have_set_dir_index;
+					jump _matched_and_have_set_dir_index;
 				}
 #Endif;
 			}
@@ -701,7 +701,7 @@ Object Directions
 			if((normal_directions_enabled || ship_directions_enabled) &&
 					_w == 'floor' or 'ground') {
 				selected_direction_index = DIRECTION_COUNT - 2;
-        		jump _matched_and_have_set_dir_index;
+				jump _matched_and_have_set_dir_index;
 			}
 #EndIf;
 			! no match
