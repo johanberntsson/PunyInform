@@ -5,6 +5,7 @@ Upcoming release:
 - Fixed bug in CSTEST action in cheap scenery, which said a reaction string or 
   routine was expected after a CS_PARSE_NAME + routine, when there was in fact
   no problem.
+- Optimized routines _CopyInputArray and _CopyParseArray for z5.
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)

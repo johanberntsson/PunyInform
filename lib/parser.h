@@ -266,25 +266,33 @@ System_file;
 ];
 
 [ _CopyInputArray p_src_input_array p_dst_input_array _i;
-	!_n = MAX_INPUT_CHARS + 3;
+#IfV5;
+	_i = (p_src_input_array->1) + 2;
+	@copy_table p_src_input_array p_dst_input_array _i;
+#IfNot;
 	for(_i = 0: : _i++) {
 		p_dst_input_array->_i = p_src_input_array->_i;
 		! abort when 0 found in the text, which starts
 		! from 1 in v1-4, and from 2 in v5-v8.
-#IfV5;
-		if(p_dst_input_array->_i == 0 && _i>2) break;
-#IfNot;
-		if(p_dst_input_array->_i == 0 && _i>1) break;
-#EndIf;
+		if(p_dst_input_array->_i == 0 && _i ~= 0) break;
 	}
+#EndIf;
 ];
 
+#IfV5;
+[ _CopyParseArray p_src_parse_array p_dst_parse_array _n;
+	_n = p_src_parse_array->1;
+	@log_shift _n 2 -> _n; ! Multiply by 4
+	_n = _n + 2;
+	@copy_table p_src_parse_array p_dst_parse_array _n;
+];
+#IfNot;
 [ _CopyParseArray p_src_parse_array p_dst_parse_array _n _i;
-	!_n = 2 + 4 * (MAX_INPUT_WORDS + 1);
 	_n = 2 + 4*p_src_parse_array->1;
 	for(_i = 0: _i < _n: _i++)
 		p_dst_parse_array->_i = p_src_parse_array->_i;
 ];
+#EndIf;
 
 [ _PatternRanking p_pattern _i;
 	! Return a biased pattern ranking:
