@@ -1,5 +1,8 @@
 Upcoming release:
 
+- Ifdefs instead of stubs for entry point routines, saving up to 178 bytes,
+  and adding performance.
+
 =======
 v5.0.1: bug fix release (25 Sep 2023)
 

@@ -139,9 +139,11 @@ System_file;
 		_risk_duplicates = 1;
 	}
 
+#Ifdef InScope;
 	! give entry routine a chance to override
 	if(InScope(p_actor)) rtrue;
 	if(scope_objects > _initial_scope_objects) _risk_duplicates = 0;
+#Endif;
 
 	! the directions are always in scope
 	_PutInScope(Directions, _risk_duplicates);

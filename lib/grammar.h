@@ -1089,7 +1089,9 @@ Verb meta 'quit' 'q//'
 			_sc = task_scores->(_i);
 			PANum(_sc);
 			_score_sum = _score_sum + _sc;
+#Ifdef PrintTaskName;
 			PrintTaskName(_i);
+#Endif;
 		}
 #IfNot;
 	_i = 0; ! Avoid warning
@@ -1721,8 +1723,10 @@ Global scope_cnt;
 		_ceil = ScopeCeiling(player, _ceil);
 	} ! while
 ._EndOfLookRoutine;
+#Ifdef LookRoutine;
 	! finally, call the optional library entry routine
-	LookRoutine();
+	RunEntryPointRoutine(LookRoutine);
+#Endif;
 	_action = action; action = ##Look;
 	AfterRoutines();
 	action = _action;
@@ -1943,8 +1947,10 @@ Global scope_cnt;
 
 
 [ VerbName p_v ;
+#Ifdef PrintVerb;
 	! first give entry routine a chance to override
 	if(PrintVerb(p_v)) return;
+#Endif;
 
 #IfV3;
 	switch(p_v) {

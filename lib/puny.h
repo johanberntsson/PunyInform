@@ -922,20 +922,24 @@ Constant ONE_SPACE_STRING = " ";
 			if(parent(player) ~= _old_parent)
 				jump _recheck_visibility_ceil;
 		}
+#Ifdef NewRoom;
 #Ifdef OPTIONAL_NO_DARKNESS;
 		RunEntryPointRoutine(NewRoom);
 #Ifnot;
 		if(location ~= thedark)
 			RunEntryPointRoutine(NewRoom);
 #Endif;
+#Endif;
 	}
 
 #Ifndef OPTIONAL_NO_DARKNESS;
+#Ifdef DarkToDark;
 	if(_old_real_loc ~= real_location && location == thedark && _old_loc == thedark) {
 		! we have moved between dark rooms
 		! give entry point a chance to react
 		RunEntryPointRoutine(DarkToDark);
 	}
+#Endif;
 #Endif;
 	_old_lookmode = lookmode;
 	if(p_flag==false)
@@ -2120,7 +2124,9 @@ Object thedark "Darkness"
 #Endif;
 	RunTimersAndDaemons(); if(deadflag >= GS_DEAD) rtrue;
 	RunEachTurn(); if(deadflag >= GS_DEAD) rtrue;
+#Ifdef TimePasses;
 	RunEntryPointRoutine(TimePasses);
+#Endif;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	_UpdateDarkness(true);
 #Endif;
@@ -2378,11 +2384,13 @@ Object thedark "Darkness"
 			EndTurnSequence();
 		}
 
-		if(deadflag ~= GS_PLAYING && deadflag ~= GS_WIN) {
+#Ifdef AfterLife;
+		if(deadflag ~= GS_PLAYING or GS_WIN) {
 			! we died somehow, use entry routine to give
 			! a chance of resurrection
 			RunEntryPointRoutine(AfterLife);
 		}
+#Endif;
 
 #Ifndef NO_SCORE;
 		if(_score ~= score && notify_mode == true) {
@@ -2424,7 +2432,9 @@ Object thedark "Darkness"
 	print "^  *** ";
 	if(deadflag == GS_WIN) PrintMsg(MSG_YOU_HAVE_WON);
 	else if(deadflag == GS_DEAD) PrintMsg(MSG_YOU_HAVE_DIED);
+#Ifdef DeathMessage;
 	else if(deadflag >= GS_DEATHMESSAGE) DeathMessage();
+#Endif;
 	print " ***^^";
 #ifV5;
 	style roman;
@@ -2443,7 +2453,9 @@ Object thedark "Darkness"
 #Endif;
 		if(verb_word == 'restart') @restart;
 		if(verb_word == 'restore') RestoreSub();
+#Ifdef Amusing;
 		if(AMUSING_PROVIDED == 0 && deadflag == 2 && verb_word == 'amusing') Amusing();
+#Endif;
 		if(verb_word == 'quit') @quit;
 #IfDef OPTIONAL_FULL_SCORE;
 		if(verb_word == 'full') FullScoreSub();
@@ -2455,23 +2467,23 @@ Object thedark "Darkness"
 ! Routines marked NO are not supported in Puny, usually
 ! because the implementations differ too much.
 !
-#Stub AfterLife	   0;
-#Stub AfterPrompt	 0;
-#Stub Amusing		 0;
-#Stub BeforeParsing   0;
-#Stub DeathMessage	0;
-#Stub GamePostRoutine 0;
-#Stub GamePreRoutine  0;
-#Stub InScope		 1;
-#Stub LookRoutine	 0;
-#Stub NewRoom		 0;
-#Stub ParseNumber	 2;
-#Stub PrintTaskName   1;
-#Stub PrintVerb	   1;
-#Stub TimePasses	  0;
-#Stub UnknownVerb	 1;
+!#Stub AfterLife	   0;
+!#Stub AfterPrompt	 0;
+!#Stub Amusing		 0;
+!#Stub BeforeParsing   0;
+!#Stub DeathMessage	0;
+!#Stub GamePostRoutine 0;
+!#Stub GamePreRoutine  0;
+!#Stub InScope		 1;
+!#Stub LookRoutine	 0;
+!#Stub NewRoom		 0;
+!#Stub ParseNumber	 2;
+!#Stub PrintTaskName   1;
+!#Stub PrintVerb	   1;
+!#Stub TimePasses	  0;
+!#Stub UnknownVerb	 1;
 !#Stub ChooseObjects   2; ! No need for stub
 !NO #Stub ParserError	 1;
-#Ifndef OPTIONAL_NO_DARKNESS;
-#Stub DarkToDark	  0;
-#Endif;
+!#Ifndef OPTIONAL_NO_DARKNESS;
+!#Stub DarkToDark	  0;
+!#Endif;

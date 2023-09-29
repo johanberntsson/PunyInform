@@ -193,7 +193,9 @@ System_file;
 #EndIf;
 	if(p_no_prompt == false) PrintMsg(MSG_PROMPT);
 	! library entry routine
+#Ifdef AfterPrompt;
 	RunEntryPointRoutine(AfterPrompt);
+#Endif;
 #IfV5;
 	if(p_no_statusline == false) DrawStatusLine();
 	buffer->1 = 0;
@@ -209,8 +211,10 @@ System_file;
 	@sread buffer parse;
 #EndIf;
 
+#Ifdef BeforeParsing;
 	! call library entry routine
 	RunEntryPointRoutine(BeforeParsing);
+#Endif;
 
 	num_words = parse -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
@@ -243,8 +247,10 @@ System_file;
 
 	_i = p_wordnum*4+1; _j = parse->_i; _num = _j+buffer; _len = parse->(_i-1);
 
+#Ifdef ParseNumber;
 	! allow for a entry point routine to override normal parsing
 	_tot = ParseNumber(_num, _len); if(_tot ~= 0) return _tot;
+#Endif;
 
 	! this uses Horner's algorithm: 2421 = 10*(10*(10*(2)+4)+2)+1
 	for (_i=0: _i<_len: _i++) {
@@ -1782,7 +1788,11 @@ Array guess_object-->5;
 ._perform_reparse_2;
 	if(UnsignedCompare(verb_word, (HDR_DICTIONARY-->0)) == -1) {
 		! Not a verb. Try the entry point routine before giving up
+#Ifdef UnknownVerb;
 		verb_word = UnknownVerb(verb_word);
+#Ifnot;
+		verb_word = 0;
+#Endif;
 		if(verb_word == 0) {
 			! unknown word
 #IfDef DEBUG_PARSEANDPERFORM;
