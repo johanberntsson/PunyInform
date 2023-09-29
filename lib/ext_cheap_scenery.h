@@ -523,7 +523,7 @@ Object CheapScenery "object"
 		}
 		if(_val == CS_MAYBE_ADD_LIST) {
 			_val = _arr-->++_i;
-			if(~~(_val ofclass Routine)) {
+			if(metaclass(_val) ~= Routine) {
 				CSDebugPrintObjRef(p_obj, p_prop, _i);
 				"Element following CS_MAYBE_ADD_LIST must be a routine.";
 
@@ -542,12 +542,12 @@ Object CheapScenery "object"
 		}
 		if(_done == false && _val == CS_PARSE_NAME) {
 			_val = _arr-->++_i;
-			if(~~(_val ofclass Routine)) {
+			if(metaclass(_val) ~= Routine) {
 				CSDebugPrintObjRef(p_obj, p_prop, _i);
 				"Element following CS_PARSE_NAME must be a routine.";
 			}
 			_val = _arr-->++_i;
-			if(~~(_val ofclass String) && ~~(_val ofclass Routine)) {
+			if(metaclass(_val) ~= String or Routine) {
 				CSDebugPrintObjRef(p_obj, p_prop, _i);
 				"Expected a reaction string or routine in this position.";
 			}
@@ -573,7 +573,7 @@ Object CheapScenery "object"
 			}
 			_i = _i + _val + 1;
 			_val = _arr-->_i;
-			if((~~(_val ofclass String)) && ~~(_val ofclass Routine)) {
+			if(metaclass(_val) ~= String or Routine) {
 				CSDebugPrintObjRef(p_obj, p_prop, _i);
 				"Expected a reaction string or routine in this position.";
 			}
