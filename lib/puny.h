@@ -2443,7 +2443,7 @@ Object thedark "Darkness"
 	style roman;
 #Endif;
 #Ifndef NO_SCORE;
-	ScoreSub();
+	<Score>;
 #Endif;
 	for(::) {
 		PrintMsg(MSG_RESTART_RESTORE_OR_QUIT);
