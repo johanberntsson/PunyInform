@@ -2455,13 +2455,13 @@ Object thedark "Darkness"
 		}
 #Endif;
 		if(verb_word == 'restart') @restart;
-		if(verb_word == 'restore') RestoreSub();
+		if(verb_word == 'restore') <Restore>;
 #Ifdef Amusing;
 		if(AMUSING_PROVIDED == 0 && deadflag == 2 && verb_word == 'amusing') Amusing();
 #Endif;
 		if(verb_word == 'quit') @quit;
 #IfDef OPTIONAL_FULL_SCORE;
-		if(verb_word == 'full') FullScoreSub();
+		if(verb_word == 'full') <FullScore>;
 #EndIf;
 	}
 ];
