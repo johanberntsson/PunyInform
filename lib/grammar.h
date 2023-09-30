@@ -404,7 +404,7 @@ Verb 'wear'
 	if(_prop == 0) { _RunTimeError(ERR_INVALID_DIR_PROP); rtrue; }
 #EndIf;
 
-	GoDir(_prop);
+	return GoDir(_prop);
 ];
 
 ! Generic routine to move object. Can be used for Insert, PutOn, Take, Drop, Transfer, Empty (and Enter/Exit?)
