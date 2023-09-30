@@ -6,6 +6,8 @@ Upcoming release:
   routine was expected after a CS_PARSE_NAME + routine, when there was in fact
   no problem.
 - Optimized routines _CopyInputArray and _CopyParseArray for z5.
+- Let action routines return a message# to be printed, and have 
+  PerformPreparedAction print this, saving 344 bytes.
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)

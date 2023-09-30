@@ -987,16 +987,19 @@ Constant ONE_SPACE_STRING = " ";
 Include "scope.h";
 Include "parser.h";
 
-[ ActionPrimitive; indirect(#actions_table-->action); ];
+[ ActionPrimitive; return indirect(#actions_table-->action); ];
 
-[ PerformPreparedAction _ret_val;
+[ PerformPreparedAction _ret_val _action_returned;
 #IfDef DEBUG;
 	if(debug_flag & 2) TraceAction();
 #EndIf;
 	if ((meta || (BeforeRoutines() == false)) && action < 4096) {
 		@push run_after_routines_msg; @push run_after_routines_arg_1;
 		run_after_routines_msg = 0;
-		ActionPrimitive();
+		_action_returned = ActionPrimitive();
+		if(_action_returned ~= 0 or 1) {
+			PrintMsg(_action_returned);
+		}
 		! If the action has set run_after_routines_msg = true, after routines
 		! should be run. If it has set it to another value, this message should
 		! be printed unless after routines returns true.

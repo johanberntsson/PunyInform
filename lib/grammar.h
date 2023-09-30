@@ -226,12 +226,12 @@ Verb 'wear'
 
 [ AnswerSub;
 	if (second > 1 && RunLife(second,##Answer) ~= 0) rfalse;
-	PrintMsg(MSG_ANSWER_DEFAULT);
+	return MSG_ANSWER_DEFAULT;
 ];
 
 [ AskSub;
 	if (RunLife(noun,##Ask) ~= 0) rfalse;
-	PrintMsg(MSG_ASK_DEFAULT);
+	return MSG_ASK_DEFAULT;
 ];
 
 [ AskToSub;
@@ -247,12 +247,12 @@ Verb 'wear'
 	if(ImplicitGrabIfNotHeld(second)) rtrue;
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun has animate && RunLife(noun, ##Attack) ~= 0) rfalse;
-	PrintMsg(MSG_ATTACK_DEFAULT);
+	return MSG_ATTACK_DEFAULT;
 ];
 
 [ ClimbSub;
-	if(noun has animate) { PrintMsg(MSG_CLIMB_ANIMATE); rtrue;}
-	PrintMsg(MSG_CLIMB_DEFAULT);
+	if(noun has animate) return MSG_CLIMB_ANIMATE;
+	return MSG_CLIMB_DEFAULT;
 ];
 
 [ CloseSub;
@@ -266,30 +266,30 @@ Verb 'wear'
 ];
 
 [ ConsultSub;
-	PrintMsg(MSG_CONSULT_NOTHING_INTERESTING);
+	return MSG_CONSULT_NOTHING_INTERESTING;
 ];
 
 [ CutSub;
-	PrintMsg(MSG_CUT_NO_USE);
+	return MSG_CUT_NO_USE;
 ];
 
 [ DigSub;
 	if(ImplicitGrabIfNotHeld(second)) rtrue;
-	PrintMsg(MSG_DIG_NO_USE);
+	return MSG_DIG_NO_USE;
 ];
 
 [ DisrobeSub;
-	if (noun notin player || noun hasnt worn) { PrintMsg(MSG_DISROBE_NOT_WEARING); rtrue; }
+	if (noun notin player || noun hasnt worn) return MSG_DISROBE_NOT_WEARING;
 	give noun ~worn;
 	run_after_routines_msg = MSG_DISROBE_DEFAULT;
 ];
 
 [ DrinkSub;
-	PrintMsg(MSG_DRINK_NOTHING_SUITABLE);
+	return MSG_DRINK_NOTHING_SUITABLE;
 ];
 
 [ DropSub _p;
-	if(noun notin player) { PrintMsg(MSG_DROP_NOT_HOLDING); rtrue; }
+	if(noun notin player) return MSG_DROP_NOT_HOLDING;
 	if(ImplicitDisrobeIfWorn(noun)) rtrue;
 	_p = parent(player);
 	!if(_p ~= location) <<Insert noun _p>>;
@@ -299,9 +299,9 @@ Verb 'wear'
 ];
 
 [ EatSub;
-	if(noun has animate) { PrintMsg(MSG_EAT_ANIMATE); rtrue; }
+	if(noun has animate) return MSG_EAT_ANIMATE;
 	if(ImplicitGrabIfNotHeld(noun)) rtrue;
-	if(noun hasnt edible) { PrintMsg(MSG_EAT_INEDIBLE); rtrue; }
+	if(noun hasnt edible) return MSG_EAT_INEDIBLE;
 	remove noun;
 	scope_modified = true;
 	run_after_routines_msg = MSG_EAT_DEFAULT;
@@ -336,9 +336,9 @@ Verb 'wear'
 		<<Go _door_dir>>;
 	}
 	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT, 'enter'); rtrue; }
-	if(player in noun) { PrintMsg(MSG_ENTER_ALREADY); rtrue; }
+	if(player in noun) return MSG_ENTER_ALREADY;
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
-	if(parent(noun) ~= parent(player)) { PrintMsg(MSG_ENTER_BAD_LOCATION); rtrue; }
+	if(parent(noun) ~= parent(player)) return MSG_ENTER_BAD_LOCATION;
 	PlayerTo(noun, true);
 	run_after_routines_msg = MSG_ENTER_DEFAULT;
 	run_after_routines_arg_1 = 'enter';
@@ -346,23 +346,19 @@ Verb 'wear'
 
 [ ExamineSub x;
 #Ifndef OPTIONAL_NO_DARKNESS;
-	if(location == thedark) {
-		PrintMsg(MSG_EXAMINE_DARK);
-		rtrue;
-	}
+	if(location == thedark) return MSG_EXAMINE_DARK;
 #Endif;
 	if (noun.description == 0) {
 		if (noun has container) {
 			if (noun has open or transparent) <<Search noun>>;
 			else { PrintMsg(MSG_EXAMINE_CLOSED, noun); rtrue;	}
 		}
-		if (noun has switchable) { PrintMsg(MSG_EXAMINE_ONOFF); rtrue; }
-		PrintMsg(MSG_EXAMINE_NOTHING_SPECIAL);
-		rtrue;
+		if (noun has switchable) return MSG_EXAMINE_ONOFF;
+		return MSG_EXAMINE_NOTHING_SPECIAL;
 	}
 	x = PrintOrRun(noun, description);
-	if (x == 0 && noun has switchable) PrintMsg(MSG_EXAMINE_ONOFF);
 	run_after_routines_msg = 1; ! Run after routines, don't print a msg
+	if (x == 0 && noun has switchable) return MSG_EXAMINE_ONOFF;
 ];
 
 [ ExitSub _p;
@@ -370,15 +366,13 @@ Verb 'wear'
 	if(parent(_p) == 0) {
 		! player not inside, standing in the room
 		if(_p.out_to && noun == 0) <<Go FAKE_OUT_OBJ>>;
-		PrintMsg(MSG_EXIT_ALREADY);
-		rtrue;
+		return MSG_EXIT_ALREADY;
 	}
 	if(noun == 0) <<Exit _p>>;
 	if(player notin noun) {
 		if(IndirectlyContains(noun, player)) { PrintMsg(MSG_EXIT_FIRST_LEAVE, parent(player)); rtrue; }
-		if(noun has supporter) { PrintMsg(MSG_EXIT_NOT_ON); rtrue; }
-		PrintMsg(MSG_EXIT_NOT_IN);
-		rtrue;
+		if(noun has supporter) return MSG_EXIT_NOT_ON;
+		return MSG_EXIT_NOT_IN;
 	}
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_EXIT_NOT_OPEN, noun); rtrue; }
 	PlayerTo(parent(noun), true);
@@ -387,20 +381,20 @@ Verb 'wear'
 ];
 
 [ FillSub;
-	PrintMsg(MSG_FILL_NO_WATER);
+	return MSG_FILL_NO_WATER;
 ];
 
 [ GetOffSub;
 	if (parent(player) == noun) <<Exit noun>>;
-	PrintMsg(MSG_EXIT_NOT_ON); rtrue;
+	return MSG_EXIT_NOT_ON;
 ];
 
 [ GiveSub;
 	if(ObjectIsUntouchable(second)) return;
-	if (noun notin player) { PrintMsg(MSG_GIVE_NOT_HOLDING); rtrue; }
-	if (second == player)  { PrintMsg(MSG_GIVE_PLAYER); rtrue; }
+	if (noun notin player) return MSG_GIVE_NOT_HOLDING;
+	if (second == player)  return MSG_GIVE_PLAYER;
 	if (RunLife(second, ##Give) ~= 0) rfalse;
-	PrintMsg(MSG_GIVE_DEFAULT);
+	return MSG_GIVE_DEFAULT;
 ];
 
 [ GoSub _prop;
@@ -430,15 +424,11 @@ Verb 'wear'
 	_ancestor = CommonAncestor(noun, second);
 
 	_msg = p_messages-->0;
-	if(_msg && parent(noun) == second) {
-		PrintMsg(_msg);
-		rtrue;
-	}
+	if(_msg && parent(noun) == second) 
+		return _msg;
 	_msg = p_messages-->1;
-	if(_msg && _ancestor == noun) {
-		PrintMsg(_msg);
-		rtrue;
-	}
+	if(_msg && _ancestor == noun) 
+		return _msg;
 	_msg = p_messages-->2;
 	if(_msg && second ~= _ancestor && second has container && second hasnt open) {
 		PrintMsg(_msg, second);
@@ -460,10 +450,8 @@ Verb 'wear'
 	action = _action;
 
 	_msg = p_messages-->5;
-	if(_msg && second has animate) {
-		PrintMsg(_msg);
-		rtrue;
-	}
+	if(_msg && second has animate)
+		return _msg;
 	_msg = p_messages-->6;
 	if(_msg && second hasnt container) {
 		PrintMsg(_msg, second);
@@ -475,10 +463,8 @@ Verb 'wear'
 		rtrue;
 	}
 	_msg = p_messages-->8;
-	if(_msg && _AtFullCapacity(second)) {
-		PrintMsg(_msg);
-		rtrue;
-	}
+	if(_msg && _AtFullCapacity(second))
+		return _msg;
 
 	move noun to second;
 
@@ -495,7 +481,7 @@ Verb 'wear'
 
 	if (keep_silent) return;
 	_msg = p_messages-->9;
-	if(_msg) PrintMsg(_msg);
+	return _msg; ! Can be 0 or a message#
 ];
 
 
@@ -523,7 +509,7 @@ Array _InsertMessages -->
 
 [ InsertSub;
 	if(noun == player) <<Enter second>>;
-	_MoveNounToSecond(_InsertMessages);
+	return _MoveNounToSecond(_InsertMessages);
 ];
 
 #Ifdef OPTIONAL_FLEXIBLE_INVENTORY;
@@ -534,31 +520,30 @@ Array _InsertMessages -->
 #Ifnot;
 [ InvSub;
 #Endif;
-	if(PrintMsg(MSG_INVENTORY_DEFAULT) == false) {
-		PrintMsg(MSG_INVENTORY_EMPTY);
-	}
 	run_after_routines_msg = 1; ! Run after routines, don't print a msg
+	if(PrintMsg(MSG_INVENTORY_DEFAULT) == false)
+		return MSG_INVENTORY_EMPTY;
 ];
 
 [ JumpSub;
-	PrintMsg(MSG_JUMP);
+	return MSG_JUMP;
 ];
 
 [ JumpOverSub;
-	PrintMsg(MSG_JUMP_OVER);
+	return MSG_JUMP_OVER;
 ];
 
 [ ListenSub;
-	PrintMsg(MSG_LISTEN_DEFAULT);
+	return MSG_LISTEN_DEFAULT;
 ];
 
 [ LockSub;
 	if (ObjectIsUntouchable(noun)) return;
 	if (noun hasnt lockable) { PrintMsg(MSG_LOCK_NOT_A_LOCK, 'lock'); rtrue; }
 	if (noun has locked)  { PrintMsg(MSG_LOCK_ALREADY_LOCKED, 'lock'); rtrue; }
-	if (noun has open) { PrintMsg(MSG_LOCK_CLOSE_FIRST); rtrue; }
+	if (noun has open) return MSG_LOCK_CLOSE_FIRST;
 	if(ImplicitGrabIfNotHeld(second)) rtrue;
-	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_LOCK_KEY_DOESNT_FIT); rtrue; }
+	if (RunRoutines(noun, with_key) ~= second) return MSG_LOCK_KEY_DOESNT_FIT;
 	give noun locked;
 	run_after_routines_msg = MSG_LOCK_DEFAULT;
 	run_after_routines_arg_1 = 'lock';
@@ -574,8 +559,8 @@ Array _InsertMessages -->
 [ OpenSub;
 	if(ObjectIsUntouchable(noun)) return;
 	if(noun hasnt openable) { PrintMsg(MSG_OPEN_YOU_CANT, 'open'); rtrue; }
-	if(noun has locked) { PrintMsg(MSG_OPEN_LOCKED); rtrue; }
-	if(noun has open) { PrintMsg(MSG_OPEN_ALREADY); rtrue; }
+	if(noun has locked) return MSG_OPEN_LOCKED;
+	if(noun has open) return MSG_OPEN_ALREADY;
 	give noun open;
 	scope_modified = true;
 	run_after_routines_msg = MSG_OPEN_DEFAULT;
@@ -583,22 +568,22 @@ Array _InsertMessages -->
 
 [ PullSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (noun has static)   { PrintMsg(MSG_PULL_STATIC); rtrue; }
-	if (noun has scenery)  { PrintMsg(MSG_PULL_SCENERY); rtrue; }
-	if (noun has animate)  { PrintMsg(MSG_PULL_ANIMATE); rtrue; }
-	PrintMsg(MSG_PULL_DEFAULT); !Nothing obvious happens
+	if (noun has static)   return MSG_PULL_STATIC;
+	if (noun has scenery)  return MSG_PULL_SCENERY;
+	if (noun has animate)  return MSG_PULL_ANIMATE;
+	return MSG_PULL_DEFAULT; !Nothing obvious happens
 ];
 
 [ PushSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (noun has static)   { PrintMsg(MSG_PUSH_STATIC); rtrue; }
-	if (noun has scenery)  { PrintMsg(MSG_PUSH_SCENERY); rtrue; }
-	if (noun has animate)  { PrintMsg(MSG_PUSH_ANIMATE); rtrue; }
-	PrintMsg(MSG_PUSH_DEFAULT);
+	if (noun has static)   return MSG_PUSH_STATIC;
+	if (noun has scenery)  return MSG_PUSH_SCENERY;
+	if (noun has animate)  return MSG_PUSH_ANIMATE;
+	return MSG_PUSH_DEFAULT;
 ];
 
 [ PushDirSub;
-	PrintMsg(MSG_PUSHDIR_DEFAULT);
+	return MSG_PUSHDIR_DEFAULT;
 ];
 
 ! 0: Noun is already in second
@@ -625,13 +610,13 @@ Array _PutOnMessages -->
 
 [ PutOnSub;
 	if(noun == player) <<Enter second>>;
-	_MoveNounToSecond(_PutOnMessages);
+	return _MoveNounToSecond(_PutOnMessages);
 ];
 
 [ RemoveSub _i;
 	_i = parent(noun);
 	if (_i has container && _i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED, _i); rtrue; }
-	if (_i ~= second) { PrintMsg(MSG_REMOVE_NOT_HERE); rtrue; }
+	if (_i ~= second) return MSG_REMOVE_NOT_HERE;
 	if(TryToTakeNoun() ~= false) rtrue;
 	action = ##Remove; if (AfterRoutines()) rtrue;
 	action = ##Take;
@@ -639,66 +624,64 @@ Array _PutOnMessages -->
 ];
 
 [ RubSub;
-	PrintMsg(MSG_RUB_DEFAULT);
+	return MSG_RUB_DEFAULT;
 ];
 
 [ SearchSub _i _plural;
 #Ifndef OPTIONAL_NO_DARKNESS;
-	if(location == thedark) { PrintMsg(MSG_SEARCH_DARK); rtrue; }
+	if(location == thedark) return MSG_SEARCH_DARK;
 #Endif;
 	if (ObjectIsUntouchable(noun)) return;
 	_plural = PrintContents(1, noun);
 
 	if(noun has supporter) {
 		if(_plural == 0)
-			PrintMsg(MSG_SEARCH_NOTHING_ON);
+			return MSG_SEARCH_NOTHING_ON;
 		else
-			PrintMsg(MSG_SEARCH_ON_IT_ISARE);
-		rtrue;
+			return MSG_SEARCH_ON_IT_ISARE;
 	}
-	if(noun hasnt container) { PrintMsg(MSG_SEARCH_NOTHING_SPECIAL); rtrue; }
-	if(noun hasnt transparent && noun hasnt open) {
-		PrintMsg(MSG_SEARCH_CANT_SEE_CLOSED); rtrue;
-	}
+	if(noun hasnt container) return MSG_SEARCH_NOTHING_SPECIAL;
+	if(noun hasnt transparent && noun hasnt open)
+		return MSG_SEARCH_CANT_SEE_CLOSED;
 	if(AfterRoutines()) rtrue;
 	_i = MSG_SEARCH_EMPTY;
 	if(_plural)
 		_i = MSG_SEARCH_IN_IT_ISARE;
-	PrintMsg(_i);
+	return _i;
 ];
 
 [ ShoutSub;
-	PrintMsg(MSG_SHOUT_DEFAULT);
+	return MSG_SHOUT_DEFAULT;
 ];
 
 [ ShoutAtSub;
-	PrintMsg(MSG_SHOUTAT_DEFAULT);
+	return MSG_SHOUTAT_DEFAULT;
 ];
 
 [ ShowSub;
-	if (parent(noun) ~= player) { PrintMsg(MSG_SHOW_NOT_HOLDING); rtrue; }
+	if (parent(noun) ~= player) return MSG_SHOW_NOT_HOLDING;
 	if (second == player) <<Examine noun>>;
 	if (RunLife(second, ##Show) ~= 0) rfalse;
-	PrintMsg(MSG_SHOW_DEFAULT);
+	return MSG_SHOW_DEFAULT;
 ];
 
 [ SmellSub;
 	if(ObjectIsUntouchable(noun)) return;
-	PrintMsg(MSG_SMELL_DEFAULT);
+	return MSG_SMELL_DEFAULT;
 ];
 
 [ SwitchOffSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_OFF_NOT_SWITCHABLE); rtrue; }
-	if (noun hasnt on)         { PrintMsg(MSG_SWITCH_OFF_NOT_ON); rtrue; }
+	if (noun hasnt switchable) return MSG_SWITCH_OFF_NOT_SWITCHABLE;
+	if (noun hasnt on)         return MSG_SWITCH_OFF_NOT_ON;
 	give noun ~on;
 	run_after_routines_msg = MSG_SWITCH_OFF_DEFAULT;
 ];
 
 [ SwitchOnSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (noun hasnt switchable) { PrintMsg(MSG_SWITCH_ON_NOT_SWITCHABLE); rtrue; }
-	if (noun has on)           { PrintMsg(MSG_SWITCH_ON_ON); rtrue; }
+	if (noun hasnt switchable) return MSG_SWITCH_ON_NOT_SWITCHABLE;
+	if (noun has on)           return MSG_SWITCH_ON_ON;
 	give noun on;
 	run_after_routines_msg = MSG_SWITCH_ON_DEFAULT;
 ];
@@ -709,13 +692,13 @@ Array _PutOnMessages -->
 ];
 
 [ TieSub;
-	PrintMsg(MSG_TIE_DEFAULT);
+	return MSG_TIE_DEFAULT;
 ];
 
 [ TellSub;
-	if (noun == player) { PrintMsg(MSG_TELL_PLAYER); rtrue; }
+	if (noun == player) return MSG_TELL_PLAYER;
 	if (RunLife(noun, ##Tell) ~= 0) rfalse;
-	PrintMsg(MSG_TELL_DEFAULT);
+	return MSG_TELL_DEFAULT;
 ];
 
 [ ThrowAtSub;
@@ -730,22 +713,20 @@ Array _PutOnMessages -->
 		if (RunRoutines(second, before) ~= 0) { action = ##ThrowAt; rtrue; }
 		action = ##ThrowAt;
 	}
-	if(second hasnt animate) { PrintMsg(MSG_THROW_ANIMATE); rtrue; }
+	if(second hasnt animate) return MSG_THROW_ANIMATE;
 	if(RunLife(second,##ThrowAt) ~= 0) rfalse;
-	PrintMsg(MSG_THROW_DEFAULT);
+	return MSG_THROW_DEFAULT;
 ];
 
 [ TouchSub;
 	if(ObjectIsUntouchable(noun)) return;
-	PrintMsg(MSG_TOUCH_DEFAULT);
+	return MSG_TOUCH_DEFAULT;
 ];
 
 [ TransferSub;
-	if(noun in second || (noun in parent(player) && selected_direction == d_to)) {
-		PrintMsg(MSG_TRANSFER_ALREADY);
-		rtrue;
-	}
-	if(noun notin player && TryToTakeNoun() == true) return;
+	if(noun in second || (noun in parent(player) && selected_direction == d_to))
+		return MSG_TRANSFER_ALREADY;
+	if(noun notin player && TryToTakeNoun() == true) rtrue;
 	if (second has supporter) <<PutOn noun second>>;
 	if (second == Directions && selected_direction == d_to) <<Drop noun>>;
 	<Insert noun second>;
@@ -753,10 +734,10 @@ Array _PutOnMessages -->
 
 [ TurnSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (noun has static)   { PrintMsg(MSG_TURN_STATIC); rtrue; }
-	if (noun has scenery)  { PrintMsg(MSG_TURN_SCENERY); rtrue; }
-	if (noun has animate)  { PrintMsg(MSG_TURN_ANIMATE); rtrue; }
-	PrintMsg(MSG_TURN_DEFAULT);
+	if (noun has static)   return MSG_TURN_STATIC;
+	if (noun has scenery)  return MSG_TURN_SCENERY;
+	if (noun has animate)  return MSG_TURN_ANIMATE;
+	return MSG_TURN_DEFAULT;
 ];
 
 [ UnlockSub;
@@ -764,7 +745,7 @@ Array _PutOnMessages -->
 	if (noun hasnt lockable) { PrintMsg(MSG_UNLOCK_NOT_A_LOCK, 'unlock'); rtrue; }
 	if (noun hasnt locked)  { PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED, 'unlock'); rtrue; }
 	if(ImplicitGrabIfNotHeld(second)) rtrue;
-	if (RunRoutines(noun, with_key) ~= second) { PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT); rtrue; }
+	if (RunRoutines(noun, with_key) ~= second) return MSG_UNLOCK_KEY_DOESNT_FIT;
 	give noun ~locked;
 	run_after_routines_msg = MSG_UNLOCK_DEFAULT;
 	run_after_routines_arg_1 = 'unlock';
@@ -772,12 +753,12 @@ Array _PutOnMessages -->
 
 [ WaitSub;
 	if(AfterRoutines()) rtrue;
-	PrintMsg(MSG_WAIT_DEFAULT);
+	return MSG_WAIT_DEFAULT;
 ];
 
 [ WearSub;
-	if (parent(noun) ~= player) { PrintMsg(MSG_WEAR_NOT_HOLDING); rtrue; }
-	if (noun has worn) { PrintMsg(MSG_WEAR_ALREADY_WORN); rtrue; }
+	if (parent(noun) ~= player) return MSG_WEAR_NOT_HOLDING;
+	if (noun has worn) return MSG_WEAR_ALREADY_WORN;
 	if (noun hasnt clothing) { PrintMsg(MSG_WEAR_NOT_CLOTHING, 'wear'); rtrue; }
 	give noun worn;
 	run_after_routines_msg = MSG_WEAR_DEFAULT;
@@ -887,16 +868,16 @@ Verb 'yes' 'y//'
 
 [ BlowSub;
 	if(ImplicitGrabIfNotHeld(noun)) rtrue;
-	PrintMsg(MSG_BLOW_DEFAULT);
+	return MSG_BLOW_DEFAULT;
 ];
 
 [ BurnSub;
 	if(ImplicitGrabIfNotHeld(second)) rtrue;
-	PrintMsg(MSG_BURN_DEFAULT);
+	return MSG_BURN_DEFAULT;
 ];
 
 [ BuySub;
-	PrintMsg(MSG_BUY_DEFAULT);
+	return MSG_BUY_DEFAULT;
 ];
 
 [ EmptySub;
@@ -904,7 +885,7 @@ Verb 'yes' 'y//'
 ];
 
 [ EmptyTSub _i _recipient;
-	if(noun == second) { PrintMsg(MSG_EMPTY_WOULDNT_ACHIEVE); rtrue; }
+	if(noun == second) return MSG_EMPTY_WOULDNT_ACHIEVE;
 	if(noun has container && noun hasnt open) {
 		PrintMsg(MSG_EMPTY_IS_CLOSED, noun);
 		rtrue;
@@ -932,90 +913,90 @@ Verb 'yes' 'y//'
 [ KissSub;
 	if (ObjectIsUntouchable(noun)) return;
 	if (RunLife(noun, ##Kiss) ~= 0) rfalse;
-	if (noun == player) { PrintMsg(MSG_KISS_PLAYER); rtrue; }
-	PrintMsg(MSG_KISS_DEFAULT);
+	if (noun == player) return MSG_KISS_PLAYER;
+	return MSG_KISS_DEFAULT;
 ];
 
 [ MildSub;
-	PrintMsg(MSG_MILD_DEFAULT);
+	return MSG_MILD_DEFAULT;
 ];
 
 [ NoSub;
-	PrintMsg(MSG_RHETORICAL_QUESTION);
+	return MSG_RHETORICAL_QUESTION;
 ];
 
 [ PraySub;
-	PrintMsg(MSG_PRAY_DEFAULT);
+	return MSG_PRAY_DEFAULT;
 ];
 
 [ SetSub;
-	PrintMsg(MSG_SET_DEFAULT);
+	return MSG_SET_DEFAULT;
 ];
 
 [ SetToSub;
-	PrintMsg(MSG_SET_TO_DEFAULT);
+	return MSG_SET_TO_DEFAULT;
 ];
 
 [ SingSub;
-	PrintMsg(MSG_SING_DEFAULT);
+	return MSG_SING_DEFAULT;
 ];
 
 [ SleepSub;
-	PrintMsg(MSG_SLEEP_DEFAULT);
+	return MSG_SLEEP_DEFAULT;
 ];
 
 [ SorrySub;
-	PrintMsg(MSG_SORRY_DEFAULT);
+	return MSG_SORRY_DEFAULT;
 ];
 
 [ StrongSub;
-	PrintMsg(MSG_STRONG_DEFAULT);
+	return MSG_STRONG_DEFAULT;
 ];
 
 [ SqueezeSub;
 	if (ObjectIsUntouchable(noun)) return;
-	if (noun has animate) { PrintMsg(MSG_SQUEEZE_YOURSELF); rtrue; }
-	PrintMsg(MSG_SQUEEZE_DEFAULT);
+	if (noun has animate) return MSG_SQUEEZE_YOURSELF;
+	return MSG_SQUEEZE_DEFAULT;
 ];
 
 [ SwimSub;
-	PrintMsg(MSG_SWIM_DEFAULT);
+	return MSG_SWIM_DEFAULT;
 ];
 
 [ SwingSub;
-	PrintMsg(MSG_SWING_DEFAULT);
+	return MSG_SWING_DEFAULT;
 ];
 
 [ TasteSub;
 	if (ObjectIsUntouchable(noun)) return;
-	PrintMsg(MSG_TASTE_DEFAULT);
+	return MSG_TASTE_DEFAULT;
 ];
 
 [ ThinkSub;
-	PrintMsg(MSG_THINK_DEFAULT);
+	return MSG_THINK_DEFAULT;
 ];
 
 [ WakeSub;
-	PrintMsg(MSG_WAKE_DEFAULT);
+	return MSG_WAKE_DEFAULT;
 ];
 
 [ WakeOtherSub;
 	if (ObjectIsUntouchable(noun)) return;
 	if (RunLife(noun, ##WakeOther) ~= 0) rfalse;
-	PrintMsg(MSG_WAKEOTHER_DEFAULT);
+	return MSG_WAKEOTHER_DEFAULT;
 ];
 
 [ WaveSub;
 	if(parent(noun) ~= player) { PrintMsg(MSG_WAVE_NOTHOLDING, noun); rtrue; }
-	PrintMsg(MSG_WAVE_DEFAULT);
+	return MSG_WAVE_DEFAULT;
 ];
 
 [ WaveHandsSub;
-	PrintMsg(MSG_WAVEHANDS_DEFAULT);
+	return MSG_WAVEHANDS_DEFAULT;
 ];
 
 [ YesSub;
-	PrintMsg(MSG_RHETORICAL_QUESTION);
+	return MSG_RHETORICAL_QUESTION;
 ];
 
 #EndIf;
@@ -1115,23 +1096,23 @@ Verb meta 'quit' 'q//'
 	}
 	@new_line;
 	PANum(score);
-	PrintMsg(MSG_FULLSCORE_END);
+	return MSG_FULLSCORE_END;
 ];
 #EndIf;
 
 [ LookModeNormalSub;
 	lookmode=1;
-	PrintMsg(MSG_LOOKMODE_NORMAL);
+	return MSG_LOOKMODE_NORMAL;
 ];
 
 [ LookModeLongSub;
 	lookmode=2;
-	PrintMsg(MSG_LOOKMODE_LONG);
+	return MSG_LOOKMODE_LONG;
 ];
 
 [ LookModeShortSub;
 	lookmode=3;
-	PrintMsg(MSG_LOOKMODE_SHORT);
+	return MSG_LOOKMODE_SHORT;
 ];
 
 #Ifndef NO_SCORE;
@@ -1165,7 +1146,7 @@ Verb meta 'quit' 'q//'
 	PrintMsg(MSG_RESTART_CONFIRM);
 	if(YesOrNo()) {
 		@restart;
-		PrintMsg(MSG_RESTART_FAILED);
+		return MSG_RESTART_FAILED;
 	}
 ];
 
@@ -1173,35 +1154,33 @@ Verb meta 'quit' 'q//'
 [ RestoreSub;
 	@restore ?_restore_was_successful; ! can't use @restore because of compiler test
 	verb_word = 'restore';
-	PrintMsg(MSG_RESTORE_FAILED);
-	rtrue;
+	return MSG_RESTORE_FAILED;
 ._restore_was_successful; ! This is never reached, since a successful restore continues after save opcode.
 #IfNot;
 [ RestoreSub _flag;
 	@restore -> _flag;
 	! must have failed here so no need to check the flag
-	PrintMsg(MSG_RESTORE_FAILED);
+	return MSG_RESTORE_FAILED;
 #EndIf;
 ];
 
 #IfV3;
 [ SaveSub;
 	@save ?_save_was_successful;
-	PrintMsg(MSG_SAVE_FAILED);
-	rtrue;
+	return MSG_SAVE_FAILED;
 ._save_was_successful;
-	PrintMsg(MSG_SAVE_DEFAULT);
+	return MSG_SAVE_DEFAULT;
 #IfNot;
 [ SaveSub _result;
 	@save -> _result;
-	if(_result == 0) { PrintMsg(MSG_SAVE_FAILED); rtrue; }
-	PrintMsg(MSG_SAVE_DEFAULT); ! _result = 1: save ok, 2: Restore ok
+	if(_result == 0) return MSG_SAVE_FAILED;
+	return MSG_SAVE_DEFAULT; ! _result = 1: save ok, 2: Restore ok
 #EndIf;
 ];
 
 #Ifdef NO_SCORE;
 [ ScoreSub;
-	PrintMsg(MSG_SCORE_DEFAULT);
+	return MSG_SCORE_DEFAULT;
 ];
 #Ifnot;
 [ ScoreSub;
@@ -1438,7 +1417,7 @@ Global scope_cnt;
 ];
 
 [ PurloinSub;
-	if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
+	if(noun == player) return MSG_TAKE_YOURSELF;
 	if(IndirectlyContains(noun, player)) { PrintMsg(MSG_TAKE_PLAYER_PARENT, noun); rtrue; }
 
 	move noun to player;
@@ -1763,12 +1742,13 @@ Global scope_cnt;
 #EndIf;
 
 [ TryToTakeNoun _i _k _ancestor _after_recipient;
-	! Try to transfer the given item to the player: return false
-	! if successful, true if unsuccessful, printing a suitable message
-	! in the latter case. Return value 2 means it was a success, and a "Taken"
-	! message has been printed.
+	! Try to transfer the given item to the player. Return values:
+	! 	0: Success, no message has been printed
+	!   1: Failed, a message has been printed
+	!   2: Success, a message has been printed
+
 	! People cannot ordinarily be taken.
-	if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; }
+	if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; };
 #Ifdef DisallowTakeAnimate;
 	if(noun has animate && DisallowTakeAnimate(noun)) { PrintMsg(MSG_TAKE_ANIMATE); rtrue; }
 #Ifnot;
@@ -1803,7 +1783,6 @@ Global scope_cnt;
 
 	if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
 	if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
-
 	if(_AtFullCapacity(player)) { PrintMsg(MSG_TAKE_NO_CAPACITY); rtrue; }
 
 	move noun to player;
@@ -1912,8 +1891,7 @@ Global scope_cnt;
 			PrintOrRun(real_location, cant_go);
 			rtrue;
 		}
-		PrintMsg(MSG_GO_CANT_GO);
-		rtrue;
+		return MSG_GO_CANT_GO;
 	}
 
 #IfDef DEBUG;
