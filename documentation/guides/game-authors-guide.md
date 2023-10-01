@@ -212,6 +212,18 @@ it spots which don't make the game crash. This makes the game file smaller
 and stops the library from breaking player immersion with complaints about
 programming errors.
 
+## Convert your Zcode file to HTML
+
+The Parchment HTML Converter at https://iplayif.com/api/sitegen allows you to
+convert Zcode to HTML, allowing players to play your game in a web browser.
+
+It even has a REST API, so you can use it to convert Zcode to HTML on the
+command line with `curl`, like this:
+
+```
+curl -o output.html -F "story_file=@LostPig.z8" https://iplayif.com/api/sitegen
+```
+
 # Optimizations
 
 PunyInform leaves you with about 100k bytes to write your game (if you're using

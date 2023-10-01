@@ -25,6 +25,11 @@ You can also use [borogove.app](https://borogove.app/) to write PunyInform
 code and play the resulting game in your browser. Just select PunyInform from
 the dropdown menu under Inform 6 and press the arrow next to it.
 
+When you're done, you can upload your z3, z5, or z8 file to the
+[Parchment HTML Converter](https://iplayif.com/api/sitegen) and download a
+single-file HTML file. You can upload that HTML file to Itch.io to make
+your PunyInform game playable online.
+
 ![A minimal game in PunyInform](https://github.com/johanberntsson/PunyInform/blob/master/documentation/screenshots/simplegame.png?raw=true)
 
 ## Motivation
@@ -161,6 +166,10 @@ The biggest differences between the standard library and PunyInform are:
   [Puddle BuildTools](https://github.com/ByteProject/Puddle-BuildTools). This
   tool set can be installed on Linux. Windows users can create a virtual machine
   running Linux.
+
+* The [Parchment HTML Converter](https://iplayif.com/api/sitegen) can convert
+  your z3, z5, or z8 file into an HTML file, making your game playable in a
+  web browser.
 
 ## Games Using PunyInform
 
