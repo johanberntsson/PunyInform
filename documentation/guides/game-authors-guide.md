@@ -215,13 +215,11 @@ programming errors.
 ## Convert your Zcode file to HTML
 
 The Parchment HTML Converter at https://iplayif.com/api/sitegen allows you to
-convert Zcode to HTML, allowing players to play your game in a web browser.
-
-It even has a REST API, so you can use it to convert Zcode to HTML on the
-command line with `curl`, like this:
+convert Zcode to HTML, allowing players to play your game in a web browser. This process can be automated using `curl` and its REST API from command line, like this:
 
 ```
-curl -o output.html -F "story_file=@LostPig.z8" https://iplayif.com/api/sitegen
+curl -o output.html -F "story_file=@mygame.z5" \
+https://iplayif.com/api/sitegen
 ```
 
 # Optimizations

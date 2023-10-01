@@ -163,8 +163,7 @@ The biggest differences between the standard library and PunyInform are:
   running Linux.
 
 * The [Parchment HTML Converter](https://iplayif.com/api/sitegen) can convert
-  your z3, z5, or z8 file into an HTML file, making your game playable in a
-  web browser.
+  your game file into an HTML file, making your game playable in a web browser.
 
 ## Games Using PunyInform
 
