@@ -21,9 +21,13 @@ https://github.com/DavidKinder/Inform6.  Binaries can be found at the
 PunyInform requires at least Inform v6.36. We recommended using the latest
 version.
 
-You can also use [borogove.app](https://borogove.app/) to write PunyInform
-code and play the resulting game in your browser. Just select PunyInform from
-the dropdown menu under Inform 6 and press the arrow next to it. Alternative, you can upload your z3 or z5 to the [Parchment HTML Converter](https://iplayif.com/api/sitegen) and download a single-file HTML file, which can be uploaded to sites such as Itch.io.
+You can use [borogove.io](https://borogove.io/) to make your PunyInform
+game playable online. Create an account, upload your game file, and choose whether
+the game should be visible and playable for all visitors to the site, or
+only to those who have the link to your game. Another option is to upload 
+your game file (e.g. mygame.z3) to the 
+[Parchment HTML Converter](https://iplayif.com/api/sitegen) and download a 
+single-file HTML file, which can be uploaded to sites such as Itch.io.
 
 ![A minimal game in PunyInform](https://github.com/johanberntsson/PunyInform/blob/master/documentation/screenshots/simplegame.png?raw=true)
 
