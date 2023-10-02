@@ -142,8 +142,7 @@ Array cursor_pos --> 2;
 	statuswin_current = false;
 ];
 
-
-Array TenSpaces -> "          ";
+Array _TenSpaces static -> "          ";
 
 [ _PrintSpacesOrMoveBack p_col p_string _current_col;
 	p_col = screen_width - p_col;
@@ -818,10 +817,10 @@ Constant ONE_SPACE_STRING = " ";
 	for( : p_spaces > 0 : p_spaces--) @print_char ' ';
 #Ifnot;
 	while(p_spaces > 10) {
-		@print_table TenSpaces 10 1;
+		@print_table _TenSpaces 10 1;
 		p_spaces = p_spaces - 10;
 	}
-	@print_table TenSpaces p_spaces 1;
+	@print_table _TenSpaces p_spaces 1;
 #Endif;
 ];
 

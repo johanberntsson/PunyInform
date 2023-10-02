@@ -95,6 +95,9 @@ Constant MSG_REMOVE_DEFAULT "Removed.";
 #Ifndef MSG_SEARCH_NOTHING_SPECIAL;
 Constant MSG_SEARCH_NOTHING_SPECIAL "You find nothing special.";
 #EndIf;
+#Ifndef MSG_OOPS_DEFAULT;
+Constant MSG_OOPS_DEFAULT "Think nothing of it.";
+#EndIf;
 #Ifndef MSG_PARSER_ONLY_TO_ANIMATE;
 Constant MSG_PARSER_ONLY_TO_ANIMATE "You can only do that to something animate.";
 #EndIf;
@@ -306,6 +309,8 @@ Default MSG_OPEN_LOCKED = 141;
 Default MSG_PUTON_NOT_SUPPORTER = 142;
 Default MSG_PARSER_NO_IT = 143;
 Default MSG_PARSER_CANT_SEE_IT = 144;
+Default MSG_NOTIFY_ON = 145;
+Default MSG_NOTIFY_OFF = 146;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -623,6 +628,13 @@ Constant SKIP_MSG_LOOKMODE;
 #Endif;
 #Endif;
 
+#Ifndef OPTIONAL_NO_SCORE;
+#Iffalse MSG_NOTIFY_ON < 1000;
+#Iffalse MSG_NOTIFY_OFF < 1000;
+Constant SKIP_MSG_NOTIFY_ON;
+#Endif;
+#Endif;
+#Endif;
 
 #Ifndef OPTIONAL_NO_DARKNESS;
 #Iffalse MSG_EXAMINE_DARK < 1000;
@@ -1094,7 +1106,14 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 	MSG_RESTART_CONFIRM:
 		print "Are you sure you want to restart? ";
 #Endif;
+
 #Ifndef NO_SCORE;
+#Ifndef SKIP_MSG_NOTIFY_ON;
+	MSG_NOTIFY_ON, MSG_NOTIFY_OFF:
+		print "Score notification o";
+		if(p_msg == MSG_NOTIFY_ON) "n.";
+		"ff.";
+#Endif;
 #Iftrue MSG_PARSER_NEW_SCORE < 1000;
 	MSG_PARSER_NEW_SCORE:
 		! p_arg_1 = the old score

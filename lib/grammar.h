@@ -1118,17 +1118,17 @@ Verb meta 'quit' 'q//'
 #Ifndef NO_SCORE;
 [ NotifyOnSub;
 	notify_mode = 1;
-	"Score notification on.";
+	return MSG_NOTIFY_ON;
 ];
 
 [ NotifyOffSub;
 	notify_mode = 0;
-	"Score notification off.";
+	return MSG_NOTIFY_OFF;
 ];
 #Endif;
 
 [ OopsSub;
-	"Think nothing of it.";
+	return MSG_OOPS_DEFAULT;
 ];
 
 [ OopsCorrectionSub;
