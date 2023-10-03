@@ -227,9 +227,18 @@ System_file;
 [ NumberWord p_o _i _n;
 	! try to parse  "one" up to "twenty".
 	_n = LanguageNumbers-->0;
+#Ifv5;
+	@log_shift _n (-1) -> _n; ! Divide by 2
+	@add LanguageNumbers 2 -> sp;
+	@scan_table p_o sp _n $84 -> _i ?_found;
+	return 0;
+._found;
+	return _i-->1;
+#Ifnot;
 	for(_i = 1 : _i <= _n : _i = _i + 2)
 		if (p_o == LanguageNumbers-->_i) return LanguageNumbers-->(_i+1);
 	return 0;
+#Endif;
 ];
 #Endif;
 
