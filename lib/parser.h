@@ -981,7 +981,8 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 ];
 
 [ _ParseToken p_pattern_pointer p_parse_pointer _noun _i _token
-		_token_type _token_data _old_wn _j _k _parse_plus_2 _num_already_added;
+		_token_type _token_data _old_wn _j _k _parse_plus_2 _parse_next 
+		_num_already_added;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
@@ -991,12 +992,13 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! when the calling routine already has them at hand)
 	object_token_type = -1;
 	_parse_plus_2 = parse + 2;
+	_parse_next = _parse_plus_2 + 4 * (wn - 1);
 	if(_noun < 0) {
 		! called from ParseToken (DM library API)
 		! since third argument is -1 instead of default 0
 		_token = p_pattern_pointer;
 		_token_data = p_parse_pointer;
-		p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+		p_parse_pointer = _parse_next;
 		p_pattern_pointer = 0;
 	} else {
 		_token = (p_pattern_pointer -> 0);
@@ -1102,7 +1104,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				}
 #Endif;
 			}
-			p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+			p_parse_pointer = _parse_next;
 			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {
 				phase2_necessary = PHASE2_ERROR;
 				if(parser_phase == PHASE2) {
@@ -1170,7 +1172,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						print "adding plural ", which_object->0, " ", which_object->1, " ", multiple_objects --> 0, "^";
 #Endif;
 						! check if 'take all Xs but Y'
-						p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+						p_parse_pointer = _parse_next;
 						if(_PeekAtNextWord() == EXCEPT_WORD1 or EXCEPT_WORD2) {
 							wn = wn + 1;
 							! here we only want to consider the Xs
@@ -1204,7 +1206,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 								parser_all_except_object = _noun;
 							}
 							! allow 'take all Xs but Y one'
-							p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+							p_parse_pointer = _parse_next;
 							if(_PeekAtNextWord() == 'one') {
 								wn = wn + 1;
 							}
@@ -1217,12 +1219,12 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 								! there is no word, so the pattern fails
 								return GPR_FAIL;
 							}
-							_i = (_parse_plus_2 + 4*wn ) --> 0; ! Word value
+							_i = (_parse_next + 4 ) --> 0; ! Word value
 							if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
 								! this is not a verb so we assume it is a list
 								! of nouns instead. Continue to parse
 								++wn;
-								p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+								p_parse_pointer = _parse_next;
 								!print "and followed by a noun^";
 								parser_all_found = false;
 								continue;
@@ -1239,7 +1241,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						!
 						! Add all reasonable objects in scope
 						! to the multiple_objects array
-						p_parse_pointer = _parse_plus_2 + 4 * (wn - 2);
+						p_parse_pointer = _parse_next - 4;
 						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
 							!print "take all but^";
 							if(parser_phase == PHASE2) {
@@ -1290,7 +1292,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				}
 				! If _j == false, the object is not in the list, so add it!
 				if(_j == false) {
-					p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+					p_parse_pointer = _parse_next;
 					multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 					multiple_objects --> (multiple_objects --> 0) = _noun;
 				}
@@ -1302,12 +1304,12 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						! there is no word, so the pattern fails
 						return GPR_FAIL;
 					}
-					_i = (_parse_plus_2 + 4*wn ) --> 0; ! Word value
+					_i = (_parse_next + 4 ) --> 0; ! Word value
 					if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
 						! this is not a verb so we assume it is a list
 						! of nouns instead. Continue to parse
 						++wn;
-						p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+						p_parse_pointer = _parse_next;
 						!print "and followed by a noun^";
 						continue;
 					}

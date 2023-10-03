@@ -10,6 +10,7 @@ Upcoming release:
   PerformPreparedAction print this, saving 344 bytes.
 - Moved NotifyOff-, NotifyOn- and Oops-messages to messages.h.
 - TenSpaces array is now private (_TenSpaces) and resides in static memory.
+- Saved 68 bytes in _ParseToken routine.
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)
