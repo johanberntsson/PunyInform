@@ -1188,8 +1188,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 							! before GetNextNoun. Later we need to restore scope
 							scope_objects = multiple_objects --> 0;
 #Ifv5;
+							@log_shift scope_objects 1 -> sp;
 							@add multiple_objects 2 -> sp;
-							@copy_table sp scope scope_objects;
+							@copy_table sp scope sp;
 #Ifnot;
 							for(_noun = 0: _noun < scope_objects : _noun++) {
 								scope-->_noun = multiple_objects-->(_noun + 1);
