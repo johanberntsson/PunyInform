@@ -1164,7 +1164,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						for(_i = 0: _i < which_object->0: _i++) {
 							! don't add if already in multiple_objects
 							_k = 1;
-							for(_j = 0: _j < multiple_objects-->0: _j++) {
+							for(_j = 1: _j <= multiple_objects-->0: _j++) {
 								if(multiple_objects --> _j == which_object--> (_i + 1)) {
 									_k = 0;
 									! this was already added

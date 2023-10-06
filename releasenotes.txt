@@ -14,6 +14,8 @@ Upcoming release:
   performance.
 - Saved 12 bytes in z5 in NumberWord (used by OPTIONAL_ALLOW_WRITTEN_NUMBERS),
   while improving performance.
+- Fixed parser bug which gave a strange message for "get blue book and all 
+  books but blue."
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)
