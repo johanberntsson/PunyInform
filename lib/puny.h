@@ -1367,9 +1367,15 @@ Include "parser.h";
 [ StopDaemon p_obj p_array_val _i;
 	if(p_array_val == 0)
 		p_array_val = WORD_HIGHBIT + p_obj;
+#Ifv5;
+	@scan_table p_array_val the_timers active_timers -> _i ?~rfalse;
+	_i = _i - the_timers;
+	@log_shift _i (-1) -> _i; ! Divide by 2
+#Ifnot;
 	for (_i=0 : _i<active_timers : _i++)
 		if (the_timers-->_i == p_array_val) jump _FoundTSlot4;
 	rfalse;
+#Endif;
 ._FoundTSlot4;
 #IfDef DEBUG;
 	if(debug_flag & 4) {
