@@ -1304,8 +1304,12 @@ Include "parser.h";
 #EndIf;
 	if(p_array_val == 0)
 		p_array_val = WORD_HIGHBIT + p_obj;
+#Ifv5;
+	@scan_table p_array_val the_timers active_timers -> _i ?rfalse;
+#Ifnot;
 	for (_i=0 : _i<active_timers : _i++)
 		if (the_timers-->_i == p_array_val) rfalse;
+#Endif;
 	if (active_timers >= MAX_TIMERS) {
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 		_RunTimeError(ERR_TOO_MANY_TIMERS_DAEMONS);

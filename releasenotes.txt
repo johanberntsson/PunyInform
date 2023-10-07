@@ -19,6 +19,7 @@ Upcoming release:
 - Created internal parser routine _ObjInMultipleObjects, reducing logic 
   duplication and saving 48 bytes in z3 and 64 bytes in z5.
 - Saved 18 bytes in _ParsePattern for z5.
+- Saved 15 bytes in StartDaemon for z5.
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)
