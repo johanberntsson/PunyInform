@@ -989,8 +989,29 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	return _ParseToken(p_token_type, p_token_data, -1);
 ];
 
+[_ObjInMultipleObjects p_obj p_special_count p_count _i;
+! Call with p_special_count = true if p_count holds the count
+! Otherwise, count is in multiple_objects-->0
+	if(p_special_count == 0)
+		p_count = multiple_objects-->0;
+#Ifv5;
+!	@loadw multiple_objects 0 -> sp;
+	@add multiple_objects 2 -> sp;
+!	@scan_table p_obj sp sp -> _i ?rtrue;
+	@scan_table p_obj sp p_count -> _i ?rtrue;
+#Ifnot;
+	for(_i = 1: _i <= p_count: _i++) {
+		if(multiple_objects --> _i == p_obj) {
+			rtrue;
+		}
+	}
+#Endif;
+	rfalse;
+];
+
+
 [ _ParseToken p_pattern_pointer p_parse_pointer _noun _i _token
-		_token_type _token_data _old_wn _j _k _parse_plus_2 
+		_token_type _token_data _old_wn _parse_plus_2 
 		_num_already_added;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
@@ -1163,15 +1184,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						! copy which_object to multiple_objects
 						for(_i = 0: _i < which_object->0: _i++) {
 							! don't add if already in multiple_objects
-							_k = 1;
-							for(_j = 1: _j <= multiple_objects-->0: _j++) {
-								if(multiple_objects --> _j == which_object--> (_i + 1)) {
-									_k = 0;
-									! this was already added
-									!print _i, " ", _j, " ", (the) multiple_objects --> _j, " == ", (the) which_object--> (_i + 1), "^";
-								}
-							}
-							if(_k) {
+							if(_ObjInMultipleObjects(which_object--> (_i + 1)) == false) {
 								multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 								multiple_objects --> (multiple_objects --> 0) = which_object--> (_i + 1);
 							}
@@ -1188,7 +1201,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 							! before GetNextNoun. Later we need to restore scope
 							scope_objects = multiple_objects --> 0;
 #Ifv5;
-							@log_shift scope_objects 1 -> sp;
+							@log_shift scope_objects 1 -> sp; ! Multiply by 2
 							@add multiple_objects 2 -> sp;
 							@copy_table sp scope sp;
 #Ifnot;
@@ -1210,13 +1223,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 							! we started parsing this NP (e.g. get books
 							! but X), then it should not be used since
 							! the "but" object only refers to this NP.
-							_k = 1;
-							for(_i = 0: _i < _num_already_added: _i++) {
-								if(_noun == multiple_objects-->(_i + 1)) {
-									_k = 0;
-								}
-							}
-							if(_k) {
+							if(_ObjInMultipleObjects(_noun, true, _num_already_added) == false) {
 								parser_all_except_object = _noun;
 							}
 							! allow 'take all Xs but Y one'
@@ -1294,18 +1301,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 					return GPR_FAIL;
 				}
 				! adding a single object - check if it's already there
-				_j = false;
-				_k = multiple_objects-->0;
-				if(_k > 0) {
-					for(_i = 1: _i <= _k: _i++) {
-						if(multiple_objects-->_i == _noun) {
-							_j = true;
-							break;
-						}
-					}
-				}
-				! If _j == false, the object is not in the list, so add it!
-				if(_j == false) {
+				if(_ObjInMultipleObjects(_noun) == false) {
 					p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 					multiple_objects --> 0 = 1 + (multiple_objects --> 0);
 					multiple_objects --> (multiple_objects --> 0) = _noun;

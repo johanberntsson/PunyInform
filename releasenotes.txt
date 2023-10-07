@@ -16,6 +16,8 @@ Upcoming release:
   while improving performance.
 - Fixed parser bug which gave a strange message for "get blue book and all 
   books but blue."
+- Created internal parser routine _ObjInMultipleObjects, reducing logic 
+  duplication and saving 48 bytes in z3 and 64 bytes in z5.
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)
