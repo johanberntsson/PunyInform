@@ -22,6 +22,9 @@ Upcoming release:
 - Made StopDaemon faster and a few bytes shorter for z5.
 - Saved 15 bytes in _ParsePattern for z5.
 - Made resetting of task_done array in main shorter and faster in z5.
+- Made FastSpaces routine tolerate negative argument.
+- Made quote box extension faster and smaller in z5, by using FastSpaces 
+  routine.
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)

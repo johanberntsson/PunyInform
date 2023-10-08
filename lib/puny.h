@@ -820,6 +820,7 @@ Constant ONE_SPACE_STRING = " ";
 		@print_table _TenSpaces 10 1;
 		p_spaces = p_spaces - 10;
 	}
+	if(p_spaces <= 0) rtrue;
 	@print_table _TenSpaces p_spaces 1;
 #Endif;
 ];
