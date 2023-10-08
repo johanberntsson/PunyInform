@@ -1665,15 +1665,18 @@ Array guess_object-->5;
 						if(_k) {
 							@get_prop_len _k -> _j;
 		#IfV5;
-							@log_shift _j (-1) -> _j;
+							@log_shift _j (-1) -> _j; ! Divide by 2
+							@scan_table _word _k _j -> _i ?~_no_loc_name;
+							inp1 = 1;
+._no_loc_name;
 		#IfNot;
 							@div _j 2 -> _j;
-		#EndIf;
 							for(_i = 0: _i < _j: _i++) {
 								if(_word == (_k-->_i)) {
 									inp1 = _i;
 								}
 							}
+		#EndIf;
 						}
 						if(inp1 ~= -1) {
 							PrintMsg(MSG_PARSER_NO_NEED_REFER_TO);
