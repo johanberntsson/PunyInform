@@ -1519,7 +1519,7 @@ Array guess_object-->5;
 #EndIf;
 
 #Ifv5;
-[ _ParsePattern p_pattern _parse_pointer _noun _j _k _word _type _current_wn _old_dir_index;
+[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index;
 #Ifnot;
 [ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index;
 #Endif;
@@ -1666,16 +1666,14 @@ Array guess_object-->5;
 							@get_prop_len _k -> _j;
 		#IfV5;
 							@log_shift _j (-1) -> _j;
-							@scan_table _word _k _j -> inp1 ?_no_loc_name;
-._no_loc_name;
 		#IfNot;
 							@div _j 2 -> _j;
+		#EndIf;
 							for(_i = 0: _i < _j: _i++) {
 								if(_word == (_k-->_i)) {
 									inp1 = _i;
 								}
 							}
-		#EndIf;
 						}
 						if(inp1 ~= -1) {
 							PrintMsg(MSG_PARSER_NO_NEED_REFER_TO);

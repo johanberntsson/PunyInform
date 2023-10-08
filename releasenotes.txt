@@ -18,7 +18,6 @@ Upcoming release:
   books but blue."
 - Created internal parser routine _ObjInMultipleObjects, reducing logic 
   duplication and saving 48 bytes in z3 and 64 bytes in z5.
-- Saved 18 bytes in _ParsePattern for z5.
 - Made StartDaemon faster and 15 bytes shorter for z5.
 - Made StopDaemon faster and a few bytes shorter for z5.
 

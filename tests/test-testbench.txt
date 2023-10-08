@@ -21,7 +21,6 @@ The blue book ticks loudly.
 Are you sure you want to restart? yes
 
 
-
 tried out. Don't expect much of a game here. Currently, you can win by putting
 stuff in the box, or lose by checking out the sun by the river or by pushing
 John around.
@@ -51,19 +50,27 @@ pink book: You dared taking the pink book. Bravo!
 > open box
 You open the box, revealing a red book and a brown book.
 
+The blue book ticks loudly.
+
 [The score has just gone up by 3 points.]
 
 > put book in box
-Do you mean the blue book, the green book or the pink book?
+Do you mean the pink book or the blue book?
 
 > i
-You are empty handed.
+You're carrying that stupid old pink book and a blue book (providing light).
+
+The blue book ticks loudly.
 
 > take book from box
 Do you mean the red book or the brown book?
 
 > brown
 Yay, got rid of the brown book!
+
+The box goes BOOM.
+
+The blue book ticks loudly.
 
 [The score has just gone down by 1 point.]
 

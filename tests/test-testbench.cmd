@@ -7,8 +7,6 @@ get books and dial
 restart
 yes
 get blue and all books but blue
-blue
-i
 open box
 put book in box
 i
