@@ -2276,7 +2276,11 @@ Object thedark "Darkness"
 	things_score = 0;
 #EndIf;
 #IfDef TASKS_PROVIDED;
-	for(_i = 0 : _i < NUMBER_TASKS : _i++) task_done->_i = 0;
+	#Ifv5;
+		@copy_table task_done 0 NUMBER_TASKS;
+	#Ifnot;
+		for(_i = 0 : _i < NUMBER_TASKS : _i++) task_done->_i = 0;
+	#EndIf;
 #EndIf;
 #EndIf;
 
