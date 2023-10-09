@@ -119,11 +119,11 @@ More information on last page.
 
 ###### The action (*##Insert* or *##PutOn*) that caused the fake action *##Receive*.
 
-## run_after_routines_arg_1
+## run_after_routines_arg_1 **PUNY++**
 
 ###### Argument for message (See run_after_routines_msg).
 
-## run_after_routines_msg
+## run_after_routines_msg **PUNY++**
 
 ###### Action routine sets to a message# or 1, to run after-routines. 1 means "run after routines, no message". Action routine can also set run_after_routines_arg_1.
 
