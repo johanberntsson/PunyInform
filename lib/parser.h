@@ -1009,6 +1009,24 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	rfalse;
 ];
 
+[ _CheckForAndObject p_parse_plus_2 _i;
+	if(_PeekAtNextWord() == comma_word or AND_WORD) {
+		! check the next word after "and" or comma
+		if((wn + 1) > parse->1) {
+			!print "and followed by nothing^";
+			! there is no word, so the pattern fails
+			return GPR_FAIL;
+		}
+		_i = (p_parse_plus_2 + 4 * wn) --> 0; ! Word value
+		if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
+			! this is not a verb so we assume it is a list
+			! of nouns instead. Continue to parse
+			++wn;
+			rfalse;
+		}
+		!print "and followed by a verb^";
+	}
+];
 
 [ _ParseToken p_pattern_pointer p_parse_pointer _noun _i _token
 		_token_type _token_data _old_wn _parse_plus_2 
@@ -1233,26 +1251,14 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 							}
 						}
 						! check if get [all] Xs (and|,) Y...
-						if(_PeekAtNextWord() == comma_word or AND_WORD) {
-							! check the next word after "and" or comma
-							if((wn + 1) > parse->1) {
-								!print "and followed by nothing^";
-								! there is no word, so the pattern fails
-								return GPR_FAIL;
-							}
-							_i = (_parse_plus_2 + 4 * wn) --> 0; ! Word value
-							if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
-								! this is not a verb so we assume it is a list
-								! of nouns instead. Continue to parse
-								++wn;
-								p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
-								!print "and followed by a noun^";
-								parser_all_found = false;
-								continue;
-							}
-							!print "and followed by a verb^";
+						_i = _CheckForAndObject(_parse_plus_2);
+						if(_i == false) {
+							p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+							parser_all_found = false;
+							continue;
 						}
-
+						if(_i == GPR_FAIL)
+							return _i;
 						return GPR_MULTIPLE;
 					}
 					if(p_parse_pointer-->0 == ALL_WORD) {
@@ -1307,24 +1313,13 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 					multiple_objects --> (multiple_objects --> 0) = _noun;
 				}
 				! check if we should continue: and or comma followed by a noun
-				if(_PeekAtNextWord() == comma_word or AND_WORD) {
-					! check the next word after "and" or comma
-					if((wn + 1) > parse->1) {
-						!print "and followed by nothing^";
-						! there is no word, so the pattern fails
-						return GPR_FAIL;
-					}
-					_i = (_parse_plus_2 + 4 * wn) --> 0; ! Word value
-					if(_i ~= 0 && _i -> DICT_BYTES_FOR_WORD & 1 == 0) {
-						! this is not a verb so we assume it is a list
-						! of nouns instead. Continue to parse
-						++wn;
-						p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
-						!print "and followed by a noun^";
-						continue;
-					}
-					!print "and followed by a verb^";
+				_i = _CheckForAndObject(_parse_plus_2);
+				if(_i == false) {
+					p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
+					continue;
 				}
+				if(_i == GPR_FAIL)
+					return _i;
 				break;
 			}
 			if(multiple_objects --> 0 == 0) {

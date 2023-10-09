@@ -25,6 +25,7 @@ Upcoming release:
 - Made FastSpaces routine tolerate negative argument.
 - Made quote box extension faster and smaller in z5, by using FastSpaces 
   routine.
+- Created routine _CheckForAndObject in parser, to save 18 bytes.
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)
