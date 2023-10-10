@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.1: bug fix and new feature release (10 Oct 2023)
+
 - Ifdefs instead of stubs for entry point routines, saving up to 178 bytes,
   and adding performance.
 - Fixed bug in CSTEST action in cheap scenery, which said a reaction string or 

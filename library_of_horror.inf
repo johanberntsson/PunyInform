@@ -2,8 +2,8 @@
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
 !% $MAX_ABBREVS=96
-!% $ZCODE_MAX_INLINE_STRING=9999    ! Requires Inform 6.42
-!!!!!% $OMIT_SYMBOL_TABLE=1             ! Requires Inform 6.42
+!!% $ZCODE_MAX_INLINE_STRING=9999    ! Requires Inform 6.42
+!!% $OMIT_SYMBOL_TABLE=1             ! Requires Inform 6.42, and can not be used with DEBUG
 
 ! The very first lines of the main source code file for a game can
 ! contain compiler options, like the lines above. -~S disables
@@ -136,6 +136,7 @@ Abbreviate ". ";
 !Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_FULL_SCORE;
 Constant OPTIONAL_MANUAL_SCOPE;
+Constant OPTIONAL_MANUAL_SCOPE_BOOST;
 Constant OPTIONAL_REACTIVE_PARSE_NAME;
 ! 0 = Minimal error checking, 1 = Numeric error codes, 2: Error messages
 Constant RUNTIME_ERRORS = 0;
