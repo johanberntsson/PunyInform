@@ -29,6 +29,8 @@ v5.1: bug fix and new feature release (10 Oct 2023)
 - Made quote box extension faster and smaller in z5, by using FastSpaces 
   routine.
 - Created routine _CheckForAndObject in parser, to save 18 bytes.
+- Updated abbreviations, saving 108 bytes for a minimal game using the
+  built-in abbreviations.
 
 =======
 v5.0.1: bug fix release (25 Sep 2023)
