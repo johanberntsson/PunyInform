@@ -3,8 +3,13 @@
 You dared taking the pink book. Bravo!
 
 > break ladder with pink
-WrongBreakObject Noun: the ladder
-BreakWithWrongObject
+WrongBreakObject Noun: the pink book
+BreakWithWrongObject the ladder the pink book
+
+> break ladder with sweater
+WrongBreakObject Noun: the sweater
+(first taking the sweater)
+Break the ladder the sweater
 
 > quit
 You ain't no quitter eh? yes

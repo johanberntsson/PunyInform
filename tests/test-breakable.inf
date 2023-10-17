@@ -1314,10 +1314,10 @@ Include "Grammar";
 ];
 
 [ BreakSub;
-    print "Break^";
+    print "Break ", (the) noun, " ", (the) second ,"^";
 ];
 [ BreakWithWrongObjectSub;
-    print "BreakWithWrongObject^";
+    print "BreakWithWrongObject ", (the) noun, " ", (the) second ,"^";
 ];
 
 [ WrongBreakObject;
@@ -1325,6 +1325,7 @@ Include "Grammar";
     if(noun) print "Noun: ", (the) noun;
     if(second) print "Second: ", (the) second;
     print "^";
+    if(noun == PinkBook) rfalse;
 ];
 
 Extend only 'break' 'crack' replace

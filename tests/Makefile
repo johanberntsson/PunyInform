@@ -7,9 +7,9 @@ inform:
 	inform -v8 -D test-issue107.inf
 	frotz test-issue107.z8
 
-test-parser:
-	inform +../lib -v3 test-parser.inf
-	frotz test-parser.z3
+test-breakable:
+	inform +../lib -v3 test-breakable.inf
+	frotz test-breakable.z3
 
 indistiguishable:
 	inform +../lib -v3 indistiguishable.inf
