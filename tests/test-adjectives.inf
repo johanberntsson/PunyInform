@@ -1,0 +1,115 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+Constant Story      "Adjectives";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+Constant OPTIONAL_NO_DARKNESS;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+Include "puny.h";
+
+! -------------------- Copy the following code to your own game
+
+#Ifv5;
+Property adj_name;
+Property noun_name;
+#Ifnot;
+Property individual adj_name;
+Property individual noun_name;
+#Endif;
+
+#Ifv5;
+[MatchNameList p_obj p_prop _w _matched _an _count _i;
+#Ifnot;
+[MatchNameList p_obj p_prop _w _matched _base _an _count _i;
+#Endif;
+    _w = NextWord();
+    _an = p_obj.&p_prop;
+    if(_an == 0) return 0;
+    _count = p_obj.#p_prop / 2;
+    while(true) {
+#Ifv5;
+		@scan_table _w _an _count -> _i ?_MNL_match;
+		return _matched;
+._MNL_match;
+		_matched++;
+		_w = NextWord();
+#Ifnot;
+        _base = _matched;
+        for(_i = 0 : _i < _count : _i++)
+            if(_w == _an-->_i) { _matched++; _w = NextWord(); break; }
+        if(_matched == _base) return _matched;
+#Endif;
+    }
+];
+
+Class AdjObject
+    with
+        parse_name [ _adj _noun;
+            _adj = MatchNameList(self, adj_name);
+            wn--;
+            _noun = MatchNameList(self, noun_name);
+            if(_noun) return _noun + _adj;
+        ];
+
+! -------------------- End of code to copy
+
+
+Object Library "The Library"
+	with
+		description "I am in a library.";
+
+Object -> Box "box"
+	with
+		name 'box',
+		inside_description "It feels so nice, standing in the box.",
+	has container open openable enterable;
+
+Object -> RecordPlayer "brown record player"
+    class AdjObject
+    with
+        adj_name 'brown' 'record',
+        noun_name 'player',
+		description "A beautiful record player, mostly made out of wood.",
+    has static;
+
+Object -> Record "record"
+    with
+        name 'record',
+		description "Dark Side of the Moon, by Pink Floyd.";
+
+Verb 'play'
+	* held 'on' noun -> Play;
+
+[PlaySub;
+	if(noun notin player) "You're not even holding ", (the) noun, ".";
+	if(noun ~= Record)
+		"That's not something you can play.";
+	if(second ~= RecordPlayer)
+		"You can't play it on that!";
+	"It sounds fantastic!";
+];
+	
+[Initialise;
+	print "^^The AdjObject class allows you to define up to 32 adjectives and 
+		32 nouns for an object, in any Z-code version. This can be used to add
+		lots of synonyms as nouns, and/or to define some words as adjectives.
+		Adjectives are words that can be used to refer to the object but only if
+		they're followed by one or more nouns.^^
+		In this example, RECORD refers to the record, while RECORD PLAYER 
+		refers to the record player, and there is no ambiguity. You can also refer
+		to the record player as BROWN PLAYER or BROWN RECORD PLAYER or just PLAYER.^^";
+];

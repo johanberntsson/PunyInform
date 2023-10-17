@@ -1,0 +1,7 @@
+
+> say test
+I think you wanted to say "say something to someone". Please try again.
+
+> quit
+Are you sure you want to quit? yes
+
