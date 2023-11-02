@@ -59,11 +59,16 @@ Global menu_nesting;
 
 		_ReadPlayerInput(true);
 		j = parse->1; ! number of words
+		parse->1=0;
 		if (j == 0) jump _v3_redisplay_menu;
 		i = parse-->1;
 		if(i == 'q//') {
 			menu_nesting--; if (menu_nesting > 0) rfalse;
+#ifdef M_NO_LOOK;
+			if (deadflag == 0) rtrue;
+#Ifnot;
 			if (deadflag == 0) <<Look>>;
+#Endif;
 			rfalse;
 		}
 		i = TryNumber(1);
@@ -193,7 +198,11 @@ Constant QKEY2__KY      = 'q';
 	gg_statuswin_cursize = 0;
 #EndIf;
 	new_line; new_line; new_line;
+#ifdef M_NO_LOOK;
+	if (deadflag == 0) rtrue;
+#Ifnot;
 	if (deadflag == 0) <<Look>>;
+#Endif;
 ];
 
 #EndIf;
