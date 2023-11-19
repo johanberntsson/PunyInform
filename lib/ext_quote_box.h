@@ -56,6 +56,7 @@ Constant QB_ERR = "^[Quote_box error #";
 
 Constant QUOTE_MAX_LENGTH = 80;
 
+#IfV3;
 Default QUOTE_V3_SCREEN_WIDTH = 2;
 
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 6;
@@ -78,6 +79,7 @@ Constant QUOTE_INDENT_STRING = " ";
 #EndIf;
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 0;
 Constant QUOTE_INDENT_STRING = "";
+#EndIf;
 #EndIf;
 
 Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
