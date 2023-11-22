@@ -178,31 +178,23 @@ Constant CS_THEM = 104;
 Constant CS_FIRST_ID = 200;
 Constant CS_LAST_ID = 299;
 
-Array CSData --> 7;
-Constant CSDATA_OBJ = 0;
-Constant CSDATA_PROP = 1;
-Constant CSDATA_INDEX = 2;
-Constant CSDATA_PARSE_NAME_ID = 3;
-Constant CSDATA_MATCH_LENGTH = 4;
-Constant CSDATA_PRONOUN = 5;
-Constant CSDATA_PRONOUN_TEMP = 6;
-!  CSData-->0: The object which holds list where we found a match
-!  CSData-->1: The property where the list is stored
-!  CSData-->2: The index into the list for the best match
-!  CSData-->3: The value of cs_parse_name_id when match was made
-!  CSData-->4: The length of the best match
-!  CSData-->5: The pronoun for the match (CS_IT or CS_THEM)
-!  CSData-->6: Used to pass a pronoun value between routines
+Array CSData --> 5;
+Constant CSDATA_POINTER = 0;
+Constant CSDATA_PARSE_NAME_ID = 1;
+Constant CSDATA_MATCH_LENGTH = 2;
+Constant CSDATA_PRONOUN = 3;
+Constant CSDATA_PRONOUN_TEMP = 4;
+!  CSData-->0: The memory location where the matching cheap scenery object begins
+!  CSData-->1: The value of cs_parse_name_id when match was made
+!  CSData-->2: The length of the best match
+!  CSData-->3: The pronoun for the match (CS_IT or CS_THEM)
+!  CSData-->4: Used to pass a pronoun value between routines
 
 #Ifndef cheap_scenery;
 Property individual cheap_scenery;
 #Endif;
 
 Global cs_parse_name_id = 0;
-
-[ _CSGetArr;
-	return (CSData-->CSDATA_OBJ).&(CSData-->CSDATA_PROP) + 2 * (CSData-->CSDATA_INDEX);
-];
 
 [ _CSFindInArr p_value p_array p_count _i;
 #Ifv5;
@@ -232,7 +224,7 @@ Global cs_parse_name_id = 0;
 ];
 
 [ CSHasAdjective p_word _arr _w1;
-	_arr = _CSGetArr();
+	_arr = CSData-->CSDATA_POINTER;
 	_w1 = _arr-->0;
 	if(_w1 < 1 || _w1 > 99) {
 		if(_w1 == p_word)
@@ -243,7 +235,7 @@ Global cs_parse_name_id = 0;
 ];
 
 [ CSHasNoun p_word _arr _w1;
-	_arr = _CSGetArr();
+	_arr = CSData-->CSDATA_POINTER;
 	_w1 = _arr-->0;
 	if(_w1 < 1 || _w1 > 99) {
 		if(_arr-->1 == p_word)
@@ -388,9 +380,7 @@ Global cs_parse_name_id = 0;
 			if(_ret > _longest) {
 ._cs_found_a_match;
 				_longest = _ret;
-				CSData-->CSDATA_OBJ = p_obj;
-				CSData-->CSDATA_PROP = p_prop;
-				CSData-->CSDATA_INDEX = _i;
+				CSData-->CSDATA_POINTER = p_obj.&p_prop + 2 * _i;
 				CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
 				CSData-->CSDATA_MATCH_LENGTH = _longest;
 				CSDATA-->CSDATA_PRONOUN = CSDATA-->CSDATA_PRONOUN_TEMP;
@@ -438,7 +428,7 @@ Object CheapScenery "object"
 #Ifnot;
 		before [_i _k _self_bak;
 #Endif;
-			_i = _CSGetArr();
+			_i = CSData-->CSDATA_POINTER;
 			_k = _i-->0;
 			if(_k > 0 && _k < 100)
 				_k = 1 + (_k / 10) + (_k % 10);
