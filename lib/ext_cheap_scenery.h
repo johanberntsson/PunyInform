@@ -175,6 +175,9 @@ Constant CS_MAYBE_ADD_LIST = 102;
 Constant CS_IT = 103;
 Constant CS_THEM = 104;
 
+Constant CS_FIRST_ID = 200;
+Constant CS_LAST_ID = 299;
+
 Array CSData --> 7;
 Constant CSDATA_OBJ = 0;
 Constant CSDATA_PROP = 1;
@@ -267,6 +270,10 @@ Global cs_parse_name_id = 0;
 	while(_i < _len) {
 		CSDATA-->CSDATA_PRONOUN_TEMP = CS_IT;
 		_sw1 = _arr-->_i;
+		if(_sw1 >= CS_FIRST_ID && _sw1 <= CS_LAST_ID) {
+			_i++;
+			_sw1 = _arr-->_i;
+		}
 		if(_sw1 == CS_THEM) {
 			CSDATA-->CSDATA_PRONOUN_TEMP = CS_THEM;
 			_i++;
@@ -276,7 +283,7 @@ Global cs_parse_name_id = 0;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 		if(_sw1 == 0) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			print (string) CS_ERR, "5: First element of entry, at position ", _i,
+			print (string) CS_ERR, "5: Element at position ", _i,
 				" in property ", (property) p_prop, " of ", (name) p_obj,
 				" should be a value 1-99, or a vocabulary word, but is 0]^" ;
 #Ifnot;
@@ -411,7 +418,6 @@ Global cs_parse_name_id = 0;
 	return _longest;
 ];
 
-
 Object CheapScenery "object"
 	with
 		article "an",
@@ -514,6 +520,14 @@ Object CheapScenery "object"
 	while(++_i < _len) {
 		_done = false;
 		_val = _arr-->_i;
+		if(_val >= CS_FIRST_ID && _val <= CS_LAST_ID) {
+			_val = _arr-->++_i;
+			if(_val == CS_ADD_LIST or CS_MAYBE_ADD_LIST) {
+				CSDebugPrintObjRef(p_obj, p_prop, _i);
+				"Element following an ID (", CS_FIRST_ID, "-", CS_LAST_ID, 
+					") can't be CS_ADD_LIST or CS_MAYBE_ADD_LIST.";
+			}
+		}
 		if(_val == CS_THEM) {
 			_val = _arr-->++_i;
 			if(_val == CS_ADD_LIST or CS_MAYBE_ADD_LIST) {

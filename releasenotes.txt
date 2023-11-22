@@ -3,6 +3,7 @@ Upcoming release:
   with "q" can never be misunderstood as the player trying to quit the game.
 - ext_menu ends with <<Look>>; but this can now be skipped by defining the
   constant M_NO_LOOK. 
+- Added option to assign an ID to a cheap scenery object.
 
 =======
 v5.1: bug fix and new feature release (10 Oct 2023)
