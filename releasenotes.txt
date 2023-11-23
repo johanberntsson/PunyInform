@@ -1,10 +1,13 @@
 Upcoming release:
+- Quote boxes weren't centered on screen in z5+ games, like they should.
 - Parse buffer is emptied when leaving a menu in ext_menu in z3, so ending it
   with "q" can never be misunderstood as the player trying to quit the game.
 - ext_menu ends with <<Look>>; but this can now be skipped by defining the
   constant M_NO_LOOK. 
-- Added option to assign an ID to a cheap scenery object.
 - Saved 34 bytes in cheap scenery extension.
+- Added option to assign an ID to a cheap scenery object.
+- New procedure in cheap scenery: CSPerformAction(action, ID, second) -
+  Works like <action noun second>; but for a cheap scenery object.
 
 =======
 v5.1: bug fix and new feature release (10 Oct 2023)

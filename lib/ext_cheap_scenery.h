@@ -28,13 +28,16 @@
 ! Alternatively, an entry can start with CS_PARSE_NAME and then a routine
 ! which will act as a parse_name routine.
 !
-! Optionally, you can precede an entry with CS_THEM to say that this cheap
-! scenery object should be considered a "them"-object by the parser. E.g.
-! the player can type "EXAMINE CURTAINS.TAKE THEM". Another option is to
-! mark some of the words with the plural flag, e.g. 'doors//p'. If a plural
-! word is matched, the object is considered a "them"-object. For objects
-! with a parse_name routine, the routine can set parser_action = ##PluralFound
-! to signal that a plural word was matched.
+! An entry may be preceded by an ID (100-299), to be used in calls to 
+! CSPerformAction.
+!
+! Optionally, and after any ID, you can precede an entry with CS_THEM to say 
+! that this cheap scenery object should be considered a "them"-object by the 
+! parser. E.g. the player can type "EXAMINE CURTAINS.TAKE THEM". Another 
+! option is to mark some of the words with the plural flag, e.g. 'doors//p'. 
+! If a plural word is matched, the object is considered a "them"-object. For 
+! objects with a parse_name routine, the routine can set 
+! parser_action = ##PluralFound to signal that a plural word was matched.
 !
 ! Additionally, you can start an entry with CS_ADD_LIST and then an object
 ! ID and a property name, to include the cheap scenery list held in that
@@ -168,14 +171,14 @@ Constant CS_DEFAULT_MSG "No need to concern yourself with that.";
 #Endif;
 
 Constant CS_NO_ADJ = 1;
-Constant CS_PARSE_NAME = 100;
-Constant CS_ADD_LIST = 101;
-Constant CS_MAYBE_ADD_LIST = 102;
+Constant CS_PARSE_NAME = 300;
+Constant CS_ADD_LIST = 301;
+Constant CS_MAYBE_ADD_LIST = 302;
 
-Constant CS_IT = 103;
-Constant CS_THEM = 104;
+Constant CS_IT = 303;
+Constant CS_THEM = 304;
 
-Constant CS_FIRST_ID = 200;
+Constant CS_FIRST_ID = 100;
 Constant CS_LAST_ID = 299;
 
 Array CSData --> 5;
@@ -247,6 +250,85 @@ Global cs_parse_name_id = 0;
 
 [ CSHasWord p_word;
 	return CSHasAdjective(p_word) | CSHasNoun(p_word);
+];
+
+[ _CSFindID p_obj p_prop p_id _i _arr _val _val2;
+	_arr = p_obj.&p_prop;
+	for(_i=0: _i<p_obj.#p_prop / 2: _i++) {
+		_val = _arr-->_i;
+		if(_val >= CS_FIRST_ID && _val <= CS_LAST_ID) {
+			if(_val == p_id) {
+				_val = _arr-->++_i;
+				if(_val == CS_THEM)
+					_val = _arr-->++_i;
+				if(_val == CS_PARSE_NAME) {
+					! Routine must get a chance to set cs_parse_name_id
+					@push self;
+					@push wn;
+					self = location;
+					indirect(_arr-->(_i + 1));
+					@pull wn;
+					@pull self;
+				}
+				return _arr + 2 * _i;
+			}
+			_val = _arr-->++_i;
+		}
+		if(_val == CS_THEM) {
+			_val = _arr-->++_i;
+		}
+		if(_val == CS_ADD_LIST or CS_MAYBE_ADD_LIST) {
+			_val2 = _val;
+			if(_val2 == CS_MAYBE_ADD_LIST)
+				_val2 = indirect(_arr --> (++_i)); ! Will be false or non-false
+			if(_val2) {
+				_i++;
+				_val2 = _CSFindID(_arr-->_i, _arr-->(_i + 1), p_id);
+				if(_val2)
+					return _val2;
+				_i = _i + 2;
+			}
+		}
+		else if(_val == CS_PARSE_NAME) {
+			_i = _i + 2;
+		}
+		else if(_val > 0 && _val < 100) {
+			_i = _i + _val / 10 + _val % 10 + 1;
+		}
+		else {
+			_i = _i + 2;
+		}
+	}
+	rfalse;
+];
+
+[ CSPerformAction p_action p_id p_second _ret;
+	_ret = _CSFindID(location, cheap_scenery, p_id);
+	if(_ret == 0) {
+#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
+#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
+		if(p_id < CS_FIRST_ID || p_id > CS_LAST_ID)
+			print (string) CS_ERR,"6: Tried to perform a cheap scenery action with ID ", p_id, 
+				", but valid ID range is ", CS_FIRST_ID, "-", CS_LAST_ID, ".^" ;
+		else
+			print (string) CS_ERR,"7: ID ", p_id, " couldn't be found when attempting to perform an action]^" ;
+#Ifnot;
+		if(p_id < CS_FIRST_ID || p_id > CS_LAST_ID)
+			print (string) CS_ERR, "6]^";
+		else
+			print (string) CS_ERR, "7]^";
+#Endif;
+#Endif;
+		rfalse;
+	}
+	@loadw CSData CSDATA_POINTER -> sp;
+	@loadw CSData CSDATA_PARSE_NAME_ID -> sp;
+	CSData-->CSDATA_POINTER = _ret;
+	CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
+	PerformAction(p_action, CheapScenery, p_second);
+	@storew CSDATA CSDATA_PARSE_NAME_ID sp;
+	@storew CSDATA CSDATA_POINTER sp;
+	rtrue;
 ];
 
 [ _ParseCheapScenery p_obj p_prop p_base_wn _i _j _sw1 _sw2 _len _ret _arr _longest _next_i _self_bak;
