@@ -8,6 +8,8 @@ Upcoming release:
 - Added option to assign an ID to a cheap scenery object.
 - New procedure in cheap scenery: CSPerformAction(action, ID, second) -
   Works like <action noun second>; but for a cheap scenery object.
+  Give second as -(object) to flip the order, so the cheap scenery object gets
+  to be second.
 
 =======
 v5.1: bug fix and new feature release (10 Oct 2023)

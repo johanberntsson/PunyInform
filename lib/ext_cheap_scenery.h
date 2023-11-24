@@ -325,7 +325,10 @@ Global cs_parse_name_id = 0;
 	@loadw CSData CSDATA_PARSE_NAME_ID -> sp;
 	CSData-->CSDATA_POINTER = _ret;
 	CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
-	PerformAction(p_action, CheapScenery, p_second);
+	if(p_second < 0)
+		PerformAction(p_action, -p_second, CheapScenery);
+	else
+		PerformAction(p_action, CheapScenery, p_second);
 	@storew CSDATA CSDATA_PARSE_NAME_ID sp;
 	@storew CSDATA CSDATA_POINTER sp;
 	rtrue;
