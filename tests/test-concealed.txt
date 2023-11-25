@@ -1,0 +1,9 @@
+Room 1
+There are two concealed doors here, one purple and one cyan.
+
+> open door
+You can't see any such thing.
+
+> quit
+Are you sure you want to quit? yes
+
