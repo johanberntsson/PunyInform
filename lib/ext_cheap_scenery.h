@@ -195,7 +195,7 @@ Constant CSDATA_ID_TEMP = 4;
 !  CSData-->CSDATA_ID_TEMP: Used to pass an ID value between routines
 
 !  The ID of the matching object, if any
-Global cs_matched_id;
+Global cs_match_id;
 
 #Ifndef cheap_scenery;
 Property individual cheap_scenery;
@@ -312,14 +312,14 @@ Property individual cheap_scenery;
 		rfalse;
 	}
 	@loadw CSData CSDATA_POINTER -> sp;
-	@push cs_matched_id;
+	@push cs_match_id;
 	CSData-->CSDATA_POINTER = _ret;
-	cs_matched_id = p_id;
+	cs_match_id = p_id;
 	if(p_second < 0)
 		PerformAction(p_action, -p_second, CheapScenery);
 	else
 		PerformAction(p_action, CheapScenery, p_second);
-	@pull cs_matched_id;
+	@pull cs_match_id;
 	@storew CSDATA CSDATA_POINTER sp;
 	rtrue;
 ];
@@ -456,7 +456,7 @@ Property individual cheap_scenery;
 				CSData-->CSDATA_POINTER = p_obj.&p_prop + 2 * _i;
 				CSData-->CSDATA_MATCH_LENGTH = _longest;
 				CSDATA-->CSDATA_PRONOUN = CSDATA-->CSDATA_PRONOUN_TEMP;
-				cs_matched_id = CSDATA-->CSDATA_ID_TEMP;
+				cs_match_id = CSDATA-->CSDATA_ID_TEMP;
 			}
 		}
 ._no_list;
@@ -484,7 +484,7 @@ Object CheapScenery "object"
 	with
 		article "an",
 		parse_name [ _ret;
-			cs_matched_id = 0;
+			cs_match_id = 0;
 			CSData-->CSDATA_MATCH_LENGTH = 0;
 			_ret = _ParseCheapScenery(location, cheap_scenery, wn);
 			if(CSDATA-->CSDATA_PRONOUN == CS_THEM) {
@@ -525,7 +525,7 @@ Object CheapScenery "object"
 				print_ret (string) SceneryReply;
 			_w1 = _i-->_w1pos;
 			_w2 = _i-->(_w1pos + 1);
-			_id_or_routine = cs_matched_id;
+			_id_or_routine = cs_match_id;
 			if(_w1 == CS_PARSE_NAME) {
 				if(_id_or_routine == 0)
 					_id_or_routine = _w2;
