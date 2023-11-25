@@ -181,12 +181,13 @@ Constant CS_THEM = 304;
 Constant CS_FIRST_ID = 100;
 Constant CS_LAST_ID = 299;
 
-Array CSData --> 5;
+Array CSData --> 6;
 Constant CSDATA_POINTER = 0;
-Constant CSDATA_PARSE_NAME_ID = 1;
+Constant CSDATA_ID = 1;
 Constant CSDATA_MATCH_LENGTH = 2;
 Constant CSDATA_PRONOUN = 3;
 Constant CSDATA_PRONOUN_TEMP = 4;
+Constant CSDATA_ID_TEMP = 5;
 !  CSData-->0: The memory location where the matching cheap scenery object begins
 !  CSData-->1: The value of cs_parse_name_id when match was made
 !  CSData-->2: The length of the best match
@@ -196,8 +197,6 @@ Constant CSDATA_PRONOUN_TEMP = 4;
 #Ifndef cheap_scenery;
 Property individual cheap_scenery;
 #Endif;
-
-Global cs_parse_name_id = 0;
 
 [ _CSFindInArr p_value p_array p_count _i;
 #Ifv5;
@@ -252,50 +251,42 @@ Global cs_parse_name_id = 0;
 	return CSHasAdjective(p_word) | CSHasNoun(p_word);
 ];
 
-[ _CSFindID p_obj p_prop p_id _i _arr _val _val2;
+[ _CSFindID p_obj p_prop p_id _i _arr _len _val _val2;
 	_arr = p_obj.&p_prop;
-	for(_i=0: _i<p_obj.#p_prop / 2: _i++) {
+	_len = p_obj.#p_prop;
+#Ifv3;
+	_len = _len / 2;
+#Ifnot;
+	@log_shift _len (-1) -> _len;
+#Endif;
+	for(_i=0: _i<_len: _i++) {
 		_val = _arr-->_i;
 		if(_val >= CS_FIRST_ID && _val <= CS_LAST_ID) {
 			if(_val == p_id) {
 				_val = _arr-->++_i;
 				if(_val == CS_THEM)
-					_val = _arr-->++_i;
-				if(_val == CS_PARSE_NAME) {
-					! Routine must get a chance to set cs_parse_name_id
-					@push self;
-					@push wn;
-					self = location;
-					indirect(_arr-->(_i + 1));
-					@pull wn;
-					@pull self;
-				}
+					_i++;
 				return _arr + 2 * _i;
 			}
 			_val = _arr-->++_i;
 		}
-		if(_val == CS_THEM) {
+		if(_val == CS_THEM)
 			_val = _arr-->++_i;
-		}
 		if(_val == CS_ADD_LIST or CS_MAYBE_ADD_LIST) {
 			_val2 = _val;
 			if(_val2 == CS_MAYBE_ADD_LIST)
 				_val2 = indirect(_arr --> (++_i)); ! Will be false or non-false
-			if(_val2) {
+			if(_val2) { ! _val2 is non-zero unless it's CS_MAYBE_ADD_LIST and function returned false
 				_i++;
 				_val2 = _CSFindID(_arr-->_i, _arr-->(_i + 1), p_id);
 				if(_val2)
 					return _val2;
+				_i = _i + 1;
+			} else
 				_i = _i + 2;
-			}
-		}
-		else if(_val == CS_PARSE_NAME) {
-			_i = _i + 2;
-		}
-		else if(_val > 0 && _val < 100) {
+		} else if(_val > 0 && _val < 100) {
 			_i = _i + _val / 10 + _val % 10 + 1;
-		}
-		else {
+		} else { ! This case covers both CS_PARSE_NAME and regular entries
 			_i = _i + 2;
 		}
 	}
@@ -322,21 +313,20 @@ Global cs_parse_name_id = 0;
 		rfalse;
 	}
 	@loadw CSData CSDATA_POINTER -> sp;
-	@loadw CSData CSDATA_PARSE_NAME_ID -> sp;
+	@loadw CSData CSDATA_ID -> sp;
 	CSData-->CSDATA_POINTER = _ret;
-	CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
+	CSData-->CSDATA_ID = p_id;
 	if(p_second < 0)
 		PerformAction(p_action, -p_second, CheapScenery);
 	else
 		PerformAction(p_action, CheapScenery, p_second);
-	@storew CSDATA CSDATA_PARSE_NAME_ID sp;
+	@storew CSDATA CSDATA_ID sp;
 	@storew CSDATA CSDATA_POINTER sp;
 	rtrue;
 ];
 
 [ _ParseCheapScenery p_obj p_prop p_base_wn _i _j _sw1 _sw2 _len _ret _arr _longest _next_i _self_bak;
 	_longest = CSData-->CSDATA_MATCH_LENGTH;
-	cs_parse_name_id = 0;
 	_arr = p_obj.&p_prop;
 	_len = p_obj.#p_prop;
 #ifv5;
@@ -345,9 +335,11 @@ Global cs_parse_name_id = 0;
 	_len = _len / 2;
 #Endif;
 	while(_i < _len) {
+		CSDATA-->CSDATA_ID_TEMP = 0;
 		CSDATA-->CSDATA_PRONOUN_TEMP = CS_IT;
 		_sw1 = _arr-->_i;
 		if(_sw1 >= CS_FIRST_ID && _sw1 <= CS_LAST_ID) {
+			CSDATA-->CSDATA_ID_TEMP = _sw1;
 			_i++;
 			_sw1 = _arr-->_i;
 		}
@@ -428,7 +420,6 @@ Global cs_parse_name_id = 0;
 				CSDATA-->CSDATA_PRONOUN_TEMP = _sw2;
 				jump _cs_found_a_match;
 			}
-			cs_parse_name_id = 0;
 		} else if(_sw1 > 0 && _sw1 < 100) {
 			wn = p_base_wn;
 			_sw2 = _sw1 / 10; ! Repurposing _sw2 as a temp var
@@ -443,15 +434,15 @@ Global cs_parse_name_id = 0;
 			_sw1 = _CSMatchNameList(_arr + _j + _j, _sw2);
 
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(metaclass(_arr-->(_j + _sw2)) ~= String or Routine) {
+			if(metaclass(_arr-->(_j + _sw2)) ~= String or Routine) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
-			print (string) CS_ERR,"3: Element ", _j + _sw2, " in property ", (property) p_prop, " of ",
-				(name) p_obj, " is not a string or routine]^";
+				print (string) CS_ERR,"3: Element ", _j + _sw2, " in property ", (property) p_prop, " of ",
+					(name) p_obj, " is not a string or routine]^";
 #Ifnot;
-			print (string) CS_ERR,"3]^";
+				print (string) CS_ERR,"3]^";
 #Endif;
-			rfalse;
-		}
+				rfalse;
+			}
 #Endif;
 
 			_ret = _ret + _sw1;
@@ -466,9 +457,9 @@ Global cs_parse_name_id = 0;
 ._cs_found_a_match;
 				_longest = _ret;
 				CSData-->CSDATA_POINTER = p_obj.&p_prop + 2 * _i;
-				CSData-->CSDATA_PARSE_NAME_ID = cs_parse_name_id;
 				CSData-->CSDATA_MATCH_LENGTH = _longest;
 				CSDATA-->CSDATA_PRONOUN = CSDATA-->CSDATA_PRONOUN_TEMP;
+				CSDATA-->CSDATA_ID = CSDATA-->CSDATA_ID_TEMP;
 			}
 !				jump _cs_found_a_match;
 		}
@@ -538,7 +529,7 @@ Object CheapScenery "object"
 			_w1 = _i-->_w1pos;
 			_w2 = _i-->(_w1pos + 1);
 			if(_w1 == CS_PARSE_NAME) {
-				_routine = CSData-->CSDATA_PARSE_NAME_ID;
+				_routine = CSData-->CSDATA_ID;
 				if(_routine == 0)
 					_routine = _w2;
 				_w2 = 0;

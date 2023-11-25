@@ -10,6 +10,8 @@ Upcoming release:
   Works like <action noun second>; but for a cheap scenery object.
   Give second as -(object) to flip the order, so the cheap scenery object gets
   to be second.
+- Global cs_parse_name_id in cheap scenery extension has been removed. 
+  Instead, give the object an ID in the cheap scenery list.
 
 =======
 v5.1: bug fix and new feature release (10 Oct 2023)
