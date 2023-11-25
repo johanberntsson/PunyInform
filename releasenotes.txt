@@ -17,6 +17,9 @@ Upcoming release:
   routine and it didn't set parser_action = ##PluralFound.
 - Fixed parser bug: If all matched objects had concealed, and 2+ objects matched, 
   the parser would ask a disambiguation question.
+- New global in cheap scenery: cs_matched_id. Can be used to check ID of matched
+  cheap scenery object in location before-routines etc.
+
 =======
 v5.1: bug fix and new feature release (10 Oct 2023)
 
