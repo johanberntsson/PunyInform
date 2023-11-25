@@ -337,6 +337,7 @@ Verb 'wear'
 	}
 	if(noun hasnt enterable) { PrintMsg(MSG_ENTER_YOU_CANT, 'enter'); rtrue; }
 	if(player in noun) return MSG_ENTER_ALREADY;
+	if(IndirectlyContains(player, noun)) return MSG_ENTER_HELD;
 	if(noun has container && noun hasnt open) { PrintMsg(MSG_ENTER_NOT_OPEN, noun); rtrue; }
 	if(parent(noun) ~= parent(player)) return MSG_ENTER_BAD_LOCATION;
 	PlayerTo(noun, true);

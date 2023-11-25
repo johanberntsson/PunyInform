@@ -15,10 +15,12 @@ Upcoming release:
 - Fixed bug in cheap scenery: If an entry using CS_PARSE_NAME starts with
   CS_THEM, the object was still considered an IT-object if it had a parse_name
   routine and it didn't set parser_action = ##PluralFound.
-- Fixed parser bug: If all matched objects had concealed, and 2+ objects matched, 
-  the parser would ask a disambiguation question.
+- Fixed parser bug: If all matched objects had concealed, and 2+ objects 
+  matched, the parser would ask a disambiguation question.
 - New global in cheap scenery: cs_match_id. Can be used to check ID of matched
   cheap scenery object in location before-routines etc.
+- Enter action has a new message: MSG_ENTER_HELD, which is used when trying to
+  enter something which is (possibly indirectly) held by the player.
 
 =======
 v5.1: bug fix and new feature release (10 Oct 2023)

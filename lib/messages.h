@@ -311,6 +311,7 @@ Default MSG_PARSER_NO_IT = 143;
 Default MSG_PARSER_CANT_SEE_IT = 144;
 Default MSG_NOTIFY_ON = 145;
 Default MSG_NOTIFY_OFF = 146;
+Default MSG_ENTER_HELD 147;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -1092,6 +1093,10 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		else
 			print "enter ", (the) parent(noun);
 		" first.";
+#EndIf;
+#IfTrue MSG_ENTER_HELD < 1000;
+	MSG_ENTER_HELD:
+		"You can't enter ", (the) noun, " while holding ", (ItOrThem) noun, ".";
 #EndIf;
 #IfTrue MSG_INSERT_NOT_CONTAINER < 1000;
 	MSG_INSERT_NOT_CONTAINER:
