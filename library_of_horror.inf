@@ -226,8 +226,9 @@ Include "ext_flags.h";
 ! ====================================
 ! Setup cheap scenery
 ! ====================================
-[SceneryReply;
+[SceneryReply p_word1 p_word2 p_id_or_routine;
 	default:
+		p_word1 = p_word2 + p_id_or_routine; ! Avoid compiler warnings for unused vars
 		"Better just leave it alone and get on with the task at hand.";
 ];
 Include "ext_cheap_scenery.h";
@@ -235,7 +236,9 @@ Include "ext_cheap_scenery.h";
 ! ====================================
 ! Setup quote box
 ! ====================================
+#Ifv3;
 Constant QUOTE_V3_SCREEN_WIDTH 40;
+#Endif;
 Include "ext_quote_box.h";
 
 Array quote_stairs static --> 5 34

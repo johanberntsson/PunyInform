@@ -86,11 +86,12 @@ Constant MAX_SCORE = 3;
 ];
 
 ! Setup cheap scenery
-[SceneryReply w1 w2;
+[SceneryReply w1 w2 id_or_routine;
 	Push:
 		if(w1=='bird' && w2=='birds') "The birds fly away as you try.";
 		"Now how would you do that?";
 	default:
+		id_or_routine = 0; ! Avoid compiler warning for unused var
 		rfalse;
 ];
 
@@ -250,7 +251,21 @@ Include "ext_waittime.h";
 ];
 Verb 'help' * -> Help;
 
+[ MumbleSub a;
+	a=TryNumber(consult_from);
+	print "The number is ",a,"^";
+	"No no, speak up!";
+];
 
+[ MumbleAtSub a;
+	a=TryNumber(consult_from);
+	print "The number is ",a,"^";
+	"You mumble ", consult_words, " words to ", (the) second,".";
+];
+
+Verb 'mumble'
+	* topic 'at' creature -> MumbleAt
+	* topic -> Mumble;
 
 Verb 'talk'
 	*	'to'/'with'	creature	-> Talk;
@@ -363,7 +378,19 @@ Class Book
 		],
 	has openable;
 
-Object CarPark "Car Park"
+Object dummy "dummy"
+	with 
+!		react_before [; Examine: "No you can't!"; ] [; Open: "Hell no!"; ],
+		name 'dummy',
+!		found_in [; rtrue; ]
+		found_in Sweater,
+	has reactive;
+
+
+Class Outside
+	has light;
+
+Outside CarPark "Car Park"
 	with
 		!short_name [; print "In front of the library!"; rtrue; ],
 		initial "Wow, this is a huge car park!",
