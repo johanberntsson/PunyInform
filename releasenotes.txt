@@ -12,6 +12,9 @@ Upcoming release:
   to be second.
 - Global cs_parse_name_id in cheap scenery extension has been removed. 
   Instead, give the object an ID in the cheap scenery list.
+- Fixed bug in cheap scenery: If an entry using CS_PARSE_NAME starts with
+  CS_THEM, the object was still considered an IT-object if it had a parse_name
+  routine and it didn't set parser_action = ##PluralFound.
 
 =======
 v5.1: bug fix and new feature release (10 Oct 2023)

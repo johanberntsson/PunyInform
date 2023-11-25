@@ -17,14 +17,14 @@ Constant INITIAL_LOCATION_VALUE = Library;
 
 Include "globals.h";
 
-! Cheap Scenery Parse Name constants. Use values 1-600.
-Constant CSP_LIBRARY 1;
+! Cheap Scenery Parse Name constants. Use values 100-500.
+Constant CSP_LIBRARY 100;
 
-[ SceneryReply word1 word2 routine;
+[ SceneryReply word1 word2 id_or_routine;
 	! We can check location, if we want different answers in different rooms
 	! We can also check action, and there's even an implicit switch on action,
 	! so we can do things like: Take: "You're crazy.";
-	switch(routine) {
+	switch(id_or_routine) {
 	PARSE_NAME_AIR:
 		! We don't use word2 for anything in this routine. We set it here, to avoid
 		! a warning that it's unused
@@ -77,10 +77,9 @@ Object Library "Library"
 			the walls and the ceiling. The reading room lies east.",
 		e_to ReadingRoom,
 		cheap_scenery
-			14 'old' 'book' 'books' 'volume' 'volumes' BOOKDESC
-			'shelf' 'shelves' "They're full of books."
-			CS_PARSE_NAME [ _i _w;
-				cs_parse_name_id = CSP_LIBRARY;
+			14 'old' 'book' 'books//p' 'volume' 'volumes//p' BOOKDESC
+			'shelf' 'shelves//p' "They're full of books."
+			CSP_LIBRARY CS_PARSE_NAME [ _i _w;
 				_w = NextWord();
 				if(_w == 'big') { _i++; _w = NextWord();}
 				if(_w == 'lovely') { _i++; _w = NextWord();}
@@ -91,7 +90,7 @@ Object Library "Library"
 		inside_scenery
 			CS_PARSE_NAME PARSE_NAME_AIR "The air is oh so thin here."
 			1 'atmosphere' SCN_ATMOSPHERE
-			'wall' 'walls' WALL_DESC
+			'wall' 'walls//p' WALL_DESC
 			1 'ceiling' [;
 				Examine: "The ceiling is quite high up.";
 				default: "There's no way you could reach it!";

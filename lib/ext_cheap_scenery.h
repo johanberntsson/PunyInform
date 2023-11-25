@@ -28,8 +28,8 @@
 ! Alternatively, an entry can start with CS_PARSE_NAME and then a routine
 ! which will act as a parse_name routine.
 !
-! An entry may be preceded by an ID (100-299), to be used in calls to 
-! CSPerformAction.
+! An entry may be preceded by an ID (100-500), to be used in calls to 
+! CSPerformAction, or in the SceneryReply routine.
 !
 ! Optionally, and after any ID, you can precede an entry with CS_THEM to say 
 ! that this cheap scenery object should be considered a "them"-object by the 
@@ -69,30 +69,31 @@
 !
 ! Before including this extension, you can also define a string or routine
 ! called SceneryReply. If you do, it will be used whenever the player does
-! something to a scenery object other than examining it. If it's a string, it's
-! printed. If it's a routine it's called. If the routine prints something, it
-! should return true, otherwise false. The routine is called with three
-! parameters - word1, word2 and routine. These hold:
-! * If the cheap scenery object was matched using a parse_name routine, and this
-!     routine set cs_parse_name_id = n, then word1 = CS_PARSE_NAME, word2 = 0,
-!     routine = n. The value n should be in the range 1-600.
-! * If the cheap scenery object was matched using a parse_name routine, and this
-!     routine did not set cs_parse_name_id, word1 = CS_PARSE_NAME,
-!     word2 = 0 and routine = [routine address] (If you use a named routine,
-!     the name is a constant equal to the routine address).
-! * Otherwise, word1 and word2 hold the two dictionary words specified for the
-!     matched cheap scenery object, and routine = 0.
+! something to a scenery object other than examining it. If it's a string, 
+! it's printed. If it's a routine it's called. If the routine prints 
+! something, it should return true, otherwise false. The routine is called 
+! with three parameters - word1, word2 and id_or_routine. These hold:
+! * If the cheap scenery object has an ID, id_or_routine holds the ID.
+! * If the cheap scenery object was matched using a parse_name routine, 
+!     word1 = CS_PARSE_NAME, word2 = 0. If the object doesn't have an ID,
+!     routine = [routine address] (If you use a named routine, the name is a
+!     constant equal to the routine address).
+! * If the object starts with a number 1-99 (allowing for multiple adjectives
+!     and/or nouns), word1 holds the first adjective and word2 holds the first
+!     noun.
+! * Otherwise, word1 and word2 hold the two dictionary words specified for the 
+!     matched cheap scenery object.
 !
 ! Example usage: (from howto/cheapscenerydemo.inf in PunyInform distribution)
 
-! ! Cheap Scenery Parse Name constants. Use values 1-600.
-! Constant CSP_LIBRARY 1;
+! ! Cheap Scenery Parse Name constants. Use values 100-500.
+! Constant CSP_LIBRARY 100;
 !
-! [ SceneryReply word1 word2 routine;
+! [ SceneryReply word1 word2 id_or_routine;
 !     ! We can check location, if we want different answers in different rooms
 !     ! We can also check action, and there's even an implicit switch on action,
 !     ! so we can do things like: Take: "You're crazy.";
-!     switch(routine) {
+!     switch(id_or_routine) {
 !     ParseNameAir:
 !         "You need the air to breathe, that's all.";
 !     CSP_LIBRARY:
@@ -134,8 +135,7 @@
 !             'book' 'books//p' BOOKDESC
 !             'shelf' 'shelves//p' "They're full of books."
 !             CS_PARSE_NAME ParseNameAir "The air is oh so thin here."
-!             CS_PARSE_NAME [ _i _w;
-!                 cs_parse_name_id = CSP_LIBRARY;
+!             CSP_LIBRARY CS_PARSE_NAME [ _i _w;
 !                 _w = NextWord();
 !                 if(_w == 'big') { _i++; _w = NextWord();}
 !                 if(_w == 'lovely') { _i++; _w = NextWord();}
@@ -170,16 +170,17 @@ Constant CS_ERR = "^[Cheap_scenery error #";
 Constant CS_DEFAULT_MSG "No need to concern yourself with that.";
 #Endif;
 
-Constant CS_NO_ADJ = 1;
-Constant CS_PARSE_NAME = 300;
-Constant CS_ADD_LIST = 301;
-Constant CS_MAYBE_ADD_LIST = 302;
-
-Constant CS_IT = 303;
-Constant CS_THEM = 304;
+Constant CS_NO_ADJ = 1; ! Deprecated, but still works
 
 Constant CS_FIRST_ID = 100;
-Constant CS_LAST_ID = 299;
+Constant CS_LAST_ID = 500;
+
+Constant CS_PARSE_NAME = 501;
+Constant CS_ADD_LIST = 502;
+Constant CS_MAYBE_ADD_LIST = 503;
+
+Constant CS_IT = 504;
+Constant CS_THEM = 505;
 
 Array CSData --> 6;
 Constant CSDATA_POINTER = 0;
@@ -189,10 +190,11 @@ Constant CSDATA_PRONOUN = 3;
 Constant CSDATA_PRONOUN_TEMP = 4;
 Constant CSDATA_ID_TEMP = 5;
 !  CSData-->0: The memory location where the matching cheap scenery object begins
-!  CSData-->1: The value of cs_parse_name_id when match was made
+!  CSData-->1: The ID of the matching object, if any
 !  CSData-->2: The length of the best match
 !  CSData-->3: The pronoun for the match (CS_IT or CS_THEM)
 !  CSData-->4: Used to pass a pronoun value between routines
+!  CSData-->5: Used to pass an ID value between routines
 
 #Ifndef cheap_scenery;
 Property individual cheap_scenery;
@@ -414,10 +416,8 @@ Property individual cheap_scenery;
 			_ret = _sw2();
 			self = _self_bak;
 			if(_ret > _longest) {
-				_sw2 = CS_IT;
 				if(parser_action == ##PluralFound)
-					_sw2 = CS_THEM;
-				CSDATA-->CSDATA_PRONOUN_TEMP = _sw2;
+					CSDATA-->CSDATA_PRONOUN_TEMP = CS_THEM;
 				jump _cs_found_a_match;
 			}
 		} else if(_sw1 > 0 && _sw1 < 100) {
@@ -500,7 +500,7 @@ Object CheapScenery "object"
 			return _ret;
 		],
 #Ifdef SceneryReply;
-		before [_i _k _w1pos _w1 _w2 _routine _self_bak;
+		before [_i _k _w1pos _w1 _w2 _id_or_routine _self_bak;
 #Ifnot;
 		before [_i _k _self_bak;
 #Endif;
@@ -528,10 +528,10 @@ Object CheapScenery "object"
 				print_ret (string) SceneryReply;
 			_w1 = _i-->_w1pos;
 			_w2 = _i-->(_w1pos + 1);
+			_id_or_routine = CSData-->CSDATA_ID;
 			if(_w1 == CS_PARSE_NAME) {
-				_routine = CSData-->CSDATA_ID;
-				if(_routine == 0)
-					_routine = _w2;
+				if(_id_or_routine == 0)
+					_id_or_routine = _w2;
 				_w2 = 0;
 			} else if(_w1 > 0 && _w1 < 100) {
 				_k = _w1 / 10;
@@ -540,7 +540,7 @@ Object CheapScenery "object"
 					_w1 = _w2;
 				_w2 = _i-->(_w1pos + 1 + _k);
 			}
-			if(SceneryReply(_w1, _w2, _routine))
+			if(SceneryReply(_w1, _w2, _id_or_routine))
 				rtrue;
 #endif;
 			print_ret (string) CS_DEFAULT_MSG;
