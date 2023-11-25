@@ -1,0 +1,23 @@
+Constant INITIAL_LOCATION_VALUE = Room1;
+
+Include "globals";
+Include "puny";
+
+Object Room1 "Room 1"
+	with
+		description "There are two concealed doors here, one purple and one cyan.",
+	has light;
+
+Object -> PurpleDoor "purple door"
+	with
+		name 'purple' 'door',
+		description "Very purple.",
+	has openable lockable locked concealed;
+
+Object -> CyanDoor "cyan door"
+	with
+		name 'cyan' 'door',
+		description "Very cyan.",
+	has openable lockable locked concealed;
+	
+Constant Initialise = 0;
