@@ -261,7 +261,7 @@ Property individual cheap_scenery;
 #Ifnot;
 	@log_shift _len (-1) -> _len;
 #Endif;
-	for(_i=0: _i<_len: _i++) {
+	for(_i=0: _i<_len: _i = _i + 3) {
 		_val = _arr-->_i;
 		if(_val >= CS_FIRST_ID && _val <= CS_LAST_ID) {
 			if(_val == p_id) {
@@ -274,23 +274,19 @@ Property individual cheap_scenery;
 		}
 		if(_val == CS_THEM)
 			_val = _arr-->++_i;
+
 		if(_val == CS_ADD_LIST or CS_MAYBE_ADD_LIST) {
 			_val2 = _val;
 			if(_val2 == CS_MAYBE_ADD_LIST)
 				_val2 = indirect(_arr --> (++_i)); ! Will be false or non-false
-			if(_val2) { ! _val2 is non-zero unless it's CS_MAYBE_ADD_LIST and function returned false
-				_i++;
-				_val2 = _CSFindID(_arr-->_i, _arr-->(_i + 1), p_id);
+			if(_val2) { ! _val2 is non-zero unless it was CS_MAYBE_ADD_LIST and function returned false
+				_val2 = _CSFindID(_arr-->(_i + 1), _arr-->(_i + 2), p_id);
 				if(_val2)
 					return _val2;
-				_i = _i + 1;
-			} else
-				_i = _i + 2;
+			} 
 		} else if(_val > 0 && _val < 100) {
-			_i = _i + _val / 10 + _val % 10 + 1;
-		} else { ! This case covers both CS_PARSE_NAME and regular entries
-			_i = _i + 2;
-		}
+			_i = _i + _val / 10 + _val % 10 - 1;
+		} 
 	}
 	rfalse;
 ];
