@@ -1,3 +1,4 @@
+Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant INITIAL_LOCATION_VALUE = Room1;
 
 Include "globals";
