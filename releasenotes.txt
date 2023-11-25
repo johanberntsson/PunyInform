@@ -15,7 +15,8 @@ Upcoming release:
 - Fixed bug in cheap scenery: If an entry using CS_PARSE_NAME starts with
   CS_THEM, the object was still considered an IT-object if it had a parse_name
   routine and it didn't set parser_action = ##PluralFound.
-
+- Fixed parser bug: If all matched objects had concealed, and 2+ objects matched, 
+  the parser would ask a disambiguation question.
 =======
 v5.1: bug fix and new feature release (10 Oct 2023)
 

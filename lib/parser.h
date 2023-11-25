@@ -792,6 +792,11 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	_pluralword = false;
 	if(parser_action == ##PluralFound) _pluralword = true;
 
+	! If there are multiple objects to choose from and the first one is concealed,
+	! we consider it like no object was matched
+	if(_noun < 0 && (which_object-->1) has concealed)
+		_noun = 0;
+
 ._getnextnoun_recheck_noun;
 	if(_noun < 0) {
 		if(_pluralword || _all_found) {
