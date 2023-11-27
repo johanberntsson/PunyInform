@@ -9,7 +9,7 @@ Leave the books to the people who care about them.
 The papers are all dusty.
 
 > push papers
-Remember you're in a library. There's no need to touch everything.
+Leave them papers or walls alone!
 
 > x them
 The papers are all dusty.
@@ -30,7 +30,7 @@ You need the air to breathe, that's all.
 There's a really nice atmosphere to the place.
 
 > pull walls
-Remember you're in a library. There's no need to touch everything.
+Leave them papers or walls alone!
 
 > x ceiling
 The ceiling is quite high up.
@@ -41,12 +41,33 @@ There's no way you could reach it!
 > x it
 The ceiling is quite high up.
 
+> x pushpull button
+Just a pretty button.
+
+> x light
+You can't see any such thing.
+
+> push pushpull button
+There's a really nice atmosphere to the place.
+
+> pull pushpull button
+The papers are all dusty.
+
+> turn on switch
+You switch the switch on.
+
+> x light
+It's like real sunlight.
+
+> push pushpull button
+It's like real sunlight.
+
+> pull pushpull button
+The papers are all dusty.
+
 > e
 Reading Room
-This is the reading room. The air feels different here. There's a single book
-sitting on one of the tables. You can examine or try to take the tables, the
-reading room, the air, the atmosphere, the walls and the ceiling. The library
-lies west.
+This is the reading room. The air feels different here. There's a single book sitting on one of the tables. You can examine or try to take the tables, the reading room, the air, the atmosphere, the walls and the ceiling. The library lies west.
 
 > x it
 I don't know what "it" refers to.
