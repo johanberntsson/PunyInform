@@ -15,6 +15,14 @@ pull walls
 x ceiling
 push ceiling
 x it
+x pushpull button
+x light
+push pushpull button
+pull pushpull button
+turn on switch
+x light
+push pushpull button
+pull pushpull button
 e
 x it
 x book

@@ -20,11 +20,12 @@ Include "globals.h";
 ! Cheap Scenery Parse Name constants. Use values 100-500.
 Constant CSP_LIBRARY 100;
 
-[ SceneryReply word1 word2 routine;
+[ SceneryReply word1 word2 id_or_routine;
 	! We can check location, if we want different answers in different rooms
 	! We can also check action, and there's even an implicit switch on action,
 	! so we can do things like: Take: "You're crazy.";
-	switch(routine) {
+	switch(id_or_routine) {
+	201: "Leave them papers or walls alone!";
 	PARSE_NAME_AIR:
 		! We don't use word2 for anything in this routine. We set it here, to avoid
 		! a warning that it's unused
@@ -74,12 +75,25 @@ Object Library "Library"
 	with
 		description "You are in a big lovely library. You can examine or try to
 			take the old books, the papers, the library, the air, the atmosphere,
+			the pushpull button, 
 			the walls and the ceiling. The reading room lies east.",
+		before [;
+		Push:
+			if(noun == CheapScenery && cs_match_id == 203) {
+				CSPerformAction(##Examine, 200);
+				rtrue;
+			}
+		Pull:
+			if(noun == CheapScenery && cs_match_id == 203) {
+				CSPerformAction(##Examine, 201);
+				rtrue;
+			}
+		],
 		e_to ReadingRoom,
 		s_to Kitchen,
 		cheap_scenery
 			CS_THEM 14 'old' 'book' 'books//p' 'volume' 'volumes//p' BOOKDESC
-			'paper' 'papers//p' "The papers are all dusty."
+			201 'paper' 'papers//p' "The papers are all dusty."
 			CSP_LIBRARY CS_PARSE_NAME [ _i _w;
 				_w = NextWord();
 				if(_w == 'big') { _i++; _w = NextWord();}
@@ -90,14 +104,15 @@ Object Library "Library"
 				return 0;
 			] "It's truly glorious."
 			CS_MAYBE_ADD_LIST [; if(LightSwitch has on) rtrue; ] Library (switch_scenery)
-			CS_ADD_LIST Library (inside_scenery),
+			CS_ADD_LIST Library (inside_scenery)
+			203 'pushpull' 'button' "Just a pretty button.",
 		switch_scenery
-			1 'light' "It's like real sunlight.",
+			200 1 'light' "It's like real sunlight.",
 		inside_scenery
 			1 'hello' SCN_ATMOSPHERE
 			CS_PARSE_NAME PARSE_NAME_AIR "The air is oh so thin here."
-			1 'atmosphere' SCN_ATMOSPHERE
-			'wall' 'walls//p' WALL_DESC
+			200 1 'atmosphere' SCN_ATMOSPHERE
+			201 'wall' 'walls//p' WALL_DESC
 			1 'ceiling' [;
 				Examine: "The ceiling is quite high up.";
 				default: "There's no way you could reach it!";
