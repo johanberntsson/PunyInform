@@ -2046,16 +2046,12 @@ Array guess_object-->5;
 	if(_best_score < parse->1) {
 		if(_best_score == 0) {
 			PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+		} else if(_best_phase2 == PHASE2_DISAMBIGUATION) {
+			PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
 		} else if(_best_phase2 > 0) {
 			! call again to generate suitable error message
 			second = _best_second;
 			_score = _ParsePattern(_best_pattern);
-			if(_score == -1) {
-				! there was a disambiguation question that contained
-				! at least one trailing unknown word
-				!_PrintPatternSyntax(_best_pattern -1);
-				PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
-			}
 		} else {
 			! parser_unknown_word is set when we tried to parse
 			! a noun but were found a word that was didn't match
