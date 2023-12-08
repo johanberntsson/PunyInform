@@ -3,11 +3,7 @@
 Do you mean the navigation panel, the engine panel or the cargo panel?
 
 > examine navigation panel
-You're only a sailor, not a navigator, so you don't understand what the controls
-on the navigation panel are used for. However, you can see that the sonar shows
-that the ship is only a few miles off the coast. With the engines off, the ship
-will drift to shore within a few hours and the deadly chlorine gas could
-potentially kill hundreds of people.
+I don't understand that sentence.
 
 > g
 You're only a sailor, not a navigator, so you don't understand what the controls

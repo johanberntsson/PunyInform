@@ -27,9 +27,9 @@ test-chooseobjectsfinal:
 	inform +../lib -v5 -s -S -D test-chooseobjectsfinal.inf
 	frotz test-chooseobjectsfinal.z5
 
-test-issue107:
-	inform +../lib -v3 -s test-issue107.inf
-	frotz test-issue107.z3
+test-panels:
+	inform +../lib -v3 -s test-panels.inf
+	frotz test-panels.z3
 
 clean:
 	rm -f *z3 *z5 *z8 *scr *output *messages

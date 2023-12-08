@@ -29,6 +29,12 @@ Constant NO_SCORE = 0;
 
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_PARSENOUNPHRASE;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
 !Constant DIALECT_US ! Affects OPTIONAL_ENGLISH_NUMBER
 !Constant CUSTOM_ABBREVIATIONS;
 !Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;

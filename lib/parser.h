@@ -2050,6 +2050,12 @@ Array guess_object-->5;
 			! call again to generate suitable error message
 			second = _best_second;
 			_score = _ParsePattern(_best_pattern);
+			if(_score == -1) {
+				! there was a disambiguation question that contained
+				! at least one trailing unknown word
+				!_PrintPatternSyntax(_best_pattern -1);
+				PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+			}
 		} else {
 			! parser_unknown_word is set when we tried to parse
 			! a noun but were found a word that was didn't match
