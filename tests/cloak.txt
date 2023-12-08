@@ -13,6 +13,9 @@ Cloakroom
 The walls of this small room were clearly once lined with hooks, though now only
 one remains. The exit is a door to the east.
 
+> remove hook
+That's hardly portable.
+
 > e
 Foyer of the Opera House
 
@@ -43,7 +46,7 @@ The message, neatly marked in the sawdust, reads...
 
   *** You have won ***
 
-In that game you scored 2 out of a possible 2, in 11 turns.
+In that game you scored 2 out of a possible 2, in 12 turns.
 
 Would you like to RESTART, RESTORE or QUIT? quit
 

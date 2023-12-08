@@ -22,7 +22,7 @@ You take off the hat.
 You're not wearing the hat.
 
 > remove hat                                                            
-You're not wearing the hat.
+You already have it.
 
 > drop hat                                                              
 Dropped.
@@ -31,8 +31,7 @@ Dropped.
 You're not wearing the hat.
 
 > remove hat                                                            
-(first taking the hat)
-You're not wearing the hat.
+Taken.
 
 > quit
 Are you sure you want to quit? yes

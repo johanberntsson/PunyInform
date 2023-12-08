@@ -4,6 +4,7 @@ examine west
 push west
 push west west
 go west
+remove hook
 e
 west
 take off cloak
