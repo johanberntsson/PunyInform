@@ -102,6 +102,7 @@ System_file;
 #IfDef DEBUG_SCOPE;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
 #EndIf;
+
 	scope_reason = p_reason;
 	! check if scope is already calculated
 	if(cached_scope_pov == p_actor && scope_modified == false &&
@@ -114,6 +115,7 @@ System_file;
 		return;
 #EndIf;
 	}
+	scope_modified = false;
 	scope_copy_actor = 0;
 	cached_scope_pov = p_actor;
 	_start_pos = ScopeCeiling(p_actor);
@@ -147,8 +149,12 @@ System_file;
 
 #Ifdef InScope;
 	! give entry routine a chance to override
-	if(InScope(p_actor)) rtrue;
-	if(scope_objects > _initial_scope_objects) _risk_duplicates = 0;
+	_i = InScope(p_actor);
+	if(_i ~= 0 || scope_objects > _initial_scope_objects) {
+		scope_modified = true; ! Force a hard scope update next call
+		_risk_duplicates = 0;
+		if(_i) return;
+	}
 #Endif;
 
 	! the directions are always in scope
@@ -186,7 +192,6 @@ System_file;
 			_PerformAddToScope(_obj);
 	}
 
-	scope_modified = false;
 #IfDef DEBUG_SCOPE;
 	print "*** Updated scope from ", (the) _start_pos, ". Found ", scope_objects, " objects.^";
 #EndIf;
