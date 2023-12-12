@@ -1,9 +1,10 @@
 Upcoming release:
-=======
-v5.3: bug fix and new feature release
+
 - Disambiguation of a complex noun phrase where a parse_name didn't
   consume all words failed without a response.
 - Improved grammar for 'remove' when removing clothing.
+- New entry point routine: ForceScopeUpdate(), letting the game author force a scope update as needed.
+- Library global scope_reason is now supported.
 
 =======
 v5.2: bug fix and new feature release (26 Nov 2023)

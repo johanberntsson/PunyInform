@@ -1064,7 +1064,7 @@ Include "parser.h";
 [ RunEachTurn;
 	! Run all each_turn routines for location and all objects in scope.
 
-	GetScopeCopy(); ! later used by _RunReact
+	GetScopeCopy(player, EACH_TURN_REASON); ! later used by _RunReact
 
 	if(location has reactive && location.&each_turn ~= 0) {
 #IfDef DEBUG;
@@ -1093,7 +1093,7 @@ Include "parser.h";
 
 [ BeforeRoutines;
 
-	GetScopeCopy(); ! later used by _RunReact
+	GetScopeCopy(player, REACT_BEFORE_REASON); ! later used by _RunReact
 
 #IfDef GamePreRoutine;
 #IfDef DEBUG;
@@ -1153,7 +1153,7 @@ Include "parser.h";
 	! react_after - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
 
-	GetScopeCopy(); ! later used by _RunReact
+	GetScopeCopy(player, REACT_AFTER_REASON); ! later used by _RunReact
 
 #Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
 
@@ -2314,7 +2314,6 @@ Object thedark "Darkness"
 		_UpdateScoreOrTime();
 		if(_sentencelength > 0) @new_line;
 
-		_UpdateScope(player);
 #Ifndef NO_SCORE;
 		_score = score;
 #Endif;

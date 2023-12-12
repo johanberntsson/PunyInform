@@ -96,18 +96,24 @@ System_file;
 	scope-->(scope_objects++) = p_obj;
 ];
 
-[ _UpdateScope p_actor p_force _start_pos _i _obj _initial_scope_objects
+[ _UpdateScope p_actor p_reason _start_pos _i _obj _initial_scope_objects
 		_current_scope_objects _risk_duplicates _scope_base;
-	if(p_actor == 0) p_actor = player;
 
-	! check if scope is already calculated
 #IfDef DEBUG_SCOPE;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
 #EndIf;
+	scope_reason = p_reason;
+	! check if scope is already calculated
 	if(cached_scope_pov == p_actor && scope_modified == false &&
-			p_force == false &&
 			((scope_stage ~= 2 && cached_scope_routine == 0) ||
-			 (scope_stage == 2 && cached_scope_routine == scope_routine))) return;
+			 (scope_stage == 2 && cached_scope_routine == scope_routine))) {
+#IfDef ForceScopeUpdate;
+		if(ForceScopeUpdate() == false)
+			return;
+#IfNot;
+		return;
+#EndIf;
+	}
 	scope_copy_actor = 0;
 	cached_scope_pov = p_actor;
 	_start_pos = ScopeCeiling(p_actor);
@@ -187,14 +193,12 @@ System_file;
 ];
 
 #IfV5;
-[GetScopeCopy p_actor _i;
+[GetScopeCopy p_actor p_reason _i;
 #IfNot;
-[GetScopeCopy p_actor _i _max;
+[GetScopeCopy p_actor p_reason _i _max;
 #EndIf;
-	if(p_actor == 0)
-		p_actor = player;
 
-	_UpdateScope(p_actor);
+	_UpdateScope(p_actor, p_reason);
 
 	if(scope_copy_actor ~= p_actor) {
 #IfV5;
@@ -281,7 +285,7 @@ Constant AddToScope = _PutInScope;
 	if(p_actor == 0)
 		p_actor = player;
 
-	_UpdateScope(p_actor);
+	_UpdateScope(p_actor, TESTSCOPE_REASON);
 #IfV5;
 	@scan_table p_obj scope scope_objects -> _i ?~_object_wasnt_found;
 	rtrue;
@@ -331,7 +335,7 @@ Constant AddToScope = _PutInScope;
 	_g_item = p_item;
 	_g_check_take = p_checktake;
 
-	_UpdateScope(player);
+	_UpdateScope(player, TESTSCOPE_REASON);
 
 	_ancestor = CommonAncestor(player, p_item);
 	if(_ancestor == 0) {
@@ -409,8 +413,7 @@ Constant AddToScope = _PutInScope;
 	if(p_actor == 0)
 		p_actor = player;
 
-	_UpdateScope(p_actor);
-	_scope_count = GetScopeCopy(p_actor);
+	_scope_count = GetScopeCopy(p_actor, LOOPOVERSCOPE_REASON);
 
 	for(_i = 0: _i < _scope_count: _i++) p_routine(scope_copy-->_i);
 ];

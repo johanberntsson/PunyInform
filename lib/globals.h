@@ -5,7 +5,7 @@ System_file;
 Constant PUNYINFORM_MAJOR_VERSION = 5;
 Constant PUNYINFORM_MINOR_VERSION = 2;
 Constant PUNYINFORM_PATCH_VERSION = 0; ! Usually 0 (if zero, it is not printed in banner)
-!Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
+Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
 #Ifndef VN_1636;
 Message fatalerror "*** The PunyInform library needs Inform v6.36 or later to work ***";
@@ -444,6 +444,13 @@ Global location = INITIAL_LOCATION_VALUE;		! Must be the first global to show lo
 	#EndIf;
 #EndIf;
 
+Constant PARSING_REASON       = 0;  ! Possible reasons for searching scope
+Constant TALKING_REASON       = 1;
+Constant EACH_TURN_REASON     = 2;
+Constant REACT_BEFORE_REASON  = 3;
+Constant REACT_AFTER_REASON   = 4;
+Constant LOOPOVERSCOPE_REASON = 5;
+Constant TESTSCOPE_REASON     = 6;
 
 #Ifdef NO_SCORE;
 #Ifndef OPTIONAL_SL_NO_SCORE;
@@ -507,6 +514,7 @@ Global parser_one; ! Used to pass extra information between user code and parser
 Global parser_two; ! Used to pass extra information between user code and parser
 Global usual_grammar_after; ! needed for grammar property parsing
 Global deadflag;
+Global scope_reason = PARSING_REASON; ! The reason scope is being calculated, see constants *_REASON
 Global scope_modified;   ! true if daemons, each_turn etc has invalidated scope
 Global scope_objects;
 Global scope_copy_objects;

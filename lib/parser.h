@@ -1057,7 +1057,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		_token_data = (p_pattern_pointer + 1) --> 0;
 	}
 	_token_type = _token & $0f;
-	if(_token_type ~= TT_PREPOSITION or TT_SCOPE) _UpdateScope(actor);
+	if(_token_type ~= TT_PREPOSITION or TT_SCOPE) _UpdateScope(actor, PARSING_REASON);
 	! first set up filters, if any
 	noun_filter = 0;
 	if(_token_type == TT_ROUTINE_FILTER) {
@@ -1080,7 +1080,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			_token_data = NOUN_OBJECT;
 		! trigger add to scope
 		scope_stage = 2;
-		_UpdateScope();
+		_UpdateScope(actor, PARSING_REASON);
 		! not a real error, just to make sure that phase2 runs
 		phase2_necessary = PHASE2_SCOPE;
 	} else if(_token_type == TT_PARSE_ROUTINE) {
