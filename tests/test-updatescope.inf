@@ -26,6 +26,7 @@ Include "globals.h";
 
 [ InScope p_actor;
 	print "^InScope(", (name) p_actor, ", ";
+	
 	switch(scope_reason) {
 		PARSING_REASON: print "PARSING";
 		TALKING_REASON: print "TALKING";
@@ -35,6 +36,8 @@ Include "globals.h";
 		LOOPOVERSCOPE_REASON: print "LOOPOVERSCOPE";
 		TESTSCOPE_REASON: print "TESTSCOPE";
 	}
+	if(action_to_be ~= 0 or NULL)
+		print ", ", (DebugAction) action_to_be;
 	print ")^";
 	if(scope_reason == REACT_AFTER_REASON)
 		PlaceInScope(RemoteObject);
