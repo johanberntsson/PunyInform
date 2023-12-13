@@ -1,0 +1,80 @@
+!% -~S
+
+Constant Story      "Update Scope test";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+Constant DEBUG;
+Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_MANUAL_SCOPE;
+!Constant OPTIONAL_MANUAL_SCOPE_BOOST;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+Constant INITIAL_LOCATION_VALUE = NearLocation;
+
+Include "globals.h";
+
+[ ForceScopeUpdate;
+	if(scope_reason == PARSING_REASON && action_to_be == ##Take)
+		rtrue;
+	if(scope_reason == REACT_AFTER_REASON)
+		rtrue;
+	rfalse;
+];
+
+[ InScope p_actor;
+	print "^InScope(", (name) p_actor, ", ";
+	switch(scope_reason) {
+		PARSING_REASON: print "PARSING";
+		TALKING_REASON: print "TALKING";
+		EACH_TURN_REASON: print "EACH_TURN";
+		REACT_BEFORE_REASON: print "REACT_BEFORE";
+		REACT_AFTER_REASON: print "REACT_AFTER";
+		LOOPOVERSCOPE_REASON: print "LOOPOVERSCOPE";
+		TESTSCOPE_REASON: print "TESTSCOPE";
+	}
+	print ")^";
+	if(scope_reason == REACT_AFTER_REASON)
+		PlaceInScope(RemoteObject);
+	rfalse;
+];
+
+Include "puny.h";
+
+Object NearLocation "The Near Location"
+	with
+		description "You are in a near location. East lies a remote location.",
+		e_to RemoteLocation;
+
+Object -> Box "box"
+	with
+		name 'box',
+	has container open openable enterable;
+
+Object -> NearObject "near object"
+	with
+		name 'near' 'object';
+
+Object RemoteLocation "The Near Location"
+	with
+		description "You are in a remote location. West lies a near location.",
+		w_to NearLocation;
+
+Object -> RemoteObject "remote object"
+	with
+		name 'remote' 'object',
+		react_before [;
+			Take: print "^The remote object says ~You will take something.~^";
+		],
+		react_after [;
+			Take: print "^The remote object says ~You have taken something.~^";
+		],
+		each_turn [;
+			print "^The remote object says ~I do something every turn.~^";
+		];
+
+[Initialise;
+	print "^^And so the story begins...^^";
+];
