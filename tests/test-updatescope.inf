@@ -56,6 +56,11 @@ Object -> Box "box"
 		name 'box',
 	has container open openable enterable;
 
+Object -> Bob "Bob"
+	with
+		name 'bob',
+	has animate proper;
+
 Object -> NearObject "near object"
 	with
 		name 'near' 'object';
