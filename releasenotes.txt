@@ -3,7 +3,8 @@ Upcoming release:
 - Disambiguation of a complex noun phrase where a parse_name didn't
   consume all words failed without a response.
 - Improved grammar for 'remove' when removing clothing.
-- New entry point routine: ForceScopeUpdate(), letting the game author force a scope update as needed.
+- New entry point routine: ForceScopeUpdate(), letting the game author force a
+  scope update as needed.
 - Library global scope_reason is now supported.
 
 =======

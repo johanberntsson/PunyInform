@@ -1057,7 +1057,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		_token_data = (p_pattern_pointer + 1) --> 0;
 	}
 	_token_type = _token & $0f;
-	if(_token_type ~= TT_PREPOSITION or TT_SCOPE) _UpdateScope(actor, PARSING_REASON);
+	if(_token_type ~= TT_PREPOSITION or TT_SCOPE) {
+		_UpdateScope(actor, PARSING_REASON);
+	}
 	! first set up filters, if any
 	noun_filter = 0;
 	if(_token_type == TT_ROUTINE_FILTER) {
@@ -2134,6 +2136,7 @@ Array guess_object-->5;
 	if(action == ##AskFor && noun ~= player && actor == player) {
 		! Convert "ask P for X" to "P, give X to me"
 		actor = noun; noun = second; second = player; action = ##Give;
+		_UpdateScope(actor, TALKING_REASON);
 	}
 
 	! prepare noun and second to point at dictionary words
