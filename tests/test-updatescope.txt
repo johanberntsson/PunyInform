@@ -47,6 +47,9 @@ Bob has better things to do.
 
 InScope(yourself, EACH_TURN, Give)
 
+> ask bob about box
+There is no reply.
+
 > take box
 
 InScope(yourself, PARSING)
