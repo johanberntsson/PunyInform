@@ -1913,6 +1913,8 @@ Array guess_object-->5;
 				verb_wordnum = verb_wordnum - _verb_offset;
 				jump _perform_reparse_2;
 			}
+		} else {
+			_UpdateScope(actor, TALKING_REASON);
 		}
 		jump _perform_reparse;
 	}
