@@ -1792,6 +1792,7 @@ Array guess_object-->5;
 	selected_direction_index = 0;
 	selected_direction = 0;
 	action = -1;
+	action_to_be = action;
 	meta = false;
 	which_object->1 = 0;
 	actor = player;
@@ -1844,6 +1845,7 @@ Array guess_object-->5;
 			_pattern = NextWord();
 			if(_pattern == 0 or comma_word or THEN1__WD) {
 				action = ##Go;
+				action_to_be = action;
 				noun = Directions;
 				inp1 = Directions;
 				jump _parsing_was_successful;

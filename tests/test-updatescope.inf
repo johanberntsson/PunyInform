@@ -36,7 +36,7 @@ Include "globals.h";
 		LOOPOVERSCOPE_REASON: print "LOOPOVERSCOPE";
 		TESTSCOPE_REASON: print "TESTSCOPE";
 	}
-	if(action_to_be ~= 0 or NULL)
+	if(action_to_be >= 0)
 		print ", ", (DebugAction) action_to_be;
 	print ")^";
 	if(scope_reason == REACT_AFTER_REASON)
