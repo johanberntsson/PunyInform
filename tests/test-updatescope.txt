@@ -1,30 +1,30 @@
 
 > e
 
-InScope(yourself, REACT_BEFORE, ScriptOn)
+InScope(yourself, REACT_BEFORE, Go)
 
-InScope(yourself, REACT_AFTER, ScriptOn)
+InScope(yourself, REACT_AFTER, Go)
 The Near Location
 You are in a remote location. West lies a near location.
 
 You can see a remote object here.
 
-InScope(yourself, REACT_AFTER, ScriptOn)
+InScope(yourself, REACT_AFTER, Go)
 
-InScope(yourself, EACH_TURN, ScriptOn)
+InScope(yourself, EACH_TURN, Go)
 
 The remote object says "I do something every turn."
 
 > w
 
-InScope(yourself, REACT_AFTER, ScriptOn)
+InScope(yourself, REACT_AFTER, Go)
 The Near Location
 
 You can see a box (which is empty), Bob and a near object here.
 
-InScope(yourself, REACT_AFTER, ScriptOn)
+InScope(yourself, REACT_AFTER, Go)
 
-InScope(yourself, EACH_TURN, ScriptOn)
+InScope(yourself, EACH_TURN, Go)
 
 > x me
 As good-looking as ever.
@@ -35,14 +35,14 @@ InScope(yourself, EACH_TURN, Examine)
 
 > bob, x me
 
-InScope(Bob, TALKING, Examine)
+InScope(Bob, TALKING)
 Bob has better things to do.
 
 InScope(yourself, EACH_TURN, Examine)
 
 > bob, give me box
 
-InScope(Bob, TALKING, Examine)
+InScope(Bob, TALKING)
 Bob has better things to do.
 
 InScope(yourself, EACH_TURN, Give)
@@ -59,14 +59,14 @@ InScope(yourself, EACH_TURN, AskFor)
 
 > take box
 
-InScope(yourself, PARSING)
+InScope(yourself, PARSING, Take)
 
-InScope(yourself, REACT_AFTER)
+InScope(yourself, REACT_AFTER, Take)
 
 The remote object says "You have taken something."
 Taken.
 
-InScope(yourself, EACH_TURN)
+InScope(yourself, EACH_TURN, Take)
 
 > drop it
 
