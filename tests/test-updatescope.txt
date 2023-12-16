@@ -1,3 +1,41 @@
+InScope(yourself, REACT_BEFORE, Take)
+The Near Location
+You are in a near location. East lies a remote location.
+
+You can see a box (which is empty), Bob and a near object here.
+
+InScope(yourself, REACT_AFTER, Take)
+
+> linda, examine the remote object
+
+InScope(yourself, PARSING)
+
+InScope(Linda, PARSING, Examine)
+Linda has better things to do.
+
+InScope(yourself, EACH_TURN, Examine)
+
+> linda, examine me
+
+InScope(yourself, PARSING)
+
+InScope(Linda, PARSING, Examine)
+
+InScope(yourself, REACT_BEFORE, Examine)
+There is no reply.
+
+InScope(yourself, EACH_TURN, Examine)
+
+The remote object says "I do something every turn."
+
+> bob, examine linda
+
+InScope(yourself, PARSING)
+
+InScope(Bob, PARSING, Examine)
+Bob has better things to do.
+
+InScope(yourself, EACH_TURN, Examine)
 
 > e
 
@@ -7,33 +45,31 @@ InScope(yourself, REACT_AFTER, Go)
 The Near Location
 You are in a remote location. West lies a near location.
 
-You can see a remote object here.
-
-InScope(yourself, REACT_AFTER, Go)
-
-InScope(yourself, EACH_TURN, Go)
+You can see Linda and a remote object here.
 
 The remote object says "I do something every turn."
 
 > w
+
+InScope(yourself, REACT_BEFORE, Go)
 
 InScope(yourself, REACT_AFTER, Go)
 The Near Location
 
 You can see a box (which is empty), Bob and a near object here.
 
-InScope(yourself, REACT_AFTER, Go)
-
-InScope(yourself, EACH_TURN, Go)
-
 > x me
+
+InScope(yourself, PARSING, Examine)
+
+InScope(yourself, REACT_BEFORE, Examine)
 As good-looking as ever.
 
 InScope(yourself, REACT_AFTER, Examine)
 
-InScope(yourself, EACH_TURN, Examine)
-
 > bob, x me
+
+InScope(yourself, PARSING)
 
 InScope(Bob, PARSING, Examine)
 Bob has better things to do.
@@ -42,34 +78,60 @@ InScope(yourself, EACH_TURN, Examine)
 
 > bob, give me box
 
+InScope(yourself, PARSING)
+
+InScope(Bob, PARSING, Give)
+
+InScope(Bob, PARSING, Give)
+
 InScope(Bob, PARSING, Give)
 Bob has better things to do.
 
 InScope(yourself, EACH_TURN, Give)
 
 > ask bob about box
+
+InScope(yourself, PARSING, Ask)
+
+InScope(yourself, PARSING, Ask)
+
+InScope(yourself, REACT_BEFORE, Ask)
 There is no reply.
 
+InScope(yourself, EACH_TURN, Ask)
+
 > ask bob for box
+
+InScope(yourself, PARSING, Ask)
+
+InScope(yourself, PARSING, AskFor)
+
+InScope(yourself, PARSING, AskFor)
 Bob has better things to do.
+
+InScope(yourself, EACH_TURN, AskFor)
 
 > take box
 
 InScope(yourself, PARSING, Take)
 
-InScope(yourself, REACT_AFTER, Take)
+InScope(yourself, REACT_BEFORE, Take)
 
-The remote object says "You have taken something."
+The remote object says "You will take something."
+
+InScope(yourself, TESTSCOPE, Take)
 Taken.
-
-InScope(yourself, EACH_TURN, Take)
 
 > drop it
 
+InScope(yourself, PARSING, Drop)
+
+InScope(yourself, TESTSCOPE, Drop)
+
+InScope(yourself, REACT_BEFORE, Drop)
+
 InScope(yourself, REACT_AFTER, Drop)
 Dropped.
-
-InScope(yourself, EACH_TURN, Drop)
 
 > quit
 Are you sure you want to quit? yes
