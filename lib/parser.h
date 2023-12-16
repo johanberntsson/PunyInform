@@ -1915,8 +1915,8 @@ Array guess_object-->5;
 				verb_wordnum = verb_wordnum - _verb_offset;
 				jump _perform_reparse_2;
 			}
-		} else {
-			_UpdateScope(actor, TALKING_REASON);
+		!} else {
+		!	_UpdateScope(actor, TALKING_REASON);
 		}
 		jump _perform_reparse;
 	}
@@ -2140,7 +2140,7 @@ Array guess_object-->5;
 	if(action == ##AskFor && noun ~= player && actor == player) {
 		! Convert "ask P for X" to "P, give X to me"
 		actor = noun; noun = second; second = player; action = ##Give;
-		_UpdateScope(actor, TALKING_REASON);
+		!_UpdateScope(actor, TALKING_REASON);
 	}
 
 	! prepare noun and second to point at dictionary words

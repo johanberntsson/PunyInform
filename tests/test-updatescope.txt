@@ -35,14 +35,14 @@ InScope(yourself, EACH_TURN, Examine)
 
 > bob, x me
 
-InScope(Bob, TALKING)
+InScope(Bob, PARSING, Examine)
 Bob has better things to do.
 
 InScope(yourself, EACH_TURN, Examine)
 
 > bob, give me box
 
-InScope(Bob, TALKING)
+InScope(Bob, PARSING, Give)
 Bob has better things to do.
 
 InScope(yourself, EACH_TURN, Give)
@@ -51,11 +51,7 @@ InScope(yourself, EACH_TURN, Give)
 There is no reply.
 
 > ask bob for box
-
-InScope(Bob, TALKING, AskFor)
 Bob has better things to do.
-
-InScope(yourself, EACH_TURN, AskFor)
 
 > take box
 
