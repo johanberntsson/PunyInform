@@ -17,6 +17,8 @@ Constant INITIAL_LOCATION_VALUE = NearLocation;
 Include "globals.h";
 
 [ ForceScopeUpdate;
+	if(scope_reason == PARSING_REASON && location == NearLocation)
+		rtrue;
 	if(scope_reason == PARSING_REASON && action_to_be == ##Take)
 		rtrue;
 	if(scope_reason == REACT_AFTER_REASON)
@@ -39,6 +41,8 @@ Include "globals.h";
 	if(action_to_be >= 0)
 		print ", ", (DebugAction) action_to_be;
 	print ")^";
+	if(scope_reason == PARSING_REASON && location == NearLocation)
+		PlaceInScope(Linda);
 	if(scope_reason == REACT_AFTER_REASON)
 		PlaceInScope(RemoteObject);
 	rfalse;
@@ -69,6 +73,11 @@ Object RemoteLocation "The Near Location"
 	with
 		description "You are in a remote location. West lies a near location.",
 		w_to NearLocation;
+
+Object -> Linda "Linda"
+	with
+		name 'linda',
+	has animate proper female;
 
 Object -> RemoteObject "remote object"
 	with

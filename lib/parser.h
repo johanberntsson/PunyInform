@@ -1855,6 +1855,7 @@ Array guess_object-->5;
 			rtrue;
 		}
 		! not a direction, check if beginning of a command
+		_UpdateScope(actor, PARSING_REASON);
 		_noun = _ParseNounPhrase(parse+2, false);
 		if(_noun > 0 && verb_wordnum == 1) {
 			! The sentence starts with a noun, now

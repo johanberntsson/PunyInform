@@ -1,6 +1,9 @@
 
 transcript
 
+linda, examine the remote object
+linda, examine me
+bob, examine linda
 e
 w
 x me
