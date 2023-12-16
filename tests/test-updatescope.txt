@@ -1,10 +1,3 @@
-InScope(yourself, REACT_BEFORE, Take)
-The Near Location
-You are in a near location. East lies a remote location.
-
-You can see a box (which is empty), Bob and a near object here.
-
-InScope(yourself, REACT_AFTER, Take)
 
 > linda, examine the remote object
 
