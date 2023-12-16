@@ -445,7 +445,6 @@ Global location = INITIAL_LOCATION_VALUE;		! Must be the first global to show lo
 #EndIf;
 
 Constant PARSING_REASON       = 0;  ! Possible reasons for searching scope
-Constant TALKING_REASON       = 1;
 Constant EACH_TURN_REASON     = 2;
 Constant REACT_BEFORE_REASON  = 3;
 Constant REACT_AFTER_REASON   = 4;
