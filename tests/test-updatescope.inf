@@ -33,7 +33,7 @@ Include "globals.h";
 	
 	switch(scope_reason) {
 		PARSING_REASON: print "PARSING";
-		TALKING_REASON: print "TALKING";
+		!TALKING_REASON: print "TALKING";
 		EACH_TURN_REASON: print "EACH_TURN";
 		REACT_BEFORE_REASON: print "REACT_BEFORE";
 		REACT_AFTER_REASON: print "REACT_AFTER";
