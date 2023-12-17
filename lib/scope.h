@@ -98,10 +98,10 @@ System_file;
 
 #Ifdef InScope;
 [ _UpdateScope p_actor p_reason _start_pos _i _obj _initial_scope_objects
-		_scope_objects_stage_1 _current_scope_objects _risk_duplicates _scope_base _can_skip;
+		_current_scope_objects _risk_duplicates _scope_base _can_skip;
 #Ifnot;
 [ _UpdateScope p_actor p_reason _start_pos _i _obj _initial_scope_objects
-		_scope_objects_stage_1 _current_scope_objects _risk_duplicates _scope_base;
+		_current_scope_objects _risk_duplicates _scope_base;
 #Endif;
 
 #IfDef DEBUG_SCOPE;
@@ -128,11 +128,10 @@ System_file;
 		! call scope_routine to add objects, then abort if it returns true
 		if(indirect(scope_routine)) jump _done_updating_scope;
 
+#Ifdef InScope;
 		! scope_routine has added some objects that we don't want to overwrite
-		_scope_objects_stage_1 = scope_objects;
-
-		! keep going, but set modified to force update of the normal scope
-!		scope_modified = true; ! *** Don't think we should do this anymore ***
+		_current_scope_objects = scope_objects;
+#EndIf;
 	} else {
 		cached_scope_routine = 0;
 		_risk_duplicates = 1;
@@ -141,7 +140,7 @@ System_file;
 #Ifdef InScope;
 	! give entry routine a chance to override
 	_i = InScope(p_actor);
-	if(_i ~= 0 || scope_objects > _scope_objects_stage_1) {
+	if(_i ~= 0 || scope_objects > _current_scope_objects) {
 		scope_modified = true; ! Force a hard scope update next call
 		if(_i) jump _done_updating_scope;
 		_risk_duplicates = 0;
