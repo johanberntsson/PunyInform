@@ -40,6 +40,10 @@ You are in a remote location. West lies a near location.
 
 You can see Linda and a remote object here.
 
+InScope(yourself, REACT_AFTER, Go)
+
+InScope(yourself, EACH_TURN, Go)
+
 The remote object says "I do something every turn."
 
 > w
@@ -51,6 +55,10 @@ The Near Location
 
 You can see a box (which is empty), Bob and a near object here.
 
+InScope(yourself, REACT_AFTER, Go)
+
+InScope(yourself, EACH_TURN, Go)
+
 > x me
 
 InScope(yourself, PARSING, Examine)
@@ -59,6 +67,8 @@ InScope(yourself, REACT_BEFORE, Examine)
 As good-looking as ever.
 
 InScope(yourself, REACT_AFTER, Examine)
+
+InScope(yourself, EACH_TURN, Examine)
 
 > bob, x me
 
@@ -113,7 +123,11 @@ InScope(yourself, REACT_BEFORE, Take)
 The remote object says "You will take something."
 
 InScope(yourself, TESTSCOPE, Take)
+
+InScope(yourself, REACT_AFTER, Take)
 Taken.
+
+InScope(yourself, EACH_TURN, Take)
 
 > drop it
 
@@ -125,6 +139,8 @@ InScope(yourself, REACT_BEFORE, Drop)
 
 InScope(yourself, REACT_AFTER, Drop)
 Dropped.
+
+InScope(yourself, EACH_TURN, Drop)
 
 > quit
 Are you sure you want to quit? yes
