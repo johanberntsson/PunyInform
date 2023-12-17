@@ -16,17 +16,17 @@ Constant INITIAL_LOCATION_VALUE = NearLocation;
 
 Include "globals.h";
 
-[ ForceScopeUpdate;
-	if(scope_reason == PARSING_REASON && location == NearLocation)
-		rtrue;
-	if(scope_reason == PARSING_REASON && action_to_be == ##Take)
-		rtrue;
-	if(scope_reason == REACT_BEFORE_REASON)
-		rtrue;
-	if(scope_reason == EACH_TURN_REASON && turns == 2)
-		rtrue;
-	rfalse;
-];
+! [ ForceScopeUpdate;
+	! if(scope_reason == PARSING_REASON && location == NearLocation)
+		! rtrue;
+	! if(scope_reason == PARSING_REASON && action_to_be == ##Take)
+		! rtrue;
+	! if(scope_reason == REACT_BEFORE_REASON)
+		! rtrue;
+	! if(scope_reason == EACH_TURN_REASON && turns == 2)
+		! rtrue;
+	! rfalse;
+! ];
 
 [ InScope p_actor;
 	print "^InScope(", (name) p_actor, ", ";

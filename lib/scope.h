@@ -96,8 +96,13 @@ System_file;
 	scope-->(scope_objects++) = p_obj;
 ];
 
+#Ifdef InScope;
 [ _UpdateScope p_actor p_reason _start_pos _i _obj _initial_scope_objects
-		_current_scope_objects _risk_duplicates _scope_base;
+		_scope_objects_stage_1 _current_scope_objects _risk_duplicates _scope_base _can_skip;
+#Ifnot;
+[ _UpdateScope p_actor p_reason _start_pos _i _obj _initial_scope_objects
+		_scope_objects_stage_1 _current_scope_objects _risk_duplicates _scope_base;
+#Endif;
 
 #IfDef DEBUG_SCOPE;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
@@ -108,37 +113,23 @@ System_file;
 	if(cached_scope_pov == p_actor && scope_modified == false &&
 			((scope_stage ~= 2 && cached_scope_routine == 0) ||
 			 (scope_stage == 2 && cached_scope_routine == scope_routine))) {
-#IfDef ForceScopeUpdate;
-		if(ForceScopeUpdate() == false)
-			return;
+#IfDef InScope;
+		_can_skip = true;
 #IfNot;
 		return;
 #EndIf;
 	}
 	scope_modified = false;
-	scope_copy_actor = 0;
-	cached_scope_pov = p_actor;
-	_start_pos = ScopeCeiling(p_actor);
+	_initial_scope_objects = scope_objects; 
 	scope_objects = 0;
-
-#Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
-	if(p_actor == player) {
-#Ifdef DEBUG_MANUAL_SCOPE_BOOST;
-		print "UPDATING PLAYER SCOPE, RESET BOOST^";
-#EndIf;
-		react_before_in_scope = true;
-		react_after_in_scope = true;
-		each_turn_in_scope = true;
-	}
-#Endif;
 
 	if(scope_stage == 2) {
 		cached_scope_routine = scope_routine;
 		! call scope_routine to add objects, then abort if it returns true
-		if(indirect(scope_routine)) rtrue;
+		if(indirect(scope_routine)) jump _done_updating_scope;
 
 		! scope_routine has added some objects that we don't want to overwrite
-		_initial_scope_objects = scope_objects;
+		_scope_objects_stage_1 = scope_objects;
 
 		! keep going, but set modified to force update of the normal scope
 !		scope_modified = true; ! *** Don't think we should do this anymore ***
@@ -150,10 +141,14 @@ System_file;
 #Ifdef InScope;
 	! give entry routine a chance to override
 	_i = InScope(p_actor);
-	if(_i ~= 0 || scope_objects > _initial_scope_objects) {
+	if(_i ~= 0 || scope_objects > _scope_objects_stage_1) {
 		scope_modified = true; ! Force a hard scope update next call
+		if(_i) jump _done_updating_scope;
 		_risk_duplicates = 0;
-		if(_i) return;
+	} else if(_can_skip && scope_objects == 0) {
+		! Neither scope routine or InScope have modified scope
+		scope_objects = _initial_scope_objects;
+		return;
 	}
 #Endif;
 
@@ -161,6 +156,7 @@ System_file;
 	_PutInScope(Directions, _risk_duplicates);
 
 	! if we are in a container, add it to scope
+	_start_pos = ScopeCeiling(p_actor);
 	if(parent(_start_pos)) {
 		_PutInScope(_start_pos, _risk_duplicates);
 	}
@@ -191,6 +187,20 @@ System_file;
 		if(_obj has reactive)
 			_PerformAddToScope(_obj);
 	}
+
+._done_updating_scope;
+#Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
+	if(p_actor == player) {
+#Ifdef DEBUG_MANUAL_SCOPE_BOOST;
+		print "UPDATING PLAYER SCOPE, RESET BOOST^";
+#EndIf;
+		react_before_in_scope = true;
+		react_after_in_scope = true;
+		each_turn_in_scope = true;
+	}
+#Endif;
+	scope_copy_actor = 0;
+	cached_scope_pov = p_actor;
 
 #IfDef DEBUG_SCOPE;
 	print "*** Updated scope from ", (the) _start_pos, ". Found ", scope_objects, " objects.^";
