@@ -65,7 +65,7 @@ Include "globals.h";
 
 ! Define the entry point routines you need here, like Amusing, DarkToDark etc.
 
-! Uncomment to add PunyLib extensions
+! Uncomment to add PunyInform extensions
 !Include "ext_menu.h";
 !Include "ext_flags.h";
 !Include "ext_talk_menu.h"; ! Note: Also include ext_flags.h to allow use of flags
@@ -74,7 +74,7 @@ Include "globals.h";
 
 Include "puny.h";
 
-! Uncomment to add PunyLib extensions
+! Uncomment to add PunyInform extensions
 !Include "ext_waittime.h";
 
 Object Library "The Library"
