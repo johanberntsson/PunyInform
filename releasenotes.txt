@@ -1,10 +1,15 @@
 Upcoming release:
 
+- action and action_to_be is now set to NULL when game starts, instead of 0,
+  which means action ##Take.
+- action_to_be is updated when the player types a direction.
 - Disambiguation of a complex noun phrase where a parse_name didn't
   consume all words failed without a response.
 - Improved grammar for 'remove' when removing clothing.
-- New entry point routine: ForceScopeUpdate(), letting the game author force a
-  scope update as needed.
+- The variable scope_reason is now supported, and can be checked in InScope.
+  TALKING_REASON is not supported - PARSING_REASON is used instead.
+- InScope is now always consulted when deciding whether to recalculate scope
+  or reuse the cached scope copy.
 - Library global scope_reason is now supported.
 
 =======
