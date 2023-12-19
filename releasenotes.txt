@@ -13,7 +13,6 @@ v5.3: bug fix and new feature release (19 Dec 2023)
   TALKING_REASON is not supported - PARSING_REASON is used instead.
 - InScope is now always consulted when deciding whether to recalculate scope
   or reuse the cached scope copy.
-- Library global scope_reason is now supported.
 
 =======
 v5.2: bug fix and new feature release (26 Nov 2023)
