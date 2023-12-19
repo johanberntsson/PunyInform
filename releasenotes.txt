@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.3: bug fix and new feature release (19 Dec 2023)
+
 - action and action_to_be is now set to NULL when game starts, instead of 0,
   which means action ##Take.
 - action_to_be is updated when the player types a direction.
