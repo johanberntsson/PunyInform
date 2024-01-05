@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.3.1: bug fix release (5 Jan 2024)
+
 - Fixed: add_to_scope didn't work properly.
 - Optimized: Don't force a scope update when calling a property routine if the
   property value is 0 or NULL.
