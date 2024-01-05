@@ -180,9 +180,11 @@ System_file;
 
 	_SearchScope(child(_scope_base), _risk_duplicates, true);
 
-	_current_scope_objects = scope_objects;
-	for(_i = _initial_scope_objects : _i < _current_scope_objects : _i++) {
+!	_current_scope_objects = scope_objects;
+!	print "WILL perform AddToScope for object ", _current_scope_objects, " to ", scope_objects - 1, "!^";
+	for(_i = _current_scope_objects : _i < scope_objects : _i++) {
 		_obj = scope-->_i;
+!		print "PERFORMING AddToScope for object ", _obj, "!^";
 		if(_obj has reactive)
 			_PerformAddToScope(_obj);
 	}

@@ -1,5 +1,7 @@
 Upcoming release:
 
+- Fixed: add_to_scope didn't work properly.
+
 =======
 v5.3: bug fix and new feature release (19 Dec 2023)
 
