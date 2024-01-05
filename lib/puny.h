@@ -829,15 +829,17 @@ Constant ONE_SPACE_STRING = " ";
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj == thedark && p_prop ~= initial or short_name or description) p_obj = real_location;
 #Endif;
+	@push sw__var;
 	if(p_switch == 0) sw__var = action; else sw__var = p_switch;
-	if (p_prop >= INDIV_PROP_START && p_obj.&p_prop == 0) rfalse;
-#Ifdef OPTIONAL_MANUAL_SCOPE;
-	return p_obj.p_prop();
-#Ifnot;
-	p_switch = p_obj.p_prop(); ! Repurposing p_switch
-	scope_modified = true;
-	return p_switch;
+	if (p_prop < INDIV_PROP_START || p_obj.&p_prop ~= 0) {
+		p_switch = p_obj.p_prop();
+#Ifndef OPTIONAL_MANUAL_SCOPE;
+		if(p_obj.#p_prop > 2 || p_obj.p_prop ~= NULL or 0)
+			scope_modified = true;
 #Endif;
+	}
+	@pull sw__var;
+	return p_switch;
 ];
 
 [ PrintOrRun p_obj p_prop p_no_string_newline _val;
