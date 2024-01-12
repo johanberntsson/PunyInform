@@ -1,4 +1,4 @@
-#!/bin/ruby
+#!/usr/bin/env ruby
 
 $is_windows = (ENV['OS'] == 'Windows_NT')
 
