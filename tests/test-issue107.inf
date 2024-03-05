@@ -43,6 +43,12 @@ Include "globals.h";
 #EndIf;
 
 #Ifndef USEINFORM;
+[ DisallowTakeAnimate _obj;
+    if (_obj == thechild) rfalse;
+];
+#Endif;
+
+#Ifndef USEINFORM;
 Include "puny.h";
 #EndIf;
 
@@ -105,6 +111,10 @@ Object -> george "George"
          if (action_to_be == ##AskTo) print "orders askto ", consult_from, " ", consult_words, "^";
       ],
    has animate proper;
+
+Object -> thechild "child"
+   with name 'child',
+   has animate;
 
 [ Initialise;
 #IfDef USEINFORM;

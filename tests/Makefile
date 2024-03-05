@@ -7,6 +7,10 @@ inform:
 	inform -v8 -D test-issue107.inf
 	frotz test-issue107.z8
 
+test-issue107:
+	inform +../lib -v3 test-issue107.inf
+	frotz test-issue107.z3
+
 test-breakable:
 	inform +../lib -v3 test-breakable.inf
 	frotz test-breakable.z3

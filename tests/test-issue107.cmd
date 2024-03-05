@@ -2,6 +2,10 @@ transcript
 
 
 again
+take all
+drop all
+take child
+take george
 ask george to look
 ask george about me
 ask george to do something

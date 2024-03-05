@@ -1,5 +1,7 @@
 Upcoming release:
 
+- Fixed: Added DisallowTakeAnimate support for GET ALL.
+
 =======
 v5.3.1: bug fix release (5 Jan 2024)
 
