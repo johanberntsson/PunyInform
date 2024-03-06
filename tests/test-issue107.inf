@@ -43,8 +43,8 @@ Include "globals.h";
 #EndIf;
 
 #Ifndef USEINFORM;
-[ DisallowTakeAnimate _obj;
-    if (_obj == thechild) rfalse;
+[ DisallowTakeAnimate p_obj;
+    if (p_obj == thechild) rfalse;
 ];
 #Endif;
 
@@ -117,6 +117,7 @@ Object -> thechild "child"
    has animate;
 
 [ Initialise;
+    !no_implicit_actions = true;
 #IfDef USEINFORM;
     location=INITIAL_LOCATION_VALUE;
 #EndIf;
