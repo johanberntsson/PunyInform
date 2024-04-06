@@ -234,10 +234,8 @@ for your game.
 * [PunyInformFr](https://github.com/hlabrand/PunyInformFr) is a alternate translation of
   the PunyInform library to French, by Hugo Labrande.
 
-* [PunyInform - DE](https://github.com/smartgrids-aau/punyinformde) is a translation of
-  the PunyInform library to German, by Lea Santner, A. Pulvermacher.
+* [PunyInform - DE](https://github.com/smartgrids-aau/punyinformde) is a translation of the PunyInform library to German, by Lea Santner and A. Pulvermacher.
 
-https://github.com/smartgrids-aau/punyinformde/tree/main
 ## Credits
 
 PunyInform was conceived, designed and coded by Johan Berntsson and Fredrik
