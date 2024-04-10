@@ -1,7 +1,14 @@
 Upcoming release:
 
-v5.4: bug fix release 
+=======
+v5.4: bug fix and new feature release (10 Apr 2024)
+
 - Fixed: Added DisallowTakeAnimate support for GET ALL.
+- Made talk_menu adapt better to narrow screens for z5 by providing alternate, 
+  shorter, customizable messages to end conversation and to show next page of 
+  topics.
+- Made talk menu not include message to show next page of topics when built
+  for z3.
 
 =======
 v5.3.1: bug fix release (5 Jan 2024)

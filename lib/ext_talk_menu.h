@@ -173,8 +173,17 @@ Constant TM_MSG_NO_TOPICS "Right now, you wouldn't know what to talk about.";
 #Ifndef TM_MSG_EXIT_OPTION;
 Constant TM_MSG_EXIT_OPTION "[ENTER] End conversation";
 #Endif;
+
+#Ifv5;
 #Ifndef TM_MSG_PAGE_OPTION;
 Constant TM_MSG_PAGE_OPTION "[N] Next page";
+#Endif;
+#Ifndef TM_MSG_EXIT_OPTION_SHORT;
+Constant TM_MSG_EXIT_OPTION_SHORT "[ENTER] End"; ! This + TM_MSG_PAGE_OPTION_SHORT should be 18 characters or less
+#Endif;
+#Ifndef TM_MSG_PAGE_OPTION_SHORT;
+Constant TM_MSG_PAGE_OPTION_SHORT "[N]ext"; ! This + TM_MSG_EXIT_OPTION_SHORT should be 18 characters or less
+#Endif;
 #Endif;
 
 #Ifndef TMPrintLine;
@@ -467,11 +476,19 @@ Array TenDashes static -> "----------";
 	_i = _height - 3;
 	@set_cursor _i 1;
 #Endif;
-	_TMPrintMsg(TM_MSG_EXIT_OPTION, true);
+	_i = TM_MSG_EXIT_OPTION;
+#Ifv5;
+	_j = TM_MSG_PAGE_OPTION;
+	if(_width < 39) {
+		_i = TM_MSG_EXIT_OPTION_SHORT;
+		_j = TM_MSG_PAGE_OPTION_SHORT;
+	}
+#Endif;
+	_TMPrintMsg(_i, true);
 #Ifv5;
 	if(_more || _offset) {
 		print "  ";
-		_TMPrintMsg(TM_MSG_PAGE_OPTION, true);
+		_TMPrintMsg(_j, true);
 	}
 	new_line;
 #Ifnot;
