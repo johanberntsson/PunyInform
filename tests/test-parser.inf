@@ -74,20 +74,6 @@ Constant NUMBER_TASKS = 1;
 Constant MAX_SCORE = 3;
 #EndIf;
 
-[ Amusing;
-	"^Did you try?^^1. Pushing John many times.^2. Going outside and
-	looking at the sun";
-];
-
-! Setup cheap scenery
-[SceneryReply w1 w2;
-	Push:
-		if(w1=='bird' && w2=='birds') "The birds fly away as you try.";
-		"Now how would you do that?";
-	default:
-		rfalse;
-];
-
 
 ! Setup flags
 Constant FLAG_COUNT 8;
@@ -108,6 +94,20 @@ Include "Parser";
 Include "VerbLib";
 Include "../lib/ext_cheap_scenery.h";
 Include "../lib/ext_flags.h";
+
+[ Amusing;
+	"^Did you try?^^1. Pushing John many times.^2. Going outside and
+	looking at the sun";
+];
+
+! Setup cheap scenery
+[SceneryReply w1 w2;
+	Push:
+		if(w1=='bird' && w2=='birds') "The birds fly away as you try.";
+		"Now how would you do that?";
+	default:
+		rfalse;
+];
 
 [OnOff obj; ! TODO: is there something like this in I6? change name if needed
     if(obj has on) print "on";

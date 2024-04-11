@@ -81,20 +81,6 @@ Constant NUMBER_TASKS = 1;
 Constant MAX_SCORE = 3;
 #EndIf;
 
-[ Amusing;
-	"^Did you try?^^1. Pushing John many times.^2. Going outside and looking at the sun";
-];
-
-! Setup cheap scenery
-[SceneryReply w1 w2;
-	Push:
-		if(w1=='bird' && w2=='birds') "The birds fly away as you try.";
-		"Now how would you do that?";
-	default:
-		rfalse;
-];
-
-
 ! Setup flags
 Constant FLAG_COUNT 8;
 !Constant F_SQUIRREL_ESCAPED 0;
@@ -110,6 +96,19 @@ Constant FLAG_COUNT 8;
 
 #Ifdef USEINFORM;
 Include "Parser";
+
+[ Amusing;
+	"^Did you try?^^1. Pushing John many times.^2. Going outside and looking at the sun";
+];
+
+! Setup cheap scenery
+[SceneryReply w1 w2;
+	Push:
+		if(w1=='bird' && w2=='birds') "The birds fly away as you try.";
+		"Now how would you do that?";
+	default:
+		rfalse;
+];
 
 Attribute reactive;
 
