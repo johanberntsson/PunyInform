@@ -51,7 +51,6 @@ Constant RUNTIME_ERRORS = 2;
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL = 1;
 Constant RTE_VERBOSE = 2;
-Constant TM_NOT_PUNY;
 #Endif;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 Constant FL_ERR = "^[Flags error #";

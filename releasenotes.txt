@@ -1,5 +1,8 @@
 Upcoming release:
 
+Bugfixes:
+- The Flags extension would define the symbol TM_NOT_PUNY if the extension was used without the PunyInform library. This was the wrong name, and wasn't used for anything, so it's been removed.
+
 =======
 v5.4: bug fix and new feature release (10 Apr 2024)
 
