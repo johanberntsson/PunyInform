@@ -1,5 +1,6 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
 
 Constant Story      "PushDir demo";
 Constant Headline   "^A sample game which uses PunyInform.^";

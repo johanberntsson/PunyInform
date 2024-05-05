@@ -1,3 +1,7 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
 Constant Story "Comments for Atmosphere";
 Constant Headline "^Showcasing a way to add comments to a game.^";
 Statusline score; Constant STATUSLINE_SCORE;
@@ -106,7 +110,7 @@ Include "puny";
 Object BigKitchen "Big Kitchen"
 	with
 		description "A modern, fully equipped kitchen. A doorway leads south,
-			to the smaller kitchen.",
+			to the smaller kitchen. The living room lies to the east.",
 		s_to SmallKitchen,
 		e_to LivingRoom,
 		comments

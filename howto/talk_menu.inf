@@ -1,5 +1,6 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
 
 ! Compile as z8 to use Inform stdlib instead of puny (for debugging), like
 ! inform6 -v8 +inform6lib,lib talk_menu.inf
@@ -32,25 +33,8 @@ Include "Parser";
 Include "Verblib";
 Include "Grammar";
 #Ifnot;
-!Constant CUSTOM_ABBREVIATIONS;
-!Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
+
 Constant OPTIONAL_NO_DARKNESS;
-!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-!Constant OPTIONAL_EXTENDED_METAVERBS;
-!Constant OPTIONAL_EXTENDED_VERBSET;
-!Constant OPTIONAL_FLEXIBLE_INVENTORY;
-!Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
-!Constant OPTIONAL_SCORED;
-!Constant OPTIONAL_FULL_SCORE; ! Comment out NO_SCORE when uncommenting this
-!Constant OPTIONAL_FULL_DIRECTIONS;
-!Constant OPTIONAL_SIMPLE_DOORS;
-!Constant OPTIONAL_SHIP_DIRECTIONS;
-!Constant OPTIONAL_GUESS_MISSING_NOUN;
-!Constant OPTIONAL_MANUAL_SCOPE;
-!Constant OPTIONAL_MANUAL_REACTIVE;
-!Constant OPTIONAL_ORDERED_TIMERS;
-!Constant OPTIONAL_PROVIDE_UNDO;
-!Constant OPTIONAL_REACTIVE_PARSE_NAME;
 !Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
 
 ! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
@@ -60,26 +44,22 @@ Constant INITIAL_LOCATION_VALUE = Library;
 Include "globals.h";
 #Endif;
 Property talk_array;
-! Define your attributes, common properties and global variables here, if any
 
-! Define the entry point routines you need here, like Amusing, DarkToDark etc.
-
-! Uncomment to add PunyLib extensions
-!Include "ext_menu.h";
 Constant FLAG_COUNT 50;
 Include "ext_flags.h";
 
 Constant TM_FIRST_ID 300;
 
 ! We can customize the messages printed by talk_menu, using either strings or routines.
-
 Constant TM_MSG_NO_TOPICS "Now? You have no idea what to talk about.";
 Constant TM_MSG_TALK_ABOUT_WHAT "What would you like to talk about?";
 Constant TM_MSG_TOPICS_DEPLETED "With that, the conversation comes to a natural end.";
-! The routine for TM_MSG_EXIT uses a glboal defined by ext_talk_menu, so it 
+
+! The routine for TM_MSG_EXIT uses a global defined by ext_talk_menu, so it 
 ! has to be defined *after* including the extension, but we need to define the
 ! constant *before* including the extension. This is how we do it.
 Constant TM_MSG_EXIT = TM_MSG_EXIT_Routine;
+
 Constant TM_MSG_EXIT_OPTION "[ENTER] Bye for now";
 #Ifv5;
 Constant TM_MSG_PAGE_OPTION "[N] More topics";
@@ -104,15 +84,9 @@ Include "ext_talk_menu.h"; ! Requires ext_flags.h *IF* you set flags
 	"With a brief nod, you thank ", (the) current_talker, " for the conversation.";
 ];
 
-!Include "ext_quote_box.h";
-!Include "ext_cheap_scenery.h";
-
 #Ifndef USEINFORM;
 Include "puny.h";
 #Endif;
-
-! Uncomment to add PunyLib extensions
-!Include "ext_waittime.h";
 
 ! Note that flags used in talk_array must have id 32-299
 Constant F_LINDA_TALKED_ABOUT_PARIS 32;

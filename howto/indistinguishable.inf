@@ -90,7 +90,7 @@ Class Dart
 		before [;
 		Search: "The darts are solid - no hidden compartments.";
 		],
-		list_together [ _obj _n;
+		list_together [ _obj _n; ! Each class must have its own list_together routine, or they are all listed as one class
 			if(inventory_stage == 1) {
 				for(_obj=parser_one: _obj ~= 0: _obj = NextEntry(_obj, parser_two)) _n++;
 				print (LanguageNumber) _n, " darts";
