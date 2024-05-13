@@ -1,0 +1,91 @@
+
+> 
+Come again?
+
+> again
+You can hardly repeat that.
+
+> take all
+apple: Taken.
+red key: Taken.
+blue key: Taken.
+child: Taken.
+
+> drop all
+child: Dropped.
+blue key: Dropped.
+red key: Dropped.
+apple: Dropped.
+
+> take child
+Taken.
+
+> take george
+before: George/13 nothing/0
+I don't suppose George would care for that.
+
+> ask george to look
+George orders: nothing/0 nothing/0
+orders look
+George life: nothing/0 nothing/0
+George has better things to do.
+
+> ask george about me
+before: George/13 <number>/1
+ask
+George life: George/13 <number>/1
+Life Ask
+There is no reply.
+
+> ask george to do something
+George orders: George/13 <number>/1
+orders askto 4 2
+before: George/13 George/13
+George life: George/13 George/13
+Life
+Life Answer
+There is no reply.
+
+> eat apple
+(first taking the apple)
+That's plainly inedible.
+
+> eat apple
+That's plainly inedible.
+
+> eat george
+before: George/13 nothing/0
+I don't suppose George would care for that.
+
+> unlock door with key
+Do you mean the red key or the blue key?
+
+> red
+(first taking the red key)
+The red key doesn't seem to fit the lock.
+
+> drop all
+red key: Dropped.
+apple: Dropped.
+child: Dropped.
+
+> take blue key
+Taken.
+
+> unlock door with key
+You unlock the door.
+
+> george, look
+George orders: nothing/0 nothing/0
+orders look
+George life: nothing/0 nothing/0
+George has better things to do.
+
+> child, look
+Child orders: nothing/0 nothing/0
+life: nothing/0 nothing/0
+The child has better things to do.
+
+> quit
+Are you sure you want to quit? yes
+

@@ -1,0 +1,132 @@
+! Testing that held and creature tokens parse all/all-but correctly
+! Testing issue 60 (sentence splitting)
+! 
+!
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+Constant Story      "Parser test";
+Constant Headline   "^A parser test suite for PunyInform.^";
+Serial "200827";
+Constant INITIAL_LOCATION_VALUE = Library;
+
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
+Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_PARSENOUNPHRASE;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+!Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_NO_DARKNESS;
+!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+#Ifndef USEINFORM;
+[ DisallowTakeAnimate p_obj;
+    if (p_obj == thechild) rfalse;
+];
+#Endif;
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#EndIf;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+
+Object Library "The Library"
+   with 
+       description "You are in a library.",
+   has light;
+
+Object -> apple "apple"
+   with name 'apple';
+
+Object -> RedKey "red key"
+   with name 'red' 'key';
+
+Object -> BlueKey "blue key"
+   with name 'blue' 'key';
+
+Object -> MyDoor "door"
+    with name 'door',
+    with_key BlueKey,
+    has openable lockable locked static;
+
+[ printnounsecond msg;
+    print (string) msg, ": ";
+    if(inp1 == 0) print "nothing"; else if(inp1 == 1) print "<number>"; else print (the) noun;
+    print "/", inp1, " "; 
+    if(inp2 == 0) print "nothing"; else if(inp2 == 1) print "<number>"; else print (the) second;
+    print "/", inp2, "^"; 
+];
+    
+Object -> george "George"
+   with name 'george',
+      before [;
+         printnounsecond( "before");
+         Ask: print "ask^";
+         AskTo: print "before^";
+      ],
+      Life [;
+         printnounsecond( "George life");
+         if (action_to_be == ##AskTo) print "Life^";
+         Answer: print "Life Answer^";
+         Ask: print "Life Ask^";
+         Look: print "Life Look^";
+      ],
+      orders [;
+         printnounsecond("George orders");
+         if (action_to_be == ##Look) print "orders look^";
+         if (action_to_be == ##Ask) print "orders ask^";
+         if (action_to_be == ##AskTo) print "orders askto ", consult_from, " ", consult_words, "^";
+      ],
+   has animate proper;
+
+Object -> thechild "child"
+   with name 'child',
+      Life [;
+         printnounsecond( "life");
+         if (action_to_be == ##AskTo) print "Child life^";
+      ],
+      orders [;
+         printnounsecond("Child orders");
+      ],
+   has animate;
+
+[ Initialise;
+    !no_implicit_actions = true;
+#IfDef USEINFORM;
+    location=INITIAL_LOCATION_VALUE;
+#EndIf;
+];
+
