@@ -2207,21 +2207,26 @@ Object thedark "Darkness"
 	return p_fake_obj - FAKE_N_OBJ + N_TO_CONST;
 ];
 
-[ _InitObjects _i _k _stop;
-	_stop = top_object + 1;
-	for(_i = Directions : _i < _stop : _i++) {
+[ _InitObjects _i _k _v;
+	_i = Directions;
+.objloop;
 #Ifndef OPTIONAL_MANUAL_REACTIVE;
+		@get_prop_addr _i react_before -> _v;
+		@jz _v ?~is_reactive;
+		@get_prop_addr _i react_after -> _v;
+		@jz _v ?~is_reactive;
+		@get_prop_addr _i each_turn -> _v;
+		@jz _v ?~is_reactive;
+		@get_prop_addr _i add_to_scope -> _v;
+		@jz _v ?~is_reactive;
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0 ||
-				_i.&add_to_scope ~= 0 || _i.&parse_name ~= 0)
-			give _i reactive;
-#Ifnot;
-		if(_i.&react_before ~= 0 || _i.&react_after ~= 0 || _i.&each_turn ~= 0 ||
-				_i.&add_to_scope ~= 0)
-			give _i reactive;
+		@get_prop_addr _i parse_name -> _v;
+		@jz _v ?~is_reactive;
 #Endif;
 #Endif;
-		if(_i.&found_in) {
+.back_to_objloop;
+		@get_prop_addr _i found_in -> _v;
+		@jz _v ?not_floating;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 			if(_k >= MAX_FLOATING_OBJECTS) {
 				_RunTimeError(ERR_TOO_MANY_FLOATING);
@@ -2229,8 +2234,15 @@ Object thedark "Darkness"
 			}
 #EndIf;
 			floating_objects-->(_k++) = _i;
-		}
-	}
+.not_floating;
+	@inc_chk _i top_object ?~objloop;
+	return;
+	
+#Ifndef OPTIONAL_MANUAL_REACTIVE;
+.is_reactive;
+	give _i reactive;
+	jump back_to_objloop;
+#EndIf;
 ];
 
 [ SetTime p_time p_step;
