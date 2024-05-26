@@ -274,19 +274,24 @@ System_file;
 	return -1000;
 ];
 
-[ _CopyInputArray p_src_input_array p_dst_input_array _i;
 #IfV5;
+[ _CopyInputArray p_src_input_array p_dst_input_array _i;
 	_i = (p_src_input_array->1) + 2;
 	@copy_table p_src_input_array p_dst_input_array _i;
-#IfNot;
-	for(_i = 0: : _i++) {
-		p_dst_input_array->_i = p_src_input_array->_i;
-		! abort when 0 found in the text, which starts
-		! from 1 in v1-4, and from 2 in v5-v8.
-		if(p_dst_input_array->_i == 0 && _i ~= 0) break;
-	}
-#EndIf;
 ];
+#IfNot;
+[ _CopyInputArray p_src_input_array p_dst_input_array _i _v;
+	_v = p_src_input_array->0;
+	p_dst_input_array->0 = _v;
+.copy_next;
+		_i++;
+		_v = p_src_input_array->_i;
+		p_dst_input_array->_i = _v;
+		! ! abort when 0 found in the text, which starts
+		! ! from 1 in v1-4, and from 2 in v5-v8.
+		@jz _v ?~copy_next;
+];
+#EndIf;
 
 #IfV5;
 [ _CopyParseArray p_src_parse_array p_dst_parse_array _n;
@@ -297,9 +302,11 @@ System_file;
 ];
 #IfNot;
 [ _CopyParseArray p_src_parse_array p_dst_parse_array _n _i;
-	_n = 2 + 4*p_src_parse_array->1;
-	for(_i = 0: _i < _n: _i++)
+	_n = 4*p_src_parse_array->1;
+	_n++;
+.copy_next;
 		p_dst_parse_array->_i = p_src_parse_array->_i;
+		@inc_chk _i _n ?~copy_next;
 ];
 #EndIf;
 

@@ -2,6 +2,7 @@ Upcoming release:
 
 - Optimized: automatic setting of reactive attribute is now 20% faster and shorter (total time for a full-size z3 game is typically 1.5 s)
 - Optimized: Finding floating objects at game start is faster and shorter
+- Optimized the z3 versions of _CopyInputArray and _CopyParseArray routines in parser.
 
 Bugfixes:
 - The Flags extension would define the symbol TM_NOT_PUNY if the extension was used without the PunyInform library. This was the wrong name, and wasn't used for anything, so it's been removed.
