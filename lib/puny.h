@@ -105,7 +105,9 @@ Include "grammar.h";
 	}
 ];
 
+#Ifdef OPTIONAL_NON_FLASHING_STATUSLINE;
 Array cursor_pos --> 2;
+#Endif;
 
 [ _StatusLineHeight p_height;
 	if (statusline_current_height ~= p_height) {
@@ -144,6 +146,7 @@ Array cursor_pos --> 2;
 
 Array _TenSpaces static -> "          ";
 
+#Ifdef OPTIONAL_NON_FLASHING_STATUSLINE;
 [ _PrintSpacesOrMoveBack p_col p_string _current_col;
 	p_col = screen_width - p_col;
 
@@ -158,6 +161,17 @@ Array _TenSpaces static -> "          ";
 	if(p_string)
 		print (string) p_string;
 ];
+#Ifnot;
+[ _PrintSpacesOrMoveBack p_col p_string;
+	p_col = screen_width - p_col;
+
+	_MoveCursor(1, p_col);
+
+	if(p_string)
+		print (string) p_string;
+];
+#Endif;
+
 
 Constant ONE_SPACE_STRING = " ";
 
@@ -270,6 +284,10 @@ Constant ONE_SPACE_STRING = " ";
 
 	_StatusLineHeight(statusline_height);
 	_MoveCursor(1, 1); ! This also sets the upper window as active.
+#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
+	FastSpaces(screen_width);
+	_MoveCursor(1, 1);
+#Endif;
 	if(screen_width > 66) @print_char ' ';
 
 	_visibility_ceiling = ScopeCeiling(player);
@@ -301,7 +319,9 @@ Constant ONE_SPACE_STRING = " ";
 #Endif;
 
 	! Regardless of what kind of status line we have printed, print spaces to the end.
+#Ifdef OPTIONAL_NON_FLASHING_STATUSLINE;
 	_PrintSpacesOrMoveBack(-1);
+#Endif;
 	_MainWindow(); ! set_window
 ];
 #EndIf;
