@@ -2,6 +2,7 @@ Upcoming release:
 
 =======
 v5.5: bug fix and new feature release (8 Jun 2024)
+
 - The z5+ statusline routine (DrawStatusline) has been changed to print a full line of reversed spaces before printing the actual text on the statusline. This means that the statusline flashes briefly every move (only visible on slow platforms), and it means the statusline is slightly slower (~0.10 s vs 0.09 s, on a C64). This change has been made to increase compatibility with older interpreters, as some of them don't support the get_cursor opcode, which is required for the old statusline routine. The most important interpreters that don't support it are MaxZip on classic MacOS and Infocom's Amiga-interpreter.
 - There is a new constant OPTIONAL_NON_FLASHING_STATUSLINE. Define it in z5+ games if you want to use the old, non-flashing statusline routine.
 - Optimized: automatic setting of reactive attribute is now 20% faster and shorter (total time for a full-size z3 game is typically 1.5 s)
