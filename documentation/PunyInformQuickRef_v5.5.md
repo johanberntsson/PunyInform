@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v5.4 quick reference** |
+| **PunyInform v5.5 quick reference** |
 
   
 More information on last page.
@@ -304,6 +304,10 @@ More information on last page.
 ## OPTIONAL_NO_DARKNESS **PUNY++**
 
 ###### Rooms are always lit. Don’t define the *light* attribute.
+
+## OPTIONAL_NON_FLASHING_STATUSLINE **PUNY++**
+
+###### Use a faster (and prettier?) but less compatible statusline for z5+ games.
 
 ## OPTIONAL_ORDERED_TIMERS **PUNY++**
 
