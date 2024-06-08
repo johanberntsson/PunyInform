@@ -1,6 +1,6 @@
 # PunyInform
 
-PunyInform is a library written in Inform 6 which allows people to
+PunyInform is a library written in Inform 6 which allows authors to
 create text adventure games / interactive fiction using the Z-machine
 virtual machine, to be played on 8-bit computers as well as newer
 platforms. It provides a parser, implementations of common verbs, as
@@ -171,15 +171,15 @@ The biggest differences between the standard library and PunyInform are:
 
 ## Games Using PunyInform
 
-40+ PunyInform games have been released. You can find just about all of them
+60+ PunyInform games have been released. You can find just about all of them
 in this [list of PunyInform games](https://ifdb.org/search?searchfor=tag%3Apunyinform&sortby=&pg=all).
 
 If you want to see the source code of PunyInform games, you should look at
 the [list of PunyInform games which provide source code](https://ifdb.org/search?searchfor=tag:PunyInform%20source%20available&pg=all). 
 
-Most of these games can be downloaded from the links above. Many of them
-are also available at [Ozmoo Online](http://microheaven.com/ozmooonline/)
-where you can create disk images for Commodore C64, C128, Plus/4 and MEGA65.
+Most of these games can be downloaded from the links above. Some of the best
+games are also available at [Ozmoo Online](http://ozmoo.online/)
+where you can create disk images for Commodore C64, C128, Plus/4, MEGA65, Commander X16 and Acorn/BBC computers.
 
 ## Articles
 
