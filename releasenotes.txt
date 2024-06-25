@@ -1,5 +1,7 @@
 Upcoming release:
 
+- The following verbs were truncated (all in z3, some also in z5+) when using the VerbName print rule: consult, discard, disrobe, noscript, purchase, squeeze, superbrief, swallow, transcript, transfer, uncover, unscript, verbose, version. 
+
 =======
 v5.5: bug fix and new feature release (8 Jun 2024)
 

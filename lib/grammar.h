@@ -1933,33 +1933,54 @@ Global scope_cnt;
 
 #IfV3;
 	switch(p_v) {
+		'destroy': print "destroy"; return;
+		'discard': print "discard"; return;
+		'display': print "display"; return;
+		'disrobe': print "disrobe"; return;
+		'present': print "present"; return;
 		'restart': print "restart"; return;
 		'restore': print "restore"; return;
-		'display': print "display"; return;
-		'present': print "present"; return;
-		'destroy': print "destroy"; return;
+		'superbrief': print "superbrief"; return;
+		'swallow': print "swallow"; return;
 		'torture': print "torture"; return;
+		'uncover': print "uncover"; return;
 		'unscrew': print "unscrew"; return;
-#IfDef OPTIONAL_EXTENDED_VERBSET;
-		'embrace': print "embrace"; return;
-#EndIf;
-		'x//', 'examine': print "examine"; return;
+		'verbose': print "verbose"; return;
+		'version': print "version"; return;
+		'g//': print "again"; return;
 		'i//', 'inventory': print "inventory"; return;
 		'l//': print "look"; return;
-		'z//': print "wait"; return;
 		'q//': print "quit"; return;
-		'g//': print "again"; return;
+		'x//', 'examine': print "examine"; return;
+		'z//': print "wait"; return;
+#IfDef OPTIONAL_EXTENDED_VERBSET;
+		'consult': print "consult"; return;
+		'embrace': print "embrace"; return;
+		'purchase': print "purchase"; return;
+		'squeeze': print "squeeze"; return;
+		'transfer': print "transfer"; return;
+#EndIf;
+#IfDef OPTIONAL_EXTENDED_METAVERBS;
+		'noscript': print "noscript"; return;
+		'transcript': print "transcript"; return;
+		'unscript': print "unscript"; return;
+#EndIf;
 	}
-#IfNot;
+#IfNot; ! This is z5+
 	switch(p_v) {
-		'x//': print "examine"; return;
+		'superbrief': print "superbrief"; return;
+		'g//': print "again"; return;
 		'i//': print "inventory"; return;
 		'l//': print "look"; return;
-		'z//': print "wait"; return;
 		'q//': print "quit"; return;
-		'g//': print "again"; return;
+		'x//': print "examine"; return;
+		'z//': print "wait"; return;
+#IfDef OPTIONAL_EXTENDED_METAVERBS;
+		'transcript': print "transcript"; return;
+#EndIf;
 	}
 #EndIf;
 
 	print (address) p_v;
 ];
+
