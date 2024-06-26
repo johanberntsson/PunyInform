@@ -1933,54 +1933,55 @@ Global scope_cnt;
 
 #IfV3;
 	switch(p_v) {
-		'destroy': print "destroy"; return;
-		'discard': print "discard"; return;
-		'display': print "display"; return;
-		'disrobe': print "disrobe"; return;
-		'present': print "present"; return;
-		'restart': print "restart"; return;
-		'restore': print "restore"; return;
-		'superbrief': print "superbrief"; return;
-		'swallow': print "swallow"; return;
-		'torture': print "torture"; return;
-		'uncover': print "uncover"; return;
-		'unscrew': print "unscrew"; return;
-		'verbose': print "verbose"; return;
-		'version': print "version"; return;
 		'g//': print "again"; return;
 		'i//', 'inventory': print "inventory"; return;
 		'l//': print "look"; return;
 		'q//': print "quit"; return;
 		'x//', 'examine': print "examine"; return;
 		'z//': print "wait"; return;
+	}
+
+	print (address) p_v;
+
+	! For words longer than 6 characters, print the extra characters
+	switch(p_v) {
+		'destroy', 'display': print (char) 'y'; return;
+		'discard': print (char) 'd'; return;
+		'disrobe', 'restore', 'torture', 'verbose': print (char) 'e'; return;
+#Ifndef NO_PLACES;
+		'objects': print (char) 's'; return;
+#Endif;
+		'present', 'restart': print (char) 't'; return;
+		'superbrief': print "rief"; return;
+		'swallow', 'unscrew': print (char) 'w'; return;
+		'uncover': print (char) 'r'; return;
+		'version': print (char) 'n'; return;
 #IfDef OPTIONAL_EXTENDED_VERBSET;
-		'consult': print "consult"; return;
-		'embrace': print "embrace"; return;
-		'purchase': print "purchase"; return;
-		'squeeze': print "squeeze"; return;
-		'transfer': print "transfer"; return;
+		'consult': print (char) 't'; return;
+		'embrace', 'squeeze': print (char) 'e'; return;
+		'purchase': print "se"; return;
+		'transfer': print "er"; return;
 #EndIf;
 #IfDef OPTIONAL_EXTENDED_METAVERBS;
-		'noscript': print "noscript"; return;
-		'transcript': print "transcript"; return;
-		'unscript': print "unscript"; return;
+		'noscript', 'unscript': print "pt"; return;
+		'transcript': print "ript"; return;
 #EndIf;
 	}
 #IfNot; ! This is z5+
 	switch(p_v) {
 		'superbrief': print "superbrief"; return;
 		'g//': print "again"; return;
-		'i//': print "inventory"; return;
+		'i//': print (address) 'inventory'; return;
 		'l//': print "look"; return;
 		'q//': print "quit"; return;
-		'x//': print "examine"; return;
+		'x//': print (address) 'examine'; return;
 		'z//': print "wait"; return;
 #IfDef OPTIONAL_EXTENDED_METAVERBS;
 		'transcript': print "transcript"; return;
 #EndIf;
 	}
+	print (address) p_v;
 #EndIf;
 
-	print (address) p_v;
 ];
 
