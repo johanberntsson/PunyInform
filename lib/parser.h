@@ -14,8 +14,9 @@ System_file;
 		parse -> 1 = 0;
 		if(n == 1) {
 			! one word reply
-			if(parse --> 1 == 'yes' or 'y//') rtrue;
-			if(parse --> 1 == 'no' or 'n//') rfalse;
+			n = parse --> 1;
+			if(n == 'yes' or 'y//') rtrue;
+			if(n == 'no' or 'n//') rfalse;
 		}
 		PrintMsg(MSG_YES_OR_NO);
 	}
@@ -114,7 +115,7 @@ System_file;
 			if(_num_preps == 0) print " ", (address) _data;
 			++_num_preps;
 		} else {
-			@print_char ' ';
+			print " ";
 			if(p_noun == 0) {
 				if(_type == TT_ROUTINE_FILTER && _data == ADirection) {
 					print (string) SOMEDIRECTION_STR;
@@ -155,11 +156,11 @@ System_file;
 	print "?";
 ];
 
-[ _CreatureTest obj;
+[ _CreatureTest p_obj;
 	! Will this obj do for a "creature" token?
 	if (actor ~= player) rtrue;
-	if (obj has animate) rtrue;
-	if (obj has talkable && action == ##Ask or ##Answer or ##Tell or ##AskFor)
+	if (p_obj has animate) rtrue;
+	if (p_obj has talkable && action == ##Ask or ##Answer or ##Tell or ##AskFor)
 		rtrue;
 	rfalse;
 ];
@@ -218,9 +219,10 @@ System_file;
 
 	num_words = parse -> 1;
 	! Set word after last word in parse array to all zeroes, so it won't match any words.
-	_result = 2 * (parse -> 1) + 1;
+	_result = num_words + num_words + 1;
 	parse-->_result = 0;
-	parse-->(_result + 1) = 0;
+	_result++;
+	parse-->_result = 0;
 ];
 
 #Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
@@ -310,7 +312,7 @@ System_file;
 ];
 #EndIf;
 
-[ _PatternRanking p_pattern _i;
+[ _PatternRanking p_pattern _i _val;
 	! Return a biased pattern ranking:
 	! this is used to select more basic patterns in some situations,
 	! and since when the parsning fails but there are two possible
@@ -320,14 +322,15 @@ System_file;
 	_i = (p_pattern-->0 & $400); ! give bias to action_reverse
 	p_pattern = p_pattern + 2;
 	for(::) {
-		if(p_pattern->0 == TT_END) {
+		_val = p_pattern->0;
+		if(_val == TT_END) {
 			return _i;
-		} else if(p_pattern->0 == TOKEN_SINGLE_PREP or TOKEN_FIRST_PREP) {
+		} else if(_val == TOKEN_SINGLE_PREP or TOKEN_FIRST_PREP) {
 			_i = _i + 2; ! give bias to patterns without prepositions
-		} else if(p_pattern->0 ~= TOKEN_MIDDLE_PREP or TOKEN_LAST_PREP) {
+		} else if(_val ~= TOKEN_MIDDLE_PREP or TOKEN_LAST_PREP) {
 			! Alternative prepositions should be skipped, and all other
 			! tokens should add to the length
-			++_i;
+			_i++;
 		}
 		p_pattern = p_pattern + 3;
 	}
@@ -392,7 +395,7 @@ System_file;
 
 [ _PeekAtNextWord _i;
 	_i = NextWord();
-	--wn; ! wn was modified by NextWord, restore it
+	wn--; ! wn was modified by NextWord, restore it
 	return _i;
 ];
 
@@ -425,8 +428,11 @@ System_file;
 	_score = 500;
 
 	if(p_obj has scenery) _score = 300;
-	else if(action == ##Take && p_obj in actor) {
+	else if((action == ##Take && p_obj in actor) ||
+			(object_token_type == MULTIINSIDE_OBJECT && (parent(p_obj) == location or actor ||
+					(second ~= 0 && parent(p_obj) ~= second)))) {
 		! take gives low priority for already held objects
+		! and MULTIINSIDE gives low priority for objects directly in location + objects not inside the second object
 		_score = 400;
 	} else if(object_token_type == HELD_OBJECT or MULTIHELD_OBJECT or MULTIEXCEPT_OBJECT && p_obj notin actor) {
 		! low priority for not held objects
@@ -435,12 +441,6 @@ System_file;
 			! lower priority for object in/on the second object
 			_score = _score - 10;
 		}
-	} else if(object_token_type == MULTIINSIDE_OBJECT && parent(p_obj) == location or actor) {
-		! low priority for objects directly in location
-		_score = 400;
-	} else if(object_token_type == MULTIINSIDE_OBJECT && second ~= 0 && parent(p_obj) ~= second) {
-		! lower priority for objects not inside the object
-		_score = 400;
 	}
 
 	if(p_obj ~= Directions)
@@ -738,7 +738,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! (since 'in' in this combination is usually
 	! a preposition but also matches a direction noun)
 	if(p_parse_pointer-->0 == ALL_WORD &&
-		(p_parse_pointer + 4)-->0 == 'in') {
+		p_parse_pointer-->2 == 'in') {
 		++wn;
 		return 0;
 	}
@@ -757,8 +757,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	}
 
 	! check for pronouns
-	if(p_parse_pointer --> 0 == 'it' or 'him' or 'her' or 'them') {
-		switch(p_parse_pointer --> 0) {
+	_k = p_parse_pointer --> 0;
+	if(_k == 'it' or 'him' or 'her' or 'them') {
+		switch(_k) {
 		'it': _noun = itobj;
 		'him': _noun = himobj;
 		'her': _noun = herobj;
@@ -767,14 +768,14 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		if(_noun == 0) {
 			phase2_necessary = PHASE2_ERROR;
 			if(parser_phase == PHASE2) {
-				PrintMsg(MSG_PARSER_NO_IT, p_parse_pointer --> 0);
+				PrintMsg(MSG_PARSER_NO_IT, _k);
 !				print "I don't know what ~",(address) p_parse_pointer --> 0, "~ refers to.^";
 				return -2;
 			}
 		} else if(TestScope(_noun) == false) {
 			phase2_necessary = PHASE2_ERROR;
 			if(parser_phase == PHASE2) {
-				PrintMsg(MSG_PARSER_CANT_SEE_IT, p_parse_pointer --> 0, _noun);
+				PrintMsg(MSG_PARSER_CANT_SEE_IT, _k, _noun);
 !				print "You can't see ~",(address) p_parse_pointer --> 0, "~ (", (name) _noun, ") at the moment.^";
 				return -2;
 			}
@@ -783,7 +784,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			! a filter was defined, but failed for it/his/her
 			return 0;
 		}
-		++wn;
+		wn++;
 		return _noun;
 	}
 
@@ -859,7 +860,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			_CopyParseArray(parse, parse3);
 			for(_i = 0 : _i < parse3 -> 1 : _i++) {
 				!print "Testing ", (address) (parse3 + 2 + _i * 4) --> 0, "^";
-				_j-->0 = (parse3 + 2 + _i * 4) --> 0;
+				_j-->0 = parse3 --> (_i + _i + 1);
 
 				! note that we have to add this is correct order otherwise
 				! parse_name routines may not work, so we need to test
@@ -868,7 +869,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 #IfDef DEBUG;
 				!_PrintParseArray(parse);
 #Endif;
-				_m = (parse2 + 4 * _oldwn - 2)-->0;
+				_m = parse2-->(_oldwn + _oldwn - 1);
 				parse->1 = 2;
 				if(_m == _j-->0) {
 					! don't allow repeated words (red red etc)
@@ -888,7 +889,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 					!_PrintParseArray(parse);
 #Endif;
 					_m = _j-->0;
-					_j-->0 = (parse2 + 4 * _oldwn - 2)-->0;
+					_j-->0 = parse2-->(_oldwn + _oldwn - 1);
 					parse->1 = 2;
 					if(_m == _j-->0) {
 						! don't allow repeated words (red red etc)
@@ -1040,7 +1041,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	}
 ];
 
-[ _ParseToken p_pattern_pointer p_parse_pointer _noun _i _token
+[ _ParseToken p_pattern_pointer p_parse_pointer _noun _i _j _token
 		_token_type _token_data _old_wn _parse_plus_2 
 		_num_already_added;
 	! ParseToken is similar to a general parse routine,
@@ -1082,8 +1083,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		scope_routine = _token_data;
 		! check what type of routine (single or multi)
 		scope_stage = 1;
-		_i = indirect(scope_routine);
-		if(_i == 1)
+		if(indirect(scope_routine) == 1)
 			_token_data = MULTI_OBJECT;
 		else
 			_token_data = NOUN_OBJECT;
@@ -1217,8 +1217,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						for(_i = 0: _i < which_object->0: _i++) {
 							! don't add if already in multiple_objects
 							if(_ObjInMultipleObjects(which_object--> (_i + 1)) == false) {
-								multiple_objects --> 0 = 1 + (multiple_objects --> 0);
-								multiple_objects --> (multiple_objects --> 0) = which_object--> (_i + 1);
+								_j = (multiple_objects --> 0) + 1;
+								multiple_objects --> 0 = _j;
+								multiple_objects --> _j = which_object--> (_i + 1);
 							}
 						}
 #IfDef DEBUG_PARSETOKEN;
@@ -1290,7 +1291,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 							}
 							return GPR_FAIL;
 						}
-						p_parse_pointer = _parse_plus_2 + 4 * (_old_wn);
+						p_parse_pointer = _parse_plus_2 + 4 * _old_wn;
 						if(p_parse_pointer-->0 == EXCEPT_WORD1 or EXCEPT_WORD2) {
 
 							!print "take all but <noun>^";
@@ -1323,8 +1324,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				! adding a single object - check if it's already there
 				if(_ObjInMultipleObjects(_noun) == false) {
 					p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
-					multiple_objects --> 0 = 1 + (multiple_objects --> 0);
-					multiple_objects --> (multiple_objects --> 0) = _noun;
+					_j = (multiple_objects --> 0) + 1;
+					multiple_objects --> 0 = _j;
+					multiple_objects --> _j = _noun;
 				}
 				! check if we should continue: and or comma followed by a noun
 				_i = _CheckForAndObject(_parse_plus_2);
@@ -1353,7 +1355,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			if(p_pattern_pointer ~= 0) {
 				! loop over all possible prepositions and update wn
 				! if topic and preposition matched
-				for(_i = 3: (p_pattern_pointer + _i)->0 >= TOKEN_SINGLE_PREP: _i = _i + 3) {
+				for(_i = 3: p_pattern_pointer->_i >= TOKEN_SINGLE_PREP: _i = _i + 3) {
 					!print (address) (p_pattern_pointer + _i + 1) --> 0, "^";
 					if(_ParseTopic(wn, p_parse_pointer, (p_pattern_pointer + _i + 1) --> 0)) {
 						break;
@@ -1379,7 +1381,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	}
 ];
 
-[ _AddMultipleNouns p_multiple_objects_type   _i _addobj _obj _p _ceil;
+[ _AddMultipleNouns p_multiple_objects_type   _i _j _addobj _obj _p _ceil;
 	multiple_objects --> 0 = 0;
 	for(_i = 0: _i < scope_objects: _i++) {
 		_obj = scope-->_i;
@@ -1420,8 +1422,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		}
 #Endif;
 		if(_addobj) {
-			multiple_objects --> 0 = 1 + (multiple_objects --> 0);
-			multiple_objects --> (multiple_objects --> 0) = _obj;
+			_j = (multiple_objects --> 0) + 1;
+			multiple_objects --> 0 = _j;
+			multiple_objects --> _j = _obj;
 			!print "Adding ", (name) _obj, "^";
 		}
 	}
@@ -1532,11 +1535,7 @@ Array guess_object-->5;
 
 #EndIf;
 
-#Ifv5;
-[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index;
-#Ifnot;
-[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index;
-#Endif;
+[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index _next_word;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1568,6 +1567,7 @@ Array guess_object-->5;
 
 	while(true) {
 		pattern_pointer = pattern_pointer + 3;
+		_next_word = _parse_pointer-->2;
 #IfDef DEBUG_PARSEPATTERN;
 		print "TOKEN: ", pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
@@ -1577,7 +1577,7 @@ Array guess_object-->5;
 		if(_type == TT_END) {
 			if(_IsSentenceDivider(_parse_pointer)) {
 				! check if dictionary word after sentence divider
-				if(parse->1 > wn && (_parse_pointer + 4)-->0 == 0) {
+				if(parse->1 > wn && _next_word == 0) {
 					! uknown word, so probably an unknown word in a
 					! list matching the multi token, such as
 					! 'get box and SDASDASD'
@@ -1588,7 +1588,7 @@ Array guess_object-->5;
 						phase2_necessary = PHASE2_ERROR;
 					}
 					return wn;
-				} else if(parse->1 > wn && ((((_parse_pointer + 4)-->0) + DICT_BYTES_FOR_WORD)->0 & 1) == 0) {
+				} else if(parse->1 > wn && (_next_word->DICT_BYTES_FOR_WORD & 1) == 0) {
 					_current_wn = wn;
 					wn++;
 					if(Directions.parse_name()) {
@@ -2079,11 +2079,12 @@ Array guess_object-->5;
 			! another context but not right now. Reasons may
 			! be that it matches something that isn't in scope,
 			! or this word isn't a noun word.
+			_i = (_best_pattern-> (wn*3 - 1)) & $0f;
 			if(parser_unknown_noun_found ~= 0 &&
 				parser_unknown_noun_found-->0 == 0) {
 				! this is not a dictionary word.
 				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
-			} else if((((_best_pattern - 1 + wn*3 )-> 0) & $0f) == TT_END) {
+			} else if(_i == TT_END) {
 				! the sentence matched the pattern
 				if((parse - 2 + wn*4)-->0 == ALL_WORD) {
 					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
@@ -2092,7 +2093,6 @@ Array guess_object-->5;
 				}
 			} else {
 				! we didn't match the pattern at all
-				_i = ((_best_pattern - 1 + wn*3 )-> 0) & $0f;
 				if(_i == TT_PREPOSITION or TT_OBJECT) {
 					! missing preposition
 					_PrintPatternSyntax(_best_pattern -1);
@@ -2161,7 +2161,7 @@ Array guess_object-->5;
 	if(consult_from && action == ##Answer or ##Ask or ##Tell or ##NotUnderstood) {
 		if(0 == noun or second) {
 			for(_i=0 : _i < consult_words : _i++) {
-				_noun = (parse-->(2 * (consult_from + _i) - 1));
+				_noun = parse-->(2 * (consult_from + _i) - 1);
 				if(action == ##NotUnderstood || _noun ~= 'a//' or 'an' or 'the') {
 					if(noun == 0)
 						noun = _noun;
