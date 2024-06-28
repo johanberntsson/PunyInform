@@ -18,8 +18,16 @@ System_file;
 #IfDef DEBUG_SCOPE;
 			print "add_to_scope for ", (name) p_obj, " is list of objects:^";
 #EndIf;
-			_len = p_obj.#add_to_scope / WORDSIZE;
-			for(_i = 0: _i  < _len: _i++) {
+			_len = p_obj.#add_to_scope;
+#Ifv3;
+			_len = _len / 2;
+#Ifnot;
+			@log_shift _len (-1) -> _len; ! Divide by 2
+#Endif;
+			if(_len == 0) rtrue;
+			_len--;
+!			for(_i = 0: _i  < _len: _i++) {
+._next_obj;
 				_add_obj =  _addr --> _i;
 				if(_add_obj) {
 					_n = scope_objects;
@@ -31,7 +39,9 @@ System_file;
 					print _i, ": ", _add_obj, "^";
 #EndIf;
 				}
-			}
+!			}
+			@inc_chk _i _len ?~_next_obj;
+
 		}
 	}
 ];
@@ -59,7 +69,7 @@ System_file;
 		if(p_no_add == 0 && p_obj has reactive) _PerformAddToScope(p_obj);
 
 		_child = child(p_obj);
-		if(_child ~= 0 && (p_obj has supporter || p_obj has transparent || (p_obj has container && p_obj has open)))
+		if(_child ~= 0 && (p_obj has supporter or transparent || (p_obj has container && p_obj has open)))
 			_SearchScope(_child, p_risk_duplicate, p_no_add); ! Add contents
 
 		p_obj = sibling(p_obj);
@@ -93,14 +103,15 @@ System_file;
 		return;
 	}
 	! Add it
-	scope-->(scope_objects++) = p_obj;
+	scope-->scope_objects = p_obj;
+	scope_objects++;
 ];
 
 #Ifdef InScope;
-[ _UpdateScope p_actor p_reason _start_pos _i _obj _initial_scope_objects
+[ _UpdateScope p_actor p_reason _start_pos _i _j _obj _initial_scope_objects
 		_current_scope_objects _risk_duplicates _scope_base _can_skip;
 #Ifnot;
-[ _UpdateScope p_actor p_reason _start_pos _i _obj _initial_scope_objects
+[ _UpdateScope p_actor p_reason _start_pos _i _j _obj _initial_scope_objects
 		_current_scope_objects _risk_duplicates _scope_base;
 #Endif;
 
@@ -182,12 +193,17 @@ System_file;
 
 !	_current_scope_objects = scope_objects;
 !	print "WILL perform AddToScope for object ", _current_scope_objects, " to ", scope_objects - 1, "!^";
-	for(_i = _current_scope_objects : _i < scope_objects : _i++) {
+	_j = scope_objects;
+	@dec_chk _j _current_scope_objects ?_done_updating_scope;
+	_i = _current_scope_objects;
+._next_add_to_scope;
+!	for(_i = _current_scope_objects : _i < scope_objects : _i++) {
 		_obj = scope-->_i;
 !		print "PERFORMING AddToScope for object ", _obj, "!^";
 		if(_obj has reactive)
 			_PerformAddToScope(_obj);
-	}
+!	}
+	@inc_chk _i _j ?~_next_add_to_scope;
 
 ._done_updating_scope;
 #Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
