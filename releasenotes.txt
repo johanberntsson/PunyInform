@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.5.1: bug fix and optimization release (13 Jul 2024)
+
 - The following verbs were truncated (all in z3, some also in z5+) when using the VerbName print rule: consult, discard, disrobe, noscript, objects, purchase, squeeze, superbrief, swallow, transcript, transfer, uncover, unscript, verbose, version. 
 - Saved 96-144 bytes in z3 by printing verbs smarter in VerbName.
 - Saved 130 bytes in parser.h
