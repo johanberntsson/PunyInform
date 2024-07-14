@@ -2281,8 +2281,9 @@ Object thedark "Darkness"
 	screen_width = HDR_SCREENWCHARS->0;
 #EndIf;
 	dict_start = HDR_DICTIONARY-->0;
-	dict_entry_size = dict_start->(dict_start->0 + 1);
-	dict_start = dict_start + dict_start->0 + 4;
+	_i = dict_start->0;
+	dict_entry_size = dict_start->(_i + 1);
+	dict_start = dict_start + _i + 4;
 	dict_end = dict_start + (dict_start - 2)-->0 * dict_entry_size;
 
 	parse->0 = MAX_INPUT_WORDS;
@@ -2310,13 +2311,8 @@ Object thedark "Darkness"
 	places_score = 0;
 	things_score = 0;
 #EndIf;
-#IfDef TASKS_PROVIDED;
-	#Ifv5;
-		@copy_table task_done 0 NUMBER_TASKS;
-	#Ifnot;
-		for(_i = 0 : _i < NUMBER_TASKS : _i++) task_done->_i = 0;
-	#EndIf;
-#EndIf;
+	! We used to set all elements of task_done to 0 here, but the compiler 
+	! already does that when creating the array.
 #EndIf;
 
 #IfV5;

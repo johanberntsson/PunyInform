@@ -1041,7 +1041,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	}
 ];
 
-[ _ParseToken p_pattern_pointer p_parse_pointer _noun _i _j _token
+[ _ParseToken p_pattern_pointer p_parse_pointer _noun _i _j _k _token
 		_token_type _token_data _old_wn _parse_plus_2 
 		_num_already_added;
 	! ParseToken is similar to a general parse routine,
@@ -1216,10 +1216,11 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						! copy which_object to multiple_objects
 						for(_i = 0: _i < which_object->0: _i++) {
 							! don't add if already in multiple_objects
-							if(_ObjInMultipleObjects(which_object--> (_i + 1)) == false) {
+							_k = which_object--> (_i + 1);
+							if(_ObjInMultipleObjects(_k) == false) {
 								_j = (multiple_objects --> 0) + 1;
 								multiple_objects --> 0 = _j;
-								multiple_objects --> _j = which_object--> (_i + 1);
+								multiple_objects --> _j = _k;
 							}
 						}
 #IfDef DEBUG_PARSETOKEN;
@@ -2267,7 +2268,7 @@ Array guess_object-->5;
 
 				! make sure that selected_direction* is only active when
 				! the processed noun (or second) is a direction
-				if(noun == Directions || second == Directions) {
+				if(Directions == noun or second) {
 					selected_direction = _selected_direction;
 					selected_direction_index = _selected_direction_index;
 				} else {

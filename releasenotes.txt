@@ -1,5 +1,8 @@
 Upcoming release:
 
+- Saved some bytes in parser.h and puny.h. 
+- Removed unnecessary initialization of task_done array.
+
 =======
 v5.5.1: bug fix and optimization release (13 Jul 2024)
 
