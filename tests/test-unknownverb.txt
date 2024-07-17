@@ -1,10 +1,10 @@
 
 > xcfdf blue
-UnknownVerb: not xyzzy, leaving unknown
+UnknownVerb 'xcfdf': not xyzzy, leaving unknown
 That is not a verb I recognize.
 
 > xyzzy blue
-UnknownVerb: got xyzzy changing it to 'examine'
+UnknownVerb 'xyzzy': got xyzzy changing it to 'examine'
 This is a blue coat.
 
 > open coffre
@@ -34,7 +34,7 @@ Do you mean the wooden bench or the stone bench?
 a stone bench
 
 > s
-UnknownVerb: not xyzzy, leaving unknown
+UnknownVerb 's': not xyzzy, leaving unknown
 Room
 You are in a room. There is a wooden bench here and a park to the north.
 
@@ -47,7 +47,7 @@ a stone bench
 a wooden bench
 
 > n
-UnknownVerb: not xyzzy, leaving unknown
+UnknownVerb 'n': not xyzzy, leaving unknown
 Park
 
 You can see a red coat, a blue coat, a coffre noir (which is closed) and a

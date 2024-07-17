@@ -41,12 +41,22 @@ Include "VerbLib";
 Include "globals.h";
 #EndIf;
 
-[ UnknownVerb word; 
+[ UnknownVerb word _p _i; 
+    ! verb_wordnum: location of 'word' in parse array (usually 1)
+    ! _p: 'word's parse array block
+    ! _p->2: number of characters in the word
+    ! _p->3: start of word in buffer array
+    print "UnknownVerb '";
+    _p = 2 + parse + 4 * (verb_wordnum - 1);
+    for(_i = 0: _i < _p->2: _i++) {
+        print (char) buffer->(_i + _p->3);
+    }
+    print "': ";
     if(word == 'xyzzy') {
-        print "UnknownVerb: got xyzzy changing it to 'examine'^";
+        print "got xyzzy changing it to 'examine'^";
         return 'examine';
     }
-    print "UnknownVerb: not xyzzy, leaving unknown^";
+    print "not xyzzy, leaving unknown^";
     rfalse;
 ];
 

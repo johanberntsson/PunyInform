@@ -11,9 +11,9 @@ test-issue107:
 	inform +../lib -v3 test-issue107.inf
 	frotz test-issue107.z3
 
-test-breakable:
-	inform +../lib -v3 test-breakable.inf
-	frotz test-breakable.z3
+test-unknownverb:
+	inform +../lib -v3 test-unknownverb.inf
+	frotz test-unknownverb.z3
 
 indistiguishable:
 	inform +../lib -v3 indistiguishable.inf
