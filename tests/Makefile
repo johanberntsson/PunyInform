@@ -4,8 +4,8 @@ runtests:
 	ruby runtests.rb
 
 inform:
-	inform -v8 -D test-issue107.inf
-	frotz test-issue107.z8
+	inform -v8 -D test-unknownverb.inf
+	frotz test-unknownverb.z8
 
 test-issue107:
 	inform +../lib -v3 test-issue107.inf

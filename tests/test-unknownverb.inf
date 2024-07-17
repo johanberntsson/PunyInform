@@ -1,0 +1,140 @@
+! Testing that held and creature tokens parse all/all-but correctly
+! Testing issue 60 (sentence splitting)
+! 
+!
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+Constant Story      "UnnknownVerb test";
+Constant Headline   "^A parser test suite for PunyInform.^";
+Serial "200827";
+Constant INITIAL_LOCATION_VALUE = Park;
+
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
+!Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_PARSENOUNPHRASE;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+!Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+[ UnknownVerb p_word; 
+    if(p_word == 'xyzzy') {
+        print "UnknownVerb: got xyzzy changing it to 'examine'^";
+        return 'examine';
+    }
+    print "UnknownVerb: not xyzzy, leaving unknown^";
+    rfalse;
+];
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#EndIf;
+
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+
+Object Park "Park"
+   with description "You are in a park. There is a wooden bench and a stone bench here. You can go south.",
+   s_to Room,
+has light;
+
+Object Room "Room"
+   with description "You are in a room. There is a wooden bench here and a park to the north.",
+   n_to Park,
+has light;
+
+Object red_coat "red coat" selfobj
+   with
+      name 'red' 'coat',
+      description "a red coat",
+   has clothing;
+
+Object blue_coat "blue coat" Park
+   with
+      name 'blue' 'coat',
+      description "This is a blue coat.",
+   has clothing;
+
+Object wooden_bench "wooden bench" Park
+   with
+      name 'bench' 'wooden',
+      description "a wooden bench",
+   has scenery enterable;
+
+Object stone_bench "stone bench" Park
+   with
+      name 'bench' 'stone',
+      description "a stone bench",
+   has scenery enterable;
+
+Object wooden_bench2 "wooden bench" Room
+   with
+      name 'bench' 'wooden' 'xyzzy',
+      description "a wooden bench",
+   has scenery enterable;
+
+Object stone_bench2 "stone bench" Room
+   with
+      name 'bench' 'stone',
+      description "a stone bench",
+   has enterable;
+
+Object coffre_noir "coffre noir" Park
+with
+   parse_name [;
+      if (NextWord() ~= 'coffre') return 0;
+      if (NextWord() == 'noir') return 2;
+      return 1;
+   ],
+   description "C'est un coffre noir.",
+has container openable ~open;
+
+Object coffre_blanc "coffre blanc" Park
+with
+   parse_name [;
+      if (NextWord() ~= 'coffre') return 0;
+      if (NextWord() == 'blanc') return 2;
+      return 1;
+   ],
+   description "C'est un coffre blanc.",
+has container openable ~open;
+
+[ Initialise;
+#IfDef USEINFORM;
+    location=INITIAL_LOCATION_VALUE;
+#EndIf;
+];
+

@@ -1,0 +1,62 @@
+
+>xcdfd blue
+UnknownVerb: not xyzzy, leaving unknown
+That is not a verb I recognize.
+
+>xyzzy blue 
+UnknownVerb: got xyzzy changing it to 'examine'
+This is a blue coat.
+
+> open coffre
+Do you mean the coffre noir or the coffre blanc?
+
+> blanc
+You open the coffre blanc, revealing nothing.
+
+> look
+Park
+You are in a park. There is a wooden bench and a stone bench here. You can go
+south.
+
+You can see a blue coat, a coffre noir (which is closed) and a coffre blanc
+(which is empty) here.
+
+> i
+You're carrying a red coat.
+
+> drop coat
+Dropped.
+
+> x bench
+Do you mean the wooden bench or the stone bench?
+
+> stone
+a stone bench
+
+> s
+Room
+You are in a room. There is a wooden bench here and a park to the north.
+
+You can see a stone bench here.
+
+> x bench
+a stone bench
+
+> x wooden bench
+a wooden bench
+
+> n
+Park
+
+You can see a red coat, a blue coat, a coffre noir (which is closed) and a
+coffre blanc (which is empty) here.
+
+> sit on bench
+Do you mean the wooden bench or the stone bench?
+
+> wooden
+You enter the wooden bench.
+
+> quit
+Are you sure you want to quit? yes
+
