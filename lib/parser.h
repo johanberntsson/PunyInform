@@ -1830,11 +1830,9 @@ Array guess_object-->5;
 	verb_word = (parse - 2) --> (2 * verb_wordnum);
 ._perform_reparse_2;
 	if(UnsignedCompare(verb_word, (HDR_DICTIONARY-->0)) == -1) {
-		! Not a verb. Try the entry point routine before giving up
 #Ifdef UnknownVerb;
+		! Not a dictionary word. Try the UnknownVerb routine before giving up
 		verb_word = UnknownVerb(verb_word);
-#Ifnot;
-		verb_word = 0;
 #Endif;
 		if(verb_word == 0) {
 			! unknown word
@@ -1846,7 +1844,17 @@ Array guess_object-->5;
 	}
 
 	_word_data = verb_word + DICT_BYTES_FOR_WORD;
-	! check if it is a direction
+
+#Ifdef UnknownVerb;
+	if((_word_data->0) & 1 == 0) {
+        ! This dictionary word isn't a verb. Try UnknownVerb
+		verb_word = UnknownVerb(verb_word);
+        if(verb_word) {
+	        _word_data = verb_word + DICT_BYTES_FOR_WORD;
+        }
+    }
+#EndIf;
+
 	if((_word_data->0) & 1 == 0) { ! This word does not have the verb flag set.
 		! try a direction instead
 		wn = verb_wordnum;

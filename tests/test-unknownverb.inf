@@ -41,8 +41,8 @@ Include "VerbLib";
 Include "globals.h";
 #EndIf;
 
-[ UnknownVerb p_word; 
-    if(p_word == 'xyzzy') {
+[ UnknownVerb word; 
+    if(word == 'xyzzy') {
         print "UnknownVerb: got xyzzy changing it to 'examine'^";
         return 'examine';
     }
