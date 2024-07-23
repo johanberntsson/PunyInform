@@ -1364,8 +1364,12 @@ Verb meta 'verify'
 ! ---------------------
 
 #IfDef DEBUG;
-Verb meta 'pronoun' 'pronouns'
+Verb meta 'pronoun'
 	*                                           -> Pronouns;
+#IfV5;
+Verb meta 'pronouns'
+	*                                           -> Pronouns;
+#EndIf;
 
 Verb meta 'random'
 	*                                           -> RandomSeed

@@ -24,7 +24,7 @@ def runtest(filename, version, inform_args)
         # use specific template file is available
         specific_template = "#{basename}.z#{version}.txt"
         template_file = specific_template if File.exists? specific_template
-        inform_cmd = "inform +.  +../lib -v#{version} #{inform_args} #{filename}"
+        inform_cmd = "~/inform6unix/inform-6.42 +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz -w 80 -h 200 #{basename}.z#{version} < #{command_file}"
         prune_cmd = "tail -n +6 #{transcript_file} | grep -v PunyInform > #{output_file}"
         diff_cmd = "diff -Z #{template_file} #{output_file}"
@@ -61,20 +61,20 @@ end
 $num_tests = 0
 $num_tests_failed = 0
 
-puts "Testing v3 debug"
-Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
-checkforfailures
-
 puts "Testing v3 release"
 Dir["*.inf"].sort.each { |filename| runtest filename, 3, "" }
 checkforfailures
 
-puts "Testing v5 debug"
-Dir["*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
+puts "Testing v3 debug"
+Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
 checkforfailures
 
 puts "Testing v5 release"
 Dir["*.inf"].sort.each { |filename| runtest filename, 5, "" }
+checkforfailures
+
+puts "Testing v5 debug"
+Dir["*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
 checkforfailures
 
 puts "\nALL TESTS PASSED"

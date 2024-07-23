@@ -4,6 +4,7 @@ Upcoming release:
 - Removed unnecessary initialization of task_done array.
 - Fixed a bug where UnknownVerb wasn't called for dictionary words
   that didn't have the verb flag. Only non-dictionary words were called.
+- Rewrote pronoun/pronouns grammar to work the same for both v3 and v5.
 
 =======
 v5.5.1: bug fix and optimization release (13 Jul 2024)
