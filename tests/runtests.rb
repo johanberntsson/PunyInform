@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+$inform_compiler = "inform"
 $is_windows = (ENV['OS'] == 'Windows_NT')
 
 def checkforfailures() 
@@ -24,7 +25,7 @@ def runtest(filename, version, inform_args)
         # use specific template file is available
         specific_template = "#{basename}.z#{version}.txt"
         template_file = specific_template if File.exists? specific_template
-        inform_cmd = "inform +.  +../lib -v#{version} #{inform_args} #{filename}"
+        inform_cmd = $inform_compiler + " +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz -w 80 -h 200 #{basename}.z#{version} < #{command_file}"
         prune_cmd = "tail -n +6 #{transcript_file} | grep -v PunyInform > #{output_file}"
         diff_cmd = "diff -Z #{template_file} #{output_file}"
@@ -58,6 +59,9 @@ def runtest(filename, version, inform_args)
     end
 end
 
+if ARGV.length > 0 then
+  $inform_compiler = ARGV[0]
+end
 $num_tests = 0
 $num_tests_failed = 0
 
