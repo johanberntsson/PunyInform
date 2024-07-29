@@ -4,7 +4,7 @@ Upcoming release:
 - Removed unnecessary initialization of task_done array.
 - Fixed a bug where UnknownVerb wasn't called for dictionary words
   that didn't have the verb flag. Only non-dictionary words were called.
-- Rewrote pronoun/pronouns grammar to work the same for both v3 and v5.
+- Rewrote pronoun/pronouns grammar to work the same for both v3 and v5, and to work with new compiler versions.
 - runtest.rb now supports an optional compiler path argument
 
 =======

@@ -1827,9 +1827,10 @@ Array guess_object-->5;
 	}
 
 ._perform_reparse;
-	verb_word = (parse - 2) --> (2 * verb_wordnum);
+	verb_word = parse --> (verb_wordnum + verb_wordnum - 1);
 ._perform_reparse_2;
-	if(UnsignedCompare(verb_word, (HDR_DICTIONARY-->0)) == -1) {
+!	if(UnsignedCompare(verb_word, (HDR_DICTIONARY-->0)) == -1) {
+	if(verb_word == 0) {
 #Ifdef UnknownVerb;
 		! Not a dictionary word. Try the UnknownVerb routine before giving up
 		verb_word = UnknownVerb(verb_word);
@@ -1906,7 +1907,7 @@ Array guess_object-->5;
 		! set actor
 		actor = _noun;
 		verb_wordnum = wn;
-		verb_word = (parse - 2) --> (2 * verb_wordnum);
+		verb_word = parse --> (verb_wordnum + verb_wordnum - 1);
 		if(actor provides grammar) {
 			parser_one = 0;
 			_i = actor.grammar();
@@ -2095,7 +2096,7 @@ Array guess_object-->5;
 				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
 			} else if(_i == TT_END) {
 				! the sentence matched the pattern
-				if((parse - 2 + wn*4)-->0 == ALL_WORD) {
+				if(parse-->(wn + wn - 1) == ALL_WORD) {
 					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 				} else {
 					PrintMsg(MSG_PARSER_NOSUCHTHING);
