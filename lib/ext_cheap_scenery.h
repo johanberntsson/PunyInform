@@ -492,7 +492,9 @@ Object CheapScenery "object"
 				if(itobj == self) itobj = 0;
 			} else {
 				give self ~pluralname;
+#ifdef PUNYINFORM_MAJOR_VERSION;
 				if(themobj == self) themobj = 0;
+#Endif;
 			}
 			return _ret;
 		],
@@ -545,7 +547,9 @@ Object CheapScenery "object"
 		react_after [;
 			Go:
 				if(itobj == self) itobj = 0;
+#ifdef PUNYINFORM_MAJOR_VERSION;
 				if(themobj == self) themobj = 0;
+#Endif;
 		],
 		found_in [;
 			if(location provides cheap_scenery) rtrue;
