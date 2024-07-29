@@ -944,7 +944,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #IfTrue MSG_EXAMINE_CLOSED < 1000;
 	MSG_EXAMINE_CLOSED:
 	! p_arg_1 = the examines object (which is closed).
-		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " closed.";
+		print_ret (CObjIs) p_arg_1, " closed.";
 #Endif;
 #IfTrue MSG_REMOVE_NOT_HERE < 1000;
 	MSG_REMOVE_NOT_HERE:
@@ -976,7 +976,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_EXAMINE_ONOFF < 1000;
 	MSG_EXAMINE_ONOFF:
-		print_ret (The) noun, " ", (IsOrAre) noun, " currently switched ", (onoff) noun, ".";
+		print_ret (CObjIs) noun, " currently switched ", (onoff) noun, ".";
 #EndIf;
 #IfTrue MSG_EAT_DEFAULT < 1000;
 	MSG_EAT_DEFAULT:
@@ -1147,7 +1147,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_EMPTY_ALREADY_EMPTY < 1000;
 	MSG_EMPTY_ALREADY_EMPTY:
 		! p_arg_1 = the object that is already empty
-		print_ret (The) p_arg_1, " ", (isorare) p_arg_1, " empty already.";
+		print_ret (CObjIs) p_arg_1, " empty already.";
 #EndIf;
 #IfTrue MSG_SET_DEFAULT < 1000;
 	MSG_SET_DEFAULT:

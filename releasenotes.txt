@@ -6,6 +6,7 @@ Upcoming release:
   that didn't have the verb flag. Only non-dictionary words were called.
 - Rewrote pronoun/pronouns grammar to work the same for both v3 and v5, and to work with new compiler versions.
 - runtest.rb now supports an optional compiler path argument
+- Saved 18 bytes in messages.h (Issue #122)
 
 =======
 v5.5.1: bug fix and optimization release (13 Jul 2024)
