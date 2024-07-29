@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.5.2: bug fix and optimization release (29 Jul 2024)
+
 - Saved some bytes in parser.h and puny.h. 
 - Removed unnecessary initialization of task_done array.
 - Fixed a bug where UnknownVerb wasn't called for dictionary words
