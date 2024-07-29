@@ -2431,7 +2431,7 @@ Object thedark "Darkness"
 		}
 
 #Ifdef AfterLife;
-		if(deadflag ~= GS_PLAYING or GS_WIN) {
+		if(deadflag ~= GS_PLAYING or GS_WIN or GS_QUIT) {
 			! we died somehow, use entry routine to give
 			! a chance of resurrection
 			RunEntryPointRoutine(AfterLife);

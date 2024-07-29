@@ -143,6 +143,17 @@ Include "globals.h";
 	rfalse; ! Don't interfere with ALL
 ];
 
+Global have_revived = 0;
+
+[ AfterLife;
+	if(have_revived) return;
+	have_revived = true;
+	print "^^You really shouldn't have died. Try again!^^";
+	PlayerTo(Library);
+	deadflag = GS_PLAYING;
+];
+
+
 [InScope p_actor;
 	if(p_actor == player && location == thedark && John in real_location)
 		PlaceInScope(John);

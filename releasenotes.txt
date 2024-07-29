@@ -8,6 +8,7 @@ Upcoming release:
 - runtest.rb now supports an optional compiler path argument
 - Saved 18 bytes in messages.h (Issue #122)
 - Made cheap scenery extension compatible with the standard library again (this was accidentally lost when making cheap scenery distinguish between singular and plural nouns).
+- Stopped AfterLife from running after Quit (Issue #124).
 
 =======
 v5.5.1: bug fix and optimization release (13 Jul 2024)
