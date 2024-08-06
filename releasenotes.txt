@@ -1,5 +1,7 @@
 Upcoming release:
 
+- Dropping an item in darkness now forces a scope update, so the item isn't still in scope.
+
 =======
 v5.5.2: bug fix and optimization release (29 Jul 2024)
 

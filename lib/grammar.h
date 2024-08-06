@@ -295,6 +295,9 @@ Verb 'wear'
 	!if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
 	give noun moved;
+#Ifndef OPTIONAL_NO_DARKNESS;
+	scope_modified = true;
+#Endif;
 	run_after_routines_msg = MSG_DROP_DROPPED;
 ];
 
