@@ -288,11 +288,9 @@ Verb 'wear'
 	return MSG_DRINK_NOTHING_SUITABLE;
 ];
 
-[ DropSub _p;
+[ DropSub;
 	if(noun notin player) return MSG_DROP_NOT_HOLDING;
 	if(ImplicitDisrobeIfWorn(noun)) rtrue;
-	_p = parent(player);
-	!if(_p ~= location) <<Insert noun _p>>;
 	move noun to parent(player);
 	give noun moved;
 #Ifndef OPTIONAL_NO_DARKNESS;
