@@ -150,7 +150,7 @@ Global have_revived = 0;
 	have_revived = true;
 	print "^^You really shouldn't have died. Try again!^^";
 	PlayerTo(Library);
-	deadflag = GS_PLAYING;
+	deadflag = 0; ! Same as GS_PLAYING, but works in standard library as well
 ];
 
 
