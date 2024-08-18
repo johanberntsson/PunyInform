@@ -397,6 +397,7 @@ Default MSG_WAVE_DEFAULT 201;
 Default MSG_EMPTY_ALREADY_EMPTY 202;
 Default MSG_SET_DEFAULT 203;
 Default MSG_SET_TO_DEFAULT 204;
+Default MSG_EMPTY_NOT_CONTAINER 205;
 #EndIf;
 
 
@@ -625,6 +626,16 @@ Constant SKIP_MSG_RUB_DEFAULT;
 #Iffalse MSG_LOOKMODE_LONG < 1000;
 #Iffalse MSG_LOOKMODE_SHORT < 1000;
 Constant SKIP_MSG_LOOKMODE;
+#Endif;
+#Endif;
+#Endif;
+
+#Iffalse MSG_INSERT_NOT_CONTAINER < 1000;
+#Ifndef MSG_EMPTY_NOT_CONTAINER;
+Constant SKIP_MSG_INSERT_NOT_CONTAINER;
+#Ifnot;
+#Iffalse MSG_EMPTY_NOT_CONTAINER < 1000;
+Constant SKIP_MSG_INSERT_NOT_CONTAINER;
 #Endif;
 #Endif;
 #Endif;
@@ -1098,8 +1109,12 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 	MSG_ENTER_HELD:
 		"You can't enter ", (the) noun, " while holding ", (ItOrThem) noun, ".";
 #EndIf;
-#IfTrue MSG_INSERT_NOT_CONTAINER < 1000;
+#Ifndef SKIP_MSG_INSERT_NOT_CONTAINER;
+#ifdef MSG_EMPTY_NOT_CONTAINER;
+	MSG_INSERT_NOT_CONTAINER, MSG_EMPTY_NOT_CONTAINER:
+#Ifnot;
 	MSG_INSERT_NOT_CONTAINER:
+#Endif;
 		! p_arg_1 = the object that can't contain things
 		print_ret (The) p_arg_1, " can't contain things.";
 #Endif;

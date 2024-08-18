@@ -3,6 +3,7 @@ Upcoming release:
 - Dropping an item in darkness now forces a scope update, so the item isn't still in scope.
 - Removed superfluous code in DropSub.
 - Rearranged and cleaned up parts of the manual.
+- New library message: MSG_EMPTY_NOT_CONTAINER, e.g. "The ball can't contain things."
 
 =======
 v5.5.2: bug fix and optimization release (29 Jul 2024)

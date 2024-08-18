@@ -889,7 +889,8 @@ Verb 'yes' 'y//'
 
 [ EmptyTSub _i _recipient;
 	if(noun == second) return MSG_EMPTY_WOULDNT_ACHIEVE;
-	if(noun has container && noun hasnt open) {
+	if(noun hasnt container) { PrintMsg(MSG_EMPTY_NOT_CONTAINER, noun); rtrue; }
+	if(noun hasnt open) {
 		PrintMsg(MSG_EMPTY_IS_CLOSED, noun);
 		rtrue;
 	}
