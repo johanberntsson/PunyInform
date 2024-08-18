@@ -469,14 +469,15 @@ Constant ONE_SPACE_STRING = " ";
 	if(p_obj has container && p_obj hasnt open) print " (which is closed)";
 	if(p_obj has container && (p_obj has open || p_obj has transparent)) {
 		if(PrintContentsFromR(1, child(p_obj)) == 0) {
-			print " (which is empty)";
+			if(p_obj has openable)
+				print " (which is open but empty)";
 			if(c_style & NEWLINE_BIT)
 				new_line;
 		} else {
 			if(c_style & NEWLINE_BIT == 0)
 				print " (which contains ";
 			else {
-				if(p_obj has open)
+				if(p_obj has open && p_obj has openable)
 					print " (which is open)";
 				new_line;
 			}

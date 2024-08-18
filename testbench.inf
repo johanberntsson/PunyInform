@@ -846,6 +846,11 @@ Object -> Sweater "sweater"
 	],
 	has clothing;
 
+Object -> Bucket "bucket"
+	with
+		name 'bucket',
+	has container open;
+
 Object -> Aquarium "aquarium"
 	with
 		name 'aquarium',
