@@ -18,6 +18,7 @@ n
 again
 again me
 put sweater in s
+empty sweater
 drop sweater
 put ladder on ladder
 put ladder in ladder

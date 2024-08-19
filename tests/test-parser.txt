@@ -55,6 +55,9 @@ I only understood you as far as "again" but then you lost me.
 > put sweater in s
 The south can't contain things.
 
+> empty sweater
+The sweater can't contain things.
+
 > drop sweater
 You aren't holding it.
 
