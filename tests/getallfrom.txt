@@ -1,3 +1,4 @@
+
 > get all but box
 There are no things available that match "get all but box".
 
@@ -31,7 +32,7 @@ rock: Dropped.
 > n
 Normal box
 
-There's a box here. In the box is a bag (which is empty).
+There's a box here. In the box is a bag.
 
 You can also see a rock here.
 

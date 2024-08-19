@@ -20,6 +20,7 @@ Futile.
 > throw green ball at air
 (first taking the small green ball)
 Futile.
+
 > drop green
 Dropped.
 
@@ -34,8 +35,8 @@ Taken.
 White Room
 It's all white. The ball room lies to the north.
 
-You can see a red box (which is empty) and a transparent box (which is empty)
-here.
+You can see a red box (which is open but empty) and a transparent box (which is
+open but empty) here.
 
 > put balls in red box
 small blue ball: You put the small blue ball into the red box.
@@ -85,8 +86,8 @@ You put the black cube into the red box.
 
 > i
 You're carrying a red box (which contains a black cube, a red cube, a
-transparent box (which is empty), a small red ball, a small green ball and a
-small blue ball).
+transparent box (which is open but empty), a small red ball, a small green ball
+and a small blue ball).
 
 > quit
 Are you sure you want to quit? yes

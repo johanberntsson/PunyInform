@@ -25,7 +25,7 @@ But you are already there!
 Lit Room (in the sack)
 You are in a brightly lit room.
 
-You can see some trousers and a box (which is empty) here.
+You can see some trousers and a box here.
 
 > get out
 You leave the sack.
@@ -59,7 +59,7 @@ You are the other room.
 
 Lit Room
 
-You can see a box (which is empty) and a sack (which is empty) here.
+You can see a box and a sack here.
 
 > drop all
 battery: Dropped.

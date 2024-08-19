@@ -19,7 +19,7 @@ You are in a park. There is a wooden bench and a stone bench here. You can go
 south.
 
 You can see a blue coat, a coffre noir (which is closed) and a coffre blanc
-(which is empty) here.
+(which is open but empty) here.
 
 > i
 You're carrying a red coat.
@@ -51,7 +51,7 @@ UnknownVerb 'n': not xyzzy, leaving unknown
 Park
 
 You can see a red coat, a blue coat, a coffre noir (which is closed) and a
-coffre blanc (which is empty) here.
+coffre blanc (which is open but empty) here.
 
 > sit on bench
 Do you mean the wooden bench or the stone bench?

@@ -37,10 +37,10 @@ A blue book is standing on a shelf. Looking at the blue book makes you dizzy.
 
 An old and torn green book is here.
 
-You can also see a light switch, a sweater, an aquarium (which is empty), a box
-(which is closed), a shelf (on which are a pair of boots), a ladder (on which is
-a sticker), John, an infinite bag (which is empty), that stupid old pink book
-and an electric torch (Ugly as sin) here.
+You can also see a light switch, a sweater, an aquarium (which is open but
+empty), a box (which is closed), a shelf (on which are a pair of boots), a
+ladder (on which is a sticker), John, an infinite bag (which is open but empty),
+that stupid old pink book and an electric torch (Ugly as sin) here.
 
 > get blue and all books but blue
 blue book: The blue book starts ticking...

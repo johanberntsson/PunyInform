@@ -73,8 +73,8 @@ Taken.
 White Room
 It's all white. The ball room lies to the north.
 
-You can see a red box (which is empty) and a transparent box (which is empty)
-here.
+You can see a red box (which is open but empty) and a transparent box (which is
+open but empty) here.
 
 > put all balls but the red one in the red box
 small black ball: You put the small black ball into the red box.

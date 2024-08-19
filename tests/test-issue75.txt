@@ -15,7 +15,7 @@ You can't see any such thing.
 Why did you pick up the box?
 
 > i
-You're carrying a box (which is empty).
+You're carrying a box (which is open but empty).
 
 > quit
 Are you sure you want to quit? yes

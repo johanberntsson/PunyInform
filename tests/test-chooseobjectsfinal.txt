@@ -16,7 +16,8 @@ You're carrying a green ball and a pink ball.
 The Pub
 You are in a pub.
 
-You can see a table (on which is a red ball) and a box (which is empty) here.
+You can see a table (on which is a red ball) and a box (which is open but empty)
+here.
 
 > quit
 Are you sure you want to quit? yes

@@ -63,7 +63,7 @@ You are in a pub.
 
 A cool dartboard hangs on the wall, with a dart protruding from it.
 
-You can also see a table and a box (which is empty) here.
+You can also see a table and a box (which is open but empty) here.
 
 > throw dart at board
 You hit the board, yay!
@@ -74,7 +74,7 @@ You are in a pub.
 
 A cool dartboard hangs on the wall, with two darts protruding from it.
 
-You can also see a table and a box (which is empty) here.
+You can also see a table and a box (which is open but empty) here.
 
 > throw dart at board
 You hit the board, yay!
@@ -85,7 +85,7 @@ You are in a pub.
 
 A cool dartboard hangs on the wall, with three darts protruding from it.
 
-You can also see a table and a box (which is empty) here.
+You can also see a table and a box (which is open but empty) here.
 
 > take all darts
 dart: Taken.
@@ -98,7 +98,7 @@ You are in a pub.
 
 A cool dartboard hangs on the wall.
 
-You can also see a table and a box (which is empty) here.
+You can also see a table and a box (which is open but empty) here.
 
 > quit
 Are you sure you want to quit? yes

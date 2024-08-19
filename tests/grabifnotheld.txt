@@ -58,7 +58,7 @@ You are empty handed.
 Lit Room
 You are in a brightly lit room.
 
-You can see a dust, gizmo and box (which is empty) here.
+You can see a dust, gizmo and box here.
 
 > s
 Another Room

@@ -53,7 +53,7 @@ InScope(yourself, REACT_BEFORE, Go)
 InScope(yourself, REACT_AFTER, Go)
 The Near Location
 
-You can see a box (which is empty), Bob and a near object here.
+You can see a box (which is open but empty), Bob and a near object here.
 
 InScope(yourself, REACT_AFTER, Go)
 
