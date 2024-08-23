@@ -1016,6 +1016,12 @@ Include "parser.h";
 #IfDef DEBUG;
 	if(debug_flag & 2) TraceAction();
 #EndIf;
+	if(input_action == -2) {
+		input_action = action;
+		input_noun = noun;
+		input_second = second;
+		input_direction = selected_direction;
+	}
 	if ((meta || (BeforeRoutines() == false)) && action < 4096) {
 		@push run_after_routines_msg; @push run_after_routines_arg_1;
 		run_after_routines_msg = 0;

@@ -628,6 +628,10 @@ Global listing_together; ! The first object# in the group when listing together
 Global lt_value;
 #Endif;
 
+Global input_action;
+Global input_noun;
+Global input_second;
+Global input_direction;
 
 Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
 Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used

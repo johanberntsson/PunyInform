@@ -6,6 +6,8 @@ Upcoming release:
 - New library message: MSG_EMPTY_NOT_CONTAINER, e.g. "The ball can't contain things."
 - The text "(which is open)" is no longer displayed in tall inventory for permanently open, non-empty containers (e.g. a bucket). (Issue #127)
 - The text "(which is empty)" in an inventory listing has been changed to "(which is open but empty)", and is now only displayed for openable containers.
+- New globals to say what the action input by the player was: input_action, input_noun, input_second, input_direction. 
+- Changed so action_to_be is set to NULL (-1) before action is performed.
 
 =======
 v5.5.2: bug fix and optimization release (29 Jul 2024)

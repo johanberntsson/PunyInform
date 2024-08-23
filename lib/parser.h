@@ -1790,6 +1790,13 @@ Array guess_object-->5;
 	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
 ];
 
+[ ResetInputAction p_action;
+	input_action = p_action;
+	input_noun = 0;
+	input_second = 0;
+	input_direction = 0;
+];
+
 [ _ParseAndPerformAction _word_data _verb_grammar _i _j _pattern _noun _score _best_score _best_pattern _best_phase2 _best_second _action _verb_offset _selected_direction _selected_direction_index;
 	! returns
 	! 1/true: if error was found
@@ -1801,6 +1808,7 @@ Array guess_object-->5;
 	! 1 is returned. If the input is "open box" then
 	! the whole input is matched and 2 returned.
 
+	ResetInputAction(-1); ! -1 means input_action etc won't be set (by implicit actions etc)
 	multiple_objects-->0 = 0;
 	selected_direction_index = 0;
 	selected_direction = 0;
@@ -2182,6 +2190,8 @@ Array guess_object-->5;
 			}
 		}
 	}
+	
+	action_to_be = NULL; ! We're done with parsing, and the action is now final
 
 	if(actor ~= player) {
 		! The player's "orders" property can refuse to allow conversation
@@ -2220,6 +2230,7 @@ Array guess_object-->5;
 	if(multiple_objects --> 0 == 0) {
 		! single action
 		if(inp1 > 1) PronounNotice(noun);
+		ResetInputAction(-2); ! Allow input_action to be set by PerformPreparedAction
 		PerformPreparedAction();
 	} else {
 		! multiple action
@@ -2286,6 +2297,7 @@ Array guess_object-->5;
 
 				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
 				if(inp1 > 1) PronounNotice(noun);
+				ResetInputAction(-2); ! Allow input_action to be set by PerformPreparedAction
 				PerformPreparedAction();
 				++_score;
 			}
