@@ -40,8 +40,8 @@ Include "globals.h";
 		LOOPOVERSCOPE_REASON: print "LOOPOVERSCOPE";
 		TESTSCOPE_REASON: print "TESTSCOPE";
 	}
-	if(action_to_be >= 0)
-		print ", ", (DebugAction) action_to_be;
+	if(action >= 0)
+		print ", ", (DebugAction) action;
 	print ")^";
 	if(scope_reason == PARSING_REASON && location == NearLocation)
 		PlaceInScope(Linda);

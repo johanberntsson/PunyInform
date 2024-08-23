@@ -2191,8 +2191,6 @@ Array guess_object-->5;
 		}
 	}
 	
-	action_to_be = NULL; ! We're done with parsing, and the action is now final
-
 	if(actor ~= player) {
 		! The player's "orders" property can refuse to allow conversation
 		! here, by returning true.  If not, the order is sent to the
@@ -2226,6 +2224,8 @@ Array guess_object-->5;
 		if(num_words_parsed < 0) return -num_words_parsed;
 		return num_words_parsed;
 	}
+
+	action_to_be = NULL; ! We're done with parsing, and the action is now final
 
 	if(multiple_objects --> 0 == 0) {
 		! single action
