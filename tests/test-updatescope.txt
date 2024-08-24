@@ -14,10 +14,10 @@ InScope(yourself, PARSING)
 
 InScope(Linda, PARSING, Examine)
 
-InScope(yourself, REACT_BEFORE, Examine)
+InScope(yourself, REACT_BEFORE, Answer)
 There is no reply.
 
-InScope(yourself, EACH_TURN, Examine)
+InScope(yourself, EACH_TURN, Answer)
 
 The remote object says "I do something every turn."
 
@@ -40,7 +40,7 @@ You are in a remote location. West lies a near location.
 
 You can see Linda and a remote object here.
 
-InScope(yourself, REACT_AFTER, Go)
+InScope(yourself, REACT_AFTER, Look)
 
 InScope(yourself, EACH_TURN, Go)
 
@@ -55,7 +55,7 @@ The Near Location
 
 You can see a box (which is open but empty), Bob and a near object here.
 
-InScope(yourself, REACT_AFTER, Go)
+InScope(yourself, REACT_AFTER, Look)
 
 InScope(yourself, EACH_TURN, Go)
 
@@ -112,7 +112,7 @@ InScope(yourself, PARSING, AskFor)
 InScope(yourself, PARSING, AskFor)
 Bob has better things to do.
 
-InScope(yourself, EACH_TURN, AskFor)
+InScope(yourself, EACH_TURN, Give)
 
 > take box
 
