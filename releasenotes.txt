@@ -8,6 +8,7 @@ Upcoming release:
 - The text "(which is empty)" in an inventory listing has been changed to "(which is open but empty)", and is now only displayed for openable containers.
 - New globals to say what the action input by the player was: input_action, input_noun, input_second, input_direction. 
 - Changed so action_to_be is set to NULL (-1) before action is performed.
+- New test file for input_action.
 
 =======
 v5.5.2: bug fix and optimization release (29 Jul 2024)

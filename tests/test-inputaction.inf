@@ -1,0 +1,80 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+Constant Story      "Minimal";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+Constant NO_SCORE = 0;
+
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+Constant OPTIONAL_FLEXIBLE_INVENTORY;
+Constant OPTIONAL_PROVIDE_UNDO;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+Include "puny.h";
+
+Object Library "The Library"
+	with
+		description "You are in a library.";
+
+Object -> Box "box"
+	with
+		name 'box',
+		inside_description "It feels so nice, standing in the box.",
+	has container open openable enterable;
+
+
+Object -> Ball "ball"
+	with
+		name 'ball',
+		description "This ball can be picked up, but not with an implicit action.",
+		before [;
+			Take, Remove:
+				if(input_action ~= action)
+					"The ball can't be picked up with an implicit action!";
+				if(Book in location) {
+					print "(You decide to pick up the book as well)^";
+					<Take Book>;
+				}
+		];
+
+Object -> Book "book"
+	with
+		name 'book',
+		description "This book can only be picked up when a HELD token makes the parser try to pick it up, OR when you pick up 
+			the ball and the book is in location.",
+		before [;
+			Take, Remove:
+				if(input_action == ##Take && input_noun == Ball)
+					rfalse; ! Allow action
+				if(action_to_be < 0) ! This is not the parser performing an implicit Take
+					"You can't deliberately pick it up. Trying to eat it should make you pick it up though!";
+		];
+
+Object -> Button "button"
+	with
+		name 'button',
+		description "Pushing this button makes you try to pick up the book.",
+		before [;
+			Push:
+				<<Take Book>>;
+		],
+	has static;
+
+				
+
+[Initialise;
+	print "^^And so the story begins...^^";
+];

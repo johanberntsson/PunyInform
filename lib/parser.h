@@ -1791,6 +1791,9 @@ Array guess_object-->5;
 ];
 
 [ ResetInputAction p_action;
+	! p_action values:
+	!   -1: Don't set input_action etc as long as input_action has this value (used when the parser performs implicit actions)
+	!   -2: Set input_action etc the next time an action is performed
 	input_action = p_action;
 	input_noun = 0;
 	input_second = 0;
