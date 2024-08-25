@@ -708,7 +708,7 @@ Array _PutOnMessages -->
 ];
 
 [ TakeSub;
-	if(TryToTakeNoun() ~= false) rtrue;
+	if(TryToTakeNoun(true) ~= false) rtrue;
 	run_after_routines_msg = MSG_TAKE_DEFAULT;
 ];
 
@@ -744,13 +744,24 @@ Array _PutOnMessages -->
 	return MSG_TOUCH_DEFAULT;
 ];
 
-[ TransferSub;
-	if(noun in second || (noun in parent(player) && selected_direction == d_to))
+[ TransferSub _work_to_do;
+	if(noun notin second) _work_to_do = true;
+	if(second == player) { <Take noun>; run_after_routines_msg = _work_to_do; rtrue; }
+	if(_work_to_do == false || (noun in parent(player) && second == Directions && selected_direction == d_to))
 		return MSG_TRANSFER_ALREADY;
 	if(noun notin player && TryToTakeNoun() == true) rtrue;
-	if (second has supporter) <<PutOn noun second>>;
-	if (second == Directions && selected_direction == d_to) <<Drop noun>>;
-	<Insert noun second>;
+	if (second == Directions && selected_direction == d_to) {
+		<Drop noun>;
+		if(noun in location) run_after_routines_msg = 1;
+	}
+	else {
+		if (second has supporter) 
+			<PutOn noun second>;
+		else 
+			<Insert noun second>;
+		if(noun in second)
+			run_after_routines_msg = 1;
+	}
 ];
 
 [ TurnSub;
@@ -1767,11 +1778,19 @@ Global scope_cnt;
 ];
 #EndIf;
 
-[ TryToTakeNoun _i _k _ancestor _after_recipient;
+[ TryToTakeNoun p_suppress_before_after _i _k _r _ancestor _after_recipient;
 	! Try to transfer the given item to the player. Return values:
 	! 	0: Success, no message has been printed
 	!   1: Failed, a message has been printed
 	!   2: Success, a message has been printed
+
+	_k = action;
+	if(p_suppress_before_after == false) {
+		action = ##Take;
+		_r = BeforeRoutines();
+		action = _k;
+		if (_r) rtrue;
+	}
 
 	! People cannot ordinarily be taken.
 	if(noun == player) { PrintMsg(MSG_TAKE_YOURSELF); rtrue; };
@@ -1802,10 +1821,12 @@ Global scope_cnt;
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) _i, ").before()^";
 #EndIf;
-		_k = action; action = ##LetGo;
-		if (RunRoutines(_i, before)) { action = _k; rtrue; }
+		action = ##LetGo;
+		_r = RunRoutines(_i, before);
 		action = _k;
+		if (_r) rtrue;
 	}
+	
 
 	if(noun has scenery) { PrintMsg(MSG_TAKE_SCENERY); rtrue; }
 	if(noun has static) { PrintMsg(MSG_TAKE_STATIC); rtrue; }
@@ -1821,10 +1842,17 @@ Global scope_cnt;
 #IfDef DEBUG;
 		if(debug_flag & 1) print "(", (name) _after_recipient, ").after()^";
 #EndIf;
-		_k = action; action = ##LetGo;
+		action = ##LetGo;
 		_i = RunRoutines(_after_recipient, after);
 		action = _k;
 		if(_i) return 2;
+	}
+
+	if(p_suppress_before_after == false) {
+		action = ##Take;
+		_r = AfterRoutines();
+		action = _k;
+		if (_r) return 2;
 	}
 
 	rfalse;

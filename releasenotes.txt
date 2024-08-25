@@ -10,6 +10,8 @@ Upcoming release:
 - Changed so action_to_be is set to NULL (-1) before action is performed.
 - New test file for input_action.
 - New public routines: DoorDir(door_object) and DoorTo(door_object), returning the effective values of these properties, even for simple doors.
+- Changed TryToTakeNoun routine to fire before and after routines for Take action, unless called from TakeSub. (Issue #128)
+- Changed TransferSub to add before and after stage for ##Take when applicable, and fire after stage for ##Transfer when action managed to move the noun to second.
 
 =======
 v5.5.2: bug fix and optimization release (29 Jul 2024)
