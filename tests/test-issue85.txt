@@ -1,11 +1,14 @@
 
 > push apple to box
+taking apple
 Apples are verboten
 
 > push banana to box
+taking banana
 You put the banana into the box.
 
 > push lemon to box
+taking lemon
 You put the lemon into the box.
 
 > l
@@ -22,8 +25,10 @@ taking banana
 It seems to be stuck inside the box.
 
 > empty box
-lemon: Dropped.
-banana: It seems to be stuck inside the box.
+lemon: taking lemon
+Dropped.
+banana: taking banana
+It seems to be stuck inside the box.
 
 > quit
 Are you sure you want to quit? yes
