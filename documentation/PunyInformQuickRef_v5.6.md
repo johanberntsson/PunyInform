@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v5.5 quick reference** |
+| **PunyInform v5.6 quick reference** |
 
   
 More information on last page.
@@ -10,6 +10,10 @@ More information on last page.
 ## action
 
 ###### The current action, e.g. *##PutOn*.
+
+## action_to_be
+
+###### The action currently being considered, during parsing.
 
 ## actor
 
@@ -58,6 +62,22 @@ More information on last page.
 ## inp2
 
 ###### Usually equals *second*, but is *1* if *second* is a number.
+
+## input_action **PUNY++**
+
+###### The original action, derived from player input.
+
+## input_direction **PUNY++**
+
+###### The original value of *selected_direction*, derived from player input.
+
+## input_noun **PUNY++**
+
+###### The original value of *noun*, derived from player input.
+
+## input_second **PUNY++**
+
+###### The original value of *second*, derived from player input.
 
 ## inventory_stage
 
@@ -186,6 +206,8 @@ More information on last page.
 # Library constants
 
 ###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined.  *PUNYINFORM_MAJOR_VERSION* , *PUNYINFORM_MINOR_VERSION*,* PUNYINFORM_PATCH_VERSION* and *PUNYINFORM_VERSION\_SUFFIX* hold the library version.  There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT.  *The global *scope_reason* schould always have one of the values *PARSING_REASON, EACH_TURN_REASON, REACT_BEFORE_REASON, REACT_AFTER_REASON, LOOPOVERSCOPE_REASON, TESTSCOPE_REASON*.
+
+# 
 
 # User-defined constants
 
@@ -403,6 +425,14 @@ More information on last page.
 
 ###### Return the nearest object that contains both *object1* and *object2* on some level, or *false*.
 
+## DoorDir(object) **PUNY++**
+
+###### Returns the direction in which the door object lies.
+
+## DoorTo(object) **PUNY++**
+
+###### Returns the room which the door object leads to.
+
 ## DrawStatusLine()
 
 ###### Print the statusline, in a z5 or z8 game.
@@ -527,6 +557,8 @@ More information on last page.
 
 ###### Wait for the player to type something. Return *true* if they typed yes, *false* if they typed no, or ask again.
 
+# 
+
 # Printing rules
 
 A printing rule is used to print something based on one argument,
@@ -560,6 +592,8 @@ typically an object. Example of use:
 ## ThatorThose
 
 ###### Prints "that" or "those" based on *pluralname*.
+
+# 
 
 # **E**ntry point routines
 

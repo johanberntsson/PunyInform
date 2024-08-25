@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.6: bug fix and new feature release (25 Aug 2024)
+
 - Dropping an item in darkness now forces a scope update, so the item isn't still in scope.
 - Removed superfluous code in DropSub.
 - Rearranged and cleaned up parts of the manual.
