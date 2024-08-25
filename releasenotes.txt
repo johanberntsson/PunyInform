@@ -9,6 +9,7 @@ Upcoming release:
 - New globals to say what the action input by the player was: input_action, input_noun, input_second, input_direction. 
 - Changed so action_to_be is set to NULL (-1) before action is performed.
 - New test file for input_action.
+- New public routines: DoorDir(door_object) and DoorTo(door_object), returning the effective values of these properties, even for simple doors.
 
 =======
 v5.5.2: bug fix and optimization release (29 Jul 2024)

@@ -309,30 +309,48 @@ Verb 'wear'
 	run_after_routines_msg = MSG_EAT_DEFAULT;
 ];
 
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+[ _CheckDoorDirTo p_door;
+#Ifdef OPTIONAL_SIMPLE_DOORS;
+	if(p_door.&door_dir == 0 || (p_door.&door_to == 0 && (p_door.&found_in == 0 || p_door.#found_in ~= 4))) {
+		_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_door);
+		rtrue;
+	}
+#Ifnot;
+	if(p_door.&door_to == 0 || p_door.&door_dir == 0) {
+		_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, p_door);
+		rtrue;
+	}
+#EndIf;
+];
+#EndIf;
+
+
+[ DoorDir p_door _door_dir;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+	_CheckDoorDirTo(p_door);
+#EndIf;
+#IfDef OPTIONAL_SIMPLE_DOORS;
+	if(p_door.#door_dir > 2) {
+		! This is a Simple Door, where door_dir is an array
+		if(real_location == p_door.&found_in-->1)
+			_door_dir = 1;
+		return p_door.&door_dir-->_door_dir;
+	} else {
+#EndIf;
+		! Normal Inform door
+		_door_dir = p_door.door_dir;
+		if(UnsignedCompare(_door_dir, top_object) > 0)
+			return p_door.door_dir();
+		return _door_dir;
+#IfDef OPTIONAL_SIMPLE_DOORS;
+	}
+#EndIf;
+];
+
 [ EnterSub _door_dir;
 	if(noun has door) {
-#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(noun.&door_dir == 0) { ! door_to will be checked by Go action anyway
-			_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, noun);
-			rtrue;
-		}
-#EndIf;
-#IfDef OPTIONAL_SIMPLE_DOORS;
-		if(noun.#door_dir > 2) {
-			! This is a Simple Door, where door_dir is an array
-			if(real_location == noun.&found_in-->1)
-				_door_dir = 1;
-			_door_dir = noun.&door_dir-->_door_dir;
-		} else {
-#EndIf;
-			! Normal Inform door
-			_door_dir = noun.door_dir;
-			if(UnsignedCompare(_door_dir, top_object) > 0) {
-				_door_dir = noun.door_dir();
-			}
-#IfDef OPTIONAL_SIMPLE_DOORS;
-		}
-#EndIf;
+		_door_dir = DoorDir(noun);
 		! Convert to fake object
 		_door_dir = DirPropToFakeObj(_door_dir);
 		<<Go _door_dir>>;
@@ -1812,7 +1830,31 @@ Global scope_cnt;
 	rfalse;
 ];
 
-[ GoDir p_property _new_location _old_location _door_to _vehicle _vehicle_mode _saved_location;
+[ DoorTo p_door _door_to;
+	! Returns the location the door leads to (handling Simple Doors, as needed). 
+	! Value true means the exit is blocked and a message has been printed
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+	_CheckDoorDirTo(p_door);
+#EndIf;
+	_door_to = p_door.door_to;
+#IfDef OPTIONAL_SIMPLE_DOORS;
+	if(_door_to == 0) {
+		! This is a Simple Door, where door_to has been left out
+		if(real_location == p_door.&found_in-->0)
+			_door_to = 1;
+		return p_door.&found_in-->_door_to;
+	} else {
+#EndIf;
+		! Normal Inform door
+		if(UnsignedCompare(_door_to, top_object) > 0)
+			return p_door.door_to();
+		return _door_to;
+#IfDef OPTIONAL_SIMPLE_DOORS;
+	}
+#EndIf;
+];
+
+[ GoDir p_property _new_location _old_location _vehicle _vehicle_mode _saved_location;
 	if(parent(player) ~= real_location) {
 		! special rule when in enterable (veichles)
 		! before routine for the object is called with Go dir, and returns
@@ -1852,39 +1894,9 @@ Global scope_cnt;
 			_new_location = 0;
 		else {
 			if(_new_location hasnt open) { PrintMsg(MSG_GO_DOOR_CLOSED, _new_location); rtrue; }
-#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-#Ifdef OPTIONAL_SIMPLE_DOORS;
-			if(_new_location.&door_dir == 0 || (_new_location.&door_to == 0 && (_new_location.&found_in == 0 || _new_location.#found_in ~= 4))) {
-				_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, _new_location);
+			_new_location = DoorTo(_new_location);
+			if(_new_location == 1)
 				rtrue;
-			}
-#Ifnot;
-			if(_new_location.&door_to == 0 || _new_location.&door_dir == 0) {
-				_RunTimeError(ERR_OBJECT_HASNT_PROPERTY, _new_location);
-				rtrue;
-			}
-#EndIf;
-#EndIf;
-			_door_to = _new_location.door_to;
-#IfDef OPTIONAL_SIMPLE_DOORS;
-			if(_door_to == 0) {
-				! This is a Simple Door, where door_to has been left out
-				if(real_location == _new_location.&found_in-->0)
-					_door_to = 1;
-				_new_location = _new_location.&found_in-->_door_to;
-			} else {
-#EndIf;
-				! Normal Inform door
-				if(UnsignedCompare(_door_to, top_object) > 0) {
-					_new_location = _new_location.door_to();
-	!				print "GoDir, door leads to ", (the) _new_location, "^";
-					if(_new_location == 1)
-						rtrue;
-				} else
-					_new_location = _door_to;
-#IfDef OPTIONAL_SIMPLE_DOORS;
-			}
-#EndIf;
 		}
 	}
 
