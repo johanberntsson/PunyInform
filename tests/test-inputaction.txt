@@ -1,0 +1,85 @@
+
+> get all
+box: Taken.
+ball: (You decide to pick up the book as well)
+Taken.
+Taken.
+book: You can't deliberately pick it up. Trying to eat it should make you pick
+it up though!
+
+> drop all
+ball: Dropped.
+book: Dropped.
+box: Dropped.
+
+> get book
+You can't deliberately pick it up. Trying to eat it should make you pick it up
+though!
+
+> get ball
+(You decide to pick up the book as well)
+Taken.
+Taken.
+
+> i tall
+You're carrying:
+  a ball
+  a book
+
+> drop all
+ball: Dropped.
+book: Dropped.
+
+> eat book
+(first taking the book)
+That's plainly inedible.
+
+> i
+You're carrying:
+  a book
+
+> drop all
+book: Dropped.
+
+> x ball
+This ball can be picked up, but not with an implicit action.
+
+> eat ball
+(first taking the ball)
+The ball can't be picked up with an implicit action!
+
+> put ball in box
+(first taking the ball)
+The ball can't be picked up with an implicit action!
+
+> get ball
+(You decide to pick up the book as well)
+Taken.
+Taken.
+
+> drop ball
+Dropped.
+
+> get it
+Taken.
+
+> i
+You're carrying:
+  a ball
+  a book
+
+> drop all
+ball: Dropped.
+book: Dropped.
+
+> put book in box
+(first taking the book)
+You can't deliberately pick it up. Trying to eat it should make you pick it up
+though!
+
+> i
+You are empty handed.
+
+> quit
+Are you sure you want to quit? yes
+

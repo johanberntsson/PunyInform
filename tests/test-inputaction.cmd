@@ -1,3 +1,5 @@
+transcript
+
 get all
 drop all
 get book
@@ -17,4 +19,6 @@ i
 drop all
 put book in box
 i
-recording off
+quit
+yes
+
