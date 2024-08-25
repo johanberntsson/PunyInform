@@ -431,7 +431,7 @@ More information on last page.
 
 ## DoorTo(object) **PUNY++**
 
-###### Returns the room which the door object leads to.
+###### Returns the room which the door object leads to, or 1 if object.door_to is a routine and it returned 1, meaning it printed a message why the player can't enter.
 
 ## DrawStatusLine()
 
