@@ -9,6 +9,12 @@ You can also see a silver coin, a table (on which are a gold coin, a dart and
 two silver coins), a box (which contains a gold coin), two darts and three gold
 coins here.
 
+> take two gold coins
+You can't see any such thing.
+
+> drop all
+You are not carrying anything.
+
 > x coin
 Do you mean the silver coin or the gold coin?
 

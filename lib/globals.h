@@ -378,7 +378,7 @@ Array LanguageNumberTensStrings static -->
 
 
 Constant TT_OBJECT           = 1;    ! one or more words referring to an object
-									 ! it is one of NOUN_TOKEN etc. below
+									 ! it is one of NOUN_OBJECT etc. below
 Constant TT_PREPOSITION      = 2;    ! e.g. 'into'
 Constant TT_ROUTINE_FILTER   = 3;    ! e.g. noun=CagedCreature
 Constant TT_ATTR_FILTER      = 4;    ! e.g. edible
@@ -401,6 +401,13 @@ Constant GPR_FAIL           = -1;   ! Return values from General Parsing
 Constant GPR_PREPOSITION    = 0;    ! Routines
 Constant GPR_NUMBER         = 1;
 Constant GPR_MULTIPLE       = 2;
+Constant GPR_NOUN           = -256; ! Reparse, but as NOUN_OBJECT this time
+Constant GPR_HELD           = GPR_NOUN + 1; ! ditto for HELD_OBJECT
+Constant GPR_MULTI          = GPR_NOUN + 2; ! and so on...
+Constant GPR_MULTIHELD      = GPR_NOUN + 3;
+Constant GPR_MULTIEXCEPT    = GPR_NOUN + 4;
+Constant GPR_MULTIINSIDE    = GPR_NOUN + 5;
+Constant GPR_CREATURE       = GPR_NOUN + 6;
 Constant GPR_REPARSE        = 10000;
 
 Constant TOKEN_SINGLE_PREP   = $42; ! 66

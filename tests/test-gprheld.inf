@@ -1,0 +1,107 @@
+! Testing what is/SopeWithin and custom meta
+!
+#Iftrue (#version_number == 8);
+Constant USEINFORM;
+#Endif;
+
+Constant Story      "Parser test";
+Constant Headline   "^A parser test suite for PunyInform.^";
+Serial "200827";
+Constant INITIAL_LOCATION_VALUE = LitRoom;
+
+! Uncomment to show time instead of score/turns
+!Statusline time;
+
+!Constant DEBUG;
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_PARSENOUNPHRASE;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_SCOPE;
+
+! Uncomment to add optional features to PunyLib
+!Constant DEBUG;
+!Constant CUSTOM_ABBREVIATIONS;
+!Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+!Constant OPTIONAL_FULL_SCORE;
+!Constant OPTIONAL_FULL_DIRECTIONS;
+!Constant OPTIONAL_GUESS_MISSING_NOUN;
+!Constant OPTIONAL_MANUAL_SCOPE;
+!Constant RUNTIME_ERRORS = 0;
+
+#Ifdef USEINFORM;
+Include "Parser";
+Include "VerbLib";
+#IfNot;
+Include "globals.h";
+#EndIf;
+
+#Ifndef USEINFORM;
+Include "puny.h";
+#EndIf;
+
+! Uncomment to add PunyLib extensions
+!Include "ext_menu.h";
+!Include "ext_flags.h";
+!Include "ext_quote_box.h";
+!Include "ext_cheap_scenery.h";
+
+#Ifdef USEINFORM;
+Include "Grammar";
+#Endif;
+
+! see https://intfiction.org/t/a-heldclothing-token/69982/4
+
+#Ifdef USEINFORM;
+[ ClothingWithTake tmp_wn obj;
+	    tmp_wn = wn;
+	    obj = ParseToken(ELEMENTARY_TT, NOUN_TOKEN);
+	    if (obj && obj ofclass Object && obj has clothing) {
+	            wn = tmp_wn;
+	            return GPR_HELD;
+	    }
+	    return GPR_FAIL;
+];
+#IfNot;
+[ ClothingWithTake tmp_wn obj;
+	    tmp_wn = wn;
+	    obj = ParseToken(TT_OBJECT, NOUN_OBJECT);
+	    if (obj && obj ofclass Object && obj has clothing) {
+	            wn = tmp_wn;
+	            return GPR_HELD;
+	    }
+	    return GPR_FAIL;
+];
+#Endif;
+
+Verb 'porter'
+	    * ClothingWithTake      -> Wear
+	    * noun                  -> Take;
+
+Object LitRoom "Lit Room"
+	with
+		description [;
+			print "You are in a brightly lit room.^";
+		],
+	has light;
+
+Object -> Shirt "shirt"
+    with
+        name 'shirt',
+    has clothing;
+
+Object -> Rock "rock"
+    with
+        name 'rock';
+
+[Initialise;
+	print "^^The testsuite is open for business!^^";
+#IfDef USEINFORM;
+    location=INITIAL_LOCATION_VALUE;;
+#EndIf;
+];
+
+

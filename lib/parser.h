@@ -1644,6 +1644,13 @@ Array guess_object-->5;
 		_current_wn = wn;
 		_old_dir_index = selected_direction_index;
 		_noun = _ParseToken(pattern_pointer, _parse_pointer);
+
+		! reparse if prompted by _ParseToken
+		switch(_noun) {
+		GPR_HELD:
+			_noun = _ParseToken(pattern_pointer -> 0, HELD_OBJECT, -1);
+        }
+
 		! the parse routine can change wn, so update _parse_pointer
 		_parse_pointer = parse + 2 + 4 * (wn - 1);
 

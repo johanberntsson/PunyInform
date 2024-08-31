@@ -1,6 +1,8 @@
 transcript
 
 look
+take two gold coins
+drop all
 x coin
 silver
 x coins
