@@ -487,6 +487,16 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		p_parse_pointer = p_parse_pointer + 4;
 	}
 
+	! is the first entry a number?
+	max_indistiguishable = TryNumber(wn);
+	if(max_indistiguishable == -1000) {
+		max_indistiguishable = MAX_MULTIPLE_OBJECTS;
+	} else {
+		wn = wn + 1;
+		p_parse_pointer = p_parse_pointer + 4;
+		parser_action = ##PluralFound;
+	}
+
 	if((((p_parse_pointer-->0) -> #dict_par1) & 128) == 0) {
 		! this word doesn't have the noun flag set,
 		! so it can't be part of a noun phrase
@@ -616,7 +626,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				_j = _j + _PARSENP_CHOOSEOBJ_WEIGHT * ChooseObjects(_obj, 2);
 #Endif;
 
-				if(_j == _best_score && _result == _best_word_count) {
+				if(_j == _best_score && _result == _best_word_count && _matches < max_indistiguishable) {
 					_matches++;
 					which_object-->_matches = _obj;
 #IfDef DEBUG_PARSENOUNPHRASE;

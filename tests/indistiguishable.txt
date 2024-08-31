@@ -9,11 +9,36 @@ You can also see a silver coin, a table (on which are a gold coin, a dart and
 two silver coins), a box (which contains a gold coin), two darts and three gold
 coins here.
 
-> take two gold coins
-You can't see any such thing.
+> take two gold
+gold coin: Taken.
+gold coin: Taken.
+
+> i
+You're carrying two gold coins.
 
 > drop all
-You are not carrying anything.
+gold coin: Dropped.
+gold coin: Dropped.
+
+> take two coins
+gold coin: Taken.
+gold coin: Taken.
+
+> i
+You're carrying two gold coins.
+
+> drop all
+gold coin: Dropped.
+gold coin: Dropped.
+
+> look
+The Pub
+You are in a pub.
+
+A cool dartboard hangs on the wall.
+
+You can also see a silver coin, a table (on which are a dart and two silver
+coins), a box (which is open but empty), five gold coins and two darts here.
 
 > x coin
 Do you mean the silver coin or the gold coin?

@@ -1,8 +1,13 @@
 transcript
 
 look
-take two gold coins
+take two gold
+i
 drop all
+take two coins
+i
+drop all
+look
 x coin
 silver
 x coins
