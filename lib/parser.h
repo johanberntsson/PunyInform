@@ -482,19 +482,24 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 
 	! this is needed after a which question, so that we
 	! can answer 'the pink book' and similar
+	parser_two = 0;
 	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an') {
+		if(p_parse_pointer --> 0 ~= 'the')
+			parser_two = 1;
 		wn = wn + 1;
 		p_parse_pointer = p_parse_pointer + 4;
 	}
 
 	! is the first entry a number?
-	max_indistiguishable = TryNumber(wn);
-	if(max_indistiguishable == -1000) {
-		max_indistiguishable = MAX_MULTIPLE_OBJECTS;
-	} else {
-		wn = wn + 1;
-		p_parse_pointer = p_parse_pointer + 4;
-		parser_action = ##PluralFound;
+	if(parser_two == 0) {
+		parser_two = TryNumber(wn);
+		if(parser_two < 0) {
+			parser_two = MAX_MULTIPLE_OBJECTS;
+		} else {
+			wn = wn + 1;
+			p_parse_pointer = p_parse_pointer + 4;
+			parser_action = ##PluralFound;
+		}
 	}
 
 	if((((p_parse_pointer-->0) -> #dict_par1) & 128) == 0) {
@@ -626,7 +631,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				_j = _j + _PARSENP_CHOOSEOBJ_WEIGHT * ChooseObjects(_obj, 2);
 #Endif;
 
-				if(_j == _best_score && _result == _best_word_count && _matches < max_indistiguishable) {
+				if(_j == _best_score && _result == _best_word_count && _matches < parser_two) {
 					_matches++;
 					which_object-->_matches = _obj;
 #IfDef DEBUG_PARSENOUNPHRASE;
