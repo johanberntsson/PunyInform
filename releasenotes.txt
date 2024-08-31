@@ -1,5 +1,8 @@
 Upcoming release:
 
+- Added support for GPR_NOUN, GPR_HELD, GPR_MULTI* and GPR_CREATURE return
+  values from ParseToken, see test-gprheld.inf
+
 =======
 v5.6: bug fix and new feature release (25 Aug 2024)
 

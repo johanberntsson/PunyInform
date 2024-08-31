@@ -1,5 +1,11 @@
-> install battery on mounting with toolbox
-installing with the toolbox
 
 > porter shirt
+(first taking the shirt)
+You are now wearing the shirt.
+
+> porter rock
+Taken.
+
+> quit
+Are you sure you want to quit? yes
 

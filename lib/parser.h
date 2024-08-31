@@ -1647,8 +1647,20 @@ Array guess_object-->5;
 
 		! reparse if prompted by _ParseToken
 		switch(_noun) {
+		GPR_NOUN:
+			_noun = _ParseToken(TT_OBJECT, NOUN_OBJECT, -1);
 		GPR_HELD:
-			_noun = _ParseToken(pattern_pointer -> 0, HELD_OBJECT, -1);
+			_noun = _ParseToken(TT_OBJECT, HELD_OBJECT, -1);
+		GPR_MULTI:
+			_noun = _ParseToken(TT_OBJECT, MULTI_OBJECT, -1);
+		GPR_MULTIHELD:
+			_noun = _ParseToken(TT_OBJECT, MULTIHELD_OBJECT, -1);
+		GPR_MULTIEXCEPT:
+			_noun = _ParseToken(TT_OBJECT, MULTIEXCEPT_OBJECT, -1);
+		GPR_MULTIINSIDE:
+			_noun = _ParseToken(TT_OBJECT, MULTIINSIDE_OBJECT, -1);
+		GPR_CREATURE:
+			_noun = _ParseToken(TT_OBJECT, CREATURE_OBJECT, -1);
         }
 
 		! the parse routine can change wn, so update _parse_pointer

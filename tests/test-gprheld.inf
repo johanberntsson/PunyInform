@@ -98,7 +98,7 @@ Object -> Rock "rock"
         name 'rock';
 
 [Initialise;
-	print "^^The testsuite is open for business!^^";
+	print "^^Try ~porter shirt~^^";
 #IfDef USEINFORM;
     location=INITIAL_LOCATION_VALUE;;
 #EndIf;
