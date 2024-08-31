@@ -5,7 +5,7 @@ System_file;
 Constant PUNYINFORM_MAJOR_VERSION = 5;
 Constant PUNYINFORM_MINOR_VERSION = 6;
 Constant PUNYINFORM_PATCH_VERSION = 0; ! Usually 0 (if zero, it is not printed in banner)
-!Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
+Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
 #Ifndef VN_1636;
 Message fatalerror "*** The PunyInform library needs Inform v6.36 or later to work ***";
@@ -505,7 +505,6 @@ Global noun_filter;      ! For noun filtering by user routines
 Global object_token_type;! Remember what kind of object token type is worked on
 Global noun;
 Global second;
-Global max_indistiguishable; ! how many indistiguishable to consider
 Global selected_direction;
 Global selected_direction_index;
 Global inp1;             ! the same as noun, except when noun is a number
