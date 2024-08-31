@@ -1,6 +1,9 @@
 transcript
 
 look
+drop two darts
+take 5 kg bell
+drop all
 take two gold
 i
 drop all

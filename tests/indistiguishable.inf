@@ -200,6 +200,37 @@ SilverCoin -> -> SilverCoin3;
 GoldCoin -> -> GoldCoin1;
 Dart -> -> Dart3;
 
+Class KettleBell
+	with
+#IfV5;
+		name 'kettle' 'bell' 'bells//p' 'kettlebell' 'kg' 'kilo' 'kilos' 'kilogram' 'kilograms',
+#IfNot;
+		parse_name [ _i;
+			while(NextWord() == 'kettle' or 'bell' or 'bells//p'
+				or 'kg' or 'kilo' or 'kilos' or 'kilogram'
+				or self.&name-->0 or self.&name-->1) _i++;
+			return _i;
+		],
+#EndIf;
+		weight 0,
+		description "You know the kind. Made of iron, with a layer of a rubbery
+			material on it.";
+
+KettleBell -> Bell2 "two kilogram kettlebell"
+	with
+		weight 2,
+		name '2//' 'two';
+
+KettleBell -> Bell5 "five kilogram kettlebell"
+	with
+		weight 5,
+		name '5//' 'five';
+
+KettleBell -> Bell10 "ten kilogram kettlebell"
+	with
+		weight 10,
+		name '10' 'ten';
+
 GoldCoin -> GoldCoin2;
 GoldCoin -> GoldCoin3;
 GoldCoin -> GoldCoin4;
