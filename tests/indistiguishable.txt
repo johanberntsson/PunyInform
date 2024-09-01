@@ -13,11 +13,15 @@ gold coins here.
 > drop two darts
 You aren't holding it.
 
+> take a dart
+Taken.
+
 > take 5 kg bell
-five kilogram kettlebell: Taken.
+Taken.
 
 > drop all
 five kilogram kettlebell: Dropped.
+dart: Dropped.
 
 > take two gold
 gold coin: Taken.
@@ -47,8 +51,9 @@ You are in a pub.
 
 A cool dartboard hangs on the wall.
 
-You can also see a silver coin, a table (on which are a dart and two silver
-coins), a box (which is open but empty), five gold coins and two darts here.
+You can also see a five kilogram kettlebell, a silver coin, a table (on which
+are a dart and two silver coins), a two kilogram kettlebell, a ten kilogram
+kettlebell, a box (which is open but empty), five gold coins and two darts here.
 
 > x coin
 Do you mean the silver coin or the gold coin?
@@ -104,7 +109,8 @@ You are in a pub.
 
 A cool dartboard hangs on the wall, with a dart protruding from it.
 
-You can also see a table and a box (which is open but empty) here.
+You can also see a five kilogram kettlebell, a table, a two kilogram kettlebell,
+a ten kilogram kettlebell and a box (which is open but empty) here.
 
 > throw dart at board
 You hit the board, yay!
@@ -115,7 +121,8 @@ You are in a pub.
 
 A cool dartboard hangs on the wall, with two darts protruding from it.
 
-You can also see a table and a box (which is open but empty) here.
+You can also see a five kilogram kettlebell, a table, a two kilogram kettlebell,
+a ten kilogram kettlebell and a box (which is open but empty) here.
 
 > throw dart at board
 You hit the board, yay!
@@ -126,7 +133,8 @@ You are in a pub.
 
 A cool dartboard hangs on the wall, with three darts protruding from it.
 
-You can also see a table and a box (which is open but empty) here.
+You can also see a five kilogram kettlebell, a table, a two kilogram kettlebell,
+a ten kilogram kettlebell and a box (which is open but empty) here.
 
 > take all darts
 dart: Taken.
@@ -139,7 +147,8 @@ You are in a pub.
 
 A cool dartboard hangs on the wall.
 
-You can also see a table and a box (which is open but empty) here.
+You can also see a five kilogram kettlebell, a table, a two kilogram kettlebell,
+a ten kilogram kettlebell and a box (which is open but empty) here.
 
 > quit
 Are you sure you want to quit? yes
