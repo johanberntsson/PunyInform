@@ -11,7 +11,7 @@ kilogram kettlebell, a box (which contains a gold coin), two darts and three
 gold coins here.
 
 > drop two darts
-You aren't holding it.
+You're not holding any.
 
 > take a dart
 Taken.
