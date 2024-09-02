@@ -33,6 +33,10 @@ throw dart at board
 look
 take all darts
 look
+put all in box
+close box
+drop 5 coin
+get 5 coin
 quit
 yes
 

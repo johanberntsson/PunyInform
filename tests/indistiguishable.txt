@@ -150,6 +150,28 @@ A cool dartboard hangs on the wall.
 You can also see a five kilogram kettlebell, a table, a two kilogram kettlebell,
 a ten kilogram kettlebell and a box (which is open but empty) here.
 
+> put all in box
+dart: You put the dart into the box.
+dart: You put the dart into the box.
+dart: You put the dart into the box.
+gold coin: You put the gold coin into the box.
+gold coin: You put the gold coin into the box.
+gold coin: You put the gold coin into the box.
+gold coin: You put the gold coin into the box.
+gold coin: You put the gold coin into the box.
+silver coin: You put the silver coin into the box.
+silver coin: You put the silver coin into the box.
+silver coin: You put the silver coin into the box.
+
+> close box
+You close the box.
+
+> drop 5 coin
+You can't see any coins.
+
+> get 5 coin
+You can't see any coins.
+
 > quit
 Are you sure you want to quit? yes
 
