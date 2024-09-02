@@ -873,7 +873,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 		if(action == ##Drop or ##Insert) {
 			if((parse + 2 + (p_arg_1 - 2) *4) --> 0 == ALL_WORD)
 				"You are not carrying anything.";
-			if(TryNumber(2) > 0) "You're not holding any.";
+			if(TryNumber(verb_wordnum + 1) > 0) "You're not holding any.";
 		}
 		print "There are no things available that match ~";
 		_PrintPartialMatch(verb_wordnum, p_arg_1 - 1);
