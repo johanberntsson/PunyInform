@@ -167,10 +167,13 @@ silver coin: You put the silver coin into the box.
 You close the box.
 
 > drop 5 coin
-You can't see any coins.
+You can't see any such thing.
 
 > get 5 coin
-You can't see any coins.
+You can't see any such thing.
+
+> get coin
+You can't see any such thing.
 
 > quit
 Are you sure you want to quit? yes

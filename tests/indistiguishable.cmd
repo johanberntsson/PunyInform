@@ -37,6 +37,7 @@ put all in box
 close box
 drop 5 coin
 get 5 coin
+get coin
 quit
 yes
 
