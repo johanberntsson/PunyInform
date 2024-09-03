@@ -2,8 +2,9 @@ Upcoming release:
 
 - Added support for GPR_NOUN, GPR_HELD, GPR_MULTI* and GPR_CREATURE return
   values from ParseToken, see test-gprheld.inf
-- The parser can now handle a specified number of indistiguishable objects
-  in inputs such as "take two coins", "drop 1 coin"
+- The parser can now handle a specified number of similar objects in inputs
+  such as "take two coins", "drop 1 coin"
+- Made code for printing the full score shorter.
 
 =======
 v5.6: bug fix and new feature release (25 Aug 2024)

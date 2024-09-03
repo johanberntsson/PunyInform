@@ -1769,10 +1769,10 @@ Global scope_cnt;
 [ PANum p_m _n;
 	print "  ";
 	_n = p_m;
-	if(_n < 0)    { _n = -p_m; _n = _n*10; }
-	if(_n < 10)   { print "   "; jump _Panuml; }
-	if(_n < 100)  { print "  "; jump _Panuml; }
-	if(_n < 1000) { print " "; }
+	if(_n < 0)    _n = -10 * p_m;
+	if(_n < 10)   print " ";
+	if(_n < 100)  print " ";
+	if(_n < 1000) print " ";
 ._Panuml;
 	print p_m, " ";
 ];
