@@ -867,7 +867,7 @@ Constant ONE_SPACE_STRING = " ";
 	_val = p_obj.p_prop;
 	if (p_obj.#p_prop > WORDSIZE || _val ofclass Routine) return RunRoutines(p_obj, p_prop);
 	if(_val ofclass String) {
-		print (string) p_obj.p_prop;
+		print (string) _val;
 		if(p_no_string_newline == 0) new_line;
 	}
 ];

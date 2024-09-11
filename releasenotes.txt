@@ -5,6 +5,7 @@ Upcoming release:
 - The parser can now handle a specified number of similar objects in inputs
   such as "take two coins", "drop 1 coin"
 - Made code for printing the full score shorter.
+- Optimization in PrintOrRun routine (Issue #130).
 
 =======
 v5.6: bug fix and new feature release (25 Aug 2024)
