@@ -1,0 +1,20 @@
+
+> look
+Room
+You are in a room.
+
+You can see a girl, a green bottle and a brown bottle here.
+
+> take all bottles
+green bottle: Taken.
+brown bottle: Taken.
+
+> give bottles to girl
+You can't use multiple objects with that verb.
+
+> give all bottles to girl
+You can't use multiple objects with that verb.
+
+> quit
+Are you sure you want to quit? yes
+
