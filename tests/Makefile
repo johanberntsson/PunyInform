@@ -4,8 +4,8 @@ runtests:
 	ruby runtests.rb
 
 inform:
-	inform -v8 -D test-gprheld.inf
-	frotz test-gprheld.z8
+	inform -v8 -D test-bottles.inf
+	frotz test-bottles.z8
 
 test-issue107:
 	inform +../lib -v3 test-issue107.inf
