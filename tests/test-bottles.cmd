@@ -1,9 +1,10 @@
 transcript
 
 look
-take all bottles
-give bottles to girl
-give all bottles to girl
+take all cans
+give cans to girl
+give all cans to girl
+give can to girl
 quit
 yes
 

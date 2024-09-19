@@ -1729,7 +1729,8 @@ Array guess_object-->5;
 						}
 						if(inp1 ~= -1) {
 							PrintMsg(MSG_PARSER_NO_NEED_REFER_TO);
-						} else if(_word == ALL_WORD) {
+						} else if(_word == ALL_WORD || 
+                                  parser_action ==  ##PluralFound) {
 							PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
 						} else {
 							PrintMsg(MSG_PARSER_NOSUCHTHING);

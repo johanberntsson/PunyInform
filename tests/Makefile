@@ -7,9 +7,13 @@ inform:
 	inform -v8 -D test-bottles.inf
 	frotz test-bottles.z8
 
-test-issue107:
-	inform +../lib -v3 test-issue107.inf
-	frotz test-issue107.z3
+test-bottles:
+	inform +../lib -v3 test-bottles.inf
+	frotz test-bottles.z3
+
+test-bottles5:
+	inform +../lib -v5 test-bottles.inf
+	frotz test-bottles.z5
 
 test-unknownverb:
 	inform +../lib -v3 test-unknownverb.inf

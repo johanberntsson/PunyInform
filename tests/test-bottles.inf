@@ -6,7 +6,7 @@
 Constant USEINFORM;
 #Endif;
 
-Constant Story      "Bottles";
+Constant Story      "Cans";
 Constant Headline   "^A sample game which uses PunyInform.^";
 
 Constant STATUSLINE_SCORE; Statusline score;
@@ -58,20 +58,22 @@ Object -> Girl "girl"
         name 'girl',
     has animate female;
 
-Object -> GreenBottle "green bottle"
+Object -> GreenCan "green can"
 	with
-        name 'green' 'bottle' 'bottles//p',
-		description "The green bottle is empty.",
+        name 'green' 'can' 'cans//p',
+		description "The green can is empty.",
 	has open;
 
-Object -> BrownBottle "brown bottle"
+Object -> BrownCan "brown can"
 	with
-        name 'brown' 'bottle' 'bottles//p',
-		description "The brown bottle is empty.",
+        name 'brown' 'can' 'cans//p',
+		description "The brown can is empty.",
 	has open;
 
 [Initialise; 
 #IfDef USEINFORM;
     location=INITIAL_LOCATION_VALUE;;
 #EndIf;
+    move BrownCan to player;
+    move GreenCan to player;
 ];
