@@ -1149,10 +1149,16 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		if(_token_data == NOUN_OBJECT or HELD_OBJECT or CREATURE_OBJECT) {
 			if(_PeekAtNextWord() == ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
 				! we don't accept all/all-but with held or creature
-				if(scope_stage == 2 && parser_phase == PHASE2) {
-					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
+				_noun = parse-->((wn+1)*2 - 1);
+				if(_noun == 'but') {
+					return GPR_FAIL;
+				} else {
+					phase2_necessary = PHASE2_ERROR;
+					if(parser_phase == PHASE2) {
+						PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
+						return GPR_FAIL;
+					}
 				}
-				return GPR_FAIL;
 			}
 			_noun = _GetNextNoun(p_parse_pointer, true);
 			if(_noun == -2) {

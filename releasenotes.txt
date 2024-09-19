@@ -6,6 +6,7 @@ Upcoming release:
   such as "take two coins", "drop 1 coin"
 - Made code for printing the full score shorter.
 - Optimization in PrintOrRun routine (Issue #130).
+- Improved responses for plurals matching the held parse token.
 
 =======
 v5.6: bug fix and new feature release (25 Aug 2024)
