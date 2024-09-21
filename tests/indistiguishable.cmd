@@ -38,6 +38,10 @@ close box
 drop 5 coin
 get 5 coin
 get coin
+s
+push 2
+push two
+push second button
 quit
 yes
 

@@ -151,7 +151,8 @@ Class GoldCoin
 
 Object Pub "The Pub"
 	with
-		description "You are in a pub."
+		description "You are in a pub.",
+        s_to ButtonRoom,
 	has light;
 
 Object -> Dartboard "dartboard"
@@ -243,6 +244,21 @@ Object -> Box "box"
 
 GoldCoin -> -> GoldCoin5;
 
+Object ButtonRoom "Button Room Pub"
+	with
+		description "You are in the button room.",
+        n_to Pub,
+	has light;
+
+Object -> Button "button"
+	with 
+		name '2//' 'two' 'second' 'button',
+		description "It's a button with the number '2' on it. ",
+		before [;
+			push:
+			"Something happens here. ";
+		],
+	has static;
 
 [Initialise; ! i;
 	print "^^Indistinguishable item are listed together in this demo. Things to try:^ 

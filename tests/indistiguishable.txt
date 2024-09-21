@@ -175,6 +175,21 @@ You can't see any such thing.
 > get coin
 You can't see any such thing.
 
+> s
+Button Room Pub
+You are in the button room.
+
+You can see a button here.
+
+> push 2
+Something happens here. 
+
+> push two
+Something happens here. 
+
+> push second button
+Something happens here. 
+
 > quit
 Are you sure you want to quit? yes
 
