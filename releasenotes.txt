@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.7: bug fix and new feature release (28 Sep 2024)
+
 - Added support for GPR_NOUN, GPR_HELD, GPR_MULTI* and GPR_CREATURE return
   values from ParseToken, see test-gprheld.inf
 - The parser can now handle a specified number of similar objects in inputs
