@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v5.6 quick reference** |
+| **PunyInform v5.7 quick reference** |
 
   
 More information on last page.
