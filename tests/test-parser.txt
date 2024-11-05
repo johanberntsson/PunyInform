@@ -349,9 +349,9 @@ Do you mean the green book, the red book or the pink book?
 Huge library
 
 You can also see a Orb, a light switch, an aquarium (which is open but empty), a
-box (which contains an electric torch (Ugly as sin)), a ladder (on which is a
-sticker), John and an infinite bag (providing light) (which is open but empty)
-here.
+box (which is open and contains an electric torch (Ugly as sin)), a ladder (on
+which is a sticker), John and an infinite bag (providing light) (which is open
+but empty) here.
 
 The box goes BOOM.
 

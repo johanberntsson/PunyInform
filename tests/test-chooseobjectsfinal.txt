@@ -3,8 +3,8 @@
 The Pub
 You are in a pub.
 
-You can see a table (on which is a red ball) and a box (which contains a green
-ball) here.
+You can see a table (on which is a red ball) and a box (which is open and
+contains a green ball) here.
 
 > take ball from box
 Removed.

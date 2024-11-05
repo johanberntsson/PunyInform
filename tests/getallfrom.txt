@@ -32,7 +32,7 @@ rock: Dropped.
 > n
 Normal box
 
-There's a box here. In the box is a bag.
+There's a box here. In the box is a bag (which is empty).
 
 You can also see a rock here.
 

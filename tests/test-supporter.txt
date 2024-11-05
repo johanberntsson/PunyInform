@@ -3,15 +3,15 @@
 The Library
 You are in a library.
 
-You can see a tray (on which are a plate, a bell jar (which is closed) (which
+You can see a tray (on which are a plate, a bell jar (which is closed and
 contains a head of celery) and a spoon) here.
 
 > get tray
 Taken.
 
 > i
-You're carrying a tray (on which are a plate, a bell jar (which is closed)
-(which contains a head of celery) and a spoon).
+You're carrying a tray (on which are a plate, a bell jar (which is closed and
+contains a head of celery) and a spoon).
 
 > i tall
 You're carrying:
@@ -45,15 +45,15 @@ You're carrying:
     a head of celery
 
 > i wide
-You're carrying a bell jar (which contains a tray (on which are a plate and a
-spoon) and a head of celery).
+You're carrying a bell jar (which is open and contains a tray (on which are a
+plate and a spoon) and a head of celery).
 
 > get spoon
 Taken.
 
 > i
-You're carrying a spoon and a bell jar (which contains a tray (on which is a
-plate) and a head of celery).
+You're carrying a spoon and a bell jar (which is open and contains a tray (on
+which is a plate) and a head of celery).
 
 > quit
 Are you sure you want to quit? yes

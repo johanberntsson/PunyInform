@@ -1,8 +1,14 @@
 
 > listen
-PassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPassPass
+Pass Pass Pass Pass Pass Pass Pass Pass Pass Pass Pass Pass Pass Pass Pass Pass
+Pass Pass Pass Pass Pass Pass Pass Pass Pass 
 [Flags error #1: Tried to use flag 101, but the highest flag number is 100]
-Pass
+Pass 
+FlagValue 32 is 1
+FlagValue -32 is 0
+FlagValue 33 is 0
+FlagValue -33 is 1
+yes! yes! yes! yes! yes! yes! yes! yes! yes! yes! 
 
 > quit
 Are you sure you want to quit? yes
