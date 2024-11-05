@@ -496,6 +496,7 @@ Constant ONE_SPACE_STRING = " ";
 					if(_started) print (char) ')';
 					new_line;
 				}
+				c_style = c_style & ~ISARE_BIT;
 				PrintContentsFromR(0, child(p_obj));
 				if(_newline == 0) print (char) ')';
 			}
