@@ -3,6 +3,7 @@ Upcoming release:
 - Fixed: PrintOrRun() would read a property value before checking if the property holds an array. This would give an error in strict mode, if the property held an array.
 - Fixed: An empty, closed, transparent container would get the following text in a list: "(which is closed) (which is open but empty)"
 - The open/closed status of a transparent container is now always printed by PrintContents.
+- Flags extension: A negative flag ID now performs the opposite modification or check, e.g. SetFlag(F1,-F2) sets F1 and clears F2. FlagIsClear(-F1,F2) returns true if F1 is set and F2 is clear.
 
 =======
 v5.7: bug fix and new feature release (28 Sep 2024)
