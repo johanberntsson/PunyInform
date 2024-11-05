@@ -461,39 +461,45 @@ Constant ONE_SPACE_STRING = " ";
 	return IS_STR;
 ];
 
-[ _PrintAfterEntry p_obj _contents _newline;
+[ _PrintAfterEntry p_obj _contents _newline _started;
 	_newline = c_style & NEWLINE_BIT;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj has light && p_obj hasnt animate) print " (providing light)";
 #Endif;
 	if(p_obj has worn && action == ##Inv) print " (worn)";
-	if(p_obj has container)
+	if(p_obj has container) {
 		_contents = PrintContentsFromR(1, child(p_obj));
-	if(p_obj has container && p_obj hasnt open && (p_obj hasnt transparent || _contents > 0)) print " (which is closed)";
-	if(p_obj has container && (p_obj has open or transparent)) {
-		if(_contents == 0) {
-			if(p_obj has openable) {
-				print " (which is ";
-				if(p_obj has open) print "open but"; 
-				else print "closed and"; 
-				print " empty)";
-			}
-			if(_newline)
-				new_line;
+		if(p_obj hasnt open && p_obj hasnt transparent) {
+			print " (which is closed)";
+			if(_newline) new_line;
 		} else {
-			if(p_obj has open && p_obj has openable && (_newline ~= 0 || p_obj has transparent))
-				print " (which is open)";
-			if(_newline == 0)
-				print " (which contains ";
-			else
-				new_line;
-			c_style = c_style & ~ISARE_BIT;
-			PrintContentsFromR(0, child(p_obj));
-			if(_newline == 0) {
-				print (char) ')';
+			if(p_obj has openable && (p_obj has transparent || _contents == 0 || _newline == 0)) {
+				print " (which is ";
+				if(p_obj has open) { print "open"; _started = 1; }
+				else { print "closed"; _started = 2; }
+			}
+			if(_contents == 0) {
+				print (char) ' ';
+				switch(_started) {
+				0: print "(which is";
+				1: print "but";
+				2: print "and";
+				}
+				print " empty)";
+				if(_newline) new_line;
+			} else {
+				if(_newline == 0) {
+					if(_started) print " and";
+					else print " (which";
+					print " contains ";
+				} else {
+					if(_started) print (char) ')';
+					new_line;
+				}
+				PrintContentsFromR(0, child(p_obj));
+				if(_newline == 0) print (char) ')';
 			}
 		}
-
 	} else if(p_obj has supporter) {
 		if(_newline) {
 			new_line;

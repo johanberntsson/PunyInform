@@ -70,7 +70,7 @@ Serial "999999"; ! Serial "999999" enables timing in Ozmoo, meaning that the RTC
 #EndIf;
 
 Constant DEATH_MENTION_UNDO;
-Constant MAX_CARRIED 3;
+!Constant MAX_CARRIED 3;
 Constant SACK_OBJECT infiniteBag;
 
 Constant AMUSING_PROVIDED;
@@ -748,6 +748,11 @@ Object DarkChamber "Dark Chamber"
 		description "It's almost entirely dark.",
 		w_to Toilet;
 
+Class BucketClass
+	with
+!		describe [; "^A lovely bucket lies here."; ];
+		describe "^A stringy bucket lies here.";
+
 Object Library "The Library"
 	with
 		name 'library', ! should create "you don't need to refer to ..."
@@ -773,6 +778,16 @@ Object Library "The Library"
 		],
 #EndIf;
 	has light;
+
+Object -> Holder "holder"
+	with name 'holder',
+	has container open;
+
+Object -> -> Carton "carton"
+	with
+		name 'carton',
+		inside_description "It feels so nice, standing in the carton.",
+	has container open openable enterable;
 
 Object -> Dial "dial"
 	with
@@ -835,20 +850,17 @@ Object -> LightSwitch "LightSwitch"
 Object -> Sweater "sweater"
 	with
 		name 'sweater' 'red',
-	with before [;
-		Wear:
-			if(PinkBook in player)
-				"You don't put things on while holding the pink book. It might bring bad luck.";
-	],
-	after [;
-		Wear:
-			"You put it on. The fit is perfect!";
-	],
 	has clothing;
 
-Object -> Bucket "bucket"
+BucketClass -> Bucket "bucket"
 	with
 		name 'bucket',
+		describe [; "^An ugly bucket here lies."; ],
+	has container open;
+
+BucketClass -> Bucker "bucker"
+	with
+		name 'bucker',
 	has container open;
 
 Object -> Aquarium "aquarium"
@@ -1054,6 +1066,7 @@ Object -> John "John"
 		],
 		before[;
 			Pull, Push:
+			score = score - 10;
 			switch(++self.messed_with) {
 				1: "~I'm gonna make you regret that!~, John mutters. ";
 				2: "~This is your final warning!~, John says. ";
@@ -1313,6 +1326,11 @@ Object  Beard "John's beard"
 !"Not screaming in terror, like the"
 !"passengers in his car."
 !"               -- Jack Handey";
+Object glass_bottle "glass bottle" library
+    with 
+		name 'glass' 'bottle',
+		description "It's a glass bottle, wide but with a narrow neck, ",
+    has container openable ~open transparent;
 
 [Initialise;
 #IfnDef USEINFORM;
