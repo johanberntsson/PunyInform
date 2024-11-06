@@ -1,0 +1,91 @@
+
+> look
+The Library
+You are in a library.
+
+A beautiful table stands in the middle of the room.
+
+You can also see a chest (which is open but empty), a book, a glass jar (which
+is open but empty), a peach, a bucket (which is empty), some garbage, a glass
+bowl (which is empty) and an onion here.
+
+> get all
+chest: Taken.
+book: Taken.
+glass jar: Taken.
+peach: Taken.
+bucket: Taken.
+garbage: Taken.
+glass bowl: Taken.
+onion: Taken.
+
+> i wide
+You're carrying an onion, a glass bowl (which is empty), some garbage, a bucket
+(which is empty), a peach, a glass jar (which is open but empty), a book and a
+chest (which is open but empty).
+
+> i tall
+You're carrying:
+  an onion
+  a glass bowl (which is empty)
+  some garbage
+  a bucket (which is empty)
+  a peach
+  a glass jar (which is open but empty)
+  a book
+  a chest (which is open but empty)
+
+> fillall
+You move stuff into stuff!
+
+> i wide
+You're carrying a glass bowl (which contains an onion), a bucket (which contains
+some garbage), a glass jar (which is open and contains a peach) and a chest
+(which contains a book).
+
+> i tall
+You're carrying:
+  a glass bowl
+    an onion
+  a bucket
+    some garbage
+  a glass jar (which is open)
+    a peach
+  a chest
+    a book
+
+> put bucket in jar
+You put the bucket into the glass jar.
+
+> i wide
+You're carrying a glass bowl (which contains an onion), a glass jar (which is
+open and contains a bucket (which contains some garbage) and a peach) and a
+chest (which contains a book).
+
+> i tall
+You're carrying:
+  a glass bowl
+    an onion
+  a glass jar (which is open)
+    a bucket
+      some garbage
+    a peach
+  a chest
+    a book
+
+> put all on table
+glass bowl: You put the glass bowl on the table.
+glass jar: You put the glass jar on the table.
+chest: You put the chest on the table.
+
+> look
+The Library
+You are in a library.
+
+A beautiful table stands in the middle of the room. On the table are a chest
+(which contains a book), a glass jar (which is open and contains a bucket (which
+contains some garbage) and a peach) and a glass bowl (which contains an onion).
+
+> quit
+Are you sure you want to quit? yes
+

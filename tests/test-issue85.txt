@@ -15,7 +15,7 @@ You put the lemon into the box.
 The Library
 You are in a library.
 
-You can see a box (which is open and contains a lemon and a banana) here.
+You can see a box (which contains a lemon and a banana) here.
 
 > i
 You're carrying a apple.
