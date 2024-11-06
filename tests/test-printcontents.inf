@@ -1,0 +1,130 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+
+Constant Story      "Test PrintContents";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+! Uncomment ONE of the two following lines, to show either time or score/turns
+! Leaving both commented out makes the library bigger.
+!Constant STATUSLINE_TIME; Statusline time;
+Constant STATUSLINE_SCORE; Statusline score;
+
+! Comment out to keep track of score
+! The value is what will be shown as the score on statusline in z3
+Constant NO_SCORE = 0;
+
+! Customize the statusline in z5+ (will have no effect in z3)
+!Constant OPTIONAL_SL_NO_SCORE;
+!Constant OPTIONAL_SL_NO_MOVES;
+
+! Uncomment to add optional features to PunyInform
+!Constant DEBUG;
+Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+!Constant OPTIONAL_EXTENDED_VERBSET;
+Constant OPTIONAL_FLEXIBLE_INVENTORY;
+!Constant OPTIONAL_LANGUAGE_NUMBER;
+!Constant OPTIONAL_LIST_TOGETHER;
+!Constant OPTIONAL_PRINT_SCENERY_CONTENTS;
+Constant RUNTIME_ERRORS = 2; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+! Define any library constants you need here, like MAX_SCORE, AMUSING_PROVIDED,
+! MAX_CARRIED, SACK_OBJECT,  etc.
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+! Define your attributes, common properties and global variables here, if any
+
+! Define the entry point routines you need here, like Amusing, DarkToDark etc.
+
+Include "puny.h";
+
+Verb 'fillall'
+	* -> FillAll;
+
+Verb 'emptyall'
+	* -> EmptyAll;
+
+[FillAllSub x;
+	objectloop(x provides buddy)
+		move x.buddy to x;
+	scope_modified = true;
+	"You move stuff into stuff!";
+];
+
+[EmptyAllSub x y; 
+	objectloop(x provides Buddy) {
+		y = x.Buddy;
+		if(y in x) move y to location;
+	}
+	scope_modified = true;
+	"You move stuff out of stuff!";
+];
+
+Object Library "The Library"
+	with
+        description "You are in a library.";
+
+Object -> Table "table"
+	with
+		name 'table',
+		describe [;
+			print "^A beautiful table stands in the middle of the room.";
+			if(PrintContents(" On the table ", self, ISARE_BIT)) ".";
+			new_line;
+			rtrue;
+		],
+	has static supporter;
+
+Object -> Chest "chest"
+	with 
+		name 'chest',
+		buddy Book,
+	has container open openable;
+	
+Object -> Book "book"
+	with
+		name 'book';
+
+Object -> GlassJar "glass jar"
+	with 
+		name 'glass' 'jar',
+		buddy Peach,
+	has container open openable transparent;
+	
+Object -> Peach "peach"
+	with
+		name 'peach';
+
+Object -> Bucket "bucket"
+	with 
+		name 'bucket',
+		buddy Garbage,
+	has container open;
+	
+Object -> Garbage "garbage"
+	with
+		name 'garbage'
+	has pluralname;
+
+Object -> GlassBowl "glass bowl"
+	with 
+		name 'glass' 'bowl',
+		buddy Onion,
+	has container open transparent;
+	
+Object -> Onion "onion"
+	with
+		name 'onion',
+		article "an";
+
+[Initialise;
+	print "^^Let's test PrintContents!^^
+		Each container has a buddy object. You can use the command FILLALL 
+		to move all buddy objects into their respective containers, and 
+		EMPTYALL to move them out of the containers and onto the floor.^^"; 
+];
