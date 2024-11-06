@@ -473,7 +473,7 @@ Constant ONE_SPACE_STRING = " ";
 			print " (which is closed)";
 			if(_newline) new_line;
 		} else {
-			if(p_obj has openable && (p_obj has transparent || _contents == 0 || _newline == 0)) {
+			if(p_obj has openable && (p_obj has transparent || _contents == 0)) {
 				print " (which is ";
 				if(p_obj has open) { print "open"; _started = 1; }
 				else { print "closed"; _started = 2; }
