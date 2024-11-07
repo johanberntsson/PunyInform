@@ -1,5 +1,7 @@
 # PunyInform
 
+NEWSFLASH: There's a competition coming up, and you can join! Submissions are due 29 December 2024. https://itch.io/jam/punycomp-2024
+
 PunyInform is a library written in Inform 6 which allows authors to
 create text adventure games / interactive fiction using the Z-machine
 virtual machine, to be played on 8-bit computers as well as newer
