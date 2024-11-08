@@ -35,10 +35,16 @@
 ! ClearFlag(F_FED_PARROT, F_TICKET_OK, F_SAVED_CAT) clears all three flags
 ! if(FlagIsSet(F_FED_PARROT, F_TICKET_OK, F_SAVED_CAT)) returns true if all three flags are set
 ! if(FlagIsClear(F_TICKET_OK, F_SAVED_CAT)) returns true if both flags are clear
-!
+
 ! There are also functions to check if any of two or three flags are set or clear:
 ! if(AnyFlagIsSet(F_FED_PARROT, F_TICKET_OK, F_SAVED_CAT)) returns true if any of the three flags are set
 ! if(AnyFlagIsClear(F_FED_PARROT, F_TICKET_OK, F_SAVED_CAT)) returns true if any of the three flags are clear
+
+! In all of these procedures, you can use a negative flag number, to mean "do
+! the opposite." E.g. SetFlag(F_FED_PARROT, -F_SAVED_CAT) will set 
+! F_FED_PARROT and clear F_SAVED_CAT, while 
+! AnyFlagIsSet(F_FED_PARROT, -F_TICKET_OK) returns true if F_FED_PARROT is set
+! or F_TICKET_OK is clear.
 
 System_file;
 
