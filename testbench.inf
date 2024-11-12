@@ -548,6 +548,7 @@ Object -> ExoSkeleton "exoskeleton"
 		description "A powered exoskeleton, designed to give its user superhuman
 			strength. You can enter the exoskeleton.",
 		name 'exo' 'exoskeleton' 'skeleton',
+		article "an",
 	has enterable transparent;
 
 Object -> Microphone "microphone"

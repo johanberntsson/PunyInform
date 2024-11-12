@@ -1,5 +1,9 @@
 Upcoming release:
 
+- New debug verbs FOREST, ROOMS, GOTO <name>/<number>. 
+- Debug verb TREE can now take a number as argument, e.g. "tree 10"
+- Format of output of debug verb TREE has been updated.
+
 =======
 v5.8: bug fix and new feature release (9 November 2024)
 

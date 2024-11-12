@@ -1417,10 +1417,20 @@ Verb meta 'purloin'
 
 Verb meta 'tree'
 	*                                           -> Tree
+	* number                                    -> Tree
 	* noun                                      -> Tree;
+
+Verb meta 'forest'
+	*                                           -> Forest;
+
+Verb meta 'rooms'
+	*                                           -> Rooms;
 
 Verb meta 'gonear'
 	* noun                                      -> GoNear;
+
+Verb meta 'goto'
+	* topic                                     -> Goto;
 
 Verb meta 'debug'
 	*                                           -> Debug
@@ -1447,6 +1457,61 @@ Global scope_cnt;
 	_obj = noun;
 	while(parent(_obj) ~= 0) _obj = parent(_obj);
 	PlayerTo(_obj);
+];
+
+Array _GotoSubBuffer --> 41;
+
+[ _RoomLike p_obj;
+	! Return true if p_obj seems to be a room
+	if(p_obj > Directions && p_obj <= top_object &&  parent(p_obj) == 0
+			&& (~~(p_obj provides describe or life or found_in))
+			&& (~~DebugParseNameObject(p_obj))) {
+		if(p_obj has edible or talkable or supporter or container or transparent
+				or concealed or proper or scenery or static or animate or clothing
+				or pluralname or switchable or door or lockable)
+			rfalse;
+		rtrue;
+	}
+	rfalse;
+];
+
+
+[ GotoSub _obj _first _count _i _j _k _t _val_printed _val_input _match;
+	_obj = TryNumber(consult_from);
+	if(_obj > 0) {
+		if(_RoomLike(_obj) == false)
+			"That doesn't seem to be a room.";
+._gotoObj;
+		PlayerTo(_obj);
+		rtrue;
+	}
+	_t = _GotoSubBuffer + 2;
+	_first = WordAddress(consult_from);
+	_i = consult_from + consult_words - 1;
+	_count = WordAddress(_i) + WordLength(_i) - _first;
+	objectloop(_obj) {
+		if(parent(_obj) == nothing) {
+!			print _obj;
+			@output_stream 3 _GotoSubBuffer;
+			print (name) _obj;
+			@output_stream -3;
+			_k = _GotoSubBuffer-->0;
+			if(_k == _count) {
+				_match = true;
+				for(_i=_first, _j=0 : _j<_count : _i++, _j++) {
+					_val_printed = _t->_j;
+					_val_input = _i->0;
+					if(_val_printed == _val_input) continue;
+					if(_val_printed < 91 && _val_printed > 64 && _val_printed + 32 == _val_input) continue;
+					_match = false;
+					break;
+				}
+				if(_match)
+					jump _gotoObj;
+			}
+		}
+	}
+	"I can't see which room you are referring to.";
 ];
 
 [ PronounsSub;
@@ -1485,30 +1550,51 @@ Global scope_cnt;
 	if(scope_cnt < 2) "Nothing in scope.^";
 ];
 
-[ TreeSub _obj _p;
-	_obj = noun;
-	if(_obj==0) _obj = real_location;
-	print (name) _obj;
-	_p = parent(_obj);
-	if(_p) {
-		print " (";
-		if(_p has supporter)
-			@print_char 'o';
-		else
-			@print_char 'i';
-		print "n ", (name) _p, ")";
-	}
-	@new_line;
-	TreeSubHelper(_obj, 1);
-];
-
-[TreeSubHelper p_parent p_indent _x _i;
+[ _TreeSubHelper p_parent p_indent _x _i;
 	objectloop(_x in p_parent) {
 		for(_i = 0 : _i < p_indent : _i++) print "  ";
-		print (name) _x, " (", _x, ")^";
-		if(child(_x)) TreeSubHelper(_x, p_indent + 1);
+		print (a) _x, " (", _x, ")^";
+		if(child(_x)) _TreeSubHelper(_x, p_indent + 1);
 	}
 ];
+
+[ TreeSub _p;
+	if(parsed_number > 0 && noun == parsed_number) {
+		if(parsed_number < Directions || parsed_number > top_object)
+			"That doesn't seem to be an object.";
+		noun = parsed_number;
+	}
+
+	if(noun==0) noun = real_location;
+	if(noun in nothing)
+		print (name) noun;
+	else
+		print (a) noun;
+	print " (", noun, ")";
+	_p = parent(noun);
+	if(_p) {
+		if(_p has supporter)
+			print " on";
+		else
+			print " in";
+		print " ~", (name) _p, "~ (", _p, ")";
+	}
+	@new_line;
+	_TreeSubHelper(noun, 1);
+];
+
+[ ForestSub;
+	for(noun=Directions : noun<= top_object: noun++)
+		if(noun in nothing)
+			TreeSub();
+];
+
+[ RoomsSub _obj;
+	for(_obj=Directions + 1 : _obj<= top_object: _obj++)
+		if(_RoomLike(_obj))
+			print (name) _obj, " (", _obj, ")^";
+];
+
 
 #Ifdef OPTIONAL_MANUAL_REACTIVE;
 [ MayBeRoutine p_obj p_prop _val;
