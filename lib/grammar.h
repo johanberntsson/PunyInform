@@ -1459,7 +1459,12 @@ Global scope_cnt;
 	PlayerTo(_obj);
 ];
 
-Array _GotoSubBuffer --> 41;
+#Ifndef GOTOSUB_BUFFER_SIZE;
+Constant GOTOSUB_BUFFER_SIZE 80;
+#Endif;
+
+Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word of constant has odd value
+
 
 [ _RoomLike p_obj;
 	! Return true if p_obj seems to be a room
@@ -1496,6 +1501,12 @@ Array _GotoSubBuffer --> 41;
 			print (name) _obj;
 			@output_stream -3;
 			_k = _GotoSubBuffer-->0;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+			if(_k > GOTOSUB_BUFFER_SIZE) {
+				_RunTimeError(ERR_BUFFER_OVERRUN, _obj);
+				rtrue;
+			}
+#Endif;
 			if(_k == _count) {
 				_match = true;
 				for(_i=_first, _j=0 : _j<_count : _i++, _j++) {

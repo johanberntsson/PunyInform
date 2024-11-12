@@ -3,6 +3,7 @@ Upcoming release:
 - New debug verbs FOREST, ROOMS, GOTO <name>/<number>. 
 - Debug verb TREE can now take a number as argument, e.g. "tree 10"
 - Format of output of debug verb TREE has been updated.
+- Added runtime error message when buffer is overrun (can only happen in debug mode, when doing "goto <room name>".
 
 =======
 v5.8: bug fix and new feature release (9 November 2024)

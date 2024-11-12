@@ -1244,6 +1244,7 @@ Constant ERR_TOO_MANY_FLOATING 6;
 Constant ERR_NOT_DIR_PROP 7;
 Constant ERR_NOT_FAKE_OBJ 8;
 Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
+Constant ERR_BUFFER_OVERRUN 10;
 
 [_RunTimeError p_err p_obj _parent;
 	print "^[PunyInform error: ";
@@ -1272,6 +1273,10 @@ Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 			print "FakeObjToDirProp called with non-fakeobj";
 		ERR_ILLEGAL_CHOOSEOBJNO:
 			print "ChooseObjectsFinal_(Pick or Discard) called with nonexistent array index";
+#Ifdef DEBUG;
+		ERR_BUFFER_OVERRUN:
+			print "Buffer overrun: Printing too many characters to a buffer";
+#Endif;
 		default:
 			print "Unknown error";
 		}
