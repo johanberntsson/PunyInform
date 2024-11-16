@@ -1127,7 +1127,7 @@ Verb meta 'quit' 'q//'
 		PANum(_score_sum);
 		PrintMsg(MSG_FULLSCORE_ACTIONS);
 	}
-	@new_line;
+	new_line;
 	PANum(score);
 	return MSG_FULLSCORE_END;
 ];
@@ -1262,7 +1262,7 @@ Verb meta 'quit' 'q//'
 	if(_i == 0) print " ";
 	print "R";
 #EndIf;
-	@new_line;
+	new_line;
 ];
 
 [ VersionSub;
@@ -1340,7 +1340,7 @@ Verb meta 'verify'
 	objectloop (i has moved) {
 		j = parent(i);
 		if(j) {
-			if(f == 0) @new_line;
+			if(f == 0) new_line;
 			f = 1;
 			print "- ", (the) i, "   ";
 			if (j == player) {
@@ -1355,7 +1355,7 @@ Verb meta 'verify'
 			else if(j has supporter) print "(on ", (the) j, ")";
 			else if(j has enterable) print "(in ", (the) j, ")";
 			else print "(lost)";
-			@new_line;
+			new_line;
 		}
 	}
 	if(f == 0) "none.";
@@ -1456,6 +1456,7 @@ Global scope_cnt;
 [ GoNearSub _obj;
 	_obj = noun;
 	while(parent(_obj) ~= 0) _obj = parent(_obj);
+	if(_obj == noun) print_ret (The) noun, " is not in anything!";
 	PlayerTo(_obj);
 ];
 
@@ -1482,13 +1483,13 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 
 
 [ GotoSub _obj _first _count _i _j _k _t _val_printed _val_input _match;
-	_obj = TryNumber(consult_from);
-	if(_obj > 0) {
-		if(_RoomLike(_obj) == false)
-			"That doesn't seem to be a room.";
-._gotoObj;
-		PlayerTo(_obj);
-		rtrue;
+	if(consult_words == 1) {
+		_obj = TryNumber(consult_from);
+		if(_obj > 0) {
+			if(_RoomLike(_obj))
+				jump _gotoObj;
+			jump _not_a_room;
+		}
 	}
 	_t = _GotoSubBuffer + 2;
 	_first = WordAddress(consult_from);
@@ -1517,12 +1518,16 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 					_match = false;
 					break;
 				}
-				if(_match)
-					jump _gotoObj;
+				if(_match) {
+._gotoObj;
+					PlayerTo(_obj);
+					rtrue;
+				}
 			}
 		}
 	}
-	"I can't see which room you are referring to.";
+._not_a_room;
+	"That doesn't seem to be a room.";
 ];
 
 [ PronounsSub;
@@ -1552,7 +1557,7 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 [ _ScopeSubHelper p_obj;
 	print scope_cnt++,": ", (a) p_obj, " (", p_obj, ")";
 	if(ObjectIsUntouchable(p_obj, true)) print " [untouchable]";
-	@new_line;
+	new_line;
 ];
 
 [ ScopeSub;
@@ -1569,11 +1574,12 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 	}
 ];
 
-[ TreeSub _p;
+Constant _REAL_LOCATION_TEXT " *** real_location ***";
+
+[ TreeSub p_real_location _p;
 	if(parsed_number > 0 && noun == parsed_number) {
 		if(parsed_number < Directions || parsed_number > top_object)
 			"That doesn't seem to be an object.";
-		noun = parsed_number;
 	}
 
 	if(noun==0) noun = real_location;
@@ -1590,20 +1596,40 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 			print " in";
 		print " ~", (name) _p, "~ (", _p, ")";
 	}
-	@new_line;
+	if(noun == p_real_location) {
+#IfV5;
+		style bold;
+#Endif;
+		print (string) _REAL_LOCATION_TEXT;
+#IfV5;
+		style roman;
+#Endif;
+	}
+	new_line;
 	_TreeSubHelper(noun, 1);
 ];
 
 [ ForestSub;
 	for(noun=Directions : noun<= top_object: noun++)
 		if(noun in nothing)
-			TreeSub();
+			TreeSub(real_location);
 ];
 
 [ RoomsSub _obj;
 	for(_obj=Directions + 1 : _obj<= top_object: _obj++)
-		if(_RoomLike(_obj))
-			print (name) _obj, " (", _obj, ")^";
+		if(_RoomLike(_obj)) {
+			print (name) _obj, " (", _obj, ")";
+			if(_obj == real_location) {
+#IfV5;
+				style bold;
+#Endif;
+				print (string) _REAL_LOCATION_TEXT;
+#IfV5;
+				style roman;
+#Endif;
+			}
+			new_line;
+		}
 ];
 
 
@@ -1744,7 +1770,7 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 #EndIf;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(location == thedark) {
-		@new_line;
+		new_line;
 		PrintOrRun(location, description);
 		jump _EndOfLookRoutine;
 	}
@@ -1761,14 +1787,14 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 	while(_ceil ~= player or 0) {
 		if(_describe_room) {
 			if(_ceil == location) {
-				@new_line;
+				new_line;
 				PrintOrRun(_ceil, description);
 			} else if(_ceil.inside_description ~= 0 or NULL) {
-				@new_line;
+				new_line;
 				PrintOrRun(_ceil, inside_description);
 			}
 		} else if(_ceil == location)
-			@new_line;
+			new_line;
 
 		also_flag = false;
 		! write intial and describe messages in a new paragraph
@@ -1798,7 +1824,7 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 			}
 			if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
 				give _obj ~workflag;
-				@new_line;
+				new_line;
 				PrintOrRun(_obj, _desc_prop);
 				also_flag = true;
 			}
