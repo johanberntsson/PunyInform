@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v5.8 quick reference** |
+| **PunyInform v5.9 quick reference** |
 
   
 More information on last page.
@@ -205,7 +205,17 @@ More information on last page.
 
 # Library constants
 
-###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined.  *PUNYINFORM_MAJOR_VERSION* , *PUNYINFORM_MINOR_VERSION*,* PUNYINFORM_PATCH_VERSION* and *PUNYINFORM_VERSION\_SUFFIX* hold the library version.  There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT.  *The global *scope_reason* schould always have one of the values *PARSING_REASON, EACH_TURN_REASON, REACT_BEFORE_REASON, REACT_AFTER_REASON, LOOPOVERSCOPE_REASON, TESTSCOPE_REASON*.
+###### The Inform language defines *true* (1), *false* (0) and *nothing* (0). The library also defines *NULL* (-1), which is used for an action, property or pronoun which currently doesn’t have a value. *DIRECTION_COUNT* holds the number of directions recognized: Normally 8, but 12 if *OPTIONAL_FULL_DIRECTIONS* is defined. 
+
+###### 
+
+###### *PUNYINFORM_MAJOR_VERSION* , *PUNYINFORM_MINOR_VERSION*,* PUNYINFORM_PATCH_VERSION* and *PUNYINFORM_VERSION\_SUFFIX* hold the library version.
+
+###### 
+
+###### There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT.*
+
+###### * *The global *scope_reason* schould always have one of the values *PARSING_REASON, EACH_TURN_REASON, REACT_BEFORE_REASON, REACT_AFTER_REASON, LOOPOVERSCOPE_REASON, TESTSCOPE_REASON*.
 
 # 
 
@@ -724,9 +734,9 @@ Score, Version, Quit
 ***OPTIONAL_EXTENDED_METAVERBS***** adds**: *CommandsOff, CommandsOn,
 CommandsRead, Objects, Places, ScriptOff, ScriptOn, Verify*
 
-***DEBUG***** adds**: *ActionsOff, ActionsOn, Debug, GoNear, Pronouns,
-RandomSeed, RoutinesOff, RoutinesOn, Scope, Purloin, TimersOff,
-TimersOn, Tree*
+***DEBUG***** adds**: *ActionsOff, ActionsOn, Debug, Forest, GoNear,
+Goto, Pronouns, Purloin, RandomSeed, Rooms, RoutinesOff, RoutinesOn,
+Scope, TimersOff, TimersOn, Tree*
 
 # Group 2 actions
 
