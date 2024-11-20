@@ -550,9 +550,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				}
 #Ifnot; ! Not DEBUG
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-			if(_obj has reactive && _obj.parse_name) {
+			if(_obj has reactive && (_result = _obj.parse_name) ~= 0 && _result ofclass routine) {
 #Ifnot;
-			if(_obj.parse_name) {
+			if((_result = _obj.parse_name) ~= 0 && _result ofclass routine) {
 #Endif;
 				_result = _obj.parse_name();
 #Endif;

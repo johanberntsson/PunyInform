@@ -980,7 +980,7 @@ Constant ONE_SPACE_STRING = " ";
 	if(p_flag==false)
 		lookmode = 2;
 	if(p_flag==false or 2 && deadflag == GS_PLAYING)
-		<Look>;
+		Look();
 	lookmode = _old_lookmode;
 ];
 
