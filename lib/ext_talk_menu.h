@@ -9,6 +9,10 @@ System_file;
 !
 ! STATUS [ID]* TOPIC PLAYERSAYS NPCSAYS [FLAGREF|UNLOCKREF|ROUTINE|STRING]*
 !
+! or:
+!
+! TM_MAYBE_ADD_LIST ROUTINE ARRAY
+!
 ! [] = Optional
 ! * = can be more than one
 !
@@ -46,19 +50,35 @@ System_file;
 ! topic. When doing this, you may want to use ROUTINE to print a suitable
 ! message about why the conversation ended.
 !
+! TM_MAYBE_ADD_LIST is a special value which means that if the routine that
+!    follows returns true, we should add the topic list held in the array
+!    specified. A few restrictions apply: 
+!        (1) The sub-arraymay not contain a TM_MAYBE_ADD_LIST token.
+!        (2) a relative UNLOCKREF in the base array may not refer to a topic 
+!            within the sub-array or after the TM_MAYBE_ADD_LIST token.
+!        (3) a relative UNLOCKREF in the sub-array may not refer to a topic 
+!            beyond the end of the sub-array.
+! ROUTINE is a routine to decide if the sub-array should be included. It may
+!    not randomize a result, and it may not alter the state of the game.
+! ARRAY is the name of an array (referred to as a sub-array above), which
+!    works as a normal talk array. 
+!
 ! Example of an array giving Linda one active topic (Weather), which will
 ! activate the next topic (Heat) and the topic with ID 300 (Herself), and if
 ! you ask about Heat, she'll just end the conversation without answering.
 !
 ! [ EnoughTalk; talk_menu_talking = false; ];
 !
-! Array talk_array -->
-! TM_NPC Linda
+! Array talk_array_linda -->
 ! 0 300 "Herself" "Tell me more about yourself!" "I'm just an average girl."
 ! 30 "Weather" "How do you like the weather?" "It's too hot for me." 1 300
 ! 0 "Heat" "Say, don't you like hot weather?" TM_NO_LINE EnoughTalk
 !          "Linda looks upset and turns away."
-! TM_NPC 0;
+! TM_END;
+!
+! Object Linda "Linda"
+!   with talk_array talk_array_linda,
+!   ...
 !
 ! If you find that you need more topic IDs, or more flags, you can define which
 ! number should be the lowest one to be considered an ID (32-600, default is
@@ -187,23 +207,22 @@ Constant TM_MSG_PAGE_OPTION_SHORT "[N]ext"; ! This + TM_MSG_EXIT_OPTION_SHORT sh
 #Endif;
 
 #Ifndef TMPrintLine;
-[TMPrintLine p_actor p_talk_actor p_line;
+[TMPrintLine p_actor p_array p_line;
 	! Routine to print a line, by the player or an NPC. Define your own version as needed.
-	if((p_talk_actor.talk_array)-->p_line == TM_NO_LINE)
+	if(p_array-->p_line == TM_NO_LINE)
 		rfalse;
 	if(p_actor == player)
 		_TMPrintMsg(TM_MSG_YOU, true);
 	else
 		print (The) p_actor;
 	print ": ~";
-	_TMCallOrPrint(p_talk_actor, p_line, true); ! Can be called as _TMCallOrPrint(p_actor, p_line, true); if you don't want it to print the newline, or skip third parameter to print a newline
+	_TMCallOrPrint(p_array, p_line, true); ! Can be called as _TMCallOrPrint(p_array, p_line, true); if you don't want it to print the newline, or omit third parameter to print a newline
 	"~";
 ];
 #Endif;
 
-
-
 Constant TM_INACTIVE 0;
+Constant TM_MAYBE_ADD_LIST 29;
 Constant TM_ACTIVE 30;
 Constant TM_STALE 31;
 Constant TM_END -1;
@@ -225,17 +244,17 @@ Global talk_menu_multi_mode = true;
 	if(p_no_newline == false) new_line;
 ];
 
-[ _TMCallOrPrint p_actor p_index p_no_newline;
-	_TMPrintMsg((p_actor.talk_array)-->p_index, p_no_newline);
+[ _TMCallOrPrint p_array p_index p_no_newline;
+	_TMPrintMsg(p_array-->p_index, p_no_newline);
 ];
 
-[ _SetTopic p_topic p_start p_value _index _val _find_topic _base _curr_id _success;
-	! p_topic is 1-29: Act on topic number P_TOPIC, counting from p_start
+[ _SetTopic p_topic p_array p_value _index _val _find_topic _base _curr_id _success _stash_array;
+	! p_topic is 1-29: Act on topic number P_TOPIC, counting from p_array
 	! p_topic is 300-600: Act on topic with ID = P_TOPIC.
 	! p_topic is (-600)-(-300): Act on topic with ID = -P_TOPIC. If p_value is
 	!   TM_ACTIVE or TM_INACTIVE, set the topic status even if it's currently
 	!   in status TM_STALE.
-	! p_start: Start from this index in the talk_menu array and work forward,
+	! p_array: Start from this index in the talk_menu array and work forward,
 	!   until a TM_NPC token is found.
 	! p_value is TM_ACTIVE: Set the topic to active, if it's currently in
 	!   status TM_INACTIVE or TM_ACTIVE. If p_topic is negative, set
@@ -261,11 +280,25 @@ Global talk_menu_multi_mode = true;
 	_index--;
 	while(true) {
 		_index++;
-		_val = p_start-->_index;
+		_val = p_array-->_index;
 		if(_val == TM_END) {
-			return _success; ! The topic wasn't found, or we are in multi mode
-		}
-		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
+			if(_stash_array) {
+				p_array = _stash_array;
+				_index = 0;
+				_stash_array = 0;
+			} else
+				return _success; ! The topic wasn't found, or we are in multi mode
+		} else if(_val == TM_MAYBE_ADD_LIST) {
+			_index++;
+			_val = p_array-->_index;
+			_index++;
+			_curr_id = p_array-->_index;
+			if(_val()) {
+				_stash_array = p_array + _index + _index;
+				p_array = _curr_id;
+				_index = -1;
+			}
+		} else if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
 			if(_find_topic < 30) {
 				if(_find_topic-- == 1) jump _tm_found_topic;
 				continue;
@@ -273,7 +306,7 @@ Global talk_menu_multi_mode = true;
 			_base = _index;
 			while(true) { ! Loop over a list of topic IDs
 				_index++;
-				_curr_id = p_start-->_index;
+				_curr_id = p_array-->_index;
 				if(_curr_id < TM_FIRST_ID || _curr_id > TM_LAST_ID) {
 					_index = _index + 2; ! This is a string or routine, no more IDs here
 					break;
@@ -283,9 +316,9 @@ Global talk_menu_multi_mode = true;
 					_index = _base;
 ._tm_found_topic;
 					if(p_value == 1)
-						return p_start-->_index;
+						return p_array-->_index;
 					if(_val ~= TM_STALE || p_topic < 0) {
-						p_start-->_index = p_value;
+						p_array-->_index = p_value;
 					}
 					if(_find_topic < 30 || talk_menu_multi_mode == false) {
 						rtrue;
@@ -299,12 +332,12 @@ Global talk_menu_multi_mode = true;
 	}
 ];
 
-[ ActivateTopic p_npc p_topic p_start;
-	if(p_start == 0) p_start = p_npc.talk_array;
-	p_start = _SetTopic(p_topic, p_start, TM_ACTIVE);
+[ ActivateTopic p_npc p_topic p_array;
+	if(p_array == 0) p_array = p_npc.talk_array;
+	p_array = _SetTopic(p_topic, p_array, TM_ACTIVE);
 	#Ifdef DEBUG;
 	#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(p_start == 0) {
+		if(p_array == 0) {
 	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print (string) TM_ERR,"3: Could not activate topic ", p_topic, " for NPC ", (name) p_npc, "]^";
 	#Ifnot;
@@ -314,19 +347,19 @@ Global talk_menu_multi_mode = true;
 		}
 	#Endif;
 	#Endif;
-	return p_start;
+	return p_array;
 ];
 
 [ ReActivateTopic p_npc p_topic;
 	return ActivateTopic(p_npc, -p_topic);
 ];
 
-[ InactivateTopic p_npc p_topic p_start;
-	if(p_start == 0) p_start = p_npc.talk_array;
-	p_start = _SetTopic(p_topic, p_start, TM_INACTIVE);
+[ InactivateTopic p_npc p_topic p_array;
+	if(p_array == 0) p_array = p_npc.talk_array;
+	p_array = _SetTopic(p_topic, p_array, TM_INACTIVE);
 	#Ifdef DEBUG;
 	#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(p_start == 0) {
+		if(p_array == 0) {
 	#Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
 			print (string) TM_ERR,"3: Could not inactivate topic ", p_topic, " for NPC ", (name) p_npc, "]^";
 	#Ifnot;
@@ -336,16 +369,16 @@ Global talk_menu_multi_mode = true;
 		}
 	#Endif;
 	#Endif;
-	return p_start;
+	return p_array;
 ];
 
 [ ReInactivateTopic p_npc p_topic;
 	return InActivateTopic(p_npc, -p_topic);
 ];
 
-[ GetTopicStatus p_npc p_topic p_start;
-	if(p_start == 0) p_start = p_npc.talk_array;
-	return _SetTopic(p_topic, p_start, 1);
+[ GetTopicStatus p_npc p_topic p_array;
+	if(p_array == 0) p_array = p_npc.talk_array;
+	return _SetTopic(p_topic, p_array, 1);
 ];
 
 
@@ -362,13 +395,12 @@ Array TenDashes static -> "----------";
 
 
 #Ifv5;
-[ RunTalk p_npc _array _i _j _n _val _tm_start _height _width _offset _count _more _has_split _add_msg;
+[ RunTalk p_npc _array _i _j _n _val _height _width _offset _count _more _has_split _add_msg _stash_array;
 #Ifnot;
-[ RunTalk p_npc _array _i _j _n _val _tm_start _add_msg;
+[ RunTalk p_npc _array _i _j _n _val _add_msg _stash_array;
 #Endif;
 	talk_menu_talking = true;
 	current_talker = p_npc;
-	_array = p_npc.talk_array;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(~~(p_npc provides talk_array)) {
 #Iftrue RUNTIME_ERRORS == RTE_VERBOSE;
@@ -403,20 +435,39 @@ Array TenDashes static -> "----------";
 
 ._tm_restart_talk;
 
+	! Restore basic talk array
+	_array = p_npc.talk_array;
+	_stash_array = 0;
+	
 #Ifv5;
 	_count = 0;
 	_more = 0;
 #Endif;
-	_tm_start = 0;
-	_i = -1; ! _tm_start - 1
+	_i = -1;
 	_n = 0;
 	while(true) {
 		_i++;
 		_val = _array-->_i;
-		if(_val == TM_END) break;
-		if(_val == TM_INACTIVE or TM_STALE) _i = _i + 3;
-		else
-		if(_val == TM_ACTIVE) {
+		if(_val == TM_END) {
+			if(_stash_array) {
+				_array = _stash_array;
+				_i = 0;
+				_stash_array = 0;
+			} else {
+				break;
+			}
+		} else if(_val == TM_MAYBE_ADD_LIST) {
+			_i++;
+			_val = _array-->_i;
+			_i++;
+			if(_val()) {
+				_stash_array = _array + _i + _i;
+				_array = _array-->_i;
+				_i = -1;
+			}
+		} else if(_val == TM_INACTIVE or TM_STALE) 
+			_i = _i + 3;
+		else if(_val == TM_ACTIVE) {
 #Ifv5;
 			if(_count >= _height - 6) { _more = 1; break; }
 			_n++;
@@ -449,7 +500,7 @@ Array TenDashes static -> "----------";
 				_val = _array-->_i;
 			}
 !			print "i:",_i,"!";
-			_TMCallOrPrint(p_npc, _i);
+			_TMCallOrPrint(_array, _i);
 		}
 	}
 	if(_n == 0) {
@@ -548,13 +599,29 @@ Array TenDashes static -> "----------";
 
 	! Print the line and reply
 
-	_i = -1; ! _tm_start - 1;
+	! Restore basic talk array
+	_array = p_npc.talk_array;
+	_stash_array = 0;
+
+	_i = -1;
 	_n = 0;
 	while(true) {
 		_i++;
 		_val = _array-->_i;
 !		print "_i is ", _i, ", _val is ", _val, "^";
-		if(_val == TM_ACTIVE) {
+		if(_val == TM_END) {
+			_array = _stash_array;
+			_i = 0;
+		} else if(_val == TM_MAYBE_ADD_LIST) {
+			_i++;
+			_val = _array-->_i;
+			_i++;
+			if(_val()) {
+				_stash_array = _array + _i + _i;
+				_array = _array-->_i;
+				_i = -1;
+			}
+		} else if(_val == TM_ACTIVE) {
 			_n++;
 			if(_n < _j) continue;
 			! This is the entry we're looking for
@@ -576,16 +643,16 @@ Array TenDashes static -> "----------";
 !			else
 				_i++;
 			if(_add_msg == TM_ADD_BEFORE or TM_ADD_BEFORE_AND_AFTER) {
-				_TMCallOrPrint(p_npc, _i);
+				_TMCallOrPrint(_array, _i);
 				_i++;
 			}
-			TMPrintLine(player, p_npc, _i);
+			TMPrintLine(player, _array, _i);
 			_i++;
 			if(_add_msg == TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER) {
-				_TMCallOrPrint(p_npc, _i);
+				_TMCallOrPrint(_array, _i);
 				_i++;
 			}
-			TMPrintLine(p_npc, p_npc, _i);
+			TMPrintLine(p_npc, _array, _i);
 			break;
 		}
 	}
@@ -597,7 +664,7 @@ Array TenDashes static -> "----------";
 		_j++;
 		_val = _array-->_j;
 !		print "Performing action ", _val, " at pos ", _j, "^";
-		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE or TM_END) {
+		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE or TM_END or TM_MAYBE_ADD_LIST) {
 			! No more effects to process
 			break;
 		}
@@ -633,7 +700,7 @@ Array TenDashes static -> "----------";
 			#Endif;
 		#Endif;
 		! A routine to call or a string to print
-		_TMCallOrPrint(p_npc, _j);
+		_TMCallOrPrint(_array, _j);
 	}
 
 	if(talk_menu_talking) {
