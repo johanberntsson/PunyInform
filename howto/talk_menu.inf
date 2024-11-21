@@ -64,16 +64,16 @@ Constant TM_MSG_EXIT_OPTION "[ENTER] Bye for now";
 #Ifv5;
 Constant TM_MSG_PAGE_OPTION "[N] More topics";
 #Endif;
-[TMPrintLine p_actor p_talk_actor p_line;
+[TMPrintLine p_actor p_array p_line;
 	! Routine to print a line, by the player or an NPC. Define your own version as needed.
-	if((p_talk_actor.talk_array)-->p_line == TM_NO_LINE) 
+	if(p_array-->p_line == TM_NO_LINE)
 		rfalse;
 	if(p_actor == player)
 		_TMPrintMsg(TM_MSG_YOU, true);
 	else
 		print (The) p_actor;
 	print ": ";
-	_TMCallOrPrint(p_talk_actor, p_line);
+	_TMCallOrPrint(p_array, p_line); ! Can be called as _TMCallOrPrint(p_array, p_line, true); if you don't want it to print the newline, or omit third parameter to print a newline
 ];
 
 Include "ext_talk_menu.h"; ! Requires ext_flags.h *IF* you set flags
