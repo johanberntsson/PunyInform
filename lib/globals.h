@@ -148,9 +148,7 @@ Constant SOMEDIRECTION_STR = "(some direction)";
 Constant IS_STR = "is ";
 Constant ARE_STR = "are ";
 
-#Ifndef DEFAULT_CAPACITY;
-Constant DEFAULT_CAPACITY = 100;
-#Endif;
+Default DEFAULT_CAPACITY = 100;
 
 #Ifdef OPTIONAL_PROVIDE_UNDO;
 #IfV3;
@@ -606,18 +604,14 @@ Array scope-->MAX_SCOPE; ! objects visible from the current POV
 Array scope_copy-->MAX_SCOPE; ! Used to hold a copy of a scope list, for iteration
 
 Constant WORD_HIGHBIT = $8000;
-#Ifndef MAX_TIMERS;
-Constant MAX_TIMERS  32;            ! Max number timers/daemons active at once
-#Endif; ! MAX_TIMERS
+Default MAX_TIMERS  32;            ! Max number timers/daemons active at once
 Array  the_timers --> MAX_TIMERS;
 Global active_timers;               ! Number of timers/daemons active
 Global current_timer;               ! Index of the timer which is currently being executed
 
 Global PrintMsg = _PrintMsg;        ! Using a global for this saves one byte per call
 
-#Ifndef MAX_FLOATING_OBJECTS;
-Constant MAX_FLOATING_OBJECTS  32;            ! Max number of objects that have found_in property
-#Endif; ! MAX_FLOATING_OBJECTS
+Default MAX_FLOATING_OBJECTS  32;            ! Max number of objects that have found_in property
 Array floating_objects --> MAX_FLOATING_OBJECTS + 1;
 
 Global c_style = 0;
@@ -640,8 +634,11 @@ Global input_noun;
 Global input_second;
 Global input_direction;
 
-Array which_object-->MAX_WHICH_OBJECTS;       ! options for "which book?"
-Array multiple_objects-->MAX_MULTIPLE_OBJECTS;! holds nouns when multi* used
+Array dummy1 --> 77 77 77 77 77; ! TODO: REMOVE AFTER DEBUGGING!
+Array which_object-->MAX_WHICH_OBJECTS+1;       ! options for "which book?"
+Array dummy2 --> 77 77 77 77 77; ! TODO: REMOVE AFTER DEBUGGING!
+Array multiple_objects-->MAX_MULTIPLE_OBJECTS+1;! holds nouns when multi* used
+Array dummy3 --> 77 77 77 77 77; ! TODO: REMOVE AFTER DEBUGGING!
 
 Array buffer->(MAX_INPUT_CHARS + 3);
 Array parse->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
