@@ -655,7 +655,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 #Endif;
 
 	wn = _k;
-	which_object->0 = _matches;
+	which_object->0 = _matches; ! _matches is always < parser_one
 	which_object->1 = _best_word_count;
 
 	if(p_expecting_single_noun) {
@@ -796,7 +796,8 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 #Endif;
     ! try normal parsing of noun phrase
 	_k = TryNumber(wn);
-	parser_two = MAX_MULTIPLE_OBJECTS;
+	!parser_two = MAX_MULTIPLE_OBJECTS;
+	parser_two = MAX_WHICH_OBJECTS;
 	_noun = _ParseNounPhrase(p_parse_pointer, p_expecting_single_noun);
 	if(_k > 0 && (_noun == 0 || which_object -> 1 == 1)) { ! only number parsed
 		! now we try <number> <noun> instead, skipping the <number> first
@@ -1240,8 +1241,10 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 							_k = which_object--> (_i + 1);
 							if(_ObjInMultipleObjects(_k) == false) {
 								_j = (multiple_objects --> 0) + 1;
-								multiple_objects --> 0 = _j;
-								multiple_objects --> _j = _k;
+								if(_j < MAX_MULTIPLE_OBJECTS) {
+									multiple_objects --> 0 = _j;
+									multiple_objects --> _j = _k;
+								}
 							}
 						}
 #IfDef DEBUG_PARSETOKEN;
