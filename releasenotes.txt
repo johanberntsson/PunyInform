@@ -1,5 +1,8 @@
 Upcoming release:
 
+- Fixed a buffer overrun error when wrong value given to parser_two
+- Added a buffer overrun check when copying data into multiple_objects
+
 Important to note when upgrading:
 - ext_talk_menu: Procedure TMPrintLine has changed. If you redefine it in your own source, you need to copy the procedure from ext_talk_menu.h and modify it to suit your needs. 
 
