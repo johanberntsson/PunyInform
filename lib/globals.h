@@ -634,11 +634,8 @@ Global input_noun;
 Global input_second;
 Global input_direction;
 
-Array dummy1 --> 77 77 77 77 77; ! TODO: REMOVE AFTER DEBUGGING!
 Array which_object-->MAX_WHICH_OBJECTS+1;       ! options for "which book?"
-Array dummy2 --> 77 77 77 77 77; ! TODO: REMOVE AFTER DEBUGGING!
 Array multiple_objects-->MAX_MULTIPLE_OBJECTS+1;! holds nouns when multi* used
-Array dummy3 --> 77 77 77 77 77; ! TODO: REMOVE AFTER DEBUGGING!
 
 Array buffer->(MAX_INPUT_CHARS + 3);
 Array parse->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra word which is set to 0
