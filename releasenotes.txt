@@ -8,6 +8,7 @@ Important to note when upgrading:
 - Added option in ext_talk_menu to conditionally add sub-arrays of topics.
 - Bugfix: Arrays which_object and multiple_objects in globals.h were one word too small, leading to buffer overruns when the parser handles multiple objects.
 - Bugfix: howto/adjectives.inf had a bug which broke matching for AdjObject objects which didn't have an adj_name property.
+- talk_menu now uses pagination of topics even in z3 format.
 
 =======
 v5.9: bug fix and new feature release (17 November 2024)

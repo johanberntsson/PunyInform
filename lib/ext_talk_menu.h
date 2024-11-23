@@ -36,7 +36,7 @@ System_file;
 ! FLAGREF is a number 32-299 for a flag to be set (In order to use this,
 !    you must include ext_flags.h before including ext_talk_menu.h)
 ! UNLOCKREF is either a topic ID (300-600) or a relative reference to a topic
-!    (1 to 29) that is activated by this topic. 1 means the next topic,
+!    (1 to 20) that is activated by this topic. 1 means the next topic,
 !    2 the topic after that etc. The target topic has to have status
 !    TM_INACTIVE (= 0) or TM_ACTIVE (= 30) for this to work. When a topic
 !    is chosen in a conversation, it is set to status TM_STALE, and the only
@@ -194,10 +194,10 @@ Constant TM_MSG_NO_TOPICS "Right now, you wouldn't know what to talk about.";
 Constant TM_MSG_EXIT_OPTION "[ENTER] End conversation";
 #Endif;
 
-#Ifv5;
 #Ifndef TM_MSG_PAGE_OPTION;
 Constant TM_MSG_PAGE_OPTION "[N] Next page";
 #Endif;
+#Ifv5;
 #Ifndef TM_MSG_EXIT_OPTION_SHORT;
 Constant TM_MSG_EXIT_OPTION_SHORT "[ENTER] End"; ! This + TM_MSG_PAGE_OPTION_SHORT should be 18 characters or less
 #Endif;
@@ -249,7 +249,7 @@ Global talk_menu_multi_mode = true;
 ];
 
 [ _SetTopic p_topic p_array p_value _index _val _find_topic _base _curr_id _success _stash_array;
-	! p_topic is 1-29: Act on topic number P_TOPIC, counting from p_array
+	! p_topic is 1-20: Act on topic number P_TOPIC, counting from p_array
 	! p_topic is 300-600: Act on topic with ID = P_TOPIC.
 	! p_topic is (-600)-(-300): Act on topic with ID = -P_TOPIC. If p_value is
 	!   TM_ACTIVE or TM_INACTIVE, set the topic status even if it's currently
@@ -299,7 +299,7 @@ Global talk_menu_multi_mode = true;
 				_index = -1;
 			}
 		} else if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
-			if(_find_topic < 30) {
+			if(_find_topic < 29) {
 				if(_find_topic-- == 1) jump _tm_found_topic;
 				continue;
 			}
@@ -320,7 +320,7 @@ Global talk_menu_multi_mode = true;
 					if(_val ~= TM_STALE || p_topic < 0) {
 						p_array-->_index = p_value;
 					}
-					if(_find_topic < 30 || talk_menu_multi_mode == false) {
+					if(_find_topic < 29 || talk_menu_multi_mode == false) {
 						rtrue;
 					}
 					_index = _index + 3;
@@ -393,11 +393,12 @@ Array TenDashes static -> "----------";
 ];
 #Endif;
 
+Array _TMLines --> 10;
 
 #Ifv5;
 [ RunTalk p_npc _array _i _j _n _val _height _width _offset _count _more _has_split _add_msg _stash_array;
 #Ifnot;
-[ RunTalk p_npc _array _i _j _n _val _add_msg _stash_array;
+[ RunTalk p_npc _array _i _j _n _val _offset _count _more _add_msg _stash_array;
 #Endif;
 	talk_menu_talking = true;
 	current_talker = p_npc;
@@ -422,16 +423,13 @@ Array TenDashes static -> "----------";
 	if(_height > 31) _height = 16;
 	else if(_height > 13) @log_shift _height (-1) -> _height; !Division by 2
 	else _height = 7;
-!	@erase_window $ffff;
 #Endif;
 
 	! Print all valid lines to say
 
 ._tm_restart_talk_after_line;
 
-#Ifv5;
 	_offset = 0;
-#Endif;
 
 ._tm_restart_talk;
 
@@ -439,10 +437,8 @@ Array TenDashes static -> "----------";
 	_array = p_npc.talk_array;
 	_stash_array = 0;
 	
-#Ifv5;
 	_count = 0;
 	_more = 0;
-#Endif;
 	_i = -1;
 	_n = 0;
 	while(true) {
@@ -475,23 +471,27 @@ Array TenDashes static -> "----------";
 			_count++;
 !			print "Talk to ", (the) p_npc, " about:^";
 			if(_count == 1) {
-				#Ifv5;
-					_has_split = true;
-					@split_window _height;
-					@erase_window 1;
-					DrawStatusLine();
-					@set_window 1;
-					@set_cursor 2 1;
-				#Endif;
+				_has_split = true;
+				@split_window _height;
+				@erase_window 1;
+				DrawStatusLine();
+				@set_window 1;
+				@set_cursor 2 1;
 				_TMPrintMsg(TM_MSG_TALK_ABOUT_WHAT);
 			}
 			print "  ", _count % 10, ": ";
 #Ifnot;
+			if(_count >= 8) { _more = 1; break; }
 			_n++;
+			if(_n <= _offset) continue;
+			_count++;
 !			print "Talk to ", (the) p_npc, " about:^";
-			if(_n == 1) _TMPrintMsg(TM_MSG_TALK_ABOUT_WHAT);
-			print "  ", _n, ": ";
+			if(_count == 1) {
+				_TMPrintMsg(TM_MSG_TALK_ABOUT_WHAT);
+			}
+			print "  ", _count, ": ";
 #Endif;
+			(_TMLines - 2)-->_count = _array + _i + _i; ! Store the start of the line
 			_i++;
 			_val = _array-->_i;
 			while(_val >= TM_FIRST_ID && _val <= TM_LAST_ID) {
@@ -499,7 +499,6 @@ Array TenDashes static -> "----------";
 				_i++;
 				_val = _array-->_i;
 			}
-!			print "i:",_i,"!";
 			_TMCallOrPrint(_array, _i);
 		}
 	}
@@ -528,35 +527,27 @@ Array TenDashes static -> "----------";
 	@set_cursor _i 1;
 #Endif;
 	_i = TM_MSG_EXIT_OPTION;
-#Ifv5;
 	_j = TM_MSG_PAGE_OPTION;
+#Ifv5;
 	if(_width < 39) {
 		_i = TM_MSG_EXIT_OPTION_SHORT;
 		_j = TM_MSG_PAGE_OPTION_SHORT;
 	}
 #Endif;
 	_TMPrintMsg(_i, true);
-#Ifv5;
+
 	if(_more || _offset) {
 		print "  ";
 		_TMPrintMsg(_j, true);
 	}
 	new_line;
-#Ifnot;
-	new_line;
-#Endif;
 
 	! Ask player to choose a line to say
+._askAgain;
 
 	_j = 0;
 	while(_j == 0) {
 #IfV5;
-!		_j = _height - 1;
-!		@set_cursor _j 1;
-!		PrintMsg(MSG_PROMPT);
-	!	DrawStatusLine();
-!		buffer->1 = 0;
-!		@aread buffer parse -> _val;
 		@read_char -> _val;
 
 		if(_val == 13 or 'q' or 'Q' or 'x' or 'X') {
@@ -577,85 +568,67 @@ Array TenDashes static -> "----------";
 		}
 		_j = _val - 48;
 		if(_j == 0) _j = 10;
-		if(_j >= 0 && _j <= 10)
-			_j = _j + _offset;
 #IfNot;
 		! This is v3
 		PrintMsg(MSG_PROMPT);
 		@sread buffer parse;
 		num_words = parse->1;
 
-!		_ReadPlayerInput(true);
-
 		if(num_words == 0) {
 			_TMPrintMsg(TM_MSG_EXIT);
 !			"With that, you politely end the conversation.";
 			rtrue;
 		}
+		_val = buffer->1;
+		if(_val == 'n') {
+			if(_more) {
+				_offset = _offset + 8;
+				jump _tm_restart_talk;
+			}
+			else if(_offset) {
+				_offset = 0;
+				jump _tm_restart_talk;
+			}
+		}
 		_j = TryNumber(1);
 #EndIf;
-		if(_j < 1 || _j > _n) _j = 0;
 	}
+
+	if(_j < 1 || _j > _count) jump _askAgain;
 
 	! Print the line and reply
 
-	! Restore basic talk array
-	_array = p_npc.talk_array;
-	_stash_array = 0;
+	_array = (_TMLines - 2)-->_j;
+	_array-->0 = TM_STALE;
+	_i = 1;
+	_val = _array-->_i;
 
-	_i = -1;
-	_n = 0;
-	while(true) {
+	while(_val >= TM_FIRST_ID && _val <= TM_LAST_ID) {
+		! An ID was found
 		_i++;
 		_val = _array-->_i;
-!		print "_i is ", _i, ", _val is ", _val, "^";
-		if(_val == TM_END) {
-			_array = _stash_array;
-			_i = 0;
-		} else if(_val == TM_MAYBE_ADD_LIST) {
-			_i++;
-			_val = _array-->_i;
-			_i++;
-			if(_val()) {
-				_stash_array = _array + _i + _i;
-				_array = _array-->_i;
-				_i = -1;
-			}
-		} else if(_val == TM_ACTIVE) {
-			_n++;
-			if(_n < _j) continue;
-			! This is the entry we're looking for
-			_array-->_i = TM_STALE;
-			_i++;
-			_val = _array-->_i;
-			while(_val >= TM_FIRST_ID && _val <= TM_LAST_ID) {
-				! An ID was found
-				_i++;
-				_val = _array-->_i;
-			}
-			_i++;
-#Ifv5;
-			@set_window 0;
-#Endif;
-			_add_msg = _array-->_i;
-			if(_add_msg == TM_ADD_BEFORE or TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER)
-!				_add_msg = 0;
-!			else
-				_i++;
-			if(_add_msg == TM_ADD_BEFORE or TM_ADD_BEFORE_AND_AFTER) {
-				_TMCallOrPrint(_array, _i);
-				_i++;
-			}
-			TMPrintLine(player, _array, _i);
-			_i++;
-			if(_add_msg == TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER) {
-				_TMCallOrPrint(_array, _i);
-				_i++;
-			}
-			TMPrintLine(p_npc, _array, _i);
-			break;
-		}
 	}
+
+	_i++;
+
+#Ifv5;
+	@set_window 0;
+#Endif;
+
+	_add_msg = _array-->_i;
+	if(_add_msg == TM_ADD_BEFORE or TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER)
+		_i++;
+	if(_add_msg == TM_ADD_BEFORE or TM_ADD_BEFORE_AND_AFTER) {
+		_TMCallOrPrint(_array, _i);
+		_i++;
+	}
+	TMPrintLine(player, _array, _i);
+	_i++;
+	if(_add_msg == TM_ADD_AFTER or TM_ADD_BEFORE_AND_AFTER) {
+		_TMCallOrPrint(_array, _i);
+		_i++;
+	}
+	TMPrintLine(p_npc, _array, _i);
 
 	! Apply effects
 
