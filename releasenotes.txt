@@ -1,10 +1,9 @@
 Upcoming release:
 
-- Fixed a buffer overrun error when wrong value given to parser_two
-- Added a buffer overrun check when copying data into multiple_objects
 
 Important to note when upgrading:
-- ext_talk_menu: Procedure TMPrintLine has changed. If you redefine it in your own source, you need to copy the procedure from ext_talk_menu.h and modify it to suit your needs. 
+- ext_talk_menu: Procedure TMPrintLine has changed. If you redefine it in your own source, you need to copy the procedure from ext_talk_menu.h and modify it to suit your needs.
+- ext_talk_menu: A relative topic reference could previously be a number between 1 and 29. From now on it can be in the range 1-20.
 
 - Bugfix: Parser will no longer confuse an out_to property value with a parse_name routine, if the value isn't a valid routine address.
 - Bugfix: PlayerTo(obj, 2) used to always print a long description, while it should print a short description if the game was in superbrief mode or the game was in brief mode and the player had already visited the location. Fixed now.
@@ -12,6 +11,8 @@ Important to note when upgrading:
 - Bugfix: Arrays which_object and multiple_objects in globals.h were one word too small, leading to buffer overruns when the parser handles multiple objects.
 - Bugfix: howto/adjectives.inf had a bug which broke matching for AdjObject objects which didn't have an adj_name property.
 - talk_menu now uses pagination of topics even in z3 format.
+- Fixed a buffer overrun error when wrong value given to parser_two
+- Added a buffer overrun check when copying data into multiple_objects
 
 =======
 v5.9: bug fix and new feature release (17 November 2024)

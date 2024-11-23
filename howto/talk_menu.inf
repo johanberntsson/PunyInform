@@ -90,6 +90,7 @@ Include "puny.h";
 
 ! Note that flags used in talk_array must have id 32-299
 Constant F_LINDA_TALKED_ABOUT_PARIS 32;
+Constant F_LINDA_TALKS_WARHAMMER 33;
 
 [ FunnyReply;
 	talk_menu_talking = false;
@@ -99,11 +100,20 @@ Constant F_LINDA_TALKED_ABOUT_PARIS 32;
 	ReActivateTopic(Linda, 303);
 ];
 
+[ DoesLindaTalkWarhammer; return FlagIsSet(F_LINDA_TALKS_WARHAMMER); ];
+
+Array linda_warhammer_talk -->
+	30 "Warhammer 40K" "Josh mentioned you like Warhammer 40K?" "Oh yeah, I love it!" 1 2
+	0 "Warhammer units" "Which are your favourite Warhammer units?" "Must be the wood elves, with their longbows!"
+	0 "Warhammer hobby" "How long have you been playing Warhammer 40K?" "I got into it back in highschool."
+	TM_END;
+
 Array talk_array_linda -->
 	30 "Monkeys" TM_ADD_BEFORE_AND_AFTER "Loudly, you clear your throat..." "What do you know about monkeys?" 
 			"You stare at her intensely, watching for any sign that she registered the question." TM_NO_LINE "She just looks at you, flabbergasted."
 	30 "Elephants" TM_ADD_AFTER TM_NO_LINE "You open your mouth, but Linda knows what you're about to ask and cuts you short." "Everyone loves elephants, right?"
 	30 "Dogs" TM_ADD_BEFORE "You bring out your wallet and show Linda a picure of your puppy." "What do you think about dogs?" "They make great companions!" "Linda snickers to herself."
+	TM_MAYBE_ADD_LIST DoesLindaTalkWarhammer linda_warhammer_talk
 	0 300 "Bob's death" "What do you know about Bob's death?" "Oh not much. He was murdered I think." 301
 	0 301 "Murder" "Tell me more about the murder" "Sorry, I've told you everything I know."
 	30 303 "Paris" "How do you like Paris?" "I love it. Especially the Louvre! But it's sad that Bob died there." 1 2 3 300
@@ -114,7 +124,7 @@ Array talk_array_linda -->
 	TM_END;
 	
 Array talk_array_josh -->
-	30 "Linda" "How do you know Linda?" "I don't really." 1
+	30 "Linda" "How do you know Linda?" "Oh you should really ask her about Warhammer 40K!" 1 F_LINDA_TALKS_WARHAMMER
 	0 "Himself" "Are you a funny guy?" FunnyReply
 	30 "Nothing" FunnyReply "Yes!"
 	30 "Gorillas" "What do you know about gorillas?" "I think they live in misty locations."

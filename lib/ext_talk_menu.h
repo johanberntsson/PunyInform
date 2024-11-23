@@ -282,6 +282,7 @@ Global talk_menu_multi_mode = true;
 		_index++;
 		_val = p_array-->_index;
 		if(_val == TM_END) {
+			if(_find_topic < 29) rfalse; ! Signal failure, as the topic was not found
 			if(_stash_array) {
 				p_array = _stash_array;
 				_index = 0;
@@ -289,15 +290,12 @@ Global talk_menu_multi_mode = true;
 			} else
 				return _success; ! The topic wasn't found, or we are in multi mode
 		} else if(_val == TM_MAYBE_ADD_LIST) {
-			_index++;
-			_val = p_array-->_index;
-			_index++;
+			if(_find_topic < 29) rfalse; ! Signal failure, as the topic was not found
+			_index = _index + 2;
 			_curr_id = p_array-->_index;
-			if(_val()) {
-				_stash_array = p_array + _index + _index;
-				p_array = _curr_id;
-				_index = -1;
-			}
+			_stash_array = p_array + _index + _index;
+			p_array = _curr_id;
+			_index = -1;
 		} else if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
 			if(_find_topic < 29) {
 				if(_find_topic-- == 1) jump _tm_found_topic;
