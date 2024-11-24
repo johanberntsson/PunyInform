@@ -1,6 +1,9 @@
 Upcoming release:
 
 
+=======
+v5.10: bug fix and new feature release (24 November 2024)
+
 Important to note when upgrading:
 - ext_talk_menu: Procedure TMPrintLine has changed. If you redefine it in your own source, you need to copy the procedure from ext_talk_menu.h and modify it to suit your needs.
 - ext_talk_menu: A relative topic reference could previously be a number between 1 and 29. From now on it can be in the range 1-20.
