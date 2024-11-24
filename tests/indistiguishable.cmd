@@ -42,6 +42,9 @@ s
 push 2
 push two
 push second button
+s
+x 1
+x 2
 quit
 yes
 

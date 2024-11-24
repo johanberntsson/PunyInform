@@ -248,6 +248,7 @@ Object ButtonRoom "Button Room Pub"
 	with
 		description "You are in the button room.",
         n_to Pub,
+        s_to NoteRoom,
 	has light;
 
 Object -> Button "button"
@@ -259,6 +260,23 @@ Object -> Button "button"
 			"Something happens here. ";
 		],
 	has static;
+
+Object NoteRoom "Note Room"
+	with
+		description "You are in the button room.",
+        n_to ButtonRoom,
+	has light;
+
+Object -> ws_one "step one"
+    with
+        name 'one' '1//' 'step',
+        IntrinsicNote 1;
+
+Object -> ws_two "step two"
+    with
+        name 'two' '2//' 'step',
+        IntrinsicNote 2;
+
 
 [Initialise; ! i;
 	print "^^Indistinguishable item are listed together in this demo. Things to try:^ 
