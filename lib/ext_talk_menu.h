@@ -11,7 +11,7 @@ System_file;
 !
 ! or:
 !
-! TM_MAYBE_ADD_LIST ROUTINE ARRAY
+! TM_MAYBE_ADD_LIST FLAGREF|ROUTINE ARRAY
 !
 ! [] = Optional
 ! * = can be more than one
@@ -45,19 +45,22 @@ System_file;
 !    current_talker refers to the NPC being talked to.
 ! STRING is a string to be printed.
 !
-! Whenever a routine is used for PLAYERSAYS, NPCSAYS or ROUTINE, it can set the
-! global talk_menu_talking to false to end the conversation after the current
-! topic. When doing this, you may want to use ROUTINE to print a suitable
-! message about why the conversation ended.
+! Whenever a routine is used for PLAYERSAYS, NPCSAYS or ROUTINE, it can set
+! the global talk_menu_talking to false to end the conversation after the 
+! current topic. When doing this, you may want to use ROUTINE to print a 
+! suitable message about why the conversation ended.
 !
-! TM_MAYBE_ADD_LIST is a special value which means that if the routine that
-!    follows returns true, we should add the topic list held in the array
-!    specified. A few restrictions apply: 
-!        (1) The sub-arraymay not contain a TM_MAYBE_ADD_LIST token.
+! TM_MAYBE_ADD_LIST is a special value which means: If it's followed by a
+!    flag reference, and that flag is set, OR it's followed by a routine and
+!    that routine returns true, the topic list held in the sub-array specified 
+!    will be added. A few restrictions apply: 
+!        (1) The sub-array may not contain a TM_MAYBE_ADD_LIST token.
 !        (2) a relative UNLOCKREF in the base array may not refer to a topic 
 !            within the sub-array or after the TM_MAYBE_ADD_LIST token.
 !        (3) a relative UNLOCKREF in the sub-array may not refer to a topic 
 !            beyond the end of the sub-array.
+! FLAGREF is a flag number, normally between 32 and 299. If the flag is set,
+!    the sub-array is included.
 ! ROUTINE is a routine to decide if the sub-array should be included. It may
 !    not randomize a result, and it may not alter the state of the game.
 ! ARRAY is the name of an array (referred to as a sub-array above), which
@@ -454,7 +457,15 @@ Array _TMLines --> 10;
 			_i++;
 			_val = _array-->_i;
 			_i++;
-			if(_val()) {
+#Ifdef EXT_FLAGS;
+			if(_val > 0 && _val < TM_FIRST_ID)
+				_val = FlagIsSet(_val);
+			else
+				_val = _val();
+#Ifnot;
+			_val = _val();
+#Endif;
+			if(_val) {
 				_stash_array = _array + _i + _i;
 				_array = _array-->_i;
 				_i = -1;

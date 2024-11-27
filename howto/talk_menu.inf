@@ -108,6 +108,11 @@ Array linda_warhammer_talk -->
 	0 "Warhammer hobby" "How long have you been playing Warhammer 40K?" "I got into it back in highschool."
 	TM_END;
 
+Array linda_paris_talk -->
+	30 "The Seine" "Do you like the Seine?" "It's like my favourite river - ever!"
+	30 "Eiffel Tower" "Have you visited the Eiffel Tower?" "Well, I've seen it. I haven't gone up. I'm afraid of heights" "Linda shudders."
+	TM_END;
+
 Array talk_array_linda -->
 	30 "Monkeys" TM_ADD_BEFORE_AND_AFTER "Loudly, you clear your throat..." "What do you know about monkeys?" 
 			"You stare at her intensely, watching for any sign that she registered the question." TM_NO_LINE "She just looks at you, flabbergasted."
@@ -121,6 +126,7 @@ Array talk_array_linda -->
 	0 "The Louvre" "What about the Louvre?" "Oh I just love the artsy atmosphere here in Paris you know."
 	0 "Paris trivia" "Do you even know Paris is the capital of France?" "Well of course I do!" ReActivateParis
 	0 350 "Plates" "What do you know about plates?" "They're usually flat I guess."
+	TM_MAYBE_ADD_LIST F_LINDA_TALKED_ABOUT_PARIS linda_paris_talk
 	TM_END;
 	
 Array talk_array_josh -->

@@ -1,5 +1,6 @@
 Upcoming release:
 
+- talk_menu: A TM_MAYBE_ADD_LIST line can now specify a flag instead of an array to decide if the sub-array should be included.
 
 =======
 v5.10: bug fix and new feature release (24 November 2024)
