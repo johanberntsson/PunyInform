@@ -542,6 +542,10 @@ Object CheapScenery "object"
 			if(SceneryReply(_w1, _w2, _id_or_routine))
 				rtrue;
 #endif;
+			if(CS_DEFAULT_MSG ofclass Routine) {
+				CS_DEFAULT_MSG.Call();
+				rtrue;
+			}
 			print_ret (string) CS_DEFAULT_MSG;
 		],
 		react_after [;

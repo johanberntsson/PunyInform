@@ -1,6 +1,7 @@
 Upcoming release:
 
 - talk_menu: A TM_MAYBE_ADD_LIST line can now specify a flag instead of an array to decide if the sub-array should be included.
+- cheap_scenery: If you want to set the default message to be used for interactions with cheap scenery items (CS_DEFAULT_MSG), it can now be set to a routine (Until now, it could only be a string).
 
 =======
 v5.10: bug fix and new feature release (24 November 2024)
