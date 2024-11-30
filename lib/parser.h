@@ -1873,6 +1873,7 @@ Array guess_object-->5;
 	scope_routine = 0;
 	noun_filter = 0;
 	object_token_type = -1;
+	parser_all_found = false;
 
 	verb_wordnum = 1;
 
