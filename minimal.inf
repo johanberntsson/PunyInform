@@ -29,7 +29,7 @@ Constant NO_SCORE = 0;
 
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
-!Constant DIALECT_US ! Affects OPTIONAL_LANGUAGE_NUMBER
+!Constant DIALECT_US; ! Affects OPTIONAL_LANGUAGE_NUMBER
 !Constant CUSTOM_ABBREVIATIONS;
 !Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
 Constant OPTIONAL_NO_DARKNESS;
