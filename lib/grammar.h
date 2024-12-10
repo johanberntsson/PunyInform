@@ -145,7 +145,7 @@ Verb 'put' 'place'
 Verb 'read'
 	* noun                                      -> Examine
 	* 'about' topic 'in' noun                   -> Consult reverse
-	* topic 'in' noun                           -> Consult;
+	* topic 'in' noun                           -> Consult reverse;
 
 Verb 'remove'
 	* worn                                      -> Disrobe

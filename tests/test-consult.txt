@@ -11,6 +11,12 @@ consult_words = 1
 consult_from = 3
 You discover nothing of interest in the book.
 
+> read ghosts in book
+special_number = 0
+consult_words = 1
+consult_from = 2
+You discover nothing of interest in the book.
+
 > ask john about ghosts
 ???
 special_number = 0
@@ -35,6 +41,12 @@ You discover nothing of interest in the book.
 special_number = 0
 consult_words = 1
 consult_from = 3
+You discover nothing of interest in the book.
+
+> read apple in book
+special_number = 0
+consult_words = 1
+consult_from = 2
 You discover nothing of interest in the book.
 
 > ask john about apple
