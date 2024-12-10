@@ -5,6 +5,7 @@ Upcoming release:
 - Fixed that parser_all_found wasn't always reset when parsing a new command, which gave confusing error messages.
 - Fixed: _InitObjects was called too late in main() in puny.h, resulting in games using PlayerTo() in Initialise not getting any floating objects in location, including the cheap scenery object.
 - Fixed: Orders to NPCs should only be single objects
+- Fixed: tkers submitted a pull request to improve the consult grammar rule
 
 =======
 v5.10: bug fix and new feature release (24 November 2024)
