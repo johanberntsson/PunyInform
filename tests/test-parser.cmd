@@ -1,6 +1,7 @@
 
 transcript
 
+john, take torch and sweater
 say test
 say test to john
 feed door with torch

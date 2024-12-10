@@ -2255,6 +2255,11 @@ Array guess_object-->5;
 			PrintMsg(MSG_PARSER_BE_MORE_SPECIFIC);
 			rtrue;
 		}
+		if(multiple_objects --> 0 > 1) {
+			! Orders to NPCs should only be single objects
+			PrintMsg(MSG_PARSER_NO_MULTIPLES_FOR_NPC);
+			rtrue;
+		}
 		if(RunRoutines(actor, orders)) rtrue;
 		if(RunRoutines(player, orders)) rtrue;
 		if(action == ##NotUnderstood) {

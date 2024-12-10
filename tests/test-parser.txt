@@ -1,4 +1,7 @@
 
+> john, take torch and sweater
+You can only refer to single objects when talking to others.
+
 > say test
 (assuming to John)
 Rule life, action Answer, noun 0, second John, consult 2 1, special_number 0

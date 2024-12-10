@@ -140,6 +140,9 @@ Constant MSG_PARSER_NOTHING_TO_AGAIN "You can hardly repeat that.";
 #Ifndef MSG_PARSER_BE_MORE_SPECIFIC;
 Constant MSG_PARSER_BE_MORE_SPECIFIC "You need to be more specific.";
 #EndIf;
+#Ifndef MSG_PARSER_NO_MULTIPLES_FOR_NPC;
+Constant MSG_PARSER_NO_MULTIPLES_FOR_NPC "You can only refer to single objects when talking to others.";
+#EndIf;
 
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;
