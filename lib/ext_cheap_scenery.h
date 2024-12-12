@@ -231,19 +231,16 @@ Property individual cheap_scenery;
 [ CSHasAdjective p_word _arr _w1;
 	_arr = CSData-->CSDATA_POINTER;
 	_w1 = _arr-->0;
-	if(_w1 < 1 || _w1 > 99) {
-		if(_w1 == p_word)
-			rtrue;
+	if(_w1 < 10 || _w1 > 99)
 		rfalse;
-	}
 	return _CSFindInArr(p_word, _arr + 2, _w1 / 10);
 ];
 
 [ CSHasNoun p_word _arr _w1;
 	_arr = CSData-->CSDATA_POINTER;
 	_w1 = _arr-->0;
-	if(_w1 < 1 || _w1 > 99) {
-		if(_arr-->1 == p_word)
+	if(_w1 < 2 || _w1 > 99) {
+		if(p_word == _w1 or _arr-->1)
 			rtrue;
 		rfalse;
 	}

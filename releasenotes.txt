@@ -6,6 +6,8 @@ Upcoming release:
 - Fixed: _InitObjects was called too late in main() in puny.h, resulting in games using PlayerTo() in Initialise not getting any floating objects in location, including the cheap scenery object.
 - Fixed: Orders to NPCs should only be single objects
 - Fixed: tkers submitted a pull request to improve the consult grammar rule
+- Fixed bugs in cheap_scenery routines CSHasNoun, CSHasAdjective and CSHasWord, which were introduced in v4.5, but have never worked properly.
+- Documented cheap_scenery routines CSHasNoun, CSHasAdjective and CSHasWord, so users will know that they're there, and how to use them.
 
 =======
 v5.10: bug fix and new feature release (24 November 2024)
