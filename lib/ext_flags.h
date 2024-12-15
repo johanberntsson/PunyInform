@@ -141,7 +141,8 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 ];
 
 [ _FlagValue p_x _abs_p_x _val;
-	if(p_x >= 0) _abs_p_x = p_x; else _abs_p_x = -p_x;
+	_abs_p_x = p_x;
+	if(p_x < 0) _abs_p_x = -p_x;
 #IfV5;
 	@log_shift _abs_p_x (-3) -> _val; ! Divide by 8
 	_abs_p_x = _abs_p_x & 7;
@@ -165,15 +166,6 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 	rtrue;
 ];
 
-[ AnyFlagIsSet p_x p_y p_z;
-#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if(IncorrectFlagNumber(p_x)) rfalse;
-#Endif;
-	if(_FlagValue(p_x)) rtrue;
-	if(p_y) return AnyFlagIsSet(p_y, p_z);
-	rfalse;
-];
-
 [ FlagIsClear p_x p_y p_z;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(IncorrectFlagNumber(p_x)) rfalse;
@@ -183,12 +175,13 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 	rtrue;
 ];
 
+[ AnyFlagIsSet p_x p_y p_z;
+	if(FlagIsClear(p_x, p_y, p_z)) rfalse;
+	rtrue;
+];
+
 [ AnyFlagIsClear p_x p_y p_z;
-#Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
-	if(IncorrectFlagNumber(p_x)) rfalse;
-#Endif;
-	if(_FlagValue(p_x) == 0) rtrue;
-	if(p_y) return AnyFlagIsClear(p_y, p_z);
-	rfalse;
+	if(FlagIsSet(p_x, p_y, p_z)) rfalse;
+	rtrue;
 ];
 

@@ -150,12 +150,9 @@ Property individual talk_array;
 
 Global current_talker;
 
-#Ifndef TM_FIRST_ID;
-Constant TM_FIRST_ID = 300;
-#Endif;
-#Ifndef TM_LAST_ID;
-Constant TM_LAST_ID = 600;
-#Endif;
+Default TM_FIRST_ID = 300;
+Default TM_LAST_ID = 600;
+
 #Iftrue TM_FIRST_ID < 32;
 Message fatalerror "*** ERROR: ext_talk_menu: TM_FIRST_ID must be in the range 32 to TM_LAST_ID ***";
 #Endif;

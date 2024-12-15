@@ -1,5 +1,8 @@
 Upcoming release:
 
+- Made ext_flags.h 32 bytes shorter (if you use AnyFlagIsSet and AnyFlagIsClear).
+- Made sure error message about too many floating objects isn't obscured by statusline in z5.
+
 =======
 v5.11: bug fix and new feature release (14 December 2024)
 

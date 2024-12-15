@@ -2334,11 +2334,11 @@ Object thedark "Darkness"
 	! already does that when creating the array.
 #EndIf;
 
-	_InitObjects(); ! Give reactive attribute as needed + list floating objects
-
 #IfV5;
 	new_line; ! So the first line of text isn't covered by the statusline
 #Endif;
+	_InitObjects(); ! Give reactive attribute as needed + list floating objects
+
 	_j = Initialise();
 
 	objectloop (_i in player) give _i moved ~concealed;
