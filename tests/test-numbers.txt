@@ -17,8 +17,23 @@ You can see a step one and a step two here.
 > x 1
 There is nothing special about the step one.
 
+> x one
+There is nothing special about the step one.
+
 > x 2
 There is nothing special about the step two.
+
+> take one
+step one: That's fixed in place.
+
+> take two
+step two: That's fixed in place.
+
+> press 1
+That's fixed in place.
+
+> press 2
+That's fixed in place.
 
 > quit
 Are you sure you want to quit? yes

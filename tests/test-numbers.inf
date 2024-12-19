@@ -31,6 +31,8 @@ Constant INITIAL_LOCATION_VALUE = ButtonRoom;
 
 Include "globals.h";
 
+![ ChooseObjectsFinal p_arr p_len; p_arr = p_len; ];
+
 Include "puny.h";
 
 Object ButtonRoom "Button Room Pub"
@@ -58,12 +60,12 @@ Object NoteRoom "Note Room"
 Object -> ws_one "step one"
     with
         name 'one' '1//' 'step',
-        IntrinsicNote 1;
+	has static;
 
 Object -> ws_two "step two"
     with
         name 'two' '2//' 'step',
-        IntrinsicNote 2;
+	has static;
 
 
 [Initialise; ! i;
