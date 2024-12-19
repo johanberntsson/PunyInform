@@ -1,0 +1,25 @@
+
+> push 2
+Something happens here. 
+
+> push two
+Something happens here. 
+
+> push second button
+Something happens here. 
+
+> s
+Note Room
+You are in the button room.
+
+You can see a step one and a step two here.
+
+> x 1
+There is nothing special about the step one.
+
+> x 2
+There is nothing special about the step two.
+
+> quit
+Are you sure you want to quit? yes
+

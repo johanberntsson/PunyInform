@@ -1,0 +1,76 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+
+Constant Story      "Numbers";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+Constant NO_SCORE = 0;
+
+!Constant DEBUG; ! Provides debug verbs for both Inform and PunyInform
+!Constant DEBUG_PARSEANDPERFORM;
+!Constant DEBUG_PARSEPATTERN;
+!Constant DEBUG_PARSETOKEN;
+!Constant DEBUG_GETNEXTNOUN;
+!Constant DEBUG_PARSENOUNPHRASE;
+
+! Uncomment to add optional features to PunyInform
+Constant RUNTIME_ERRORS = 2; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+Constant OPTIONAL_LIST_TOGETHER;
+Constant OPTIONAL_LANGUAGE_NUMBER; ! Use this to have list_together print numbers using words
+Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS; ! Cheaper to add when OPTIONAL_LANGUAGE_NUMBER is defined
+
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+Constant OPTIONAL_FLEXIBLE_INVENTORY;
+
+Constant INITIAL_LOCATION_VALUE = ButtonRoom;
+
+Include "globals.h";
+
+Include "puny.h";
+
+Object ButtonRoom "Button Room Pub"
+	with
+		description "You are in the button room.",
+        s_to NoteRoom,
+	has light;
+
+Object -> Button "button"
+	with 
+		name '2//' 'two' 'second' 'button',
+		description "It's a button with the number '2' on it. ",
+		before [;
+			push:
+			"Something happens here. ";
+		],
+	has static;
+
+Object NoteRoom "Note Room"
+	with
+		description "You are in the button room.",
+        n_to ButtonRoom,
+	has light;
+
+Object -> ws_one "step one"
+    with
+        name 'one' '1//' 'step',
+        IntrinsicNote 1;
+
+Object -> ws_two "step two"
+    with
+        name 'two' '2//' 'step',
+        IntrinsicNote 2;
+
+
+[Initialise; ! i;
+	print "^^Indistinguishable item are listed together in this demo. Things to try:^ 
+			INVENTORY TALL^
+			INVENTORY WIDE^
+			GET COIN^
+			EXAMINE DARTS^
+			^^";
+];
