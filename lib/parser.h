@@ -478,8 +478,6 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	!	 - stores number of words consumed in -> 1
 	!	 - stores all matching nouns if more than one in -->1 ...
 
-	which_object->0 = 0;
-
 	! don't check if wn out of range
 	if(wn > num_words) return 0;
 
@@ -736,6 +734,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! wn can change
 
 	parser_action = 0;
+	which_object->0 = 0;
 
 	! special rule to avoid "all in"
 	! (since 'in' in this combination is usually
