@@ -311,9 +311,6 @@ Constant AddToScope = _PutInScope;
 	! The routine returns true or false.
 	!print "TestScope ", (object) p_obj, "^";
 
-	! special case for debugging verbs; everything is in scope
-	if(meta) rtrue;
-
 	if(p_actor == 0)
 		p_actor = player;
 
