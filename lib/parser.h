@@ -1759,7 +1759,7 @@ Array guess_object-->5;
 				}
 			} else {
 				if(parser_phase == PHASE2) {
-					if(pattern_pointer->0 == TOKEN_SINGLE_PREP) {
+					if(pattern_pointer->0 == TOKEN_SINGLE_PREP or TOKEN_LAST_PREP) {
 						PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 					}
 				}
