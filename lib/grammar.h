@@ -218,7 +218,7 @@ Verb 'turn' 'rotate' 'screw' 'twist' 'unscrew'
 Verb 'unlock'
 	* noun 'with' held                          -> Unlock;
 
-Verb 'wait' 'z'
+Verb 'wait' 'z//'
 	*                                           -> Wait;
 
 Verb 'wear'
@@ -1798,37 +1798,38 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 
 		also_flag = false;
 		! write intial and describe messages in a new paragraph
-		objectloop(_obj in _ceil && _obj hasnt scenery or concealed && _obj ~= player) {
-			give _obj workflag;
-			if(_obj.&describe) {
-				if(PrintOrRun(_obj, describe, 0)) {
+		objectloop(_obj in _ceil)
+			if(_obj hasnt scenery or concealed && _obj ~= player) {
+				give _obj workflag;
+				if(_obj.&describe) {
+					if(PrintOrRun(_obj, describe, 0)) {
+						give _obj ~workflag;
+						also_flag = true;
+						continue;
+					}
+				}
+				if(_obj has container or door) {
+					if(_obj has open) {
+						_desc_prop = when_open;
+					} else {
+						_desc_prop = when_closed;
+					}
+				} else if(_obj has switchable) {
+					if(_obj has on) {
+						_desc_prop = when_on;
+					} else {
+						_desc_prop = when_off;
+					}
+				} else {
+					_desc_prop = initial;
+				}
+				if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
 					give _obj ~workflag;
+					new_line;
+					PrintOrRun(_obj, _desc_prop);
 					also_flag = true;
-					continue;
 				}
 			}
-			if(_obj has container or door) {
-				if(_obj has open) {
-					_desc_prop = when_open;
-				} else {
-					_desc_prop = when_closed;
-				}
-			} else if(_obj has switchable) {
-				if(_obj has on) {
-					_desc_prop = when_on;
-				} else {
-					_desc_prop = when_off;
-				}
-			} else {
-				_desc_prop = initial;
-			}
-			if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
-				give _obj ~workflag;
-				new_line;
-				PrintOrRun(_obj, _desc_prop);
-				also_flag = true;
-			}
-		}
 
 		! write any remaining objects in a new paragraph
 		if(parent(_ceil) == 0) {
@@ -1844,16 +1845,17 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 
 #IfDef OPTIONAL_PRINT_SCENERY_CONTENTS;
 		newline_flag = true;
-		objectloop(_obj in _ceil && _obj has scenery &&
-				(_obj has supporter ||
-					(_obj has container && _obj has transparent or open)) &&
-					child(_obj) ~= 0 &&
-					IndirectlyContains(_obj, player) == false) {
-			if(PrintContents(_ListObjsInOnMsg, _obj)) {
-				print (string) ". ";
-				newline_flag = false;
+		objectloop(_obj in _ceil)
+			if(_obj has scenery &&
+					(_obj has supporter ||
+						(_obj has container && _obj has transparent or open)) &&
+						child(_obj) ~= 0 &&
+						IndirectlyContains(_obj, player) == false) {
+				if(PrintContents(_ListObjsInOnMsg, _obj)) {
+					print (string) ". ";
+					newline_flag = false;
+				}
 			}
-		}
 		if(newline_flag == false)
 			print "^";
 #EndIf;
