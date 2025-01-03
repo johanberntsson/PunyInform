@@ -249,11 +249,11 @@ Car Park
 You are in a car park in front of the library. You can enter to the north. There
 is a river off to the east.
 
-A little red car is parked here.
+An old and torn green book is here.
 
 A blue book is standing on a shelf. Looking at the blue book makes you dizzy.
 
-An old and torn green book is here.
+A little red car is parked here.
 
 You can also see a key and a lead weight here.
 
