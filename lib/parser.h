@@ -442,6 +442,8 @@ System_file;
 			_score = _score - 10;
 		}
 	}
+	if(action == ##Exit && actor notin p_obj)
+		_score = _score - 50;
 
 	if(p_obj ~= Directions)
 		_score = _score + 10;
