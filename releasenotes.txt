@@ -7,6 +7,7 @@ Upcoming release:
 - Reset matching object count when _ParseNounPhrase starts.
 - Changed two objectloops in Look routine, so they use the fast way of iterating over objects in another object.
 - Made the parser give lower priority to an object the actor isn't in, when the action is ##Exit.
+- Fixed: Using a number as a synonym for an object gave weird responses from the parser.
 
 =======
 v5.11: bug fix and new feature release (14 December 2024)
