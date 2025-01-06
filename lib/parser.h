@@ -1175,20 +1175,18 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				! Here we got a list of nouns when we only expected
 				! one. Let's give ChooseObjectsFinal a chance
 				! to reduce the numbers before failing
-#Ifdef ChooseObjectsFinal;
 				parser_one = which_object -> 0;
+#Ifdef ChooseObjectsFinal;
 				if(parser_one > 1) {
 					ChooseObjectsFinal(which_object + 2, parser_one);
 				}
+#Endif;
 				if(parser_one == 1) {
 					_noun = which_object --> 1;
 				} else {
-#Endif;
 					parser_unknown_noun_found = p_parse_pointer;
 					return GPR_FAIL;
-#Ifdef ChooseObjectsFinal;
 				}
-#Endif;
 			}
 			p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 			if(_token_data == CREATURE_OBJECT && _CreatureTest(_noun) == 0)  {

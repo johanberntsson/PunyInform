@@ -7,6 +7,9 @@ Upcoming release:
 - Reset matching object count when _ParseNounPhrase starts.
 - Changed two objectloops in Look routine, so they use the fast way of iterating over objects in another object.
 - Made the parser give lower priority to an object the actor isn't in, when the action is ##Exit.
+- Fixed: Using a number as a synonym for an object gave weird responses from the parser.
+- talk_menu extension: A relative reference to a topic to be activated can now be negative as well as positive. If it's negative, the number has to preceded by TM_ACTIVATE, and the number has to be in parentheses. E.g. TM_ACTIVATE (-1)
+- talk_menu extension: A topic can now inactivate another topic, by specifying TM_INACTIVATE followed by either a positive or negative relative reference (e.g. (-1) means the previous topic), or an absolute ID 300-600.
 
 =======
 v5.11: bug fix and new feature release (14 December 2024)
