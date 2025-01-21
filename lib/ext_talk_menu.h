@@ -272,7 +272,7 @@ Global talk_menu_multi_mode = true;
 	! p_value is TM_INACTIVE: Set the topic to inactive, if it's currently in
 	!   status TM_INACTIVE or TM_ACTIVE. If p_topic is negative, set
 	!   it to inactive even if the topic is in status TM_STALE.
-	! p_value is 1: Return the current status of the topic.
+	! p_value is 1: Return the current status of the topic. Return true if not found.
 	! Return true if setting succeeded, false if not.
 	!
 	! Examples:
@@ -295,15 +295,26 @@ Global talk_menu_multi_mode = true;
 		}
 		_val = p_array-->_index;
 		if(_val == TM_END) {
-			if(_find_topic < 29) rfalse; ! Signal failure, as the topic was not found
+			if(_find_topic < 29) {
+				! Signal failure, as the topic was not found
+				if(p_value == 1) rtrue;
+				rfalse;
+			}
 			if(_stash_array) {
 				p_array = _stash_array;
 				_index = 0;
 				_stash_array = 0;
-			} else
+			} else {
+				! The topic wasn't found, or we are in multi mode
+				if(p_value == 1) rtrue; ! When trying to read a status, reaching the end means failure 
 				return _success; ! The topic wasn't found, or we are in multi mode
+			}
 		} else if(_val == TM_MAYBE_ADD_LIST) {
-			if(_find_topic < 29) rfalse; ! Signal failure, as the topic was not found
+			if(_find_topic < 29) {
+				! Signal failure, as the topic was not found
+				if(p_value == 1) rtrue;
+				rfalse;
+			}
 			_index = _index + 2;
 			_curr_id = p_array-->_index;
 			_stash_array = p_array + _index + _index;
@@ -754,3 +765,153 @@ Array _TMLines --> 10;
 Verb 'talk' 'converse' 'interview' 'interrogate'
 	* 'to'/'with' creature                      ->Talk
 	* creature                                  ->Talk;
+
+#Ifdef DEBUG;
+#Ifdef FLAG_COUNT;
+Constant TM_MAX_FLAG = FLAG_COUNT;
+#Ifnot;
+Constant TM_MAX_FLAG = 0;
+#Endif;
+
+[ _TMErrorContext p_topic p_element p_value;
+#Ifv5;
+	style bold;
+#Endif;
+	print "*** ERROR! ***^";
+#Ifv5;
+	style roman;
+#Endif;
+	print "Topic: ", p_topic,", ";
+	print "Array element: ", p_element,", ";
+	print "Value: ", p_value,"^";
+	print "Error: ";
+];
+
+Constant TM_ERR_NOT_FOUND "Target topic not found.";
+
+[ _CheckTMArray p_npc p_array _v _v0 _i _topic _backtopics _subs;
+	_i--;
+	_backtopics = 1;
+	while(_v ~= TM_END) {
+		_v = p_array --> (++_i);
+		if(_v == TM_MAYBE_ADD_LIST) {
+			_subs++;
+			print "Examining sub-array ", _subs,".^";
+			_v = p_array --> (++_i);
+			if((_v < 32 || _v > TM_MAX_FLAG) && metaclass(_v) ~= Routine) {
+				_TMErrorContext(_topic, _i, _v); 
+				"Value after TM_MAYBE_ADD_LIST is not a valid flag# or a routine address.";
+			}
+			_v = p_array --> (++_i);
+			_CheckTMArray(p_npc, _v);
+			_backtopics = 1;
+		} else if(_v == TM_ACTIVE or TM_INACTIVE or TM_STALE) {
+			_topic++;
+			_backtopics--;
+!			print "  Topic #", _topic, "^";
+			! Iterate past any IDs specified for this topic
+			while(true) {
+				_v = p_array --> (++_i);
+				if(_v < TM_FIRST_ID || _v > TM_LAST_ID) break; 
+			}
+			if(metaclass(_v) ~= Routine or String) {
+				_TMErrorContext(_topic, _i, _v); 
+				"Topic name is not a string or routine.";
+			}
+			_v = p_array --> (++_i);
+			if(_v == TM_ADD_BEFORE_AND_AFTER or TM_ADD_BEFORE) {
+				_v0 = p_array --> (++_i);
+				if(metaclass(_v0) ~= Routine or String) {
+					_TMErrorContext(_topic, _i, _v0); 
+					"Item to be printed BEFORE player line is not a string or routine.";
+				}
+				_v0 = p_array --> (++_i);
+			} else if(_v == TM_ADD_AFTER) {
+				_v0 = p_array --> (++_i);
+			} else
+				_v0 = _v;
+			if(_v0 ~= TM_NO_LINE && metaclass(_v0) ~= Routine or String) {
+				_TMErrorContext(_topic, _i, _v0); 
+				"Player line is not TM_NO_LINE, nor a string or routine.";
+			}
+			if(_v == TM_ADD_BEFORE_AND_AFTER or TM_ADD_AFTER) {
+				_v0 = p_array --> (++_i);
+				if(metaclass(_v0) ~= Routine or String) {
+					_TMErrorContext(_topic, _i, _v0); 
+					"Item to be printed AFTER player line is not a string or routine.";
+				}
+			}
+			_v = p_array --> (++_i);
+			if(_v ~= TM_NO_LINE && metaclass(_v) ~= Routine or String) {
+				_TMErrorContext(_topic, _i, _v); 
+				"NPC line is not TM_NO_LINE, nor a string or routine.";
+			}
+			! Process line effects
+			while(true) {
+				_v = p_array --> (++_i);
+				if(_v == TM_ACTIVE or TM_INACTIVE or TM_STALE or 
+						TM_MAYBE_ADD_LIST or TM_END) {
+					_i--;
+					break;
+				}
+				if(metaclass(_v) == Routine or String || (_v > 31 && _v <= TM_MAX_FLAG))
+					continue;
+				! Has to be an activate/inactivate topic
+				if(_v == TM_ACTIVATE or TM_INACTIVATE)
+					_v = p_array --> (++_i);
+				if(_v >= TM_FIRST_ID && _v <= TM_LAST_ID) {
+					if(GetTopicStatus(p_npc, _v) == true) {
+						_TMErrorContext(_topic, _i, _v); 
+						print_ret (string) TM_ERR_NOT_FOUND;
+					}
+					continue;
+				}
+				if(_v >= -20 && _v <= -1) {
+					if(_backtopics > _v) {
+						_TMErrorContext(_topic, _i, _v); 
+						print_ret (string) TM_ERR_NOT_FOUND;
+					}
+					continue;
+				}
+				if(_v > 0 && _v <= 20) {
+					if(GetTopicStatus(p_npc, _v, p_array + _i + _i) == true) {
+						_TMErrorContext(_topic, _i, _v); 
+						print_ret (string) TM_ERR_NOT_FOUND;
+					}
+					continue;
+				}
+				_TMErrorContext(_topic, _i, _v);
+				if(0 < 1)
+				"Unknown value.";
+			}
+			
+		}
+	}
+	"Array end (", _topic, " topics)";		
+];
+
+[ _ExamineTMObj p_obj;
+	print "=== Examining talk_menu for ", (the) p_obj, " ===^";
+	if(p_obj provides talk_array && p_obj.talk_array ~= 0) {
+		_CheckTMArray(p_obj, p_obj.talk_array);
+	} else {
+		"ERROR: Lacks talk_array value.";
+	}
+];
+
+[ TMTestSub _o _showed_any;
+	if(noun) {
+		_ExamineTMObj(noun);
+	} else {
+		objectloop(_o provides talk_array && _o.talk_array ~= 0) {
+			if(_showed_any) new_line;
+			_ExamineTMObj(_o);
+			_showed_any = true;
+		}
+	}
+];
+
+Verb meta 'tmtest'
+	* noun -> TMTest
+	*      -> TMTest;
+#Endif;
