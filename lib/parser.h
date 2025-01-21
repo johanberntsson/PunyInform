@@ -799,16 +799,15 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 #Endif;
     ! try normal parsing of noun phrase
 	_k = TryNumber(wn);
-	!parser_two = MAX_MULTIPLE_OBJECTS;
 	parser_two = MAX_WHICH_OBJECTS;
 	_noun = _ParseNounPhrase(p_parse_pointer, p_expecting_single_noun);
 	if(_k > 0 && (_noun == 0 || which_object -> 1 == 1)) { ! only number parsed
 		! now we try <number> <noun> instead, skipping the <number> first
 		wn = wn + 1;
 		parser_two = _k;
-		! assume that it is plural if there is a number > 1 at first
+		! assume that it is plural if there is a number at first
 		_k = parser_action;
-		if(parser_two > 1) parser_action = ##PluralFound;
+		if(parser_two > 0) parser_action = ##PluralFound;
 		_noun = _ParseNounPhrase(p_parse_pointer + 4, p_expecting_single_noun);
 		! restore parser_action if no words matched (perhaps out of scope)
 		if(which_object -> 1 == 0) parser_action = _k;
