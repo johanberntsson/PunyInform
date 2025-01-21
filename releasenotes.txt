@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.12: bug fix and new feature release (21 January 2025)
+
 - Fixed a mistake from PunyInform v1.6: TestScope would return true for any object if meta=1, which is neither useful nor consistent with I6lib.
 - Fixed: incomplete sentences with multiple preposition lists didn't produce an error message
 - Made ext_flags.h 32 bytes shorter (if you use AnyFlagIsSet and AnyFlagIsClear).
@@ -11,7 +14,7 @@ Upcoming release:
 - talk_menu extension: A relative reference to a topic to be activated can now be negative as well as positive. If it's negative, the number has to preceded by TM_ACTIVATE, and the number has to be in parentheses. E.g. TM_ACTIVATE (-1)
 - talk_menu extension: A topic can now inactivate another topic, by specifying TM_INACTIVATE followed by either a positive or negative relative reference (e.g. (-1) means the previous topic), or an absolute ID 300-600.
 - Statusline prints spaces to cover parts of long room name which could show between Score and Moves, and to the right of Moves.
-- New debug verb for talk_menu: tmtest - Looks for incorrect entries in talk_menu arrays. Use with "tmtest" or e.g.  "tmtest bob".
+- New debug verb for talk_menu: tmtest - Looks for incorrect entries in talk_menu arrays. Type "tmtest" or e.g.  "tmtest bob" to use it.
 
 =======
 v5.11: bug fix and new feature release (14 December 2024)
