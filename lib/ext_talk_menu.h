@@ -17,7 +17,7 @@ System_file;
 ! * = can be more than one
 !
 ! STATUS is either 0 ( = TM_INACTIVE = not active) or
-!   30 ( = TM_ACTIVE  = active) or 31 ( = TM_STALE, has been used).
+!   30 ( = TM_ACTIVE  = active) or TM_STALE (has been used).
 ! ID is a number (300-600) which can be used as a reference to 
 !   activate/inactivate a topic in code or using an ACTIVATEREF or 
 !   INACTIVATEREF in a talk array. Note that IDs are local to the NPC - two 
@@ -39,18 +39,15 @@ System_file;
 ! ACTIVATEREF is the keyword TM_ACTIVATE followed be either a 
 !    topic ID (300-600) or a relative reference to a topic (1 to 20, or 
 !    -1 to -20) that is activated by this topic. 1 means the next topic,
-!    2 the topic after that etc. The keyword TM_ACTIVATE can be skipped, 
-!    unless the reference number is negative. Note that a negative number has
-!    to be enclosed in parentheses. When a topic is picked by the player, 
-!    it is set to status TM_STALE, and the only way to activate it when it's 
-!    stale is to call ReActivateTopic.
-! INACTIVATEREF is the keyword TM_INACTIVATE followed be either a 
+!    2 the topic after that etc. The keyword TM_ACTIVATE can be omitted, 
+!    unless the reference number is negative. Note that a negative number in
+!    an array has to be enclosed in parentheses, or the compiler will get 
+!    confused. ALso note that When a topic is picked by the player, it gets 
+!    the status TM_STALE, and the only way to change it from this 
+!    status is to call `ReActivateTopic` or `ReInactivateTopic`.
+! INACTIVATEREF is the keyword TM_INACTIVATE followed by either a 
 !    topic ID (300-600) or a relative reference to a topic (1 to 20, or 
-!    -1 to -20) that is activated by this topic. 1 means the next topic, 2 the
-!    topic after that etc. Note that a negative number has to be enclosed in 
-!    parentheses. When a topic is picked by the player, it is set to status
-!    TM_STALE, and the only way to activate it when it's stale is to call 
-!    ReActivateTopic.
+!    -1 to -20) that is inactivated by this topic.
 ! ROUTINE is a routine to be run. In this routine, the global variable
 !    current_talker refers to the NPC being talked to.
 ! STRING is a string to be printed.
