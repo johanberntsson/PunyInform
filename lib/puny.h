@@ -2538,10 +2538,19 @@ Object thedark "Darkness"
 			! the first sentence in the input  has been parsed
 			! and executed. Now remove it from parse so that
 			! the next sentence can be parsed
-			_copylength = 2 * _parsearraylength + 1;
-			for(_i = 1, _j = 2 * _sentencelength + 1: _j < _copylength: _i++, _j++)
+#Ifv5;
+			_j = parse + 2;
+			_i = _sentencelength;
+			@log_shift _i 2 -> _i; ! Multiply by 4
+			_i = _i + _j;
+			_copylength = -(_parsearraylength - _sentencelength);
+			@log_shift _copylength 2 -> _copylength; ! Multiply by 4
+			@copy_table _i _j _copylength;
+#Ifnot;
+			_copylength = 2 * _parsearraylength;
+			for(_i = 1, _j = 2 * _sentencelength + 1: _j <= _copylength: _i++, _j++)
 				parse-->_i = parse-->_j;
-
+#Endif;
 			parse->1 = _parsearraylength - _sentencelength;
 			_disallow_complex_again = true; ! cannot parse "x me.g.g.g"
 		} else {
