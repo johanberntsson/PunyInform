@@ -2443,7 +2443,8 @@ Object thedark "Darkness"
 		if(parse->1 == 0) {
 			_ReadPlayerInput();
 			if(buffer->1 == 42) { ! asterisk
-				print "Comment recorded.^^";
+				if(transcript_mode) PrintMsg(MSG_COMMENT_TRANSCRIPT);
+                else PrintMsg(MSG_COMMENT_NO_TRANSCRIPT);
 				jump _abort_current_input;
 			}
 			_disallow_complex_again = false;

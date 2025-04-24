@@ -331,6 +331,13 @@ Constant MSG_UNDO_DONE "Previous turn undone.";
 #EndIf;
 #EndIf;
 
+#Ifndef MSG_COMMENT_TRANSCRIPT;
+Constant MSG_COMMENT_TRANSCRIPT "[Comment recorded]^";
+#EndIf;
+#Ifndef MSG_COMMENT_NO_TRANSCRIPT;
+Constant MSG_COMMENT_NO_TRANSCRIPT "[Start a transcript to save comments for future reference]^";
+#EndIf;
+
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
