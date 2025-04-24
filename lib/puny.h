@@ -2442,6 +2442,10 @@ Object thedark "Darkness"
 #Endif;
 		if(parse->1 == 0) {
 			_ReadPlayerInput();
+			if(buffer->1 == 42) { ! asterisk
+				print "Comment recorded.^^";
+				jump _abort_current_input;
+			}
 			_disallow_complex_again = false;
 #Ifdef OPTIONAL_PROVIDE_UNDO_FINAL;
 			if(parse-->1 == 'undo') {

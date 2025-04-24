@@ -1,6 +1,7 @@
 Upcoming release:
 
 - Fixed: Calling property routines with 0 arguments in z3 actually sent 1 argument, with the value zero. This could cause problems in Infocom's Z-code interpreters.
+- Added support for adding commentents in transcripts using asterisk+any text
 
 =======
 v5.12: bug fix and new feature release (21 January 2025)
