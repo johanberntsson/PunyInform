@@ -85,6 +85,8 @@ easily see if they interact with the game world as you expect. You can
 also see opportunities to add or improve responses to non-essential
 actions.
 
+If a line of input begins with an asterisk (\*), it will be treated as a comment and ignored by the game. This feature is useful during testing using transcripts. Comments will be included in the transcript, making it easy to search for them and review both the notes and the gameplay context in which they were added.
+
 If you don't have any volunteers for testing, you can ask for help in
 some forum, such as the one at https://intfiction.org/ .
 
