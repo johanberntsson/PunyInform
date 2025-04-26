@@ -20,7 +20,7 @@ To compile games using PunyInform, we recommend the official Inform 6
 compiler maintained by David Kinder, at
 https://github.com/DavidKinder/Inform6.  Binaries can be found at the
 [IF-Archive](https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/).
-PunyInform requires at least Inform v6.36. We recommended using the latest
+PunyInform requires at least Inform v6.42. We recommended using the latest
 version.
 
 You can use [borogove.io](https://borogove.io/) to make your PunyInform
@@ -173,7 +173,7 @@ The biggest differences between the standard library and PunyInform are:
 
 ## Games Using PunyInform
 
-60+ PunyInform games have been released. You can find just about all of them
+70+ PunyInform games have been released. You can find just about all of them
 in this [list of PunyInform games](https://ifdb.org/search?searchfor=tag%3Apunyinform&sortby=&pg=all).
 
 If you want to see the source code of PunyInform games, you should look at

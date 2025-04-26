@@ -2,6 +2,9 @@ Upcoming release:
 
 - Fixed: Calling property routines with 0 arguments in z3 actually sent 1 argument, with the value zero. This could cause problems in Infocom's Z-code interpreters.
 - Added support for adding commentents in transcripts using asterisk+any text
+- Added a compiler flag to minimal.inf ( $LONG_DICT_FLAG_BUG=0 ), to fix issue with plural flag being ignored on long dictionary words. This requires compiler version 6.42+ to work.
+- Changed the manual to say PunyInform now requires Inform v6.42+ (You can still get away with v6.36 if you don't use the compiler flag mentioned above though).
+- Made copying of remaining commandline parse buffer faster in z5.
 
 =======
 v5.12: bug fix and new feature release (21 January 2025)
