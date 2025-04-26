@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.13: bug fix and new feature release (27 April 2025)
+
 - Fixed: Calling property routines with 0 arguments in z3 actually sent 1 argument, with the value zero. This could cause problems in Infocom's Z-code interpreters.
 - Added support for adding commentents in transcripts using asterisk+any text
 - Added a compiler flag to minimal.inf ( $LONG_DICT_FLAG_BUG=0 ), to fix issue with plural flag being ignored on long dictionary words. This requires compiler version 6.42+ to work.
