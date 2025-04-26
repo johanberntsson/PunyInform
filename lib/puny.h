@@ -2544,16 +2544,15 @@ Object thedark "Darkness"
 			! and executed. Now remove it from parse so that
 			! the next sentence can be parsed
 #Ifv5;
+			@log_shift _sentencelength 2 -> _i; ! Multiply by 4
 			_j = parse + 2;
-			_i = _sentencelength;
-			@log_shift _i 2 -> _i; ! Multiply by 4
 			_i = _i + _j;
-			_copylength = -(_parsearraylength - _sentencelength);
+			_copylength = _sentencelength - _parsearraylength;
 			@log_shift _copylength 2 -> _copylength; ! Multiply by 4
 			@copy_table _i _j _copylength;
 #Ifnot;
-			_copylength = 2 * _parsearraylength;
-			for(_i = 1, _j = 2 * _sentencelength + 1: _j <= _copylength: _i++, _j++)
+			_copylength = _parsearraylength + _parsearraylength;
+			for(_i = 1, _j = _sentencelength + _sentencelength + 1: _j <= _copylength: _i++, _j++)
 				parse-->_i = parse-->_j;
 #Endif;
 			parse->1 = _parsearraylength - _sentencelength;

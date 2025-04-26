@@ -1,6 +1,7 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
+!% $LONG_DICT_FLAG_BUG=0
 
 ! The very first lines of the main source code file for a game can
 ! contain compiler options, like the lines above. -~S disables
@@ -10,6 +11,8 @@
 ! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
 ! aren't used. This can save some space.
 ! $ZCODE_LESS_DICT_DATA=1 removes an empty data byte for every dictionary word.
+! $LONG_DICT_FLAG_BUG=0 enables a bug fix in Inform v6.42+, so plural flags
+! on long words are heeded, e.g. 'transmogrifiers//p'.
 
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";
