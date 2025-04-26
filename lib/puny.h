@@ -2442,7 +2442,11 @@ Object thedark "Darkness"
 #Endif;
 		if(parse->1 == 0) {
 			_ReadPlayerInput();
+#ifv5;
+			if(buffer->1 ~= 0 && buffer->2 == 42) { ! asterisk
+#ifnot;
 			if(buffer->1 == 42) { ! asterisk
+#endif;
 				if(transcript_mode) PrintMsg(MSG_COMMENT_TRANSCRIPT);
 				else PrintMsg(MSG_COMMENT_NO_TRANSCRIPT);
 				jump _abort_current_input;
