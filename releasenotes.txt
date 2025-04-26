@@ -1,6 +1,11 @@
 Upcoming release:
 
 =======
+v5.13.1: bug fix release (27 April 2025)
+
+- Fixed: Starting a line with asterisk to make a comment in a transcript was broken for z5+
+
+=======
 v5.13: bug fix and new feature release (27 April 2025)
 
 - Fixed: Calling property routines with 0 arguments in z3 actually sent 1 argument, with the value zero. This could cause problems in Infocom's Z-code interpreters.
