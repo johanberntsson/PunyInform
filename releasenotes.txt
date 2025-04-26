@@ -1,6 +1,11 @@
 Upcoming release:
 
 =======
+v5.13.2: bug fix release (27 April 2025)
+
+- Fixed: Set correct version# in globals.h (displayed when game starts).
+
+=======
 v5.13.1: bug fix release (27 April 2025)
 
 - Fixed: Starting a line with asterisk to make a comment in a transcript was broken for z5+
