@@ -1,6 +1,11 @@
 Upcoming release:
 
 =======
+v5.13.3: bug fix release (27 April 2025)
+
+- Fixed: A game without OPTIONAL_EXTENDED_METAVERBS couldn't be compiled.
+
+=======
 v5.13.2: bug fix release (27 April 2025)
 
 - Fixed: Set correct version# in globals.h (displayed when game starts).

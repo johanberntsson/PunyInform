@@ -2447,8 +2447,12 @@ Object thedark "Darkness"
 #ifnot;
 			if(buffer->1 == 42) { ! asterisk
 #endif;
+#ifdef OPTIONAL_EXTENDED_METAVERBS;
 				if(transcript_mode) PrintMsg(MSG_COMMENT_TRANSCRIPT);
 				else PrintMsg(MSG_COMMENT_NO_TRANSCRIPT);
+#Ifnot;
+				PrintMsg(MSG_COMMENT_NO_TRANSCRIPT);
+#Endif;
 				jump _abort_current_input;
 			}
 			_disallow_complex_again = false;

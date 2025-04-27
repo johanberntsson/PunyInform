@@ -335,9 +335,12 @@ Constant MSG_UNDO_DONE "Previous turn undone.";
 Constant MSG_COMMENT_TRANSCRIPT "[Comment recorded]^";
 #EndIf;
 #Ifndef MSG_COMMENT_NO_TRANSCRIPT;
-Constant MSG_COMMENT_NO_TRANSCRIPT "[Start a transcript to save comments for future reference]^";
+#ifdef OPTIONAL_EXTENDED_METAVERBS;
+Constant MSG_COMMENT_NO_TRANSCRIPT "[Comment not recorded. To record comments, start a transcript.]^";
+#IfNot;
+Constant MSG_COMMENT_NO_TRANSCRIPT "[Comment not recorded. This game does not support transcripts.]^";
 #EndIf;
-
+#EndIf;
 
 #IfDef OPTIONAL_EXTENDED_VERBSET;
 #Ifndef MSG_BURN_DEFAULT;
