@@ -2,6 +2,8 @@ Upcoming release:
 
 - Fixed: Game name and version info was printed with no newline or space between, if constant Headline was undefined (Issue #140).
 - Fixed: There was no message from the library when the location got dark (Issue #142).
+- Fixed: Message MSG_SEARCH_IN_IT_ISARE used when searching ("The sofa contains a photo.") didn't consider the pluralname attribute of the container. (Issue #138)
+- Fixed: Object lists didn't consider the pluralname attribute in extra information like "(which is closed)" (Issue #138).
 
 =======
 v5.13.3: bug fix release (27 April 2025)

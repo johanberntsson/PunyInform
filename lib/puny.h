@@ -535,18 +535,18 @@ Constant ONE_SPACE_STRING = " ";
 	if(p_obj has container) {
 		_contents = PrintContentsFromR(1, child(p_obj));
 		if(p_obj hasnt open && p_obj hasnt transparent) {
-			print " (which is closed)";
+			print " (which ",(IsorAre) p_obj," closed)";
 			if(_newline) new_line;
 		} else {
 			if(p_obj has openable && (p_obj has transparent || _contents == 0)) {
-				print " (which is ";
+				print " (which ", (IsorAre) p_obj, " ";
 				if(p_obj has open) { print "open"; _started = 1; }
 				else { print "closed"; _started = 2; }
 			}
 			if(_contents == 0) {
 				print (char) ' ';
 				switch(_started) {
-				0: print "(which is";
+				0: print "(which ", (IsorAre) p_obj;
 				1: print "but";
 				2: print "and";
 				}
@@ -556,7 +556,9 @@ Constant ONE_SPACE_STRING = " ";
 				if(_newline == 0) {
 					if(_started) print " and";
 					else print " (which";
-					print " contains ";
+					print " contain";
+					if(p_obj hasnt pluralname) print "s";
+					print " ";
 				} else {
 					if(_started) print (char) ')';
 					new_line;

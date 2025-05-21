@@ -982,7 +982,9 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_SEARCH_IN_IT_ISARE < 1000;
 	MSG_SEARCH_IN_IT_ISARE:
-		print (The) noun, " contains ";
+		print (The) noun, " contain";
+		if(noun hasnt pluralname) print "s";
+		print " ";
 		PrintContents(0, noun);
 		".";
 #EndIf;
