@@ -1234,6 +1234,8 @@ Verb meta 'quit' 'q//'
 	#EndIf;
 	#IfDef Headline;
 		print (string) Headline;
+	#IfNot;
+		new_line;
 	#EndIf;
 #EndIf;
 	print "Release ", (0-->1) & $03ff, " / Serial number ";
