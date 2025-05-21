@@ -1065,10 +1065,11 @@ Constant ONE_SPACE_STRING = " ";
 	if(_LookForLightInObj(_ceil, _ceil) == false) _darkness = true;
 	if(_darkness ~= _old_darkness) scope_modified = true;
 	if(_darkness) {
+		if(_old_darkness == false) PrintMsg(MSG_NOW_DARK);
 		location = thedark;
 	} else {
 		location = real_location;
-		if(_old_darkness == true && p_look == true)
+		if(_old_darkness && p_look)
 			<Look>;
 	}
 ];

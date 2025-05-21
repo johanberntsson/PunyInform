@@ -143,6 +143,11 @@ Constant MSG_PARSER_BE_MORE_SPECIFIC "You need to be more specific.";
 #Ifndef MSG_PARSER_NO_MULTIPLES_FOR_NPC;
 Constant MSG_PARSER_NO_MULTIPLES_FOR_NPC "You can only refer to single objects when talking to others.";
 #EndIf;
+#IfnDef OPTIONAL_NO_DARKNESS;
+#IfnDef MSG_NOW_DARK;
+Constant MSG_NOW_DARK "^It is now pitch dark in here.";
+#EndIf;
+#EndIf;
 
 #IfDef OPTIONAL_FULL_SCORE;
 #IfDef OPTIONAL_SCORED;

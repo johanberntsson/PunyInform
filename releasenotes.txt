@@ -1,6 +1,7 @@
 Upcoming release:
 
-- Fixed: Game name and version info was printed with no newline or space between, if constant Headline was undefined.
+- Fixed: Game name and version info was printed with no newline or space between, if constant Headline was undefined (Issue #140).
+- Fixed: There was no message from the library when the location got dark (Issue #142).
 
 =======
 v5.13.3: bug fix release (27 April 2025)
