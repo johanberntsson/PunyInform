@@ -1025,12 +1025,16 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_TAKE_BELONGS < 1000;
 	MSG_TAKE_BELONGS:
 		! p_arg_1 = the object that is held by p_arg_2
-		print_ret (The) p_arg_1, " seems to belong to ", (the) p_arg_2, ".";
+		print (The) p_arg_1, " seem";
+		if(p_arg_1 hasnt pluralname) print "s";
+		" to belong to ", (the) p_arg_2, ".";
 #EndIf;
 #IfTrue MSG_TAKE_PART_OF < 1000;
 	MSG_TAKE_PART_OF:
 		! p_arg_1 = the object that is part of p_arg_2
-		print_ret (The) p_arg_1, " seems to be part of ", (the) p_arg_2, ".";
+		print (The) p_arg_1, " seem";
+		if(p_arg_1 hasnt pluralname) print "s";
+		" to be part of ", (the) p_arg_2, ".";
 #EndIf;
 #Ifndef OPTIONAL_NO_DARKNESS;
 #Ifndef SKIP_MSG_EXAMINE_DARK;

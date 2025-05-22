@@ -1,7 +1,5 @@
 # PunyInform
 
-NEWSFLASH: There's a competition coming up, and you can join! Submissions are due 29 December 2024. https://itch.io/jam/punycomp-2024
-
 PunyInform is a library written in Inform 6 which allows authors to
 create text adventure games / interactive fiction using the Z-machine
 virtual machine, to be played on 8-bit computers as well as newer
@@ -158,13 +156,14 @@ The biggest differences between the standard library and PunyInform are:
 
 * To work with source code you may want a text editor which has a syntax
   colouring mode for Inform 6. Some popular choices include Visual Studio
-  Code and Atom, both available for Windows, Mac and Linux.
+  Code and Atom, both available for Windows, Mac and Linux. Notepad++ is
+  another option, for Windows.
 
-* To quickly build a game for play on Commodore 64, 128, Plus/4 or MEGA65, you
-  can use [Ozmoo Online](http://microheaven.com/ozmooonline/).
+* To quickly build a game for play on Commodore 64, 128, Plus/4, MEGA65, Commander X16 or Acorn/BBC, you
+  can use [Ozmoo Online](https://ozmooo.online/).
 
-* To build a game for 25 different platforms at once, you can use the
-  [Puddle BuildTools](https://github.com/ByteProject/Puddle-BuildTools). This
+* To build a game for 20+ different platforms at once, you can use the
+  [Puny BuildTools](https://github.com/ByteProject/Puny-BuildTools). This
   tool set can be installed on Linux. Windows users can create a virtual machine
   running Linux.
 

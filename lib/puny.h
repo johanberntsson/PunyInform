@@ -1012,7 +1012,7 @@ Constant ONE_SPACE_STRING = " ";
 	location = real_location;
 	MoveFloatingObjects(); ! Also sets scope_modified = true;
 #Ifndef OPTIONAL_NO_DARKNESS;
-	_UpdateDarkness();
+	_UpdateDarkness(false, true);
 #Endif;
 ._recheck_visibility_ceil;
 	_vc = CalculateVisibilityCeiling();
@@ -1061,17 +1061,17 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 #Ifndef OPTIONAL_NO_DARKNESS;
-[ _UpdateDarkness p_look _ceil _old_darkness _darkness;
+[ _UpdateDarkness p_look p_silent _ceil _old_darkness _darkness;
 	if(location == thedark) _old_darkness = true;
 	_ceil = ScopeCeiling(player);
 	if(_LookForLightInObj(_ceil, _ceil) == false) _darkness = true;
 	if(_darkness ~= _old_darkness) scope_modified = true;
 	if(_darkness) {
-		if(_old_darkness == false) PrintMsg(MSG_NOW_DARK);
+		if(_old_darkness == false && p_silent == false) PrintMsg(MSG_NOW_DARK);
 		location = thedark;
 	} else {
 		location = real_location;
-		if(_old_darkness && p_look)
+		if(_old_darkness && p_look && p_silent == false)
 			<Look>;
 	}
 ];
