@@ -6,6 +6,8 @@ Upcoming release:
 - Fixed: Object lists didn't consider the pluralname attribute in extra information like "(which is closed)" (Issue #138).
 - Fixed: The message MSG_TAKE_BELONG (e.g. "The staff seems to belong to Gandalf.") didn't adapt the sentence properly if the first object was an object with pluralname set (Issue #137).
 - Fixed: The message MSG_TAKE_PART_OF (e.g. "The button seems to be part of the machine.") didn't adapt the sentence properly if the first object was an object with pluralname set (Issue #137).
+- The way to call the _UpdateDarkness procedure has changed. It used to be _UpdateDarkness(p_look), where you'd set p_look to true if you wanted the procedure to print a room description if a transition from darkness to light was made. The call is now _UpdateDarkness(p_silent), and you set p_silent to true if you want to routine to not print anything. If you set it to false, or don't give it a value, the routine performs a Look if going from dark to light, and prints a message if going from light to dark.
+- howto/change_player.inf has been changed to call _UpdateDarkness in the new way.
 
 =======
 v5.13.3: bug fix release (27 April 2025)
