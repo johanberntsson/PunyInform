@@ -556,9 +556,7 @@ Constant ONE_SPACE_STRING = " ";
 				if(_newline == 0) {
 					if(_started) print " and";
 					else print " (which";
-					print " contain";
-					if(p_obj hasnt pluralname) print "s";
-					print " ";
+					print " contain", (SingularS) p_obj, " ";
 				} else {
 					if(_started) print (char) ')';
 					new_line;

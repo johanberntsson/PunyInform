@@ -982,9 +982,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_SEARCH_IN_IT_ISARE < 1000;
 	MSG_SEARCH_IN_IT_ISARE:
-		print (The) noun, " contain";
-		if(noun hasnt pluralname) print "s";
-		print " ";
+		print (The) noun, " contain", (SingularS) noun, " ";
 		PrintContents(0, noun);
 		".";
 #EndIf;
@@ -1025,16 +1023,12 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_TAKE_BELONGS < 1000;
 	MSG_TAKE_BELONGS:
 		! p_arg_1 = the object that is held by p_arg_2
-		print (The) p_arg_1, " seem";
-		if(p_arg_1 hasnt pluralname) print "s";
-		" to belong to ", (the) p_arg_2, ".";
+		print (The) p_arg_1, " seem", (SingularS) p_arg_1, " to belong to ", (the) p_arg_2, ".";
 #EndIf;
 #IfTrue MSG_TAKE_PART_OF < 1000;
 	MSG_TAKE_PART_OF:
 		! p_arg_1 = the object that is part of p_arg_2
-		print (The) p_arg_1, " seem";
-		if(p_arg_1 hasnt pluralname) print "s";
-		" to be part of ", (the) p_arg_2, ".";
+		print (The) p_arg_1, " seem", (SingularS) p_arg_1, " to be part of ", (the) p_arg_2, ".";
 #EndIf;
 #Ifndef OPTIONAL_NO_DARKNESS;
 #Ifndef SKIP_MSG_EXAMINE_DARK;
@@ -1209,16 +1203,16 @@ default:
 	}
 ];
 
-[ ThatorThose obj;
-	if (obj has pluralname) print "those"; else print "that";
+[ ThatorThose p_obj;
+	if (p_obj has pluralname) print "those"; else print "that";
 ];
 
-[ ItorThem obj;
-	if (obj == player) { print "yourself"; rtrue; }
-	if (obj has pluralname) { print "them"; rtrue; }
-	if (obj has animate) {
-		if (obj has female) { print "her"; rtrue; }
-		if (obj hasnt neuter) { print "him"; rtrue; }
+[ ItorThem p_obj;
+	if (p_obj == player)		{ print "yourself"; rtrue; }
+	if (p_obj has pluralname)	{ print "them"; rtrue; }
+	if (p_obj has animate) {
+		if (p_obj has female)	{ print "her"; rtrue; }
+		if (p_obj hasnt neuter)	{ print "him"; rtrue; }
 	}
 	print "it";
 ];
@@ -1227,16 +1221,16 @@ default:
 	print (The) p_obj, " ", (isorare) p_obj;
 ];
 
-[ IsorAre obj;
-	if (obj has pluralname || obj == player) print "are"; else print "is";
+[ IsorAre p_obj;
+	if (p_obj has pluralname || p_obj == player) print "are"; else print "is";
 ];
 
-[ CTheyreorThats obj;
-	if (obj == player)			 { print "You're"; return; }
-	if (obj has pluralname)		{ print "They're"; return; }
-	if (obj has animate) {
-		if (obj has female)		{ print "She's"; return; }
-		if (obj hasnt neuter) { print "He's"; return; }
+[ CTheyreorThats p_obj;
+	if (p_obj == player)		{ print "You're"; return; }
+	if (p_obj has pluralname)	{ print "They're"; return; }
+	if (p_obj has animate) {
+		if (p_obj has female)	{ print "She's"; return; }
+		if (p_obj hasnt neuter) { print "He's"; return; }
 	}
 	print "That's";
 ];
@@ -1249,13 +1243,15 @@ default:
 	CTheyreorThats(p_obj);
 ];
 
-[OnOff obj;
-	if(obj has on) print "on";
+[ OnOff p_obj;
+	if(p_obj has on) print "on";
 	else print "off";
 	return;
 ];
 
-
+[ SingularS p_obj;
+	if(p_obj hasnt pluralname && p_obj ~= player) print "s";
+];
 !
 ! Error messages
 !
