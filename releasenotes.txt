@@ -9,6 +9,7 @@ Upcoming release:
 - The way to call the _UpdateDarkness procedure has changed. It used to be _UpdateDarkness(p_look), where you'd set p_look to true if you wanted the procedure to print a room description if a transition from darkness to light was made. The call is now _UpdateDarkness(p_silent), and you set p_silent to true if you want to routine to not print anything. If you set it to false, or don't give it a value, the routine performs a Look if going from dark to light, and prints a message if going from light to dark.
 - howto/change_player.inf has been changed to call _UpdateDarkness in the new way.
 - New print rule: SingularS, which prints an "s" if the argument is a singular object and not the player. I.e. print (The) obj, " contain", (SingularS) obj, " some wine.";
+- Improved the default abbreviations
 
 =======
 v5.13.3: bug fix release (27 April 2025)
