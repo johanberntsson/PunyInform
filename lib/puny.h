@@ -330,7 +330,7 @@ Constant ONE_SPACE_STRING = " ";
 #Endif;
 ];
 
-[ DrawStatusLine _visibility_ceiling;
+[ DrawStatusLine p_linefeeds _visibility_ceiling;
 	! For wide screens (67+ columns):
 	! * print a space before room name, and "Score: xxx  Moves: xxxx" to the right.
 	! * Room names up to 39 characters are never truncated.
@@ -338,6 +338,10 @@ Constant ONE_SPACE_STRING = " ";
 	! * No space before room name
 	! * Print "Score: xxx/yyyy", "xxx/yyyy", "xxx" or nothing, depending on screen width
 	! * Room names up to 21 characters are never truncated. On a 40 column screen, room names up to 24 characters are never truncated.
+
+	! If called with p_linefeeds == true, print the number of linefeeds needed
+	! to make sure text at start of game doesn't get covered by statusline
+	if(p_linefeeds) { new_line; return; }
 
 	! If there is no player location, we shouldn't try to draw status window
 	if (location == nothing || parent(player) == nothing)
@@ -2405,7 +2409,7 @@ Object thedark "Darkness"
 #EndIf;
 
 #IfV5;
-	new_line; ! So the first line of text isn't covered by the statusline
+	DrawStatusLine(true); ! So the first line of text isn't covered by the statusline
 #Endif;
 	_InitObjects(); ! Give reactive attribute as needed + list floating objects
 
