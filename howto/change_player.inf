@@ -36,6 +36,7 @@ Include "puny.h";
 	location = superparent(p_new_pc);
 	real_location = location;
 	_UpdateDarkness(true);
+	MoveFloatingObjects();
 ];
 
 [ ChangePlayer p_new_pc p_first_time _character;

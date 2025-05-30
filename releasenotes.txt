@@ -11,6 +11,7 @@ Upcoming release:
 - New print rule: SingularS, which prints an "s" if the argument is a singular object and not the player. I.e. print (The) obj, " contain", (SingularS) obj, " some wine.";
 - Improved the default abbreviations
 - Added a task to the DrawStatusLine routine - DrawStatusLine(true) must print the correct number of newline characters needed at the start of the game to make sure the first text isn't accidentally covered by the statusline (Issue #141).
+- Fixed: howto/change_player.inf lacked a call to MoveFloatingObjects.
 
 =======
 v5.13.3: bug fix release (27 April 2025)
