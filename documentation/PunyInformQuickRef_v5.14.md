@@ -1,6 +1,6 @@
 |                                      |
 |--------------------------------------|
-| **PunyInform v5.13 quick reference** |
+| **PunyInform v5.14 quick reference** |
 
   
 More information on last page.
@@ -443,9 +443,9 @@ More information on last page.
 
 ###### Returns the room which the door object leads to, or 1 if object.door_to is a routine and it returned 1, meaning it printed a message why the player can't enter.
 
-## DrawStatusLine()
+## DrawStatusLine(newlines) **\~PUNY**
 
-###### Print the statusline, in a z5 or z8 game.
+###### z5+ only. Print the statusline. If *newlines* is true, it must instead print as many newlines as the statusline height
 
 ## FastSpaces(number) **PUNY++**
 
@@ -598,6 +598,10 @@ typically an object. Example of use:
 ## OnOff **PUNY++**
 
 ###### Prints "on" or "off", based on *on*.
+
+## SingularS **PUNY++**
+
+###### Prints "s" if the object doesn't have *pluralname*.
 
 ## ThatorThose
 
