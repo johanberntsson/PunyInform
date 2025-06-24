@@ -1,5 +1,8 @@
 Upcoming release:
 
+- Fixed: The message MSG_TAKE_BELONGS (e.g. "The staff seems to belong to Gandalf.") was missing a line break at the end.
+- Fixed: The message MSG_TAKE_PART_OF (e.g. "The button seems to be part of the machine.") was missing a line break at the end.
+
 =======
 v5.14: bug fix and new feature release (10 June 2025)
 
@@ -11,7 +14,7 @@ v5.14: bug fix and new feature release (10 June 2025)
 - New message: The message MSG_NOW_DARK is now printed when the player's location suddenly goes dark (Issue #142).
 - Fixed: Message MSG_SEARCH_IN_IT_ISARE used when searching ("The sofa contains a photo.") didn't consider the pluralname attribute of the container. (Issue #138)
 - Fixed: Object lists didn't consider the pluralname attribute in extra information like "(which is closed)" (Issue #138).
-- Fixed: The message MSG_TAKE_BELONG (e.g. "The staff seems to belong to Gandalf.") didn't adapt the sentence properly if the first object was an object with pluralname set (Issue #137).
+- Fixed: The message MSG_TAKE_BELONGS (e.g. "The staff seems to belong to Gandalf.") didn't adapt the sentence properly if the first object was an object with pluralname set (Issue #137).
 - Fixed: The message MSG_TAKE_PART_OF (e.g. "The button seems to be part of the machine.") didn't adapt the sentence properly if the first object was an object with pluralname set (Issue #137).
 - Improved the default abbreviations
 - Fixed: howto/change_player.inf lacked a call to MoveFloatingObjects.

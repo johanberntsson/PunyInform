@@ -873,17 +873,17 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Iftrue MSG_AUTO_TAKE < 1000;
 	MSG_AUTO_TAKE:
 	! p_arg_1 = the object the player automatically picks up
-	print "(first taking ", (the) p_arg_1, ")^";
+		"(first taking ", (the) p_arg_1, ")";
 #Endif;
 #Iftrue MSG_AUTO_DISROBE < 1000;
 	MSG_AUTO_DISROBE:
 	! p_arg_1 = the object the player automatically takes off.
-		print "(first taking off ", (the) p_arg_1, ")^";
+		"(first taking off ", (the) p_arg_1, ")";
 #Endif;
 #Iftrue MSG_AUTO_DISROBE_WORN < 1000;
 	MSG_AUTO_DISROBE_WORN:
 	! p_arg_1 = the object the player would need to take off.
-		print "But you would need to take off ", (the) p_arg_1, " first.^";
+		"But you would need to take off ", (the) p_arg_1, " first.";
 #Endif;
 #IfTrue MSG_PARSER_NOTHING_TO_VERB < 1000;
 	MSG_PARSER_NOTHING_TO_VERB:
@@ -901,7 +901,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 	MSG_PARSER_NOT_HOLDING, MSG_AUTO_TAKE_NOT_HELD, MSG_WAVE_NOTHOLDING:
 	! p_arg_1 = the object which the player must be holding to perform the
 	! action but isn't.
-		print_ret "But you are not holding ", (the) p_arg_1, ".";
+		"But you are not holding ", (the) p_arg_1, ".";
 #Endif;
 #IfTrue MSG_PARSER_PARTIAL_MATCH < 1000;
 	MSG_PARSER_PARTIAL_MATCH:
@@ -913,19 +913,19 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #IfTrue MSG_PARSER_CANT_TALK < 1000;
 	MSG_PARSER_CANT_TALK:
 	! p_arg_1 = the object which can't be talked to.
-		print_ret "You can't talk to ", (the) p_arg_1, ".";
+		"You can't talk to ", (the) p_arg_1, ".";
 #EndIf;
 #IfTrue MSG_PARSER_NO_NEED_REFER_TO < 1000;
 	MSG_PARSER_NO_NEED_REFER_TO:
 		print "You don't need to refer to ~";
 		_PrintUnknownWord();
-		print_ret "~ in this game.";
+		"~ in this game.";
 #EndIf;
 #IfTrue MSG_PARSER_DONT_UNDERSTAND_WORD < 1000;
 	MSG_PARSER_DONT_UNDERSTAND_WORD:
-			print "Sorry, I don't understand what ~";
-			_PrintUnknownWord();
-			print_ret "~ means.";
+		print "Sorry, I don't understand what ~";
+		_PrintUnknownWord();
+		"~ means.";
 #EndIf;
 #IfTrue MSG_PARSER_BAD_PATTERN_PREFIX < 1000;
 	MSG_PARSER_BAD_PATTERN_PREFIX:
@@ -1023,12 +1023,12 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_TAKE_BELONGS < 1000;
 	MSG_TAKE_BELONGS:
 		! p_arg_1 = the object that is held by p_arg_2
-		print (The) p_arg_1, " seem", (SingularS) p_arg_1, " to belong to ", (the) p_arg_2, ".";
+		print_ret (The) p_arg_1, " seem", (SingularS) p_arg_1, " to belong to ", (the) p_arg_2, ".";
 #EndIf;
 #IfTrue MSG_TAKE_PART_OF < 1000;
 	MSG_TAKE_PART_OF:
 		! p_arg_1 = the object that is part of p_arg_2
-		print (The) p_arg_1, " seem", (SingularS) p_arg_1, " to be part of ", (the) p_arg_2, ".";
+		print_ret (The) p_arg_1, " seem", (SingularS) p_arg_1, " to be part of ", (the) p_arg_2, ".";
 #EndIf;
 #Ifndef OPTIONAL_NO_DARKNESS;
 #Ifndef SKIP_MSG_EXAMINE_DARK;
@@ -1140,10 +1140,12 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 #IfTrue MSG_YES_OR_NO < 1000;
 	MSG_YES_OR_NO:
 		print "Please answer yes or no: ";
+		rtrue;
 #EndIf;
 #IfTrue MSG_RESTART_CONFIRM < 1000;
 	MSG_RESTART_CONFIRM:
 		print "Are you sure you want to restart? ";
+		rtrue;
 #Endif;
 
 #Ifndef NO_SCORE;
@@ -1166,7 +1168,7 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		}
 		print " by ", p_arg_2, " point";
 		if(p_arg_2 > 1) print "s";
-		print ".]^";
+		".]";
 #Endif;
 #Endif;
 
