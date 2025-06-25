@@ -521,7 +521,7 @@ Object TopOfStairs "Staircase Leading Down"
 					too. From the stairs and from the library to the west comes the sound of the
 					crackling of the flames. How could it spread so quickly?";
 			"This is a small, dusty room, with some boxes piled up and stairs leading down to the
-			dark basement. A beam of light comes from the west, leading to the main hall of the library,";
+			dark basement. A beam of light comes from the west, leading to the main hall of the library.";
 		],
 		cheap_scenery
 			'beam' 'light' "The light beam stands out clearly in the darkness of the room."
