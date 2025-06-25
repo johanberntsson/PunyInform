@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v5.14.1: bug fix release (25 June 2025)
+
 - Fixed: The message MSG_TAKE_BELONGS (e.g. "The staff seems to belong to Gandalf.") was missing a line break at the end.
 - Fixed: The message MSG_TAKE_PART_OF (e.g. "The button seems to be part of the machine.") was missing a line break at the end.
 
