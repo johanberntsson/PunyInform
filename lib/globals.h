@@ -5,7 +5,7 @@ System_file;
 Constant PUNYINFORM_MAJOR_VERSION = 5;
 Constant PUNYINFORM_MINOR_VERSION = 14;
 Constant PUNYINFORM_PATCH_VERSION = 1; ! Usually 0 (if zero, it is not printed in banner)
-!Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
+Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
 #Ifndef VN_1636;
 Message fatalerror "*** The PunyInform library needs Inform v6.36 or later to work ***";
@@ -568,6 +568,15 @@ Constant CLR_BLUE            = 6;
 Constant CLR_MAGENTA         = 7;
 Constant CLR_CYAN            = 8;
 Constant CLR_WHITE           = 9;
+
+Constant CLR_OZMOO_ORANGE      = 16;
+Constant CLR_OZMOO_BROWN       = 17;
+Constant CLR_OZMOO_LIGHT_RED   = 18;
+Constant CLR_OZMOO_DARK_GREY   = 19;
+Constant CLR_OZMOO_MEDIUM_GREY = 20;
+Constant CLR_OZMOO_LIGHT_GREEN = 21;
+Constant CLR_OZMOO_LIGHT_BLUE  = 22;
+Constant CLR_OZMOO_LIGHT_GREY  = 23;
 
 #IfV5;
 Constant WIN_ALL     0;

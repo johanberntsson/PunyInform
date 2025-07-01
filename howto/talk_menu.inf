@@ -201,7 +201,29 @@ Object -> Josh "Josh"
 		talk_array talk_array_josh,
 	has proper animate;
 
-[Initialise;
+[Initialise ozmoo_colours;
+#Ifv5;
+	if(OzmooColoursAvailable())
+		ozmoo_colours = true;
+	if(HDR_TERPFLAGS->0 & 1) {
+		print "^^Would you like colour? ";
+		if(YesOrNo()) {
+			clr_on = true;
+			clr_bg = CLR_BLACK;
+			if(ozmoo_colours) {
+				clr_fg = CLR_OZMOO_MEDIUM_GREY;
+				clr_talk_menu = CLR_WHITE; ! We choose to use one of the 8 extra colours in Ozmoo
+			} else {
+				clr_fg = CLR_WHITE;
+				clr_talk_menu = CLR_YELLOW;
+			}
+			clr_fgstatus = CLR_BLUE;
+		}
+		ClearScreen(WIN_ALL);
+	}
+#Endif;
+
+
 #Ifdef light;
 	give player light;
 #Endif;

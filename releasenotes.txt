@@ -1,5 +1,10 @@
 Upcoming release:
 
+- New function: OzmooColoursAvailable(), returns true if Ozmoo's eight extra colours are available. 
+- Added constants for the eight extra colours supported by Ozmoo: CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY. 
+- Added a global clr_talk_menu to ext_talk_menu.inf, to let game programmer set the menu colour. 
+- Updated howto/colours.inf and howto/talk_menu.inf.
+
 =======
 v5.14.1: bug fix release (25 June 2025)
 

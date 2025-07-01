@@ -41,15 +41,20 @@ Object -> Box "box"
 		inside_description "It feels so nice, standing in the box.",
 	has container open openable enterable;
 
-[Initialise;
+[Initialise ozmoo_colours;
 #Ifv5;
+	if(OzmooColoursAvailable())
+		ozmoo_colours = true;
 	if(HDR_TERPFLAGS->0 & 1) {
 		print "^^Would you like colour? ";
 		if(YesOrNo()) {
 			clr_on = true;
 			clr_fg = MY_DEFAULT_FG; ! Defined in this program, right after including "puny.h"
 			clr_bg = CLR_BLACK;
-			clr_fginput = CLR_YELLOW; ! Don't set this, or set it to CLR_CURRENT, to keep input in same colour as normal text
+			if(ozmoo_colours)
+				clr_fginput = CLR_OZMOO_LIGHT_GREEN; ! We choose to use one of the 8 extra colours in Ozmoo
+			else
+				clr_fginput = CLR_YELLOW; ! Don't set this, or set it to CLR_CURRENT, to keep input in same colour as normal text
 			clr_fgstatus = CLR_RED; ! Don't set this, or set it to CLR_CURRENT, to keep statusline in same colour as normal text
 		}
 		ClearScreen(WIN_ALL);

@@ -244,6 +244,7 @@ Constant TM_ADD_BEFORE_AND_AFTER 4; ! Can be used directly after subject
 
 Global talk_menu_talking = false;
 Global talk_menu_multi_mode = true;
+Global clr_talk_menu = CLR_CURRENT;
 
 [ _TMPrintMsg p_msg p_no_newline;
 	if(metaclass(p_msg) == Routine) {
@@ -418,7 +419,7 @@ Array TenDashes static -> "----------";
 Array _TMLines --> 10;
 
 #Ifv5;
-[ RunTalk p_npc _array _i _j _n _val _height _width _offset _count _more _has_split _add_msg _stash_array;
+[ RunTalk p_npc _array _i _j _n _val _height _width _offset _count _more _has_split _add_msg _stash_array _old_fg;
 #Ifnot;
 [ RunTalk p_npc _array _i _j _n _val _offset _count _more _add_msg _stash_array;
 #Endif;
@@ -507,6 +508,10 @@ Array _TMLines --> 10;
 				DrawStatusLine();
 				@set_window 1;
 				@set_cursor 2 1;
+				if(clr_on) {
+					_old_fg = clr_fg;
+					ChangeFgColour(clr_talk_menu);
+				}
 				_TMPrintMsg(TM_MSG_TALK_ABOUT_WHAT);
 			}
 			print "  ", _count % 10, ": ";
@@ -571,6 +576,10 @@ Array _TMLines --> 10;
 		_TMPrintMsg(_j, true);
 	}
 	new_line;
+#Ifv5;
+	if(clr_on)
+		ChangeFgColour(_old_fg);
+#Endif;
 
 	! Ask player to choose a line to say
 ._askAgain;

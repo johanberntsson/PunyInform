@@ -87,6 +87,12 @@ Include "grammar.h";
 
 #IfV5;
 
+[ OzmooColoursAvailable;
+	if($3a-->0 == $4f5a)
+		rtrue;
+	rfalse;
+];
+
 [ ClearScreen window;
 	if (clr_on) {
 		@set_colour clr_fg clr_bg;
