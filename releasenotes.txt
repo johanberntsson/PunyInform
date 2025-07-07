@@ -7,6 +7,7 @@ Upcoming release:
 - Messages MSG_SHOW_DEFAULT, MSG_GIVE_DEFAULT (e.g. "John doesn't seem interested.") has been adapted to actors having pluralname.
 - Messages MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT, MSG_ORDERS_WONT (e.g. "John has better things to do.") has been adapted to actors having pluralname.
 - Messages MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT (e.g. "The silver key doesn't seem to fit the lock.") has been adapted to handle attempted keys having pluralname. 
+- Message MSG_REMOVE_NOT_HERE (e.g. "But the fork isn't there now.") has been adapted to handle objects having pluralname. 
 
 =======
 v5.14.1: bug fix release (25 June 2025)
