@@ -103,7 +103,15 @@ Object -> Box "box"
         ],
 	has container open openable;
 
+Object -> Indians "Apache Indians"
+    with
+        name 'apache' 'indians',
+    has animate pluralname;
 
+Object -> John "John"
+    with
+        name 'john',
+    has animate proper;
 
 [ Initialise;
 #IfDef USEINFORM;

@@ -7,6 +7,10 @@ l
 i
 take banana
 empty box
+give apple to indians
+give apple to john
+ask indians for me
+ask john for me
 quit
 yes
 

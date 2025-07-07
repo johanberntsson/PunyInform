@@ -797,12 +797,12 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #Ifndef SKIP_MSG_GIVE_DEFAULT;
 	MSG_GIVE_DEFAULT, MSG_SHOW_DEFAULT:
-		print_ret (The) second, " doesn't seem interested.";
+		print_ret (The) second, " ", (DoOrDoes) second, "n't seem interested.";
 #Endif;
 #Ifndef SKIP_MSG_ASKFOR_DEFAULT;
 	MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT, MSG_ORDERS_WONT:
 	! p_arg_1 = the actor which the player has asked to do something.
-		print_ret (The) p_arg_1, " has better things to do.";
+		print_ret (The) p_arg_1, " ", (HaveOrHas) p_arg_1, " better things to do.";
 #Endif;
 #Ifndef SKIP_MSG_ENTER_NOT_OPEN;
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN,
@@ -1221,6 +1221,14 @@ default:
 
 [ CObjIs p_obj;
 	print (The) p_obj, " ", (isorare) p_obj;
+];
+
+[ DoOrDoes p_obj;
+	if (p_obj has pluralname) print "do"; else print "does";
+];
+
+[ HaveOrHas p_obj;
+	if (p_obj has pluralname) print "have"; else print "has";
 ];
 
 [ IsorAre p_obj;

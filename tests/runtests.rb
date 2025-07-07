@@ -24,7 +24,7 @@ def runtest(filename, version, inform_args)
     else
         # use specific template file is available
         specific_template = "#{basename}.z#{version}.txt"
-        template_file = specific_template if File.exists? specific_template
+        template_file = specific_template if File.exist? specific_template
         inform_cmd = $inform_compiler + " +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz -w 80 -h 200 #{basename}.z#{version} < #{command_file}"
         prune_cmd = "tail -n +6 #{transcript_file} | grep -v PunyInform > #{output_file}"

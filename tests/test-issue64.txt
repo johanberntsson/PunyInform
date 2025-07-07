@@ -85,7 +85,8 @@ In that game you scored 0 out of a possible 0, in 18 turns.
 
 Would you like to RESTART, RESTORE or QUIT? restore
 Enter a file name.
-Default is "sdsda": dasdas
+Default is "sdsda.qzl": dasdas
 Failed restore.
 
 Would you like to RESTART, RESTORE or QUIT? quit
+
