@@ -4,7 +4,9 @@ Upcoming release:
 - Added constants for the eight extra colours supported by Ozmoo: CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY. 
 - Added a global clr_talk_menu to ext_talk_menu.inf, to let game programmer set the menu colour. 
 - Updated howto/colours.inf and howto/talk_menu.inf.
-- Actor responses such as MSG_ORDERS_WONT now work if pluralname is set
+- Messages MSG_SHOW_DEFAULT, MSG_GIVE_DEFAULT (e.g. "John doesn't seem interested.") has been adapted to actors having pluralname.
+- Messages MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT, MSG_ORDERS_WONT (e.g. "John has better things to do.") has been adapted to actors having pluralname.
+- Messages MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT (e.g. "The silver key doesn't seem to fit the lock.") has been adapted to handle attempted keys having pluralname. 
 
 =======
 v5.14.1: bug fix release (25 June 2025)

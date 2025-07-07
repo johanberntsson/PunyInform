@@ -969,7 +969,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #Ifndef SKIP_MSG_LOCK_KEY_DOESNT_FIT;
 	MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT:
-		print_ret (The) second, " doesn't seem to fit the lock.";
+		print_ret (The) second, " ", (DoOrDoes) second, "n't seem to fit the lock.";
 #Endif;
 #IfTrue MSG_EXAMINE_CLOSED < 1000;
 	MSG_EXAMINE_CLOSED:
