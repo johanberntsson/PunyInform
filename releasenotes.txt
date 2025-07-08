@@ -8,6 +8,10 @@ Upcoming release:
 - Messages MSG_ASKFOR_DEFAULT, MSG_ASKTO_DEFAULT, MSG_ORDERS_WONT (e.g. "John has better things to do.") has been adapted to actors having pluralname.
 - Messages MSG_LOCK_KEY_DOESNT_FIT, MSG_UNLOCK_KEY_DOESNT_FIT (e.g. "The silver key doesn't seem to fit the lock.") has been adapted to handle attempted keys having pluralname. 
 - Message MSG_REMOVE_NOT_HERE (e.g. "But the fork isn't there now.") has been adapted to handle objects having pluralname. 
+- Debug verb GOTO will now only consider target objects which seem to be rooms, i.e. don't have attributes or properties which aren't meaningful for rooms.
+- Debug verb GOTO will now accept an '*' character at the end as a wildcard, e.g. "GOTO HALL*" can be used to go to the first room that starts with "HALL"
+- Fixed: The cheap scenery object didn't have the reactive attribute in games with OPTIONAL_MANUAL_REACTIVE, which made it not reset itobj and themobj when the player changed rooms.
+- New print rule: ObjIs, prints e.g. "the ball is" or "the barrels are".
 
 =======
 v5.14.1: bug fix release (25 June 2025)

@@ -1471,13 +1471,16 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 
 [ _RoomLike p_obj;
 	! Return true if p_obj seems to be a room
-	if(p_obj > Directions && p_obj <= top_object &&  parent(p_obj) == 0
+	if(p_obj > Directions && p_obj <= top_object &&  p_obj in nothing
 			&& (~~(p_obj provides describe or life or found_in))
 			&& (~~DebugParseNameObject(p_obj))) {
 		if(p_obj has edible or talkable or supporter or container or transparent
-				or concealed or proper or scenery or static or animate or clothing
+				or concealed or scenery or static or animate or clothing
 				or pluralname or switchable or door or lockable)
 			rfalse;
+#Ifndef OPTIONAL_NO_DARKNESS;
+		if(p_obj == thedark) rfalse;
+#Endif;
 		rtrue;
 	}
 	rfalse;
@@ -1497,35 +1500,33 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 	_first = WordAddress(consult_from);
 	_i = consult_from + consult_words - 1;
 	_count = WordAddress(_i) + WordLength(_i) - _first;
-	objectloop(_obj) {
-		if(parent(_obj) == nothing) {
-!			print _obj;
-			@output_stream 3 _GotoSubBuffer;
-			print (name) _obj;
-			@output_stream -3;
-			_k = _GotoSubBuffer-->0;
+	objectloop(_obj && _RoomLike(_obj)) {
+		@output_stream 3 _GotoSubBuffer;
+		print (name) _obj;
+		@output_stream -3;
+		_k = _GotoSubBuffer-->0;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-			if(_k > GOTOSUB_BUFFER_SIZE) {
-				_RunTimeError(ERR_BUFFER_OVERRUN, _obj);
-				rtrue;
-			}
+		if(_k > GOTOSUB_BUFFER_SIZE) {
+			_RunTimeError(ERR_BUFFER_OVERRUN, _obj);
+			rtrue;
+		}
 #Endif;
-			if(_k == _count) {
-				_match = true;
-				for(_i=_first, _j=0 : _j<_count : _i++, _j++) {
-					_val_printed = _t->_j;
-					_val_input = _i->0;
-					if(_val_printed == _val_input) continue;
-					if(_val_printed < 91 && _val_printed > 64 && _val_printed + 32 == _val_input) continue;
-					_match = false;
-					break;
-				}
-				if(_match) {
+		_match = true;
+		for(_i=_first, _j=0 : _j<_count : _i++, _j++) {
+			_val_printed = _t->_j;
+			if(_j >= _k) _val_printed = 0;
+			_val_input = _i->0;
+			if(_val_input == '*') { _match = 2; break; } ! The rest is considered a match
+			if(_val_printed == _val_input) continue;
+			if(_val_printed < 91 && _val_printed > 64 && _val_printed + 32 == _val_input) continue;
+			_match = false;
+			break;
+		}
+		if(_match == true && _count < _k) _match = false;
+		if(_match) {
 ._gotoObj;
-					PlayerTo(_obj);
-					rtrue;
-				}
-			}
+			PlayerTo(_obj);
+			rtrue;
 		}
 	}
 ._not_a_room;

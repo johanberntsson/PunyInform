@@ -555,10 +555,7 @@ Object CheapScenery "object"
 		found_in [;
 			if(location provides cheap_scenery) rtrue;
 		],
-	has concealed scenery
-#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-		reactive
-#Endif;
+	has concealed scenery reactive
 ;
 
 #Ifdef DEBUG;

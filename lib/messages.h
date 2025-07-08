@@ -808,7 +808,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN,
 	MSG_GO_DOOR_CLOSED, MSG_EMPTY_IS_CLOSED, MSG_REMOVE_CLOSED:
 	! p_arg_1 = the object which is closed, thus blocking the player's action.
-		"You can't, since ", (the) p_arg_1, " ", (isorare) p_arg_1, " closed.";
+		"You can't, since ", (ObjIs) p_arg_1, " closed.";
 #Endif;
 #Ifndef SKIP_MSG_GIVE_PLAYER;
 	MSG_GIVE_PLAYER, MSG_TAKE_ALREADY_HAVE:
@@ -978,7 +978,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #IfTrue MSG_REMOVE_NOT_HERE < 1000;
 	MSG_REMOVE_NOT_HERE:
-		"But ", (the) noun, " ", (IsorAre) noun, "n't there now.";
+		"But ", (ObjIs) noun, "n't there now.";
 #EndIf;
 #IfTrue MSG_SEARCH_IN_IT_ISARE < 1000;
 	MSG_SEARCH_IN_IT_ISARE:
@@ -1002,7 +1002,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_SEARCH_CANT_SEE_CLOSED < 1000;
 	MSG_SEARCH_CANT_SEE_CLOSED:
-		"You can't see inside, since ", (the) noun, " ", (IsorAre) noun, " closed.";
+		"You can't see inside, since ", (ObjIs) noun, " closed.";
 #EndIf;
 #IfTrue MSG_EXAMINE_ONOFF < 1000;
 	MSG_EXAMINE_ONOFF:
@@ -1223,8 +1223,13 @@ default:
 	print (The) p_obj, " ", (isorare) p_obj;
 ];
 
+[ ObjIs p_obj;
+	print (the) p_obj, " ", (isorare) p_obj;
+];
+
 [ DoOrDoes p_obj;
-	if (p_obj has pluralname) print "do"; else print "does";
+	print "do";
+	if (p_obj hasnt pluralname) print "es";
 ];
 
 [ HaveOrHas p_obj;
