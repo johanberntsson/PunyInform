@@ -172,7 +172,7 @@ The biggest differences between the standard library and PunyInform are:
 
 ## Games Using PunyInform
 
-70+ PunyInform games have been released. You can find just about all of them
+80+ PunyInform games have been released. You can find just about all of them
 in this [list of PunyInform games](https://ifdb.org/search?searchfor=tag%3Apunyinform&sortby=&pg=all).
 
 If you want to see the source code of PunyInform games, you should look at
@@ -228,6 +228,9 @@ discuss plot, story, puzzles etc, and posts requests for beta-testers
 for your game.
 
 ## Translations
+
+* [PunyInformES](https://github.com/Kozelek/PunyInformES) is a translation of
+  the PunyInform library to Spanish, by Pablo Martínez.
 
 * [PunyInformFr](https://gitlab.com/auraes/punyinformfr) is a translation of
   the PunyInform library to French, by auraes.
