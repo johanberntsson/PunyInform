@@ -315,7 +315,7 @@ System_file;
 [ _PatternRanking p_pattern _i _val;
 	! Return a biased pattern ranking:
 	! this is used to select more basic patterns in some situations,
-	! and since when the parsning fails but there are two possible
+	! and since when the parsing fails but there are two possible
 	! patterns, once with preposition and one with basic object slots,
 	! then give bias to the more basic form (without prepositions).
 	! This gives better error messages.
@@ -1065,7 +1065,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! ParseToken is similar to a general parse routine,
 	! and returns GPR_FAIL, GPR_MULTIPLE, GPR_NUMBER,
 	! GPR_PREPOSITION, GPR_REPARSE or the object number
-	! However, it also taks the current grammar token as input
+	! However, it also takes the current grammar token as input
 	! while a general parse routine takes no arguments.
 	! (this is mostly to avoid recalculating the values from wn
 	! when the calling routine already has them at hand)
@@ -1080,7 +1080,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		p_pattern_pointer = 0;
 	} else {
 		_token = (p_pattern_pointer -> 0);
-		_token_data = (p_pattern_pointer + 1) --> 0;
+		_token_data = (p_pattern_pointer + 1) -> 0;
 	}
 	_token_type = _token & $0f;
 	if(_token_type ~= TT_PREPOSITION or TT_SCOPE) {
@@ -1089,7 +1089,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! first set up filters, if any
 	noun_filter = 0;
 	if(_token_type == TT_ROUTINE_FILTER) {
-		noun_filter = _token_data;
+		noun_filter = #preactions_table-->_token_data;
 		_token_type = TT_OBJECT;
 		_token_data = NOUN_OBJECT;
 	} else if(_token_type == TT_ATTR_FILTER) {
@@ -1098,7 +1098,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		_token_data = NOUN_OBJECT;
 	} else if(_token_type == TT_SCOPE) {
 		_token_type = TT_OBJECT;
-		scope_routine = _token_data;
+		scope_routine = #preactions_table-->_token_data;
 		! check what type of routine (single or multi)
 		scope_stage = 1;
 		if(indirect(scope_routine) == 1)
@@ -1113,10 +1113,11 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	} else if(_token_type == TT_PARSE_ROUTINE) {
 		! allow the 'general parsing routine' to do all instead.
 		! it returns object or GRP_FAIL, ...; just like _ParseToken
-		return  indirect(_token_data);
+		return  indirect(#preactions_table-->_token_data);
 	}
 	! then parse objects or prepositions
 	if(_token_type == TT_PREPOSITION) {
+		_token_data = #adjectives_table-->_token_data;
 #IfDef DEBUG_PARSETOKEN;
 		print "Preposition: _token ", _token, " _token_type ", _token_type, ": data ", _token_data;
 		if(_token_data > 1000) {
@@ -1560,7 +1561,7 @@ Array guess_object-->5;
 
 #EndIf;
 
-[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index _next_word;
+[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index _next_word _token_count;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1568,7 +1569,7 @@ Array guess_object-->5;
 	!   100 if perfect match
 	wn = verb_wordnum + 1;
 	_parse_pointer = parse + 2 + 4*(verb_wordnum);
-	pattern_pointer = p_pattern - 1;
+	pattern_pointer = p_pattern;
 	num_noun_groups = 0;
 	noun = 0;
 	consult_from = 0;
@@ -1585,67 +1586,26 @@ Array guess_object-->5;
 	parser_all_except_object = 0;
 	selected_direction_index = 0;
 	selected_direction = 0;
+	_token_count = (((p_pattern --> 0) & $f800) / 2048);
 	action = (p_pattern --> 0) & $03ff;
 	action_to_be = action; ! compatibility (referenced in DM4 for ChooseObjects)
 	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
 	phase2_necessary = PHASE2_SUCCESS;
 
-	while(true) {
-		pattern_pointer = pattern_pointer + 3;
+#IfDef DEBUG_PARSEPATTERN;
+		print "Pattern: ",p_pattern, "^";
+#EndIf;
+	while((_token_count--) > 0) {
+		pattern_pointer = pattern_pointer + 2;
 		_next_word = _parse_pointer-->2;
 #IfDef DEBUG_PARSEPATTERN;
-		print "TOKEN: ", pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+		print "  TOKEN: ", pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
 		scope_stage = 0;
 		_type = ((pattern_pointer -> 0) & $0f);
-		if(_type == TT_END) {
-			if(_IsSentenceDivider(_parse_pointer)) {
-				! check if dictionary word after sentence divider
-				if(parse->1 > wn && _next_word == 0) {
-					! uknown word, so probably an unknown word in a
-					! list matching the multi token, such as
-					! 'get box and SDASDASD'
-					if(parser_phase == PHASE2) {
-						parser_unknown_noun_found = _parse_pointer + 4;
-						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
-					} else {
-						phase2_necessary = PHASE2_ERROR;
-					}
-					return wn;
-				} else if(parse->1 > wn && (_next_word->DICT_BYTES_FOR_WORD & 1) == 0) {
-					_current_wn = wn;
-					wn++;
-					if(Directions.parse_name()) {
-						return 100; ! Next is a direction, so this is fine
-					}
-					! neither a verb nor a direction, so probably a list
-					! of nouns without a matching multi token
-					if(parser_phase == PHASE2) {
-						PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
-					} else {
-						phase2_necessary = PHASE2_ERROR;
-					}
-					return _current_wn;
-				} else {
-					wn++;
-					return 100; ! pattern matched
-				}
-			}
-			!if(_IsSentenceDivider(_parse_pointer)) {
-			!	wn++;
-			!	return 100; ! pattern matched
-			!}
-			if(wn == 1 + parse->1) {
-				return 100; ! pattern matched
-			}
-			! Fail because the grammar line ends here but not the input
-			if(parser_phase == PHASE2) {
-				! last resort when no other error message printed
-				PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
-			}
-			return wn - verb_wordnum;
-		}
+!		if(_type == TT_END) {
+!		}
 
 		! parse_routine doesn't match anything and is always allowed
 		if(wn >= 1 + parse->1 && _type ~= TT_PARSE_ROUTINE) {
@@ -1663,7 +1623,7 @@ Array guess_object-->5;
 		}
 
 #IfDef DEBUG_PARSEPATTERN;
-		print "Calling ParseToken: token ", pattern_pointer->0," type ", (pattern_pointer->0) & $f, ", data ", (pattern_pointer + 1) --> 0,"^";
+		print "Calling ParseToken: token ", pattern_pointer->0," type ", (pattern_pointer->0) & $f, ", data ", (pattern_pointer + 1) -> 0,"^";
 #EndIf;
 		_current_wn = wn;
 		_old_dir_index = selected_direction_index;
@@ -1770,13 +1730,14 @@ Array guess_object-->5;
 			print "-- preposition mached ", pattern_pointer, " ", pattern_pointer->0, "^";
 #Endif;
 			_type = ((pattern_pointer -> 0) & $0f);
-			while(_type ~= TT_END && _type ~= TT_PARSE_ROUTINE &&
+			while(_token_count > 0 && _type ~= TT_PARSE_ROUTINE &&
 				(pattern_pointer->0 ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP)) {
 #IfDef DEBUG_PARSEPATTERN;
 			print "-- increasing pattern_pointer^";
 #Endif;
-				pattern_pointer = pattern_pointer + 3;
+				pattern_pointer = pattern_pointer + 2;
 				_type = ((pattern_pointer -> 0) & $0f);
+				_token_count--;
 			}
 		GPR_MULTIPLE:
 			! multiple_objects contains the objects
@@ -1818,8 +1779,55 @@ Array guess_object-->5;
 			_UpdateNounSecond(_noun, _noun);
 		}
 	}
-	! we should never reach this line
-	! the while(true) loop is only exited by return statements
+
+	! We have reached the end of pattern
+
+	if(_IsSentenceDivider(_parse_pointer)) {
+		! check if dictionary word after sentence divider
+		if(parse->1 > wn && _next_word == 0) {
+			! uknown word, so probably an unknown word in a
+			! list matching the multi token, such as
+			! 'get box and SDASDASD'
+			if(parser_phase == PHASE2) {
+				parser_unknown_noun_found = _parse_pointer + 4;
+				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
+			} else {
+				phase2_necessary = PHASE2_ERROR;
+			}
+			return wn;
+		} else if(parse->1 > wn && (_next_word->DICT_BYTES_FOR_WORD & 1) == 0) {
+			_current_wn = wn;
+			wn++;
+			if(Directions.parse_name()) {
+				return 100; ! Next is a direction, so this is fine
+			}
+			! neither a verb nor a direction, so probably a list
+			! of nouns without a matching multi token
+			if(parser_phase == PHASE2) {
+				PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
+			} else {
+				phase2_necessary = PHASE2_ERROR;
+			}
+			return _current_wn;
+		} else {
+			wn++;
+			return 100; ! pattern matched
+		}
+	}
+	!if(_IsSentenceDivider(_parse_pointer)) {
+	!	wn++;
+	!	return 100; ! pattern matched
+	!}
+	if(wn == 1 + parse->1) {
+		return 100; ! pattern matched
+	}
+	! Fail because the grammar line ends here but not the input
+	if(parser_phase == PHASE2) {
+		! last resort when no other error message printed
+		PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+	}
+	return wn - verb_wordnum;
+
 ];
 
 [ PronounNotice p_object;
@@ -2092,11 +2100,13 @@ Array guess_object-->5;
 		}
 
 		! Scan to the end of this pattern
-		_j  = _pattern + 2;
-		while(_j  -> 0 ~= TT_END) {
-			_j  = _j  + 3;
-		}
-		_pattern = _j  + 1;
+		_j =  2 + (((_pattern -> 0) & $f8) / 4);
+		_pattern = _pattern + _j;
+!		_j  = _pattern + 2;
+!		while(_j  -> 0 ~= TT_END) {
+!			_j  = _j  + 3;
+!		}
+!		_pattern = _j  + 1;
 	}
 
 	! skip phase 2 if last pattern matched perfectly
