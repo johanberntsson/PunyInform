@@ -320,28 +320,33 @@ System_file;
 ];
 #EndIf;
 
-[ _PatternRanking p_pattern _i _val;
+[ _PatternRanking p_pattern _rank _k _val _byte0 _count;
 	! Return a biased pattern ranking:
 	! this is used to select more basic patterns in some situations,
 	! and since when the parsing fails but there are two possible
 	! patterns, once with preposition and one with basic object slots,
 	! then give bias to the more basic form (without prepositions).
 	! This gives better error messages.
-	_i = (p_pattern-->0 & $400); ! give bias to action_reverse
-	p_pattern = p_pattern + 2;
-	for(::) {
-		_val = p_pattern->0;
-		if(_val == TT_END) {
-			return _i;
-		} else if(_val == TOKEN_SINGLE_PREP or TOKEN_FIRST_PREP) {
-			_i = _i + 2; ! give bias to patterns without prepositions
+	_byte0 = p_pattern->0;
+	_rank = (_byte0 & $04); ! give bias to action_reverse
+!	p_pattern = p_pattern + 2;
+	_count = (_byte0 & $f8) / 4;
+	for(_k = 2: _k <= _count: _k = _k + 2) {
+!	for(::) {
+		_val = p_pattern->_k;
+!		if(_val == TT_END) {
+!			return _i;
+!		} else if(_val == TOKEN_SINGLE_PREP or TOKEN_FIRST_PREP) {
+		if(_val == TOKEN_SINGLE_PREP or TOKEN_FIRST_PREP) {
+			_rank = _rank + 2; ! give bias to patterns without prepositions
 		} else if(_val ~= TOKEN_MIDDLE_PREP or TOKEN_LAST_PREP) {
 			! Alternative prepositions should be skipped, and all other
 			! tokens should add to the length
-			_i++;
+			_rank++;
 		}
-		p_pattern = p_pattern + 3;
+!		p_pattern = p_pattern + 3;
 	}
+	return _rank;
 ];
 
 #IfDef DEBUG;
@@ -357,27 +362,33 @@ System_file;
 	}
 ];
 
-[ _PrintGrammarPattern p_pattern _i _action_number _token_top _token_next _token_bottom;
+[ _PrintGrammarPattern p_pattern _i _action_number _action _action_reverse _token_top _token_next _token_bottom
+		_val _data _count;
 	! action number is the first two bytes
 	_action_number = p_pattern-->0;
-	p_pattern = p_pattern + 2;
-	action = _action_number & $3ff;
-	action_reverse = (_action_number & $400 ~= 0);
-!	print "Action#: ", action, " Reverse: ", reverse, "^";
-	print "Action#: ", action, "^";
+!	p_pattern = p_pattern + 2;
+	_count = (_action_number & $f800) / 2048;
+	_action = _action_number & $3ff;
+	_action_reverse = (_action_number & $400 ~= 0);
+!	print "Action#: ", _action, " Reverse: ", _action_reverse, "^";
+	print "Action#: ", _action, " Tokens: ", _count, "^";
 
-	for(_i = 0: : _i++) {
-		if(p_pattern->0 == TT_END) break;
-		_token_top = (p_pattern->0 & $c0)/64; ! top (2 bits)
-		_token_next = (p_pattern->0 & $30)/16;  ! next (2 bits)
-		_token_bottom = p_pattern->0 & $0f; ! bottom (4 bits)
-		print "Token#: ", _i, " Type: ", p_pattern->0, " (top ", _token_top, ", next ",_token_next, ", bottom ",_token_bottom, ") data: " ,(p_pattern + 1)-->0;
-		if((p_pattern + 1)-->0>4000) print" " ,(address) (p_pattern + 1)-->0;
+	for(_i = 1: _i <= _count: _i = _i + 1) {
+!	for(_i = 0: : _i++) {
+!		if(p_pattern->0 == TT_END) break;
+		_val = p_pattern->(_i + _i);
+		_token_top = _val / 64; ! top (2 bits)
+		_token_next = (_val & $30) / 16;  ! next (2 bits)
+		_token_bottom = _val & $0f; ! bottom (4 bits)
+		_data = (p_pattern + 1)->(_i + _i);
+		print "Token#: ", _i, " Type: ", _val, " (top ", _token_top, ", next ",_token_next, ", bottom ",_token_bottom, ") data: " , _data;
+!		if((p_pattern + 1)-->0>4000) print" " ,(address) (p_pattern + 1)-->0;
+		if(_val & $0f == 2) print" " ,(address) #adjectives_table-->_data;
 		@new_line;
-		p_pattern = p_pattern + 3;
+!		p_pattern = p_pattern + 3;
 	}
 	! print ": ", i, " tokens^";
-	return p_pattern + 1; ! skip TT_END
+	return p_pattern + _i + _i; ! Start of next pattern, if any
 ];
 #EndIf;
 
@@ -2097,7 +2108,7 @@ Array guess_object-->5;
 				(
 				! we override previous best if this pattern is equally
 				! good but shorter, so that for example get without a
-				! noun picks "get multi" instead of "get 'out' 'off' noun"
+				! noun picks "get multi" instead of "get 'out' 'of' noun"
 				_score == _best_score && _best_pattern ~= 0 &&
 				_PatternRanking(_pattern) < _PatternRanking(_best_pattern)
 				)
