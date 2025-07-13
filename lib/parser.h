@@ -1089,7 +1089,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! first set up filters, if any
 	noun_filter = 0;
 	if(_token_type == TT_ROUTINE_FILTER) {
-		noun_filter = #preactions_table-->_token_data;
+		noun_filter = _token_data; ! This is what's needed when called from ParseToken
+		if(_token_data <= 255)
+			noun_filter = #preactions_table-->_token_data;
 		_token_type = TT_OBJECT;
 		_token_data = NOUN_OBJECT;
 	} else if(_token_type == TT_ATTR_FILTER) {
@@ -1098,7 +1100,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		_token_data = NOUN_OBJECT;
 	} else if(_token_type == TT_SCOPE) {
 		_token_type = TT_OBJECT;
-		scope_routine = #preactions_table-->_token_data;
+		scope_routine = _token_data; ! This is what's needed when called from ParseToken
+		if(_token_data <= 255)
+			scope_routine = #preactions_table-->_token_data;
 		! check what type of routine (single or multi)
 		scope_stage = 1;
 		if(indirect(scope_routine) == 1)
@@ -1113,7 +1117,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	} else if(_token_type == TT_PARSE_ROUTINE) {
 		! allow the 'general parsing routine' to do all instead.
 		! it returns object or GRP_FAIL, ...; just like _ParseToken
-		return  indirect(#preactions_table-->_token_data);
+		if(_token_data <= 255) ! This is what's needed when NOT called from ParseToken
+			_token_data = #preactions_table-->_token_data;
+		return  indirect(_token_data);
 	}
 	! then parse objects or prepositions
 	if(_token_type == TT_PREPOSITION) {
