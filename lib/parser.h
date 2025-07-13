@@ -1566,7 +1566,8 @@ Array guess_object-->5;
 	if(_noun) {
 		print "(assuming ";
 		if(p_prep) {
-			print (address) (p_prep+1) --> 0, " ";
+!			print (address) (p_prep+1) --> 0, " ";
+			print (address) #adjectives_table-->(p_prep->1), " ";
 		}
 		print (the) _noun, ")^";
 	}
