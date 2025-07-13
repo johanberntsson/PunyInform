@@ -35,7 +35,7 @@ System_file;
 	return _ret;
 ];
 
-[ _FixIncompleteSentenceOrComplain p_pattern _token _type _noun _prep _second _num_nouns;
+[ _FixIncompleteSentenceOrComplain p_pattern _token _type _noun _prep _second _num_nouns _i _count;
 	! Called because sentence shorter than the pattern
 	! Available data: wn, parse and p_pattern_token (last matched token)
 	!
@@ -55,7 +55,10 @@ System_file;
 	! is creature missing (or if only one animate object in scope)
 
 	! analyse the rest of the pattern to see if second and prep are expected
-	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
+	_count = (((p_pattern->0) & $f8) / 8);
+	for(_i = 1: _i <= _count: _i++) {
+	!for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
+		_token = p_pattern + _i + _i;
 		_type = _token -> 0;
 		if(_type > 9) {
 			_prep = _token;
@@ -100,27 +103,31 @@ System_file;
 	rfalse;
 ];
 
-[ _PrintPatternSyntax p_pattern p_noun _num_preps _token _type _data;
+[ _PrintPatternSyntax p_pattern p_noun _num_preps _token _type _data _i _count;
 	! write what pattern we expected, something like:
 	! "I think you wanted to say "put all in something". Please try again."
 	PrintMsg(MSG_PARSER_BAD_PATTERN_PREFIX);
 	print (verbname) verb_word;
-	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
+	_count = (((p_pattern->0) & $f8) / 8);
+	for(_i = 1: _i <= _count: _i++) {
+!	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
+		_token = p_pattern + _i + _i;
 		_type = (_token -> 0) & $0f;
-		_data = (_token + 1) --> 0;
+		_data = (_token + 1) -> 0;
 		! check if this is a new list of prepositions
 		if(_token->0 == TOKEN_FIRST_PREP or TOKEN_SINGLE_PREP) _num_preps = 0;
 		if(_type == TT_PREPOSITION) {
 			! only write the first item in a list of alternative prepositions
-			if(_num_preps == 0) print " ", (address) _data;
+			if(_num_preps == 0) print " ", (address) #adjectives_table-->_data;
 			++_num_preps;
 		} else {
 			print " ";
 			if(p_noun == 0) {
-				if(_type == TT_ROUTINE_FILTER && _data == ADirection) {
+				if(_type == TT_ROUTINE_FILTER && #preactions_table-->_data == ADirection) {
 					print (string) SOMEDIRECTION_STR;
 				} else if(second == 0) {
-					if(_type == TT_OBJECT && _token->2 == CREATURE_OBJECT) {
+!					if(_type == TT_OBJECT && _token->2 == CREATURE_OBJECT) {
+					if(_type == TT_OBJECT && _data == CREATURE_OBJECT) {
 						print (string) SOMEONE_STR;
 					} else {
 						print (string) SOMETHING_STR;
@@ -130,7 +137,8 @@ System_file;
 				if(noun ~= 0 && metaclass(noun) ~= ROUTINE) {
 					p_noun = 0; ! avoid repeat (we don't need p_noun anymore)
 					if(parser_all_found) print "all"; else print (name) noun;
-				} else if(_type == TT_OBJECT && _token->2 == CREATURE_OBJECT) {
+!				} else if(_type == TT_OBJECT && _token->2 == CREATURE_OBJECT) {
+				} else if(_type == TT_OBJECT && _data == CREATURE_OBJECT) {
 					print (string) SOMEONE_STR;
 				} else {
 					print (string) SOMETHING_STR;
@@ -1620,7 +1628,7 @@ Array guess_object-->5;
 #EndIf;
 			if(parser_phase == PHASE2) {
 				!print "You need to be more specific.^";
-				if(_FixIncompleteSentenceOrComplain(p_pattern - 1)) {
+				if(_FixIncompleteSentenceOrComplain(p_pattern)) {
 					! sentence was corrected
 					return 100;
 				}
@@ -2177,7 +2185,7 @@ Array guess_object-->5;
 				! we didn't match the pattern at all
 				if(_i == TT_PREPOSITION or TT_OBJECT) {
 					! missing preposition
-					_PrintPatternSyntax(_best_pattern -1);
+					_PrintPatternSyntax(_best_pattern);
 				} else {
 					! some other problem
 					PrintMsg(MSG_PARSER_PARTIAL_MATCH, wn - 1);
