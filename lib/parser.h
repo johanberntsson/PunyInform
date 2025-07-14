@@ -76,10 +76,10 @@ System_file;
 	! return true if we could fix everything
 #IfDef OPTIONAL_GUESS_MISSING_NOUN;
 	if(_noun ~= 0 && noun == 0) {
-		noun = _GuessMissingNoun(_noun -> 2, 0, 1);
+		noun = _GuessMissingNoun(_noun -> 1, 0, 1);
 	}
 	if(_second ~= 0 && second == 0) {
-		second = _GuessMissingNoun(_second -> 2, _prep, 2);
+		second = _GuessMissingNoun(_second -> 1, _prep, 2);
 	}
 	!print scope_stage, " ", phase2_necessary, " num_nouns ",_num_nouns, " noun ", _noun, "=", noun, ": second ", _second, "=", second, "^";
 	if(_noun ~= 0  && noun ~= 0) {
