@@ -1406,9 +1406,11 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			if(p_pattern_pointer ~= 0) {
 				! loop over all possible prepositions and update wn
 				! if topic and preposition matched
-				for(_i = 3: p_pattern_pointer->_i >= TOKEN_SINGLE_PREP: _i = _i + 3) {
+!				for(_i = 3: p_pattern_pointer->_i >= TOKEN_SINGLE_PREP: _i = _i + 3) {
+				for(_i = 2: p_pattern_pointer->_i >= TOKEN_SINGLE_PREP: _i = _i + 2) {
 					!print (address) (p_pattern_pointer + _i + 1) --> 0, "^";
-					if(_ParseTopic(wn, p_parse_pointer, (p_pattern_pointer + _i + 1) --> 0)) {
+!					if(_ParseTopic(wn, p_parse_pointer, (p_pattern_pointer + _i + 1) --> 0)) {
+					if(_ParseTopic(wn, p_parse_pointer, #adjectives_table-->((p_pattern_pointer + _i) -> 1))) {
 						break;
 					}
 				}
