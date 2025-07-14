@@ -1808,6 +1808,7 @@ Array guess_object-->5;
 
 	! We have reached the end of pattern
 
+	pattern_pointer = pattern_pointer + 2;
 	_next_word = _parse_pointer-->2;
 	if(_IsSentenceDivider(_parse_pointer)) {
 		! check if dictionary word after sentence divider
@@ -2119,6 +2120,7 @@ Array guess_object-->5;
 			_best_pattern = _pattern;
 			_best_phase2 = phase2_necessary;
 			_best_second = second; ! need to save for multiexcept in phase 2
+			parser_two = pattern_pointer;
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: new best pattern ", _i, " ", _best_phase2, " ", _score, "^";
 #EndIf;
@@ -2182,12 +2184,16 @@ Array guess_object-->5;
 			! another context but not right now. Reasons may
 			! be that it matches something that isn't in scope,
 			! or this word isn't a noun word.
-			_i = (_best_pattern-> (wn*3 - 1)) & $0f;
+!			_i = (_best_pattern-> (wn*3 - 1)) & $0f;
+			_i = (parser_two->0) & $0f;
+			if(parser_two > _best_pattern + ((_best_pattern->0) & $f8) / 4)
+				_i = 255; ! Special value for end of pattern
 			if(parser_unknown_noun_found ~= 0 &&
 				parser_unknown_noun_found-->0 == 0) {
 				! this is not a dictionary word.
 				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
-			} else if(_i == TT_END) {
+!			} else if(_i == TT_END) {
+			} else if(_i == 255) { ! End of pattern
 				! the sentence matched the pattern
 				if(parse-->(wn + wn - 1) == ALL_WORD) {
 					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
