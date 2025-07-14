@@ -1808,6 +1808,7 @@ Array guess_object-->5;
 
 	! We have reached the end of pattern
 
+	_next_word = _parse_pointer-->2;
 	if(_IsSentenceDivider(_parse_pointer)) {
 		! check if dictionary word after sentence divider
 		if(parse->1 > wn && _next_word == 0) {
