@@ -2039,7 +2039,10 @@ Array guess_object-->5;
 	}
 
 	! Now it is known word, and it is not a direction, in the first position
-	meta = (_word_data->0) & 2;
+#Ifndef GRAMMAR_META_FLAG;
+	if((_word_data->0) & 2)
+		meta = true;
+#Endif;
 
 !   print "Parse array: ", parse, "^";
 !   print "Word count: ", parse->0, "^";
@@ -2213,7 +2216,7 @@ Array guess_object-->5;
 				}
 			}
 		}
-		action = 0;
+		action = -1;
 		rtrue;
 	}
 
@@ -2283,6 +2286,12 @@ Array guess_object-->5;
 			}
 		}
 	}
+
+#Ifdef GRAMMAR_META_FLAG;
+	if(action <= #highest_meta_action_number)
+		meta = true;
+#Endif;
+	
 	
 	if(actor ~= player) {
 		! The player's "orders" property can refuse to allow conversation
