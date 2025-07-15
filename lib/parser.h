@@ -2213,7 +2213,7 @@ Array guess_object-->5;
 				}
 			}
 		}
-		action = 0;
+		action = -1;
 		rtrue;
 	}
 
