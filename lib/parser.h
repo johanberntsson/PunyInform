@@ -2188,7 +2188,7 @@ Array guess_object-->5;
 			! or this word isn't a noun word.
 			!
 			! _i is the token we stopped at
-            _i = (_best_pattern-> (wn*3 - 1)) & $0f;
+            _i = (_best_pattern-> (wn*2)) & $0f;
             ! check for end of pattern (TT_END in GV2)
 			if((((_best_pattern-> 0) & $f8) / 8) == (wn - 1)) _i = TT_END;
 			if(parser_unknown_noun_found ~= 0 &&
