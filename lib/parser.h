@@ -2186,16 +2186,16 @@ Array guess_object-->5;
 			! another context but not right now. Reasons may
 			! be that it matches something that isn't in scope,
 			! or this word isn't a noun word.
-!			_i = (_best_pattern-> (wn*3 - 1)) & $0f;
-			_i = (parser_two->0) & $0f;
-			if(parser_two > _best_pattern + ((_best_pattern->0) & $f8) / 4)
-				_i = 255; ! Special value for end of pattern
+			!
+			! _i is the token we stopped at
+            _i = (_best_pattern-> (wn*3 - 1)) & $0f;
+            ! check for end of pattern (TT_END in GV2)
+			if((((_best_pattern-> 0) & $f8) / 8) == (wn - 1)) _i = TT_END;
 			if(parser_unknown_noun_found ~= 0 &&
 				parser_unknown_noun_found-->0 == 0) {
 				! this is not a dictionary word.
 				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
-!			} else if(_i == TT_END) {
-			} else if(_i == 255) { ! End of pattern
+			} else if(_i == TT_END) {
 				! the sentence matched the pattern
 				if(parse-->(wn + wn - 1) == ALL_WORD) {
 					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
