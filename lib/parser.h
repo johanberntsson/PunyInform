@@ -55,7 +55,7 @@ System_file;
 	! is creature missing (or if only one animate object in scope)
 
 	! analyse the rest of the pattern to see if second and prep are expected
-	_count = (((p_pattern->0) & $f8) / 8);
+	_count = (p_pattern->0) / 8;
 	for(_i = 1: _i <= _count: _i++) {
 	!for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
 		_token = p_pattern + _i + _i;
@@ -1590,7 +1590,7 @@ Array guess_object-->5;
 
 #EndIf;
 
-[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _type _current_wn _old_dir_index _next_word _token_count;
+[ _ParsePattern p_pattern _parse_pointer _noun _i _j _k _word _token _type _current_wn _old_dir_index _next_word _token_count;
 	! Check if the current pattern will parse, with side effects if PHASE2
 	! _ParsePattern will return:
 	!   -1 if need to reparse
@@ -1634,12 +1634,13 @@ Array guess_object-->5;
 	while((_token_count--) > 0) {
 		pattern_pointer = pattern_pointer + 2;
 		_next_word = _parse_pointer-->2;
+		_token = pattern_pointer -> 0;
 #IfDef DEBUG_PARSEPATTERN;
-		print "  TOKEN: ", pattern_pointer -> 0, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+		print "  TOKEN: ", _token;, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
 		scope_stage = 0;
-		_type = ((pattern_pointer -> 0) & $0f);
+		_type = _token & $0f;
 !		if(_type == TT_END) {
 !		}
 
@@ -1659,7 +1660,7 @@ Array guess_object-->5;
 		}
 
 #IfDef DEBUG_PARSEPATTERN;
-		print "Calling ParseToken: token ", pattern_pointer->0," type ", (pattern_pointer->0) & $f, ", data ", (pattern_pointer + 1) -> 0,"^";
+		print "Calling ParseToken: token ", _token," type ", _type & $f, ", data ", pattern_pointer -> 1,"^";
 #EndIf;
 		_current_wn = wn;
 		_old_dir_index = selected_direction_index;
@@ -1684,7 +1685,8 @@ Array guess_object-->5;
         }
 
 		! the parse routine can change wn, so update _parse_pointer
-		_parse_pointer = parse + 2 + 4 * (wn - 1);
+!		_parse_pointer = parse + 2 + 4 * (wn - 1);
+		_parse_pointer = parse + 4 * wn - 2; ! Shorter than parse + 2 + 4 * (wn - 1)
 
 		switch(_noun) {
 		GPR_FAIL:
@@ -1699,7 +1701,7 @@ Array guess_object-->5;
 				}
 				return _current_wn - 1;
 			}
-			if(pattern_pointer->0 == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) {
+			if(_token == TOKEN_FIRST_PREP or TOKEN_MIDDLE_PREP) {
 				! First or in the middle of a list of alternative prepositions
 #IfDef DEBUG_PARSEPATTERN;
 				print "Preposition failed, but more options available so reparsing^";
@@ -1754,7 +1756,7 @@ Array guess_object-->5;
 				}
 			} else {
 				if(parser_phase == PHASE2) {
-					if(pattern_pointer->0 == TOKEN_SINGLE_PREP or TOKEN_LAST_PREP) {
+					if(_token == TOKEN_SINGLE_PREP or TOKEN_LAST_PREP) {
 						PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 					}
 				}
@@ -1763,16 +1765,17 @@ Array guess_object-->5;
 		GPR_PREPOSITION:
 			! advance until the end of the list of prepositions
 #IfDef DEBUG_PARSEPATTERN;
-			print "-- preposition mached ", pattern_pointer, " ", pattern_pointer->0, "^";
+			print "-- preposition mached ", pattern_pointer, " ", _token, "^";
 #Endif;
-			_type = ((pattern_pointer -> 0) & $0f);
+!			_type = ((pattern_pointer -> 0) & $0f); ! Already set
 			while(_token_count > 0 && _type ~= TT_PARSE_ROUTINE &&
-				(pattern_pointer->0 ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP)) {
+				(_token ~= TOKEN_LAST_PREP or TOKEN_SINGLE_PREP)) {
 #IfDef DEBUG_PARSEPATTERN;
 			print "-- increasing pattern_pointer^";
 #Endif;
 				pattern_pointer = pattern_pointer + 2;
-				_type = ((pattern_pointer -> 0) & $0f);
+				_token = pattern_pointer -> 0;
+				_type = _token & $0f;
 				_token_count--;
 			}
 		GPR_MULTIPLE:
@@ -2201,7 +2204,7 @@ Array guess_object-->5;
 			! _i is the token we stopped at
             _i = (_best_pattern-> (wn*2)) & $0f;
             ! check for end of pattern (TT_END in GV2)
-			if((((_best_pattern-> 0) & $f8) / 8) == (wn - 1)) _i = TT_END;
+			if((_best_pattern-> 0) / 8 == wn - 1) _i = TT_END;
 			if(parser_unknown_noun_found ~= 0 &&
 				parser_unknown_noun_found-->0 == 0) {
 				! this is not a dictionary word.
