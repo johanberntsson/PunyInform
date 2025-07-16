@@ -103,19 +103,20 @@ System_file;
 	rfalse;
 ];
 
-[ _PrintPatternSyntax p_pattern p_noun _num_preps _token _type _data _i _count;
+[ _PrintPatternSyntax p_pattern p_noun _num_preps _token _type _data _i _count _token_value;
 	! write what pattern we expected, something like:
 	! "I think you wanted to say "put all in something". Please try again."
 	PrintMsg(MSG_PARSER_BAD_PATTERN_PREFIX);
 	print (verbname) verb_word;
-	_count = (((p_pattern->0) & $f8) / 8);
+	_count = (p_pattern->0) / 8;
 	for(_i = 1: _i <= _count: _i++) {
 !	for(_token = p_pattern + 3: _token->0 ~= TT_END: _token = _token + 3) {
 		_token = p_pattern + _i + _i;
-		_type = (_token -> 0) & $0f;
-		_data = (_token + 1) -> 0;
+		_token_value = _token -> 0;
+		_type = _token_value & $0f;
+		_data = _token -> 1;
 		! check if this is a new list of prepositions
-		if(_token->0 == TOKEN_FIRST_PREP or TOKEN_SINGLE_PREP) _num_preps = 0;
+		if(_token_value == TOKEN_FIRST_PREP or TOKEN_SINGLE_PREP) _num_preps = 0;
 		if(_type == TT_PREPOSITION) {
 			! only write the first item in a list of alternative prepositions
 			if(_num_preps == 0) print " ", (address) #adjectives_table-->_data;
@@ -362,14 +363,14 @@ System_file;
 	}
 ];
 
-[ _PrintGrammarPattern p_pattern _i _action_number _action _action_reverse _token_top _token_next _token_bottom
+[ _PrintGrammarPattern p_pattern _i _action_number _action _token_top _token_next _token_bottom
 		_val _data _count;
 	! action number is the first two bytes
 	_action_number = p_pattern-->0;
 !	p_pattern = p_pattern + 2;
-	_count = (_action_number & $f800) / 2048;
+	_count = _action_number / 2048;
 	_action = _action_number & $3ff;
-	_action_reverse = (_action_number & $400 ~= 0);
+!	_action_reverse = (_action_number & $400 ~= 0);
 !	print "Action#: ", _action, " Reverse: ", _action_reverse, "^";
 	print "Action#: ", _action, " Tokens: ", _count, "^";
 
@@ -1098,8 +1099,8 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		p_parse_pointer = _parse_plus_2 + 4 * (wn - 1);
 		p_pattern_pointer = 0;
 	} else {
-		_token = (p_pattern_pointer -> 0);
-		_token_data = (p_pattern_pointer + 1) -> 0;
+		_token = p_pattern_pointer -> 0;
+		_token_data = p_pattern_pointer -> 1;
 	}
 	_token_type = _token & $0f;
 	if(_token_type ~= TT_PREPOSITION or TT_SCOPE) {
@@ -1614,10 +1615,17 @@ Array guess_object-->5;
 	parser_all_except_object = 0;
 	selected_direction_index = 0;
 	selected_direction = 0;
-	_token_count = (((p_pattern --> 0) & $f800) / 2048);
-	action = (p_pattern --> 0) & $03ff;
+	_i = p_pattern --> 0;
+#Ifv5;
+	@log_shift _i (-11) -> _token_count; ! Divide by 2048
+#Ifnot;
+	_token_count = _i / 2048;
+#Endif;	
+	action = _i & $03ff;
 	action_to_be = action; ! compatibility (referenced in DM4 for ChooseObjects)
-	action_reverse = ((p_pattern --> 0) & $400 ~= 0);
+	action_reverse = false;
+	if(_i & $400)
+		action_reverse = true;
 	phase2_necessary = PHASE2_SUCCESS;
 
 #IfDef DEBUG_PARSEPATTERN;
