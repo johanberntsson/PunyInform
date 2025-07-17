@@ -1623,6 +1623,11 @@ Array guess_object-->5;
 #Endif;	
 	action = _i & $03ff;
 	action_to_be = action; ! compatibility (referenced in DM4 for ChooseObjects)
+#Ifdef GRAMMAR_META_FLAG;
+	meta = false;
+	if(action <= #highest_meta_action_number)
+		meta = true;
+#Endif;
 	action_reverse = false;
 	if(_i & $400)
 		action_reverse = true;
@@ -2299,6 +2304,7 @@ Array guess_object-->5;
 	}
 
 #Ifdef GRAMMAR_META_FLAG;
+	meta = false;
 	if(action <= #highest_meta_action_number)
 		meta = true;
 #Endif;
