@@ -13,20 +13,19 @@ Let's go!
 
 > wait until xyzzy
 I only understood you as far as "wait until" but then you lost me.
-The time is: 0:5
 
 > wait xyzzy
 I didn't understand that number.
 
 > wait two
 Time passes.
+The time is: 0:5
 The time is: 0:6
-The time is: 0:7
 Let's go!
 
 > wait
 Let's go!
-The time is: 0:8
+The time is: 0:7
 
 > quit
 Are you sure you want to quit? yes
