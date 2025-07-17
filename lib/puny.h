@@ -292,7 +292,7 @@ Constant ONE_SPACE_STRING = " ";
 			} else {
 				_PrintSpacesOrMoveBack(13, SCORE__TX);
 #Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-				parser_one = 8;
+				parser_one = 6;
 #Endif;
 			}
 			print status_field_1;
