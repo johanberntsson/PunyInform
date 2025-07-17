@@ -2306,11 +2306,12 @@ Array guess_object-->5;
 		}
 	}
 
-#Ifdef GRAMMAR_META_FLAG;
-	meta = false;
-	if(action <= #highest_meta_action_number)
-		meta = true;
-#Endif;
+! This shouldn't be needed, now that we do this in _ParsePattern
+!#Ifdef GRAMMAR_META_FLAG;
+!	meta = false;
+!	if(action <= #highest_meta_action_number)
+!		meta = true;
+!#Endif;
 	
 	
 	if(actor ~= player) {
