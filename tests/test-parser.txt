@@ -104,7 +104,7 @@ Her: nothing
 Them: nothing
 
 > get ladder and
-I think you wanted to say "get something". Please try again.
+I only understood you as far as "get ladder" but then you lost me.
 
 > kiss ladder
 You can only do that to something animate.
@@ -131,7 +131,7 @@ You are empty handed.
 You can't use multiple objects with that verb.
 
 > i blue
-I think you wanted to say "inventory". Please try again.
+I only understood you as far as "i" but then you lost me.
 
 > open all
 You can't use multiple objects with that verb.

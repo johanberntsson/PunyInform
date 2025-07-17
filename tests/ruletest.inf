@@ -67,7 +67,7 @@ Class Room
 	with
 		print_trace [ prop;
 #Ifdef DEBUG;
-			print " *** ", (name) self, ".", (string) prop, ": action is ", (DebugAction) action, "/", action;
+			print " *** ", (name) self, ".", (string) prop, ": action is ", (DebugAction) action;
 			if(noun ~= 0) print " noun=", (NounParameter) noun;
 			if(second ~=0) print " second=", (NounParameter) second;
 			print "^     consult ", consult_from, "/", consult_words;

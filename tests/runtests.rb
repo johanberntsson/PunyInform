@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-
-$inform_compiler = "inform"
+$inform_compiler = "../Inform6/inform"
+#$inform_compiler = "../Inform6/inform \\\$GRAMMAR_META_FLAG=1"
 $is_windows = (ENV['OS'] == 'Windows_NT')
 
 def checkforfailures() 

@@ -1,3 +1,4 @@
+
 > john, take aim
 grammar 3 0
 "Okay, I'm aiming."
@@ -14,7 +15,7 @@ There is no reply.
 
 > john, take me
 grammar 3 0
-order 20: inv 25 take 20
+order ##Take
 John has better things to do.
 
 > john, jump
