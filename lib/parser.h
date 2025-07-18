@@ -2137,12 +2137,13 @@ Array guess_object-->5;
 				)
 				)
 			{
+			parser_two = pattern_pointer;
 			_best_score = _score;
 			_best_pattern = _pattern;
 			_best_phase2 = phase2_necessary;
 			_best_second = second; ! need to save for multiexcept in phase 2
-			_selected_direction = wn; ! should be _best_wn
-			parser_two = pattern_pointer;
+			_selected_direction = wn; ! _best_wn
+			_selected_direction_index = pattern_pointer;! _best_pattern_pointer
 #IfDef DEBUG_PARSEANDPERFORM;
 		print "### PHASE 1: new best pattern ", _i, " ", _best_phase2, " ", _score, "^";
 #EndIf;
@@ -2190,7 +2191,8 @@ Array guess_object-->5;
 	}
 	if(player ~= actor) jump _treat_bad_line_as_conversation;
 	if(_best_score < parse->1) {
-		wn = _selected_direction; ! restore _best_wn
+		wn = _selected_direction; ! _best_wn
+		pattern_pointer = _selected_direction_index; ! _best_pattern_pointer
 		if(_best_score == 0) {
 			PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 		} else if(_best_phase2 == PHASE2_DISAMBIGUATION) {
@@ -2207,16 +2209,11 @@ Array guess_object-->5;
 			! another context but not right now. Reasons may
 			! be that it matches something that isn't in scope,
 			! or this word isn't a noun word.
-			!
-			! _i is the token we stopped at
-			_i = (_best_pattern-> ((wn - 1) * 2)) & $0f;
-			! check for end of pattern (TT_END in GV2)
-			if((_best_pattern-> 0) / 8 == wn - 1) _i = TT_END;
 			if(parser_unknown_noun_found ~= 0 &&
 				parser_unknown_noun_found-->0 == 0) {
 				! this is not a dictionary word.
 				PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
-			} else if(_i == TT_END) {
+			} else if((wn - 1) == parse->1 ) {
 				! the sentence matched the pattern
 				if(parse-->(wn + wn - 1) == ALL_WORD) {
 					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
@@ -2225,8 +2222,11 @@ Array guess_object-->5;
 				}
 			} else {
 				! we didn't match the pattern at all
-				!if(_i == TT_PREPOSITION or TT_OBJECT) {
-				if(_i == TT_PREPOSITION) {
+				_word_data = (pattern_pointer -> 0) & $0f; ! next token type
+				_i = (pattern_pointer - _best_pattern) / 2; ! # stop token
+				_j = (_best_pattern-> 0) / 8; ! # tokens in pattern
+				!print "type ", _word_data, " token ", _i, " tokens ", _j, "^";
+				if(_i < _j && _word_data == TT_PREPOSITION ) {
 					! missing preposition
 					_PrintPatternSyntax(_best_pattern);
 				} else {
