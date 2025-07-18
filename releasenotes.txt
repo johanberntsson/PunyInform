@@ -13,6 +13,7 @@ Upcoming release:
 - Fixed: The cheap scenery object didn't have the reactive attribute in games with OPTIONAL_MANUAL_REACTIVE, which made it not reset itobj and themobj when the player changed rooms.
 - New print rule: ObjIs, prints e.g. "the ball is" or "the barrels are".
 - Fixed too long statusline when screen width was 55+ and OPTIONAL_SL_NO_MOVES was defined (Issue #144).
+- Changed RemoveSub, so "get me from [obj]" is transformed to <<Exit [obj]>>
 
 =======
 v5.14.1: bug fix release (25 June 2025)

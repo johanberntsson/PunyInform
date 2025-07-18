@@ -635,6 +635,8 @@ Array _PutOnMessages -->
 ];
 
 [ RemoveSub _i;
+	if(noun == player)
+		<<Exit second>>;
 	_i = parent(noun);
 	if (_i has container && _i hasnt open) { PrintMsg(MSG_REMOVE_CLOSED, _i); rtrue; }
 	if (_i ~= second) return MSG_REMOVE_NOT_HERE;
