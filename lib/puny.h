@@ -1216,6 +1216,7 @@ Include "parser.h";
 ];
 
 [ BeforeRoutines;
+	if(real_location == 0) rfalse;
 
 	GetScopeCopy(player, REACT_BEFORE_REASON); ! later used by _RunReact
 
@@ -1256,7 +1257,7 @@ Include "parser.h";
 #IfV3;
 	if(debug_flag & 1) print "(", (name) real_location, ").before()^";
 #EndIf;
-#EndIf;
+#EndIf;	
 	if(real_location.&before) {
 		if(RunRoutines(real_location, before)) rtrue;
 	}
