@@ -540,6 +540,7 @@ Global receive_action;
 Global run_after_routines_msg;
 Global run_after_routines_arg_1;
 Global no_implicit_actions;         ! Don't implicitly do things.
+Global caps_mode;
 #Ifdef OPTIONAL_MANUAL_SCOPE_BOOST;
 Global react_before_in_scope;
 Global react_after_in_scope;

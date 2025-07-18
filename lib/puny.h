@@ -512,6 +512,9 @@ Constant ONE_SPACE_STRING = " ";
 ];
 
 [ _PrintObjName p_obj p_form;
+	caps_mode = false;
+	if(p_form == FORM_CDEF)
+		caps_mode = true;
 	if(p_obj hasnt proper) {
 		if(p_form == FORM_CDEF) {
 			print "The ";
@@ -2189,7 +2192,12 @@ Include "parser.h";
 Object selfobj "you"
 	with
 		name 'me' 'myself' 'self',
-		short_name  "yourself",
+!		short_name  "yourself",
+		short_name  [; 
+			if(caps_mode) { print "You"; rtrue; }
+			print "yourself";
+			rtrue;
+		],
 		description "As good-looking as ever.",
 		before NULL,
 		after NULL,
