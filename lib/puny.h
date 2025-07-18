@@ -501,6 +501,10 @@ Constant ONE_SPACE_STRING = " ";
 
 
 [ PrintShortName o;
+	if(caps_mode == 2) 
+		caps_mode = true;
+	else 
+		caps_mode = false;
 	if (o == 0) { print "nothing"; rtrue; }
 	switch (metaclass(o)) {
 	  Routine:  print "<routine ", o, ">"; rtrue;
@@ -514,7 +518,7 @@ Constant ONE_SPACE_STRING = " ";
 [ _PrintObjName p_obj p_form;
 	caps_mode = false;
 	if(p_form == FORM_CDEF)
-		caps_mode = true;
+		caps_mode = 2;
 	if(p_obj hasnt proper) {
 		if(p_form == FORM_CDEF) {
 			print "The ";
