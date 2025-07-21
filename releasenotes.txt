@@ -16,7 +16,7 @@ Upcoming release:
 - Changed RemoveSub, so "get me from [obj]" is transformed to <<Exit [obj]>>
 - New feature: The short_name routine of an object can decide how to print the name based on if the name printing is done in the context of a (The) print rule. The short_name routine does this by checking if caps_mode == true.
 - The default player object is now printed as "You" when printed with a (The) print rule. (Issues #139, #145)
-- Fixed: If you invoke an action in Initalise, and compile with Strict mode, you would get a message for a programming error, since real_location wasn't set, and the Before stage would try to access properties of this object. Now the Before stage will be skipped if real_location isn't set. 
+- Fixed: If you invoke an action in Initalise, and compile with Strict mode, you would get a message for a programming error, since real_location wasn't set, and BeforeRoutines() and AfterRoutines() would try to access properties of this object. Now these routines will be skipped if real_location isn't set.
 
 =======
 v5.14.1: bug fix release (25 June 2025)

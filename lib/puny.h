@@ -1277,6 +1277,7 @@ Include "parser.h";
 [ AfterRoutines;
 	! react_after - Loops over the scope to find possible react_before routines
 	! to run in each object, if it's found stop the action by returning true
+	if(real_location == 0) rfalse;
 
 	GetScopeCopy(player, REACT_AFTER_REASON); ! later used by _RunReact
 
