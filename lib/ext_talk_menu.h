@@ -295,33 +295,7 @@ Global clr_talk_menu = CLR_CURRENT;
 			_index = _index - 2;
 		}
 		_val = p_array-->_index;
-		if(_val == TM_END) {
-			if(_find_topic < 29) {
-				! Signal failure, as the topic was not found
-				if(p_value == 1) rtrue;
-				rfalse;
-			}
-			if(_stash_array) {
-				p_array = _stash_array;
-				_index = 0;
-				_stash_array = 0;
-			} else {
-				! The topic wasn't found, or we are in multi mode
-				if(p_value == 1) rtrue; ! When trying to read a status, reaching the end means failure 
-				return _success; ! The topic wasn't found, or we are in multi mode
-			}
-		} else if(_val == TM_MAYBE_ADD_LIST) {
-			if(_find_topic < 29) {
-				! Signal failure, as the topic was not found
-				if(p_value == 1) rtrue;
-				rfalse;
-			}
-			_index = _index + 2;
-			_curr_id = p_array-->_index;
-			_stash_array = p_array + _index + _index;
-			p_array = _curr_id;
-			_index = -1;
-		} else if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
+		if(_val == TM_INACTIVE or TM_ACTIVE or TM_STALE) {
 			if(_find_topic < 29) {
 				if(_find_topic-- == 1) jump _tm_found_topic;
 				continue;
@@ -349,6 +323,34 @@ Global clr_talk_menu = CLR_CURRENT;
 					_index = _index + 3;
 					break;
 
+				}
+			}
+		} else if(_val == TM_MAYBE_ADD_LIST or TM_END) {
+			if(_val == TM_MAYBE_ADD_LIST) {
+				if(_find_topic < 29) {
+					! Signal failure, as the topic was not found
+					if(p_value == 1) rtrue;
+					rfalse;
+				}
+				_index = _index + 2;
+				_curr_id = p_array-->_index;
+				_stash_array = p_array + _index + _index;
+				p_array = _curr_id;
+				_index = -1;
+			} else  { ! _val == TM_END
+				if(_find_topic < 29) {
+					! Signal failure, as the topic was not found
+					if(p_value == 1) rtrue;
+					rfalse;
+				}
+				if(_stash_array) {
+					p_array = _stash_array;
+					_index = 0;
+					_stash_array = 0;
+				} else {
+					! The topic wasn't found, or we are in multi mode
+					if(p_value == 1) rtrue; ! When trying to read a status, reaching the end means failure 
+					return _success; ! The topic wasn't found, or we are in multi mode
 				}
 			}
 		}
