@@ -1737,9 +1737,9 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 	print "see ";
 ];
 
-[ Look _obj _top_ceil _ceil _describe_room
-	_you_can_see_1 _you_can_see_2 _desc_prop _last_level _action;
-	PrintMsg(MSG_LOOK_BEFORE_ROOMNAME);
+[ Look _obj _top_ceil _ceil _describe_room _you_can_see_1 _you_can_see_2 
+		_desc_prop _last_level _action;
+	if(input_action == ##Look) PrintMsg(MSG_LOOK_BEFORE_ROOMNAME);
 	if((lookmode == 1 && location hasnt visited) || lookmode == 2) _describe_room = true;
 #IfV5;
 	style bold;
@@ -2109,6 +2109,8 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 
 	if(AfterRoutines()) rtrue;
 	if(keep_silent) rtrue;
+	
+	PrintMsg(MSG_LOOK_BEFORE_ROOMNAME);
 	Look();
 ];
 

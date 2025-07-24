@@ -1086,8 +1086,10 @@ Constant ONE_SPACE_STRING = " ";
 		location = thedark;
 	} else {
 		location = real_location;
-		if(_old_darkness && p_silent == false)
+		if(_old_darkness && p_silent == false) {
+			new_line;
 			<Look>;
+		}
 	}
 ];
 
