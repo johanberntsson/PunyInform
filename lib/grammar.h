@@ -1789,15 +1789,22 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 		print (the) _obj, ")";
 		_obj = parent(_obj);
 	}
+	newline_flag = false;
 	while(_ceil ~= player or 0) {
 		if(_describe_room) {
 			if(_ceil == location) {
 				new_line;
 				PrintOrRun(_ceil, description);
+				newline_flag = true;
 			} else if(_ceil.inside_description ~= 0 or NULL) {
 				new_line;
 				PrintOrRun(_ceil, inside_description);
+				newline_flag = true;
+			} else if(newline_flag == false) {
+				new_line;
+				newline_flag = true;
 			}
+
 		} else if(_ceil == location)
 			new_line;
 
@@ -1810,6 +1817,7 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 					if(PrintOrRun(_obj, describe, 0)) {
 						give _obj ~workflag;
 						also_flag = true;
+						newline_flag = true;
 						continue;
 					}
 				}
@@ -1830,9 +1838,11 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 				}
 				if(_obj.&_desc_prop && (_obj hasnt moved || _desc_prop == when_off)) { ! Note: when_closed in an alias of when_off
 					give _obj ~workflag;
+					if(newline_flag == false) new_line;
 					new_line;
 					PrintOrRun(_obj, _desc_prop);
 					also_flag = true;
+					newline_flag = true;
 				}
 			}
 
@@ -1844,12 +1854,13 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 			_you_can_see_1 = _ListObjsInOnMsg;
 			_you_can_see_2 = ".^";
 		}
+		if(newline_flag == false) new_line;
 		newline_flag = true;
 		if(PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
 
 
 #IfDef OPTIONAL_PRINT_SCENERY_CONTENTS;
-		newline_flag = true;
+!		newline_flag = true;
 		objectloop(_obj in _ceil)
 			if(_obj has scenery &&
 					(_obj has supporter ||
