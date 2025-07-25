@@ -23,6 +23,7 @@ Upcoming release:
 - When listing objects with PrintContents, extend the rule that we don't show a container/supporter which the player is in, to we don't show a container/supporter which indirectly contains the player.
 - Dropped global newline_flag and made Look routine shorter, simpler and faster.
 - Changed the way talk_menu detects if it's used with PunyInform or the standard library, as old way broke if flags extensions was also used.
+- Added code to howto/colours.inf and howto/talk_menu-inf to avoid a bug in some interpreters, where default background colour is not restored on restart.
 
 =======
 v5.14.1: bug fix release (25 June 2025)
