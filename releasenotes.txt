@@ -20,6 +20,7 @@ Upcoming release:
 - Fixed: If inside a closed container, with no inside_description, we lacked a newline before listing the contents. (Issue #150).
 - Changed so MSG_LOOK_BEFORE_ROOMNAME (doesn't normally print anything, typically used to print a newline for authors who want that) is only printed in two scenarios: (A) when the player typed something that was translated to a ##Look action, and (B) when the player moved using the ##Go action. From now on, calls to <Look> in code don't cause this message to be printed.
 - Changed _UpdateDarkness so a newline is printed before <Look> is called, when a lamp is switched on. (Issue #148)
+- When listing objects with PrintContents, extend the rule that we don't show a container/supporter which the player is in, to we don't show a container/supporter which indirectly contains the player.
 
 =======
 v5.14.1: bug fix release (25 June 2025)

@@ -894,7 +894,7 @@ Constant ONE_SPACE_STRING = " ";
 
 [ _PrintContentsShowObj p_obj;
 	! Return true if object should be shown in list, false if not
-	if(p_obj ~= parent(player) && ! don't print container when player in it
+	if(IndirectlyContains(p_obj, player) == false && ! don't print container when player in it 
 			(pc_depth > 0 || c_style & WORKFLAG_BIT == 0 || p_obj has workflag) &&
 	! Hide concealed and scenery unless taking inventory
 			(action == ##Inv || (p_obj hasnt concealed && p_obj hasnt scenery)))
