@@ -19,7 +19,26 @@ Constant INITIAL_LOCATION_VALUE = Library;
 
 Include "globals.h";
 
+#Ifv5;
+Replace RestartSub;
+#Endif;
+
 Include "puny.h";
+
+#Ifv5;
+! Make sure we go back to the default colours, as a workaround
+! for a bug in some interpreters, where the background doesn't
+! automatically revert to its default colour on restart.
+[ RestartSub;
+	PrintMsg(MSG_RESTART_CONFIRM);
+	if(YesOrNo()) {
+		@set_colour CLR_DEFAULT CLR_DEFAULT;
+		ClearScreen(WIN_ALL);
+		@restart;
+		return MSG_RESTART_FAILED;
+	}
+];
+#Endif;
 
 ! Declare the colour constants we need to conveniently switch colours during the game
 Constant MY_DEFAULT_FG = CLR_CYAN;

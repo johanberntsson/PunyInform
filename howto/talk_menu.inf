@@ -85,7 +85,28 @@ Include "ext_talk_menu.h"; ! Requires ext_flags.h *IF* you set flags
 ];
 
 #Ifndef USEINFORM;
+
+#Ifv5;
+Replace RestartSub;
+#Endif;
+
 Include "puny.h";
+
+#Ifv5;
+! Make sure we go back to the default colours, as a workaround
+! for a bug in some interpreters, where the background doesn't
+! automatically revert to its default colour on restart.
+[ RestartSub;
+	PrintMsg(MSG_RESTART_CONFIRM);
+	if(YesOrNo()) {
+		@set_colour CLR_DEFAULT CLR_DEFAULT;
+		ClearScreen(WIN_ALL);
+		@restart;
+		return MSG_RESTART_FAILED;
+	}
+];
+#Endif;
+
 #Endif;
 
 ! Note that flags used in talk_array must have id 32-299
@@ -202,6 +223,8 @@ Object -> Josh "Josh"
 	has proper animate;
 
 [Initialise ozmoo_colours;
+	ozmoo_colours = false;
+#Ifdef PUNYINFORM_MAJOR_VERSION;
 #Ifv5;
 	if(OzmooColoursAvailable())
 		ozmoo_colours = true;
@@ -222,7 +245,7 @@ Object -> Josh "Josh"
 		ClearScreen(WIN_ALL);
 	}
 #Endif;
-
+#Endif;
 
 #Ifdef light;
 	give player light;

@@ -141,7 +141,6 @@ Constant RUNTIME_ERRORS = 2;
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL = 1;
 Constant RTE_VERBOSE = 2;
-Constant TM_NOT_PUNY;
 #Endif;
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 Constant TM_ERR = "^[Talk_menu error #";
@@ -759,10 +758,10 @@ Array _TMLines --> 10;
 		@erase_window 1;
 		@split_window 0;
 		@set_window 0;
-		#Ifdef TM_NOT_PUNY;
-			gg_statuswin_cursize = 0;
-		#Ifnot;
+		#Ifdef PUNYINFORM_MAJOR_VERSION;
 			statusline_current_height = 0;
+		#Ifnot;
+			gg_statuswin_cursize = 0;
 		#Endif;
 	}
 #Endif;
@@ -771,12 +770,12 @@ Array _TMLines --> 10;
 ];
 
 [ TalkSub;
-#Ifdef TM_NOT_PUNY;
-   if (noun==player) { L__M(##Tell, 1, noun); rtrue; }
-   if (~~(noun provides talk_array)) { L__M(##Show, 2, second); rtrue; }
-#Ifnot;
+#Ifdef PUNYINFORM_MAJOR_VERSION;
    if (noun==player) { PrintMsg(MSG_TELL_PLAYER); rtrue; }
    if (~~(noun provides talk_array)) { second = noun; PrintMsg(MSG_SHOW_DEFAULT); rtrue; }
+#Ifnot;
+   if (noun==player) { L__M(##Tell, 1, noun); rtrue; }
+   if (~~(noun provides talk_array)) { L__M(##Show, 2, second); rtrue; }
 #Endif;
    RunTalk(noun);
    AfterRoutines();
