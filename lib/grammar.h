@@ -1805,8 +1805,10 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 				newline_flag = true;
 			}
 
-		} else if(_ceil == location)
+		} else if(_ceil == location) {
 			new_line;
+			newline_flag = true;
+		}
 
 		also_flag = false;
 		! write intial and describe messages in a new paragraph
