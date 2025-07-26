@@ -918,7 +918,7 @@ Verb 'yes' 'y//'
 	<EmptyT noun FAKE_D_OBJ>;
 ];
 
-[ EmptyTSub _i _recipient;
+[ EmptyTSub _i _n _obj _recipient;
 	if(noun == second) return MSG_EMPTY_WOULDNT_ACHIEVE;
 	if(noun hasnt container) { PrintMsg(MSG_EMPTY_NOT_CONTAINER, noun); rtrue; }
 	if(noun hasnt open) {
@@ -929,13 +929,20 @@ Verb 'yes' 'y//'
 		_recipient = DirPropToFakeObj(selected_direction);
 	else
 		_recipient = second;
-	_i = child(noun);
-	if(_i == 0) { PrintMsg(MSG_EMPTY_ALREADY_EMPTY, noun); rtrue; }
-	while(_i ~= 0) {
-		if(keep_silent == 0) print (name) _i, ": ";
-		<Transfer _i _recipient>;
-		if(_i in noun || _i in player) rtrue;
-		_i = child(noun);
+	_obj = child(noun);
+	if(_obj == 0) { PrintMsg(MSG_EMPTY_ALREADY_EMPTY, noun); rtrue; }
+	while(_obj ~= 0 && _n<MAX_SCOPE) {
+		scope_copy-->_n = _obj;
+		_n++;
+		_obj = sibling(_obj);
+	}
+	for(_i=0: _i<_n: _i++) {
+		_obj = scope_copy-->_i;
+		if(_obj in noun) {
+			if(keep_silent == 0) print (name) _obj, ": ";
+			<Transfer _obj _recipient>;
+			if(parent(_obj) == noun or player) rtrue;
+		}
 	}
 	run_after_routines_msg = 1;
 ];

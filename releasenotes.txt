@@ -24,6 +24,7 @@ Upcoming release:
 - Dropped global newline_flag and made Look routine shorter, simpler and faster.
 - Changed the way talk_menu detects if it's used with PunyInform or the standard library, as old way broke if flags extensions was also used.
 - Added code to howto/colours.inf and howto/talk_menu-inf to avoid a bug in some interpreters, where default background colour is not restored on restart.
+- Fixed: If the player asks to empty the SACK_OBJECT, and the player is at max capacity, an object is placed in the sack object, and is subsequently removed along with everything else. (Issue #146)
 
 =======
 v5.14.1: bug fix release (25 June 2025)
