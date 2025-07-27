@@ -979,7 +979,11 @@ Constant ONE_SPACE_STRING = " ";
 			jump _isnt_present;
 		} else {
 			_j = _obj.&found_in;
+#Ifv5;
+			@log_shift _len (-1) -> _len; ! Divide by 2
+#Ifnot;
 			_len = _len / 2;
+#Endif;
 			_len = _len - 1;
 ._check_next_value;
 				_o = _j-->_len;
