@@ -516,7 +516,7 @@ Verb 'wear'
 ! 7: Second isn't supporter
 ! 8: Check if second is full
 ! 9: Default (success) message
-Array _InsertMessages -->
+Array _InsertMessages static -->
 	MSG_INSERT_ALREADY
 	MSG_INSERT_ITSELF
 	MSG_INSERT_NOT_OPEN
@@ -617,7 +617,7 @@ Array _InsertMessages -->
 ! 7: Second isn't supporter
 ! 8: Check if second is full
 ! 9: Default (success) message
-Array _PutOnMessages -->
+Array _PutOnMessages static -->
 	MSG_PUTON_ALREADY
 	MSG_PUTON_ITSELF
 	0
@@ -1253,25 +1253,21 @@ Verb meta 'quit' 'q//'
 	inversion;
 	print " PunyInform v", PUNYINFORM_MAJOR_VERSION, (char) '.', PUNYINFORM_MINOR_VERSION;
 	if(PUNYINFORM_PATCH_VERSION)
-		print ".", PUNYINFORM_PATCH_VERSION;
+		print (char) '.', PUNYINFORM_PATCH_VERSION;
 #Ifdef PUNYINFORM_VERSION_SUFFIX;
 	print (string) PUNYINFORM_VERSION_SUFFIX;
 #EndIf;
-	_i = 0;
+	print (char) ' ';
 #IfDef STRICT_MODE;
 	#IfV5;
-	print " S";
-	_i = 1;
+	print (char) 'S';
 	#EndIf;
 #EndIf;
 #IfDef DEBUG;
-	if(_i == 0) print " ";
-	print "D";
-	_i = 1;
+	print (char) 'D';
 #EndIf;
 #IfTrue RUNTIME_ERRORS > 0;
-	if(_i == 0) print " ";
-	print "R";
+	print (char) 'R';
 #EndIf;
 	new_line;
 ];
