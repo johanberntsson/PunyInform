@@ -28,6 +28,8 @@ It seems to be stuck inside the box.
 > empty box
 lemon: taking lemon
 Dropped.
+banana: taking banana
+It seems to be stuck inside the box.
 
 > give apple to indians
 The Apache Indians don't seem interested.
