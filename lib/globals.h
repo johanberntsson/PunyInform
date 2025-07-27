@@ -652,7 +652,14 @@ Array parse->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! + 1 to make room for an extra wo
 ! extra arrays to be able to ask for additional info (do you mean X or Y?)
 Array buffer2->(MAX_INPUT_CHARS + 3);
 Array parse2->(2 + 4 * (MAX_INPUT_WORDS + 1));
-Array parse3->(2 + 4 * (MAX_INPUT_WORDS + 1));
+Array parse3->(2 + 4 * (MAX_INPUT_WORDS + 1)); ! Must be placed directly after parse2 (used together for empty_arr below)
+
+#Iftrue 4*MAX_INPUT_WORDS >= MAX_SCOPE;
+Constant empty_arr = parse2;
+#Ifnot;
+Array empty_arr --> MAX_SCOPE;
+#Endif;
+
 
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL  = 1;

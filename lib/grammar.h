@@ -932,16 +932,15 @@ Verb 'yes' 'y//'
 	_obj = child(noun);
 	if(_obj == 0) { PrintMsg(MSG_EMPTY_ALREADY_EMPTY, noun); rtrue; }
 	while(_obj ~= 0 && _n<MAX_SCOPE) {
-		scope_copy-->_n = _obj;
+		empty_arr-->_n = _obj;
 		_n++;
 		_obj = sibling(_obj);
 	}
 	for(_i=0: _i<_n: _i++) {
-		_obj = scope_copy-->_i;
+		_obj = empty_arr-->_i;
 		if(_obj in noun) {
 			if(keep_silent == 0) print (name) _obj, ": ";
 			<Transfer _obj _recipient>;
-			if(parent(_obj) == noun or player) rtrue;
 		}
 	}
 	run_after_routines_msg = 1;

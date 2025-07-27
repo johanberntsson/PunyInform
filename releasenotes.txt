@@ -27,6 +27,7 @@ Upcoming release:
 - Fixed: If the player asks to empty the SACK_OBJECT, and the player is at max capacity, an object is placed in the sack object, and is subsequently removed along with everything else. (Issue #146)
 - Moved arrays _InsertMessages and _PutOnMessages to static memory, to reduce dynamic memory.
 - Made code to print the banner shorter.
+- Changed so actions Empty/EmptyT don't abort the processing if one object can't be removed from the source container, or it can't be put in the target.
 
 =======
 v5.14.1: bug fix release (25 June 2025)
