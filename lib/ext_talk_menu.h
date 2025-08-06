@@ -597,7 +597,7 @@ Array _TMLines --> 10;
 	_j = 0;
 	while(_j == 0) {
 #IfV5;
-		@read_char -> _val;
+		@read_char 1 -> _val;
 
 		if(_val == 13 or 'q' or 'Q' or 'x' or 'X') {
 			@set_window 0;
