@@ -104,7 +104,7 @@ Her: nothing
 Them: nothing
 
 > get ladder and
-I think you wanted to say "get something". Please try again.
+I only understood you as far as "get ladder" but then you lost me.
 
 > kiss ladder
 You can only do that to something animate.
@@ -131,7 +131,7 @@ You are empty handed.
 You can't use multiple objects with that verb.
 
 > i blue
-I think you wanted to say "inventory". Please try again.
+I only understood you as far as "i" but then you lost me.
 
 > open all
 You can't use multiple objects with that verb.
@@ -368,8 +368,6 @@ The blue book glows annoyingly.
 > put sweater in bag
 You can't see any such thing.
 
-The blue book glows annoyingly.
-
 > i
 You're carrying an infinite bag (providing light) (which is open but empty) and
 a blue book (providing light).
@@ -405,6 +403,15 @@ I think you wanted to say "feed John something". Please try again.
 (assuming to John)
 Rule life, action Give, noun the ladder, second John, special_number 0
 John doesn't appear to be interested.
+
+> x torch
+The electric torch is currently switched off.
+
+> x torch now
+I only understood you as far as "x torch" but then you lost me.
+
+> x torch torch now
+I only understood you as far as "x torch torch" but then you lost me.
 
 > quit
 You ain't no quitter eh? yes

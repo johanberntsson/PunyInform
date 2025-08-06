@@ -76,7 +76,14 @@ Object -> John "John"
 	life [;
 	Answer:  print "answer words ", consult_words, " from ", consult_from, "^";
 	Ask: print "ask^";
-	Order: print "order ", action, ": inv ", ##Inv, " take ", ##Take, "^";
+	Order: 
+        print "order ";
+        switch(action) {
+        ##Inv: print "##Inv";
+        ##Take: print "##Take";
+        default: print action;
+        };
+        print "^";
 	],
 	before [;
 	Consult: print "consult^";

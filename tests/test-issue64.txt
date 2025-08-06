@@ -81,7 +81,7 @@ You eat the apple. Not bad.
 
   *** You have won ***
 
-In that game you scored 0 out of a possible 0, in 18 turns.
+In that game you scored 0 out of a possible 0, in 17 turns.
 
 Would you like to RESTART, RESTORE or QUIT? restore
 Enter a file name.

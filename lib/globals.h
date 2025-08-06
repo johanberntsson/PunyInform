@@ -84,7 +84,7 @@ Message fatalerror "Can't define both STATUSLINE_TIME and STATUSLINE_SCORE."
 #EndIf;
 #EndIf;
 
-Constant Grammar__Version = 2;
+Constant Grammar__Version = 3;
 Constant INDIV_PROP_START 64;
 Constant NULL         = $ffff;
 

@@ -100,6 +100,9 @@ drop all
 feed
 feed john
 feed ladder
+x torch
+x torch now
+x torch torch now
 quit
 yes
 
