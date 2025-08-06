@@ -408,7 +408,7 @@ John doesn't appear to be interested.
 The electric torch is currently switched off.
 
 > x torch now
-I only understood you as far as "x torch" but then you lost me.
+I think you wanted to say "examine something". Please try again.
 
 > x torch torch now
 I only understood you as far as "x torch torch" but then you lost me.

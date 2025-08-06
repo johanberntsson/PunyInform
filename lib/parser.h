@@ -3,7 +3,7 @@
 ! Designed to be similar, but not identical, to the Inform 6 library.
 
 ! ######################### Parser
-! PunyInform uses grammar version 2 which is easier to parse and economical
+! PunyInform uses grammar version 3 which is smaller and easy to parse
 
 System_file;
 

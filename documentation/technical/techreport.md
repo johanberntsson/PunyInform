@@ -499,7 +499,7 @@ error message if it finds such a barrier. It might be something like
 
 PunyInform uses the same dictionary and grammar formats that were
 created by Infocom, and which are also used by Inform 6. Infocom created
-two versions of the grammar tables, and we only use grammar version 2.
+two versions of the grammar tables, and we only use grammar version 3.
 
 ## Dictionary
 
@@ -512,7 +512,13 @@ byte 0 & $2 : Meta flag
 ```
 Verb number (255 - value is for "traditional Infocom reasons")
 
+## Grammar 3
+
+The GV33 format is documented here: [https://gitlab.com/DavidGriffith/inform6lib/-/issues/146](https://gitlab.com/DavidGriffith/inform6lib/-/issues/146)
+
 ## Grammar 2
+
+*Note that Grammar 1 is not used by PunyInform.*
 
 Grammar table is always located at the start of static memory (address
 pointed to by word at $0e in header). Word (Verb number) points to the
