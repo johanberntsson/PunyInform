@@ -244,7 +244,6 @@ Default MSG_LOCK_KEY_DOESNT_FIT 74;
 Default MSG_LOCK_DEFAULT 75;
 Default MSG_DISROBE_NOT_WEARING 76;
 Default MSG_DISROBE_DEFAULT 77;
-Default MSG_REMOVE_CLOSED 78;
 Default MSG_REMOVE_NOT_HERE 79;
 Default MSG_SEARCH_IN_IT_ISARE 80;
 Default MSG_SEARCH_ON_IT_ISARE 81;
@@ -525,9 +524,7 @@ Constant SKIP_MSG_ASKFOR_DEFAULT;
 #Iffalse MSG_INSERT_NOT_OPEN < 1000;
 #Iffalse MSG_GO_DOOR_CLOSED < 1000;
 #Iffalse MSG_EMPTY_IS_CLOSED < 1000;
-#Iffalse MSG_REMOVE_CLOSED < 1000;
 Constant SKIP_MSG_ENTER_NOT_OPEN;
-#Endif;
 #Endif;
 #Endif;
 #Endif;
@@ -806,7 +803,7 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #Ifndef SKIP_MSG_ENTER_NOT_OPEN;
 	MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN,
-	MSG_GO_DOOR_CLOSED, MSG_EMPTY_IS_CLOSED, MSG_REMOVE_CLOSED:
+	MSG_GO_DOOR_CLOSED, MSG_EMPTY_IS_CLOSED:
 	! p_arg_1 = the object which is closed, thus blocking the player's action.
 		"You can't, since ", (ObjIs) p_arg_1, " closed.";
 #Endif;

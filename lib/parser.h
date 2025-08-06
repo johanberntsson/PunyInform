@@ -2313,6 +2313,7 @@ Array guess_object-->5;
 !		meta = true;
 !#Endif;
 	
+	_i = multiple_objects --> 0;
 	
 	if(actor ~= player) {
 		! The player's "orders" property can refuse to allow conversation
@@ -2330,7 +2331,7 @@ Array guess_object-->5;
 			PrintMsg(MSG_PARSER_BE_MORE_SPECIFIC);
 			rtrue;
 		}
-		if(multiple_objects --> 0 > 1) {
+		if(_i > 1) { ! _i = multiple_objects --> 0
 			! Orders to NPCs should only be single objects
 			PrintMsg(MSG_PARSER_NO_MULTIPLES_FOR_NPC);
 			rtrue;
@@ -2355,7 +2356,7 @@ Array guess_object-->5;
 
 	action_to_be = NULL; ! We're done with parsing, and the action is now final
 
-	if(multiple_objects --> 0 == 0) {
+	if(_i == 0) { ! _i = multiple_objects --> 0
 		! single action
 		if(inp1 > 1) PronounNotice(noun);
 		ResetInputAction(-2); ! Allow input_action to be set by PerformPreparedAction
@@ -2373,7 +2374,7 @@ Array guess_object-->5;
 			_action = action;
 			_selected_direction = selected_direction;
 			_selected_direction_index = selected_direction_index;
-			for(_noun = 1: _noun <= multiple_objects --> 0 : _noun++) {
+			for(_noun = 1: _noun <= _i : _noun++) {
 				action = _action; ! This may have been altered by a previous interation for multitokens
 				inp1 = multiple_objects --> _noun;
 				noun = inp1;
@@ -2423,7 +2424,7 @@ Array guess_object-->5;
 					selected_direction = 0; selected_direction_index = 0;
 				}
 
-				if(parser_all_found || multiple_objects --> 0 > 1) print (name) noun, ": ";
+				if(parser_all_found || _i > 1) print (name) noun, ": "; ! _i = multiple_objects --> 0
 				if(inp1 > 1) PronounNotice(noun);
 				ResetInputAction(-2); ! Allow input_action to be set by PerformPreparedAction
 				PerformPreparedAction();
