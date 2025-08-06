@@ -34,6 +34,7 @@ Upcoming release:
 - Fixed incorrect usage of @get_char in ext_talk_menu and ext_quote_box, which made them fail on Infocom's Apple II v5 interpreter. (Issue #152)
 - Optimized _ParseAndPerformAction, putting multiple_objects-->0 in a local.
 - Removed message MSG_REMOVE_CLOSED and the code in RemoveSub that called it, since the check was superfluous. (Issue #147)
+- Added new optional feature OPTIONAL_GUESS_KEY which, if OPTIONAL_GUESS_MISSING_NOUN is defined, lets the parser automatically pick out the right key for a lock. (Issue #149)
 
 =======
 v5.14.1: bug fix release (25 June 2025)

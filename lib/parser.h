@@ -1506,15 +1506,25 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 ];
 
 
-#IfDef OPTIONAL_GUESS_MISSING_NOUN;
+#Ifdef OPTIONAL_GUESS_MISSING_NOUN;
 Constant GUESS_CREATURE = 0;
 Constant GUESS_HELD = 1;
 Constant GUESS_CONTAINER = 2;
 Constant GUESS_THING = 3;
 Constant GUESS_DOOR = 4;
+#Ifdef OPTIONAL_GUESS_KEY;
+Constant GUESS_KEY = 5;
+Array guess_object-->6;
+#Ifnot;
 Array guess_object-->5;
+#Endif;
+#Ifdef OPTIONAL_GUESS_KEY;
+[ _GuessMissingNoun p_type p_prep p_nounphrase_num _assumed _exclude _i _noun
+	_door_count _container_count _creature_count _held_count _thing_count _key_count _val;
+#Ifnot;
 [ _GuessMissingNoun p_type p_prep p_nounphrase_num _assumed _exclude _i _noun
 	_door_count _container_count _creature_count _held_count _thing_count;
+#Endif;
 
 	if(p_nounphrase_num == 1) {
 		_assumed = noun;
@@ -1526,8 +1536,8 @@ Array guess_object-->5;
 
 	for(_i = 0: _i < scope_objects: _i++) {
 		_noun = scope-->_i;
-		if(_noun == player || _noun has concealed ||
-			TestScope(_noun, player) == false) {
+		if(_noun == player || _noun has concealed || 
+				TestScope(_noun, player) == false) {
 			continue;
 		}
 		if(_noun has door && _noun ~= _exclude) {
@@ -1550,12 +1560,35 @@ Array guess_object-->5;
 			guess_object-->GUESS_THING = _noun;
 			_thing_count++;
 		}
+#Ifdef OPTIONAL_GUESS_KEY;
+		if(p_nounphrase_num == 2 && noun ofclass Object && 
+				noun provides with_key && _noun ~= _exclude) {
+			_val = noun.with_key;
+			if(_val == _noun) {
+				guess_object-->GUESS_KEY = _noun;
+				_key_count++;
+			} else if(_val ofclass Routine) {
+				@push second;
+				second = _noun;
+				if(noun.with_key() == second) {
+					guess_object-->GUESS_KEY = _noun;
+					_key_count++;
+				}
+				@pull second;
+			}
+		}
+#Endif;
 	}
 
 	_noun = 0;
 	switch(p_type) {
 	HELD_OBJECT:
-		if(_held_count == 1)
+#Ifdef OPTIONAL_GUESS_KEY;
+		if(_key_count == 1 && action == ##Lock or ##Unlock) {
+			_noun = guess_object-->GUESS_KEY;
+		}
+#Endif;
+		if(_noun == 0 && _held_count == 1)
 			_noun = guess_object-->GUESS_HELD;
 	CREATURE_OBJECT:
 		if(_creature_count == 1)
@@ -1563,12 +1596,12 @@ Array guess_object-->5;
 	TOPIC_OBJECT:
 		! we can't guess anything when parsing a topic
 	default:
-		if(_noun == 0 && _container_count == 1 &&
-			action == ##Open or ##Close) {
+		if(_container_count == 1 &&
+				action == ##Open or ##Close) {
 			_noun = guess_object-->GUESS_CONTAINER;
 		}
 		if(_noun == 0 && _door_count == 1 &&
-			action == ##Lock or ##Unlock or ##Open or ##Close) {
+				action == ##Lock or ##Unlock or ##Open or ##Close) {
 			_noun = guess_object-->GUESS_DOOR;
 		}
 		if(_noun == 0 && _thing_count == 1) {
