@@ -31,7 +31,7 @@ Upcoming release:
 - Micro-optimization for speed in MoveFloatingObjects for z5.
 - Changed to use Grammar Version 3, a more compact way of storing grammar (requires Inform v6.43). (Issue #132)
 - PunyInform now handles setting the meta-flag on individual actions (requires Inform v6.43). (Issue #133)
-- Fixed incorrect usage of @get_char in talk_menu, which made it fail on Infocom's Apple II v5 interpreter. (Issue #152)
+- Fixed incorrect usage of @get_char in ext_talk_menu and ext_quote_box, which made them fail on Infocom's Apple II v5 interpreter. (Issue #152)
 - Optimized _ParseAndPerformAction, putting multiple_objects-->0 in a local.
 - Removed message MSG_REMOVE_CLOSED and the code in RemoveSub that called it, since the check was superfluous. (Issue #147)
 

@@ -150,7 +150,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 	@set_window 0;
 !	print "[Press any key to continue]";
 	if(p_dont_pause == 0) {
-		@read_char _i;
+		@read_char 1 -> _i;
 		@erase_window -1;
 	} else
 		@split_window 0;
