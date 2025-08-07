@@ -36,6 +36,13 @@ trouble getting your code to run in `before`, `after` etc, you can use
 _Actions_ and/or _Routines_ to figure out which actions are triggered
 and which user-supplied routines are executed.
 
+If you're using the cheap_scenery extension, there's a debug command
+"cstest", which looks through all the cheap_scenery arrays in the game,
+to see if values of a surprising kind are found in any position.
+
+If you're using the talk_menu extension, there's a debug verb "tmtest",
+which checks all the talk menu arrays in the game.
+
 ## Enable all error checking
 
 Inform 6 has the ability to check for a number of problems at runtime,
@@ -217,7 +224,8 @@ programming errors.
 ## Convert your Zcode file to HTML
 
 The Parchment HTML Converter at https://iplayif.com/api/sitegen allows you to
-convert Zcode to HTML, allowing players to play your game in a web browser. This process can be automated using `curl` and its REST API from command line, like this:
+convert Zcode to HTML, allowing players to play your game in a web browser. 
+This process can be automated using `curl` and its REST API from command line, like this:
 
 ```
 curl -o output.html -F "story_file=@mygame.z5" \
@@ -268,16 +276,13 @@ which you `Include` in your main source code file. Also, make sure you have the
 line `Constant CUSTOM_ABBREVIATIONS;` in your source, before including
 globals.h, or your new abbreviations won't be used.
 
-Very recently, interest in the algorithmics of the problem have led to the
-creation of tools to compute even better abbreviations. [Henrik Åsman's
-program](https://github.com/heasm66/ZAbbrevMaker) and [Matthew Russotto's
-program](https://gitlab.com/russotto/zilabbrs) aim to compute 96
-abbreviations with efficient implementations; a
-slightly less efficient program [in Python is the one written by Hugo
-Labrande](https://github.com/hlabrand/retro-scripts). Both Åsman's and
-Labrande's programs can output any number of abbreviations in Inform's
-expected format and can handle Inform 6's newest gametext format, introduced
-in version 6.35. Currently PunyInform requires version 6.36, so these program are useful for all PunyInform developers.
+Recently, interest in the algorithmics of the problem have led to the
+creation of tools to compute even better abbreviations. The best program
+right now is probably [Henrik Åsman's zabbrev program](https://github.com/heasm66/zabbrev).
+
+Another contender is [Matthew Russotto's zilabbrs program](https://gitlab.com/russotto/zilabbrs).
+
+Both aim to compute up to 96 abbreviations, as efficiently as possible.
 
 You can now declare up to 96 abbreviations (if you don't
 declare any "low strings" - that is, set the compiler switches MAX_ABBREVS to
@@ -286,11 +291,43 @@ savings of up to 7kb on a 128kb file!
 
 ### Omit unused routines
 
-The Inform 6 compiler switch $OMIT_UNUSED_ROUTINES is off by default, but can be
-turned on by putting it in the compilation flags. This frees up memory at no
-cost, and can save several hundred, maybe even thousands, of bytes! This switch
-is set at the start of the file `minimal.inf` so if you base you game on that
-file, you have this covered.
+The Inform 6 compiler normally stores all routines that are compiled, in the Z-code file.
+If you set the switch $OMIT_UNUSED_ROUTINES=1, it will remove all routines that
+aren't referred to. This frees up memory at no cost, and can save several hundred, 
+maybe even thousands, of bytes! This and several other switches described below are
+set at the start of the file `minimal.inf` so if you base you game on that file, you 
+have this covered.
+
+### Omit the symbol table
+
+Inform 6 normally stores the names of all actions, properties, attributes etc, so
+they can be printed for debugging purposes. However, when distributing a properly
+tested game, you may want to drop the dead weight. You can do this by setting the
+compiler flag $OMIT_SYMBOL_TABLE=1.
+
+### Make the dictionary smaller
+
+Set the compiler switch $ZCODE_LESS_DICT_DATA=1 to remove a superfluous data
+byte from each dictionary word.
+
+### Don't waste space on unused globals
+
+The Z-machine allows for up to 240 global variables, and the compiler will normally
+reserve 480 bytes of dynamic memory for storing the values of these variables.
+However, the PunyInform library only uses about 100 global variables, so about 
+280 bytes (140 variables) are just left unused. Set the compiler switch 
+$ZCODE_COMPACT_GLOBALS=1 to reclaim this memory.
+
+### Store strings inline
+
+When a string is printed in code, e.g. `print "Hello";`, Inform 6 compares the length
+of the string to a threshold value (normally 30). If the length of the string exceeds 
+this value, the string is stored separately, in the string area of high memory, and it's printed
+with `@print_paddr [packed address]`. This has the advantage of keeping routines compact,
+but the drawback is that it takes up more space. It takes up two more bytes for the packed
+address, plus there will be padding after the string in the string area (1 byte on average).
+If you prefer to keep all strings inline in the code instead, you can increase the threshold to
+a crazy high number with: $ZCODE_MAX_INLINE_STRING=9999
 
 ### Turn off strict error checking
 
@@ -304,7 +341,61 @@ Just keep in mind that this mechanism exists, and if you get weird errors or
 crashes you may want to enable it for testing. Note that you'll need to compile
 as z5 or z8 for it to work.
 
-## Things that save dozens of bytes
+### Use common properties
+
+Inform 6 allows you to create any number of individual properties, but only a limited
+number of common properties. From a programmers point of view, these work very much
+the same. However, there's a cost in bytes when accessing individual properties. To
+address this, you should use common properties as much as possible. If you have
+two individual properties which are associated to different objects, you can
+typically make one of them an alias of the other. E.g. lets say a lamp has the
+properties `fuel_left` and `ignite`, and a troll has the properties `is_angry`
+and `is_hungry`. You will never need to check in code if the lamp is angry, or
+how much fuel the troll has left. You can then do:
+
+```
+Property fuel_left;
+Property ingite;
+Property is_angry alias fuel_left;
+Property is_hungry alias ignite;
+```
+
+Note that this means `fuel_left` and `is_angry` will have the same property number. E.g.
+if you check `if(Troll provides fuel_left) ...` this is true.
+
+### Cut down on classes
+
+If you use a class to give an attribute or two, consider scrapping the class and just
+setting the attributes for all involved objects instead. This drops an object (a
+class is essentially an object in Inform 6), and makes all the objects that used to
+belong to the class shorter.
+
+If you use a class to identify all objects of a certain kind, consider using an
+attribute instead. The objects get smaller, the code to check if an attribute
+is set is shorter and faster than the code to check if an object belongs to a 
+class. E.g. `if(obj ofclass OutdoorsLocation)` becomes 
+`if(obj has outdoors_location)`
+
+### Set RUNTIME_ERRORS to 0
+
+RUNTIME_ERRORS has three settings:
+
+- 0: Perform a bare minimum of error checking. If there's a problem, just
+print the error number.
+- 1: Perform full error checks. If there's a problem, just print the error
+number.
+- 2: Perform full error checks. If there's a problem, print a suitable error
+message.
+
+When compiling with DEBUG enabled, setting 2 is the default. When DEBUG isn't
+enabled, setting 1 is the default.
+
+In a production build, when the code has been thoroughly tested, you may
+want to set RUNTIME_ERRORS to 0. This helps make the game file smaller, and
+the reduced checks also make it faster. If you still want all error checks,
+but skip the explanatory error messages, you can set it to 1.
+
+## Things that can save dozens, maybe even hundreds of bytes
 
 ### Use string constants
 
@@ -395,26 +486,18 @@ If you're using more than four doors, you can save space by using
 `OPTIONAL_SIMPLE_DOORS`. As a bonus, the code gets shorter and more legible.
 Read more at https://github.com/johanberntsson/PunyInform/wiki/Manual#doors .
 
-### Set RUNTIME_ERRORS to 0
+### Use cheap scenery
 
-RUNTIME_ERRORS has three settings:
+This reduces the object count, and makes the game smaller.
 
-- 0: Perform a bare minimum of error checking. If there's a problem, just
-print the error number.
-- 1: Perform full error checks. If there's a problem, just print the error
-number.
-- 2: Perform full error checks. If there's a problem, print a suitable error
-message.
+### Use globals instead of flags
 
-When compiling with DEBUG enabled, setting 2 is the default. When DEBUG isn't
-enabled, setting 1 is the default.
-
-In a production build, when the code has been thoroughly tested, you may
-want to set RUNTIME_ERRORS to 0. This helps make the game file smaller, and
-the reduced checks also make it faster. If you still want all error checks,
-but skip the explanatory error messages, you can set it to 1.
-
-## Things that save several bytes
+The flags extension is good for keeping dynamic memory usage low, and it's extra
+powerful if used in conjuction with the talk_menu extension. However, if you have
+a flag that has to be set or checked in many places in the code, your game will
+get smaller if you use a global variable to represent it. 
+E.g. `if(FlagIsSet(F_HAS_EATEN))` compiles to nine bytes, whereas `if(g_has_eaten)`
+compiles to three bytes.
 
 ### Avoid conditions in mathematical expressions
 

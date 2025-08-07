@@ -2,6 +2,7 @@
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
 !% $LONG_DICT_FLAG_BUG=0
+!% $ZCODE_COMPACT_GLOBALS=1
 
 ! The very first lines of the main source code file for a game can
 ! contain compiler options, like the lines above. -~S disables
