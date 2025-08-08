@@ -1,5 +1,7 @@
 # PunyInform
 
+*ALERT: There's a PunyInform competition this fall, check it out: https://itch.io/jam/punycomp-2025* 
+
 PunyInform is a library written in Inform 6 which allows authors to
 create text adventure games / interactive fiction using the Z-machine
 virtual machine, to be played on 8-bit computers as well as newer
@@ -18,8 +20,8 @@ To compile games using PunyInform, we recommend the official Inform 6
 compiler maintained by David Kinder, at
 https://github.com/DavidKinder/Inform6.  Binaries can be found at the
 [IF-Archive](https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/).
-PunyInform requires at least Inform v6.42. We recommended using the latest
-version.
+PunyInform requires at least Inform v6.43. We recommended using the latest
+version. PunyInform uses Grammar Version 3 only, which was not supported before v6.43.
 
 You can use [borogove.io](https://borogove.io/) to make your PunyInform
 game playable online. Create an account, upload your game file, and choose whether
@@ -42,7 +44,7 @@ target is to make it suitable for games on the Commodore 64 using
 
 ## Status
 
-PunyInform is fully working and has been used to write several games. We
+PunyInform is fully working and has been used to write many games. We
 carefully add and change features and fix bugs as they are found. Please
 check releasenotes.txt for more details.
 
