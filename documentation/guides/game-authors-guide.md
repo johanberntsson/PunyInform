@@ -27,7 +27,7 @@ Here are some advice on finding and fixing problems in your game.
 PunyInform has a nifty set of commands to be used when debugging. Read
 the docs on these commands at
 
-https://github.com/johanberntsson/PunyInform/wiki/Manual#debugging
+[https://github.com/johanberntsson/PunyInform/wiki/Manual#debugging](https://github.com/johanberntsson/PunyInform/wiki/Manual#debugging)
 
 and make sure you try them out and understand how to use them. They can
 be used to teleport to other locations, moving objects to your
@@ -95,7 +95,7 @@ actions.
 If a line of input begins with an asterisk (\*), it will be treated as a comment and ignored by the game. This feature is useful during testing using transcripts. Comments will be included in the transcript, making it easy to search for them and review both the notes and the gameplay context in which they were added.
 
 If you don't have any volunteers for testing, you can ask for help in
-some forum, such as the one at https://intfiction.org/ .
+some forum, such as the one at [https://intfiction.org/](https://intfiction.org/).
 
 And of course, make sure you give credit to your testers, as well as
 others who have somehow helped out with your game.
@@ -109,7 +109,7 @@ the public.
 ## Create an IFID
 
 There's a standard for identifying text adventures, and it's part of The
-Treaty of Babel (See https://babel.ifarchive.org/ ). Each game gets an
+Treaty of Babel (See [https://babel.ifarchive.org/](https://babel.ifarchive.org/)). Each game gets an
 IFID - a unique identifier which can be used to look up data about the
 game. It's a good idea to include an IFID in your PunyInform game.
 Somewhere in your source code, you write a section like this:
@@ -121,7 +121,7 @@ Array UUID_ARRAY string "UUID://XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX//";
 
 Instead of all the Xs you put your unqique identifier consisting of the
 characters 0-9 and A-F, which you obtain from
-https://www.tads.org/ifidgen/ifidgen .
+[https://www.tads.org/ifidgen/ifidgen](https://www.tads.org/ifidgen/ifidgen).
 
 The IFID remains the same when you release updated versions of your
 game. If the game is ported to a new system (say from PunyInform to
@@ -154,7 +154,7 @@ PunyInform has a number of limits which have been set to reasonable
 values, but some games will need to raise some of these limits. Read
 about these limits at
 
-https://github.com/johanberntsson/PunyInform/wiki/Manual#parameters
+[https://github.com/johanberntsson/PunyInform/wiki/Manual#parameters](https://github.com/johanberntsson/PunyInform/wiki/Manual#parameters)
 
 The limits which you have to be particulary careful with are:
 
@@ -223,7 +223,7 @@ programming errors.
 
 ## Convert your Zcode file to HTML
 
-The Parchment HTML Converter at https://iplayif.com/api/sitegen allows you to
+The Parchment HTML Converter at [https://iplayif.com/api/sitegen](https://iplayif.com/api/sitegen) allows you to
 convert Zcode to HTML, allowing players to play your game in a web browser. 
 This process can be automated using `curl` and its REST API from command line, like this:
 
@@ -484,7 +484,8 @@ which the Inform compiler utilizes to generate shorter code.
 
 If you're using more than four doors, you can save space by using
 `OPTIONAL_SIMPLE_DOORS`. As a bonus, the code gets shorter and more legible.
-Read more at https://github.com/johanberntsson/PunyInform/wiki/Manual#doors .
+Read more at 
+[https://github.com/johanberntsson/PunyInform/wiki/Manual#doors](https://github.com/johanberntsson/PunyInform/wiki/Manual#doors).
 
 ### Use cheap scenery
 
@@ -618,7 +619,7 @@ This is another optimization for speed. In short, you define
 weren't any routines of a certain type last turn, and what's in scope 
 hasn't changed since then. See the full documentation for this feature at:
 
-https://github.com/johanberntsson/PunyInform/wiki/Manual#manual-scope-boost
+[https://github.com/johanberntsson/PunyInform/wiki/Manual#manual-scope-boost](https://github.com/johanberntsson/PunyInform/wiki/Manual#manual-scope-boost)
 
 
 ### Use manual setting of reactive attribute

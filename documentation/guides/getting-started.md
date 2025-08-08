@@ -7,7 +7,7 @@ writing a game using PunyInform. For this article, I will be using
 Windows, but you can also use PunyInform on Mac or Linux.
 
 # Step 1: Install the PunyInform library
-Go to https://github.com/johanberntsson/PunyInform/releases and download
+Go to [https://github.com/johanberntsson/PunyInform/releases](https://github.com/johanberntsson/PunyInform/releases) and download
 the newest version of PunyInform (the version that comes first on the
 page) by clicking on "Source code (zip)" under Assets. When it has
 finished downloading, click on the Zip archive in your browser window to
@@ -24,7 +24,7 @@ it, you will need to download the compiler, called "inform" or
 "inform6". PunyInform requires at least version 6.36 of the compiler. If
 you use Windows, it's available as a binary executable, so you can just
 download it and start to use it. Go to
-https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/
+[https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/](https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/)
 and download inform635_win32.zip.
 
 Open the Zip archive and extract the file (there is just one) in the
@@ -55,7 +55,8 @@ different platforms. For Windows, I recommend you get Windows Frotz.
 
 ![](getting-started-pic2.png){ width=450px }
 
-Go to http://www.davidkinder.co.uk/frotz.html , download Windows Frotz
+Go to 
+[http://www.davidkinder.co.uk/frotz.html](http://www.davidkinder.co.uk/frotz.html), download Windows Frotz
 and run the installer.  Then start Windows Frotz once, to make sure it
 has set file type associations properly.
 
@@ -184,7 +185,8 @@ Windows Frotz.
 # Step 7: Turn your game into a C64 disk image
 Now let's make a Commodore 64 version of your game. To do this, we will
 bundle the story file with a Z-code interpreter called Ozmoo. Go to
-http://microheaven.com/ozmooonline/ . Under "Upload Z-code file", pick
+[http://microheaven.com/ozmooonline/](http://microheaven.com/ozmooonline/).
+ Under "Upload Z-code file", pick
 the file mygame.z3 and click "Upload".  Then, under Build game, make
 sure the story file mygame.z3 is selected, then scroll to the bottom of
 the page and click "Build". If all goes well, you get a message that the
@@ -197,7 +199,7 @@ If you don't have a Commodore 64 emulator installed already, this should
 get you going.
 
 Download WinVICE from
-https://vice-emu.sourceforge.io/index.html#download and unzip it in a
+[https://vice-emu.sourceforge.io/index.html#download](https://vice-emu.sourceforge.io/index.html#download) and unzip it in a
 folder of your choice. You may need to install 7-Zip to unzip WinVICE.
 Then go to this folder in Windows Explorer and double-click x64sc.exe .
 Click File -> Attach disk image -> Drive #8 and point to mygame.d64.
