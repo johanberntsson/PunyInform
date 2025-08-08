@@ -1,6 +1,6 @@
-|                                      |
-|--------------------------------------|
-| **PunyInform v5.14 quick reference** |
+|                                     |
+|-------------------------------------|
+| **PunyInform v6.0 quick reference** |
 
   
 More information on last page.
@@ -22,6 +22,10 @@ More information on last page.
 ## buffer
 
 ###### The array where player input is kept.
+
+## caps_mode
+
+###### In a *short_name* routine: set to true if object is printed wth printing rule (The).
 
 ## clr_bg
 
@@ -213,11 +217,9 @@ More information on last page.
 
 ###### 
 
-###### There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT.*
+###### There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT, CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY.*
 
 ###### * *The global *scope_reason* schould always have one of the values *PARSING_REASON, EACH_TURN_REASON, REACT_BEFORE_REASON, REACT_AFTER_REASON, LOOPOVERSCOPE_REASON, TESTSCOPE_REASON*.
-
-# 
 
 # User-defined constants
 
@@ -308,6 +310,10 @@ More information on last page.
 ## OPTIONAL_FULL_SCORE **PUNY++**
 
 ###### Enable the *'fullscore'* verb, and optionally support for tasks (See *TASKS_PROVIDED*).
+
+## OPTIONAL_GUESS_KEY **PUNY++**
+
+###### Make the parser pick the right key for lock/unlock, if OPTIONAL_GUESS_MISSING_NOUN is defined.
 
 ## OPTIONAL_GUESS_MISSING_NOUN **PUNY++**
 
@@ -499,6 +505,10 @@ More information on last page.
 
 ###### Return *true* if *player* can't touch *object*. If so, and *flag* is *false* or unspecified, also print a message.
 
+## OzmooColoursAvailable() **PUNY++**
+
+###### Returns true if the game is being played on Z-code interpreter Ozmoo, with the 8 extra colours available.
+
 ## ParseToken(type, data)
 
 ###### Use in general parsing routines. See DM4 index for examples.
@@ -567,8 +577,6 @@ More information on last page.
 
 ###### Wait for the player to type something. Return *true* if they typed yes, *false* if they typed no, or ask again.
 
-# 
-
 # Printing rules
 
 A printing rule is used to print something based on one argument,
@@ -594,6 +602,10 @@ typically an object. Example of use:
 ## ItorThem
 
 ###### Prints "it", "them", "her" etc.
+
+## ObjIs **PUNY++**
+
+###### Prints "the (object) ", and "is" or "are" (see *IsOrAre*).
 
 ## OnOff **PUNY++**
 
