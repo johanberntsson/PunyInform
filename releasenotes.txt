@@ -36,6 +36,7 @@ Upcoming release:
 - Removed message MSG_REMOVE_CLOSED and the code in RemoveSub that called it, since the check was superfluous. (Issue #147)
 - Added new optional feature OPTIONAL_GUESS_KEY which, if OPTIONAL_GUESS_MISSING_NOUN is defined, lets the parser automatically pick out the right key for a lock. (Issue #149)
 - Updated Game Author's Guide, fixing some advice that hadn't aged well, and adding more tips on optimizing for size.
+- Fixed bug in cheap_scenery: If the cheap scenery object was addressed by an action without first having been matched by any words (should not normally happen, but there are ways), the before routine would typically crash.
 
 =======
 v5.14.1: bug fix release (25 June 2025)
