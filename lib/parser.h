@@ -2241,6 +2241,13 @@ Array guess_object-->5;
 			! be that it matches something that isn't in scope,
 			! or this word isn't a noun word.
 			!
+			! _j is the number of tokens in _best_pattern
+			_i = _best_pattern --> 0;
+#Ifv5;
+			@log_shift _i (-11) -> _j; ! Divide by 2048
+#Ifnot;
+			_j = _i / 2048;
+#Endif;	
 			! _i is the token we stopped at
 			_i = (_best_pattern-> ((wn - 1) * 2)) & $0f;
 			! check for end of pattern (TT_END in GV2)
@@ -2259,7 +2266,7 @@ Array guess_object-->5;
 			} else {
 				! we didn't match the pattern at all
 				!if(_i == TT_PREPOSITION or TT_OBJECT) {
-				if(_i == TT_PREPOSITION) {
+				if(2*(1 + _j) < wn && _i == TT_PREPOSITION) {
 					! missing preposition
 					_PrintPatternSyntax(_best_pattern);
 				} else {

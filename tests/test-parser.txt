@@ -19,7 +19,7 @@ I don't understand that sentence.
 I don't understand that sentence.
 
 > feed sweater with ladder
-I think you wanted to say "feed something to someone". Please try again.
+I only understood you as far as "feed sweater" but then you lost me.
 
 > drop all
 sweater: Dropped.
@@ -35,7 +35,7 @@ A look in that direction reveals nothing new.
 You open the toilet door.
 
 > sit ladder
-I think you wanted to say "sit on something". Please try again.
+I only understood you as far as "sit" but then you lost me.
 
 > look at ladder
 It's very sturdy. On the ladder is a sticker.
@@ -169,7 +169,7 @@ I think you wanted to say "put all in something". Please try again.
 I don't understand that sentence.
 
 > put all except in box
-I think you wanted to say "put something in something". Please try again.
+I only understood you as far as "put all except in" but then you lost me.
 
 > put all except book in box
 electric torch: You put the electric torch into the box.
@@ -408,7 +408,7 @@ John doesn't appear to be interested.
 The electric torch is currently switched off.
 
 > x torch now
-I think you wanted to say "examine something". Please try again.
+I only understood you as far as "x torch" but then you lost me.
 
 > x torch torch now
 I only understood you as far as "x torch torch" but then you lost me.
