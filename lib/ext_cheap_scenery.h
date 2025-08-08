@@ -501,6 +501,8 @@ Object CheapScenery "object"
 		before [_i _k _self_bak;
 #Endif;
 			_i = CSData-->CSDATA_POINTER;
+			if(_i == 0) ! There is no match
+				print_ret (string) CS_DEFAULT_MSG;
 			_k = _i-->0;
 			if(_k > 0 && _k < 100)
 				_k = 1 + (_k / 10) + (_k % 10);
@@ -545,11 +547,19 @@ Object CheapScenery "object"
 			}
 			print_ret (string) CS_DEFAULT_MSG;
 		],
-		react_after [;
+		react_after [ _i;
 			Go:
+				_i = 0; ! Get rid of warning
 				if(itobj == self) itobj = 0;
 #ifdef PUNYINFORM_MAJOR_VERSION;
 				if(themobj == self) themobj = 0;
+#Endif;
+#Ifv5;
+				@copy_table CSDATA 0 10;
+#Ifnot;
+._BlankNext;
+				CS_DATA-->_i = 0;
+				@inc_chk _i 4 ?~_BlankNext;
 #Endif;
 		],
 		found_in [;

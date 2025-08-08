@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v6.0: bug fix and new feature release (8 Aug 2025)
+
 - New function: OzmooColoursAvailable(), returns true if Ozmoo's eight extra colours are available. 
 - Added constants for the eight extra colours supported by Ozmoo: CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY. 
 - Added a global clr_talk_menu to ext_talk_menu.inf, to let game programmer set the menu colour. 
@@ -36,6 +39,7 @@ Upcoming release:
 - Removed message MSG_REMOVE_CLOSED and the code in RemoveSub that called it, since the check was superfluous. (Issue #147)
 - Added new optional feature OPTIONAL_GUESS_KEY which, if OPTIONAL_GUESS_MISSING_NOUN is defined, lets the parser automatically pick out the right key for a lock. (Issue #149)
 - Updated Game Author's Guide, fixing some advice that hadn't aged well, and adding more tips on optimizing for size.
+- Fixed bug in cheap_scenery: If the cheap scenery object was addressed by an action without first having been matched by any words (should not normally happen, but there are ways), the before routine would typically crash. (Issue #153)
 
 =======
 v5.14.1: bug fix release (25 June 2025)
