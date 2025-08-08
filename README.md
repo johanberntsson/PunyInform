@@ -1,6 +1,6 @@
 # PunyInform
 
-*ALERT: There's a PunyInform competition this fall, check it out: https://itch.io/jam/punycomp-2025* 
+**ALERT: There's a PunyInform competition this fall, check it out: https://itch.io/jam/punycomp-2025** 
 
 PunyInform is a library written in Inform 6 which allows authors to
 create text adventure games / interactive fiction using the Z-machine
