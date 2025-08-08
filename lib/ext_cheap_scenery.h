@@ -549,16 +549,16 @@ Object CheapScenery "object"
 		],
 		react_after [ _i;
 			Go:
-				_i = 0; ! Get rid of warning
 				if(itobj == self) itobj = 0;
 #ifdef PUNYINFORM_MAJOR_VERSION;
 				if(themobj == self) themobj = 0;
 #Endif;
 #Ifv5;
-				@copy_table CSDATA 0 10;
+				_i = 0; ! Get rid of warning
+				@copy_table CSData 0 10;
 #Ifnot;
 ._BlankNext;
-				CS_DATA-->_i = 0;
+				CSData-->_i = 0;
 				@inc_chk _i 4 ?~_BlankNext;
 #Endif;
 		],
