@@ -514,7 +514,7 @@ Verb number (255 - value is for "traditional Infocom reasons")
 
 ## Grammar 3
 
-The GV33 format is documented here: [https://gitlab.com/DavidGriffith/inform6lib/-/issues/146](https://gitlab.com/DavidGriffith/inform6lib/-/issues/146)
+The GV3 format is documented here: [https://inform-fiction.org/manual/I6-Addendum.html#grammarformat](https://inform-fiction.org/manual/I6-Addendum.html#grammarformat)
 
 ## Grammar 2
 
