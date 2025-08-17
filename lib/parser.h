@@ -2309,6 +2309,7 @@ Array guess_object-->5;
 	! we want to return how long the successfully sentence was
 	! but wn can be destroyed by action routines, so store in _i
 
+	scope_routine = 0;
 	num_words_parsed = -(wn - 1);
 	if(action_reverse) {
 		_i = second;

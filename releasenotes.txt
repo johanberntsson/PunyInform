@@ -1,5 +1,7 @@
 Upcoming release:
 
+Bugfix: Set scope_routine=0 in parser before performing action, or scope can get messed up
+
 =======
 v6.0: bug fix and new feature release (8 Aug 2025)
 
