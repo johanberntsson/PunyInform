@@ -2404,6 +2404,9 @@ Object thedark "Darkness"
 	dict_entry_size = dict_start->(_i + 1);
 	dict_start = dict_start + _i + 4;
 	dict_end = dict_start + (dict_start - 2)-->0 * dict_entry_size;
+#Ifdef OPTIONAL_EXTENDED_METAVERBS;
+	transcript_mode = (HDR_GAMEFLAGS-->0) & 1;
+#Endif;
 
 	parse->0 = MAX_INPUT_WORDS;
 #IfV5;
