@@ -2,6 +2,7 @@ Upcoming release:
 
 - Bugfix: Set scope_routine=0 in parser before performing action, or scope can get messed up
 - If the ##Restart action was performed, while a transcript was being output, the library forgot that it had an active transcript, and would print a warning if the player tried to enter a comment with '*'.
+- Made WordValue routine faster.
 
 =======
 v6.0: bug fix and new feature release (8 Aug 2025)

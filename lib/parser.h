@@ -406,7 +406,7 @@ System_file;
 ];
 
 [ WordValue p_wordnum;	  ! Dictionary value of 'wordnum' string in buffer
-	return parse-->(p_wordnum*2-1);
+	return parse-->(p_wordnum + p_wordnum - 1);
 ];
 
 [ NumberWords;			  ! Number of parsed strings in buffer
@@ -1957,7 +1957,7 @@ Array guess_object-->5;
 	consult_words = 0;
 	usual_grammar_after = 0;
 	_verb_offset = 0;
-	scope_routine = 0;
+!	scope_routine = 0;
 	noun_filter = 0;
 	object_token_type = -1;
 	parser_all_found = false;
