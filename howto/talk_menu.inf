@@ -12,18 +12,9 @@ Constant USEINFORM;
 Constant Story      "Talk Menu";
 Constant Headline   "^A showcase for the ext_talk_menu extension.^";
 
-! Uncomment ONE of the two following lines, to show either time or score/turns
-! Leaving both commented out makes the library bigger.
-!Constant STATUSLINE_TIME; Statusline time;
-Constant STATUSLINE_SCORE; Statusline score; #Ifdef STATUSLINE_SCORE; #Endif;
+Constant STATUSLINE_SCORE; Statusline score;
 
-! Comment out to keep track of score
-! The value is what will be shown as the score on statusline in z3
 Constant NO_SCORE = 0;
-
-! Customize the statusline in z5+ (will have no effect in z3)
-!Constant OPTIONAL_SL_NO_SCORE;
-!Constant OPTIONAL_SL_NO_MOVES;
 
 ! Uncomment to add optional features to PunyInform
 !Constant DEBUG;
@@ -61,9 +52,7 @@ Constant TM_MSG_TOPICS_DEPLETED "With that, the conversation comes to a natural 
 Constant TM_MSG_EXIT = TM_MSG_EXIT_Routine;
 
 Constant TM_MSG_EXIT_OPTION "[ENTER] Bye for now";
-#Ifv5;
 Constant TM_MSG_PAGE_OPTION "[N] More topics";
-#Endif;
 [TMPrintLine p_actor p_array p_line;
 	! Routine to print a line, by the player or an NPC. Define your own version as needed.
 	if(p_array-->p_line == TM_NO_LINE)
@@ -131,7 +120,7 @@ Array linda_warhammer_talk -->
 
 Array linda_paris_talk -->
 	30 "The Seine" "Do you like the Seine?" "It's like my favourite river - ever!"
-	30 "Eiffel Tower" "Have you visited the Eiffel Tower?" "Well, I've seen it. I haven't gone up. I'm afraid of heights" "Linda shudders."
+	30 "Eiffel Tower" "Have you visited the Eiffel Tower?" "Well, I've seen it. I haven't gone up. I'm afraid of heights." "Linda shudders."
 	TM_END;
 
 Array talk_array_linda -->
@@ -234,8 +223,8 @@ Object -> Josh "Josh"
 			clr_on = true;
 			clr_bg = CLR_BLACK;
 			if(ozmoo_colours) {
-				clr_fg = CLR_OZMOO_MEDIUM_GREY;
-				clr_talk_menu = CLR_WHITE; ! We choose to use one of the 8 extra colours in Ozmoo
+				clr_fg = CLR_OZMOO_MEDIUM_GREY; ! We choose to use one of the 8 extra colours in Ozmoo
+				clr_talk_menu = CLR_WHITE;
 			} else {
 				clr_fg = CLR_WHITE;
 				clr_talk_menu = CLR_YELLOW;
