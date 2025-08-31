@@ -14,6 +14,7 @@
 ! $ZCODE_LESS_DICT_DATA=1 removes an empty data byte for every dictionary word.
 ! $LONG_DICT_FLAG_BUG=0 enables a bug fix in Inform v6.42+, so plural flags
 ! on long words are heeded, e.g. 'transmogrifiers//p'.
+! $ZCODE_COMPACT_GLOBALS=1 avoids reserving dynmem space for unused globals.
 
 Constant Story      "Minimal";
 Constant Headline   "^A sample game which uses PunyInform.^";
