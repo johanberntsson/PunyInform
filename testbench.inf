@@ -555,13 +555,15 @@ Object -> Microphone "microphone"
 	with
 		name 'microphone',
 		orders [;
-			"~Don't you boss me around!~ says the microphone.";
+			Give:
+				print "Orders: Microphone - Give^";
+				"Won't give you anything!";
+			default:
+				"~Don't you boss me around!~ says the microphone.";
 		],
 		before [;
 			Ask:
 				print "Before: Microphone - Ask^";
-			AskFor:
-				print "Before: Microphone - AskFor^";
 			Answer:
 				print "Before: Microphone - Answer^";
 			Tell:
@@ -571,8 +573,6 @@ Object -> Microphone "microphone"
 		life [;
 			Ask:
 				"Life: Microphone - Ask";
-			AskFor:
-				"Life: Microphone - AskFor";
 			Answer:
 				"Life: Microphone - Answer";
 			Tell:
@@ -1119,7 +1119,7 @@ Object -> John "John"
 			if(second == 'pink') "~That is a nice pink book.~";
 			"John ignores your question.";
 		],
-	has proper animate reactive;
+	has proper animate transparent reactive;
 
 Object -> -> JohnsBall "pink ball"
   with  name 'pink' 'ball';

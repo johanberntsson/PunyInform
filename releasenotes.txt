@@ -1,5 +1,8 @@
 Upcoming release:
 
+- Optimized scope routines. (Issue #155)
+- Updated Testbench, Microphone object, to reflect that ##AskFor action is transformed to an order to ##Give by the parser.
+
 =======
 v6.0.1: bug fix release (28 Aug 2025)
 
