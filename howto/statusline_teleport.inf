@@ -1,0 +1,289 @@
+! This is a Cluedo type game, made to show off how this might be done
+! in PunyInform. The program is explained in some detail at
+! https://intfiction.org/t/mini-cluedo-in-punyinform/75748
+!
+! This program demonstrates at least two features that may be useful
+! in a lot of projects:
+! * A custom statusline, which is two lines in height
+! * A teleportation system, i.e. the player can type the name of a room
+!   to go there, without using a verb, e.g. "study" moves the player to
+!   the study
+
+Constant Story      "Mini-Cluedo";
+Constant Headline   "^A PunyInform demonstration.^";
+
+Constant STATUSLINE_SCORE; Statusline score;
+
+Constant NO_SCORE = 0;
+
+!Constant DEBUG;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
+Constant OPTIONAL_GUESS_MISSING_NOUN;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_PROVIDE_UNDO;
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+Global teleport_destination;
+Global crime_scene;
+Global killer;
+Global room_count;
+
+Property teleport_words;
+Property chances;
+
+Replace DrawStatusLine;
+
+[ UnknownVerb p_word p_word_2 i o arr;
+	teleport_destination = 0;
+	if(NumberWords() > 1) p_word_2 = WordValue(2);
+	for(i = room_count: i>=0: i--) {
+		o = Rooms-->i;
+		arr = o.&teleport_words;
+		if(p_word == arr-->0 or arr-->1) {
+			teleport_destination = o; 
+			if(o == location)
+				teleport_destination = "You're already there!";
+			break;
+		}
+	}
+	if(teleport_destination)
+		return ',teleport';
+	rfalse;
+];
+
+Constant GS_WRONG = 3;
+
+[ DeathMessage;
+	print "You have been humliliated by the Chief of Police";
+];
+
+Include "puny.h";
+
+[ DrawStatusLine p_linefeeds exits i o;
+	! If called with p_linefeeds == true, print the number of linefeeds needed
+	! to make sure text at start of game doesn't get covered by statusline
+	if(p_linefeeds) "^";
+
+	! If there is no player location, we shouldn't try to draw status window
+	if (location == nothing || parent(player) == nothing)
+		return;
+
+	_StatusLineHeight(2);
+	_MoveCursor(1, 1); ! This also sets the upper window as active.
+	FastSpaces(screen_width);
+	_MoveCursor(1, 2);
+	print (name) location;
+	_PrintSpacesOrMoveBack(12, MOVES__TX);
+	print turns;
+	_MoveCursor(2, 1);
+	FastSpaces(screen_width);
+	_MoveCursor(2, 2);
+	print "Exits: ";
+	for(i = 1: i <= room_count: i++) {
+		o = Rooms-->i;
+		if(o ~= location) {
+			if(exits) print ", ";
+			print (name) o;
+			exits++;
+		}
+	 }
+	_MainWindow(); ! set_window
+];
+
+Include "ext_waittime.h";
+
+Object Library "Library"
+	with
+		teleport_words 'library',
+		description "You are in a library.";
+
+Object Study "Study"
+	with
+		teleport_words 'study',
+		description "You are in a study.";
+
+Object LivingRoom "Living Room"
+	with
+		teleport_words 'living' 'livingroom',
+		description "You are in a living room.";
+
+Object HobbyRoom "Hobby Room"
+	with
+		teleport_words 'hobby' 'hobbyroom',
+		description "You are in a hobby room.";
+
+Array Rooms table Library Study LivingRoom HobbyRoom;
+
+
+Class Suspect
+	with
+		chances 0 1 1 1 1, ! First index is 0, not used
+		daemon [ i k loc total chosen;
+			! Only move 1/3 of the time
+			if(random(3) > 1) return;
+			loc = parent(self);
+			! Sum the weights of all destinations
+			for(i=room_count: i>0: i--)
+				if(Rooms-->i ~= loc)
+					total = total + self.&chances-->i;
+			! Choose a random destination, where the probability for picking a
+			! certain room is relative to its weight. Adjust weights to make
+			! it more likely we visit rooms we haven't visited in a while
+			k = random(total);
+			for(i=room_count: i>0: i--) {
+				if(Rooms-->i == loc)
+					self.&chances-->i = 0;
+				else {
+					k = k - self.&chances-->i;
+					if(k <= 0 && chosen == 0) chosen = Rooms-->i;
+					(self.&chances-->i)++;
+				}
+			}
+			if(player in loc)
+				print "^", (The) self, " leaves the room.^";
+			move self to chosen;
+			if(player in chosen) {
+				waittime_waiting = false;
+				print "^", (The) self, " arrives.^";
+			}
+		],
+	has animate proper;
+
+Suspect Bill "Bill" with name 'bill';
+Suspect Tom "Tom" with name 'tom';
+Suspect Linda "Linda" with name 'linda' has female;
+Suspect Sue "Sue" with name 'sue' has female;
+
+Array Suspects table Bill Tom Linda Sue;
+
+[ HeOrShe p_noun;
+	if(p_noun has female)
+		print "she";
+	else
+		print "he";
+];
+
+[ CHeOrShe p_noun;
+	if(p_noun has female)
+		print "She";
+	else
+		print "He";
+];
+
+
+#Ifdef DEBUG;
+Verb meta 'chance' 'chances'
+	* creature -> Chance;
+
+[ ChanceSub i;
+	if(~~(noun provides chances))
+		print_ret (The) noun, " lacks the chances property!";
+	for(i=1: i<=room_count: i++) {
+		print (The) Rooms-->i, ": ", noun.&chances-->i;
+		if(noun in Rooms-->i) print " (",(The) noun," 's current location)";
+		print "^";
+	}
+	print "normal_directions_enabled is ", normal_directions_enabled, "^";
+];
+#Endif;
+
+
+Verb ',teleport'
+	* 			-> Teleport
+	* topic 	-> Teleport;
+
+[ TeleportSub;
+	if(teleport_destination ofclass String)
+		print_ret (string) teleport_destination;
+	PlayerTo(teleport_destination);
+];
+
+Extend 'search' replace
+	* 							-> SearchRoom
+	* 'room'/'location'/'scene' -> SearchRoom;
+	
+[ SearchRoomSub;
+	if(location == crime_scene)
+		"You find all the evidence you need - this is the crime scene, for sure.";
+	"You find nothing that indicates a murder was commited here.";
+];
+
+Verb 'question'
+	* creature -> Question;
+
+[ QuestionSub;
+	if(noun == killer)
+		"~Okay, I admit, I did it!~, ", (HeOrShe) noun, " ", 
+			(string) random("shouts", "screams", "exclaims"), ".";
+	print_ret (CHeOrShe) noun, " calmly denies having anything to do with the murder.";
+];
+
+Verb 'accuse'
+	* creature -> Accuse;
+
+[ AccuseSub;
+	deadflag = GS_WRONG;
+	print "Police arrive. ";
+	if(location == crime_scene && noun == killer) {
+		deadflag = GS_WIN;
+		print_ret (The) noun, " ", 
+			(string) random("breaks down", "sobs quietly", "laughs diabolically"),
+			" as ", (HeOrShe) noun, "'s taken away. 
+			^^The Chief of Police gives you an admiring look: ~Well done, detective!~";
+	}
+	if(location == crime_scene) {
+		print_ret (The) noun, " looks at you in confusion: ~But I have an alibi!~ 
+			^^The Chief of Police questions the suspect, finds that ", (HeOrShe) noun,
+			" actually does	have an alibi, and releases ", (ItOrThem) noun, ".
+			^^The chief looks at you and shakes her head in disappointment.";
+	}
+	if(noun == killer) {
+		print_ret (The) noun, " gives you a smile: ~You have no idea, do you? I'm sure
+			they'll find no signs of a murder having been commited here.~
+			^^The Chief of Police have her officers do a cursory search of the room. With
+			no evidence to support your claim, they have to let ", (the) noun, " go.
+			The chief looks at you and shakes her head in disappointment.";
+	}
+	print_ret (The) noun, " looks at you in utter confusion: ~You're saying *I*
+		commited a murder, *HERE*? You must be out of your mind!~ 
+		^^The Chief of Police have her officers do a cursory search of the room, while
+		she questions the suspect. Finding no evidence to support that ", (the) noun,
+		" is the perpetrator, or that this is even the crime scene for that matter, ", 
+		(the) noun, " is free to go.
+		^^The chief looks at you and shakes her head in disappointment.";
+];
+
+Verb meta 'help' 'about' 'instructions'
+	* -> Help;
+
+[ HelpSub;
+	"Someone has commited a murder.
+		^* Go to another room by typing its name.
+		^* You can QUESTION a person to ask if they did it, and they will reply truthfully. 
+		^* You can SEARCH to decide if your current location is the crime scene. 
+		^* You can WAIT (or Z, or WAIT 10) to wait for suspects to move.
+		^* You can ACCUSE a person. If you accuse the person who is the murderer, 
+		and you do it at the scene of the crime, you win.
+		Otherwise you lose. Good luck!";
+];
+
+[Initialise o loc;
+	<Help>;
+	print "^ (Type HELP to repeat this text at any time!)^";
+	normal_directions_enabled = false;
+	room_count = Rooms-->0;
+	objectloop(o ofclass Suspect) {
+		loc = Rooms-->(random(room_count));
+		move o to loc;
+		StartDaemon(o);
+	}
+	crime_scene = Rooms-->(random(room_count));
+	killer = Suspects-->(random(Suspects-->0));
+];
+
+
