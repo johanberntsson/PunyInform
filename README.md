@@ -20,8 +20,7 @@ To compile games using PunyInform, we recommend the official Inform 6
 compiler maintained by David Kinder, at
 https://github.com/DavidKinder/Inform6.  Binaries can be found at the
 [IF-Archive](https://www.ifarchive.org/indexes/if-archive/infocom/compilers/inform6/executables/).
-PunyInform requires at least Inform v6.43. We recommended using the latest
-version. PunyInform uses Grammar Version 3 only, which was not supported before v6.43.
+PunyInform uses Grammar Version 3 which is only supported by recent versions of the Inform 6 compiler. PunyInform requires at least Inform v6.44, and we recommended using the latest available version.
 
 You can use [borogove.io](https://borogove.io/) to make your PunyInform
 game playable online. Create an account, upload your game file, and choose whether

@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v6.0.2: bug fix release (11 Sep 2025)
+
 - Optimized scope routines. (Issue #155)
 - Updated Testbench, Microphone object, to reflect that ##AskFor action is transformed to an order to ##Give by the parser.
 - Added Mini-Cluedo demonstration game as statusline_teleport.inf to howto folder.
