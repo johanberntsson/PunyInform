@@ -4,11 +4,11 @@ System_file;
 
 Constant PUNYINFORM_MAJOR_VERSION = 6;
 Constant PUNYINFORM_MINOR_VERSION = 0;
-Constant PUNYINFORM_PATCH_VERSION = 1; ! Usually 0 (if zero, it is not printed in banner)
-Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
+Constant PUNYINFORM_PATCH_VERSION = 2; ! Usually 0 (if zero, it is not printed in banner)
+!Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
-#Ifndef VN_1643;
-Message fatalerror "*** The PunyInform library needs Inform v6.43 or later to work ***";
+#Ifndef VN_1644;
+Message fatalerror "*** The PunyInform library needs Inform v6.44 or later to work ***";
 #Endif; ! VN_
 
 #IfnDef CUSTOM_ABBREVIATIONS;
