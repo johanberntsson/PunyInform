@@ -95,10 +95,10 @@ Verb 'insert'
 #Ifdef OPTIONAL_FLEXIBLE_INVENTORY;
 Verb 'inventory' 'i//'
 	* -> Inv
-	* 'tall'/'wide' -> Inv;
+	* 'tall'/'wide'                             -> Inv;
 #Ifnot;
 Verb 'inventory' 'i//'
-	* -> Inv;
+	*                                           -> Inv;
 #Endif;
 
 Verb 'jump'
@@ -819,8 +819,7 @@ Verb 'buy' 'purchase'
 	* noun                                      -> Buy;
 
 Verb 'consult'
-	* noun 'about' topic                        -> Consult
-	* noun 'on' topic                           -> Consult;
+	* noun 'about'/'on' topic                   -> Consult;
 
 Verb 'empty'
 	* noun                                      -> Empty
@@ -1429,7 +1428,8 @@ Verb meta 'forest'
 	*                                           -> Forest;
 
 Verb meta 'rooms'
-	*                                           -> Rooms;
+	*                                           -> Rooms
+	* topic                                     -> Rooms;
 
 Verb meta 'gonear'
 	* noun                                      -> GoNear;
@@ -1621,20 +1621,67 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 			TreeSub(real_location);
 ];
 
-[ RoomsSub _obj;
+[ RoomsSub _obj _first _i _j _k _n _t _match _count _first_typed_char _last_start_pos;
+	_t = _GotoSubBuffer + 2;
+	if(consult_from) {
+		_first = WordAddress(consult_from);
+		if(_first->0 == '*') _first++; ! Ignore '*' at start of search string
+		_i = consult_from + consult_words - 1;
+		_count = WordAddress(_i) + WordLength(_i) - _first;
+		if(_first->(_count-1) == '*') _count--;  ! Ignore '*' at end of search string
+		_first_typed_char = _first->0;
+	}
 	for(_obj=Directions + 1 : _obj<= top_object: _obj++)
 		if(_RoomLike(_obj)) {
-			print (name) _obj, " (", _obj, ")";
-			if(_obj == real_location) {
-#IfV5;
-				style bold;
+
+			_match = true;
+			if(consult_from && _count > 0) {
+				@output_stream 3 _GotoSubBuffer;
+				print (name) _obj;
+				@output_stream -3;
+				_k = _GotoSubBuffer-->0;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+				if(_k > GOTOSUB_BUFFER_SIZE) {
+					_RunTimeError(ERR_BUFFER_OVERRUN, _obj);
+					rtrue;
+				}
 #Endif;
-				print (string) _REAL_LOCATION_TEXT;
-#IfV5;
-				style roman;
-#Endif;
+				! Downcase room name
+				for(_j=0:_j<_k:_j++) {
+					_i = _t->_j;
+					if(_i < 91 && _i > 64) 
+						_t->_j = _i + 32;
+				}
+
+				! Check if search string is part of room name
+				_match = false;
+				_last_start_pos = _k - _count;
+				for(_j=0:_j<=_last_start_pos:_j++) {
+					if(_t->_j == _first_typed_char) {
+						! Found a match for first character
+						_match = true;
+						for(_i=1,_n=_j+1:_i<_count:_i++,_n++)
+							if(_t->_n ~= _first->_i) {
+								_match = false;
+								break;
+							}
+					}
+				}
 			}
-			new_line;
+		
+			if(_match) {
+				print (name) _obj, " (", _obj, ")";
+				if(_obj == real_location) {
+#Ifv5;
+					style bold;
+#Endif;
+					print (string) _REAL_LOCATION_TEXT;
+#Ifv5;
+					style roman;
+#Endif;
+				}
+				new_line;
+			}
 		}
 ];
 
