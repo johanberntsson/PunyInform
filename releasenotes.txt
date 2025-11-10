@@ -2,6 +2,7 @@ Upcoming release:
 
 - Optimized grammar for 'consult' verb.
 - Debug verb 'rooms' now takes an optional substring to search for in room names, e.g. "rooms way" will show rooms like "Hallway Junction"
+- Fixed parser bug, where "e.n" could be parsed as "n.n"
 
 =======
 v6.0.2: bug fix release (11 Sep 2025)

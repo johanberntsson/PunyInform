@@ -1877,7 +1877,10 @@ Array guess_object-->5;
 		} else if(parse->1 > wn && (_next_word->DICT_BYTES_FOR_WORD & 1) == 0) {
 			_current_wn = wn;
 			wn++;
-			if(Directions.parse_name()) {
+			@push selected_direction_index; @push selected_direction;
+			_i = Directions.parse_name();
+			@pull selected_direction; @pull selected_direction_index;
+			if(_i) {
 				return 100; ! Next is a direction, so this is fine
 			}
 			! neither a verb nor a direction, so probably a list
