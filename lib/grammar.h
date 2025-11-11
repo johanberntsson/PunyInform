@@ -1660,11 +1660,13 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 					if(_t->_j == _first_typed_char) {
 						! Found a match for first character
 						_match = true;
-						for(_i=1,_n=_j+1:_i<_count:_i++,_n++)
+						for(_i=1,_n=_j+1:_i<_count:_i++,_n++) {
 							if(_t->_n ~= _first->_i) {
 								_match = false;
 								break;
 							}
+						}
+						if(_match) break;
 					}
 				}
 			}
