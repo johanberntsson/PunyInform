@@ -1472,7 +1472,7 @@ Constant GOTOSUB_BUFFER_SIZE 80;
 Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word of constant has odd value
 
 
-[ _RoomLike p_obj;
+[ _RoomLike p_obj _verdict;
 	! Return true if p_obj seems to be a room
 	if(p_obj > Directions && p_obj <= top_object &&  p_obj in nothing
 			&& (~~(p_obj provides describe or life or found_in))
@@ -1480,17 +1480,20 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 		if(p_obj has edible or talkable or supporter or container or transparent
 				or concealed or scenery or static or animate or clothing
 				or pluralname or switchable or door or lockable)
-			rfalse;
+			jump _decided;
 #Ifndef OPTIONAL_NO_DARKNESS;
-		if(p_obj == thedark) rfalse;
+		if(p_obj == thedark) jump _decided;
 #Endif;
-		rtrue;
+		_verdict = true;
 	}
-	rfalse;
+._decided;
+#Ifdef DebugIsARoom;
+	_verdict = DebugIsARoom(p_obj, _verdict);
+#Endif;
+	return _verdict;
 ];
 
-
-[ GotoSub _obj _first _count _i _j _k _t _val_printed _val_input _match;
+[ GotoSub _obj;
 	if(consult_words == 1) {
 		_obj = TryNumber(consult_from);
 		if(_obj > 0) {
@@ -1499,39 +1502,12 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 			jump _not_a_room;
 		}
 	}
-	_t = _GotoSubBuffer + 2;
-	_first = WordAddress(consult_from);
-	_i = consult_from + consult_words - 1;
-	_count = WordAddress(_i) + WordLength(_i) - _first;
-	objectloop(_obj && _RoomLike(_obj)) {
-		@output_stream 3 _GotoSubBuffer;
-		print (name) _obj;
-		@output_stream -3;
-		_k = _GotoSubBuffer-->0;
-#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
-		if(_k > GOTOSUB_BUFFER_SIZE) {
-			_RunTimeError(ERR_BUFFER_OVERRUN, _obj);
-			rtrue;
-		}
-#Endif;
-		_match = true;
-		for(_i=_first, _j=0 : _j<_count : _i++, _j++) {
-			_val_printed = _t->_j;
-			if(_j >= _k) _val_printed = 0;
-			_val_input = _i->0;
-			if(_val_input == '*') { _match = 2; break; } ! The rest is considered a match
-			if(_val_printed == _val_input) continue;
-			if(_val_printed < 91 && _val_printed > 64 && _val_printed + 32 == _val_input) continue;
-			_match = false;
-			break;
-		}
-		if(_match == true && _count < _k) _match = false;
-		if(_match) {
+	_obj = _GotoRoomsHelper(true);
+	if(_obj == 0)
+		jump _not_a_room;
 ._gotoObj;
-			PlayerTo(_obj);
-			rtrue;
-		}
-	}
+	PlayerTo(_obj);
+	rtrue;
 ._not_a_room;
 	"That doesn't seem to be a room.";
 ];
@@ -1621,7 +1597,9 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 			TreeSub(real_location);
 ];
 
-[ RoomsSub _obj _first _i _j _k _n _t _match _count _first_typed_char _last_start_pos;
+[ _GotoRoomsHelper p_return_first _obj _first _i _j _k _n _t _match _count _first_typed_char _last_start_pos;
+	! p_return_first = true: return the first matching room
+	! p_return_first = false: print all matching rooms
 	_t = _GotoSubBuffer + 2;
 	if(consult_from) {
 		_first = WordAddress(consult_from);
@@ -1672,6 +1650,8 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 			}
 		
 			if(_match) {
+				if(p_return_first)
+					return _obj;
 				print (name) _obj, " (", _obj, ")";
 				if(_obj == real_location) {
 #Ifv5;
@@ -1685,8 +1665,12 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 				new_line;
 			}
 		}
+	return false;
 ];
 
+[ RoomsSub;
+	_GotoRoomsHelper();
+];
 
 #Ifdef OPTIONAL_MANUAL_REACTIVE;
 [ MayBeRoutine p_obj p_prop _val;
