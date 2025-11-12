@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v6.0 quick reference** |
+| **PunyInform v6.1 quick reference** |
 
   
 More information on last page.
@@ -9,7 +9,7 @@ More information on last page.
 
 ## action
 
-###### The current action, e.g. *##PutOn*.
+###### The current action, e.g. *\##PutOn*.
 
 ## action_to_be
 
@@ -105,7 +105,7 @@ More information on last page.
 
 ## meta
 
-###### Is *true* if *action* is a meta action, like *##Save*.
+###### Is *true* if *action* is a meta action, like *\##Save*.
 
 ## no_implicit_actions
 
@@ -129,7 +129,7 @@ More information on last page.
 
 ## parser_action
 
-###### In a *parse_name* routine, set this to *##PluralFound* if a match was made and it’s in plural form.
+###### In a *parse_name* routine, set this to *\##PluralFound* if a match was made and it’s in plural form.
 
 ## player
 
@@ -141,7 +141,7 @@ More information on last page.
 
 ## receive_action
 
-###### The action (*##Insert* or *##PutOn*) that caused the fake action *##Receive*.
+###### The action (*\##Insert* or *\##PutOn*) that caused the fake action *\##Receive*.
 
 ## run_after_routines_arg_1 **PUNY++**
 
@@ -155,7 +155,7 @@ More information on last page.
 
 ###### If *OPTIONAL_MANUAL_SCOPE* has been defined, set this to *true* whenever (possibly) changing what’s in scope.
 
-## scope_reason ***\~P****UNY***
+## scope_reason ***~P****UNY***
 
 ###### Used in *InScope* routine (but not in *add_to_scope*).
 
@@ -213,13 +213,13 @@ More information on last page.
 
 ###### 
 
-###### *PUNYINFORM_MAJOR_VERSION* , *PUNYINFORM_MINOR_VERSION*,* PUNYINFORM_PATCH_VERSION* and *PUNYINFORM_VERSION\_SUFFIX* hold the library version.
+###### *PUNYINFORM_MAJOR_VERSION* , *PUNYINFORM_MINOR_VERSION*, *PUNYINFORM_PATCH_VERSION* and *PUNYINFORM_VERSION\_SUFFIX* hold the library version.
 
 ###### 
 
 ###### There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT, CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY.*
 
-###### * *The global *scope_reason* schould always have one of the values *PARSING_REASON, EACH_TURN_REASON, REACT_BEFORE_REASON, REACT_AFTER_REASON, LOOPOVERSCOPE_REASON, TESTSCOPE_REASON*.
+######  **The global *scope_reason* schould always have one of the values *PARSING_REASON, EACH_TURN_REASON, REACT_BEFORE_REASON, REACT_AFTER_REASON, LOOPOVERSCOPE_REASON, TESTSCOPE_REASON*.
 
 # User-defined constants
 
@@ -231,7 +231,7 @@ More information on last page.
 
 ###### The player object to use instead of *selfobj*.
 
-## DEATH_MENTION_UNDO **\~PUNY**
+## DEATH_MENTION_UNDO **~PUNY**
 
 ###### Print 'undo' option even when player wins.
 
@@ -427,15 +427,15 @@ More information on last page.
 
 ## ChooseObjectsFinal_Discard(number) **PUNY++**
 
-###### Call from entry point routine *ChooseObjectsFinal *to remove option *number* (0 or higher).
+###### Call from entry point routine *ChooseObjectsFinal* to remove option *number* (0 or higher).
 
 ## ChooseObjectsFinal_Pick(number) **PUNY++**
 
-###### Call from entry point routine *ChooseObjectsFinal *to pick option *number* (0 or higher).
+###### Call from entry point routine *ChooseObjectsFinal* to pick option *number* (0 or higher).
 
-## ClearScreen(window) **\~PUNY**
+## ClearScreen(window) **~PUNY**
 
-###### z5+ only. Call with argument *WIN_MAIN*, *WIN_STATUS* or *WIN_ALL *to set colours (if *clr_on* is *true*) and clear main and/or status window. 
+###### z5+ only. Call with argument *WIN_MAIN*, *WIN_STATUS* or *WIN_ALL* to set colours (if *clr_on* is *true*) and clear main and/or status window. 
 
 ## CommonAncestor(object1, object2)
 
@@ -449,7 +449,7 @@ More information on last page.
 
 ###### Returns the room which the door object leads to, or 1 if object.door_to is a routine and it returned 1, meaning it printed a message why the player can't enter.
 
-## DrawStatusLine(newlines) **\~PUNY**
+## DrawStatusLine(newlines) **~PUNY**
 
 ###### z5+ only. Print the statusline. If *newlines* is true, it must instead print as many newlines as the statusline height
 
@@ -467,11 +467,11 @@ More information on last page.
 
 ## IndirectlyContains(object1, object2)
 
-###### Return *true* if *object1* holds *object2*, on some level.* *
+###### Return *true* if *object1* holds *object2*, on some level. **
 
 ## LanguageNumber(number)
 
-###### Print *number* using words. Requires *OPTIONAL_LANGUAGE_NUMBER*.* *
+###### Print *number* using words. Requires *OPTIONAL_LANGUAGE_NUMBER*. **
 
 ## LoopOverScope(routine, actor)
 
@@ -523,11 +523,11 @@ More information on last page.
 
 ## PrintContents(text, object, style) **PUNY++**
 
-###### Recursively list contents of *object*. Hide items that have *concealed* or *scenery*, unless *action* is *##Inv*. Print or run *text* (unless 0) before first item. If *style* has *WORKFLAG_BIT *set, only print objects which have the *workflag* attribute. If it has *ISARE_BIT* set, print "is" or "are" before list. If it has *NEWLINE_BIT* set, print each object on a new line. Return *true* if any objects were listed. Call with *text==1* to not print anything but return *0* if *object* contains no printable objects, *1* if contents can be prefixed with "is", *2* for "are". 
+###### Recursively list contents of *object*. Hide items that have *concealed* or *scenery*, unless *action* is *\##Inv*. Print or run *text* (unless 0) before first item. If *style* has *WORKFLAG_BIT* set, only print objects which have the *workflag* attribute. If it has *ISARE_BIT* set, print "is" or "are" before list. If it has *NEWLINE_BIT* set, print each object on a new line. Return *true* if any objects were listed. Call with *text==1* to not print anything but return *0* if *object* contains no printable objects, *1* if contents can be prefixed with "is", *2* for "are". 
 
 ## PrintContentsFromR(text, object) **PUNY++**
 
-###### Like PrintContents, but list *object and its siblings *+ contents, retaining current style and indentation. 
+###### Like PrintContents, but list *object and its siblings* + contents, retaining current style and indentation. 
 
 ## PrintMsg(msg, arg1, arg2) **PUNY++**
 
@@ -648,7 +648,7 @@ circumstances stated for each routine.
 
 ## ChooseObjectsFinal(array, length) **PUNY++**
 
-###### Called just before having to ask the player which object they mean. *array* holds the address of a word array holding object numbers, *length* holds the number of objects. Use *ChooseObjectsFinal_Pick* and/or *ChooseObjectsFinal_Discard *to either pick an object or discard options. You may rearrange the array.
+###### Called just before having to ask the player which object they mean. *array* holds the address of a word array holding object numbers, *length* holds the number of objects. Use *ChooseObjectsFinal_Pick* and/or *ChooseObjectsFinal_Discard* to either pick an object or discard options. You may rearrange the array.
 
 ## DarkToDark()
 
@@ -657,6 +657,10 @@ circumstances stated for each routine.
 ## DeathMessage()
 
 ###### When game ends and *deadflag* is set to 3 or higher. Should print a few words to say why the game ended.
+
+## DebugIsARoom(obj, verdict) **PUNY++**
+
+###### Player has typed GOTO or ROOMS. *Verdict* = 1 or 0 says if library thinks *obj* is a room or not. Return 0 to accept, 1 to say it’s a room, 2 to say it’s not.
 
 ## DebugParseNameObject(object) **PUNY++**
 
@@ -678,7 +682,7 @@ circumstances stated for each routine.
 
 ###### When working out the scope for the actor. Call *ScopeWithin* and *PlaceInScope* to add objects to scope. Return true if no other objects should be in scope.
 
-## Initialise **\~PUNY**
+## Initialise **~PUNY**
 
 ###### **Mandatory**: A (possibly empty) routine which is called when the game starts. May print an introduction. May return 2 to skip the game banner. Must set *location*, unless *INITIAL_LOCATION_VALUE* is defined.
 
@@ -694,7 +698,7 @@ circumstances stated for each routine.
 
 ###### When the player has entered a new room, before the room is described.
 
-## ParseNoun(object) **\~PUNY**
+## ParseNoun(object) **~PUNY**
 
 ###### When checking if input matches *object*, before *parse_name* and *name* properties are checked. Can advance *wn* and return *-1* to consume words (*parse_name* + *name* will also be checked), just return *-1* to not interfere, or return how many words matched.
 
@@ -734,7 +738,7 @@ circumstances stated for each routine.
 
 ## thedark
 
-###### Fake room. When *real_location *is dark, *location* points here. The player is never moved to *thedark*.
+###### Fake room. When *real_location* is dark, *location* points here. The player is never moved to *thedark*.
 
 ## 
 
@@ -747,10 +751,10 @@ Again, FullScore, LookModeLong, LookModeNormal, LookModeShort,
 NotifyOff, NotifyOn, Oops, OopsCorrection, Restart, Restore, Save,
 Score, Version, Quit
 
-***OPTIONAL_EXTENDED_METAVERBS***** adds**: *CommandsOff, CommandsOn,
+***OPTIONAL_EXTENDED_METAVERBS*** **adds**: *CommandsOff, CommandsOn,
 CommandsRead, Objects, Places, ScriptOff, ScriptOn, Verify*
 
-***DEBUG***** adds**: *ActionsOff, ActionsOn, Debug, Forest, GoNear,
+***DEBUG*** **adds**: *ActionsOff, ActionsOn, Debug, Forest, GoNear,
 Goto, Pronouns, Purloin, RandomSeed, Rooms, RoutinesOff, RoutinesOn,
 Scope, TimersOff, TimersOn, Tree*
 
@@ -801,7 +805,7 @@ routines but not *after* routines.
 *AskTo* "ASK (noun) TO (topic)"  
 *Attack* "ATTACK (noun)"  
 *Climb* "CLIMB (noun)"  
-*Consult* "CONSULT (noun) ABOUT (topic)"  
+*Consult* "READ ABOUT (topic) IN (noun)"  
 *Cut* "CUT (noun)"  
 *Dig* "DIG (noun)"  
 *Drink* "DRINK (noun)"  
@@ -869,12 +873,12 @@ issued an order to it, and *orders* didn't
 handle it.
 
 *PluralFound* A *parse_name* routine can set  
-*parser_action *to this value when a  
+*parser_action* to this value when a  
 match is found and it’s in plural.
 
 *Receive* Sent to the object the player tries to place  
-something in/on. *receive_action  
-*holds the original action.
+something in/on. *receive_action  *
+holds the original action.
 
 *ThrownAt* Sent by action *ThrowAt* to the object the  
 player tries to throw something at.
@@ -1027,7 +1031,7 @@ from a class which also defines the property, it gets both values.
 
 ###### For an object: Receives every action and fake action for which this is the noun. For a room: Receives every action which occurs here. The property value is a routine, which usually has sections like switch-clauses, each listing one or more actions, a colon and the code to run. There can be a *default* clause which runs if nothing else was matched. There can also be code before the first clause, which will run regardless of action. The routine should return false to continue, telling the player what has happened, or true to stop processing the action and produce no further output.
 
-## article \[OBJ\] **\~PUNY**
+## article \[OBJ\] **~PUNY**
 
 ###### A string or a routine to print the indefinite article for the object name.The default article is "some" for objects that have *pluralname*, nothing for objects that have *proper*, and "a" for all others.
 
@@ -1039,7 +1043,7 @@ from a class which also defines the property, it gets both values.
 
 ###### A string or a routine to print a message, when the player tries to go in a direction where there's no exit.
 
-## capacity \[OBJ\] **\~PUNY**
+## capacity \[OBJ\] **~PUNY**
 
 ###### The maximum number of items that can be in this container, on this supporter or held by this actor. To read the capacity of an object, taking the default capacity into consideration, you must call *ObjectCapacity(object)*.
 
@@ -1053,7 +1057,7 @@ from a class which also defines the property, it gets both values.
 
 ###### A routine that is executed every turn once it is started. Use *StartDaemon* and *StopDaemon* to start/stop it.
 
-## describe \[OBJ\] (+) **\~PUNY**
+## describe \[OBJ\] (+) **~PUNY**
 
 ###### A string or a routine to print a paragraph of text for an object in a room description. If it's a string or it's a routine which returns *true*, the object won't be further described. Not supported for rooms as in DM4. Note: Start and end the description with a newline ("^").
 
@@ -1061,11 +1065,11 @@ from a class which also defines the property, it gets both values.
 
 ###### For an object: A string or a routine to print the text the player should get when examining the object. For a room: A string or a routine to print the room description.
 
-## door_dir \[OBJ\] **\~PUNY**
+## door_dir \[OBJ\] **~PUNY**
 
 ###### For a door: A direction (e.g. *n_to*) or a routine returning a direction. This says in which direction the door lies in *location*. If *OPTIONAL_SIMPLE_DOORS* is defined and *found_in* holds a list with two rooms, *door_dir* can be a list of two directions.
 
-## door_to \[OBJ\] **\~PUNY**
+## door_to \[OBJ\] **~PUNY**
 
 ###### For a door: A room or a routine returning a room. This says where the door leads, when the player is in *location*. If *OPTIONAL_SIMPLE_DOORS* is defined and *found_in* holds a list with two rooms, *door\_to* can be omitted.
 
@@ -1105,7 +1109,7 @@ from a class which also defines the property, it gets both values.
 
 ###### For *animate* objects: Works like a *before* routine, but receives only person-to-person actions (*Answer*, *Ask*, *Attack*, *Give*, *Kiss*, *Order*, *Show*, *Tell*, *ThrowAt*, *WakeOther*). Can be a string instead of a routine.
 
-## list_together \[OBJ\] **\~PUNY**
+## list_together \[OBJ\] **~PUNY**
 
 ###### Objects that have the same value are listed together in object listings. Set to a low number to print them adjacent to each other, a string to print them as a group, or (advanced) a routine to handle the printing yourself. Can't handle identical objects. Requires *OPTIONAL_LIST_TOGETHER*. 
 
@@ -1197,7 +1201,7 @@ from a class which also defines the property, it gets both values.
 
 ###### Like *when\_closed*, but for when it's open. Not used if the object has *moved*.
 
-## with_key \[OBJ\] **\~PUNY**
+## with_key \[OBJ\] **~PUNY**
 
 ###### For *lockable* objects: The object which works as a key, or a routine which returns *true* if the object held in *second* works as a key.
 
@@ -1221,7 +1225,7 @@ Based on InfoLib at Your Fingertips by Roger Firth.
 
 Legend
 
-Items marked **PUNY++** aren't described in DM4. Items marked **\~PUNY**
+Items marked **PUNY++** aren't described in DM4. Items marked **~PUNY**
 don't work exactly as described in DM4. See PunyInform manual for
 details on these items.
 

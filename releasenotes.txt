@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v6.1: bug fix and new feature release (13 Nov 2025)
+
 - Optimized grammar for 'consult' verb.
 - Debug verb 'rooms' now takes an optional substring to search for in room names, e.g. "rooms way" will show rooms like "Hallway Junction"
 - Changed debug verb 'goto' to perform matching exactly like 'rooms', ignoring any asterisks at start or end of string, e.g. "goto way" moves the player to the first room that has "way" anywhere in its name.
