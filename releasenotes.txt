@@ -3,6 +3,7 @@ Upcoming release:
 - Optimized grammar for 'consult' verb.
 - Debug verb 'rooms' now takes an optional substring to search for in room names, e.g. "rooms way" will show rooms like "Hallway Junction"
 - Changed debug verb 'goto' to perform matching exactly like 'rooms', ignoring any asterisks at start or end of string, e.g. "goto way" moves the player to the first room that has "way" anywhere in its name.
+- Added entry point for DEBUG mode only: DebugIsARoom(obj, verdict). Library will call it when the player uses debug verbs 'goto' or 'rooms', to decide if an object is a room. The verdict parameter is 0 if the library thinks it's not a room, 1 if it thinks it's a room. Return: 0 to accept the library's decision, 1 to say it's a room, 2 to say it's not a room.
 - Fixed parser bug, where "e.n" could be parsed as "n.n"
 - Optimized MoveFloatingObjects
 

@@ -1472,7 +1472,7 @@ Constant GOTOSUB_BUFFER_SIZE 80;
 Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word of constant has odd value
 
 
-[ _RoomLike p_obj _verdict;
+[ _RoomLike p_obj _verdict _return_code;
 	! Return true if p_obj seems to be a room
 	if(p_obj > Directions && p_obj <= top_object &&  p_obj in nothing
 			&& (~~(p_obj provides describe or life or found_in))
@@ -1488,7 +1488,9 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 	}
 ._decided;
 #Ifdef DebugIsARoom;
-	_verdict = DebugIsARoom(p_obj, _verdict);
+	_return_code = DebugIsARoom(p_obj, _verdict);
+	if(_return_code > 0)
+		_verdict = 2 - _return_code;
 #Endif;
 	return _verdict;
 ];
