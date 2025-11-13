@@ -1604,7 +1604,8 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 			TreeSub(real_location);
 ];
 
-[ _GotoRoomsHelper p_return_first _obj _first _i _j _k _n _t _match _count _first_typed_char _last_start_pos;
+[ _GotoRoomsHelper p_return_first _obj _first _i _j _k _m _n _t _count 
+		_first_typed_char _first_typed_char_upcase _last_start_pos;
 	! p_return_first = true: return the first matching room
 	! p_return_first = false: print all matching rooms
 	_t = _GotoSubBuffer + 2;
@@ -1615,12 +1616,18 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 		_count = WordAddress(_i) + WordLength(_i) - _first;
 		if(_first->(_count-1) == '*') _count--;  ! Ignore '*' at end of search string
 		_first_typed_char = _first->0;
+		_first_typed_char_upcase = _first_typed_char;
+		if(_first_typed_char_upcase < 123 && _first_typed_char_upcase > 96) {
+			_first_typed_char_upcase = _first_typed_char_upcase - 32;
+		}
+		
 	}
-	for(_obj=Directions + 1 : _obj<= top_object: _obj++)
+	_obj=Directions + 1;
+!	for(_obj=Directions + 1 : _obj<= top_object: _obj++)
+._check_next_obj;
 		if(_RoomLike(_obj)) {
 
-			_match = true;
-			if(consult_from && _count > 0) {
+			if(_count > 0) {
 				@output_stream 3 _GotoSubBuffer;
 				print (name) _obj;
 				@output_stream -3;
@@ -1631,47 +1638,53 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 					rtrue;
 				}
 #Endif;
-				! Downcase room name
-				for(_j=0:_j<_k:_j++) {
-					_i = _t->_j;
-					if(_i < 91 && _i > 64) 
-						_t->_j = _i + 32;
-				}
+				_last_start_pos = _k - _count;
 
 				! Check if search string is part of room name
-				_match = false;
-				_last_start_pos = _k - _count;
-				for(_j=0:_j<=_last_start_pos:_j++) {
-					if(_t->_j == _first_typed_char) {
+				_j = 0;
+				!for(_j=0:_j<=_last_start_pos:_j++) {
+._match_loop;
+					if(_t->_j == _first_typed_char or _first_typed_char_upcase) {
 						! Found a match for first character
-						_match = true;
-						for(_i=1,_n=_j+1:_i<_count:_i++,_n++) {
-							if(_t->_n ~= _first->_i) {
-								_match = false;
-								break;
+						if(_count == 1) jump _found_match;
+						_m = _count - 1;
+						_i = 1;
+						_n = _j + 1;
+!							for(_i=1,_n=_j+1:_i<_count:_i++,_n++) {
+._match_next_char;
+							_k = _t->_n;
+							if(_k < 91 && _k > 64)
+								_k = _k + 32;
+							if(_k ~= _first->_i) {
+								jump _leave_inner_match_loop;
 							}
-						}
-						if(_match) break;
+							_n++;
+							@inc_chk _i _m ?~_match_next_char;
+!							}
+						jump _found_match;
+._leave_inner_match_loop;
 					}
-				}
-			}
-		
-			if(_match) {
-				if(p_return_first)
-					return _obj;
-				print (name) _obj, " (", _obj, ")";
-				if(_obj == real_location) {
+					@inc_chk _j _last_start_pos ?~_match_loop;
+!				}
+				jump _end_of_obj_loop;
+			} 
+._found_match;		
+			if(p_return_first)
+				return _obj;
+			print (name) _obj, " (", _obj, ")";
+			if(_obj == real_location) {
 #Ifv5;
-					style bold;
+				style bold;
 #Endif;
-					print (string) _REAL_LOCATION_TEXT;
+				print (string) _REAL_LOCATION_TEXT;
 #Ifv5;
-					style roman;
+				style roman;
 #Endif;
-				}
-				new_line;
 			}
+			new_line;
 		}
+._end_of_obj_loop;
+		@inc_chk _obj top_object ?~_check_next_obj;
 	return false;
 ];
 
