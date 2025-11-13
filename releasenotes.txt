@@ -1,5 +1,7 @@
 Upcoming release:
 
+- Removed _RoomLike warning when _return_code not used.
+
 =======
 v6.1: bug fix and new feature release (13 Nov 2025)
 
