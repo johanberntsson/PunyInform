@@ -419,14 +419,43 @@ Constant ONE_SPACE_STRING = " ";
 ];
 #EndIf;
 
-#IfDef DEBUG;
+!#IfDef DEBUG;
 #IfnDef DebugParseNameObject;
 [ DebugParseNameObject p_obj;
 	@inc p_obj; ! Just to get rid of warning that p_obj isn't used
 	rfalse;
 ];
 #Endif;
+!#Endif;
+
+#Ifdef IsARoom;
+[ _RoomLike p_obj _verdict _return_code;
+#Ifnot;
+[ _RoomLike p_obj _verdict;
 #Endif;
+
+	! Return true if p_obj seems to be a room
+	if(p_obj > Directions && p_obj <= top_object && p_obj in nothing
+			&& p_obj provides description
+			&& (~~(p_obj provides describe or life or found_in))
+			&& (~~DebugParseNameObject(p_obj))) {
+		if(p_obj has edible or talkable or supporter or container or transparent
+				or concealed or scenery or static or animate or clothing
+				or pluralname or switchable or door or lockable)
+			jump _decided;
+#Ifndef OPTIONAL_NO_DARKNESS;
+		if(p_obj == thedark) jump _decided;
+#Endif;
+		_verdict = true;
+	}
+._decided;
+#Ifdef IsARoom;
+	_return_code = IsARoom(p_obj, _verdict);
+	if(_return_code)
+		_verdict = 2 - _return_code;
+#Endif;
+	return _verdict;
+];
 
 #Ifdef OPTIONAL_LANGUAGE_NUMBER;
 

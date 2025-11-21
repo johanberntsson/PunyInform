@@ -1,5 +1,9 @@
 Upcoming release:
 
+- Verb 'places' (part of the extended meta-verbs) now performs a more thorough check to decide if an object is a room, and game author can control the process using an IsARoom entry point routine.
+- Entry point routine DebugIsARoom has changed name to IsARoom, and is used for debug verbs 'rooms' and 'goto' *and* for extended meta-verb 'places'.
+- Routine _RoomLike (Used by verbs 'goto', 'rooms'  and 'places') now requires an object to provide description, to be seen as a possible room.
+
 =======
 v6.1.1: bug fix and new feature release (13 Nov 2025)
 

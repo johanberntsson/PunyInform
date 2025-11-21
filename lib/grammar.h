@@ -1328,9 +1328,9 @@ Verb meta 'verify'
 #Ifndef NO_PLACES;
 [ PlacesSub i j k;
 	print "You have visited: ";
-	objectloop(i has visited) if(parent(i) == 0) j++;
+	objectloop(i has visited) if(parent(i) == 0 && _RoomLike(i)) j++;
 	objectloop(i has visited) {
-		if(parent(i) == 0) {
+		if(parent(i) == 0 && _RoomLike(i)) {
 			print (name) i; k++;
 			if (k == j) { print ".^"; return; }
 			if (k == j-1) print " and ";
@@ -1470,35 +1470,6 @@ Constant GOTOSUB_BUFFER_SIZE 80;
 #Endif;
 
 Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word of constant has odd value
-
-
-#Ifdef DebugIsARoom;
-[ _RoomLike p_obj _verdict _return_code;
-#IfNot;
-[ _RoomLike p_obj _verdict;
-#Endif;
-
-	! Return true if p_obj seems to be a room
-	if(p_obj > Directions && p_obj <= top_object &&  p_obj in nothing
-			&& (~~(p_obj provides describe or life or found_in))
-			&& (~~DebugParseNameObject(p_obj))) {
-		if(p_obj has edible or talkable or supporter or container or transparent
-				or concealed or scenery or static or animate or clothing
-				or pluralname or switchable or door or lockable)
-			jump _decided;
-#Ifndef OPTIONAL_NO_DARKNESS;
-		if(p_obj == thedark) jump _decided;
-#Endif;
-		_verdict = true;
-	}
-._decided;
-#Ifdef DebugIsARoom;
-	_return_code = DebugIsARoom(p_obj, _verdict);
-	if(_return_code > 0)
-		_verdict = 2 - _return_code;
-#Endif;
-	return _verdict;
-];
 
 [ GotoSub _obj;
 	if(consult_words == 1) {
