@@ -22,7 +22,10 @@ Constant OPTIONAL_NO_DARKNESS;
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_EXTENDED_METAVERBS;
+
+#Ifv5;
 Constant OPTIONAL_PROVIDE_UNDO;
+#Endif;
 
 Constant INITIAL_LOCATION_VALUE = Library;
 
@@ -33,8 +36,10 @@ Global crime_scene;
 Global killer;
 Global room_count;
 
+#Ifv5;
 Property teleport_words;
 Property chances;
+#Endif;
 
 Replace DrawStatusLine;
 
@@ -64,6 +69,7 @@ Constant GS_WRONG = 3;
 
 Include "puny.h";
 
+#Ifv5;
 [ DrawStatusLine p_linefeeds exits i o;
 	! If called with p_linefeeds == true, print the number of linefeeds needed
 	! to make sure text at start of game doesn't get covered by statusline
@@ -94,6 +100,23 @@ Include "puny.h";
 	 }
 	_MainWindow(); ! set_window
 ];
+#Ifnot;
+Verb 'exits'
+	* -> Exits;
+
+[ ExitsSub i o exits;
+	print "You can go to: ";
+	for(i = 1: i <= room_count: i++) {
+		o = Rooms-->i;
+		if(o ~= location) {
+			if(exits) print ", ";
+			print (name) o;
+			exits++;
+		}
+	 }
+	 new_line;
+];
+#Endif;
 
 Include "ext_waittime.h";
 
@@ -177,8 +200,11 @@ Array Suspects table Bill Tom Linda Sue;
 
 
 #Ifdef DEBUG;
-Verb meta 'chance' 'chances'
+Verb meta 'chance'
 	* creature -> Chance;
+#Ifv5;
+Verb 'chances' = 'chance';
+#Endif;
 
 [ ChanceSub i;
 	if(~~(noun provides chances))
@@ -188,7 +214,7 @@ Verb meta 'chance' 'chances'
 		if(noun in Rooms-->i) print " (",(The) noun," 's current location)";
 		print "^";
 	}
-	print "normal_directions_enabled is ", normal_directions_enabled, "^";
+	new_line;
 ];
 #Endif;
 
@@ -262,9 +288,12 @@ Verb meta 'help' 'about' 'instructions'
 	* -> Help;
 
 [ HelpSub;
-	"Someone has commited a murder.
-		^* Go to another room by typing its name.
-		^* You can QUESTION a person to ask if they did it, and they will reply truthfully. 
+	print "Someone has commited a murder.
+		^* Go to another room by typing its name.";
+#Ifv3;
+	print "^* Type EXITS to list the rooms you can go to.";
+#Endif;
+	"^* You can QUESTION a person to ask if they did it, and they will reply truthfully. 
 		^* You can SEARCH to decide if your current location is the crime scene. 
 		^* You can WAIT (or Z, or WAIT 10) to wait for suspects to move.
 		^* You can ACCUSE a person. If you accuse the person who is the murderer, 

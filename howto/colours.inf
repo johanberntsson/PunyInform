@@ -78,6 +78,8 @@ Object -> Box "box"
 		}
 		ClearScreen(WIN_ALL);
 	}
+#Ifnot;
+	ozmoo_colours = false;
 #Endif;
 	print "^^And so the story begins...^^";
 ];
