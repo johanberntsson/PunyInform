@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v6.1 quick reference** |
+| **PunyInform v6.2 quick reference** |
 
   
 More information on last page.
@@ -658,10 +658,6 @@ circumstances stated for each routine.
 
 ###### When game ends and *deadflag* is set to 3 or higher. Should print a few words to say why the game ended.
 
-## DebugIsARoom(obj, verdict) **PUNY++**
-
-###### Player has typed GOTO or ROOMS. *Verdict* = 1 or 0 says if library thinks *obj* is a room or not. Return 0 to accept, 1 to say it’s a room, 2 to say it’s not.
-
 ## DebugParseNameObject(object) **PUNY++**
 
 ###### When the parser checks for matching objects for a debug verb like *'purloin'*. Return true if *object* has a *parse_name* routine.
@@ -685,6 +681,10 @@ circumstances stated for each routine.
 ## Initialise **~PUNY**
 
 ###### **Mandatory**: A (possibly empty) routine which is called when the game starts. May print an introduction. May return 2 to skip the game banner. Must set *location*, unless *INITIAL_LOCATION_VALUE* is defined.
+
+## IsARoom(obj, verdict) **PUNY++**
+
+###### Player has typed PLACES, GOTO or ROOMS. *Verdict* = 1 or 0 says if library thinks *obj* is a room or not. Return 0 to accept, 1 to say it’s a room, 2 to say it’s not.
 
 ## LibraryMessages(number, arg1, arg2) **PUNY++**
 

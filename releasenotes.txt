@@ -1,13 +1,16 @@
 Upcoming release:
 
+=======
+v6.2: bug fix and new feature release (26 Nov 2025)
+
 - Verb 'places' (part of the extended meta-verbs) now performs a more thorough check to decide if an object is a room, and game author can control the process using an IsARoom entry point routine.
 - Entry point routine DebugIsARoom has changed name to IsARoom, and is used for debug verbs 'rooms' and 'goto' *and* for extended meta-verb 'places'.
-- Routine _RoomLike (Used by verbs 'goto', 'rooms'  and 'places') now requires an object to provide description, to be seen as a possible room.
+- Routine _RoomLike (Used by verbs 'goto', 'rooms'  and 'places') now requires an object to provide the description property, to be seen as a possible room.
 - Updated howto/statusline_teleport.inf to work in z3 format as well.
 - New script tests/compile_all.rb to check that all .inf files compile without errors or warnings.
 
 =======
-v6.1.1: bug fix and new feature release (13 Nov 2025)
+v6.1.1: bug fix and optimization release (13 Nov 2025)
 
 - Removed _RoomLike warning when _return_code not used.
 - Optimized 'goto' and 'rooms' debug verbs for speed.
