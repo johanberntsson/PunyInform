@@ -1326,43 +1326,41 @@ Verb meta 'verify'
 ];
 
 #Ifndef NO_PLACES;
-[ PlacesSub i j k;
-	print "You have visited: ";
-	objectloop(i has visited) if(parent(i) == 0 && _RoomLike(i)) j++;
-	objectloop(i has visited) {
-		if(parent(i) == 0 && _RoomLike(i)) {
-			print (name) i; k++;
-			if (k == j) { print ".^"; return; }
-			if (k == j-1) print " and ";
-			else          print ", ";
+[ PlacesSub _i;
+	print "You have visited:^";
+	objectloop(_i has visited) {
+		if(parent(_i) == 0 && _RoomLike(_i)) {
+#Ifndef OPTIONAL_NO_DARKNESS;
+			if(_i == thedark) continue;
+#Endif;
+			print "- ", (name) _i; new_line;
 		}
 	}
 ];
 
-[ ObjectsSub i j f;
+[ ObjectsSub _i _j _f;
 	print "Objects you have handled: ";
-	objectloop (i has moved) {
-		j = parent(i);
-		if(j) {
-			if(f == 0) new_line;
-			f = 1;
-			print "- ", (the) i, "   ";
-			if (j == player) {
-				if (i has worn) {
-					print "(worn)";
-				} else {
-					print "(held)";
-				}
-			} else if(j has animate) print "(given away)";
-			else if(j has visited) print "(in ", (name) j, ")";
-			else if(j has container) print "(inside ", (the) j, ")";
-			else if(j has supporter) print "(on ", (the) j, ")";
-			else if(j has enterable) print "(in ", (the) j, ")";
-			else print "(lost)";
-			new_line;
-		}
+	objectloop (_i has moved && _ObjectLike(_i)) {
+		_j = parent(_i);
+		if(_f == 0) new_line;
+		_f++;
+		print "- ", (the) _i, "   ";
+		if (_j == player) {
+			if (_i has worn) {
+				print "(worn)";
+			} else {
+				print "(held)";
+			}
+		} else if(_j == 0) print "(lost)";
+		else if(_j has animate) print "(given away)";
+		else if(_j has visited && parent(_j)==0) print "(in ", (name) _j, ")";
+		else if(_j has container) print "(inside ", (the) _j, ")";
+		else if(_j has supporter) print "(on ", (the) _j, ")";
+		else if(_j has enterable) print "(in ", (the) _j, ")";
+		else print "(lost)";
+		new_line;
 	}
-	if(f == 0) "none.";
+	if(_f == 0) "none.";
 ];
 #Endif; ! NO_PLACES
 

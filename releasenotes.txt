@@ -1,5 +1,10 @@
 Upcoming release:
 
+- Extended meta-verb 'places' now lists one location per line, as this is faster, smaller, and more similar to the meta-verb 'objects'
+- Extended meta-verb 'objects' will now also list objects that have been removed from the game (i.e. have no parent).
+- Extended meta-verb 'objects' now relies on the entry point routine IsARoom (if provided) to decide whether a certain object is a room or not.
+- Optimized WordAddress() and WordLength(), for z5.
+
 =======
 v6.2: bug fix and new feature release (26 Nov 2025)
 

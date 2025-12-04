@@ -397,12 +397,23 @@ System_file;
 ! Keep the routines WordAddress, WordLength, NextWord and NextWordStopped just next to _ParseNounPhrase,
 ! since they will typically be called from parse_name routines, which are called from _ParseNounPhrase
 
-[ WordAddress p_wordnum;	! Absolute addr of 'wordnum' string in buffer
-	return buffer + parse->(p_wordnum*4+1);
+[ WordAddress p_wordnum _pointer; ! Absolute addr of 'wordnum' string in buffer
+#Ifv5;
+    @log_shift p_wordnum 2 -> _pointer; ! Multiply by 4
+#Ifnot;
+    _pointer = 4 * p_wordnum;
+#Endif;
+	_pointer++;
+	return buffer + parse->_pointer;
 ];
 
-[ WordLength p_wordnum;	 ! Length of 'wordnum' string in buffer
-	return parse->(p_wordnum*4);
+[ WordLength p_wordnum _pointer; ! Length of 'wordnum' string in buffer
+#Ifv5;
+    @log_shift p_wordnum 2 -> _pointer; ! Multiply by 4
+#Ifnot;
+    _pointer = 4 * p_wordnum;
+#Endif;
+	return parse->_pointer;
 ];
 
 [ WordValue p_wordnum;	  ! Dictionary value of 'wordnum' string in buffer
@@ -421,7 +432,7 @@ System_file;
 
 [ NextWord _i _j;
 	if (wn <= 0 || wn > parse->1) { wn++; rfalse; }
-	_i = wn*2-1; wn++;
+	_i = wn + wn - 1; wn++;
 	_j = parse-->_i;
 	if (_j == ',//') _j = comma_word;
 	if (_j == './/') _j = THEN1__WD;
