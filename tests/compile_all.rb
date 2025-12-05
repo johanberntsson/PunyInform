@@ -41,7 +41,7 @@ def runtest(filename, version, inform_args)
         end
 		File.delete(out_name)
         $num_tests += 1
-		puts "passed"
+		puts "compiled"
 		return nil
     rescue Errno::ENOENT
         puts "Failed to find a specified file or directory"
@@ -86,4 +86,4 @@ $SPECIFIC_FILES.each { |filename| runtest filename, 3, "-D" }
 Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
 Dir["*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
 
-puts "\nALL TESTS PASSED"
+puts "\nALL PROGRAMS COULD BE COMPILED WITHOUT WARNINGS OR ERRORS"
