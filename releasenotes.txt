@@ -5,7 +5,7 @@ Upcoming release:
 - Extended meta-verb 'objects' now relies on the entry point routine IsARoom (if provided) to decide whether a certain object is a room or not.
 - Optimized WordAddress() and WordLength(), for z5.
 - "GET ALL" won't try to take objects in a closed container.
-- "GET X FROM Y", where Y is a closed (transparent) container, now fires the action, unless X is "ALL", so before-routines can react. Unless a before-routine blocks the action, the action routine will block it. "GET ALL FROM Y" is still blocked by the parser, so the player doesn't get one message per item in the container.
+- "GET X FROM Y", where Y is a closed (transparent) container, now fires the action, unless X is "ALL", so before-routines can react. Unless a before-routine blocks the action, the action routine will block it. "GET ALL FROM Y" is still blocked by the parser, so the player doesn't get one message per item in the container. (Issue #147)
 
 =======
 v6.2: bug fix and new feature release (26 Nov 2025)
