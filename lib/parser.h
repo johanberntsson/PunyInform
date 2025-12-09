@@ -562,7 +562,6 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				_current_word = _p-->0;
 			}
 #Endif;
-			_result = 0;
 #Ifdef DEBUG;
 			! Problem: parse_name is an alias of sw_to, and debug verbs can
 			! reference any object in the game, some of which are rooms.
@@ -574,7 +573,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			if(_obj.parse_name ofclass Routine) {
 #Endif;
 				if(meta == 0 || parent(_obj) ~= 0
-						|| (_obj provides describe or life or found_in)
+						|| _RoomLike(_obj) == false
 						|| DebugParseNameObject(_obj)) {
 #IfV3;
 					if(debug_flag & 1) print (name) _obj, ".parse_name()^";
@@ -604,7 +603,6 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 !  Try matching name array
 			@get_prop_addr _obj name -> _name_array;
 			if(wn <= num_words && _name_array) {
-				_result = 0;
 				! Assembler equivalent of _name_array_len = _obj.#name / 2
 				@get_prop_len _name_array -> _name_array_len;
 #IfV5;
@@ -620,15 +618,15 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 #EndIf;
 				while(_IsSentenceDivider(_p) == false) {
 #IfV5;
-					@scan_table _current_word _name_array _name_array_len -> _j ?_word_found_in_name_prop;
+					@scan_table _current_word _name_array _name_array_len -> _j ?~_register_candidate;
 #IfNot;
 					_j = 0;
 ._next_word_in_name_prop;
 					@loadw _name_array _j -> sp;
 					@je sp _current_word ?_word_found_in_name_prop;
 					@inc_chk _j _name_array_len ?~_next_word_in_name_prop;
-#EndIf;
 					jump _register_candidate;
+#EndIf;
 ._word_found_in_name_prop;
 #IfDef DEBUG_PARSENOUNPHRASE;
 					print " - matched ", (address) _current_word,"^";
@@ -669,7 +667,15 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		}
 	}
 
-	for(_i = p_parse_pointer + (_best_word_count - 1) * 4: _i >= p_parse_pointer: _i = _i - 4) {
+!	for(_i = p_parse_pointer + (_best_word_count - 1) * 4: _i >= p_parse_pointer: _i = _i - 4) {
+	_i = _best_word_count - 1;
+#IfV5;
+	@log_shift _i 2 -> _i;
+#IfNot;
+	_i = 4 * _i;
+#EndIf;
+	_i = _i + p_parse_pointer;
+	for(: _i >= p_parse_pointer: _i = _i - 4) {
 		_j = _i-->0;
 		if(_j && (_j-> #dict_par1) & 4) parser_action = ##PluralFound;
 	}
@@ -1005,7 +1011,8 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 [ _IsSentenceDivider p_parse_pointer;
 	! check if current parse block, indicated by p_parse_pointer,
 	! is a period or other sentence divider
-	if(p_parse_pointer --> 0 == './/' or ',//' or AND_WORD or THEN1__WD) rtrue;
+	p_parse_pointer = p_parse_pointer --> 0; ! Just keep the value we're interested in
+	if(p_parse_pointer == './/' or ',//' or AND_WORD or THEN1__WD) rtrue;
 	rfalse;
 ];
 
