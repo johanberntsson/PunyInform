@@ -497,7 +497,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	print "Entering _ParseNounPhrase, first word is ";
 	_i = WordValue(wn);
 	if(_i == 0) print "[Unknown]";
-	else print (address) _i;
+	else { print (address) _i; _i = 0; }
 	new_line;
 #EndIf;
 	! return 0 if no noun matches
@@ -512,35 +512,54 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	!	 - stores all matching nouns if more than one in -->1 ...
 
 	! don't check if wn out of range
-	if(wn > num_words) return 0;
+!	if(wn > num_words) return 0;
+	@jg wn num_words ?rfalse;
 
 	! this is needed after a which question, so that we
 	! can answer 'the pink book' and similar
-	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an') {
-		wn = wn + 1;
+!	while(p_parse_pointer --> 0 == 'a//' or 'the' or 'an') {
+!		wn++;
+!		p_parse_pointer = p_parse_pointer + 4;
+!	}
+._skip_articles;
+	_k = p_parse_pointer --> 0;
+	if(_k== 'a//' or 'the' or 'an') {
 		p_parse_pointer = p_parse_pointer + 4;
+		@inc_chk wn 255 ?~_skip_articles; ! Always loop back
 	}
 
-	if((((p_parse_pointer-->0) -> #dict_par1) & 128) == 0) {
-		! this word doesn't have the noun flag set,
-		! so it can't be part of a noun phrase
-		return 0;
-	}
+!	if(((_k -> #dict_par1) & 128) == 0) {
+!		! this word doesn't have the noun flag set,
+!		! so it can't be part of a noun phrase
+!		return 0;
+!	}
+	_k = _k -> #dict_par1;
+	_k = _k & 128;
+	@jz _k ?rfalse;
+
 	_k = wn;
 
 #IfDef DEBUG;
 	if(meta) {
-		_name_array_len = Directions; parser_one = top_object + 1;
+		_name_array_len = Directions; parser_one = top_object;
 	} else {
-		_name_array_len = 0; parser_one = scope_objects;
+		_name_array_len = 0; parser_one = scope_objects - 1;
 	}
-	for(_i = _name_array_len: _i < parser_one: _i++) {
+!	for(_i = _name_array_len: _i < parser_one: _i++) {
+	_i = _name_array_len;
+._check_next_object;
 		if(meta) _obj = _i; else _obj = scope-->_i;
 #IfNot;
-	for(_i = 0: _i < scope_objects: _i++) {
+!	if(scope_objects == 0)
+!		return 0;
+	@jz scope_objects ?rfalse;
+	parser_one = scope_objects - 1;
+!	for(_i = 0: _i < scope_objects: _i++) {
+._check_next_object;
 		_obj = scope-->_i;
 #Endif;
-		if(parser_check_multiple && _obj == Directions && selected_direction ~= 0) continue;
+		if(_obj == Directions && parser_check_multiple && selected_direction ~= 0)
+			jump _end_of_check_loop;
 		wn = _k;
 		_p = p_parse_pointer;
 		_current_word = p_parse_pointer-->0;
@@ -558,7 +577,15 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			}
 			else if(wn > _k) {
 				_parse_noun_words = wn - _k;
-				_p = p_parse_pointer + 4 * _parse_noun_words;
+
+!				_p = p_parse_pointer + 4 * _parse_noun_words;
+#IfV5;
+				@log_shift _parse_noun_words 2 -> _p;
+#IfNot;
+				_p = 4 * _parse_noun_words;
+#EndIf;
+				_p = _p + p_parse_pointer;
+
 				_current_word = _p-->0;
 			}
 #Endif;
@@ -665,7 +692,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				}
 			}
 		}
-	}
+._end_of_check_loop;
+	@inc_chk _i parser_one ?~_check_next_object;
+!	}
 
 !	for(_i = p_parse_pointer + (_best_word_count - 1) * 4: _i >= p_parse_pointer: _i = _i - 4) {
 	_i = _best_word_count - 1;
