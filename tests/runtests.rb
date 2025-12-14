@@ -27,7 +27,8 @@ def runtest(filename, version, inform_args)
         inform_cmd = $inform_compiler + " +.  +../lib -v#{version} #{inform_args} #{filename}"
         frotz_cmd = "frotz -w 80 -h 200 #{basename}.z#{version} < #{command_file}"
 #        prune_cmd = "tail -n +6 #{transcript_file} | grep -v PunyInform > #{output_file}"
-		prune_cmd = "tail -n +6 #{transcript_file} | grep -v PunyInform | gawk \"/qzl/ {print;next} {print gensub(/^(Default is \\\".+)\\\"/, \\\"\\\\\\1.qzl\\\\\\\"\\\", \\\"g\\\"); } \" > #{output_file}"        diff_cmd = "diff -Z #{template_file} #{output_file}"
+		prune_cmd = "tail -n +6 #{transcript_file} | grep -v PunyInform | gawk \"/qzl/ {print;next} {print gensub(/^(Default is \\\".+)\\\"/, \\\"\\\\\\1.qzl\\\\\\\"\\\", \\\"g\\\"); } \" > #{output_file}"
+        diff_cmd = "diff -Z #{template_file} #{output_file}"
         diff_cmd_ignore_banner = "diff -ZB #{template_file} #{output_file} | grep -v PunyInform"
     end
     # Remove old transcripts
