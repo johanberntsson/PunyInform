@@ -1,5 +1,6 @@
 Upcoming release:
 - Optimized _ParseNounPhrase and _IsSentenceDivider routines a little.
+- Made automatic assignment of reactive attribute faster, for games that don't use custom common properties for a lot of objects.
 
 =======
 v6.3: new feature release (5 Dec 2025)

@@ -2398,6 +2398,8 @@ Object thedark "Darkness"
 	_i = Directions;
 .objloop;
 #Ifndef OPTIONAL_MANUAL_REACTIVE;
+		@get_next_prop _i 0 -> _v;
+		@jl _v react_before ?back_to_objloop;
 		@get_prop_addr _i react_before -> _v;
 		@jz _v ?~is_reactive;
 		@get_prop_addr _i react_after -> _v;
