@@ -13,6 +13,11 @@ System_file;
 	if(_addr) {
 		! routine or a list of objects
 		if(UnsignedCompare(_addr-->0, top_object) > 0) {
+#IfDef DEBUG;
+#IfV3;
+			if(debug_flag & 1) print "[ ~", (name) inp1, "~.add_to_scope() ]^";
+#EndIf;
+#EndIf;
 			RunRoutines(p_obj, add_to_scope);
 		} else {
 #IfDef DEBUG_SCOPE;

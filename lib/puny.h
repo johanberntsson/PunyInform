@@ -1182,7 +1182,7 @@ Include "parser.h";
 		! should be run. If it has set it to another value, this message should
 		! be printed unless after routines returns true.
 		if(run_after_routines_msg && AfterRoutines() == false &&
-				run_after_routines_msg ~= 0 or 1 &&
+				run_after_routines_msg ~= 1 &&
 				keep_silent == false)
 			PrintMsg(run_after_routines_msg, run_after_routines_arg_1);
 		@pull run_after_routines_arg_1; @pull run_after_routines_msg;
@@ -1228,7 +1228,7 @@ Include "parser.h";
 #EndIf;
 #IfDef DEBUG;
 #IfV3;
-		if(debug_flag & 1) print "(", (name) _obj, ").",(property) p_property,"()^";
+		if(debug_flag & 1) print "[ ~", (name) _obj, "~.",(property) p_property,"() ]^";
 #EndIf;
 #EndIf;
 		if(RunRoutines(_obj, p_property) && p_break) {
@@ -1247,7 +1247,7 @@ Include "parser.h";
 	if(location has reactive && location.&each_turn ~= 0) {
 #IfDef DEBUG;
 #IfV3;
-		if(debug_flag & 1) print "(", (name) location, ").each_turn()^";
+		if(debug_flag & 1) print "[ ~", (name) location, "~.each_turn() ]^";
 #EndIf;
 #EndIf;
 		RunRoutines(location, each_turn);
@@ -1276,16 +1276,14 @@ Include "parser.h";
 
 #IfDef GamePreRoutine;
 #IfDef DEBUG;
-#IfV3;
-	if(debug_flag & 1) print "GamePreRoutine()^";
-#EndIf;
+	if(debug_flag & 1) print "[ GamePreRoutine() ]^";
 #EndIf;
 	if(RunEntryPointRoutine(GamePreRoutine)) rtrue;
 #EndIf;
 
 #IfDef DEBUG;
 #IfV3;
-	if(debug_flag & 1) print "player.orders()^";
+	if(debug_flag & 1) print "[ player.orders() ]^";
 #EndIf;
 #EndIf;
 	if(RunRoutines(player, orders)) rtrue;
@@ -1309,7 +1307,7 @@ Include "parser.h";
 
 #IfDef DEBUG;
 #IfV3;
-	if(debug_flag & 1) print "(", (name) real_location, ").before()^";
+	if(debug_flag & 1) print "[ ~", (name) real_location, "~.before() ]^";
 #EndIf;
 #EndIf;	
 	if(real_location.&before) {
@@ -1318,7 +1316,7 @@ Include "parser.h";
 	if(inp1 > 1) {
 #IfDef DEBUG;
 #IfV3;
-		if(debug_flag & 1) print "(", (name) inp1, ").before()^";
+		if(debug_flag & 1) print "[ ~", (name) inp1, "~.before() ]^";
 #EndIf;
 #EndIf;
 		if(inp1.&before) {
@@ -1354,7 +1352,7 @@ Include "parser.h";
 
 #IfDef DEBUG;
 #IfV3;
-	if(debug_flag & 1) print "(", (name) real_location, ").after()^";
+	if(debug_flag & 1) print "[ ~", (name) real_location, "~.after() ]^";
 #EndIf;
 #EndIf;
 	if(real_location.&after) {
@@ -1363,7 +1361,7 @@ Include "parser.h";
 	if(inp1 > 1) {
 #IfDef DEBUG;
 #IfV3;
-		if(debug_flag & 1) print "(", (name) inp1, ").after()^";
+		if(debug_flag & 1) print "[ ~", (name) inp1, "~.after() ]^";
 #EndIf;
 #EndIf;
 		if(inp1.&after) {
@@ -1372,9 +1370,7 @@ Include "parser.h";
 	}
 #IfDef GamePostRoutine;
 #IfDef DEBUG;
-#IfV3;
-	if(debug_flag & 1) print "GamePostRoutine()^";
-#EndIf;
+	if(debug_flag & 1) print "[ GamePostRoutine() ]^";
 #EndIf;
 	if(RunEntryPointRoutine(GamePostRoutine)) rtrue;
 #EndIf;
@@ -1384,7 +1380,7 @@ Include "parser.h";
 [ RunLife p_actor p_reason;
 #IfDef DEBUG;
 #IfV3;
-	if(debug_flag & 1 && p_actor provides life) print "(", (name) p_actor, ").life()^";
+	if(debug_flag & 1 && p_actor provides life) print "[ ~", (name) p_actor, "~.life() ]^";
 #EndIf;
 #EndIf;
 	return RunRoutines(p_actor, life, p_reason);

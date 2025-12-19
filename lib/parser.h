@@ -603,7 +603,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 						|| _RoomLike(_obj) == false
 						|| DebugParseNameObject(_obj)) {
 #IfV3;
-					if(debug_flag & 1) print (name) _obj, ".parse_name()^";
+					if(debug_flag & 1) print "[ ~", (name) _obj, "~.parse_name() ]^";
 #EndIf;
 					_result = _obj.parse_name();
 				}
