@@ -4,6 +4,7 @@ Upcoming release:
 - Updated tests/runtests.rb to accept Frotz not always appending ".qzl" to save file names.
 - Fixed: Debug verb 'routines' didn't print anything in z5 when calling GamePreRoutine and GamePostRoutine.
 - Changed format of routine names printed by debug verb 'routines' to match Inform 6 output (which is used for methods being called in z5 in PunyInform as well), e.g. from (small rock).before() to [ "small rock".before() ].
+- Fixed that Oops-message prints the original word that wasn't understood, even if player changed the word using 'oops'. (Issue #151)
 
 =======
 v6.3: new feature release (5 Dec 2025)

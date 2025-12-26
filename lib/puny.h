@@ -2566,11 +2566,13 @@ Object thedark "Darkness"
 		timer1 = 0-->2;
 #Endif;
 		if(action == ##OopsCorrection) {
-			if(_again_saved && _parser_oops > 0) {
+			if(_again_saved && _parser_oops ~= 0) {
 				_CopyInputArray(buffer2, buffer);
 				_CopyParseArray(parse2, parse);
 				num_words = parse -> 1;
 				_parser_oops-->0 = special_word;
+				if(special_word == 0)
+					oops_unfixed = true;
 				_again_saved = false;
 				jump _try_same_command_again;
 			} else {

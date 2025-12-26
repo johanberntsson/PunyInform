@@ -512,6 +512,7 @@ Global parser_phase;     ! the current phase
 Global parser_action;    ! needed for parse_name, ##PluralFound (see DM)
 Global parser_check_multiple;    ! parser should check if multiheld/multiinside
 Global parser_unknown_noun_found;! parser should report unknown word
+Global oops_unfixed = 0;         ! attempt to fix unknown word failed
 Global parser_all_found;! parser encountered 'all'
 Global parser_all_except_object; ! used to filter all but/except patterns
 Global parser_one; ! Used to pass extra information between user code and parser

@@ -1834,6 +1834,7 @@ Array guess_object-->5;
 						PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 					} else {
 						PrintMsg(MSG_PARSER_DONT_UNDERSTAND_WORD);
+						oops_unfixed = false;
 					}
 				} else if(phase2_necessary ~= PHASE2_SCOPE) {
 					! give higher score to unknown words matches
@@ -2287,7 +2288,7 @@ Array guess_object-->5;
 			_score = _ParsePattern(_best_pattern);
 		} else {
 			! parser_unknown_noun_found is set when we tried to parse
-			! a noun but were found a word that was didn't match
+			! a noun but we found a word that didn't match
 			! any object in scope. This word can be completely
 			! crazy (not in the dictionary) or a valid word in
 			! another context but not right now. Reasons may

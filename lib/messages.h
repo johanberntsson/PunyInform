@@ -920,7 +920,11 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #EndIf;
 #IfTrue MSG_PARSER_DONT_UNDERSTAND_WORD < 1000;
 	MSG_PARSER_DONT_UNDERSTAND_WORD:
-		print "Sorry, I don't understand what ~";
+		print "Sorry, I don't understand ";
+		if(oops_unfixed) {
+			"that word either.";
+		}
+		print "what ~";
 		_PrintUnknownWord();
 		"~ means.";
 #EndIf;
