@@ -1,4 +1,8 @@
 Upcoming release:
+
+=======
+v6.3.1: bugfix release (27 Dec 2025)
+
 - Optimized _ParseNounPhrase and _IsSentenceDivider routines a little.
 - Made automatic assignment of reactive attribute faster, for games that don't use custom common properties for a lot of objects.
 - Updated tests/runtests.rb to accept Frotz not always appending ".qzl" to save file names.
