@@ -1913,8 +1913,11 @@ Array guess_object-->5;
 	pattern_pointer = pattern_pointer + 2;
 	_next_word = _parse_pointer-->2;
 	if(_IsSentenceDivider(_parse_pointer)) {
+		if(_parse_pointer-->0 == './/' or THEN1__WD) {
+			wn++;
+			return 100; ! A full stop means the command always ends
 		! check if dictionary word after sentence divider
-		if(parse->1 > wn && _next_word == 0) {
+		} else if(parse->1 > wn && _next_word == 0) {
 			! uknown word, so probably an unknown word in a
 			! list matching the multi token, such as
 			! 'get box and SDASDASD'
