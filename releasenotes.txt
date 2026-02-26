@@ -1,5 +1,10 @@
 Upcoming release:
 
+- Changed score/moves statusline to use ":" as a separator instead of "/", and for screens ~40 characters wide, print "Sc:0 Mv:0" rather than "Score: 0/0".
+- Changed score/moves statusline to adjust score + moves information as far to the right as possible, on narrow screens  ( less than 67 characters wide, for a score+moves statusline).
+- Changed the threshold values for screen width when DrawStatusLine switches between different layouts, to adhere to a simple principle: Regardless of screen size, make sure room names up to 21 characters in length can always be printed on the statusline without score, moves, or time overwriting any part of the room name.
+- Fixed a time statusline display bug - if hour was between 1 and 9, the rightmost character in the statusline could show a character that was part of the room name.
+
 =======
 v6.3.1: bugfix release (27 Dec 2025)
 

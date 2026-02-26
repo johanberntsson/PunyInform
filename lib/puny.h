@@ -157,11 +157,11 @@ Array _TenSpaces static -> "          ";
 Constant ONE_SPACE_STRING = " ";
 
 [ _PrintStatusLineTime _h _pm;
-	if (screen_width > 29) {
+	if (screen_width > 30) {
 #Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
 		parser_one = 1;
 #Endif;
-		if (screen_width > 39) {
+		if (screen_width > 36) {
 			if (screen_width > 66) {
 				! Width is 67-, print "Time: 12:34 pm" with some space to the right
 				_PrintSpacesOrMoveBack(20, TIME__TX);
@@ -169,11 +169,11 @@ Constant ONE_SPACE_STRING = " ";
 				parser_one = 6;
 #Endif;
 			} else {
-				! Width is 40-66, print "Time: 12:34 pm" one character fromm right edge
+				! Width is 37-66, print "Time: 12:34 pm" one character fromm right edge
 				_PrintSpacesOrMoveBack(15, TIME__TX);
 			}
 		} else {
-			! Width is 30-, print "12:34 pm" one character from right edge
+			! Width is 31-, print "12:34 pm" one character from right edge
 			_PrintSpacesOrMoveBack(9, ONE_SPACE_STRING);
 		}
 		_h = status_field_1;
@@ -184,6 +184,9 @@ Constant ONE_SPACE_STRING = " ";
 			_h = _h - 12;
 		}
 		if(_h < 1) print 12; else print _h;
+#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
+		if(_h ~= 0 && _h<10) parser_one++;
+#Endif;
 		@print_char ':';
 		if (status_field_2<10)
 			@print_char '0';
@@ -213,98 +216,97 @@ Constant ONE_SPACE_STRING = " ";
 	return _length;
 ];
 
-[ _PrintStatusLineScore;
+[ _PrintStatusLineScore field_1_length field_2_length;
+#Ifdef OPTIONAL_SL_NO_SCORE;
+	field_1_length = 0;
+#Ifnot;
+	field_1_length = _NumberLength(status_field_1);
+#Endif;
+#Ifdef OPTIONAL_SL_NO_MOVES;
+	field_2_length = 0;
+#Ifnot;
+	field_2_length = _NumberLength(status_field_2);
+#Endif;
+
 #Ifdef OPTIONAL_SL_NO_SCORE;
 #Ifndef OPTIONAL_SL_NO_MOVES;
 	! Show moves only
 	if (screen_width > 25) {
-		if (screen_width < 30) {
-			! Width is 25-29, only print moves as "0"
-			_PrintSpacesOrMoveBack(4, ONE_SPACE_STRING);
-#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-			parser_one = 4;
-#Endif;
+		if (screen_width < 29) {
+			! Width is 26-28, only print moves as "0"
+			_PrintSpacesOrMoveBack(field_2_length, ONE_SPACE_STRING);
 		} else {
-			! Width is 30-, print "Moves: 0"
+			! Width is 29+
 			if (screen_width > 52) {
-				! Width is 53+, leave some space to the right
-				_PrintSpacesOrMoveBack(15, MOVES__TX);
+				! Width is 53+, print "Moves: 0" and leave some space to the right
+				_PrintSpacesOrMoveBack(13, MOVES__TX);
 #Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-				parser_one = 8;
+				parser_one = 8 - field_2_length;
 #Endif;
+			} else if (screen_width < 33) {
+				! Width is 29-32, print "Mv:0"
+				_PrintSpacesOrMoveBack(3 + field_2_length, MOVES_SHORT__TX);
 			} else {
-				_PrintSpacesOrMoveBack(11, MOVES__TX);
-#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-				parser_one = 4;
-#Endif;
+				! Width is 33-52, print "Moves: 0"
+				_PrintSpacesOrMoveBack(7 + field_2_length, MOVES__TX);
 			}
 		}
 		print status_field_2;
-#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-		parser_one = parser_one - _NumberLength(status_field_2);
-#Endif;
 	}
 #Endif; ! Ifndef NO_MOVES
 #Ifnot;
 	! Show score and maybe moves
 	if (screen_width > 24) {
-		if (screen_width < 30) {
-			! Width is 25-29, only print score as "0", no moves
-			_PrintSpacesOrMoveBack(3, ONE_SPACE_STRING);
+		if (screen_width < 28) {
+			! Width is 25-27, only print score as "0", no moves
+			_PrintSpacesOrMoveBack(field_1_length, ONE_SPACE_STRING);
 			print status_field_1;
-#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-			parser_one = 3 - _NumberLength(status_field_1);
-#Endif;
 		} else {
 #Ifdef OPTIONAL_SL_NO_MOVES;
-	! Show score only
-			! Width is 30-, print "Score: 0"
-			if(screen_width < 55) {
-				_PrintSpacesOrMoveBack(10, SCORE__TX);
-#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-				parser_one = 3;
-#Endif;
+		! Show score only
+			if(screen_width < 32) {
+				! Width is 28-31, print "Sc:0"
+				_PrintSpacesOrMoveBack(3 + field_1_length, SCORE_SHORT__TX);
+			} else if(screen_width < 55) {
+				! Width is 32-54, print "Score: 0"
+				_PrintSpacesOrMoveBack(7 + field_1_length, SCORE__TX);
 			} else {
-				_PrintSpacesOrMoveBack(13, SCORE__TX);
+				! Width is 55+, print "Score: 0" and leave some space at end
+				_PrintSpacesOrMoveBack(12, SCORE__TX);
 #Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-				parser_one = 6;
+				parser_one = 6 - field_1_length;
 #Endif;
 			}
 			print status_field_1;
-#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-			parser_one = parser_one - _NumberLength(status_field_1);
-#Endif;
 #Ifnot;
 	! Show score + moves
-#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-			parser_one = 7 - _NumberLength(status_field_1);
-#Endif;
 			if (screen_width > 66) {
 				! Width is 67-, print "Score: 0 Moves: 0"
-				_PrintSpacesOrMoveBack(28, SCORE__TX);
+				_PrintSpacesOrMoveBack(27, SCORE__TX);
 				print status_field_1;
 #Ifdef OPTIONAL_NON_FLASHING_STATUSLINE;
-				_PrintSpacesOrMoveBack(14, MOVES__TX);
+				_PrintSpacesOrMoveBack(15, MOVES__TX);
 #Ifnot;
-				FastSpaces(parser_one - 1);
+				FastSpaces(6 - field_1_length);
 				print (string) MOVES__TX;
-				parser_one = 7;
+				parser_one = 6 - field_2_length ;
 #Endif;
 			} else {
-				if (screen_width > 36) {
-					! Width is 37-66, print "Score: 0/0"
-					_PrintSpacesOrMoveBack(15, SCORE__TX);
+				if (screen_width > 35) {
+					! Width is 36-66, print "Sc:0 Mv:0"
+					_PrintSpacesOrMoveBack(7 + field_1_length + 
+											field_2_length, SCORE_SHORT__TX);
+					print status_field_1;
+					print (string) MOVES_SHORT__TX;
 				} else {
-					! Width is 29-35, print "0/0"
-					_PrintSpacesOrMoveBack(8, ONE_SPACE_STRING);
+					! Width is 30-36, print "0:0"
+					_PrintSpacesOrMoveBack(1 + field_1_length + 
+											field_2_length, ONE_SPACE_STRING);
+					print status_field_1;
+					@print_char ':';
 				}
-				print status_field_1;
-				@print_char '/';
 			}
 			print status_field_2;
-#Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-			parser_one = parser_one - _NumberLength(status_field_2);
-#Endif;
 #Endif;
 		}
 	}
@@ -330,8 +332,8 @@ Constant ONE_SPACE_STRING = " ";
 
 	_StatusLineHeight(statusline_height);
 	_MoveCursor(1, 1); ! This also sets the upper window as active.
-	parser_one = 1000;
 #Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
+	parser_one = 1000;
 	FastSpaces(screen_width);
 	_MoveCursor(1, 1);
 #Endif;

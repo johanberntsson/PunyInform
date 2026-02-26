@@ -5,7 +5,7 @@ System_file;
 Constant PUNYINFORM_MAJOR_VERSION = 6;
 Constant PUNYINFORM_MINOR_VERSION = 3;
 Constant PUNYINFORM_PATCH_VERSION = 1; ! Usually 0 (if zero, it is not printed in banner)
-!Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
+Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
 #Ifndef VN_1644;
 Message fatalerror "*** The PunyInform library needs Inform v6.44 or later to work ***";
@@ -428,7 +428,9 @@ Constant DICT_BYTES_FOR_WORD = 4;
 #IfNot;
 Constant DICT_BYTES_FOR_WORD = 6;
 Constant MOVES__TX = " Moves: ";
+Constant MOVES_SHORT__TX = " Mv:";
 Constant SCORE__TX = " Score: ";
+Constant SCORE_SHORT__TX = " Sc:";
 Constant TIME__TX = " Time: ";
 #EndIf;
 
