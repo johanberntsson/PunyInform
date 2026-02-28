@@ -241,7 +241,7 @@ Constant ONE_SPACE_STRING = " ";
 				! Width is 53+, print "Moves: 0" and leave some space to the right
 				_PrintSpacesOrMoveBack(13, MOVES__TX);
 #Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-				parser_one = 8 - field_2_length;
+				parser_one = 6 - field_2_length;
 #Endif;
 			} else if (screen_width < 33) {
 				! Width is 29-32, print "Mv:0"
@@ -274,7 +274,7 @@ Constant ONE_SPACE_STRING = " ";
 				! Width is 55+, print "Score: 0" and leave some space at end
 				_PrintSpacesOrMoveBack(12, SCORE__TX);
 #Ifndef OPTIONAL_NON_FLASHING_STATUSLINE;
-				parser_one = 6 - field_1_length;
+				parser_one = 5 - field_1_length;
 #Endif;
 			}
 			print status_field_1;
