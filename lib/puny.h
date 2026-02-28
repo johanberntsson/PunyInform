@@ -192,9 +192,9 @@ Constant ONE_SPACE_STRING = " ";
 			@print_char '0';
 		print status_field_2;
 		if (_pm)
-			print " pm";
+			print " PM";
 		else
-			print " am";
+			print " AM";
 	}
 ];
 
