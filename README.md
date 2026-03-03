@@ -1,7 +1,5 @@
 # PunyInform
 
-**ALERT: There's a PunyInform competition this fall, check it out: https://itch.io/jam/punycomp-2025** 
-
 PunyInform is a library written in Inform 6 which allows authors to
 create text adventure games / interactive fiction using the Z-machine
 virtual machine, to be played on 8-bit computers as well as newer
@@ -173,7 +171,7 @@ The biggest differences between the standard library and PunyInform are:
 
 ## Games Using PunyInform
 
-80+ PunyInform games have been released. You can find just about all of them
+90+ PunyInform games have been released. You can find just about all of them
 in this [list of PunyInform games](https://ifdb.org/search?searchfor=tag%3Apunyinform&sortby=&pg=all).
 
 If you want to see the source code of PunyInform games, you should look at
