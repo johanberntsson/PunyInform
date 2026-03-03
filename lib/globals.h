@@ -3,9 +3,9 @@
 System_file;
 
 Constant PUNYINFORM_MAJOR_VERSION = 6;
-Constant PUNYINFORM_MINOR_VERSION = 3;
-Constant PUNYINFORM_PATCH_VERSION = 1; ! Usually 0 (if zero, it is not printed in banner)
-Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
+Constant PUNYINFORM_MINOR_VERSION = 4;
+Constant PUNYINFORM_PATCH_VERSION = 0; ! Usually 0 (if zero, it is not printed in banner)
+!Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
 #Ifndef VN_1644;
 Message fatalerror "*** The PunyInform library needs Inform v6.44 or later to work ***";
@@ -424,14 +424,22 @@ Constant FORM_DEF            = 2;
 Constant FORM_INDEF          = 3;
 
 #IfV3;
-Constant DICT_BYTES_FOR_WORD = 4;
+	Constant DICT_BYTES_FOR_WORD = 4;
 #IfNot;
-Constant DICT_BYTES_FOR_WORD = 6;
-Constant MOVES__TX = " Moves: ";
-Constant MOVES_SHORT__TX = " Mv:";
-Constant SCORE__TX = " Score: ";
-Constant SCORE_SHORT__TX = " Sc:";
-Constant TIME__TX = " Time: ";
+	Constant DICT_BYTES_FOR_WORD = 6;
+	#Ifndef STATUSLINE_TIME;
+		#Ifndef OPTIONAL_SL_NO_MOVES;
+			Constant MOVES__TX = " Moves: ";
+			Constant MOVES_SHORT__TX = " Mv:";
+		#Endif;
+		#Ifndef OPTIONAL_SL_NO_SCORE;
+			Constant SCORE__TX = " Score: ";
+			Constant SCORE_SHORT__TX = " Sc:";
+		#Endif;
+	#Endif;
+	#Ifndef STATUSLINE_SCORE;
+		Constant TIME__TX = " Time: ";
+	#Endif;
 #EndIf;
 
 !#Default Story        0;

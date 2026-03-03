@@ -319,8 +319,8 @@ Constant ONE_SPACE_STRING = " ";
 	! * Room names up to 39 characters are never truncated.
 	! For narrow screens:
 	! * No space before room name
-	! * Print "Score: xxx/yyyy", "xxx/yyyy", "xxx" or nothing, depending on screen width
-	! * Room names up to 21 characters are never truncated. On a 40 column screen, room names up to 24 characters are never truncated.
+	! * Print "Sc:xxx Mv:yyyy", "xxx:yyyy", "xxx" or nothing, depending on screen width
+	! * Room names up to 21 characters are never truncated. On a 40 column screen, room names up to 25 characters are never truncated.
 
 	! If called with p_linefeeds == true, print the number of linefeeds needed
 	! to make sure text at start of game doesn't get covered by statusline
