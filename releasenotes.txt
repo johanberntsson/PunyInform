@@ -1,6 +1,10 @@
 Upcoming release:
 
 =======
+v6.4.1: bug fix release (6 Mar 2026)
+- Statusline code couldn't compile with certain combinations of constants defined.
+
+=======
 v6.4: new feature release (3 Mar 2026)
 
 - Changed score/moves statusline to use ":" as a separator instead of "/", and for screens ~40 characters wide, print "Sc:0 Mv:0" rather than "Score: 0/0".
