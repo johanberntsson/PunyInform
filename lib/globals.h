@@ -5,7 +5,7 @@ System_file;
 Constant PUNYINFORM_MAJOR_VERSION = 6;
 Constant PUNYINFORM_MINOR_VERSION = 4;
 Constant PUNYINFORM_PATCH_VERSION = 1; ! Usually 0 (if zero, it is not printed in banner)
-!Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
+Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
 #Ifndef VN_1644;
 Message fatalerror "*** The PunyInform library needs Inform v6.44 or later to work ***";
@@ -722,6 +722,8 @@ Object Directions
 			_parse = parse + _parse - 2;
 
 			_w = _parse-->0;
+			@jz _w ?rfalse; ! If word is not in dictionary, it's not a direction
+
 			_arr = _direction_dict_words;
 			if(normal_directions_enabled) {
 				@scan_table _w _arr (DIRECTION_COUNT * 2) -> _i ?_matched_word_in_list;
@@ -759,6 +761,7 @@ Object Directions
 
 			_parse = parse+4*wn-2;
 			_w = _parse-->0;
+			@jz _w ?rfalse; ! If word is not in dictionary, it's not a direction
 
 			if(normal_directions_enabled) {
 #Ifndef OPTIONAL_SHIP_DIRECTIONS;

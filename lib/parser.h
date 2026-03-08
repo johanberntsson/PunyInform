@@ -528,14 +528,13 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 		@inc_chk wn 255 ?~_skip_articles; ! Always loop back
 	}
 
-!	if(((_k -> #dict_par1) & 128) == 0) {
-!		! this word doesn't have the noun flag set,
-!		! so it can't be part of a noun phrase
-!		return 0;
+!	if(_k) {
+!		_k = _k -> #dict_par1;
+!		_k = _k & 128;
+!!		! If this word doesn't have the noun flag set,
+!!		! it can't be part of a noun phrase
+!		@jz _k ?rfalse;
 !	}
-	_k = _k -> #dict_par1;
-	_k = _k & 128;
-	@jz _k ?rfalse;
 
 	_k = wn;
 
@@ -638,12 +637,15 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				@div _name_array_len 2 -> _name_array_len;
 #EndIf;
 #IfDef DEBUG_PARSENOUNPHRASE;
-				print "Trying to find ", (address) _current_word," in name (length ",_name_array_len,").^";
+				print "Trying to find ";
+				if(_current_word == 0) print "[Unknown]";
+				else print (address) _current_word;
+				print " in name (length ",_name_array_len,").^";
 #EndIf;
 #IfV3;
 				@dec _name_array_len; ! This is needed for the loop.
 #EndIf;
-				while(_IsSentenceDivider(_p) == false) {
+				while(_current_word ~= 0 && _IsSentenceDivider(_p) == false) {
 #IfV5;
 					@scan_table _current_word _name_array _name_array_len -> _j ?~_register_candidate;
 #IfNot;
