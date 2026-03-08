@@ -3,8 +3,15 @@ Upcoming release:
 =======
 v6.4.1: bug fix release (8 Mar 2026)
 
+Important to note when upgrading:
+- Until now, `parse_name` routines were not called if the first input word wasn't in the dictionary (i.e. the word value was 0). Now `parse_name` is called in these instances.  Make sure you don't have parse_name routines which accept 0 as a synonym. E.g. it could look in an array of synonyms, and the array may contain the value 0 at times, to make room for synonyms that will be put there at a certain point in the game. 
+
+Bugfixes:
 - Statusline code couldn't compile with certain combinations of constants defined.
-- An unknown word in player input would be recognized as the direction "in" if routines started at or above address $8000.
+- If an input word wasn't recognized, _ParseNounPhrase would still check if it had the noun flag, i.e. it would look at adress 6 in the header, and accept it as a noun if bit 7 was set. One effect of this was that an unknown word in player input would be recognized as the direction "in" if routines started at or above address $8000.
+- The parse_name routine of the Directions object would look for an unrecognized word in user input in its arrays of direction words. This would match empty entries, e.g. the short form of 'in' (which doesn't exist, so it's set to 0).
+- If an input word was recognized, and it didn't have the noun flag, _ParseNounPhrase would conclude it can't be the name of an object. This was a mistake - a `parse_name` routine may still want to recognize the word as a synonym for the object. E.g. if the player names a cube "drop", the player should then be able to do "get drop".  (example from Balances.inf, available at if-archive).
+- If an input word wasn't recognized, an object's `name` array would still be scanned for the word (which would then be 0).
 
 =======
 v6.4: new feature release (3 Mar 2026)
