@@ -125,9 +125,6 @@ Constant MSG_PARSER_CANT_DISAMBIGUATE "I still don't understand what you are ref
 #Ifndef MSG_PARSER_UNKNOWN_PERSON;
 Constant MSG_PARSER_UNKNOWN_PERSON "I can't see who you are referring to.";
 #EndIf;
-#Ifndef MSG_PARSER_NOSUCHTHING;
-Constant MSG_PARSER_NOSUCHTHING "You can't see any such thing.";
-#EndIf;
 #Ifndef MSG_PARSER_CANT_OOPS;
 Constant MSG_PARSER_CANT_OOPS "Sorry, that can't be corrected.";
 #EndIf;
@@ -319,6 +316,8 @@ Default MSG_PARSER_CANT_SEE_IT = 144;
 Default MSG_NOTIFY_ON = 145;
 Default MSG_NOTIFY_OFF = 146;
 Default MSG_ENTER_HELD 147;
+Default MSG_PARSER_NOSUCHTHING 148;
+Default MSG_SHOUT_NOSUCHTHING 149;
 
 #IfDef OPTIONAL_PROVIDE_UNDO_FINAL;
 #Ifndef MSG_UNDO_NOTHING_DONE;
@@ -671,6 +670,12 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #Endif;
 #Endif;
 
+#Iffalse MSG_PARSER_NOSUCHTHING < 1000;
+#Iffalse MSG_SHOUT_NOSUCHTHING < 1000;
+Constant SKIP_MSG_PARSER_NOSUCHTHING;
+#Endif;
+#Endif;
+
 [ _PrintMsg p_msg p_arg_1 p_arg_2;
 	if(p_msg ofclass String)
 		print_ret (string) p_msg;
@@ -940,6 +945,10 @@ Constant SKIP_MSG_EXAMINE_DARK;
 #IfTrue MSG_PARSER_NO_IT < 1000;
 	MSG_PARSER_NO_IT:
 		"I don't know what ~",(address) p_arg_1, "~ refers to.";
+#EndIf;
+#Ifndef SKIP_MSG_PARSER_NOSUCHTHING;
+	MSG_PARSER_NOSUCHTHING, MSG_SHOUT_NOSUCHTHING:
+		"You can't see any such thing.";
 #EndIf;
 #IfTrue MSG_PARSER_CANT_SEE_IT < 1000;
 	MSG_PARSER_CANT_SEE_IT:

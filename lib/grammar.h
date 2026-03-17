@@ -673,6 +673,8 @@ Array _PutOnMessages static -->
 ];
 
 [ ShoutSub;
+	if(consult_words > 1 && WordValue(consult_from) == 'at')
+		return MSG_PARSER_NOSUCHTHING;
 	return MSG_SHOUT_DEFAULT;
 ];
 
