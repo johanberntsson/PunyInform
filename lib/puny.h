@@ -951,13 +951,16 @@ Constant ONE_SPACE_STRING = " ";
 		print "      ";
 		p_spaces = p_spaces - 6;
 	}
-	for( : p_spaces > 0 : p_spaces--) @print_char ' ';
+	@jl p_spaces 1 ?rtrue;
+._print_space;
+	@print_char ' ';
+	@dec_chk p_spaces 1 ?~_print_space;
 #Ifnot;
-	while(p_spaces > 10) {
+	while(p_spaces >= 10) {
 		@print_table _TenSpaces 10 1;
 		p_spaces = p_spaces - 10;
 	}
-	if(p_spaces <= 0) rtrue;
+	@jl p_spaces 1 ?rtrue;
 	@print_table _TenSpaces p_spaces 1;
 #Endif;
 ];
