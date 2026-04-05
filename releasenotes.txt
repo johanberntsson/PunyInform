@@ -3,6 +3,7 @@ Upcoming release:
 - New message MSG_SHOUT_NOSUCHTHING ("You can't see any such thing."), printed by the Shout action, if the player types SHOUT AT x, where x isn't recognized as a nearby actor or object.
 - Message MSG_PARSER_NOSUCHTHING ("You can't see any such thing.") has changed from being a simple message (a string) to being a complex message (code). This means you can no longer use a string to replace it - it can only be replaced by a complex message.
 - Optimized the FastSpaces routine, used for statusline and more.
+- Optimized the UnsignedCompare routine, the most used routine (called by ofclass).
 
 =======
 v6.4.1: bug fix release (8 Mar 2026)

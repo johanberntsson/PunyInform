@@ -31,13 +31,28 @@ Include "messages.h";
 Include "grammar.h";
 
 ! ######################### Helper routines
-[ UnsignedCompare p_x p_y _u _v;
-	if (p_x == p_y) return 0;
-	if (p_x < 0 && p_y >= 0) return 1;
-	if (p_x >= 0 && p_y < 0) return -1;
-	_u = p_x&~WORD_HIGHBIT; _v = p_y&~WORD_HIGHBIT;
-	if (_u > _v) return 1;
+
+[ UnsignedCompare p_x p_y;
+	@jl p_x 0 ?_x_negative;
+	! x >= 0
+	@jl p_y 0 ?~_x_positive_y_positive;
+	! x >= 0 and y < 0
 	return -1;
+._x_negative;
+	@jl p_y 0 ?~rtrue; ! x < 0 and y >= 0
+	! x < 0 && y < 0
+._x_positive_y_positive;
+	! x and y have same sign
+	@jg p_x p_y ?rtrue;
+	@je p_x p_y ?rfalse;
+	return -1;
+! Original implementation:
+!	if (p_x == p_y) return 0;
+!	if (p_x < 0 && p_y >= 0) return 1;
+!	if (p_x >= 0 && p_y < 0) return -1;
+!	_u = p_x&~WORD_HIGHBIT; _v = p_y&~WORD_HIGHBIT;
+!	if (_u > _v) return 1;
+!	return -1;
 ];
 
 #Ifdef OPTIONAL_MANUAL_SCOPE;
