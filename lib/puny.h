@@ -32,7 +32,7 @@ Include "grammar.h";
 
 ! ######################### Helper routines
 
-[ UnsignedCompare p_x p_y;
+[ Unsigned__Compare p_x p_y;
 	@jl p_x 0 ?_x_negative;
 	! x >= 0
 	@jl p_y 0 ?~_x_positive_y_positive;
@@ -54,6 +54,8 @@ Include "grammar.h";
 !	if (_u > _v) return 1;
 !	return -1;
 ];
+
+Constant UnsignedCompare = Unsigned__Compare;
 
 #Ifdef OPTIONAL_MANUAL_SCOPE;
 [ RunEntryPointRoutine p_routine;

@@ -4,6 +4,7 @@ Upcoming release:
 - Message MSG_PARSER_NOSUCHTHING ("You can't see any such thing.") has changed from being a simple message (a string) to being a complex message (code). This means you can no longer use a string to replace it - it can only be replaced by a complex message.
 - Optimized the FastSpaces routine, used for statusline and more.
 - Optimized the UnsignedCompare routine, the most used routine (called by ofclass).
+- Use the same, optimized UnsignedCompare for the library and the veneer.
 
 =======
 v6.4.1: bug fix release (8 Mar 2026)
