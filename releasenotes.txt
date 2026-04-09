@@ -7,6 +7,7 @@ Upcoming release:
 - Use the same, optimized UnsignedCompare for the library and the veneer.
 - Implemented 33% faster way to call methods in RunRoutines.
 - Fixed a bug in howto/talk_menu.inf (one topic tried to activate another topic using a topic ID, but that ID didn't exist).
+- Removed a pointless variable in cheap scenery extension.
 
 =======
 v6.4.1: bug fix release (8 Mar 2026)

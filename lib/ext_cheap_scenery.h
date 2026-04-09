@@ -496,7 +496,7 @@ Object CheapScenery "object"
 			return _ret;
 		],
 #Ifdef SceneryReply;
-		before [_i _k _w1pos _w1 _w2 _id_or_routine _self_bak;
+		before [_i _k _w1 _w2 _id_or_routine _self_bak;
 #Ifnot;
 		before [_i _k _self_bak;
 #Endif;
@@ -524,8 +524,8 @@ Object CheapScenery "object"
 #ifdef SceneryReply;
 			if(SceneryReply ofclass string)
 				print_ret (string) SceneryReply;
-			_w1 = _i-->_w1pos;
-			_w2 = _i-->(_w1pos + 1);
+			_w1 = _i-->0;
+			_w2 = _i-->1;
 			_id_or_routine = cs_match_id;
 			if(_w1 == CS_PARSE_NAME) {
 				if(_id_or_routine == 0)
@@ -536,7 +536,7 @@ Object CheapScenery "object"
 				_w1 = 0;
 				if(_k) ! There is at least one adjective
 					_w1 = _w2;
-				_w2 = _i-->(_w1pos + 1 + _k);
+				_w2 = _i-->(1 + _k);
 			}
 			if(SceneryReply(_w1, _w2, _id_or_routine))
 				rtrue;

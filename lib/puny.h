@@ -985,19 +985,6 @@ Constant _SpaceTableLength 20;
 #Endif;
 ];
 
-! Three different versions of MyZRegion, a routine which returns either of
-! 0:Routine, 1:String, 2: Constant, optimized to be fast for type Routine
-! main routine sets global _my_zregion to the correct routine.
-
-Global _puny_zregion_case;
-
-Constant _StringsOffset = #strings_offset;
-Constant _CodeOffset = #code_offset;
-
-Constant _PunyZRegionCase1 = 1;
-Constant _PunyZRegionCase2 = 2;
-!Constant _PunyZRegionCase3 = 3; ! CAN'T HAPPEN!?
-
 [ RunRoutines p_obj p_prop p_switch _sw__var _self _address 
 		_len _i _value _result;
 #Ifndef OPTIONAL_NO_DARKNESS;
@@ -2582,9 +2569,9 @@ Object thedark "Darkness"
 ! 2: #code_offset > 0 && #strings_offset < 0
 ! 3: #code_offset < 0 && #strings_offset < 0 (CAN'T HAPPEN?!)
 	if(#strings_offset > 0) _puny_zregion_case = _PunyZRegionCase1;
-	else 
+!	else 
 	! if(#code_offset > 0) 
-		_puny_zregion_case = _PunyZRegionCase2;
+!		_puny_zregion_case = _PunyZRegionCase2;
 !	else _puny_zregion_case = _PunyZRegionCase3;
 
 #Ifdef CUSTOM_PLAYER_OBJECT;

@@ -671,6 +671,14 @@ Constant empty_arr = parse2;
 Array empty_arr --> MAX_SCOPE;
 #Endif;
 
+! Constants and global used to accelerate RunRoutines() in puny.h
+Constant _StringsOffset = #strings_offset;
+Constant _CodeOffset = #code_offset;
+Constant _PunyZRegionCase1 = 1;
+Constant _PunyZRegionCase2 = 0;
+!Constant _PunyZRegionCase3 = 3; ! CAN'T HAPPEN!?
+! _puny_zregion_case Must start as case 2 (main changes it to case 1 if needed)
+Global _puny_zregion_case = _PunyZRegionCase2; 
 
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL  = 1;
