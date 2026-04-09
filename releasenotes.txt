@@ -5,6 +5,7 @@ Upcoming release:
 - Optimized the FastSpaces routine, used for statusline and more.
 - Optimized the UnsignedCompare routine, the most used routine (called by ofclass).
 - Use the same, optimized UnsignedCompare for the library and the veneer.
+- Implemented 33% faster way to call methods in RunRoutines.
 
 =======
 v6.4.1: bug fix release (8 Mar 2026)

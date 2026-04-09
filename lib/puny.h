@@ -985,25 +985,109 @@ Constant _SpaceTableLength 20;
 #Endif;
 ];
 
-[ RunRoutines p_obj p_prop p_switch;
+! Three different versions of MyZRegion, a routine which returns either of
+! 0:Routine, 1:String, 2: Constant, optimized to be fast for type Routine
+! main routine sets global _my_zregion to the correct routine.
+
+Global _puny_zregion_case;
+
+Constant _StringsOffset = #strings_offset;
+Constant _CodeOffset = #code_offset;
+
+Constant _PunyZRegionCase1 = 1;
+Constant _PunyZRegionCase2 = 2;
+!Constant _PunyZRegionCase3 = 3; ! CAN'T HAPPEN!?
+
+[ RunRoutines p_obj p_prop p_switch _sw__var _self _address 
+		_len _i _value _result;
 #Ifndef OPTIONAL_NO_DARKNESS;
 	if(p_obj == thedark && p_prop ~= initial or short_name or description) p_obj = real_location;
 #Endif;
-	@push sw__var;
-	if(p_switch == 0) sw__var = action; else sw__var = p_switch;
-	if (p_prop < INDIV_PROP_START || p_obj.&p_prop ~= 0) {
-		p_switch = p_obj.p_prop();
+	_address = p_obj.&p_prop;
+	if (p_prop < INDIV_PROP_START || _address ~= 0) {
+		_sw__var = sw__var;
+		if(p_switch == 0) sw__var = action; else sw__var = p_switch;
+		_self = self; self = p_obj;
+!		p_switch = p_obj.p_prop();
+		if(_address == 0) { _value = p_obj.p_prop; jump _process_value; }
+		_len = p_obj.#p_prop;
+#Ifv5;
+		@log_shift _len (-1) -> _len; ! Divide by 2
+#Ifnot;
+		_len = _len / 2;
+#Endif;
+		@dec _len;
+._get_next_value;
+		_value = _address-->_i;
+._process_value;
+		@je _value 0 (-1) ?_isZero;
+		! Rather than using obj.prop(), which calls ofclass,
+		! which calls Z__Region, which calls UnsignedCompare,
+		! to decide what kind of value(s) are in the property,
+		! we have specialized code here, to reach the same
+		! conclusions, much cheaper.
+		if(_puny_zregion_case == _PunyZRegionCase1) {
+			! Case 1, code_offset > 0 && strings_offset > 0
+			! This is first, because it's the most common case
+			! for PunyInform games, and placing it first gives
+			! them a ~4% advantage in speed.
+!			if(value >= #strings_offset) return stringtype;
+			@jl _value _StringsOffset ?~_isString;
+!			if(value >= #code_offset) return routinetype;
+			@jl _value _CodeOffset ?~_isRoutine;
+			jump _isConstant;
+		} 
+!		else if(_puny_zregion_case == _PunyZRegionCase2) {
+			! Case 2, code_offset > 0 && strings_offset < 0
+!			if(value >= #code_offset) return routinetype;
+			@jl _value _CodeOffset ?~_isRoutine;
+!			if(value < #strings_offset) return routinetype;
+			@jl _value _StringsOffset ?_isRoutine;
+!			if(value < -1) return stringtype;
+			@jl _value (-1) ?_isString;
+			jump _isConstant;
+!		}
+!		! Case 3, code_offset < 0 && strings_offset < 0
+!		! Should never happen. If it happens, it's very rare
+!!		if(value >= #strings_offset) jump ret_string_or_const;
+!		@jl _value _StringsOffset ?~_isStringOrConst;
+!!		if(value >= #code_offset) return routinetype;
+!		@jl _value _CodeOffset ?~_isRoutine;
+!		jump _isConstant;
+!._isStringOrConst;
+!!		if(value < -1) return stringtype;
+!		@jl _value (-1) ?_isString;
+!		jump _isConstant;
+
+._isRoutine;
+			@call _value -> _result;
+			@jz _result ?_next;
+			jump _done;
+._isString;
+			print (string) _value, "^";
+			_result = true;
+			jump _done;
+._isZero;
+			_value = 0;
+._isConstant;
+			_result = _value;
+			jump _done;
+._next;
+		@inc_chk _i _len ?~_get_next_value;
+._done;
 #Ifndef OPTIONAL_MANUAL_SCOPE;
 		if(p_obj.#p_prop > 2 || p_obj.p_prop ~= NULL or 0)
 			scope_modified = true;
 #Endif;
+		self = _self;
+		sw__var = _sw__var;
 	}
-	@pull sw__var;
-	return p_switch;
+	return _result;
 ];
 
 [ PrintOrRun p_obj p_prop p_no_string_newline _val;
-	if (p_obj.#p_prop > WORDSIZE || (_val = p_obj.p_prop) ofclass Routine) return RunRoutines(p_obj, p_prop);
+	if (p_obj.#p_prop > WORDSIZE || (_val = p_obj.p_prop) ofclass Routine)
+		return RunRoutines(p_obj, p_prop);
 	if(_val ofclass String) {
 		print (string) _val;
 		if(p_no_string_newline == 0) new_line;
@@ -2492,6 +2576,16 @@ Object thedark "Darkness"
 
 	top_object = #largest_object-255;
 	sys_statusline_flag = ( ($1->0) & 2 ) / 2;
+
+! Pick the correct case for custom logic in RunRoutines.
+! 1: #strings_offset > 0
+! 2: #code_offset > 0 && #strings_offset < 0
+! 3: #code_offset < 0 && #strings_offset < 0 (CAN'T HAPPEN?!)
+	if(#strings_offset > 0) _puny_zregion_case = _PunyZRegionCase1;
+	else 
+	! if(#code_offset > 0) 
+		_puny_zregion_case = _PunyZRegionCase2;
+!	else _puny_zregion_case = _PunyZRegionCase3;
 
 #Ifdef CUSTOM_PLAYER_OBJECT;
 	player = CUSTOM_PLAYER_OBJECT;
