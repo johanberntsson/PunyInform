@@ -155,6 +155,7 @@ Array talk_array_josh -->
 	30 "PC" "What do you know about IBM PCs?" "Boring, they're just for work." 50
 	30 "BBC computers" "Tell me about BBC Computers!" "British, weren't they? And I think the name of the company was actually Acorn."
 	30 "Murder" "Where were you when Bob was killed?" "I was at home, watching TV. You don't think I had anything to do with his death, do you?"
+	0 400 "Jack Tramiel" "Oh, did you know Jack Tramiel, the founder of Commodore?" "No, not personally."
 	TM_END;
 
 
