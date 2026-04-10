@@ -1,5 +1,4 @@
-!%++puny
-
+Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant INITIAL_LOCATION_VALUE = TheRoom;
 
 Include "globals.h";

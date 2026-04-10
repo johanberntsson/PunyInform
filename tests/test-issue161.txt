@@ -1,6 +1,6 @@
 
 > foo for 1
-I think you wanted to say "foo for 1 minutes". Please try again.
+I think you wanted to say "foo for 1 minute". Please try again.
 
 > foo for 1 minute
 Got here: 1
