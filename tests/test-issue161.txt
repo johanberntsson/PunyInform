@@ -1,8 +1,8 @@
 
 > foo for 1
-I think you wanted to say "foo for 1 minute". Please try again.
+I think you wanted to say "foo for 1 unit". Please try again.
 
-> foo for 1 minute
+> foo for 1 unit
 Got here: 1
 
 > quit
