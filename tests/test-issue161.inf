@@ -1,0 +1,13 @@
+!%++puny
+
+Constant INITIAL_LOCATION_VALUE = TheRoom;
+
+Include "globals.h";
+Include "puny.h";
+
+[ Initialise; ];
+
+Object TheRoom "The Room" with description "The room";
+
+[ FooSub; "Got here: ", noun; ];
+Verb 'foo' * 'for' number 'minutes' -> Foo;
