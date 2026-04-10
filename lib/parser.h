@@ -818,7 +818,7 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 	! skip 'all' etc
 	while(p_parse_pointer --> 0 == ALL_WORD or EXCEPT_WORD1 or EXCEPT_WORD2) {
 		if(p_parse_pointer --> 0 == ALL_WORD) {
-			parser_all_found = true; !TODO: do we really need the global?
+			parser_all_found = true;
 			_all_found = true;
 		}
 #IfDef DEBUG_GETNEXTNOUN;
@@ -1943,6 +1943,9 @@ Array guess_object-->5;
 			! of nouns without a matching multi token
 			if(parser_phase == PHASE2) {
 				if(parser_all_found) {
+					! tried to use multiple NPs in an expect clause,
+					! such as GET ALL EXCEPT X and Y
+					! This is too hard to handle, only one NP allowed.
 					PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
 				} else {
 					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
