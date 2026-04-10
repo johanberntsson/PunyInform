@@ -17,6 +17,9 @@ dial: That's fixed in place.
 
 The blue book ticks loudly.
 
+> drop all but box and blue book
+I don't understand that sentence.
+
 > restart
 Are you sure you want to restart? yes
 

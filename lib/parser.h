@@ -1942,7 +1942,11 @@ Array guess_object-->5;
 			! neither a verb nor a direction, so probably a list
 			! of nouns without a matching multi token
 			if(parser_phase == PHASE2) {
-				PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
+				if(parser_all_found) {
+					PrintMsg(MSG_PARSER_UNKNOWN_SENTENCE);
+				} else {
+					PrintMsg(MSG_PARSER_NOT_MULTIPLE_VERB);
+				}
 			} else {
 				phase2_necessary = PHASE2_ERROR;
 			}
