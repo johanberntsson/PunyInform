@@ -12,3 +12,6 @@ Object TheRoom "The Room" with description "The room";
 [ FooSub; "Got here: ", noun; ];
 Verb 'foo' * 'for' number 'unit' -> Foo;
 
+[ BlobSub; "You blob."; ];
+Verb 'blob' * noun 'to' number 'minute' -> Blob;
+

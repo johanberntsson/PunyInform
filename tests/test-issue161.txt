@@ -1,9 +1,18 @@
-
 > foo for 1
-I think you wanted to say "foo for 1 unit". Please try again.
+I think you wanted to say "foo for something unit". Please try again.
 
 > foo for 1 unit
 Got here: 1
+
+> blob
+I think you wanted to say "blob something to something minute". Please try
+again.
+
+> blob me to 4
+I think you wanted to say "blob yourself to something minute". Please try again.
+
+> blob me to 5 minute
+You blob.
 
 > quit
 Are you sure you want to quit? yes
