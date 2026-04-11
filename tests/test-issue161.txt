@@ -12,7 +12,16 @@ again.
 I think you wanted to say "blob yourself to something minute". Please try again.
 
 > blob me to 5 minute
-You blob.
+You blob: 5
+
+> blob me to 0 minute
+You blob: 0
+
+> blob me to 10000 minute
+You blob: 10000
+
+> blob me to 10001 minute
+You blob: 10000
 
 > quit
 Are you sure you want to quit? yes
