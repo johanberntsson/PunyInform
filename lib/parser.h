@@ -123,7 +123,9 @@ System_file;
 			++_num_preps;
 		} else {
 			print " ";
-			if(p_noun == 0) {
+			if(_type == TT_OBJECT && _data == NUMBER_OBJECT) {
+				print (string) SOMETHING_STR;
+			} else if(p_noun == 0) {
 				if(_type == TT_ROUTINE_FILTER && #preactions_table-->_data == ADirection) {
 					print (string) SOMEDIRECTION_STR;
 				} else if(second == 0) {
@@ -135,12 +137,9 @@ System_file;
 					}
 				} else print (name) second;
 			} else {
-                if(_type == TT_OBJECT && _data == NUMBER_OBJECT) {
-                    print noun;
-                } else if(noun ~= 0 && metaclass(noun) ~= ROUTINE) {
+				if(noun ~= 0 && metaclass(noun) ~= ROUTINE) {
 					p_noun = 0; ! avoid repeat (we don't need p_noun anymore)
 					if(parser_all_found) print "all"; else print (name) noun;
-!				} else if(_type == TT_OBJECT && _token->2 == CREATURE_OBJECT) {
 				} else if(_type == TT_OBJECT && _data == CREATURE_OBJECT) {
 					print (string) SOMEONE_STR;
 				} else {
