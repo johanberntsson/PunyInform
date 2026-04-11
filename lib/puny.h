@@ -1231,7 +1231,14 @@ Constant _SpaceTableLength 20;
 [ _UpdateDarkness p_silent _ceil _old_darkness _darkness;
 	if(location == thedark) _old_darkness = true;
 	_ceil = ScopeCeiling(player);
-	if(_LookForLightInObj(_ceil, _ceil) == false) _darkness = true;
+	if(_ceil hasnt light) {
+		if((last_light_source == 0 || last_light_source hasnt light ||
+					parent(last_light_source) ~= player or _ceil) &&
+				_LookForLightInObj(_ceil) == false) {
+			_darkness = true;
+			last_light_source = 0;
+		}
+	}
 	if(_darkness ~= _old_darkness) scope_modified = true;
 	if(_darkness) {
 		if(_old_darkness == false && p_silent == false) PrintMsg(MSG_NOW_DARK);
@@ -1245,12 +1252,15 @@ Constant _SpaceTableLength 20;
 	}
 ];
 
-[ _LookForLightInObj p_obj p_ceiling _o;
-	if(p_obj has light) rtrue;
-	if(p_obj == p_ceiling || p_obj has transparent || p_obj has supporter || (p_obj has container && p_obj has open))
-		objectloop(_o in p_obj)
-			if(_LookForLightInObj(_o))
-				rtrue;
+[ _LookForLightInObj p_obj _o;
+!	if(p_obj has light) rtrue;
+	@test_attr p_obj light ?rtrue;
+	objectloop(_o in p_obj) {
+		if(_o has light) { last_light_source = _o; rtrue; }
+		if(_o has transparent or supporter || 
+				(_o has container && _o has open))
+			if(_LookForLightInObj(_o)) rtrue;
+	}
 	rfalse;
 ];
 #Endif;
