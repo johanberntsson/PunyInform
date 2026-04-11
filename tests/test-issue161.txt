@@ -1,0 +1,10 @@
+
+> foo for 1
+I think you wanted to say "foo for 1 unit". Please try again.
+
+> foo for 1 unit
+Got here: 1
+
+> quit
+Are you sure you want to quit? yes
+
