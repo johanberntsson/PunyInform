@@ -412,7 +412,7 @@ Constant AddToScope = _PutInScope;
 [ _ObjectScopedBySomething p_obj _j _k _l _m;
 	objectloop (_j has reactive && (_j.&add_to_scope ~= 0)) {
 		_l = _j.&add_to_scope;
-		if (_l-->0 ofclass Routine) continue;
+		if (IsARoutine(_l-->0)) continue;
 #IfV5;
 		_k = _j.#add_to_scope;
 		@log_shift _k (-1) -> _k;

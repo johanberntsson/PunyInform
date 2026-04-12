@@ -12,6 +12,8 @@ Upcoming release:
 - Optimized the search for a light source (New global last_light_source holds the last used light source, if any)
 - Printing numbers correctly when printing parsed pattern (thanks joelburton)
 - Renamed ResetInputAction to _ResetInputAction
+- New routine IsARoutine(value) to (quickly) decide if a value can be a routine address.
+- New routine IsAString(value) to (quickly) decide if a value can be a string address.
 
 =======
 v6.4.1: bug fix release (8 Mar 2026)

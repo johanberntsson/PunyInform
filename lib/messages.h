@@ -677,7 +677,7 @@ Constant SKIP_MSG_PARSER_NOSUCHTHING;
 #Endif;
 
 [ _PrintMsg p_msg p_arg_1 p_arg_2;
-	if(p_msg ofclass String)
+	if(IsAString(p_msg))
 		print_ret (string) p_msg;
 
 #Ifdef LibraryMessages;

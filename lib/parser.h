@@ -595,9 +595,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 			! Solution: If the object seems to be a room, we will not call
 			! parse_name, unless DebugParseNameObject(object) returns true
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-			if(_obj has reactive && _obj.parse_name ofclass Routine) {
+			if(_obj has reactive && IsARoutine(_obj.parse_name)) {
 #Ifnot;
-			if(_obj.parse_name ofclass Routine) {
+			if(IsARoutine(_obj.parse_name)) {
 #Endif;
 				if(meta == 0 || parent(_obj) ~= 0
 						|| _RoomLike(_obj) == false
@@ -609,9 +609,9 @@ Constant _PARSENP_CHOOSEOBJ_WEIGHT = 1000;
 				}
 #Ifnot; ! Not DEBUG
 #Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-			if(_obj has reactive && (_result = _obj.parse_name) ~= 0 && _result ofclass routine) {
+			if(_obj has reactive && (_result = _obj.parse_name) ~= 0 && IsARoutine(_result)) {
 #Ifnot;
-			if((_result = _obj.parse_name) ~= 0 && _result ofclass routine) {
+			if((_result = _obj.parse_name) ~= 0 && IsARoutine(_result)) {
 #Endif;
 				_result = _obj.parse_name();
 #Endif;
@@ -1620,7 +1620,7 @@ Array guess_object-->5;
 			if(_val == _noun) {
 				guess_object-->GUESS_KEY = _noun;
 				_key_count++;
-			} else if(_val ofclass Routine) {
+			} else if(IsARoutine(_val)) {
 				@push second;
 				second = _noun;
 				if(noun.with_key() == second) {
@@ -1710,9 +1710,13 @@ Array guess_object-->5;
 	action = _i & $03ff;
 	action_to_be = action; ! compatibility (referenced in DM4 for ChooseObjects)
 #Ifdef GRAMMAR_META_FLAG;
-	meta = (action <= #highest_meta_action_number);
+	meta = false;
+	if(action <= #highest_meta_action_number)
+		meta = true;
 #Endif;
-	action_reverse = (_i & $400);
+	action_reverse = false;
+	if(_i & $400)
+		action_reverse = true;
 	phase2_necessary = PHASE2_SUCCESS;
 
 #IfDef DEBUG_PARSEPATTERN;
