@@ -10,6 +10,8 @@ Upcoming release:
 - Removed a pointless variable in cheap scenery extension.
 - Improved the error message when trying GET ALL BUT X AND Y (too complex)
 - Optimized the search for a light source (New global last_light_source holds the last used light source, if any)
+- Printing numbers correctly when printing parsed pattern (thanks joelburton)
+- Renamed ResetInputAction to _ResetInputAction
 
 =======
 v6.4.1: bug fix release (8 Mar 2026)

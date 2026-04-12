@@ -1710,13 +1710,9 @@ Array guess_object-->5;
 	action = _i & $03ff;
 	action_to_be = action; ! compatibility (referenced in DM4 for ChooseObjects)
 #Ifdef GRAMMAR_META_FLAG;
-	meta = false;
-	if(action <= #highest_meta_action_number)
-		meta = true;
+	meta = (action <= #highest_meta_action_number);
 #Endif;
-	action_reverse = false;
-	if(_i & $400)
-		action_reverse = true;
+	action_reverse = (_i & $400);
 	phase2_necessary = PHASE2_SUCCESS;
 
 #IfDef DEBUG_PARSEPATTERN;
@@ -1732,8 +1728,6 @@ Array guess_object-->5;
 
 		scope_stage = 0;
 		_type = _token & $0f;
-!		if(_type == TT_END) {
-!		}
 
 		! parse_routine doesn't match anything and is always allowed
 		if(wn >= 1 + parse->1 && _type ~= TT_PARSE_ROUTINE) {
@@ -1741,7 +1735,6 @@ Array guess_object-->5;
 			print "Fail, since grammar line has not ended but player input has.^";
 #EndIf;
 			if(parser_phase == PHASE2) {
-				!print "You need to be more specific.^";
 				if(_FixIncompleteSentenceOrComplain(p_pattern)) {
 					! sentence was corrected
 					return 100;
@@ -1776,7 +1769,6 @@ Array guess_object-->5;
         }
 
 		! the parse routine can change wn, so update _parse_pointer
-!		_parse_pointer = parse + 2 + 4 * (wn - 1);
 		_parse_pointer = parse + 4 * wn - 2; ! Shorter than parse + 2 + 4 * (wn - 1)
 
 		switch(_noun) {
@@ -1960,10 +1952,6 @@ Array guess_object-->5;
 			return 100; ! pattern matched
 		}
 	}
-	!if(_IsSentenceDivider(_parse_pointer)) {
-	!	wn++;
-	!	return 100; ! pattern matched
-	!}
 	if(wn == 1 + parse->1) {
 		return 100; ! pattern matched
 	}
@@ -1988,7 +1976,7 @@ Array guess_object-->5;
 	!print "he ", himobj, " she ", herobj, " it ", itobj, "^";
 ];
 
-[ ResetInputAction p_action;
+[ _ResetInputAction p_action;
 	! p_action values:
 	!   -1: Don't set input_action etc as long as input_action has this value (used when the parser performs implicit actions)
 	!   -2: Set input_action etc the next time an action is performed
@@ -2009,7 +1997,7 @@ Array guess_object-->5;
 	! 1 is returned. If the input is "open box" then
 	! the whole input is matched and 2 returned.
 
-	ResetInputAction(-1); ! -1 means input_action etc won't be set (by implicit actions etc)
+	_ResetInputAction(-1); ! -1 means input_action etc won't be set (by implicit actions etc)
 	multiple_objects-->0 = 0;
 	selected_direction_index = 0;
 	selected_direction = 0;
@@ -2024,7 +2012,6 @@ Array guess_object-->5;
 	consult_words = 0;
 	usual_grammar_after = 0;
 	_verb_offset = 0;
-!	scope_routine = 0;
 	noun_filter = 0;
 	object_token_type = -1;
 	parser_all_found = false;
@@ -2467,7 +2454,7 @@ Array guess_object-->5;
 	if(_i == 0) { ! _i = multiple_objects --> 0
 		! single action
 		if(inp1 > 1) PronounNotice(noun);
-		ResetInputAction(-2); ! Allow input_action to be set by PerformPreparedAction
+		_ResetInputAction(-2); ! Allow input_action to be set by PerformPreparedAction
 		PerformPreparedAction();
 	} else {
 		! multiple action
@@ -2535,7 +2522,7 @@ Array guess_object-->5;
 
 				if(parser_all_found || _i > 1) print (name) noun, ": "; ! _i = multiple_objects --> 0
 				if(inp1 > 1) PronounNotice(noun);
-				ResetInputAction(-2); ! Allow input_action to be set by PerformPreparedAction
+				_ResetInputAction(-2); ! Allow input_action to be set by PerformPreparedAction
 				PerformPreparedAction();
 				++_score;
 			}
