@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v6.4 quick reference** |
+| **PunyInform v6.5 quick reference** |
 
   
 More information on last page.
@@ -345,7 +345,7 @@ More information on last page.
 
 ## OPTIONAL_NON_FLASHING_STATUSLINE **PUNY++**
 
-###### Use a faster (and prettier?) but less compatible statusline for z5+ games.
+###### Use a faster but less compatible statusline (z5+ only).
 
 ## OPTIONAL_ORDERED_TIMERS **PUNY++**
 
@@ -469,6 +469,14 @@ More information on last page.
 
 ###### Return *true* if *object1* holds *object2*, on some level. **
 
+## IsARoutine(value) **PUNY++**
+
+###### Return true if value can be a routine address.
+
+## IsAString(value) **PUNY++**
+
+###### Return true if value can be a string address.
+
 ## LanguageNumber(number)
 
 ###### Print *number* using words. Requires *OPTIONAL_LANGUAGE_NUMBER*. **
@@ -559,7 +567,7 @@ More information on last page.
 
 ## TryNumber(wordnum)
 
-###### Try to parse word *wordnum* in player input as a number. If successful, return the number (0-10000, higher values are returned as 10000). If it's not a valid number, return -1000. If *OPTIONAL_ALLOW_WRITTEN_NUMBERS* is defined, also parse number words (*'one'* .. *'twenty'*).
+###### Try to parse word *wordnum* in player input as a number. Return the number (0-10000), or -1000 for invalid number. If *OPTIONAL_ALLOW_WRITTEN_NUMBERS* is defined, also parse number words (*'one'* .. *'twenty'*).
 
 ## WordAddress(wordnum)
 
@@ -567,7 +575,7 @@ More information on last page.
 
 ## WordLength(wordnum)
 
-###### Return the number of characters in word *wordnum* in player input.
+###### Return the length of word *wordnum* in player input.
 
 ## WordValue(wordnum)
 
