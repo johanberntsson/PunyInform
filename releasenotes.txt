@@ -14,7 +14,6 @@ Upcoming release:
 - Renamed ResetInputAction to _ResetInputAction
 - New routine IsARoutine(value) to (quickly) decide if a value can be a routine address.
 - New routine IsAString(value) to (quickly) decide if a value can be a string address.
-- Improved code: If parser exits with scope_stage set to 2, but scope_routine is 0, _UpdateScope will now set scope_stage to 0.
 
 =======
 v6.4.1: bug fix release (8 Mar 2026)

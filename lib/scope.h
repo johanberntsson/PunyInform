@@ -131,9 +131,6 @@ System_file;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
 #EndIf;
 
-	if(scope_stage == 2 && scope_routine ~= 0)
-		scope_stage = 0;
-
 	scope_reason = p_reason;
 	! check if scope is already calculated
 	if(cached_scope_pov == p_actor && scope_modified == false &&
