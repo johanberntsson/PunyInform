@@ -38,9 +38,6 @@ Global menu_nesting;
 
 	print "--- "; print (string) main_title; print " ---^^";
 
-	!if (menu_choices ofclass Routine) menu_choices.call();
-	!else                              print (string) menu_choices;
-
 	print "There is information provided on the following:^^";
 	for(i = 1: i <= lines: i++) {
 		menu_item = i;
@@ -139,7 +136,7 @@ Constant QKEY2__KY      = 'q';
 	y = y+2*ch;
 	@set_cursor y x; font off;
 
-	if (menu_choices ofclass String) print (string) menu_choices;
+	if (IsAString(menu_choices)) print (string) menu_choices;
 	else                             menu_choices.call();
 
 	x = 1+3;

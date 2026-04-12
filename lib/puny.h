@@ -707,7 +707,7 @@ Constant ONE_SPACE_STRING = " ";
 	_count = 0;
 	for(_obj = p_obj: _obj ~= 0: _obj = NextEntry(_obj, pc_depth)) _count++;
 
-	if(lt_value ofclass String) {
+	if(IsAString(lt_value)) {
 		if(c_style & NEWLINE_BIT) {
 			FastSpaces(pc_indent);
 		}
@@ -873,7 +873,7 @@ Constant ONE_SPACE_STRING = " ";
 
 		if(_show_obj) {
 			if(_last_obj == 0) {
-				if(p_first_text ofclass String)
+				if(IsAString(p_first_text))
 					print (string) p_first_text;
 				else if(p_first_text ~= 0)
 					p_first_text(parent(p_obj));
@@ -985,6 +985,42 @@ Constant _SpaceTableLength 20;
 #Endif;
 ];
 
+[ _IsARoutine_Case1 p_value;
+	! Decide if a value is a routine address, faster than using ofclass
+	! For the ideas behind this implementation, see comments in RunRoutines
+	! Case 1, code_offset > 0 && strings_offset > 0
+	@jl p_value (#strings_offset) ?~rfalse;
+	@jl p_value (#code_offset) ?~rtrue;
+	rfalse;
+];
+
+[ _IsARoutine_Case2 p_value;
+	! Decide if a value is a routine address, faster than using ofclass
+	! For the ideas behind this implementation, see comments in RunRoutines
+	! Case 2, code_offset > 0 && strings_offset < 0
+	@jl p_value (#code_offset) ?~rtrue;
+	@jl p_value (#strings_offset) ?rtrue;
+	rfalse;
+];
+
+[ _IsAString_Case1 p_value;
+	! Decide if a value is a string address, faster than using ofclass
+	! For the ideas behind this implementation, see comments in RunRoutines
+	! Case 1, code_offset > 0 && strings_offset > 0
+	@jl p_value (#strings_offset) ?~rtrue;
+	@jl p_value (-1) ?rtrue;
+	rfalse;
+];
+
+[ _IsAString_Case2 p_value;
+	! Decide if a value is a string address, faster than using ofclass
+	! For the ideas behind this implementation, see comments in RunRoutines
+	! Case 2, code_offset > 0 && strings_offset < 0
+	@jl p_value (#strings_offset) ?rfalse;
+	@jl p_value (-1) ?rtrue;
+	rfalse;
+];
+
 [ RunRoutines p_obj p_prop p_switch _sw__var _self _address 
 		_len _i _value _result;
 #Ifndef OPTIONAL_NO_DARKNESS;
@@ -1019,27 +1055,28 @@ Constant _SpaceTableLength 20;
 			! for PunyInform games, and placing it first gives
 			! them a ~4% advantage in speed.
 !			if(value >= #strings_offset) return stringtype;
-			@jl _value _StringsOffset ?~_isString;
+			@jl _value (#strings_offset) ?~_isString;
 !			if(value >= #code_offset) return routinetype;
-			@jl _value _CodeOffset ?~_isRoutine;
+			@jl _value (#code_offset) ?~_isRoutine;
+			@jl _value (-1) ?_isString;
 			jump _isConstant;
 		} 
 !		else if(_puny_zregion_case == _PunyZRegionCase2) {
 			! Case 2, code_offset > 0 && strings_offset < 0
 !			if(value >= #code_offset) return routinetype;
-			@jl _value _CodeOffset ?~_isRoutine;
+			@jl _value (#code_offset) ?~_isRoutine;
 !			if(value < #strings_offset) return routinetype;
-			@jl _value _StringsOffset ?_isRoutine;
+			@jl _value (#strings_offset) ?_isRoutine;
 !			if(value < -1) return stringtype;
 			@jl _value (-1) ?_isString;
 			jump _isConstant;
 !		}
 !		! Case 3, code_offset < 0 && strings_offset < 0
 !		! Should never happen. If it happens, it's very rare
-!!		if(value >= #strings_offset) jump ret_string_or_const;
-!		@jl _value _StringsOffset ?~_isStringOrConst;
-!!		if(value >= #code_offset) return routinetype;
-!		@jl _value _CodeOffset ?~_isRoutine;
+!!		if(value >= (#strings_offset)) jump ret_string_or_const;
+!		@jl _value (#strings_offset) ?~_isStringOrConst;
+!!		if(value >= (#code_offset)) return routinetype;
+!		@jl _value (#code_offset) ?~_isRoutine;
 !		jump _isConstant;
 !._isStringOrConst;
 !!		if(value < -1) return stringtype;
@@ -1073,9 +1110,9 @@ Constant _SpaceTableLength 20;
 ];
 
 [ PrintOrRun p_obj p_prop p_no_string_newline _val;
-	if (p_obj.#p_prop > WORDSIZE || (_val = p_obj.p_prop) ofclass Routine)
+	if (p_obj.#p_prop > WORDSIZE || IsARoutine((_val = p_obj.p_prop)))
 		return RunRoutines(p_obj, p_prop);
-	if(_val ofclass String) {
+	if(IsAString(_val)) {
 		print (string) _val;
 		if(p_no_string_newline == 0) new_line;
 	}
@@ -2476,7 +2513,7 @@ Object thedark "Darkness"
 #IfTrue RUNTIME_ERRORS < RTE_VERBOSE;
 [RT__Err err_no par1 par2;
 	print "Inform error: ";
-	if(err_no ofclass String)
+	if(IsAString(err_no))
 		print (string) err_no, " - ";
 	else
 		print_ret err_no;
@@ -2575,14 +2612,14 @@ Object thedark "Darkness"
 	sys_statusline_flag = ( ($1->0) & 2 ) / 2;
 
 ! Pick the correct case for custom logic in RunRoutines.
-! 1: #strings_offset > 0
+! 1: #strings_offset > 0 (DEFAULT)
 ! 2: #code_offset > 0 && #strings_offset < 0
-! 3: #code_offset < 0 && #strings_offset < 0 (CAN'T HAPPEN?!)
-	if(#strings_offset > 0) _puny_zregion_case = _PunyZRegionCase1;
-!	else 
-	! if(#code_offset > 0) 
-!		_puny_zregion_case = _PunyZRegionCase2;
-!	else _puny_zregion_case = _PunyZRegionCase3;
+! 3: #code_offset < 0 && #strings_offset < 0 (CAN'T HAPPEN)
+	if(#strings_offset < 0) {
+		_puny_zregion_case = _PunyZRegionCase2;
+		IsARoutine = _IsARoutine_Case2;
+		IsAString = _IsAString_Case2;
+	}
 
 #Ifdef CUSTOM_PLAYER_OBJECT;
 	player = CUSTOM_PLAYER_OBJECT;

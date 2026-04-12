@@ -154,6 +154,7 @@ System_file;
 
 Constant EXT_CHEAP_SCENERY = 1;
 
+! Define things that are provided by PunyInform, if we're not using PunyInform
 #Ifndef RUNTIME_ERRORS;
 Constant RUNTIME_ERRORS = 2;
 #Endif;
@@ -162,6 +163,19 @@ Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL = 1;
 Constant RTE_VERBOSE = 2;
 #Endif;
+#Ifndef IsARoutine;
+[ IsARoutine p_value;
+	if(p_value ofclass Routine) rtrue;
+	rfalse;
+];
+#Endif;
+#Ifndef IsAString;
+[ IsAString p_value;
+	if(p_value ofclass String) rtrue;
+	rfalse;
+];
+#Endif;
+
 #Iftrue RUNTIME_ERRORS > RTE_MINIMUM;
 Constant CS_ERR = "^[Cheap_scenery error #";
 #Endif;
@@ -509,10 +523,10 @@ Object CheapScenery "object"
 			else
 				_k = 2;
 			_k = _i-->_k;
-			if(action == ##Examine && _k ofclass String)
+			if(action == ##Examine && IsAString(_k))
 				print_ret (string) _k;
 
-			if(_k ofclass Routine) {
+			if(IsARoutine(_k)) {
 				_self_bak = self;
 				self = location;
 				sw__var = action;
@@ -522,7 +536,7 @@ Object CheapScenery "object"
 			}
 
 #ifdef SceneryReply;
-			if(SceneryReply ofclass string)
+			if(IsAString(SceneryReply))
 				print_ret (string) SceneryReply;
 			_w1 = _i-->0;
 			_w2 = _i-->1;
@@ -541,7 +555,7 @@ Object CheapScenery "object"
 			if(SceneryReply(_w1, _w2, _id_or_routine))
 				rtrue;
 #endif;
-			if(CS_DEFAULT_MSG ofclass Routine) {
+			if(IsARoutine(CS_DEFAULT_MSG)) {
 				CS_DEFAULT_MSG.Call();
 				rtrue;
 			}

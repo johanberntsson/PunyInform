@@ -131,6 +131,9 @@ System_file;
 	print "*** Call to UpdateScope for ", (the) p_actor, "^";;
 #EndIf;
 
+	if(scope_stage == 2 && scope_routine ~= 0)
+		scope_stage = 0;
+
 	scope_reason = p_reason;
 	! check if scope is already calculated
 	if(cached_scope_pov == p_actor && scope_modified == false &&
@@ -412,7 +415,7 @@ Constant AddToScope = _PutInScope;
 [ _ObjectScopedBySomething p_obj _j _k _l _m;
 	objectloop (_j has reactive && (_j.&add_to_scope ~= 0)) {
 		_l = _j.&add_to_scope;
-		if (_l-->0 ofclass Routine) continue;
+		if (IsARoutine(_l-->0)) continue;
 #IfV5;
 		_k = _j.#add_to_scope;
 		@log_shift _k (-1) -> _k;
