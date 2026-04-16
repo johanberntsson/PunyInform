@@ -1115,7 +1115,9 @@ Constant _SpaceTableLength 20;
 	if(IsAString(_val)) {
 		print (string) _val;
 		if(p_no_string_newline == 0) new_line;
+		rtrue;
 	}
+	return _val;
 ];
 
 [ CommonAncestor p_o1 p_o2 _i _j;

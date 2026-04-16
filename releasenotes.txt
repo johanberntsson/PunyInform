@@ -1,5 +1,9 @@
 Upcoming release:
 
+- A describe property can now hold the value 2, or a routine returning 2, to say that the object isn't described at all (not by the describe property, nor should it be shown in any other way). This differs from returning 1/true, in that returning 2 won't make the Look routine think it has printed an object, so it won't necessarily print "You can ALSO see..." when listing the remaining objects. (Issue #164)
+- Storing 0 in a describe property would make the object be listed as usual by the Look routine, if the object belonged to a class that had a describe routine returning 0 (correct!), but would exempt the object from being listed if it didn't belong to a class that had a describe routine (wrong!). This has been corrected - 0 always means the same as not giving a value at all for describe. (Issue #163)
+- If a property had the value n, where n is 0 or a small positive number, and code called PrintOrRun for this property, PrintOrRun should have returned n. Instead it has always returned 1 in this scenario. This bug has been fixed. In the library, the describe property is the only property that is affected by this change.
+
 =======
 v6.5: new feature release (12 Apr 2026)
 

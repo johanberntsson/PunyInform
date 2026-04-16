@@ -1762,7 +1762,7 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 ];
 
 [ Look _obj _top_ceil _ceil _describe_room _you_can_see_1 _you_can_see_2 
-		_desc_prop _last_level _action;
+		_desc_prop _last_level _action _result;
 	if(input_action == ##Look) PrintMsg(MSG_LOOK_BEFORE_ROOMNAME);
 	if((lookmode == 1 && location hasnt visited) || lookmode == 2) _describe_room = true;
 #IfV5;
@@ -1829,9 +1829,10 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 			if(_obj hasnt scenery or concealed && _obj ~= player) {
 				give _obj workflag;
 				if(_obj.&describe) {
-					if(PrintOrRun(_obj, describe, 0)) {
+					_result = PrintOrRun(_obj, describe, 0);
+					if(_result) {
 						give _obj ~workflag;
-						also_flag = true;
+						if(_result ~= 2) also_flag = true;
 						continue;
 					}
 				}
