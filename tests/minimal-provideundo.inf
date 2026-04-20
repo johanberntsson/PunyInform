@@ -43,7 +43,7 @@ Constant OPTIONAL_EXTENDED_METAVERBS;
 !Constant OPTIONAL_MANUAL_SCOPE;
 !Constant OPTIONAL_MANUAL_REACTIVE;
 !Constant OPTIONAL_ORDERED_TIMERS;
-#Iftrue (#version_number > 3);
+#Iftrue (#version_number > 4);
 Constant OPTIONAL_PROVIDE_UNDO;
 #EndIf;
 !Constant OPTIONAL_REACTIVE_PARSE_NAME;

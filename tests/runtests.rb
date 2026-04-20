@@ -65,6 +65,14 @@ end
 $num_tests = 0
 $num_tests_failed = 0
 
+puts "Testing v4 release"
+Dir["*.inf"].sort.each { |filename| runtest filename, 4, "" }
+checkforfailures
+
+puts "Testing v3 debug"
+Dir["*.inf"].sort.each { |filename| runtest filename, 4, "-D" }
+checkforfailures
+
 puts "Testing v3 release"
 Dir["*.inf"].sort.each { |filename| runtest filename, 3, "" }
 checkforfailures
