@@ -27,7 +27,7 @@ Global item_width;
 Global item_name;
 Global menu_nesting;
 
-#IfV3;
+#Iftrue #version_number < 4;
 [ DoMenu menu_choices EntryR ChoiceR lines main_title i j;
 	menu_choices = 0; ! Avoid warning
 	menu_nesting++;

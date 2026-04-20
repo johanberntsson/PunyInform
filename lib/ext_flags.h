@@ -62,7 +62,7 @@ Constant RTE_VERBOSE = 2;
 Constant FL_ERR = "^[Flags error #";
 #Endif;
 
-#Ifv3;
+#Iftrue #version_number < 5;
 Array flag_powers static ->
 	$$00000001
 	$$00000010
@@ -109,7 +109,7 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 		ClearFlag(-p_x);
 		rtrue;
 	}
-#IfV5;
+#iftrue #version_number > 4;
 	@log_shift p_x (-3) -> _val;
 	p_x = p_x & 7;
 	@log_shift 1 p_x -> p_x;
@@ -129,7 +129,7 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 		SetFlag(-p_x);
 		rtrue;
 	}
-#IfV5;
+#iftrue #version_number > 4;
 	@log_shift p_x (-3) -> _val;
 	p_x = p_x & 7;
 	@log_shift 1 p_x -> p_x;
@@ -143,7 +143,7 @@ Array game_flags -> (FLAG_COUNT + 1) / 8 + ((FLAG_COUNT + 1) & 7 > 0);
 [ _FlagValue p_x _abs_p_x _val;
 	_abs_p_x = p_x;
 	if(p_x < 0) _abs_p_x = -p_x;
-#IfV5;
+#iftrue #version_number > 4;
 	@log_shift _abs_p_x (-3) -> _val; ! Divide by 8
 	_abs_p_x = _abs_p_x & 7;
 	@log_shift 1 _abs_p_x -> _abs_p_x;

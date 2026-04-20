@@ -151,9 +151,9 @@ Constant ARE_STR = "are ";
 Default DEFAULT_CAPACITY = 100;
 
 #Ifdef OPTIONAL_PROVIDE_UNDO;
-#IfV3;
-Message warning "*** Skipping Undo - not supported in v3 ***";
-#IfNot;
+#Iftrue #version_number < 5;
+Message warning "*** Skipping Undo - not supported in v3,v4 ***";
+#Ifnot;
 Constant OPTIONAL_PROVIDE_UNDO_FINAL;
 #Endif;
 #Endif;
@@ -288,7 +288,7 @@ Constant FAKE_U_OBJ = 10009;
 Constant FAKE_D_OBJ = 10010;
 Constant FAKE_IN_OBJ = 10011;
 Constant FAKE_OUT_OBJ = 10012;
-#IfV5;
+#Iftrue #version_number > 3;
 Array _direction_dict_words static --> 'n//' 's//' 'e//' 'w//' 'ne' 'nw' 'se' 'sw' 'u//' 'd//' 0 0
 	'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'up' 'down' 'in' 'out';
 #Ifdef OPTIONAL_SHIP_DIRECTIONS;
@@ -306,7 +306,7 @@ Constant FAKE_U_OBJ = 10005;
 Constant FAKE_D_OBJ = 10006;
 Constant FAKE_IN_OBJ = 10007;
 Constant FAKE_OUT_OBJ = 10008;
-#IfV5;
+#Iftrue #version_number > 3;
 Array _direction_dict_words static --> 'n//' 's//' 'e//' 'w//' 'u//' 'd//' 0 0
 	'north' 'south' 'east' 'west' 'up' 'down' 'in' 'out';
 #Ifdef OPTIONAL_SHIP_DIRECTIONS;
@@ -330,7 +330,7 @@ Array LanguageNumbers static table
 
 #Ifdef OPTIONAL_LANGUAGE_NUMBER;
 #Ifdef OPTIONAL_ALLOW_WRITTEN_NUMBERS;
-#IfV3;
+#Iftrue #version_number < 4;
 Array LanguageNumberStrings static -->
 	"thirteen"
 	"fourteen"
@@ -423,9 +423,9 @@ Constant FORM_CDEF           = 1;
 Constant FORM_DEF            = 2;
 Constant FORM_INDEF          = 3;
 
-#IfV3;
+#Iftrue #version_number < 4;
 	Constant DICT_BYTES_FOR_WORD = 4;
-#IfNot;
+#Ifnot;
 	Constant DICT_BYTES_FOR_WORD = 6;
 	#Ifndef STATUSLINE_TIME;
 		#Ifndef OPTIONAL_SL_NO_MOVES;
@@ -440,7 +440,7 @@ Constant FORM_INDEF          = 3;
 	#Ifndef STATUSLINE_SCORE;
 		Constant TIME__TX = " Time: ";
 	#Endif;
-#EndIf;
+#Endif;
 
 !#Default Story        0;
 !#Default Headline     0;
@@ -590,7 +590,7 @@ Constant CLR_OZMOO_LIGHT_GREEN = 21;
 Constant CLR_OZMOO_LIGHT_BLUE  = 22;
 Constant CLR_OZMOO_LIGHT_GREY  = 23;
 
-#IfV5;
+#Iftrue #version_number > 3;
 Constant WIN_ALL     0;
 Constant WIN_STATUS  1;
 Constant WIN_MAIN    2;
@@ -598,12 +598,14 @@ Global screen_width;
 Global statusline_current_height = 0;
 Global statusline_height     = 1;
 Global statuswin_current     = false;
+#Iftrue #version_number > 4;
 Global clr_on                = false;
 Global clr_bg                = CLR_BLACK;
 Global clr_fg                = CLR_WHITE;
 Global clr_fgstatus          = CLR_CURRENT;
 Global clr_fginput           = CLR_CURRENT;
-#endif;
+#Endif;
+#Endif;
 
 Global normal_directions_enabled = true;
 #Ifdef OPTIONAL_SHIP_DIRECTIONS;
@@ -720,14 +722,18 @@ Object Directions
 			print (string) direction_name_array-->selected_direction_index;
 			rtrue;
 		],
-#IfV5;
+#iftrue #version_number > 3;
 		parse_name [_parse _i _w _arr;
 #IfNot;
 		parse_name [_parse _i _w;
 #EndIf;
-#IfV5;
+#iftrue #version_number > 3;
 !			_parse = parse+4*wn-2;
+	#Iftrue #version_number > 4;
 			@log_shift wn 2 -> _parse; ! Multiply by 4
+	#Ifnot;
+			_parse = wn * 4;
+	#Endif;
 			_parse = parse + _parse - 2;
 
 			_w = _parse-->0;
@@ -760,12 +766,16 @@ Object Directions
 			return 0;
 ._matched_word_in_list;
 			_i = _i - _arr;
+#Iftrue #version_number > 4;
 			@log_shift _i (-1) -> _i; ! Divide by 2
+#Ifnot;
+			_i = _i / 2;
+#Endif;
 			selected_direction_index = (_i % DIRECTION_COUNT) + 1;
 ._matched_and_have_set_dir_index;
 			selected_direction = direction_properties_array -> selected_direction_index;
 			return 1;
-#IfNot;
+#Ifnot;
 			! This is V3
 
 			_parse = parse+4*wn-2;

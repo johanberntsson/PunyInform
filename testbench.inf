@@ -538,7 +538,7 @@ Object RiverBank "River Bank"
 		nw_to Library,
 		cheap_scenery
 			'blue' 'water' SCN_WATER
-			'bird' 'birds' "They seem so carefree."
+			CS_THEM 'bird' 'birds' "They seem so carefree."
 			CS_NO_ADJ 'sun' SCN_SUN
 			CS_ADD_LIST CarPark (scenery_outdoors),
 	has light;

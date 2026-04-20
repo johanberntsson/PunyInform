@@ -216,7 +216,7 @@ Property individual cheap_scenery;
 #Endif;
 
 [ _CSFindInArr p_value p_array p_count _i;
-#Ifv5;
+#Iftrue #version_number > 3;
 	@scan_table p_value p_array p_count -> _i ?~rfalse;
 	rtrue;
 !._didnt_match_word_in_array;
@@ -268,10 +268,10 @@ Property individual cheap_scenery;
 [ _CSFindID p_obj p_prop p_id _i _arr _len _val _val2;
 	_arr = p_obj.&p_prop;
 	_len = p_obj.#p_prop;
-#Ifv3;
-	_len = _len / 2;
-#Ifnot;
+#iftrue #version_number > 4;
 	@log_shift _len (-1) -> _len;
+#Ifnot;
+	_len = _len / 2;
 #Endif;
 	for(_i=0: _i<_len: _i = _i + 3) {
 		_val = _arr-->_i;
@@ -339,7 +339,7 @@ Property individual cheap_scenery;
 	_longest = CSData-->CSDATA_MATCH_LENGTH;
 	_arr = p_obj.&p_prop;
 	_len = p_obj.#p_prop;
-#ifv5;
+#iftrue #version_number > 4;
 	@log_shift _len (-1) -> _len; ! Divide by 2
 #Ifnot;
 	_len = _len / 2;
@@ -567,7 +567,7 @@ Object CheapScenery "object"
 #ifdef PUNYINFORM_MAJOR_VERSION;
 				if(themobj == self) themobj = 0;
 #Endif;
-#Ifv5;
+#iftrue #version_number > 4;
 				_i = 0; ! Get rid of warning
 				@copy_table CSData 0 10;
 #Ifnot;

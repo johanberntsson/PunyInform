@@ -56,42 +56,42 @@ Constant QB_ERR = "^[Quote_box error #";
 
 Constant QUOTE_MAX_LENGTH = 80;
 
-#IfV3;
+#Iftrue #version_number < 4;
 Default QUOTE_V3_SCREEN_WIDTH = 2;
 
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 6;
 Constant QUOTE_INDENT_STRING = "      ";
-#EndIf;
+#Endif;
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 5;
 Constant QUOTE_INDENT_STRING = "     ";
-#EndIf;
+#Endif;
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 4;
 Constant QUOTE_INDENT_STRING = "    ";
-#EndIf;
+#Endif;
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 3;
 Constant QUOTE_INDENT_STRING = "   ";
-#EndIf;
+#Endif;
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 2;
 Constant QUOTE_INDENT_STRING = "  ";
-#EndIf;
+#Endif;
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 1;
 Constant QUOTE_INDENT_STRING = " ";
-#EndIf;
+#Endif;
 #Iftrue	QUOTE_V3_SCREEN_WIDTH == 0;
 Constant QUOTE_INDENT_STRING = "";
-#EndIf;
-#EndIf;
+#Endif;
+#Endif;
 
 Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 
-#Ifv3;
+#Iftrue #version_number < 4;
 [ QuoteBox p_quote_data p_dont_pause _quote_lines _quote_width _screen_width _i _j _k _last_index;
 #Ifnot;
 [ QuoteBox p_quote_data p_dont_pause _quote_lines _quote_width _screen_width _i _k _last_index;
 #Endif;
 	_quote_lines = p_quote_data --> 0;
 	_quote_width = p_quote_data --> 1;
-#IfV5;
+#Iftrue #version_number > 3;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 #IfTrue RUNTIME_ERRORS == RTE_VERBOSE;
 	if(_quote_width > QUOTE_MAX_LENGTH) {
@@ -111,9 +111,9 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 !	@erase_window 1;
 	@new_line;
 	@new_line;
-#IfNot;
+#Ifnot;
 	_screen_width = QUOTE_V3_SCREEN_WIDTH;
-#EndIf;
+#Endif;
 	@new_line;
 	font off;
 	_last_index = 2 + _quote_lines;
@@ -126,27 +126,27 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 		_k =  p_quote_data-->_i;
 		if(_i == 1 or _last_index) {
 			_k = "";
-#IfV3;
+#Iftrue #version_number < 4;
 			for(_j = -2 : _j < _quote_width: _j++) @print_char '-';
-#EndIf;
+#Endif;
 		}
-#IfV5;
+#Iftrue #version_number > 3;
 		style reverse;
-#EndIf;
+#Endif;
 		@print_char ' ';
 		print (string) _k;
-#IfV5;
+#Iftrue #version_number > 3;
 		@output_stream 3 quote_buffer;
 		print (string) _k;
 		@output_stream -3;
 		FastSpaces(_quote_width + 1 - quote_buffer->1);
 		style roman;
-#EndIf;
+#Endif;
 		@new_line;
 	}
 	font on;
 
-#IfV5;
+#Iftrue #version_number > 3;
 	@set_window 0;
 !	print "[Press any key to continue]";
 	if(p_dont_pause == 0) {
@@ -160,12 +160,13 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 #IfNot;
 	gg_statuswin_cursize = 0;
 #EndIf;
-#IfNot;
+#Ifnot;
+	! z3
 !	@new_line;
 !	print "[ENTER]";
 	if(p_dont_pause == 0) {
 		quote_buffer -> 0 = 1;
 		read quote_buffer quote_buffer;
 	}
-#EndIf;
+#Endif;
 ];

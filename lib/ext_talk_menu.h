@@ -204,7 +204,7 @@ Constant TM_MSG_EXIT_OPTION "[ENTER] End conversation";
 #Ifndef TM_MSG_PAGE_OPTION;
 Constant TM_MSG_PAGE_OPTION "[N] Next page";
 #Endif;
-#Ifv5;
+#Iftrue #version_number > 3;
 #Ifndef TM_MSG_EXIT_OPTION_SHORT;
 Constant TM_MSG_EXIT_OPTION_SHORT "[ENTER] End"; ! This + TM_MSG_PAGE_OPTION_SHORT should be 18 characters or less
 #Endif;
@@ -405,8 +405,19 @@ Global clr_talk_menu = CLR_CURRENT;
 	return _SetTopic(p_topic, p_array, 1);
 ];
 
-
-#Ifv5;
+#Iftrue #version_number == 4;
+[ FastDashes p_dashes;
+	while(p_dashes > 10) {
+		print "----------";
+		p_dashes = p_dashes - 10;
+	}
+	while(p_dashes > 0) {
+		print "-";
+		p_dashes = p_dashes - 1;
+	}
+];
+#Endif;
+#Iftrue #version_number > 4;
 Array TenDashes static -> "----------";
 [ FastDashes p_dashes;
 	while(p_dashes > 10) {
@@ -419,7 +430,7 @@ Array TenDashes static -> "----------";
 
 Array _TMLines --> 10;
 
-#Ifv5;
+#Iftrue #version_number > 3;
 #Ifdef PUNYINFORM_MAJOR_VERSION;
 [ RunTalk p_npc _array _i _j _n _val _height _width _offset _count _more _has_split _add_msg _stash_array _old_fg;
 #Ifnot;
@@ -441,7 +452,7 @@ Array _TMLines --> 10;
 	}
 #Endif;
 	! Prepare upper window
-#Ifv5;
+#Iftrue #version_number > 3;
 	! Find out or guess the height of the screen
 	_height = HDR_SCREENHLINES->0;
 	_width = HDR_SCREENWCHARS->0;
@@ -450,8 +461,14 @@ Array _TMLines --> 10;
 	! meaning, from holding the height of the screen to holding the height of
 	! the upper window
 	if(_height > 31) _height = 16;
-	else if(_height > 13) @log_shift _height (-1) -> _height; !Division by 2
-	else _height = 7;
+	else if(_height > 13) {
+#Iftrue #version_number > 4;
+		@log_shift _height (-1) -> _height; !Division by 2
+#Ifnot;
+		! z4
+		_height = _height / 2;
+#Endif;
+	} else _height = 7;
 #Endif;
 
 	! Print all valid lines to say
@@ -498,10 +515,10 @@ Array _TMLines --> 10;
 				_array = _array-->_i;
 				_i = -1;
 			}
-		} else if(_val == TM_INACTIVE or TM_STALE) 
+		} else if(_val == TM_INACTIVE or TM_STALE)
 			_i = _i + 3;
 		else if(_val == TM_ACTIVE) {
-#Ifv5;
+#Iftrue #version_number > 3;
 			if(_count >= _height - 6) { _more = 1; break; }
 			_n++;
 			if(_n <= _offset) continue;
@@ -515,15 +532,18 @@ Array _TMLines --> 10;
 				@set_window 1;
 				@set_cursor 2 1;
 #Ifdef PUNYINFORM_MAJOR_VERSION;
+#Iftrue #version_number > 4;
 				if(clr_on) {
 					_old_fg = clr_fg;
 					ChangeFgColour(clr_talk_menu);
 				}
 #Endif;
+#Endif;
 				_TMPrintMsg(TM_MSG_TALK_ABOUT_WHAT);
 			}
 			print "  ", _count % 10, ": ";
 #Ifnot;
+			! z3
 			if(_count >= 8) { _more = 1; break; }
 			_n++;
 			if(_n <= _offset) continue;
@@ -546,7 +566,7 @@ Array _TMLines --> 10;
 		}
 	}
 	if(_n == 0) {
-#Ifv5;
+#Iftrue #version_number > 3;
 		@set_window 0;
 #Endif;
 		_val = TM_MSG_NO_TOPICS;
@@ -555,14 +575,14 @@ Array _TMLines --> 10;
 			_val = TM_MSG_TOPICS_DEPLETED;
 !			"With that, you politely end the conversation.";
 		_TMPrintMsg(_val);
-#Ifv5;
+#Iftrue #version_number > 3;
 		jump _tm_end_of_talk;
 #Ifnot;
 		rtrue;
 #Endif;
 	}
 
-#Ifv5;
+#Iftrue #version_number > 3;
 	_i = _height - 1;
 	@set_cursor _i 1;
 	FastDashes(_width);
@@ -571,7 +591,7 @@ Array _TMLines --> 10;
 #Endif;
 	_i = TM_MSG_EXIT_OPTION;
 	_j = TM_MSG_PAGE_OPTION;
-#Ifv5;
+#Iftrue #version_number > 3;
 	if(_width < 39) {
 		_i = TM_MSG_EXIT_OPTION_SHORT;
 		_j = TM_MSG_PAGE_OPTION_SHORT;
@@ -585,9 +605,12 @@ Array _TMLines --> 10;
 	}
 	new_line;
 #Ifdef PUNYINFORM_MAJOR_VERSION;
-#Ifv5;
+#Iftrue #version_number > 4;
 	if(clr_on)
 		ChangeFgColour(_old_fg);
+#Endif;
+#Iftrue #version_number == 4;
+	_old_fg = 0; ! Avoid warning for unused var
 #Endif;
 #Endif;
 
@@ -596,7 +619,7 @@ Array _TMLines --> 10;
 
 	_j = 0;
 	while(_j == 0) {
-#IfV5;
+#Iftrue #version_number > 3;
 		@read_char 1 -> _val;
 
 		if(_val == 13 or 'q' or 'Q' or 'x' or 'X') {
@@ -617,7 +640,7 @@ Array _TMLines --> 10;
 		}
 		_j = _val - 48;
 		if(_j == 0) _j = 10;
-#IfNot;
+#Ifnot;
 		! This is v3
 		PrintMsg(MSG_PROMPT);
 		@sread buffer parse;
@@ -640,7 +663,7 @@ Array _TMLines --> 10;
 			}
 		}
 		_j = TryNumber(1);
-#EndIf;
+#Endif;
 	}
 
 	if(_j < 1 || _j > _count) jump _askAgain;
@@ -660,7 +683,7 @@ Array _TMLines --> 10;
 
 	_i++;
 
-#Ifv5;
+#Iftrue #version_number > 3;
 	@set_window 0;
 #Endif;
 
@@ -753,7 +776,7 @@ Array _TMLines --> 10;
 		jump _tm_restart_talk_after_line;
 	}
 ._tm_end_of_talk;
-#Ifv5;
+#Iftrue #version_number > 3;
 	if(_has_split) {
 		@erase_window 1;
 		@split_window 0;
@@ -793,11 +816,11 @@ Constant TM_MAX_FLAG = 0;
 #Endif;
 
 [ _TMErrorContext p_topic p_element p_value;
-#Ifv5;
+#Iftrue #version_number > 3;
 	style bold;
 #Endif;
 	print "*** ERROR! ***^";
-#Ifv5;
+#Iftrue #version_number > 3;
 	style roman;
 #Endif;
 	print "Topic: ", p_topic,", ";

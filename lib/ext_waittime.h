@@ -70,7 +70,7 @@ Constant MAX_WAIT_MINUTES 1440;
 		_time_before = the_time;
 		EndTurnSequence();
 		_UpdateScoreOrTime();
-		#IfV3;
+		#Iftrue #version_number < 4;
 			@show_status;
 		#IfNot;
 			DrawStatusLine();

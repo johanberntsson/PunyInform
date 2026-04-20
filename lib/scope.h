@@ -14,9 +14,9 @@ System_file;
 		! routine or a list of objects
 		if(UnsignedCompare(_addr-->0, top_object) > 0) {
 #IfDef DEBUG;
-#IfV3;
+#Iftrue #version_number < 5;
 			if(debug_flag & 1) print "[ ~", (name) inp1, "~.add_to_scope() ]^";
-#EndIf;
+#Endif;
 #EndIf;
 			RunRoutines(p_obj, add_to_scope);
 		} else {
@@ -24,7 +24,7 @@ System_file;
 			print "add_to_scope for ", (name) p_obj, " is list of objects:^";
 #EndIf;
 			_len = p_obj.#add_to_scope;
-#Ifv3;
+#Iftrue #version_number < 5;
 			_len = _len / 2;
 #Ifnot;
 			@log_shift _len (-1) -> _len; ! Divide by 2
@@ -97,15 +97,15 @@ System_file;
 #EndIf;
 #EndIf;
 	if(p_risk_duplicate == 0) {
-#IfV5;
+#Iftrue #version_number > 3;
 		@scan_table p_obj scope scope_objects -> _i ?~_object_wasnt_found;
 		return;
 ._object_wasnt_found;
-#IfNot;
+#Ifnot;
 		for(_i = 0: _i < scope_objects: _i++) {
 			if(scope-->_i == p_obj) return;
 		}
-#EndIf;
+#Endif;
 	}
 	! Check if there is room
 	if(scope_objects >= MAX_SCOPE) {
@@ -236,26 +236,26 @@ System_file;
 #EndIf;
 ];
 
-#IfV5;
+#Iftrue #version_number > 4;
 [GetScopeCopy p_actor p_reason _i;
-#IfNot;
+#Ifnot;
 [GetScopeCopy p_actor p_reason _i _max;
-#EndIf;
+#Endif;
 
 	_UpdateScope(p_actor, p_reason);
 
 	if(scope_copy_actor ~= p_actor) {
-#IfV5;
+#Iftrue #version_number > 4;
 		@log_shift scope_objects 1 -> _i; ! _i = scope_objects * 2
 		@copy_table scope scope_copy _i;
-#IfNot;
+#Ifnot;
 		if(scope_objects) {
 			_max = scope_objects - 1;
 ._copy_next_entry;
 			scope_copy-->_i = scope-->_i;
 			@inc_chk _i _max ?~_copy_next_entry;
 		}
-#EndIf;
+#Endif;
 		scope_copy_actor = p_actor;
 	}
 	scope_copy_objects = scope_objects;
@@ -327,15 +327,15 @@ Constant AddToScope = _PutInScope;
 		p_actor = player;
 
 	_UpdateScope(p_actor, TESTSCOPE_REASON);
-#IfV5;
+#Iftrue #version_number > 3;
 	@scan_table p_obj scope scope_objects -> _i ?~_object_wasnt_found;
 	rtrue;
 ._object_wasnt_found;
-#IfNot;
+#Ifnot;
 	for(_i = 0: _i < scope_objects: _i++) {
 		if(scope-->_i == p_obj) rtrue;
 	}
-#EndIf;
+#Endif;
 	rfalse;
 ];
 
@@ -413,16 +413,16 @@ Constant AddToScope = _PutInScope;
 	objectloop (_j has reactive && (_j.&add_to_scope ~= 0)) {
 		_l = _j.&add_to_scope;
 		if (IsARoutine(_l-->0)) continue;
-#IfV5;
+#Iftrue #version_number > 4;
 		_k = _j.#add_to_scope;
 		@log_shift _k (-1) -> _k;
 		@scan_table p_obj _l _k -> _m ?~_object_wasnt_found;
 		return _j;
 ._object_wasnt_found;
-#IfNot;
+#Ifnot;
 		_k = (_j.#add_to_scope)/WORDSIZE;
 		for (_m=0 : _m<_k : _m++) if (_l-->_m == p_obj) return _j;
-#EndIf;
+#Endif;
 	}
 	rfalse;
 ];
