@@ -5,6 +5,7 @@ Upcoming release:
 - If a property had the value n, where n is 0 or a small positive number, and code called PrintOrRun for this property, PrintOrRun should have returned n. Instead it has always returned 1 in this scenario. This bug has been fixed. In the library, the describe property is the only property that is affected by this change.
 - Added support for compiling PunyInform games to z4 format. 
 - Updated a few ROUTINE debug messages to the new format (they were missed when we switched to the new format).
+- Rearranged messages in messages.h, so infrequently used messages are more consistently at the end of the routine, to (a) aid interpreters that use virtual memory by reducing the typical footprint of this big routine in VM, and (b) make frequently used messages faster to find.
 
 =======
 v6.5: new feature release (12 Apr 2026)

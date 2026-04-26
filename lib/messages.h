@@ -688,6 +688,17 @@ Constant SKIP_MSG_PARSER_NOSUCHTHING;
 
 	! Not a string, there should be code for the message here
 	switch(p_msg) {
+#IfTrue MSG_PROMPT < 1000;
+	MSG_PROMPT:
+		print "> ";
+		rtrue;
+#EndIf;
+#Iftrue MSG_LOOK_BEFORE_ROOMNAME < 1000;
+	MSG_LOOK_BEFORE_ROOMNAME:
+		! what to write at first when describing a room. Can be used to
+		! add a newline, but default is to write nothing.
+		!@new_line;
+#Endif;
 #Iftrue MSG_TAKE_SCENERY < 1000;
 	MSG_TAKE_SCENERY:
 		print_ret (CTheyreorThats) noun, " hardly portable.";
@@ -710,11 +721,6 @@ Constant SKIP_MSG_PARSER_NOSUCHTHING;
 	! p_arg_1 = the object being put into SACK_OBJECT.
 		"(putting ", (the) p_arg_1, " into ", (the) SACK_OBJECT, " to make room)";
 #EndIf;
-#EndIf;
-#IfTrue MSG_PROMPT < 1000;
-	MSG_PROMPT:
-		print "> ";
-		rtrue;
 #EndIf;
 #IfTrue MSG_INVENTORY_DEFAULT < 1000;
 	MSG_INVENTORY_DEFAULT:
@@ -750,10 +756,6 @@ Constant SKIP_MSG_PARSER_NOSUCHTHING;
 	! p_arg_1 = the base verb for this action ('open', 'close' etc).
 		"You can't ", (verbname) p_arg_1, " ", (ThatorThose) noun, ".";
 #Endif;
-#IfTrue MSG_EAT_INEDIBLE < 1000;
-	MSG_EAT_INEDIBLE:
-		print_ret (CTheyreorThats) noun, " plainly inedible.";
-#EndIf;
 #IfTrue MSG_OPEN_ALREADY < 1000;
 	MSG_OPEN_ALREADY:
 		print_ret (CTheyreorIts) noun, " already open.";
@@ -784,12 +786,6 @@ Constant SKIP_MSG_PARSER_NOSUCHTHING;
 			if(PrintContents(0, noun)==false) print "nothing";
 		}
 		".";
-#Endif;
-#Iftrue MSG_LOOK_BEFORE_ROOMNAME < 1000;
-	MSG_LOOK_BEFORE_ROOMNAME:
-		! what to write at first when describing a room. Can be used to
-		! add a newline, but default is to write nothing.
-		!@new_line;
 #Endif;
 #Ifndef SKIP_MSG_CLOSE_DEFAULT;
 	MSG_CLOSE_DEFAULT, MSG_ENTER_DEFAULT, MSG_LOCK_DEFAULT,
@@ -1040,10 +1036,78 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		! p_arg_1 = the object that is part of p_arg_2
 		print_ret (The) p_arg_1, " seem", (SingularS) p_arg_1, " to be part of ", (the) p_arg_2, ".";
 #EndIf;
+#IfTrue MSG_EAT_INEDIBLE < 1000;
+	MSG_EAT_INEDIBLE:
+		print_ret (CTheyreorThats) noun, " plainly inedible.";
+#EndIf;
 #Ifndef OPTIONAL_NO_DARKNESS;
 #Ifndef SKIP_MSG_EXAMINE_DARK;
 	MSG_EXAMINE_DARK, MSG_SEARCH_DARK:
 		"But it's dark.";
+#Endif;
+#Endif;
+#IfTrue MSG_ENTER_BAD_LOCATION < 1000;
+	MSG_ENTER_BAD_LOCATION:
+		print "You have to ";
+		if(player notin location && ~~IndirectlyContains(parent(player), noun))
+			print "leave ", (the) parent(player);
+		else
+			print "enter ", (the) parent(noun);
+		" first.";
+#EndIf;
+#IfTrue MSG_ENTER_HELD < 1000;
+	MSG_ENTER_HELD:
+		"You can't enter ", (the) noun, " while holding ", (ItOrThem) noun, ".";
+#EndIf;
+#Ifndef SKIP_MSG_INSERT_NOT_CONTAINER;
+#ifdef MSG_EMPTY_NOT_CONTAINER;
+	MSG_INSERT_NOT_CONTAINER, MSG_EMPTY_NOT_CONTAINER:
+#Ifnot;
+	MSG_INSERT_NOT_CONTAINER:
+#Endif;
+		! p_arg_1 = the object that can't contain things
+		print_ret (The) p_arg_1, " can't contain things.";
+#Endif;
+
+#IfDef OPTIONAL_EXTENDED_VERBSET;
+#IfTrue MSG_BLOW_DEFAULT < 1000;
+	MSG_BLOW_DEFAULT:
+		"You can't usefully blow ", (the) noun, ".";
+#EndIf;
+#IfTrue MSG_EMPTY_ALREADY_EMPTY < 1000;
+	MSG_EMPTY_ALREADY_EMPTY:
+		! p_arg_1 = the object that is already empty
+		print_ret (CObjIs) p_arg_1, " empty already.";
+#EndIf;
+#IfTrue MSG_SET_DEFAULT < 1000;
+	MSG_SET_DEFAULT:
+		"No, you can't set ", (thatorthose) noun, ".";
+#EndIf;
+#IfTrue MSG_SET_TO_DEFAULT < 1000;
+	MSG_SET_TO_DEFAULT:
+		"No, you can't set ", (thatorthose) noun, " to anything.";
+#EndIf;
+#IfTrue MSG_WAVE_DEFAULT < 1000;
+	MSG_WAVE_DEFAULT:
+		"You look ridiculous waving ", (the) noun, ".";
+#EndIf;
+#EndIf; ! Extended verbset
+
+#Ifndef NO_SCORE;
+#Iftrue MSG_PARSER_NEW_SCORE < 1000;
+	MSG_PARSER_NEW_SCORE:
+		! p_arg_1 = the old score
+		print "^[The score has just gone ";
+		if(p_arg_1 < score) {
+			p_arg_2 = score - p_arg_1;
+			print "up";
+		} else {
+			p_arg_2 = p_arg_1 - score;
+			print "down";
+		}
+		print " by ", p_arg_2, " point";
+		if(p_arg_2 > 1) print "s";
+		".]";
 #Endif;
 #Endif;
 #Iftrue MSG_SCORE_DEFAULT < 1000;
@@ -1069,6 +1133,11 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		"total (out of ", MAX_SCORE, ")";
 #EndIf;
 #EndIf;
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Infrequently used messages
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 #Ifndef SKIP_MSG_LOOKMODE;
 	MSG_LOOKMODE_NORMAL, MSG_LOOKMODE_LONG, MSG_LOOKMODE_SHORT:
 		print "This game is now in its ";
@@ -1125,28 +1194,6 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		print "You have died";
 		rtrue;
 #EndIf;
-#IfTrue MSG_ENTER_BAD_LOCATION < 1000;
-	MSG_ENTER_BAD_LOCATION:
-		print "You have to ";
-		if(player notin location && ~~IndirectlyContains(parent(player), noun))
-			print "leave ", (the) parent(player);
-		else
-			print "enter ", (the) parent(noun);
-		" first.";
-#EndIf;
-#IfTrue MSG_ENTER_HELD < 1000;
-	MSG_ENTER_HELD:
-		"You can't enter ", (the) noun, " while holding ", (ItOrThem) noun, ".";
-#EndIf;
-#Ifndef SKIP_MSG_INSERT_NOT_CONTAINER;
-#ifdef MSG_EMPTY_NOT_CONTAINER;
-	MSG_INSERT_NOT_CONTAINER, MSG_EMPTY_NOT_CONTAINER:
-#Ifnot;
-	MSG_INSERT_NOT_CONTAINER:
-#Endif;
-		! p_arg_1 = the object that can't contain things
-		print_ret (The) p_arg_1, " can't contain things.";
-#Endif;
 #IfTrue MSG_YES_OR_NO < 1000;
 	MSG_YES_OR_NO:
 		print "Please answer yes or no: ";
@@ -1165,49 +1212,8 @@ MSG_RUB_DEFAULT, MSG_SQUEEZE_DEFAULT:
 		if(p_msg == MSG_NOTIFY_ON) "n.";
 		"ff.";
 #Endif;
-#Iftrue MSG_PARSER_NEW_SCORE < 1000;
-	MSG_PARSER_NEW_SCORE:
-		! p_arg_1 = the old score
-		print "^[The score has just gone ";
-		if(p_arg_1 < score) {
-			p_arg_2 = score - p_arg_1;
-			print "up";
-		} else {
-			p_arg_2 = p_arg_1 - score;
-			print "down";
-		}
-		print " by ", p_arg_2, " point";
-		if(p_arg_2 > 1) print "s";
-		".]";
-#Endif;
 #Endif;
 
-
-
-
-#IfDef OPTIONAL_EXTENDED_VERBSET;
-#IfTrue MSG_BLOW_DEFAULT < 1000;
-	MSG_BLOW_DEFAULT:
-		"You can't usefully blow ", (the) noun, ".";
-#EndIf;
-#IfTrue MSG_EMPTY_ALREADY_EMPTY < 1000;
-	MSG_EMPTY_ALREADY_EMPTY:
-		! p_arg_1 = the object that is already empty
-		print_ret (CObjIs) p_arg_1, " empty already.";
-#EndIf;
-#IfTrue MSG_SET_DEFAULT < 1000;
-	MSG_SET_DEFAULT:
-		"No, you can't set ", (thatorthose) noun, ".";
-#EndIf;
-#IfTrue MSG_SET_TO_DEFAULT < 1000;
-	MSG_SET_TO_DEFAULT:
-		"No, you can't set ", (thatorthose) noun, " to anything.";
-#EndIf;
-#IfTrue MSG_WAVE_DEFAULT < 1000;
-	MSG_WAVE_DEFAULT:
-		"You look ridiculous waving ", (the) noun, ".";
-#EndIf;
-#EndIf;
 
 default:
 		! No code found. Print an error message.
