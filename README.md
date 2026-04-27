@@ -171,7 +171,7 @@ The biggest differences between the standard library and PunyInform are:
 
 ## Games Using PunyInform
 
-90+ PunyInform games have been released. You can find just about all of them
+100+ PunyInform games have been released. You can find just about all of them
 in this [list of PunyInform games](https://ifdb.org/search?searchfor=tag%3Apunyinform&sortby=&pg=all).
 
 If you want to see the source code of PunyInform games, you should look at
@@ -238,6 +238,8 @@ for your game.
   the PunyInform library to French, by Hugo Labrande.
 
 * [PunyInform - DE](https://github.com/smartgrids-aau/punyinformde) is a translation of the PunyInform library to German, by Lea Santner and A. Pulvermacher.
+
+* [PunyInformDE](https://github.com/IkeC/PunyInformDE) is based on *PunyInform - DE* above, but updated to match a newer version of PunyInform. Also, it has language rules to make the author's life easier.
 
 ## Credits
 
