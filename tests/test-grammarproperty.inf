@@ -101,13 +101,15 @@ Object -> John "John"
 	grammar [;
 	    print "grammar ", verb_wordnum, " ", verb_word == 'jump', "^";
 	    if(verb_word == 'drink') {
+			parser_one = 1;
 	        return 'eat';
         }
 	    if(verb_word == 'open') {
+			parser_one = 1;
 	        return 'close';
         }
 	    if(verb_word == 'close') {
-            parser_one = true;
+            parser_one = -1;
 	        return -'eat';
         }
 	    if(verb_word == 'jump') {
@@ -115,7 +117,7 @@ Object -> John "John"
 	        rtrue;
         }
         if(verb_word == 'take') {
-            parser_one = true;
+            parser_one = -1;
             return -'bot,';
         }
         rfalse;
