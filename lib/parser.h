@@ -2131,24 +2131,30 @@ Array guess_object-->5;
 		if(actor provides grammar) {
 			parser_one = 0;
 			_i = actor.grammar();
+#Ifdef DEBUG;
+#IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
+	if(_i ~= 0 or 1 && parser_one == 0)
+		_RunTimeError(ERR_DANGEROUS_GRAMMAR_PROP, actor);
+#EndIf;
+#Endif;
 			! 0 = carry on as usual
 			! 1 = grammar parsed it completely
 			! verb = use this verb's grammar instead
 			! -verb = try using this verb's grammar first, then the original
-			if((_i ~= 0 or 1) &&
-				(parser_one ~= 0 ||
-				(UnsignedCompare(_i, dict_start) < 0 ||
-				UnsignedCompare(_i, dict_end) >= 0 ||
-				(_i - dict_start) % dict_entry_size ~= 0))) {
-				! returned -'verb'
-				usual_grammar_after = verb_word;
-				_i = -_i;
-			}
 			if(_i == 1) {
 				++wn; ! to account for the correctly parsed verb
 				jump _parsing_was_successful;
 			}
 			if(_i ~= 0) {
+				if(parser_one < 0 || ! Force (-verb) interpretation
+						(UnsignedCompare(_i, dict_start) < 0 ||      ! Before dictionary
+						 UnsignedCompare(_i, dict_end) >= 0 ||       ! After dictionary
+						 (_i - dict_start) % dict_entry_size ~= 0 || ! Not start of a word
+						 (_i->DICT_BYTES_FOR_WORD) & 1 == 0)) {      ! Not a verb
+					! returned -'verb'
+					usual_grammar_after = verb_word;
+					_i = -_i;
+				}
 				! _i == 'verb', so use its grammar instead
 				verb_word = _i;
 				! decrease verb_wordnum to try the new grammar rule,
