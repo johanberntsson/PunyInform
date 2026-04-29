@@ -1296,7 +1296,7 @@ Constant ERR_NOT_DIR_PROP 7;
 Constant ERR_NOT_FAKE_OBJ 8;
 Constant ERR_ILLEGAL_CHOOSEOBJNO 9;
 Constant ERR_BUFFER_OVERRUN 10;
-Constant ERR_DANGEROUS_GRAMMAR_PROP 11;
+Constant ERR_UNSAFE_GRAMMAR_PROP 11;
 
 [_RunTimeError p_err p_obj _parent;
 	print "^[PunyInform error: ";
@@ -1328,8 +1328,8 @@ Constant ERR_DANGEROUS_GRAMMAR_PROP 11;
 #Ifdef DEBUG;
 		ERR_BUFFER_OVERRUN:
 			print "Buffer overrun: Printing too many characters to a buffer";
-		ERR_DANGEROUS_GRAMMAR_PROP:
-			print "Obsolete, potentially dangerous usage of grammar property, see PunyInform manual";
+		ERR_UNSAFE_GRAMMAR_PROP:
+			print "Unsafe usage of grammar property";
 #Endif;
 		default:
 			print "Unknown error";

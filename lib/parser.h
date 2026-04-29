@@ -2134,7 +2134,7 @@ Array guess_object-->5;
 #Ifdef DEBUG;
 #IfTrue RUNTIME_ERRORS > RTE_MINIMUM;
 	if(_i ~= 0 or 1 && parser_one == 0)
-		_RunTimeError(ERR_DANGEROUS_GRAMMAR_PROP, actor);
+		_RunTimeError(ERR_UNSAFE_GRAMMAR_PROP, actor);
 #EndIf;
 #Endif;
 			! 0 = carry on as usual
