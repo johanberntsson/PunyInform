@@ -1154,7 +1154,7 @@ Constant _SpaceTableLength 20;
 	rfalse;
 ];
 
-[ MoveFloatingObjects _i _j _o _len _obj;
+[ MoveFloatingObjects _i _j _o _len _obj _self;
 	_i--;
 !	while((_obj = floating_objects-->_i) ~= 0) {
 ._next_floating;
@@ -1167,33 +1167,38 @@ Constant _SpaceTableLength 20;
 		if(_obj has absent)
 			jump _isnt_present;
 		_len = _obj.#found_in;
-		if(_len == 2 && UnsignedCompare(_obj.found_in, top_object) > 0) {
-			if(RunRoutines(_obj, found_in))
+		if(_len == 2) {
+			_j = _obj.found_in;
+			if(_j > top_object || _j < -1) {
+				_self = self; self = _obj;
+				@call _j -> _j;
+				self = _self;
+				@jz _j ?_isnt_present;
 				jump _is_present;
-			jump _isnt_present;
-		} else {
-			_j = _obj.&found_in;
-#Iftrue #version_number > 4;
-			@log_shift _len (-1) -> _len; ! Divide by 2
-#Ifnot;
-			_len = _len / 2;
-#Endif;
-			_len = _len - 1;
-._check_next_value;
-				_o = _j-->_len;
-				if(_o in Class) {
-					if(location ofclass _o)
-						jump _is_present;
-				} else if(_o == location || _o in location)
-					jump _is_present;
-			@dec_chk _len 0 ?~_check_next_value;
-._isnt_present;
-			remove _obj;
-			jump _next_floating;
-._is_present;
-			if(_obj notin location)
-				move _obj to location;
+			}
+			@je _j (-1) ?_isnt_present;
 		}
+		_j = _obj.&found_in;
+#Iftrue #version_number > 4;
+		@log_shift _len (-1) -> _len; ! Divide by 2
+#Ifnot;
+		_len = _len / 2;
+#Endif;
+		_len = _len - 1;
+._check_next_value;
+			_o = _j-->_len;
+			if(_o in Class) {
+				if(location ofclass _o)
+					jump _is_present;
+			} else if(_o == location || _o in location)
+				jump _is_present;
+		@dec_chk _len 0 ?~_check_next_value;
+._isnt_present;
+		remove _obj;
+		jump _next_floating;
+._is_present;
+		if(_obj notin location)
+			move _obj to location;
 		jump _next_floating;
 !._continue_loop;
 !		_i++;
