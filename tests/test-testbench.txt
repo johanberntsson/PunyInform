@@ -24,11 +24,13 @@ I don't understand that sentence.
 Are you sure you want to restart? yes
 
 
+Welcome to the Testbench... This is where all sorts of PunyInform features are
 tried out. Don't expect much of a game here. Currently, you can win by putting
 stuff in the box, or lose by checking out the sun by the river or by pushing
 John around.
 
 Testbench
+A sandbox for PunyInform development
 
 Huge library
 You are in an old and deserted library. There is an exit leading south and a
