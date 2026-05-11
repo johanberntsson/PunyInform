@@ -19,13 +19,13 @@ Constant INITIAL_LOCATION_VALUE = Library;
 
 Include "globals.h";
 
-#Ifv5;
+#Iftrue #version_number > 4;
 Replace RestartSub;
 #Endif;
 
 Include "puny.h";
 
-#Ifv5;
+#Iftrue #version_number > 4;
 ! Make sure we go back to the default colours, as a workaround
 ! for a bug in some interpreters, where the background doesn't
 ! automatically revert to its default colour on restart.
@@ -61,7 +61,7 @@ Object -> Box "box"
 	has container open openable enterable;
 
 [Initialise ozmoo_colours;
-#Ifv5;
+#Iftrue #version_number > 4;
 	if(OzmooColoursAvailable())
 		ozmoo_colours = true;
 	if(HDR_TERPFLAGS->0 & 1) {

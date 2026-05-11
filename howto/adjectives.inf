@@ -28,12 +28,16 @@ Property individual adj_name;
 Property individual noun_name;
 #Endif;
 
-#Ifv5;
+#Iftrue #version_number > 3;
 [MatchNameList p_obj p_prop _w _matched _an _count _i;
 	_an = p_obj.&p_prop;
 	if(_an == 0) { wn++; return 0; }
 	_count = p_obj.#p_prop;
+#Iftrue #version_number > 4;
 	@log_shift _count (-1) -> _count; ! Divide by 2
+#Ifnot;
+	_count = _count / 2;
+#Endif;
 	while(true) {
 		_w = NextWord();
 		@scan_table _w _an _count -> _i ?_MNL_match;

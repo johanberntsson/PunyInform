@@ -75,13 +75,13 @@ Include "ext_talk_menu.h"; ! Requires ext_flags.h *IF* you set flags
 
 #Ifndef USEINFORM;
 
-#Ifv5;
+#Iftrue #version_number > 4;
 Replace RestartSub;
 #Endif;
 
 Include "puny.h";
 
-#Ifv5;
+#Iftrue #version_number > 4;
 ! Make sure we go back to the default colours, as a workaround
 ! for a bug in some interpreters, where the background doesn't
 ! automatically revert to its default colour on restart.
@@ -215,7 +215,7 @@ Object -> Josh "Josh"
 [Initialise ozmoo_colours;
 	ozmoo_colours = false;
 #Ifdef PUNYINFORM_MAJOR_VERSION;
-#Ifv5;
+#Iftrue #version_number > 4;
 	if(OzmooColoursAvailable())
 		ozmoo_colours = true;
 	if(HDR_TERPFLAGS->0 & 1) {

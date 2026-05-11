@@ -72,6 +72,20 @@ $SPECIFIC_FILES.each { |filename| runtest filename, 3, "-D" }
 Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
 Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
 
+puts "=================="
+puts "Testing v4 release"
+puts "=================="
+$SPECIFIC_FILES.each { |filename| runtest filename, 4, "" }
+Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 4, "" }
+Dir["*.inf"].sort.each { |filename| runtest filename, 4, "" }
+
+puts "\n=================="
+puts "Testing v4 debug"
+puts "=================="
+$SPECIFIC_FILES.each { |filename| runtest filename, 4, "-D" }
+Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 4, "-D" }
+Dir["*.inf"].sort.each { |filename| runtest filename, 4, "-D" }
+
 puts "\n=================="
 puts "Testing v5 release"
 puts "=================="

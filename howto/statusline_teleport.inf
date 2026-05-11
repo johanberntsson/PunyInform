@@ -23,7 +23,7 @@ Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
 Constant OPTIONAL_EXTENDED_METAVERBS;
 
-#Ifv5;
+#Iftrue #version_number > 4;
 Constant OPTIONAL_PROVIDE_UNDO;
 #Endif;
 
@@ -36,7 +36,7 @@ Global crime_scene;
 Global killer;
 Global room_count;
 
-#Ifv5;
+#Iftrue #version_number > 3;
 Property teleport_words;
 Property chances;
 #Endif;
@@ -69,7 +69,7 @@ Constant GS_WRONG = 3;
 
 Include "puny.h";
 
-#Ifv5;
+#Iftrue #version_number > 3;
 [ DrawStatusLine p_linefeeds exits i o;
 	! If called with p_linefeeds == true, print the number of linefeeds needed
 	! to make sure text at start of game doesn't get covered by statusline
@@ -202,7 +202,7 @@ Array Suspects table Bill Tom Linda Sue;
 #Ifdef DEBUG;
 Verb meta 'chance'
 	* creature -> Chance;
-#Ifv5;
+#Iftrue #version_number > 3;
 Verb 'chances' = 'chance';
 #Endif;
 
@@ -290,7 +290,7 @@ Verb meta 'help' 'about' 'instructions'
 [ HelpSub;
 	print "Someone has commited a murder.
 		^* Go to another room by typing its name.";
-#Ifv3;
+#Iftrue #version_number < 4;
 	print "^* Type EXITS to list the rooms you can go to.";
 #Endif;
 	"^* You can QUESTION a person to ask if they did it, and they will reply truthfully. 
