@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v6.5 quick reference** |
+| **PunyInform v6.6 quick reference** |
 
   
 More information on last page.
@@ -1067,7 +1067,7 @@ from a class which also defines the property, it gets both values.
 
 ## describe \[OBJ\] (+) **~PUNY**
 
-###### A string or a routine to print a paragraph of text for an object in a room description. If it's a string or it's a routine which returns *true*, the object won't be further described. Not supported for rooms as in DM4. Note: Start and end the description with a newline ("^").
+###### A string or a routine to print a paragraph of text for an object in a room description. If it's a string, the value 1 or 2, or a routine which returns 1 or 2, the object won't be further described. If the value / return value is 2, the library will consider it as if nothing was printed. Not supported for rooms as in DM4. Note: Start and end the description with a newline ("^").
 
 ## description \[OBJ\] \[ROOM\]
 
@@ -1093,9 +1093,9 @@ from a class which also defines the property, it gets both values.
 
 ###### A list of rooms where the object is present, or a routine which returns *true* if the object is present in *location*. If the object has *absent*, it's not present anywhere.
 
-## grammar \[OBJ\]
+## grammar \[OBJ\] **~PUNY**
 
-###### For *animate* or *talkable* objects: Called when object is spoken to. Can advance *verb_wordnum*. Return *true* if routine has parsed all input and set up *action*, *noun* and *second*. Return 'verb' to use this verb's grammar instead, or -'verb' to use this verb's grammar but fall back to the verb in player input if parsing fails. Return *false* to parse as usual.
+###### For *animate* or *talkable* objects: Called when object is spoken to. Can advance *verb_wordnum*. Return *true* if routine has parsed all input and set up *action*, *noun* and *second*. Return 'verb' and set *parser_one = 1* to use this verb's grammar instead, or return -'verb' and set *parser_one = -1* to use this verb's grammar but fall back to the verb in player input if parsing fails. Return *false* to parse as usual.
 
 ## in_to \[ROOM\]
 
@@ -1236,5 +1236,3 @@ Legend
 Items marked **PUNY++** aren't described in DM4. Items marked **~PUNY**
 don't work exactly as described in DM4. See PunyInform manual for
 details on these items.
-
-# 
