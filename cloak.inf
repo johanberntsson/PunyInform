@@ -16,6 +16,15 @@
 ! ============================================================================ !
 
 ! When compiling to z8, use the standard library instead
+!
+! This is done to provide an example of writing a game that can use either the
+! standard library or PunyInform (you can see a few conditionals throughout
+! for this).
+!
+! However, Puny itself will compile to z8 just fine. While many classic 8-bit
+! systems can't use z8 files, some can, and this would give you plenty of room
+! for a larger game. This game switches to the standard library only as an
+! example, not to document a limitation.
 #Iftrue (#version_number == 8);
 Constant USEINFORM;
 Constant MANUAL_PRONOUNS;
