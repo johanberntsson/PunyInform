@@ -1762,7 +1762,7 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 ];
 
 [ Look _obj _top_ceil _ceil _describe_room _you_can_see_1 _you_can_see_2 
-		_desc_prop _last_level _action _result;
+		_desc_prop _action _result;
 	if(input_action == ##Look) PrintMsg(MSG_LOOK_BEFORE_ROOMNAME);
 	if((lookmode == 1 && location hasnt visited) || lookmode == 2) _describe_room = true;
 #Iftrue #version_number > 3;
@@ -1771,12 +1771,12 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 
 	! Print the room name
 #Ifdef OPTIONAL_NO_DARKNESS;
-	_ceil = ScopeCeiling(player, _last_level);
+	_ceil = ScopeCeiling(player);
 #Ifnot;
 	if(location == thedark)
 		_ceil = location;
 	else
-		_ceil = ScopeCeiling(player, _last_level);
+		_ceil = ScopeCeiling(player);
 #Endif;
 
 	_top_ceil = _ceil;
@@ -1862,7 +1862,8 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 			_you_can_see_1 = _ListObjsInOnMsg;
 			_you_can_see_2 = ".^";
 		}
-		if(PrintContents(_you_can_see_1, _ceil, true)) print (string) _you_can_see_2;
+		if(PrintContents(_you_can_see_1, _ceil, WORKFLAG_BIT)) 
+			print (string) _you_can_see_2;
 
 
 #IfDef OPTIONAL_PRINT_SCENERY_CONTENTS;
@@ -1943,10 +1944,12 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 #Endif;
 	_ancestor = CommonAncestor(player, noun);
 
+#Ifdef OPTIONAL_ADD_TO_SCOPE;
 	if (_ancestor == 0) {
 		_i = _ObjectScopedBySomething(noun);
 		if (_i) _ancestor = CommonAncestor(player, _i);
 	}
+#Endif;
 
 	if(noun in player) { PrintMsg(MSG_TAKE_ALREADY_HAVE); rtrue; }
 	if(ObjectIsUntouchable(noun, false, true)) rtrue;

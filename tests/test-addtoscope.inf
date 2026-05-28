@@ -1,0 +1,255 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+!% $LONG_DICT_FLAG_BUG=0
+!% $ZCODE_COMPACT_GLOBALS=1
+
+! The very first lines of the main source code file for a game can
+! contain compiler options, like the lines above. -~S disables
+! strict error checking. This is otherwise used in z5 and z8 games by
+! default. While useful for debugging, it adds ~10 KB to the story file
+! size and it makes the game slower.
+! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
+! aren't used. This can save some space.
+! $ZCODE_LESS_DICT_DATA=1 removes an empty data byte for every dictionary word.
+! $LONG_DICT_FLAG_BUG=0 enables a bug fix in Inform v6.42+, so plural flags
+! on long words are heeded, e.g. 'transmogrifiers//p'.
+! $ZCODE_COMPACT_GLOBALS=1 avoids reserving dynmem space for unused globals.
+
+Constant Story      "Add_to_scope test";
+Constant Headline   "^A sample game which uses PunyInform.^";
+
+Statusline score;
+Constant NO_SCORE = 0;
+
+#Ifndef USEINFORM;
+
+Constant STATUSLINE_SCORE; 
+!Constant DEBUG;
+Constant OPTIONAL_ADD_TO_SCOPE;
+!Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_VERBSET;
+Constant OPTIONAL_FLEXIBLE_INVENTORY;
+Constant OPTIONAL_PROVIDE_UNDO;
+!Constant RUNTIME_ERRORS = 0; ! 0, 1 or 2. 0 = smallest file, 2 = most info
+
+#Endif;
+
+#Ifndef USEINFORM;
+Include "globals.h";
+#Endif;
+
+Constant InScope = _InScope;
+
+#Ifdef USEINFORM;
+Include "parser.h";
+Include "verblib.h";
+#Ifnot;
+
+Constant MSG_TOUCHABLE_FOUND_CLOSED 1000;
+Constant MSG_PARSER_CONTAINER_ISNT_OPEN 1001;
+Constant MSG_EXAMINE_NOTHING_SPECIAL 1002;
+Constant MSG_PROMPT 1003;
+
+[ LibraryMessages p_msg p_arg_1 p_arg_2;
+	switch(p_msg) {
+	MSG_PROMPT:
+		p_arg_2 = 0;
+		print ">";
+		rtrue;
+	MSG_TOUCHABLE_FOUND_CLOSED, MSG_PARSER_CONTAINER_ISNT_OPEN:
+		print_ret (CObjIs) p_arg_1, " not open.";
+	MSG_EXAMINE_NOTHING_SPECIAL:
+		"You see nothing special about ", (the) noun, ".";
+	}
+];
+
+Include "puny.h";
+#Endif;
+
+[ _InScope;
+	if(real_location == Library) {
+		PlaceInScope(Free1);
+		ScopeWithin(Slave7Container);
+	}
+	rfalse;
+];
+
+
+Object Library "The Library"
+	with
+		description "You are in a library. The Hallway lies east.",
+		e_to Hallway,
+	has light;
+
+Object -> Master1 "master1"
+	with
+		name 'master1',
+		add_to_scope Slave1a Slave1b Slave5Container;
+
+Object -> Master2 "master2"
+	with
+		name 'master2',
+		add_to_scope [; 
+			PlaceInScope(Slave2a); 
+			ScopeWithin(Slave2Container); 
+			ScopeWithin(Slave6Container);
+		];
+
+Object -> Box "box"
+	with
+		name 'box',
+		inside_description "It feels so nice, standing in the box.",
+	has container open openable enterable;
+
+Object -> Aquarium "aquarium"
+	with
+		name 'aquarium',
+		inside_description "It feels so nice, standing in the aquarium.",
+	has container openable enterable transparent;
+
+Object -> -> Master3 "master3"
+	with
+		name 'master3',
+		add_to_scope Slave3a Slave3b;
+
+Object -> -> Master4 "master4"
+	with
+		name 'master4',
+		add_to_scope Slave4a Slave4b,
+		xadd_to_scope [; 
+			PlaceInScope(Slave4a); 
+			PlaceInScope(Slave4b);
+!			ScopeWithin(Slave4Container); 
+		];
+
+
+Object -> Table "table"
+	with
+		name 'table',
+		inside_description "It feels so nice, standing on the table.",
+	has supporter enterable;
+
+! ============== Slave objects
+
+Object Slave1a "slave1a"
+	with
+		name 'slave1a';
+
+Object Slave2a "slave2a"
+	with
+		name 'slave2a',
+		add_to_scope Free3;
+
+Object Slave3a "slave3a"
+	with
+		name 'slave3a';
+
+Object Slave4a "slave4a"
+	with
+		name 'slave4a';
+
+
+Object Hallway "Hallway"
+	with
+		description "Nice hallway. The library lies west.",
+		w_to Library,
+	has light;
+
+Object -> SlaveContainer "slavecontainer"
+	with
+		name 'slavecontainer',
+	has container openable enterable;
+
+Object -> -> Slave1b "slave1b"
+	with
+		name 'slave1b';
+
+Object -> -> Slave3b "slave3b"
+	with
+		name 'slave3b';
+
+Object -> Slave2Container "slave2container"
+	with
+		name 'slave2container',
+	has container openable enterable;
+
+Object -> -> Slave2b "slave2b"
+	with
+		name 'slave2b';
+
+Object -> Slave4Container "slave4container"
+	with
+		name 'slave4container',
+	has container openable enterable;
+
+Object -> -> Slave4b "slave4b"
+	with
+		name 'slave4b';
+
+Object -> Slave5Container "slave5container"
+	with
+		name 'slave5container',
+		add_to_scope Free2,
+	has container openable enterable;
+
+Object -> -> Slave5ac "slave5ac"
+	with
+		name 'slave5ac',
+	has container transparent;
+
+Object -> -> -> Slave5b "slave5b"
+	with
+		name 'slave5b';
+
+Object -> Slave6Container "slave6container"
+	with
+		name 'slave6container',
+	has container openable enterable;
+
+Object -> -> Slave6ac "slave6ac"
+	with
+		name 'slave6ac',
+	has container transparent;
+
+Object -> -> -> Slave6b "slave6b"
+	with
+		name 'slave6b';
+
+Object -> Slave7Container "slave7container"
+	with
+		name 'slave7container',
+	has container openable enterable;
+
+Object -> -> Slave7ac "slave7ac"
+	with
+		name 'slave7ac',
+	has container transparent;
+
+Object -> -> -> Slave7b "slave7b"
+	with
+		name 'slave7b';
+
+
+Object Free1 "free1"
+	with
+		name 'free1';
+
+Object Free2 "free2"
+	with
+		name 'free2';
+
+Object Free3 "free3"
+	with
+		name 'free3';
+
+
+[Initialise;
+	location = Library;
+	print "^^And so the story begins...^^";
+];
+
+#Ifdef USEINFORM;
+Include "grammar.h";
+#Endif;

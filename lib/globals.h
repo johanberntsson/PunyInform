@@ -5,7 +5,7 @@ System_file;
 Constant PUNYINFORM_MAJOR_VERSION = 6;
 Constant PUNYINFORM_MINOR_VERSION = 6;
 Constant PUNYINFORM_PATCH_VERSION = 0; ! Usually 0 (if zero, it is not printed in banner)
-!Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
+Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
 #Ifndef VN_1644;
 Message fatalerror "*** The PunyInform library needs Inform v6.44 or later to work ***";
@@ -253,7 +253,9 @@ Property invent             alias se_to;
 Property inside_description alias sw_to;
 Property react_before       alias u_to;
 Property react_after        alias d_to;
+#Ifdef OPTIONAL_ADD_TO_SCOPE;
 Property add_to_scope       alias in_to;
+#Endif;
 Property parse_name         alias out_to;
 Property when_open          alias initial;
 Property when_on            alias initial;
@@ -449,13 +451,14 @@ Default MAX_SCORE           0;
 Default AMUSING_PROVIDED    1;
 Default MAX_CARRIED        32;
 
+! location must be the first global to show location name, at least for z3
 #IfDef INITIAL_LOCATION_VALUE;
-Global location = INITIAL_LOCATION_VALUE;		! Must be the first global to show location name
+Global location = INITIAL_LOCATION_VALUE;
 #IfNot;
 	#Ifdef OPTIONAL_NO_DARKNESS;
-	Global location = Directions;						! Must be the first global to show location name
+	Global location = Directions;
 	#IfNot;
-	Global location = thedark;						! Must be the first global to show location name
+	Global location = thedark;
 	#EndIf;
 #EndIf;
 
