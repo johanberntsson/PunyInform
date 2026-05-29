@@ -8,119 +8,83 @@ You see nothing special about the free2.
 >x free3
 You can't see any such thing.
 
->x slave5b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s5b
+You can't see any such thing.
 
->push slave5b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s5b
+You can't see any such thing.
 
->get slave5b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s5b
+You can't see any such thing.
 
->x slave5ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s5ac
+You can't see any such thing.
 
->push slave5ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s5ac
+You can't see any such thing.
 
->get slave5ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s5ac
+You can't see any such thing.
 
->x slave6b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s6b
+You see nothing special about the slave6b.
 
->push slave6b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s6b
+The slave6ac is not open.
 
->get slave6b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s6b
+The slave6ac is not open.
 
->x slave6ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s6ac
+The slave6container is not open.
 
->push slave6ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s6ac
+The slave6container is not open.
 
->get slave6ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s6ac
+The slave6container is not open.
 
->x slave7b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s7b
+You see nothing special about the slave7b.
 
->push slave7b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s7b
+The slave7ac is not open.
 
->get slave7b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s7b
+The slave7ac is not open.
 
->x slave7ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s7ac
+The slave7container is not open.
 
->push slave7ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s7ac
+The slave7container is not open.
 
->get slave7ac
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s7ac
+The slave7container is not open.
 
->x master1
-Do you mean the master1, the master2, the master3 or the master4?
+>x master 1
+You see nothing special about the master1.
 
->push master1
-Do you mean the master1, the master2, the master3 or the master4?
+>push master 1
+Nothing obvious happens.
 
->x master2
-Do you mean the master1, the master2, the master3 or the master4?
+>x master 2
+You see nothing special about the master2.
 
->push master2
-Do you mean the master1, the master2, the master3 or the master4?
+>push master 2
+Nothing obvious happens.
 
->x master3
-Do you mean the master1, the master2, the master3 or the master4?
+>x master 3
+You see nothing special about the master3.
 
->push master3
-Do you mean the master1, the master2, the master3 or the master4?
+>push master 3
+The aquarium is not open.
 
->x master4
-Do you mean the master1, the master2, the master3 or the master4?
+>x master 4
+You see nothing special about the master4.
 
->push master4
-Do you mean the master1, the master2, the master3 or the master4?
+>push master 4
+The aquarium is not open.
 
 >x free1
 You see nothing special about the free1.
@@ -131,125 +95,77 @@ Nothing obvious happens.
 >get free1
 Taken.
 
->x slave1a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s1a
+You see nothing special about the slave1a.
 
->push slave1a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s1a
+Nothing obvious happens.
 
->get slave1a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s1a
+Taken.
 
->x slave1b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s1b
+You see nothing special about the slave1b.
 
->push slave1b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s1b
+Nothing obvious happens.
 
->get slave1b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s1b
+Taken.
 
->x slave2a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s2a
+You see nothing special about the slave2a.
 
->push slave2a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s2a
+Nothing obvious happens.
 
->get slave2a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s2a
+Taken.
 
->x slave2b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s2b
+You see nothing special about the slave2b.
 
->push slave2b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s2b
+The slave2container is not open.
 
->get slave2b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s2b
+The slave2container is not open.
 
->x slave3a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s3a
+You see nothing special about the slave3a.
 
->push slave3a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s3a
+The aquarium is not open.
 
->get slave3a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s3a
+The aquarium is not open.
 
->x slave3b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s3b
+You see nothing special about the slave3b.
 
->push slave3b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s3b
+The aquarium is not open.
 
->get slave3b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s3b
+The aquarium is not open.
 
->x slave4a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s4a
+You see nothing special about the slave4a.
 
->push slave4a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s4a
+The aquarium is not open.
 
->get slave4a
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s4a
+The aquarium is not open.
 
->x slave4b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>x s4b
+You see nothing special about the slave4b.
 
->push slave4b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>push s4b
+The aquarium is not open.
 
->get slave4b
-Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
-slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
-slave3a?
+>get s4b
+The aquarium is not open.
 
 >x free1
 You see nothing special about the free1.
@@ -262,6 +178,9 @@ You already have it.
 
 >i tall
 You're carrying:
+  a slave2a
+  a slave1b
+  a slave1a
   a free1
 
 >quit
