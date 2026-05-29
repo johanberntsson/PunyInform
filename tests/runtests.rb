@@ -75,20 +75,20 @@ puts "Testing v3 debug"
 Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
 checkforfailures
 
-puts "Testing v4 release"
-Dir["*.inf"].sort.each { |filename| runtest filename, 4, "" }
-checkforfailures
-
-puts "Testing v4 debug"
-Dir["*.inf"].sort.each { |filename| runtest filename, 4, "-D" }
-checkforfailures
-
 puts "Testing v5 release"
 Dir["*.inf"].sort.each { |filename| runtest filename, 5, "" }
 checkforfailures
 
 puts "Testing v5 debug"
 Dir["*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
+checkforfailures
+
+puts "Testing v4 release"
+Dir["*.inf"].sort.each { |filename| runtest filename, 4, "" }
+checkforfailures
+
+puts "Testing v4 debug"
+Dir["*.inf"].sort.each { |filename| runtest filename, 4, "-D" }
 checkforfailures
 
 puts "\nALL TESTS PASSED"

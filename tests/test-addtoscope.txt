@@ -1,0 +1,269 @@
+
+>y
+That was a rhetorical question.
+
+>x free2
+You see nothing special about the free2.
+
+>x free3
+You can't see any such thing.
+
+>x slave5b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave5b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave5b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave5ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave5ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave5ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave6b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave6b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave6b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave6ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave6ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave6ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave7b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave7b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave7b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave7ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave7ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave7ac
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x master1
+Do you mean the master1, the master2, the master3 or the master4?
+
+>push master1
+Do you mean the master1, the master2, the master3 or the master4?
+
+>x master2
+Do you mean the master1, the master2, the master3 or the master4?
+
+>push master2
+Do you mean the master1, the master2, the master3 or the master4?
+
+>x master3
+Do you mean the master1, the master2, the master3 or the master4?
+
+>push master3
+Do you mean the master1, the master2, the master3 or the master4?
+
+>x master4
+Do you mean the master1, the master2, the master3 or the master4?
+
+>push master4
+Do you mean the master1, the master2, the master3 or the master4?
+
+>x free1
+You see nothing special about the free1.
+
+>push free1
+Nothing obvious happens.
+
+>get free1
+Taken.
+
+>x slave1a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave1a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave1a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave1b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave1b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave1b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave2a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave2a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave2a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave2b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave2b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave2b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave3a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave3a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave3a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave3b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave3b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave3b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave4a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave4a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave4a
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x slave4b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>push slave4b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>get slave4b
+Do you mean the slave7ac, the slave7b, the slave1a, the slave1b, the
+slave5container, the slave2a, the slave2b, the slave6ac, the slave6b or the
+slave3a?
+
+>x free1
+You see nothing special about the free1.
+
+>push free1
+Nothing obvious happens.
+
+>get free1
+You already have it.
+
+>i tall
+You're carrying:
+  a free1
+
+>quit
+Are you sure you want to quit? yes
+

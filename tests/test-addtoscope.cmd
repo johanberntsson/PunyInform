@@ -1,4 +1,6 @@
-restart
+
+transcript
+
 y
 x free2
 x free3
@@ -59,4 +61,6 @@ x free1
 push free1
 get free1
 i tall
-recording off
+quit
+yes
+
