@@ -85,12 +85,12 @@ Object Library "The Library"
 
 Object -> Master1 "master1"
 	with
-		name 'master1',
+		name 'master' '1//',
 		add_to_scope Slave1a Slave1b Slave5Container;
 
 Object -> Master2 "master2"
 	with
-		name 'master2',
+		name 'master' '2//',
 		add_to_scope [; 
 			PlaceInScope(Slave2a); 
 			ScopeWithin(Slave2Container); 
@@ -111,12 +111,12 @@ Object -> Aquarium "aquarium"
 
 Object -> -> Master3 "master3"
 	with
-		name 'master3',
+		name 'master' '3//',
 		add_to_scope Slave3a Slave3b;
 
 Object -> -> Master4 "master4"
 	with
-		name 'master4',
+		name 'master' '4//',
 		add_to_scope Slave4a Slave4b,
 		xadd_to_scope [; 
 			PlaceInScope(Slave4a); 
@@ -135,20 +135,20 @@ Object -> Table "table"
 
 Object Slave1a "slave1a"
 	with
-		name 'slave1a';
+		name 's1a';
 
 Object Slave2a "slave2a"
 	with
-		name 'slave2a',
+		name 's2a',
 		add_to_scope Free3;
 
 Object Slave3a "slave3a"
 	with
-		name 'slave3a';
+		name 's3a';
 
 Object Slave4a "slave4a"
 	with
-		name 'slave4a';
+		name 's4a';
 
 
 Object Hallway "Hallway"
@@ -159,77 +159,77 @@ Object Hallway "Hallway"
 
 Object -> SlaveContainer "slavecontainer"
 	with
-		name 'slavecontainer',
+		name 'scontainer',
 	has container openable enterable;
 
 Object -> -> Slave1b "slave1b"
 	with
-		name 'slave1b';
+		name 's1b';
 
 Object -> -> Slave3b "slave3b"
 	with
-		name 'slave3b';
+		name 's3b';
 
 Object -> Slave2Container "slave2container"
 	with
-		name 'slave2container',
+		name 's2container',
 	has container openable enterable;
 
 Object -> -> Slave2b "slave2b"
 	with
-		name 'slave2b';
+		name 's2b';
 
 Object -> Slave4Container "slave4container"
 	with
-		name 'slave4container',
+		name 's4container',
 	has container openable enterable;
 
 Object -> -> Slave4b "slave4b"
 	with
-		name 'slave4b';
+		name 's4b';
 
 Object -> Slave5Container "slave5container"
 	with
-		name 'slave5container',
+		name 's5container',
 		add_to_scope Free2,
 	has container openable enterable;
 
 Object -> -> Slave5ac "slave5ac"
 	with
-		name 'slave5ac',
+		name 's5ac',
 	has container transparent;
 
 Object -> -> -> Slave5b "slave5b"
 	with
-		name 'slave5b';
+		name 's5b';
 
 Object -> Slave6Container "slave6container"
 	with
-		name 'slave6container',
+		name 's6container',
 	has container openable enterable;
 
 Object -> -> Slave6ac "slave6ac"
 	with
-		name 'slave6ac',
+		name 's6ac',
 	has container transparent;
 
 Object -> -> -> Slave6b "slave6b"
 	with
-		name 'slave6b';
+		name 's6b';
 
 Object -> Slave7Container "slave7container"
 	with
-		name 'slave7container',
+		name 's7container',
 	has container openable enterable;
 
 Object -> -> Slave7ac "slave7ac"
 	with
-		name 'slave7ac',
+		name 's7ac',
 	has container transparent;
 
 Object -> -> -> Slave7b "slave7b"
 	with
-		name 'slave7b';
+		name 's7b';
 
 
 Object Free1 "free1"

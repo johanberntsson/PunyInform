@@ -4,6 +4,8 @@ Upcoming release:
 - Fixed bug: add_to_scope using an array would also add children of all objects. This was different from DM4 and the standard library.
 - Fixed bug: add_to_scope using a procedure that added objects with PlaceInScope would also check add_to_scope for the objects added. This was different from DM4 and the standard library.
 - Optimized some scope routines.
+- Added a test for add_to_scope handling.
+- Added back a lot of messages for ROUTINES debug verb, that went missing for z5+ in PunyInform v6.5.
 
 =======
 v6.6: new feature release (12 May 2026)

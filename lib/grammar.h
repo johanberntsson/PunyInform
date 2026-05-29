@@ -2076,9 +2076,9 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 	if(_new_location == 0) {
 		if(real_location provides cant_go) {
 #IfDef DEBUG;
-#Iftrue #version_number < 5;
+!#Iftrue #version_number < 5;
 			if(debug_flag & 1) print "[ ~", (name) real_location, "~.cant_go() ]^";
-#Endif;
+!#Endif;
 #EndIf;
 			PrintOrRun(real_location, cant_go);
 			rtrue;
@@ -2087,9 +2087,9 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 	}
 
 #IfDef DEBUG;
-#Iftrue #version_number < 5;
+!#Iftrue #version_number < 5;
 	if(debug_flag & 1) print "[ ~", (name) _new_location, "~.before() ]^";
-#Endif;
+!#Endif;
 #EndIf;
 	action = ##Going;
 	if(RunRoutines(_new_location, before)) { action = ##Go; rtrue; }

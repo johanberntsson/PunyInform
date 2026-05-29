@@ -15,9 +15,9 @@ System_file;
 		! routine or a list of objects
 		if(IsARoutine(_addr-->0)) {
 #IfDef DEBUG;
-#Iftrue #version_number < 5;
+!#Iftrue #version_number < 5;
 			if(debug_flag & 1) print "[ ~", (name) inp1, "~.add_to_scope() ]^";
-#Endif;
+!#Endif;
 #EndIf;
 			RunRoutines(p_obj, add_to_scope);
 		} else {
