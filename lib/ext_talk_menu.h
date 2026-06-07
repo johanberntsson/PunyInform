@@ -243,6 +243,7 @@ Constant TM_ADD_BEFORE_AND_AFTER 4; ! Can be used directly after subject
 
 Global talk_menu_talking = false;
 Global talk_menu_multi_mode = true;
+Default CLR_CURRENT 0;
 Global clr_talk_menu = CLR_CURRENT;
 
 [ _TMPrintMsg p_msg p_no_newline;
@@ -797,16 +798,23 @@ Array _TMLines --> 10;
    if (noun==player) { PrintMsg(MSG_TELL_PLAYER); rtrue; }
    if (~~(noun provides talk_array)) { second = noun; PrintMsg(MSG_SHOW_DEFAULT); rtrue; }
 #Ifnot;
-   if (noun==player) { L__M(##Tell, 1, noun); rtrue; }
-   if (~~(noun provides talk_array)) { L__M(##Show, 2, second); rtrue; }
+	#Ifdef NAIL_MAJOR_VERSION;
+	   if (noun==player) { PrintMsg(MSG_ABSURD); rtrue; }
+	   if (~~(noun provides talk_array)) { PrintMsg(MSG_NO_REPLY); rtrue; }
+	#Ifnot;
+	   if (noun==player) { L__M(##Tell, 1, noun); rtrue; }
+	   if (~~(noun provides talk_array)) { L__M(##Show, 2, second); rtrue; }
+	#Endif;
 #Endif;
    RunTalk(noun);
    AfterRoutines();
 ];
 
+#Ifndef NAIL_MAJOR_VERSION;
 Verb 'talk' 'converse' 'interview' 'interrogate'
 	* 'to'/'with' creature                      ->Talk
 	* creature                                  ->Talk;
+#Endif;
 
 #Ifdef DEBUG;
 #Ifdef FLAG_COUNT;
@@ -953,7 +961,9 @@ Constant TM_ERR_NOT_FOUND "Target topic not found.";
 	}
 ];
 
+#Ifndef NAIL_MAJOR_VERSION;
 Verb meta 'tmtest'
 	* noun -> TMTest
 	*      -> TMTest;
+#Endif;
 #Endif;
