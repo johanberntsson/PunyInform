@@ -2,127 +2,151 @@
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
 !% $MAX_ABBREVS=96
-!!% $ZCODE_MAX_INLINE_STRING=9999    ! Requires Inform 6.42
-!!% $OMIT_SYMBOL_TABLE=1             ! Requires Inform 6.42, and can not be used with DEBUG
+!% $ZCODE_MAX_INLINE_STRING=9999
+!% $LONG_DICT_FLAG_BUG=0
+!% $ZCODE_COMPACT_GLOBALS=1
+!% $TRANSCRIPT_FORMAT=1
+!!% $OMIT_SYMBOL_TABLE=1             ! Can not be used with DEBUG
 
-! The very first lines of the main source code file for a game can
-! contain compiler options, like the lines above. -~S disables
-! strict error checking. This is otherwise used in z5 and z8 games by
-! default. While useful for debugging, it adds ~10 KB to the story file
-! size and it makes the game slower.
-! $OMIT_UNUSED_ROUTINES=1 makes the compiler remove all routines which
-! aren't used. This can save some space.
-! ZCODE_LESS_DICT_DATA=1 removes one empty data byte for each dictionary word
-! $MAX_ABBREVS=96 increases the maximum number of abreviations from 64 to 96,
-! by removing the option to use 32 dynamic strings
-! @ZCODE_MAX_INLINE_STRING=9999 makes the compiler place all strings used in
-! code inline with the code, rather than placing longer strings in the high
-! memory string area. This saves some bytes. 
+! Library_of_horror.inf - a sample game which uses PunyInform
+! Meant to be compiled with Inform v6.44+ and PunyInform v6.7.
+
+! The very first lines of the main source code file for a game can contain
+! compiler options, like the lines above. This is what we've put here:
+!
+! -~S
+!   Disable strict error checking. This is otherwise used in z5 and z8 games
+!   by default. While useful for debugging, it adds ~10 KB to the story file
+!   size and it makes the game slower.
+! $OMIT_UNUSED_ROUTINES=1
+!   Ask the compiler to remove all routines which aren't used. This can save
+!   some space.
+! ZCODE_LESS_DICT_DATA=1
+!   removes one empty data byte for each dictionary word
+! $MAX_ABBREVS=96
+!   Increase the maximum number of abreviations from 64 to 96, by removing the
+!   option to use 32 dynamic strings
+! $ZCODE_MAX_INLINE_STRING=9999
+!   Place all strings used in code inline with the code, rather than placing
+!   longer strings in the high memory string area. This saves some bytes. 
+! $LONG_DICT_FLAG_BUG=0
+!   Fix a compiler bug that made the compiler ignore word flags on words
+!   longer than the dictionary resolution (6 or 9 characters).
+! $ZCODE_COMPACT_GLOBALS=1
+!   Don't reserve space for global variables that aren't used by the game.
+! $TRANSCRIPT_FORMAT=1
+!   If we compile with -r (write all game text to "gametext.txt"), use the
+!   file format that Zabbrev can read, to build abbreviations.
 
 ! Unless compiling in DEBUG mode, one can also define $OMIT_SYMBOL_TABLE=1 to
 ! tell the compiler not to include names of properties, attributes and more,
 ! thus saving some space.
 
-! Abbreviations created with ZAbbrevMaker 0.9 - https://github.com/heasm66/ZAbbrevMaker
+! Abbreviations created with ZAbbrev 0.12(dev) - https://github.com/heasm66/zabbrev
 Constant CUSTOM_ABBREVIATIONS;
-Abbreviate "hen you're short of";
-Abbreviate "by Maurice Sendak.";
+Abbreviate " table covered with a black velvet tablecloth.";
+Abbreviate "Maurice Sendak.";
 Abbreviate "cardboard box";
+Abbreviate "description";
+Abbreviate " from the ";
 Abbreviate "understand";
 Abbreviate "You can't ";
-Abbreviate " from the ";
-Abbreviate " already ";
 Abbreviate " you can ";
 Abbreviate "something";
+Abbreviate "direction";
 Abbreviate "basement";
-Abbreviate "irection";
-Abbreviate "nothing ";
 Abbreviate " of the ";
-Abbreviate " manager";
 Abbreviate " to the ";
 Abbreviate "building";
+Abbreviate "nothing ";
+Abbreviate "already ";
+Abbreviate "manager";
 Abbreviate "candles";
-Abbreviate "Inform ";
 Abbreviate "library";
-Abbreviate "flames";
 Abbreviate " with ";
-Abbreviate " your ";
-Abbreviate " light";
-Abbreviate "inside";
-Abbreviate " there";
-Abbreviate " about";
-Abbreviate "stairs";
 Abbreviate " that ";
-Abbreviate " black";
-Abbreviate "which";
-Abbreviate " like";
-Abbreviate "have ";
-Abbreviate " you ";
-Abbreviate "thing";
+Abbreviate " your ";
+Abbreviate "stairs";
+Abbreviate " there";
+Abbreviate " like ";
+Abbreviate "object";
+Abbreviate " about";
+Abbreviate "flames";
+Abbreviate "closed";
+Abbreviate "There";
+Abbreviate " not ";
 Abbreviate " and ";
+Abbreviate "thing";
+Abbreviate "which";
+Abbreviate " you ";
+Abbreviate ", sir";
 Abbreviate "Frank";
+Abbreviate "walls";
 Abbreviate " the ";
 Abbreviate "ould ";
-Abbreviate "start";
-Abbreviate "walls";
-Abbreviate ", sir";
-Abbreviate "There";
-Abbreviate "look";
+Abbreviate " are ";
+Abbreviate "able";
+Abbreviate " is ";
+Abbreviate "_to/";
+Abbreviate " out";
+Abbreviate "tion";
 Abbreviate "book";
 Abbreviate " of ";
-Abbreviate "dark";
-Abbreviate "You'";
-Abbreviate "his ";
 Abbreviate "here";
+Abbreviate "room";
 Abbreviate "The ";
 Abbreviate " to ";
 Abbreviate "n't ";
+Abbreviate "dark";
 Abbreviate "You ";
 Abbreviate "ing ";
 Abbreviate " you";
-Abbreviate " is ";
-Abbreviate "room";
-Abbreviate "tion";
-Abbreviate "not ";
-Abbreviate " are";
+Abbreviate " fir";
+Abbreviate "ight";
+Abbreviate "look";
 Abbreviate "ound";
-Abbreviate "able";
-Abbreviate " co";
-Abbreviate " I ";
+Abbreviate "You'";
+Abbreviate "have";
+Abbreviate "his ";
 Abbreviate "hat";
-Abbreviate "for";
-Abbreviate "ed.";
-Abbreviate "all";
-Abbreviate " be";
-Abbreviate "ly ";
-Abbreviate " on";
-Abbreviate "ed ";
-Abbreviate "ear";
-Abbreviate "rea";
-Abbreviate "see";
-Abbreviate "re ";
+Abbreviate "ack";
+Abbreviate "wor";
 Abbreviate "lea";
-Abbreviate " in";
-Abbreviate "ing";
-Abbreviate "est";
-Abbreviate "ver";
-Abbreviate "ome";
-Abbreviate "out";
-Abbreviate "urn";
-Abbreviate "'s ";
-Abbreviate "the";
-Abbreviate " it";
-Abbreviate "ter";
-Abbreviate " a ";
 Abbreviate "and";
-Abbreviate "! ";
-Abbreviate ", ";
-Abbreviate "It";
-Abbreviate "e.";
-Abbreviate "^^";
+Abbreviate "see";
+Abbreviate "for";
+Abbreviate " on";
+Abbreviate "ed.";
+Abbreviate "ed ";
+Abbreviate "ly ";
+Abbreviate "the";
+Abbreviate "re ";
+Abbreviate " a ";
+Abbreviate "est";
+Abbreviate "all";
+Abbreviate "ome";
+Abbreviate "rea";
+Abbreviate "ter";
+Abbreviate " it";
+Abbreviate "ing";
+Abbreviate "ver";
+Abbreviate "urn";
+Abbreviate "ear";
+Abbreviate "st ";
+Abbreviate "'s ";
+Abbreviate " in";
 Abbreviate ". ";
+Abbreviate "e.";
+Abbreviate "It";
+Abbreviate "^^";
+Abbreviate ", ";
 
-! Library_of_horror.inf - a sample game which uses PunyInform
+! We can make the game file smaller by creating constants for some longer 
+! texts that are used multiple times.
+ 
+Constant TXT_SHORT_OF_BREATH
+	"When you're short of breath and the heat makes you lose consciousness,
+	the last thing you hear is a laugh in the distance...";
 
 
 ! ====================================
@@ -148,11 +172,12 @@ Constant STATUSLINE_SCORE; Statusline score;
 
 Constant Story	  "The Library Of Horror";
 Constant Headline   "^A PunyInform demo game, by Pablo Martinez and Fredrik Ramsberg.^";
-Release 10;
-Serial "231010";
+Release 11;
+Serial "260530";
 
 ! Get your own unique IFID for your game at https://www.tads.org/ifidgen/ifidgen
-Array UUID_ARRAY string "UUID://43E00AEE-DEAF-40D9-8306-11BC80779320//"; #Ifdef UUID_ARRAY; #Endif;
+Array UUID_ARRAY string "UUID://43E00AEE-DEAF-40D9-8306-11BC80779320//"; 
+#Ifdef UUID_ARRAY; #Endif;
 
 Constant MAX_SCORE = 100;
 Constant TASKS_PROVIDED;
@@ -257,9 +282,6 @@ Array quote_darkchamber static --> 6 35
 "first, and is waiting for it."
 "              -- Terry Pratchett";
 
-
-
-
 ! ====================================
 ! Include puny.h
 ! ====================================
@@ -268,9 +290,6 @@ Include "puny.h";
 ! ====================================
 ! Classes, verbs etc for game
 ! ====================================
-
-! -- testing scope grammar token
-! See: https://www.inform-fiction.org/manual/html/s32.html
 
 ! Burn is available in the extended verb set, but we'll define it here
 ! instead of adding the weight of all those new verbs. Also, we want it
@@ -306,12 +325,14 @@ Extend 'put' first
 Verb 'talk' 'report'
 	* 'to' creature -> TalkTo;
 
-
 ! ====================================
 ! The following code, heavily inspired by the cheap_scenery extension,
 ! allows the player to ask questions like "WHAT IS A LIBRARY" without
 ! using an object for each question.
 ! ====================================
+
+! Using scope grammar token
+! See: https://www.inform-fiction.org/manual/html/s32.html
 
 [ QueryTopic;
   switch (scope_stage) {
@@ -369,8 +390,7 @@ Class MultiTopic
 				}
 				_i = _i + 3;
 			}
-			! It would make sense to return 0 here, but property
-			! routines return 0 by default anyway.
+			return 0;
 		],
 		description [ _k;
 			_k = self.&topics-->(self.number + 2);
@@ -650,11 +670,15 @@ Object -> Frank "Frank the Robot"
 					_dir_count = DIRECTION_COUNT - 4; ! Skip the last 4 directions (u_to, d_to, in_to, out_to)
 					for(_i=1 : _i <= _dir_count : _i++) {
 						_dir_prop = direction_properties_array->_i;
-						if(_my_loc provides _dir_prop && _my_loc._dir_prop == location) {
+						if(_my_loc provides _dir_prop && 
+								_my_loc._dir_prop == location) {
 							move self to location;
 							scope_modified = true;
-							print "^Frank enters from the ", (string) opposite_directions-->_i, ".^";
-							if (location == RepairShop && WildThingsBook in Box && Box in location &&
+							print "^Frank enters from the ", 
+									(string) opposite_directions-->_i, ".^";
+							if (location == RepairShop && 
+									WildThingsBook in Box && 
+									Box in location &&
 									FlagIsClear(F_FRANK_HAS_SEEN_BOOK)) {
 								SetFlag(F_FRANK_HAS_SEEN_BOOK);
 								print "^~Oh, here it is, sir! The book that the master asked for! Right
@@ -690,10 +714,12 @@ Object Hallway "Hallway"
 	with
 		description [;
 			if(FlagIsSet(F_STARTED_FIRE))
-				"The walls of the corridor burn fiercely, from the stairs to the west to the room to
-					the south. The heat is suffocating.";
-			"A wide hallway leads from the stairs to the west to another room to the south. There
-				are some dusty doors along the walls, but they have all been nailed shut a long time ago.";
+				"The walls of the corridor burn fiercely, from the stairs to
+					the west to the room to the south. The heat is 
+					suffocating.";
+			"A wide hallway leads from the stairs to the west to another room
+				to the south. There are some dusty doors along the walls, but 
+				they have all been nailed shut a long time ago.";
 		],
 		cheap_scenery 'door' 'doors//p' "Regular doors, but old and worn, with some cobweb on them.",
 		w_to BottomOfStairs,
@@ -703,11 +729,12 @@ Object Hallway "Hallway"
 Object StorageRoom "Storage Room"
 	with
 		description [;
-			if(FlagIsSet(F_STARTED_FIRE)) "The fire has arrived to the storage room as well,
-				turning the cobwebs and dust to ash. ";
-			print "A large storage room, which is now empty except for cobweb and dust. ";
-			"Some light is coming from the north and west. A smaller, dark passage leads east. There's a
-				yellow sign above the dark passage.";
+			if(FlagIsSet(F_STARTED_FIRE)) "The fire has arrived to the storage
+				room as well, turning the cobwebs and dust to ash.";
+			"A large storage room, which is now empty except for cobweb and
+				dust. Some light is coming from the north and west. A smaller,
+				dark passage leads east. There's a yellow sign above the dark 
+				passage.";
 		],
 		before [;
 			Go:
@@ -849,14 +876,12 @@ Object -> EvilBook "red book"
 						"^Flames are all around you now. You should still be able to reach the exit though.";
 				11:
 					deadflag=4;
-					"The flames cover all the exits! The fire hovers around you with unnatural ferocity. When
-						you're short of breath and the heat makes you lose consciousness, the last thing you
-						hear is a laugh in the distance...";
+					"The flames cover all the exits! The fire hovers around you with unnatural ferocity. ", (string) TXT_SHORT_OF_BREATH;
 			}
 			if(self.number > 7 && location ~= Library or TopOfStairs) {
 				deadflag = 4;
-				"The heat is too much for you, and you collapse on the floor. When you're short of breath and
-					the heat makes you lose consciousness, the last thing you hear is a laugh in the distance...";
+				"The heat is too much for you, and you collapse on the floor. ", 
+					(string) TXT_SHORT_OF_BREATH;
 			}
 		],
 		add_to_scope [;
