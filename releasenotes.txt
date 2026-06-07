@@ -6,6 +6,11 @@ Upcoming release:
 - Optimized some scope routines.
 - Added a test for add_to_scope handling.
 - Added back a lot of messages for ROUTINES debug verb, that went missing for z5+ in PunyInform v6.5.
+- Improved compatibility with other libraries, for extensions menu, talk_menu and cheap_scenery.
+- Purloin debug verb didn't set scope_modified, so purloined item would not be in scope in manual scope update mode.
+- Optimized name matching in cheap scenery extension.
+- Improved tests for amusing provided.
+- Improved text storage in Library of Horror.
 
 =======
 v6.6: new feature release (12 May 2026)

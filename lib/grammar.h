@@ -1500,6 +1500,7 @@ Array _GotoSubBuffer --> (1 + (GOTOSUB_BUFFER_SIZE + 1)/2); ! Add an extra word 
 
 	move noun to player;
 	scope_modified = true;
+	update_moved = true;
 	"Purloined.";
 ];
 

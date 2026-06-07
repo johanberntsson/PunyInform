@@ -2872,7 +2872,8 @@ Object thedark "Darkness"
 		if(verb_word == 'restart') @restart;
 		if(verb_word == 'restore') <Restore>;
 #Ifdef Amusing;
-		if(AMUSING_PROVIDED == 0 && deadflag == 2 && verb_word == 'amusing') Amusing();
+		if(AMUSING_PROVIDED == 0 && deadflag == GS_WIN && verb_word == 'amusing') 
+			Amusing();
 #Endif;
 		if(verb_word == 'quit') @quit;
 #IfDef OPTIONAL_FULL_SCORE;
