@@ -9,8 +9,9 @@ Upcoming release:
 - Improved compatibility with other libraries, for extensions menu, talk_menu and cheap_scenery.
 - Purloin debug verb didn't set scope_modified, so purloined item would not be in scope in manual scope update mode.
 - Optimized name matching in cheap scenery extension.
-- Improved tests for amusing provided.
+- Improved checks for amusing provided.
 - Improved text storage in Library of Horror.
+- Fixed bug: Cheap scenery extension could try to print CS_DEFAULT_MSG as a string even it was a routine.
 
 =======
 v6.6: new feature release (12 May 2026)
