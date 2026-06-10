@@ -1,17 +1,17 @@
 Upcoming release:
 
-- Made support for add_to_scope optional, governed by constant OPTIONAL_ADD_TO_SCOPE.
+- Made support for add_to_scope optional, governed by constant OPTIONAL_NO_ADD_TO_SCOPE.
 - Fixed bug: add_to_scope using an array would also add children of all objects. This was different from DM4 and the standard library.
 - Fixed bug: add_to_scope using a procedure that added objects with PlaceInScope would also check add_to_scope for the objects added. This was different from DM4 and the standard library.
 - Optimized some scope routines.
 - Added a test for add_to_scope handling.
 - Added back a lot of messages for ROUTINES debug verb, that went missing for z5+ in PunyInform v6.5.
 - Improved compatibility with other libraries, for extensions menu, talk_menu and cheap_scenery.
-- Purloin debug verb didn't set scope_modified, so purloined item would not be in scope in manual scope update mode.
+- Purloin debug verb didn't set scope_modified, so purloined item could end up not being in scope.
 - Optimized name matching in cheap scenery extension.
 - Improved checks for amusing provided.
 - Improved text storage in Library of Horror.
-- Fixed bug: Cheap scenery extension could try to print CS_DEFAULT_MSG as a string even it was a routine.
+- Fixed bug: Cheap scenery extension could try to print CS_DEFAULT_MSG as a string even if it was a routine.
 
 =======
 v6.6: new feature release (12 May 2026)

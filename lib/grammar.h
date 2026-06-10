@@ -1945,7 +1945,7 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 #Endif;
 	_ancestor = CommonAncestor(player, noun);
 
-#Ifdef OPTIONAL_ADD_TO_SCOPE;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
 	if (_ancestor == 0) {
 		_i = _ObjectScopedBySomething(noun);
 		if (_i) _ancestor = CommonAncestor(player, _i);

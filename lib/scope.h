@@ -8,7 +8,7 @@
 
 System_file;
 
-#Ifdef OPTIONAL_ADD_TO_SCOPE;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
 [ _PerformAddToScope p_obj _add_obj _i _len _addr _n;
 	_addr = p_obj.&add_to_scope;
 	if(_addr) {
@@ -69,7 +69,7 @@ System_file;
 ._next_sibling;
 		if(_PutInScope(p_obj, p_risk_duplicate)) rtrue; ! rtrue if scope full
 
-#Ifdef OPTIONAL_ADD_TO_SCOPE;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
 		! Add_to_scope
 		if(p_no_add == 0 && p_obj has reactive) _PerformAddToScope(p_obj);
 #Endif;
@@ -364,7 +364,7 @@ Constant AddToScope = _PutInScope;
 
 	_ancestor = CommonAncestor(player, p_item);
 	if(_ancestor == 0) {
-#Ifdef OPTIONAL_ADD_TO_SCOPE;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
 		_ancestor = p_item;
 		while (_ancestor && (_i = _ObjectScopedBySomething(_ancestor)) == 0)
 			_ancestor = parent(_ancestor);
@@ -398,7 +398,7 @@ Constant AddToScope = _PutInScope;
 	rfalse;
 ];
 
-#Ifdef OPTIONAL_ADD_TO_SCOPE;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
 [ _ObjectScopedBySomething p_obj _j _k _l _m;
 	objectloop (_j has reactive && (_j.&add_to_scope ~= 0)) {
 		_l = _j.&add_to_scope;

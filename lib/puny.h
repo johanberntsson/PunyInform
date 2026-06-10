@@ -2427,7 +2427,7 @@ Object selfobj "you"
 		each_turn NULL,
 		time_out NULL,
 		describe NULL, 
-#Ifdef OPTIONAL_ADD_TO_SCOPE;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
 		add_to_scope 0,
 #Endif;
 		capacity MAX_CARRIED,
@@ -2570,7 +2570,7 @@ Object thedark "Darkness"
 		@jz _v ?~is_reactive;
 		@get_prop_addr _i each_turn -> _v;
 		@jz _v ?~is_reactive;
-#Ifdef OPTIONAL_ADD_TO_SCOPE;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
 		@get_prop_addr _i add_to_scope -> _v;
 		@jz _v ?~is_reactive;
 #Endif;

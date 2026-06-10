@@ -253,7 +253,7 @@ Property invent             alias se_to;
 Property inside_description alias sw_to;
 Property react_before       alias u_to;
 Property react_after        alias d_to;
-#Ifdef OPTIONAL_ADD_TO_SCOPE;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
 Property add_to_scope       alias in_to;
 #Endif;
 Property parse_name         alias out_to;
