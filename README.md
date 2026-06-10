@@ -254,5 +254,5 @@ Labrande, Richard Fairweather, Adam Sommerfield, auraes, Hannesss and
 Garry Francis for issue reporting, advice, testing, code contributions 
 and promotion. Thanks to David Kinder and Andrew Plotkin for helping 
 out with compiler issues and sharing their deep knowledge of the 
-compiler. Huge thanks to Graham Nelson for creating the Inform 6 
-compiler and library in the first place.
+compiler.  Huge thanks to Graham Nelson, without whom the Inform 6 compiler
+and library wouldn't exist.
