@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v6.6 quick reference** |
+| **PunyInform v6.7 quick reference** |
 
   
 More information on last page.
@@ -338,6 +338,10 @@ More information on last page.
 ## OPTIONAL_MANUAL_SCOPE_BOOST **PUNY++**
 
 ###### Avoid running *react_before*, *react_after* and *each_turn* steps whenever possible, for performance.
+
+## OPTIONAL_NO_ADD_TO_SCOPE **PUNY++**
+
+###### Remove support for *add_to_scope* property.
 
 ## OPTIONAL_NO_DARKNESS **PUNY++**
 

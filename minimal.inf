@@ -36,7 +36,7 @@ Constant NO_SCORE = 0;
 !Constant DEBUG;
 !Constant DIALECT_US; ! Affects OPTIONAL_LANGUAGE_NUMBER
 !Constant CUSTOM_ABBREVIATIONS;
-Constant OPTIONAL_NO_ADD_TO_SCOPE;
+Constant OPTIONAL_NO_ADD_TO_SCOPE; ! Comment this out to use add_to_scope property
 !Constant CUSTOM_PLAYER_OBJECT = myPlayerObj;
 Constant OPTIONAL_NO_DARKNESS;
 !Constant OPTIONAL_NON_FLASHING_STATUSLINE;

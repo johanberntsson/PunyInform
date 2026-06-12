@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v6.7: new feature release (12 Jun 2026)
+
 - Made support for add_to_scope optional, governed by constant OPTIONAL_NO_ADD_TO_SCOPE.
 - Fixed bug: add_to_scope using an array would also add children of all objects. This was different from DM4 and the standard library.
 - Fixed bug: add_to_scope using a procedure that added objects with PlaceInScope would also check add_to_scope for the objects added. This was different from DM4 and the standard library.
