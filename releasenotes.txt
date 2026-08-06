@@ -1,5 +1,7 @@
 Upcoming release:
 
+- Added inp1/inp2 initialization to avoid dangling references after parsing a topic statement.
+
 =======
 v6.7: new feature release (12 Jun 2026)
 

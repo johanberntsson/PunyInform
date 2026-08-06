@@ -2031,6 +2031,8 @@ Array guess_object-->5;
 	actor = player;
 	noun = 0; ! needed since _ParsePattern not always called
 	second = 0;
+	inp1 = 0;
+	inp2 = 0;
 	consult_from = 0;
 	consult_words = 0;
 	usual_grammar_after = 0;
