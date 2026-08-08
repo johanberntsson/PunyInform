@@ -1,5 +1,8 @@
 Upcoming release:
 
+- fixed statusline updates for z6
+- fixed oddeven packing for z6
+- added z6 colours
 - Modified width/height calculations in quote and menu extensions for z6
 - Added ext_z6graphics for basic z6 screen model and graphics support
 - Added inp1/inp2 initialization to avoid dangling references after parsing a topic statement.

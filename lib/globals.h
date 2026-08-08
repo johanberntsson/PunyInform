@@ -109,8 +109,14 @@ Constant HDR_SCREENHLINES  $20;     ! byte
 Constant HDR_SCREENWCHARS  $21;     ! byte
 Constant HDR_SCREENWUNITS  $22;     ! word
 Constant HDR_SCREENHUNITS  $24;     ! word
+#Iftrue (#version_number == 6);
+! In z6 it's height/width (see z-spec 11.1)
+Constant HDR_FONTHUNITS    $26;     ! byte
+Constant HDR_FONTWUNITS    $27;     ! byte
+#IfNot;
 Constant HDR_FONTWUNITS    $26;     ! byte
 Constant HDR_FONTHUNITS    $27;     ! byte
+#Endif;
 Constant HDR_ROUTINEOFFSET $28;     ! word
 Constant HDR_STRINGOFFSET  $2A;     ! word
 Constant HDR_BGCOLOUR      $2C;     ! byte
@@ -583,6 +589,13 @@ Constant CLR_BLUE            = 6;
 Constant CLR_MAGENTA         = 7;
 Constant CLR_CYAN            = 8;
 Constant CLR_WHITE           = 9;
+#Iftrue (#version_number == 6);
+! z6 only colours (see z-spec 8.3.1, and page 171)
+Constant CLR_LIGHT_GREY      = 10; 
+Constant CLR_MEDIUM_GREY     = 11; 
+Constant CLR_DARK_GREY       = 12; 
+Constant CLR_TRANSPARENT     = 15; 
+#Endif;
 
 Constant CLR_OZMOO_ORANGE      = 16;
 Constant CLR_OZMOO_BROWN       = 17;
@@ -678,13 +691,27 @@ Array empty_arr --> MAX_SCOPE;
 #Endif;
 
 ! Constants and global used to accelerate RunRoutines() in puny.h
+#Iftrue #oddeven_packing;
+#Iftrue #version_number > 5;
+#Iftrue #version_number < 8;
+Constant USE_ODDEVEN_PACKING;
+#Endif;
+#Endif;
+#Endif;
 Constant _PunyZRegionCase1 = 1;
 Constant _PunyZRegionCase2 = 0;
 !Constant _PunyZRegionCase3 = 3; ! CAN'T HAPPEN!?
-! _puny_zregion_case Must start as case 2 (main changes it to case 1 if needed)
+Constant _PunyZRegionCaseB = 2;
+! _puny_zregion_case Must start as case 1 or case B (main changes it to case 2 if needed)
+#Ifdef USE_ODDEVEN_PACKING;
+Global _puny_zregion_case = _PunyZRegionCaseB; 
+Global IsARoutine = _IsARoutine_CaseB;
+Global IsAString = _IsAString_CaseB;
+#Ifnot;
 Global _puny_zregion_case = _PunyZRegionCase1; 
 Global IsARoutine = _IsARoutine_Case1;
 Global IsAString = _IsAString_Case1;
+#Endif;
 
 Constant RTE_MINIMUM = 0;
 Constant RTE_NORMAL  = 1;
