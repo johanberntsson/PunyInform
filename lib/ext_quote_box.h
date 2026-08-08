@@ -106,6 +106,10 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 	_screen_width = 0->$21;
 	_i = _quote_lines + 5;
 	@erase_window -2;
+#Iftrue #version_number == 6;
+	! In z6 split_window is units
+	_i = _i * (HDR_FONTHUNITS->0);
+#Endif;
 	@split_window _i;
 	@set_window 1;
 !	@erase_window 1;

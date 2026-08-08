@@ -431,6 +431,12 @@ Array TenDashes static -> "----------";
 
 Array _TMLines --> 10;
 
+! In z6 split_window and set_cursor count screen units, not characters, so
+! it has to be scaled by the height of a character
+#Iftrue #version_number == 6;
+Global _tm_units;
+#Endif;
+
 #Iftrue #version_number > 3;
 #Ifdef PUNYINFORM_MAJOR_VERSION;
 [ RunTalk p_npc _array _i _j _n _val _height _width _offset _count _more _has_split _add_msg _stash_array _old_fg;
@@ -527,11 +533,21 @@ Array _TMLines --> 10;
 !			print "Talk to ", (the) p_npc, " about:^";
 			if(_count == 1) {
 				_has_split = true;
+#Iftrue #version_number == 6;
+				_tm_units = _height * (HDR_FONTHUNITS->0);
+				@split_window _tm_units;
+#Ifnot;
 				@split_window _height;
+#Endif;
 				@erase_window 1;
 				DrawStatusLine();
 				@set_window 1;
+#Iftrue #version_number == 6;
+				_tm_units = 1 + (HDR_FONTHUNITS->0);
+				@set_cursor _tm_units 1;
+#Ifnot;
 				@set_cursor 2 1;
+#Endif;
 #Ifdef PUNYINFORM_MAJOR_VERSION;
 #Iftrue #version_number > 4;
 				if(clr_on) {
@@ -585,9 +601,15 @@ Array _TMLines --> 10;
 
 #Iftrue #version_number > 3;
 	_i = _height - 1;
+#Iftrue #version_number == 6;
+	_i = 1 + (_i - 1) * (HDR_FONTHUNITS->0);
+#Endif;
 	@set_cursor _i 1;
 	FastDashes(_width);
 	_i = _height - 3;
+#Iftrue #version_number == 6;
+	_i = 1 + (_i - 1) * (HDR_FONTHUNITS->0);
+#Endif;
 	@set_cursor _i 1;
 #Endif;
 	_i = TM_MSG_EXIT_OPTION;
