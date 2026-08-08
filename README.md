@@ -10,9 +10,10 @@ PunyInform is based on the Inform 6 library, developed by Graham Nelson.
 We are trying to make it easy for authors used to writing in Inform 6 to
 start using PunyInform. There is a manual describing the differences.
 
-Games using PunyInform can be compiled to z3, z4, z5 and z8 format. Compared
-to the Inform 6 library, this means we lack support for Glulx, but we
-have support for z3 and z4 (which the Inform 6 library lacks).
+Games using PunyInform can be compiled to z3, z4, z5, z6 and z8 format. 
+Compared to the Inform 6 library, this means we lack support for Glulx, but we
+have support for z3 and z4 (which the Inform 6 library lacks). There is
+also an extension available for basic z6 screen model and graphics support..
 
 To compile games using PunyInform, we recommend the official Inform 6
 compiler maintained by David Kinder, at

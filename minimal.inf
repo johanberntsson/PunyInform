@@ -79,6 +79,9 @@ Include "globals.h";
 !Include "ext_talk_menu.h"; ! Note: Also include ext_flags.h to allow use of flags
 !Include "ext_quote_box.h";
 !Include "ext_cheap_scenery.h";
+#Iftrue (#version_number == 6);
+!Include "ext_z6graphics.h";
+#Endif;
 
 Include "puny.h";
 
