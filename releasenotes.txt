@@ -1,5 +1,8 @@
 Upcoming release:
 
+=======
+v6.8: new feature release (9 Aug 2026)
+
 - fixed statusline updates for z6
 - fixed oddeven packing for z6
 - added z6 colours

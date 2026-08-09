@@ -64,8 +64,9 @@ Constant Z6_CURRENT_WINDOW = -3; ! magic value for current window
 ];
 
 [ Z6ShowWindow_Chars p_window p_start_x p_start_y p_width p_height;
+    ! The position is a 1-based character cell, and unit (1,1) is top left.
     Z6ShowWindow_Units(p_window,
-        Z6ColToX(p_start_x), Z6RowToY(p_start_y),
+        Z6ColToX(p_start_x - 1) + 1, Z6RowToY(p_start_y - 1) + 1,
         Z6ColToX(p_width), Z6RowToY(p_height));
 ];
 
