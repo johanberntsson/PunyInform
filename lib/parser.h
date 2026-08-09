@@ -1741,7 +1741,7 @@ Array guess_object-->5;
 		_next_word = _parse_pointer-->2;
 		_token = pattern_pointer -> 0;
 #IfDef DEBUG_PARSEPATTERN;
-		print "  TOKEN: ", _token;, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
+		print "  TOKEN: ", _token, " wn ", wn, " _parse_pointer ", _parse_pointer, "^";
 #EndIf;
 
 		scope_stage = 0;

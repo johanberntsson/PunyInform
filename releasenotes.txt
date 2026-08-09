@@ -1,5 +1,7 @@
 Upcoming release:
 
+- Fixed a bug in debug code, which would break compilation if DEBUG_PARSEPATTERN was defined.
+
 =======
 v6.8: new feature release (9 Aug 2026)
 
