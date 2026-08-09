@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v6.7 quick reference** |
+| **PunyInform v6.8 quick reference** |
 
   
 More information on last page.
@@ -217,7 +217,7 @@ More information on last page.
 
 ###### 
 
-###### There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT, CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY.*
+###### There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT, CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY.* Under z6, there is also *CLR_LIGHT_GREY, CLR_MEDIUM_GREY, CLR_DARK_GREY, CLR_TRANSPARENT.* 
 
 ######  **The global *scope_reason* schould always have one of the values *PARSING_REASON, EACH_TURN_REASON, REACT_BEFORE_REASON, REACT_AFTER_REASON, LOOPOVERSCOPE_REASON, TESTSCOPE_REASON*.
 
@@ -630,8 +630,6 @@ typically an object. Example of use:
 ## ThatorThose
 
 ###### Prints "that" or "those" based on *pluralname*.
-
-# 
 
 # **E**ntry point routines
 

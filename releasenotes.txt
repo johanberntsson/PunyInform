@@ -3,12 +3,12 @@ Upcoming release:
 =======
 v6.8: new feature release (9 Aug 2026)
 
-- fixed statusline updates for z6
-- fixed oddeven packing for z6
-- added z6 colours
+- Made statusline routines support z6.
+- Fixed: Routines IsAString, IsARoutine and RunRoutines lacked support for oddeven packing (Compiler option -B, currently supported for all Z-code versions, but only useful for z6 and z7).
+- Added z6 colours
 - Modified width/height calculations in quote and menu extensions for z6
-- Added ext_z6graphics for basic z6 screen model and graphics support
-- Added inp1/inp2 initialization to avoid dangling references after parsing a topic statement.
+- Added lib/ext_z6graphics.h for basic z6 screen model and graphics support
+- Added inp1/inp2 initialization in _ParseAndPerformAction, to avoid inp1 and inp2 referring to objects from the last command when processing a command with no objects, e.g. "joe, hello".
 
 =======
 v6.7: new feature release (12 Jun 2026)

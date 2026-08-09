@@ -3,7 +3,7 @@
 System_file;
 
 Constant PUNYINFORM_MAJOR_VERSION = 6;
-Constant PUNYINFORM_MINOR_VERSION = 7;
+Constant PUNYINFORM_MINOR_VERSION = 8;
 Constant PUNYINFORM_PATCH_VERSION = 0; ! Usually 0 (if zero, it is not printed in banner)
 !Constant PUNYINFORM_VERSION_SUFFIX = "dev"; ! Comment out if none
 
