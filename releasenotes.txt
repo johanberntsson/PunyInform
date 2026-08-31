@@ -1,6 +1,8 @@
 Upcoming release:
 
 - Fixed a bug in debug code, which would break compilation if DEBUG_PARSEPATTERN was defined.
+- Added howto/z6_with_pictures.inf, showing how to set up a game with statusline, a picture
+  window, and a normal text window.
 
 =======
 v6.8: new feature release (9 Aug 2026)

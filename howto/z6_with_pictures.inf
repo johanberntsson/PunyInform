@@ -1,0 +1,187 @@
+!% -~S
+!% $OMIT_UNUSED_ROUTINES=1
+!% $ZCODE_LESS_DICT_DATA=1
+!% $LONG_DICT_FLAG_BUG=0
+!% $ZCODE_COMPACT_GLOBALS=1
+
+! z6_with_pictures.inf -- a small PunyInform game with a three-part z6 screen:
+!
+!   row 1                 window 1, the ordinary PunyInform status line
+!   rows 2 .. 1+PICROWS   window 2, a picture window
+!   the rest              window 0, the game, scrolling and buffered with
+!                         [MORE] prompts, exactly as usual
+!
+! With no blorb there are no pictures, so the picture window draws a
+! placeholder instead. To see real artwork, build a blorb with
+! tools/make_blorb.py and pass it to make.rb with -pics.
+
+Constant Story      "Window Demo";
+Constant Headline   "^A PunyInform game with a z6 picture window.^";
+
+#Iffalse (#version_number == 6);
+Message fatalerror "z6_with_pictures.inf must be compiled with -v6";
+#Endif;
+
+Constant STATUSLINE_SCORE; Statusline score;
+Constant NO_SCORE = 0;
+Constant OPTIONAL_NO_ADD_TO_SCOPE;
+Constant OPTIONAL_NO_DARKNESS;
+
+Constant INITIAL_LOCATION_VALUE = Library;
+
+Include "globals.h";
+
+! ------------------------------------------------------------------
+! Screen layout
+! ------------------------------------------------------------------
+
+Constant PICWIN            = 2;  ! the z6 window number of the picture window
+Constant PICTURE_WINDOW_ROWS = 8;! how tall we would like it to be, in rows
+Constant MIN_TEXT_ROWS     = 6;  ! ...but never leave the game less than this
+
+Property picture;                ! a room's picture number, if it has one
+
+Global picwin_top;               ! first screen row of the picture window
+Global picwin_rows;              ! its height in rows, after clamping
+Global picwin_cols;              ! its width in columns (the whole screen)
+Global shown_picture;            ! the picture currently in the window
+
+Include "ext_z6graphics.h";
+
+[ SetUpWindows _rows;
+    _rows = HDR_SCREENHLINES->0;
+    if(_rows < 10) _rows = 25;               ! a sane guess if the header lies
+    picwin_cols = HDR_SCREENWCHARS->0;
+    if(picwin_cols < 10) picwin_cols = 40;
+
+    picwin_rows = PICTURE_WINDOW_ROWS;
+    if(_rows - 1 - picwin_rows < MIN_TEXT_ROWS)
+        picwin_rows = _rows - 1 - MIN_TEXT_ROWS;
+    if(picwin_rows < 1) picwin_rows = 1;
+    picwin_top = 2;                          ! just under the status line
+
+    ! Window 1, the status line. PunyInform makes this itself with
+    ! @split_window the first time it draws the status line, but in v6
+    ! split_window also resets window 0 to "everything below window 1",
+    ! which would undo the layout. So do the split here, once, and
+    ! tell the library the height it already has: _StatusLineHeight() then
+    ! never splits again. (The count is in units in v6, hence the font
+    ! height; PunyInform does the same multiplication.)
+    @split_window Z6RowToY(statusline_height);
+    statusline_current_height = statusline_height;
+
+    ! Window 2, the picture window: no wrapping, no scrolling, no
+    ! buffering. Nothing in here should ever scroll or raise a [MORE].
+    Z6FormatWindow(PICWIN, 0, Z6_WSTYLE_SET);
+    Z6ShowWindow_Chars(PICWIN, 1, picwin_top, picwin_cols, picwin_rows);
+
+    ! Window 0, the game. Move it below the picture window and shrink it to
+    ! the rest of the screen; it keeps its default attributes (wrapping,
+    ! scrolling, transcripting and buffering, z-spec 8.8.3.3), so word wrap
+    ! and the [MORE] prompt work in it exactly as in any other game.
+    Z6ShowWindow_Chars(0, 1, picwin_top + picwin_rows,
+        picwin_cols, HDR_SCREENHLINES->0 - picwin_top - picwin_rows + 1);
+    Z6SetWindow(0);
+];
+
+[ RoomPicture p_room;
+    if(p_room && p_room provides picture) return p_room.picture;
+    rfalse;
+];
+
+! Put a picture in the picture window, centred, or a placeholder if this
+! interpreter has no such picture (no blorb, or a text-only build).
+[ ShowPicture p_picture _w _h _x _y;
+    shown_picture = p_picture;
+    Z6SetWindow(PICWIN);
+    Z6EraseWindow(PICWIN);
+    if(p_picture && Z6PictureExists(p_picture)) {
+        _w = Z6PictureCols_Chars(p_picture);
+        _h = Z6PictureRows_Chars(p_picture);
+        _x = 1 + (picwin_cols - _w) / 2;
+        _y = 1 + (picwin_rows - _h) / 2;
+        if(_x < 1) _x = 1;
+        if(_y < 1) _y = 1;
+        Z6MoveCursor_Chars(_x, _y);
+        Z6DrawPictureHere(p_picture);
+    } else {
+        _y = 1 + picwin_rows / 2;
+        Z6MoveCursor_Chars(3, _y);
+        if(p_picture) print "[ no picture ", p_picture, " in this build ]";
+        else print "[ this room has no picture ]";
+    }
+    ! Back to the game window. This also flushes anything still buffered.
+    Z6SetWindow(0);
+];
+
+! ------------------------------------------------------------------
+! Entry points (must be defined before puny.h is included)
+! ------------------------------------------------------------------
+
+[ Initialise;
+    SetUpWindows();
+    print "^You are testing a three-window z6 screen.^^";
+    print "Try: LOOK, NORTH, SOUTH, PICTURE 3, BABBLE.^";
+];
+
+[ NewRoom;
+    ShowPicture(RoomPicture(location));
+];
+
+Include "puny.h";
+
+! ------------------------------------------------------------------
+! The game
+! ------------------------------------------------------------------
+
+Object Library "The Library"
+    with description
+            "Shelves of unread manuals line the walls. A door leads north to \
+             the garden.",
+        picture 1,
+        n_to Garden;
+
+Object -> Box "wooden box"
+    with name 'wooden' 'box',
+        inside_description "It feels so nice, standing in the box.",
+    has container open openable enterable;
+
+Object -> Manual "thick manual"
+    with name 'thick' 'manual' 'book',
+        description "It is the Z-Machine Standards Document, version 1.1.";
+
+Object Garden "The Garden"
+    with description
+            "A small walled garden, pleasantly overgrown. The library is back \
+             to the south.",
+        picture 2,
+        s_to Library;
+
+Object -> Rose "red rose"
+    with name 'red' 'rose' 'flower',
+        description "A rose, deeply red.";
+
+! ------------------------------------------------------------------
+! Two test verbs
+! ------------------------------------------------------------------
+
+! PICTURE <n> -- put any picture number in the window, to try out a blorb.
+[ PictureSub;
+    ShowPicture(noun);
+    print "Picture ", noun, " requested.^";
+];
+
+! BABBLE -- print enough lines to make the game window scroll and raise
+! its [MORE] prompt, which is the point of keeping window 0 buffered.
+[ BabbleSub _i;
+    for(_i = 1: _i <= 60: _i++) {
+        print "Line ", _i, " of sixty, long enough to show that this window \
+               still wraps its text at the right margin.^";
+    }
+];
+
+Verb 'picture' 'pic'
+    * number                        -> Picture;
+
+Verb 'babble' 'blather'
+    *                               -> Babble;
