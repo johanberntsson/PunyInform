@@ -1,16 +1,23 @@
-Constant DEBUG;
+! inform +../lib test-random.inf
+
 Constant OPTIONAL_EXTENDED_METAVERBS;
-Constant INITIAL_LOCATION_VALUE = TheRoom;
-
-
-
 Constant Story "NumberTokenDescribeGrammarTest";
+Constant INITIAL_LOCATION_VALUE = TheRoom;
 Include "globals.h";
 Include "puny.h";
 
-[ Initialise; ];
+[ Initialise _i; 
+    _i = -10; 
+    print "Seed = ", _i, " ", random(_i); "^"; 
+];
 
-Object TheRoom "The Room" with description "This is a room", each_turn [; print "random ", random(100), "^"; ] has light;
+Object TheRoom "The Room" 
+    with 
+        description "This is a room", 
+        each_turn [;
+            print "random ", random(100), "^";
+        ]
+     has light;
 
 [ FooSub; "Got here: ", noun; ];
 Verb 'foo' * 'for' number 'unit' -> Foo;

@@ -1,6 +1,5 @@
 transcript
 
-random seed 2
 look
 foo for 1
 foo for 1 unit
@@ -10,6 +9,12 @@ blob me to 5 minute
 blob me to 0 minute
 blob me to 10000 minute
 blob me to 10001 minute
+z
+z
+z
+z
+z
+z
 quit
 yes
 

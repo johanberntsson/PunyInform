@@ -1,10 +1,7 @@
 Start of a transcript of
 
 NumberTokenDescribeGrammarTest
-Release 1 / Serial number 260903 / Inform v6.44 PunyInform v6.8 DR
-
-> random seed 1
-The random seed is set to 1.
+Release 1 / Serial number 260903 / Inform v6.44 PunyInform v6.8 R
 
 > look
 The Room
@@ -16,7 +13,7 @@ I think you wanted to say "foo for something unit". Please try again.
 
 > foo for 1 unit
 Got here: 1
-random 1
+random 2
 
 > blob
 I think you wanted to say "blob something to something minute". Please try
@@ -27,19 +24,43 @@ I think you wanted to say "blob yourself to something minute". Please try again.
 
 > blob me to 5 minute
 You blob: 5
-random 1
+random 3
 
 > blob me to 0 minute
 You blob: 0
-random 1
+random 4
 
 > blob me to 10000 minute
 You blob: 10000
-random 1
+random 5
 
 > blob me to 10001 minute
 You blob: 10000
+random 6
+
+> z
+Nothing happens.
+random 7
+
+> z
+Nothing happens.
+random 8
+
+> z
+Nothing happens.
+random 9
+
+> z
+Nothing happens.
+random 10
+
+> z
+Nothing happens.
 random 1
+
+> z
+Nothing happens.
+random 2
 
 > quit
 Are you sure you want to quit? yes
