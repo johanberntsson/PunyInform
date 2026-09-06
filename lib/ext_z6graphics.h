@@ -160,6 +160,10 @@ Array z6_current_cursor --> 2; ! updated by @get_cursor
     return Z6XToCol(Z6CursorCol_Units() - 1) + 1;
 ];
 
+[ Z6MoveCursor_Units p_x p_y;
+    @set_cursor p_y p_x;
+];
+
 [ Z6MoveCursor_Chars p_col p_row _x _y;
     _x = Z6ColToX(p_col - 1) + 1;
     _y = Z6RowToY(p_row - 1) + 1;
