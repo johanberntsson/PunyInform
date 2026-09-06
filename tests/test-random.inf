@@ -1,27 +1,28 @@
 ! inform +../lib test-random.inf
+!
+! Z-code standard:
+! In "predictable" mode, the generator should store the seed value S. If S < 1000 it should
+! then internally generate 1, 2, 3, ..., S, 1, 2, 3, ..., S, 1, ...  so that random n produces
+! the next entry in this sequence modulo n. If S >= 1000 then S is used as a seed in a standard
+! seeded random-number generator. (The rising sequence is useful for testing, since it will produce
+! all possible values in sequence. On the other hand, a seeded but fairly random generator is
+! useful for testing entire scripts.)
 
+Constant DEBUG;
 Constant OPTIONAL_EXTENDED_METAVERBS;
-Constant Story "NumberTokenDescribeGrammarTest";
+Constant Story "Random Test";
 Constant INITIAL_LOCATION_VALUE = TheRoom;
 Include "globals.h";
 Include "puny.h";
 
-[ Initialise _i; 
-    _i = -10; 
-    print "Seed = ", _i, " ", random(_i); "^"; 
-];
+[ Initialise; return 2; ];
 
 Object TheRoom "The Room" 
     with 
         description "This is a room", 
         each_turn [;
-            print "random ", random(100), "^";
+            print "random ", random(2000), "^";
         ]
      has light;
 
-[ FooSub; "Got here: ", noun; ];
-Verb 'foo' * 'for' number 'unit' -> Foo;
-
-[ BlobSub; "You blob: ", second; ];
-Verb 'blob' * noun 'to' number 'minute' -> Blob;
 
