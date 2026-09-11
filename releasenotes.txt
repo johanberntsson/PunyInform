@@ -4,6 +4,7 @@ Upcoming release:
 - Added howto/z6_with_pictures.inf, showing how to set up a game with statusline, a picture
   window, and a normal text window.
 - Added missing Z6MoveCursor_Units function in ext_z6graphics.h
+- Fixed z6 statusline ScreenWidth offset error.
 
 =======
 v6.8: new feature release (9 Aug 2026)

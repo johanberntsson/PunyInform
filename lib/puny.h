@@ -117,7 +117,7 @@ Array cursor_pos --> 2;
     @get_wind_prop 1 13 -> charw;
     charw = charw & $FF;
     if (charw == 0) return width;
-    return (width+charw-1) / charw;
+    return width / charw;
 ];
 #Ifnot;
 [ ScreenWidth;
