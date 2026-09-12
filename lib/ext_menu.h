@@ -171,7 +171,7 @@ Constant QKEY2__KY      = 'q';
 			cl--; if (cl == 6) cl = 6+lines; continue;
 		}
 		if (pkey == QKEY1__KY or QKEY2__KY or 27 or 131) break;
-		if (pkey == 10 or 13 or 132) {
+		if (pkey == 10 or 13 or 132 or 32) {
 			@set_window 0; font on;
 			new_line; new_line; new_line;
 

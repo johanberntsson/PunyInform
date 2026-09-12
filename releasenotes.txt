@@ -5,6 +5,7 @@ Upcoming release:
   window, and a normal text window.
 - Added missing Z6MoveCursor_Units function in ext_z6graphics.h
 - Fixed z6 statusline ScreenWidth offset error.
+- Changed ext_menu to also accept space key as a way of picking a menu entry.
 
 =======
 v6.8: new feature release (9 Aug 2026)
