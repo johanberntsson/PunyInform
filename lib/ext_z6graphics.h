@@ -232,6 +232,13 @@ Array z6_picture_info --> 2; ! updated by @picture_data
     return _w;
 ];
 
+! Draw a picture with its top left corner at (p_x, p_y), in units relative to
+! the current window, 1-based. Use this rather than Z6MoveCursor_Units and
+! Z6DrawPictureHere to put a picture between text lines
+[ Z6DrawPicture_Units p_picture p_x p_y;
+    @draw_picture p_picture p_y p_x;
+];
+
 [ Z6DrawPictureHere p_picture _x _y;
     @get_cursor z6_current_cursor;
     _x = z6_current_cursor --> 1;
