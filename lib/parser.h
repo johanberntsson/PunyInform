@@ -217,6 +217,15 @@ System_file;
 		@set_colour clr_fginput clr_bg;
 	}
 	@aread buffer parse -> _result;
+#Ifdef HandleFunctionKey;
+	! library entry routine: a key from the game's terminating characters
+	! table (see "Zcharacter terminating" in the DM4) ended the input instead
+	! of Enter. If the routine returns true it has dealt with the key, and the
+	! player goes on editing the same line: the text typed so far is still in
+	! the buffer, with its length in buffer->1, so @aread picks it up again.
+	while(_result ~= 10 or 13 && HandleFunctionKey(_result))
+		@aread buffer parse -> _result;
+#Endif;
 #Ifnot;
 	! z4
 	@sread buffer parse;

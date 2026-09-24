@@ -7,6 +7,7 @@ Upcoming release:
 - Fixed z6 statusline ScreenWidth offset error.
 - Changed ext_menu to also accept space key as a way of picking a menu entry.
 - Added Z6DrawPicture_Units in ext_z6graphics.h
+- Added HandleFunctionKey entry point to allow for detection of F2 etc during input.
 
 =======
 v6.8: new feature release (9 Aug 2026)
