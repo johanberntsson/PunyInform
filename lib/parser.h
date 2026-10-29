@@ -2326,6 +2326,11 @@ Array guess_object-->5;
 			! call again to generate suitable error message
 			second = _best_second;
 			_score = _ParsePattern(_best_pattern);
+			if(_score == -1) {
+				! we should reparse when getting a new command
+				! instead of NP when prompted for a disambiguation
+				jump _perform_reparse;
+			}
 		} else {
 			! parser_unknown_noun_found is set when we tried to parse
 			! a noun but we found a word that didn't match
