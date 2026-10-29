@@ -1674,7 +1674,11 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 ];
 #Endif;
 
+#Ifndef OPTIONAL_MANUAL_REACTIVE;
+[DebugSub _w _o;
+#Ifnot;
 [DebugSub _w _o _seems_reactive;
+#Endif;
 	wn = num_words;
 	_w = NextWord();
 	switch(_w) {
