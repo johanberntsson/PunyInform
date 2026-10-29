@@ -9,6 +9,8 @@ Upcoming release:
 - Changed ext_menu to also accept space key as a way of picking a menu entry.
 - Added Z6DrawPicture_Units in ext_z6graphics.h
 - Added HandleFunctionKey entry point to allow for detection of F2 etc during input.
+- Fixed a bug which would cause compilation to fail in debug mode, if OPTIONAL_NO_ADD_TO_SCOPE
+  was defined.
 
 =======
 v6.8: new feature release (9 Aug 2026)

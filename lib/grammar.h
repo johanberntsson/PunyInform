@@ -1674,7 +1674,7 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 ];
 #Endif;
 
-[DebugSub _w _o;
+[DebugSub _w _o _seems_reactive;
 	wn = num_words;
 	_w = NextWord();
 	switch(_w) {
@@ -1685,41 +1685,38 @@ Constant _REAL_LOCATION_TEXT " *** real_location ***";
 #Ifnot;
 			print "Probably give reactive to these objects (see notes about ~reactive~ in manual) :^";
 			objectloop(_o) {
-#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-				if(_o hasnt reactive && (
-						MayBeRoutine(_o, react_before) ||
-						MayBeRoutine(_o, react_after) ||
-						MayBeRoutine(_o, parse_name) ||
-						_o.&add_to_scope ~= 0 ||
-						_o.&each_turn ~= 0))
-					print "(",_o,") ", (name) _o, "^";
-#Ifnot;
-				if(_o hasnt reactive && (
-						MayBeRoutine(_o, react_before) ||
-						MayBeRoutine(_o, react_after) ||
-						_o.&add_to_scope ~= 0 ||
-						_o.&each_turn ~= 0))
-					print "(",_o,") ", (name) _o, "^";
+				if(_o hasnt reactive) {
+					_seems_reactive = false;
+					if(_o.&each_turn ~= 0) _seems_reactive = true;
+					if(_ObjectLike(_o)) {
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
+						if(_o.&add_to_scope ~= 0) _seems_reactive = true;
 #Endif;
+#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
+						if(MayBeRoutine(_o, parse_name)) _seems_reactive = true;
+#Endif;
+						if(MayBeRoutine(_o, react_before) || MayBeRoutine(_o, react_after))
+							_seems_reactive = true;
+					}
+					if(_seems_reactive) print "(",_o,") ", (name) _o, "^";
+				}
 			}
-			print "^Remove reactive from these objects:^";
+			print "^Definitely remove reactive from these objects:^";
 			objectloop(_o) {
-#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
-				if(_o has reactive && (
-						MayBeRoutine(_o, react_before) == false &&
-						MayBeRoutine(_o, react_after) == false &&
-						MayBeRoutine(_o, parse_name) == false &&
-						_o.&add_to_scope == 0 &&
-						_o.&each_turn == 0))
-					print "(",_o,") ", (name) _o, "^";
-#Ifnot;
-				if(_o has reactive && (
-						MayBeRoutine(_o, react_before) == false &&
-						MayBeRoutine(_o, react_after) == false &&
-						_o.&add_to_scope == 0 &&
-						_o.&each_turn == 0))
-					print "(",_o,") ", (name) _o, "^";
+				if(_o has reactive) {
+					_seems_reactive = false;
+#Ifndef OPTIONAL_NO_ADD_TO_SCOPE;
+					if(_o.&add_to_scope ~= 0) _seems_reactive = true;
 #Endif;
+#Ifdef OPTIONAL_REACTIVE_PARSE_NAME;
+					if(MayBeRoutine(_o, parse_name)) _seems_reactive = true;
+#Endif;
+					if(MayBeRoutine(_o, react_before) ||
+							MayBeRoutine(_o, react_after) ||
+							_o.&each_turn ~= 0)
+						_seems_reactive = true;
+					if(_seems_reactive == false) print "(",_o,") ", (name) _o, "^";
+				}
 			}
 #Endif;
 		default:
