@@ -12,8 +12,12 @@
 !                         [MORE] prompts, exactly as usual
 !
 ! With no blorb there are no pictures, so the picture window draws a
-! placeholder instead. To see real artwork, build a blorb with
-! tools/make_blorb.py and pass it to make.rb with -pics.
+! placeholder instead.
+!
+! There are several tools and scripts that can be used to produce
+! blorb files. Ozmoo ships with tools/make_blorb.py, and its manual
+! describes to how use it. Another option is the suite of blorb tools
+! written by L Ross Raszewski. 
 
 Constant Story      "Window Demo";
 Constant Headline   "^A PunyInform game with a z6 picture window.^";
