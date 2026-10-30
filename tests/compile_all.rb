@@ -9,6 +9,11 @@ $SPECIFIC_FILES = [
 	"../testbench.inf",
 ];
 
+$ALL_FILES = 
+	$SPECIFIC_FILES + 
+	Dir["../howto/*.inf"].reject{ |f| f =~ /\/z6/}.sort + 
+	Dir["*.inf"].sort
+
 class CompilationError < StandardError
   def initialize(msg="Compilation error or warning.")
     super(msg)
@@ -57,47 +62,13 @@ if ARGV.length > 0 then
 end
 $num_tests = 0
 $num_tests_failed = 0
+bar = "============================"
 
-puts "=================="
-puts "Testing v3 release"
-puts "=================="
-$SPECIFIC_FILES.each { |filename| runtest filename, 3, "" }
-Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 3, "" }
-Dir["*.inf"].sort.each { |filename| runtest filename, 3, "" }
-
-puts "\n=================="
-puts "Testing v3 debug"
-puts "=================="
-$SPECIFIC_FILES.each { |filename| runtest filename, 3, "-D" }
-Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
-Dir["*.inf"].sort.each { |filename| runtest filename, 3, "-D" }
-
-puts "=================="
-puts "Testing v4 release"
-puts "=================="
-$SPECIFIC_FILES.each { |filename| runtest filename, 4, "" }
-Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 4, "" }
-Dir["*.inf"].sort.each { |filename| runtest filename, 4, "" }
-
-puts "\n=================="
-puts "Testing v4 debug"
-puts "=================="
-$SPECIFIC_FILES.each { |filename| runtest filename, 4, "-D" }
-Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 4, "-D" }
-Dir["*.inf"].sort.each { |filename| runtest filename, 4, "-D" }
-
-puts "\n=================="
-puts "Testing v5 release"
-puts "=================="
-$SPECIFIC_FILES.each { |filename| runtest filename, 5, "" }
-Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 5, "" }
-Dir["*.inf"].sort.each { |filename| runtest filename, 5, "" }
-
-puts "\n=================="
-puts "Testing v5 debug"
-puts "=================="
-$SPECIFIC_FILES.each { |filename| runtest filename, 3, "-D" }
-Dir["../howto/*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
-Dir["*.inf"].sort.each { |filename| runtest filename, 5, "-D" }
+3.upto(5) do |version|
+	puts "\n#{bar} TESTING V#{version} RELEASE #{bar}"
+	$ALL_FILES.each { |filename| runtest filename, version, "" }
+	puts "\n#{bar} TESTING V#{version} DEBUG #{bar}"
+	$ALL_FILES.each { |filename| runtest filename, version, "-D" }
+end
 
 puts "\nALL PROGRAMS COULD BE COMPILED WITHOUT WARNINGS OR ERRORS"
