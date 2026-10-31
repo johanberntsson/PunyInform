@@ -12,6 +12,8 @@ Upcoming release:
 - Fixed a bug which would cause compilation to fail in debug mode, if OPTIONAL_NO_ADD_TO_SCOPE
   was defined.
 - Stopped test program tests/compile_all.rb from trying to compile a z6 example file as z3-z5, and made the code easier to maintain. 
+- Optimized _ObjInMultipleObjects routine for z3, in parser.h.
+- Minor optimization in _AddMultipleNouns routine in parser.h.
 
 =======
 v6.8: new feature release (9 Aug 2026)
