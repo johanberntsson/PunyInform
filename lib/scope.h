@@ -216,7 +216,10 @@ System_file;
 	cached_scope_pov = p_actor;
 
 #IfDef DEBUG_SCOPE;
-	print "*** Updated scope from ", (the) _start_pos, ". Found ", scope_objects, " objects.^";
+	print "*** Updated scope, start object: ";
+	if(_start_pos) print (the) _start_pos; else print "<nothing>";
+	if(scope_stage == 2) print ", scope_routine: ", scope_routine;
+	print ". Found ", scope_objects, " objects.^";
 #EndIf;
 ];
 
