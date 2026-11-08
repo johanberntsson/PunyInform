@@ -1,6 +1,6 @@
 |                                     |
 |-------------------------------------|
-| **PunyInform v6.8 quick reference** |
+| **PunyInform v6.9 quick reference** |
 
   
 More information on last page.
@@ -217,7 +217,11 @@ More information on last page.
 
 ###### 
 
-###### There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT, CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY.* Under z6, there is also *CLR_LIGHT_GREY, CLR_MEDIUM_GREY, CLR_DARK_GREY, CLR_TRANSPARENT.* 
+###### There are constants for colours: *CLR_BLACK, CLR_RED, CLR_GREEN, CLR_YELLOW, CLR_BLUE, CLR_MAGENTA, CLR_CYAN, CLR_WHITE, CLR_DEFAULT, CLR_CURRENT, CLR_OZMOO_ORANGE, CLR_OZMOO_BROWN, CLR_OZMOO_LIGHT_RED, CLR_OZMOO_DARK_GREY, CLR_OZMOO_MEDIUM_GREY, CLR_OZMOO_LIGHT_GREEN, CLR_OZMOO_LIGHT_BLUE, CLR_OZMOO_LIGHT_GREY.* 
+
+###### 
+
+###### Under z6, there is also *CLR_LIGHT_GREY, CLR_MEDIUM_GREY, CLR_DARK_GREY, CLR_TRANSPARENT.* 
 
 ######  **The global *scope_reason* schould always have one of the values *PARSING_REASON, EACH_TURN_REASON, REACT_BEFORE_REASON, REACT_AFTER_REASON, LOOPOVERSCOPE_REASON, TESTSCOPE_REASON*.
 
@@ -684,6 +688,10 @@ circumstances stated for each routine.
 
 ###### Before *before* routines have been run.
 
+## HandleFunctionKey(zscii_code)**PUNY++**
+
+###### Called during input in z5+, if player presses a key in which has been defined as a terminating character. Return *true* to continue input, *false* to end input.
+
 ## InScope(actor)
 
 ###### When working out the scope for the actor. Call *ScopeWithin* and *PlaceInScope* to add objects to scope. Return true if no other objects should be in scope.
@@ -698,7 +706,7 @@ circumstances stated for each routine.
 
 ## LibraryMessages(number, arg1, arg2) **PUNY++**
 
-###### When a library message is about to be printed. Use it to print your own complex library messages.
+###### Called when a complex library message is about to be printed. Use it to print your own library messages.
 
 ## LookRoutine
 

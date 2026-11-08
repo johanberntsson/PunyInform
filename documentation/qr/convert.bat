@@ -1,3 +1,3 @@
-set name=PunyInformQuickRef_v6.8
+set name=PunyInformQuickRef_v6.9
 
 pandoc -t gfm %name%.odt -o %name%.md
