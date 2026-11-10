@@ -226,6 +226,19 @@ System_file;
 	while(_result ~= 10 or 13 && HandleFunctionKey(_result))
 		@aread buffer parse -> _result;
 #Endif;
+#Iftrue #version_number == 6;
+	! z6 only echoes input to the screen and we need to store it
+	! manually in the transcript if transcript is active. 
+	! This is special for z6 only (see z-spec 7.1.1.1)
+	if((_result == 10 or 13) && (0-->8) & 1) {
+		@output_stream -1;
+		@loadb buffer 1 -> sp;
+		@add buffer 2 -> sp;
+		@print_table sp sp;
+		new_line;
+		@output_stream 1;
+	}
+#Endif;
 #Ifnot;
 	! z4
 	@sread buffer parse;

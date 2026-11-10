@@ -1,5 +1,7 @@
 Upcoming release:
 
+- Fixed transcription bug: _ReadPlayerInput now updates transcripts for z6 games
+
 =======
 v6.9: new feature release (8 Nov 2026)
 
